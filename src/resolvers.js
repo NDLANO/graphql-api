@@ -6,12 +6,15 @@
  *
  */
 
-const { books } = require('./connectors');
+const { books, resource } = require('./connectors');
 
 const resolvers = {
   Query: {
     async books() {
       return books();
+    },
+    async resource(_, { id }, context) {
+      return resource(id, context);
     },
   },
   // Mutation: {},

@@ -6,7 +6,7 @@
  *
  */
 
-// const { fetch } = require('../../utils/apiHelpers');
+const { fetch } = require('../utils/apiHelpers');
 
 async function books() {
   let promise = new Promise(function(resolve) {
@@ -25,6 +25,15 @@ async function books() {
   return promise;
 }
 
+async function resource(resourceId, context) {
+  const response = await fetch(`/taxonomy/v1/resources/${resourceId}/`, {
+    headers: { Authorization: `Bearer ${context.token.access_token}` },
+  });
+  const json = await response.json();
+  return json;
+}
+
 module.exports = {
   books,
+  resource,
 };

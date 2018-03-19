@@ -13,19 +13,27 @@ const cors = require('cors');
 const { port } = require('./config');
 
 const schema = require('./schema');
+const { getToken } = require('./auth');
 
 const GRAPHQL_PORT = port;
 
 const graphQLServer = express();
 
+async function getOptions() {
+  const token = await getToken();
+  return {
+    context: { token },
+    schema,
+  };
+}
+
 graphQLServer.use(
   '/graphql',
   cors(),
   bodyParser.json(),
-  graphqlExpress(() => ({
-    schema,
-  }))
+  graphqlExpress(getOptions)
 );
+
 graphQLServer.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 graphQLServer.listen(GRAPHQL_PORT, () =>

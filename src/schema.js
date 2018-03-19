@@ -11,8 +11,32 @@ const resolvers = require('./resolvers');
 
 const typeDefs = `
 type Book { title: String, author: String }
-type Query { books: [Book] }
-#type Mutation
+
+type ResourceType {
+  id: String,
+  name: String,
+}
+
+type Resource {
+  id: String!,
+  name: String!,
+  contentUri: String,
+  path: String,
+  article: [Article]
+  resourceTypes: [ResourceType]
+}
+
+type Article {
+  title: String!,
+  content: String!,
+  resourceTypes: [ResourceType]
+}
+
+type Query {
+  books: [Book]
+  resource(id: String!): Resource
+}
+
 `;
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
