@@ -6,7 +6,7 @@
  *
  */
 
-const { books, resource } = require('./connectors');
+const { books, article, resource } = require('./connectors');
 
 const resolvers = {
   Query: {
@@ -15,6 +15,22 @@ const resolvers = {
     },
     async resource(_, { id }, context) {
       return resource(id, context);
+    },
+    async article(_, { id }, context) {
+      return article(id, context);
+    },
+  },
+  Resource: {
+    async article(resource, _, context) {
+      if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:article')
+      ) {
+        return article(
+          resource.contentUri.replace('urn:article:', ''),
+          context
+        );
+      }
     },
   },
   // Mutation: {},

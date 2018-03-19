@@ -22,19 +22,22 @@ type Resource {
   name: String!,
   contentUri: String,
   path: String,
-  article: [Article]
+  article: Article,
   resourceTypes: [ResourceType]
 }
 
 type Article {
   title: String!,
   content: String!,
+  introduction: String!,
+  metaDescription: String!,
   resourceTypes: [ResourceType]
 }
 
 type Query {
   books: [Book]
   resource(id: String!): Resource
+  article(id: String!): Article
 }
 
 `;
