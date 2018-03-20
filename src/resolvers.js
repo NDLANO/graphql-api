@@ -6,7 +6,7 @@
  *
  */
 
-const { books, article, resource } = require('./connectors');
+const { books, article, resource, subjects } = require('./connectors');
 
 const resolvers = {
   Query: {
@@ -18,6 +18,13 @@ const resolvers = {
     },
     async article(_, { id }, context) {
       return article(id, context);
+    },
+    async subject(_, { id }, context) {
+      const list = await subjects(context);
+      return list.find(subject => subject.id === id);
+    },
+    async subjects(_, __, context) {
+      return subjects(context);
     },
   },
   Resource: {

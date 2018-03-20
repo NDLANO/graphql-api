@@ -21,7 +21,7 @@ type Resource {
   id: String!,
   name: String!,
   contentUri: String,
-  path: String,
+  path: String!
   article: Article,
   resourceTypes: [ResourceType]
 }
@@ -34,10 +34,34 @@ type Article {
   resourceTypes: [ResourceType]
 }
 
+type Description {
+  value: String!,
+}
+
+type Topic {
+  id: String!,
+  contentUri: String,
+  name: String!,
+  path: String!
+  article: Article,
+  description: Description,
+}
+
+type Subject {
+  id: String!,
+  contentUri: String,
+  name: String!,
+  path: String!,
+  topics: [Topic]
+}
+
+
 type Query {
   books: [Book]
   resource(id: String!): Resource
   article(id: String!): Article
+  subject(id: String!): Subject
+  subjects: [Subject]
 }
 
 `;

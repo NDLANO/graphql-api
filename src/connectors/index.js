@@ -33,6 +33,14 @@ async function resource(resourceId, context) {
   return json;
 }
 
+async function subjects(context) {
+  const response = await fetch(`/taxonomy/v1/subjects/`, {
+    headers: { Authorization: `Bearer ${context.token.access_token}` },
+  });
+  const json = await response.json();
+  return json;
+}
+
 async function article(articleId, context) {
   const response = await fetch(`/article-converter/json/nb/${articleId}`, {
     headers: { Authorization: `Bearer ${context.token.access_token}` },
@@ -45,4 +53,5 @@ module.exports = {
   books,
   resource,
   article,
+  subjects,
 };
