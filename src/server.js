@@ -14,6 +14,7 @@ const { port } = require('./config');
 
 const schema = require('./schema');
 const { getToken } = require('./auth');
+const { articlesLoader } = require('./data/loaders');
 
 const GRAPHQL_PORT = port;
 
@@ -22,7 +23,12 @@ const graphQLServer = express();
 async function getOptions() {
   const token = await getToken();
   return {
-    context: { token },
+    context: {
+      token,
+      loaders: {
+        articlesLoader: articlesLoader({ token }),
+      },
+    },
     schema,
   };
 }

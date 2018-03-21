@@ -26,6 +26,7 @@ type Resource {
 }
 
 type Article {
+  id: Int!,
   title: String!,
   content: String!,
   introduction: String!,
@@ -34,9 +35,10 @@ type Article {
 }
 
 type ArticleSubset {
+  id: Int!,
   title: String!,
-  introduction: String!,
-  metaDescription: String!,
+  introduction: String,
+  metaDescription: String,
 }
 
 type Description {

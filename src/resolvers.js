@@ -45,7 +45,9 @@ const resolvers = {
     },
     async meta(topic, _, context) {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        return article(topic.contentUri.replace('urn:article:', ''), context);
+        return context.loaders.articlesLoader.load(
+          topic.contentUri.replace('urn:article:', '')
+        );
       }
     },
   },
