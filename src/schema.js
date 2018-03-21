@@ -10,7 +10,6 @@ const { makeExecutableSchema } = require('graphql-tools');
 const resolvers = require('./resolvers');
 
 const typeDefs = `
-type Book { title: String, author: String }
 
 type ResourceType {
   id: String,
@@ -34,6 +33,12 @@ type Article {
   resourceTypes: [ResourceType]
 }
 
+type ArticleSubset {
+  title: String!,
+  introduction: String!,
+  metaDescription: String!,
+}
+
 type Description {
   value: String!,
 }
@@ -44,7 +49,7 @@ type Topic {
   name: String!,
   path: String!
   article: Article,
-  description: Description,
+  meta: ArticleSubset
 }
 
 type Subject {
@@ -57,11 +62,12 @@ type Subject {
 
 
 type Query {
-  books: [Book]
   resource(id: String!): Resource
   article(id: String!): Article
   subject(id: String!): Subject
   subjects: [Subject]
+  topic(id: String!): Topic
+  topics: [Topic]
 }
 
 `;

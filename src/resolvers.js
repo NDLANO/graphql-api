@@ -6,13 +6,16 @@
  *
  */
 
-const { books, article, resource, subjects } = require('./connectors');
+const {
+  article,
+  resource,
+  subjects,
+  topics,
+  subjectTopics,
+} = require('./data/api');
 
 const resolvers = {
   Query: {
-    async books() {
-      return books();
-    },
     async resource(_, { id }, context) {
       return resource(id, context);
     },
@@ -25,6 +28,30 @@ const resolvers = {
     },
     async subjects(_, __, context) {
       return subjects(context);
+    },
+    async topic(_, { id }, context) {
+      const list = await topics(context);
+      return list.find(topic => topic.id === id);
+    },
+    async topics(_, __, context) {
+      return topics(context);
+    },
+  },
+  Topic: {
+    async article(topic, _, context) {
+      if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
+        return article(topic.contentUri.replace('urn:article:', ''), context);
+      }
+    },
+    async meta(topic, _, context) {
+      if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
+        return article(topic.contentUri.replace('urn:article:', ''), context);
+      }
+    },
+  },
+  Subject: {
+    async topics(subject, _, context) {
+      return subjectTopics(subject.id, context);
     },
   },
   Resource: {
