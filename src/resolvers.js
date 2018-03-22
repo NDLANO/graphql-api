@@ -12,6 +12,8 @@ const {
   subjects,
   topics,
   subjectTopics,
+  resourceResourceTypes,
+  resourceTypes,
 } = require('./data/api');
 
 const resolvers = {
@@ -36,6 +38,9 @@ const resolvers = {
     async topics(_, __, context) {
       return topics(context);
     },
+    async resourceTypes(_, __, context) {
+      return resourceTypes(context);
+    },
   },
   Topic: {
     async article(topic, _, context) {
@@ -56,6 +61,11 @@ const resolvers = {
       return subjectTopics(subject.id, context);
     },
   },
+  ResourceType: {
+    async subtypes(resourceType) {
+      return resourceType.subtypes;
+    },
+  },
   Resource: {
     async article(resource, _, context) {
       if (
@@ -67,6 +77,9 @@ const resolvers = {
           context
         );
       }
+    },
+    async resourceTypes(resource, _, context) {
+      return resourceResourceTypes(resource.id, context);
     },
   },
   // Mutation: {},

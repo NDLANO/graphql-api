@@ -12,53 +12,53 @@ const resolvers = require('./resolvers');
 const typeDefs = `
 
 type ResourceType {
-  id: String,
-  name: String,
+  id: String!
+  name: String!
+  subtypes: [ResourceType]
 }
 
 type Resource {
-  id: String!,
-  name: String!,
-  contentUri: String,
+  id: String!
+  name: String!
+  contentUri: String
   path: String!
-  article: Article,
+  article: Article
   resourceTypes: [ResourceType]
 }
 
 type Article {
-  id: Int!,
-  title: String!,
-  content: String!,
-  introduction: String!,
-  metaDescription: String!,
-  resourceTypes: [ResourceType]
+  id: Int!
+  title: String!
+  content: String!
+  introduction: String!
+  metaDescription: String!
 }
 
 type ArticleSubset {
-  id: Int!,
-  title: String!,
-  introduction: String,
-  metaDescription: String,
+  id: Int!
+  title: String!
+  introduction: String
+  metaDescription: String
 }
 
 type Description {
-  value: String!,
+  value: String!
 }
 
 type Topic {
-  id: String!,
-  contentUri: String,
-  name: String!,
+  id: String!
+  contentUri: String
+  name: String!
   path: String!
-  article: Article,
+  article: Article
   meta: ArticleSubset
 }
 
 type Subject {
-  id: String!,
-  contentUri: String,
-  name: String!,
-  path: String!,
+  id: String!
+  contentUri: String
+  name: String!
+  path: String!
   topics: [Topic]
 }
 
@@ -70,6 +70,7 @@ type Query {
   subjects: [Subject]
   topic(id: String!): Topic
   topics: [Topic]
+  resourceTypes: [ResourceType]
 }
 
 `;

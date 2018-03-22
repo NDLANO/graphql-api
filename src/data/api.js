@@ -16,6 +16,24 @@ async function resource(resourceId, context) {
   return json;
 }
 
+async function resourceResourceTypes(resourceId, context) {
+  const response = await fetch(
+    `/taxonomy/v1/resources/${resourceId}/resource-types`,
+    {
+      headers: { Authorization: `Bearer ${context.token.access_token}` },
+    }
+  );
+  const json = await response.json();
+  return json;
+}
+
+async function resourceTypes(context) {
+  const response = await fetch(`/taxonomy/v1/resource-types`, {
+    headers: { Authorization: `Bearer ${context.token.access_token}` },
+  });
+  const json = await response.json();
+  return json;
+}
 async function subjects(context) {
   const response = await fetch(`/taxonomy/v1/subjects/`, {
     headers: { Authorization: `Bearer ${context.token.access_token}` },
@@ -80,4 +98,6 @@ module.exports = {
   topics,
   subjects,
   subjectTopics,
+  resourceTypes,
+  resourceResourceTypes,
 };
