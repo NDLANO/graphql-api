@@ -61,7 +61,7 @@ const resolvers = {
       return subjectTopics(subject.id, context);
     },
   },
-  ResourceType: {
+  ResourceTypeDefinition: {
     async subtypes(resourceType) {
       return resourceType.subtypes;
     },

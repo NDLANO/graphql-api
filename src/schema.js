@@ -11,10 +11,15 @@ const resolvers = require('./resolvers');
 
 const typeDefs = `
 
+type ResourceTypeDefinition {
+  id: String!
+  name: String!
+  subtypes: [ResourceTypeDefinition]
+}
+
 type ResourceType {
   id: String!
   name: String!
-  subtypes: [ResourceType]
 }
 
 type Resource {
@@ -70,7 +75,7 @@ type Query {
   subjects: [Subject]
   topic(id: String!): Topic
   topics: [Topic]
-  resourceTypes: [ResourceType]
+  resourceTypes: [ResourceTypeDefinition]
 }
 
 `;
