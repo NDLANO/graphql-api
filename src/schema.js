@@ -57,6 +57,8 @@ type Topic {
   path: String!
   article: Article
   meta: ArticleSubset
+  coreResources: [Resource]
+  supplementaryResources: [Resource]
 }
 
 type Subject {

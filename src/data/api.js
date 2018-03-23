@@ -69,6 +69,20 @@ async function article(articleId, context) {
   return json;
 }
 
+async function topicResources(
+  topicId,
+  relevance = 'urn:relevance:core',
+  context
+) {
+  const response = await fetch(
+    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}`,
+    {
+      headers: { Authorization: `Bearer ${context.token.access_token}` },
+    }
+  );
+  return response.json();
+}
+
 async function articles(articleIds, context) {
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
@@ -100,4 +114,5 @@ module.exports = {
   subjectTopics,
   resourceTypes,
   resourceResourceTypes,
+  topicResources,
 };

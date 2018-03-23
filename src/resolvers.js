@@ -13,6 +13,7 @@ const {
   topics,
   subjectTopics,
   resourceResourceTypes,
+  topicResources,
   resourceTypes,
 } = require('./data/api');
 
@@ -54,6 +55,12 @@ const resolvers = {
           topic.contentUri.replace('urn:article:', '')
         );
       }
+    },
+    async coreResources(topic, _, context) {
+      return topicResources(topic.id, 'urn:relevance:core', context);
+    },
+    async supplementaryResources(topic, _, context) {
+      return topicResources(topic.id, 'urn:relevance:supplementary', context);
     },
   },
   Subject: {
