@@ -10,6 +10,7 @@ const {
   article,
   resource,
   subjects,
+  filters,
   topics,
   subjectTopics,
   resourceResourceTypes,
@@ -39,6 +40,9 @@ const resolvers = {
     async topics(_, __, context) {
       return topics(context);
     },
+    async filters(_, __, context) {
+      return filters(context);
+    },
     async resourceTypes(_, __, context) {
       return resourceTypes(context);
     },
@@ -66,6 +70,9 @@ const resolvers = {
   Subject: {
     async topics(subject, _, context) {
       return subjectTopics(subject.id, context);
+    },
+    async filters(subject, __, context) {
+      return context.loaders.filterLoader.load(subject.id);
     },
   },
   ResourceTypeDefinition: {

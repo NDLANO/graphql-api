@@ -50,6 +50,12 @@ type Description {
   value: String!
 }
 
+type Filter {
+  id: String!
+  name: String!
+  subjectId: String!
+}
+
 type Topic {
   id: String!
   contentUri: String
@@ -66,6 +72,7 @@ type Subject {
   contentUri: String
   name: String!
   path: String!
+  filters: [Filter]
   topics: [Topic]
 }
 
@@ -77,6 +84,7 @@ type Query {
   subjects: [Subject]
   topic(id: String!): Topic
   topics: [Topic]
+  filters: [Filter]
   resourceTypes: [ResourceTypeDefinition]
 }
 

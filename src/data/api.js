@@ -16,6 +16,14 @@ async function resource(resourceId, context) {
   return json;
 }
 
+async function filters(context) {
+  const response = await fetch(`/taxonomy/v1/filters/`, {
+    headers: { Authorization: `Bearer ${context.token.access_token}` },
+  });
+  const json = await response.json();
+  return json;
+}
+
 async function resourceResourceTypes(resourceId, context) {
   const response = await fetch(
     `/taxonomy/v1/resources/${resourceId}/resource-types`,
@@ -106,6 +114,7 @@ async function articles(articleIds, context) {
 }
 
 module.exports = {
+  filters,
   resource,
   article,
   articles,
