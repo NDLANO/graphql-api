@@ -7,49 +7,52 @@
  */
 
 const {
-  article,
-  resource,
-  subjects,
-  filters,
-  topics,
-  resourceResourceTypes,
-  topicResources,
-  resourceTypes,
+  fetchArticle,
+  fetchResource,
+  fetchSubjects,
+  fetchFilters,
+  fetchTopics,
+  fetchResourceResourceTypes,
+  fetchTopicResources,
+  fetchResourceTypes,
 } = require('./data/api');
 
 const resolvers = {
   Query: {
     async resource(_, { id }, context) {
-      return resource(id, context);
+      return fetchResource(id, context);
     },
     async article(_, { id }, context) {
-      return article(id, context);
+      return fetchArticle(id, context);
     },
     async subject(_, { id }, context) {
-      const list = await subjects(context);
+      const list = await fetchSubjects(context);
       return list.find(subject => subject.id === id);
     },
     async subjects(_, __, context) {
-      return subjects(context);
+      return fetchSubjects(context);
     },
     async topic(_, { id }, context) {
-      const list = await topics(context);
+      const list = await fetchTopics(context);
       return list.find(topic => topic.id === id);
     },
     async topics(_, __, context) {
-      return topics(context);
+      return fetchTopics(context);
     },
     async filters(_, __, context) {
-      return filters(context);
+      return fetchFilters(context);
     },
     async resourceTypes(_, __, context) {
-      return resourceTypes(context);
+      return fetchResourceTypes(context);
     },
   },
   Topic: {
     async article(topic, _, context) {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        return article(topic.contentUri.replace('urn:article:', ''), context);
+        return fetchArticle(
+          topic.contentUri.replace('urn:article:', ''),
+          context
+        );
       }
     },
     async meta(topic, _, context) {
@@ -60,7 +63,7 @@ const resolvers = {
       }
     },
     async coreResources(topic, _, context) {
-      return topicResources(topic.id, 'urn:relevance:core', context);
+      return fetchTopicResources(topic.id, 'urn:relevance:core', context);
     },
     async subtopics(topic, _, context) {
       const subjectId = 'urn:' + topic.path.split('/')[1];
@@ -68,7 +71,11 @@ const resolvers = {
       return topics.filter(t => t.parent === topic.id);
     },
     async supplementaryResources(topic, _, context) {
-      return topicResources(topic.id, 'urn:relevance:supplementary', context);
+      return fetchTopicResources(
+        topic.id,
+        'urn:relevance:supplementary',
+        context
+      );
     },
   },
   Subject: {
@@ -91,14 +98,14 @@ const resolvers = {
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        return article(
+        return fetchArticle(
           resource.contentUri.replace('urn:article:', ''),
           context
         );
       }
     },
     async resourceTypes(resource, _, context) {
-      return resourceResourceTypes(resource.id, context);
+      return fetchResourceResourceTypes(resource.id, context);
     },
   },
   // Mutation: {},

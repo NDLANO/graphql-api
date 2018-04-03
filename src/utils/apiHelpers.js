@@ -20,8 +20,13 @@ function apiResourceUrl(path) {
   return apiBaseUrl + path;
 }
 
-async function fetchHelper(path, options) {
-  return fetch(apiResourceUrl(path), options);
+async function fetchHelper(path, context, options) {
+  return fetch(apiResourceUrl(path), {
+    headers: {
+      Authorization: `Bearer ${context.token.access_token}`,
+    },
+    ...options,
+  });
 }
 
 module.exports = {

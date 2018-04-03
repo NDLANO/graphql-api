@@ -7,17 +7,17 @@
  */
 
 const DataLoader = require('dataloader');
-const { articles, subjectTopics, filters } = require('./api');
+const { fetchArticles, fetchSubjectTopics, fetchFilters } = require('./api');
 
 function articlesLoader(context) {
   return new DataLoader(async articleIds => {
-    return articles(articleIds, context);
+    return fetchArticles(articleIds, context);
   });
 }
 
 function filterLoader(context) {
   return new DataLoader(async subjectIds => {
-    const filterList = await filters(context);
+    const filterList = await fetchFilters(context);
     return subjectIds.map(subjectId =>
       filterList.filter(filter => filter.subjectId === subjectId)
     );
@@ -27,7 +27,7 @@ function filterLoader(context) {
 function subjectTopicsLoader(context) {
   return new DataLoader(async ids => {
     return ids.map(async subjectId => {
-      return subjectTopics(subjectId, context);
+      return fetchSubjectTopics(subjectId, context);
     });
   });
 }

@@ -8,95 +8,73 @@
 
 const { fetch } = require('../utils/apiHelpers');
 
-async function resource(resourceId, context) {
-  const response = await fetch(`/taxonomy/v1/resources/${resourceId}/`, {
-    headers: { Authorization: `Bearer ${context.token.access_token}` },
-  });
-  const json = await response.json();
-  return json;
+async function fetchResource(resourceId, context) {
+  const response = await fetch(
+    `/taxonomy/v1/resources/${resourceId}/`,
+    context
+  );
+  return response.json();
 }
 
-async function filters(context) {
-  const response = await fetch(`/taxonomy/v1/filters/`, {
-    headers: { Authorization: `Bearer ${context.token.access_token}` },
-  });
-  const json = await response.json();
-  return json;
+async function fetchFilters(context) {
+  const response = await fetch(`/taxonomy/v1/filters/`, context);
+  return response.json();
 }
 
-async function resourceResourceTypes(resourceId, context) {
+async function fetchResourceResourceTypes(resourceId, context) {
   const response = await fetch(
     `/taxonomy/v1/resources/${resourceId}/resource-types`,
-    {
-      headers: { Authorization: `Bearer ${context.token.access_token}` },
-    }
+    context
   );
-  const json = await response.json();
-  return json;
+  return response.json();
 }
 
-async function resourceTypes(context) {
-  const response = await fetch(`/taxonomy/v1/resource-types`, {
-    headers: { Authorization: `Bearer ${context.token.access_token}` },
-  });
-  const json = await response.json();
-  return json;
+async function fetchResourceTypes(context) {
+  const response = await fetch(`/taxonomy/v1/resource-types`, context);
+  return response.json();
 }
-async function subjects(context) {
-  const response = await fetch(`/taxonomy/v1/subjects/`, {
-    headers: { Authorization: `Bearer ${context.token.access_token}` },
-  });
-  const json = await response.json();
-  return json;
+async function fetchSubjects(context) {
+  const response = await fetch(`/taxonomy/v1/subjects/`, context);
+  return response.json();
 }
 
-async function subjectTopics(subjectId, context) {
+async function fetchSubjectTopics(subjectId, context) {
   const response = await fetch(
     `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true`,
-    {
-      headers: { Authorization: `Bearer ${context.token.access_token}` },
-    }
+    context
   );
-  const json = await response.json();
-  return json;
+  return response.json();
 }
 
-async function topics(context) {
-  const response = await fetch(`/taxonomy/v1/topics/`, {
-    headers: { Authorization: `Bearer ${context.token.access_token}` },
-  });
-  const json = await response.json();
-  return json;
+async function fetchTopics(context) {
+  const response = await fetch(`/taxonomy/v1/topics/`, context);
+  return response.json();
 }
 
-async function article(articleId, context) {
-  const response = await fetch(`/article-converter/json/nb/${articleId}`, {
-    headers: { Authorization: `Bearer ${context.token.access_token}` },
-  });
-  const json = await response.json();
-  return json;
+async function fetchArticle(articleId, context) {
+  const response = await fetch(
+    `/article-converter/json/nb/${articleId}`,
+    context
+  );
+  return response.json();
 }
 
-async function topicResources(
+async function fetchTopicResources(
   topicId,
   relevance = 'urn:relevance:core',
   context
 ) {
   const response = await fetch(
     `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}`,
-    {
-      headers: { Authorization: `Bearer ${context.token.access_token}` },
-    }
+    context
   );
   return response.json();
 }
 
-async function articles(articleIds, context) {
+async function fetchArticles(articleIds, context) {
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
-    {
-      headers: { Authorization: `Bearer ${context.token.access_token}` },
-    }
+    context
   );
   const json = await response.json();
   return json.results.map(article => {
@@ -114,14 +92,14 @@ async function articles(articleIds, context) {
 }
 
 module.exports = {
-  filters,
-  resource,
-  article,
-  articles,
-  topics,
-  subjects,
-  subjectTopics,
-  resourceTypes,
-  resourceResourceTypes,
-  topicResources,
+  fetchFilters,
+  fetchResource,
+  fetchArticle,
+  fetchArticles,
+  fetchTopics,
+  fetchSubjects,
+  fetchSubjectTopics,
+  fetchResourceTypes,
+  fetchResourceResourceTypes,
+  fetchTopicResources,
 };
