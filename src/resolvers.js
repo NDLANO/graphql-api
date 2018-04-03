@@ -12,7 +12,6 @@ const {
   subjects,
   filters,
   topics,
-  subjectTopics,
   resourceResourceTypes,
   topicResources,
   resourceTypes,
@@ -63,13 +62,19 @@ const resolvers = {
     async coreResources(topic, _, context) {
       return topicResources(topic.id, 'urn:relevance:core', context);
     },
+    async subtopics(topic, _, context) {
+      const subjectId = 'urn:' + topic.path.split('/')[1];
+      const topics = await context.loaders.subjectTopicsLoader.load(subjectId);
+      return topics.filter(t => t.parent === topic.id);
+    },
     async supplementaryResources(topic, _, context) {
       return topicResources(topic.id, 'urn:relevance:supplementary', context);
     },
   },
   Subject: {
     async topics(subject, _, context) {
-      return subjectTopics(subject.id, context);
+      const topics = await context.loaders.subjectTopicsLoader.load(subject.id);
+      return topics.filter(topic => topic.parent === subject.id);
     },
     async filters(subject, __, context) {
       return context.loaders.filterLoader.load(subject.id);

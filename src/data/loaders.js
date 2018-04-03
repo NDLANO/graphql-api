@@ -7,7 +7,7 @@
  */
 
 const DataLoader = require('dataloader');
-const { articles, filters } = require('./api');
+const { articles, subjectTopics, filters } = require('./api');
 
 function articlesLoader(context) {
   return new DataLoader(async articleIds => {
@@ -24,7 +24,16 @@ function filterLoader(context) {
   });
 }
 
+function subjectTopicsLoader(context) {
+  return new DataLoader(async ids => {
+    return ids.map(async subjectId => {
+      return subjectTopics(subjectId, context);
+    });
+  });
+}
+
 module.exports = {
   filterLoader,
+  subjectTopicsLoader,
   articlesLoader,
 };

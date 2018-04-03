@@ -14,7 +14,11 @@ const { port } = require('./config');
 
 const schema = require('./schema');
 const { getToken } = require('./auth');
-const { filterLoader, articlesLoader } = require('./data/loaders');
+const {
+  filterLoader,
+  articlesLoader,
+  subjectTopicsLoader,
+} = require('./data/loaders');
 
 const GRAPHQL_PORT = port;
 
@@ -28,6 +32,7 @@ async function getOptions() {
       loaders: {
         articlesLoader: articlesLoader({ token }),
         filterLoader: filterLoader({ token }),
+        subjectTopicsLoader: subjectTopicsLoader({ token }),
       },
     },
     schema,

@@ -63,6 +63,7 @@ type Topic {
   path: String!
   article: Article
   meta: ArticleSubset
+  subtopics: [Topic]
   coreResources: [Resource]
   supplementaryResources: [Resource]
 }
