@@ -6,8 +6,8 @@
  *
  */
 
-const fetch = require('node-fetch');
-const { getEnvironmentVariabel } = require('./config');
+import fetch from 'node-fetch';
+import { getEnvironmentVariabel } from './config';
 
 const url = `https://ndla.eu.auth0.com/oauth/token`;
 
@@ -20,7 +20,7 @@ const clientSecret = getEnvironmentVariabel(
   'w9P-niyBUZK9fadBt5yNkG-7KMBULm59HB8GnJJPgwvT_gwlG98nfvdik2sVW9d_'
 );
 
-async function getToken() {
+export async function getToken() {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -41,7 +41,3 @@ async function getToken() {
 
   throw new Error('Failed to fetch token from auth0');
 }
-
-module.exports = {
-  getToken,
-};

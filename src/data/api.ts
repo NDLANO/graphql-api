@@ -6,9 +6,9 @@
  *
  */
 
-const { fetch } = require('../utils/apiHelpers');
+import { fetch } from '../utils/apiHelpers';
 
-async function fetchResource(resourceId, context) {
+export async function fetchResource(resourceId, context) {
   const response = await fetch(
     `/taxonomy/v1/resources/${resourceId}/`,
     context
@@ -16,12 +16,12 @@ async function fetchResource(resourceId, context) {
   return response.json();
 }
 
-async function fetchFilters(context) {
+export async function fetchFilters(context) {
   const response = await fetch(`/taxonomy/v1/filters/`, context);
   return response.json();
 }
 
-async function fetchResourceResourceTypes(resourceId, context) {
+export async function fetchResourceResourceTypes(resourceId, context) {
   const response = await fetch(
     `/taxonomy/v1/resources/${resourceId}/resource-types`,
     context
@@ -29,16 +29,17 @@ async function fetchResourceResourceTypes(resourceId, context) {
   return response.json();
 }
 
-async function fetchResourceTypes(context) {
+export async function fetchResourceTypes(context) {
   const response = await fetch(`/taxonomy/v1/resource-types`, context);
   return response.json();
 }
-async function fetchSubjects(context) {
+
+export async function fetchSubjects(context) {
   const response = await fetch(`/taxonomy/v1/subjects/`, context);
   return response.json();
 }
 
-async function fetchSubjectTopics(subjectId, context) {
+export async function fetchSubjectTopics(subjectId, context) {
   const response = await fetch(
     `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true`,
     context
@@ -46,12 +47,12 @@ async function fetchSubjectTopics(subjectId, context) {
   return response.json();
 }
 
-async function fetchTopics(context) {
+export async function fetchTopics(context) {
   const response = await fetch(`/taxonomy/v1/topics/`, context);
   return response.json();
 }
 
-async function fetchArticle(articleId, context) {
+export async function fetchArticle(articleId, context) {
   const response = await fetch(
     `/article-converter/json/nb/${articleId}`,
     context
@@ -59,7 +60,7 @@ async function fetchArticle(articleId, context) {
   return response.json();
 }
 
-async function fetchTopicResources(
+export async function fetchTopicResources(
   topicId,
   relevance = 'urn:relevance:core',
   context
@@ -68,10 +69,12 @@ async function fetchTopicResources(
     `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}`,
     context
   );
-  return response.json();
+  const json = await response.json();
+  console.log(json);
+  return json;
 }
 
-async function fetchArticles(articleIds, context) {
+export async function fetchArticles(articleIds, context) {
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
     context
@@ -90,16 +93,3 @@ async function fetchArticles(articleIds, context) {
     };
   });
 }
-
-module.exports = {
-  fetchFilters,
-  fetchResource,
-  fetchArticle,
-  fetchArticles,
-  fetchTopics,
-  fetchSubjects,
-  fetchSubjectTopics,
-  fetchResourceTypes,
-  fetchResourceResourceTypes,
-  fetchTopicResources,
-};

@@ -6,16 +6,16 @@
  *
  */
 
-const DataLoader = require('dataloader');
-const { fetchArticles, fetchSubjectTopics, fetchFilters } = require('./api');
+import DataLoader from 'dataloader';
+import { fetchArticles, fetchSubjectTopics, fetchFilters } from './api';
 
-function articlesLoader(context) {
+export function articlesLoader(context) {
   return new DataLoader(async articleIds => {
     return fetchArticles(articleIds, context);
   });
 }
 
-function filterLoader(context) {
+export function filterLoader(context) {
   return new DataLoader(async subjectIds => {
     const filterList = await fetchFilters(context);
     return subjectIds.map(subjectId =>
@@ -24,16 +24,10 @@ function filterLoader(context) {
   });
 }
 
-function subjectTopicsLoader(context) {
+export function subjectTopicsLoader(context) {
   return new DataLoader(async ids => {
     return ids.map(async subjectId => {
       return fetchSubjectTopics(subjectId, context);
     });
   });
 }
-
-module.exports = {
-  filterLoader,
-  subjectTopicsLoader,
-  articlesLoader,
-};

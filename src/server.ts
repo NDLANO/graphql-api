@@ -6,19 +6,19 @@
  *
  */
 
-const express = require('express');
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const { port } = require('./config');
+import express from 'express';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import { port } from './config';
 
-const schema = require('./schema');
-const { getToken } = require('./auth');
-const {
+import schema from './schema';
+import { getToken } from './auth';
+import {
   filterLoader,
   articlesLoader,
   subjectTopicsLoader,
-} = require('./data/loaders');
+} from './data/loaders';
 
 const GRAPHQL_PORT = port;
 

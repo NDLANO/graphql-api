@@ -6,22 +6,22 @@
  *
  */
 
-const fetch = require('node-fetch');
-const config = require('../config');
+import nodeFetch from 'node-fetch';
+import { apiUrl } from '../config';
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
   //   return 'http://some-api';
   // }
-  return config.apiUrl;
+  return apiUrl;
 })();
 
 function apiResourceUrl(path) {
   return apiBaseUrl + path;
 }
 
-async function fetchHelper(path, context, options) {
-  return fetch(apiResourceUrl(path), {
+async function fetchHelper(path: string, context: any, options?: any) {
+  return nodeFetch(apiResourceUrl(path), {
     headers: {
       Authorization: `Bearer ${context.token.access_token}`,
     },
@@ -29,6 +29,4 @@ async function fetchHelper(path, context, options) {
   });
 }
 
-module.exports = {
-  fetch: fetchHelper,
-};
+export const fetch = fetchHelper;

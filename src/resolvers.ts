@@ -6,7 +6,7 @@
  *
  */
 
-const {
+import {
   fetchArticle,
   fetchResource,
   fetchSubjects,
@@ -15,9 +15,9 @@ const {
   fetchResourceResourceTypes,
   fetchTopicResources,
   fetchResourceTypes,
-} = require('./data/api');
+} from './data/api';
 
-const resolvers = {
+export const resolvers = {
   Query: {
     async resource(_, { id }, context) {
       return fetchResource(id, context);
@@ -110,5 +110,3 @@ const resolvers = {
   },
   // Mutation: {},
 };
-
-module.exports = resolvers;
