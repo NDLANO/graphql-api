@@ -9,11 +9,12 @@
   "scripts": {
     "build-ts": "tsc",
     "watch-ts": "tsc -w",
-    "lint": "eslint . --ext .js",
-    "watch-node": "nodemon dist/server.js",
+    "lint": "eslint . --ext src",
+    "watch-node": "nodemon build/server.js",
     "build": "npm run build-ts",
-    "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\"  \"npm run watch-ts\" \"npm run watch-node\"",
-    "start-prod": "node ./dist/server.js"
+    "start":
+      "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\"  \"npm run watch-ts\" \"npm run watch-node\"",
+    "start-prod": "node ./build/server.js"
   },
   "dependencies": {
     "apollo-server-express": "^1.3.2",
@@ -32,6 +33,7 @@
     "eslint": "^4.18.2",
     "nodemon": "^1.17.2",
     "prettier": "^1.11.1",
-    "typescript": "^2.8.1"
+    "typescript": "^2.8.1",
+    "typescript-eslint-parser": "^14.0.0"
   }
 }
