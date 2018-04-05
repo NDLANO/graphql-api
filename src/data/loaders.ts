@@ -9,13 +9,13 @@
 import DataLoader from 'dataloader';
 import { fetchArticles, fetchSubjectTopics, fetchFilters } from './api';
 
-export function articlesLoader(context) {
+export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async articleIds => {
     return fetchArticles(articleIds, context);
   });
 }
 
-export function filterLoader(context) {
+export function filterLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async subjectIds => {
     const filterList = await fetchFilters(context);
     return subjectIds.map(subjectId =>
@@ -24,7 +24,7 @@ export function filterLoader(context) {
   });
 }
 
-export function subjectTopicsLoader(context) {
+export function subjectTopicsLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async ids => {
     return ids.map(async subjectId => {
       return fetchSubjectTopics(subjectId, context);

@@ -8,7 +8,7 @@
 
 import { fetch } from '../utils/apiHelpers';
 
-export async function fetchResource(resourceId, context) {
+export async function fetchResource(resourceId: string, context: Context) {
   const response = await fetch(
     `/taxonomy/v1/resources/${resourceId}/`,
     context
@@ -16,12 +16,15 @@ export async function fetchResource(resourceId, context) {
   return response.json();
 }
 
-export async function fetchFilters(context) {
+export async function fetchFilters(context: Context) {
   const response = await fetch(`/taxonomy/v1/filters/`, context);
   return response.json();
 }
 
-export async function fetchResourceResourceTypes(resourceId, context) {
+export async function fetchResourceResourceTypes(
+  resourceId: string,
+  context: Context
+) {
   const response = await fetch(
     `/taxonomy/v1/resources/${resourceId}/resource-types`,
     context
@@ -29,17 +32,17 @@ export async function fetchResourceResourceTypes(resourceId, context) {
   return response.json();
 }
 
-export async function fetchResourceTypes(context) {
+export async function fetchResourceTypes(context: Context) {
   const response = await fetch(`/taxonomy/v1/resource-types`, context);
   return response.json();
 }
 
-export async function fetchSubjects(context) {
+export async function fetchSubjects(context: Context) {
   const response = await fetch(`/taxonomy/v1/subjects/`, context);
   return response.json();
 }
 
-export async function fetchSubjectTopics(subjectId, context) {
+export async function fetchSubjectTopics(subjectId: string, context: Context) {
   const response = await fetch(
     `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true`,
     context
@@ -47,12 +50,12 @@ export async function fetchSubjectTopics(subjectId, context) {
   return response.json();
 }
 
-export async function fetchTopics(context) {
+export async function fetchTopics(context: Context) {
   const response = await fetch(`/taxonomy/v1/topics/`, context);
   return response.json();
 }
 
-export async function fetchArticle(articleId, context) {
+export async function fetchArticle(articleId: string, context: Context) {
   const response = await fetch(
     `/article-converter/json/nb/${articleId}`,
     context
@@ -61,20 +64,19 @@ export async function fetchArticle(articleId, context) {
 }
 
 export async function fetchTopicResources(
-  topicId,
-  relevance = 'urn:relevance:core',
-  context
+  topicId: string,
+  relevance: string = 'urn:relevance:core',
+  context: Context
 ) {
   const response = await fetch(
     `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}`,
     context
   );
   const json = await response.json();
-  console.log(json);
   return json;
 }
 
-export async function fetchArticles(articleIds, context) {
+export async function fetchArticles(articleIds: string[], context: Context) {
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
     context

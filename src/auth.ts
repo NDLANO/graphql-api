@@ -20,7 +20,7 @@ const clientSecret = getEnvironmentVariabel(
   'w9P-niyBUZK9fadBt5yNkG-7KMBULm59HB8GnJJPgwvT_gwlG98nfvdik2sVW9d_'
 );
 
-export async function getToken() {
+export async function getToken(): Promise<AuthToken> {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -32,7 +32,6 @@ export async function getToken() {
       client_secret: `${clientSecret}`,
       audience: 'ndla_system',
     }),
-    json: true,
   });
 
   if (response.ok) {

@@ -9,6 +9,7 @@
 import express from 'express';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
+import DataLoader from 'dataloader';
 import cors from 'cors';
 import { port } from './config';
 
@@ -24,17 +25,21 @@ const GRAPHQL_PORT = port;
 
 const graphQLServer = express();
 
-async function getOptions() {
+async function getContext(): Promise<Context> {
   const token = await getToken();
   return {
-    context: {
-      token,
-      loaders: {
-        articlesLoader: articlesLoader({ token }),
-        filterLoader: filterLoader({ token }),
-        subjectTopicsLoader: subjectTopicsLoader({ token }),
-      },
+    token,
+    loaders: {
+      articlesLoader: articlesLoader({ token }),
+      filterLoader: filterLoader({ token }),
+      subjectTopicsLoader: subjectTopicsLoader({ token }),
     },
+  };
+}
+
+async function getOptions() {
+  return {
+    context: await getContext(),
     schema,
   };
 }
