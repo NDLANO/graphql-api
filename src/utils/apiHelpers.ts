@@ -16,11 +16,11 @@ const apiBaseUrl = (() => {
   return apiUrl;
 })();
 
-function apiResourceUrl(path) {
+function apiResourceUrl(path: string) {
   return apiBaseUrl + path;
 }
 
-async function fetchHelper(path: string, context: any, options?: any) {
+async function fetchHelper(path: string, context: Context, options?: any) {
   return nodeFetch(apiResourceUrl(path), {
     headers: {
       Authorization: `Bearer ${context.token.access_token}`,
