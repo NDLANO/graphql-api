@@ -49,7 +49,7 @@ export const resolvers = {
     async resourceTypes(
       _: any,
       __: any,
-      context: Context
+      context: Context,
     ): Promise<GQLResourceType[]> {
       return fetchResourceTypes(context);
     },
@@ -58,37 +58,37 @@ export const resolvers = {
     async article(
       topic: GQLTopic,
       _: any,
-      context: Context
+      context: Context,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         return fetchArticle(
           topic.contentUri.replace('urn:article:', ''),
-          context
+          context,
         );
       }
     },
     async meta(
       topic: GQLTopic,
       _: any,
-      context: Context
+      context: Context,
     ): Promise<GQLArticleSubset> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         return context.loaders.articlesLoader.load(
-          topic.contentUri.replace('urn:article:', '')
+          topic.contentUri.replace('urn:article:', ''),
         );
       }
     },
     async coreResources(
       topic: GQLTopic,
       _: any,
-      context: Context
+      context: Context,
     ): Promise<GQLResource[]> {
       return fetchTopicResources(topic.id, 'urn:relevance:core', context);
     },
     async subtopics(
       topic: GQLTopic,
       _: any,
-      context: Context
+      context: Context,
     ): Promise<GQLTopic[]> {
       const subjectId = 'urn:' + topic.path.split('/')[1];
       const topics = await context.loaders.subjectTopicsLoader.load(subjectId);
@@ -97,12 +97,12 @@ export const resolvers = {
     async supplementaryResources(
       topic: GQLTopic,
       _: any,
-      context: Context
+      context: Context,
     ): Promise<GQLResource[]> {
       return fetchTopicResources(
         topic.id,
         'urn:relevance:supplementary',
-        context
+        context,
       );
     },
   },
@@ -110,7 +110,7 @@ export const resolvers = {
     async topics(
       subject: GQLSubject,
       _: any,
-      context: Context
+      context: Context,
     ): Promise<GQLTopic[]> {
       const topics = await context.loaders.subjectTopicsLoader.load(subject.id);
       return topics.filter((topic: GQLTopic) => topic.parent === subject.id);
@@ -118,14 +118,14 @@ export const resolvers = {
     async filters(
       subject: GQLSubject,
       __: any,
-      context: Context
+      context: Context,
     ): Promise<GQLFilter[]> {
       return context.loaders.filterLoader.load(subject.id);
     },
   },
   ResourceTypeDefinition: {
     async subtypes(
-      resourceType: GQLResourceTypeDefinition
+      resourceType: GQLResourceTypeDefinition,
     ): Promise<GQLResourceTypeDefinition[]> {
       return resourceType.subtypes;
     },
@@ -134,7 +134,7 @@ export const resolvers = {
     async article(
       resource: GQLResource,
       _: any,
-      context: Context
+      context: Context,
     ): Promise<GQLArticle> {
       if (
         resource.contentUri &&
@@ -142,14 +142,14 @@ export const resolvers = {
       ) {
         return fetchArticle(
           resource.contentUri.replace('urn:article:', ''),
-          context
+          context,
         );
       }
     },
     async resourceTypes(
       resource: GQLResource,
       _: any,
-      context: Context
+      context: Context,
     ): Promise<GQLResourceType[]> {
       return fetchResourceResourceTypes(resource.id, context);
     },

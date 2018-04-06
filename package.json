@@ -7,13 +7,13 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "build-ts": "tsc",
-    "watch-ts": "tsc -w",
-    "lint": "eslint . --ext src",
-    "watch-node": "nodemon build/server.js",
-    "generate-schema-types": "ts-node generateTypeScriptTypesFromSchema.ts",
     "build": "npm run build-ts",
-    "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\"  \"npm run watch-ts\" \"npm run watch-node\"",
+    "build-ts": "tsc",
+    "lint": "yarn run lint-prettier && eslint . --ext src",
+    "lint-prettier": "prettier --l \"src/**/*.ts\"",
+    "prettier": "prettier --write \"src/**/*.ts\"",
+    "generate-schema-types": "ts-node generateTypeScriptTypesFromSchema.ts",
+    "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"nodemon build/server.js\"",
     "start-prod": "node ./build/server.js"
   },
   "dependencies": {

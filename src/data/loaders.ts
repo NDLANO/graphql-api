@@ -19,7 +19,7 @@ export function filterLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async subjectIds => {
     const filterList = await fetchFilters(context);
     return subjectIds.map(subjectId =>
-      filterList.filter(filter => filter.subjectId === subjectId)
+      filterList.filter(filter => filter.subjectId === subjectId),
     );
   });
 }

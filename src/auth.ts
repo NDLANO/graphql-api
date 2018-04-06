@@ -13,11 +13,11 @@ const url = `https://ndla.eu.auth0.com/oauth/token`;
 
 const clientId = getEnvironmentVariabel(
   'NDLA_GRAPHQL_CLIENT_ID',
-  'IxLzDBlvwmHBUMfLaGfJshD6Kahb362L'
+  'IxLzDBlvwmHBUMfLaGfJshD6Kahb362L',
 );
 const clientSecret = getEnvironmentVariabel(
   'NDLA_GRAPHQL_CLIENT_SECRET',
-  'w9P-niyBUZK9fadBt5yNkG-7KMBULm59HB8GnJJPgwvT_gwlG98nfvdik2sVW9d_'
+  'w9P-niyBUZK9fadBt5yNkG-7KMBULm59HB8GnJJPgwvT_gwlG98nfvdik2sVW9d_',
 );
 
 export async function getToken(): Promise<AuthToken> {

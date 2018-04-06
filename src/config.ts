@@ -7,7 +7,7 @@
  */
 export const getEnvironmentVariabel = (
   key: string,
-  fallback: string = undefined
+  fallback: string = undefined,
 ) => {
   const variabel = process.env[key];
   return variabel || fallback;
@@ -16,5 +16,5 @@ export const getEnvironmentVariabel = (
 export const port = getEnvironmentVariabel(process.env.PORT, '4000');
 export const apiUrl = getEnvironmentVariabel(
   process.env.API_URL,
-  'https://test.api.ndla.no'
+  'https://test.api.ndla.no',
 );

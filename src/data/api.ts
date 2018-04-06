@@ -10,11 +10,11 @@ import { fetch } from '../utils/apiHelpers';
 
 export async function fetchResource(
   resourceId: string,
-  context: Context
+  context: Context,
 ): Promise<GQLResource> {
   const response = await fetch(
     `/taxonomy/v1/resources/${resourceId}/`,
-    context
+    context,
   );
   return response.json();
 }
@@ -26,17 +26,17 @@ export async function fetchFilters(context: Context): Promise<GQLFilter[]> {
 
 export async function fetchResourceResourceTypes(
   resourceId: string,
-  context: Context
+  context: Context,
 ): Promise<GQLResourceType[]> {
   const response = await fetch(
     `/taxonomy/v1/resources/${resourceId}/resource-types`,
-    context
+    context,
   );
   return response.json();
 }
 
 export async function fetchResourceTypes(
-  context: Context
+  context: Context,
 ): Promise<GQLResourceType[]> {
   const response = await fetch(`/taxonomy/v1/resource-types`, context);
   return response.json();
@@ -50,7 +50,7 @@ export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
 export async function fetchSubjectTopics(subjectId: string, context: Context) {
   const response = await fetch(
     `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true`,
-    context
+    context,
   );
   return response.json();
 }
@@ -62,11 +62,11 @@ export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
 
 export async function fetchArticle(
   articleId: string,
-  context: Context
+  context: Context,
 ): Promise<GQLArticle> {
   const response = await fetch(
     `/article-converter/json/nb/${articleId}`,
-    context
+    context,
   );
   return response.json();
 }
@@ -74,11 +74,11 @@ export async function fetchArticle(
 export async function fetchTopicResources(
   topicId: string,
   relevance: string = 'urn:relevance:core',
-  context: Context
+  context: Context,
 ): Promise<GQLResource[]> {
   const response = await fetch(
     `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}`,
-    context
+    context,
   );
   const json = await response.json();
   return json;
@@ -86,11 +86,11 @@ export async function fetchTopicResources(
 
 export async function fetchArticles(
   articleIds: string[],
-  context: Context
+  context: Context,
 ): Promise<GQLArticleSubset[]> {
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
-    context
+    context,
   );
   const json = await response.json();
   return json.results.map((article: any) => {
