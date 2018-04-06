@@ -46,10 +46,6 @@ type ArticleSubset {
   metaDescription: String
 }
 
-type Description {
-  value: String!
-}
-
 type Filter {
   id: String!
   name: String!
@@ -61,6 +57,7 @@ type Topic {
   contentUri: String
   name: String!
   path: String!
+  parent: String
   article: Article
   meta: ArticleSubset
   subtopics: [Topic]
