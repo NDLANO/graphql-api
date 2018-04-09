@@ -24,12 +24,14 @@
     "express": "^4.16.3",
     "graphql": "^0.13.1",
     "graphql-tools": "^2.22.0",
+    "lodash": "^4.17.5",
     "node-fetch": "^2.1.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.3",
     "@types/express": "^4.11.1",
     "@types/graphql": "^0.13.0",
+    "@types/lodash": "^4.14.106",
     "@types/node": "^9.6.2",
     "@types/node-fetch": "^1.6.8",
     "chalk": "^2.3.2",

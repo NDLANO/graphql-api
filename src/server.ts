@@ -6,7 +6,7 @@
  *
  */
 
-import express from 'express';
+import express, { Request } from 'express';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
 import DataLoader from 'dataloader';
@@ -25,8 +25,8 @@ const GRAPHQL_PORT = port;
 
 const graphQLServer = express();
 
-async function getContext(): Promise<Context> {
-  const token = await getToken();
+async function getContext(request: Request): Promise<Context> {
+  const token = await getToken(request);
   return {
     token,
     loaders: {
@@ -37,9 +37,9 @@ async function getContext(): Promise<Context> {
   };
 }
 
-async function getOptions() {
+async function getOptions(request: Request) {
   return {
-    context: await getContext(),
+    context: await getContext(request),
     schema,
   };
 }
