@@ -31,12 +31,92 @@ type Resource {
   resourceTypes: [ResourceType]
 }
 
+type License {
+  license: String!
+  url: String!
+  description: String!
+}
+
+type Contributor {
+  type: String!
+  name: String!
+}
+
+type Copyright {
+  license: License
+  creators: [Contributor]
+  processors: [Contributor]
+  rightsholders: [Contributor]
+}
+
+type ArticleRequiredLibrary {
+  name: String!
+  url: String!
+  mediaType: String!
+}
+
+type FootNote {
+  ref: Int!
+  title: String!
+  year: String!
+  authors: [String]!
+  edition: String
+  publisher: String
+  url: String
+}
+
+type ImageLicense {
+  title: String!
+  src: String!
+  altText: String!
+  copyright: Copyright!
+}
+
+type AudioLicense {
+  title: String!
+  src: String!
+  copyright: Copyright!
+}
+
+type BrightcoveIframe {
+  src: String!
+  height: Int!
+  width: Int!
+}
+
+type BrightcoveLicense {
+  title: String!
+  cover: String
+  src: String
+  iframe: BrightcoveIframe
+  copyright: Copyright!
+}
+
+
+type ArticleMetaData {
+  footnotes: [FootNote]
+  images: [ImageLicense]
+  audios: [AudioLicense]
+  brightcoves: [BrightcoveLicense]
+}
+
 type Article {
   id: Int!
+  revision: Int!
   title: String!
-  content: String!
   introduction: String!
+  content: String!
+  created: String!
+  updated: String!
+  visualElement: String
+  metaImage: String
   metaDescription: String!
+  articleType: String!
+  oldNdlaUrl: String!
+  requiredLibraries: [ArticleRequiredLibrary]
+  metaData: ArticleMetaData
+  supportedLanguages: [String]
+  copyright: Copyright!
 }
 
 type ArticleSubset {
