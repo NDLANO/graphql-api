@@ -11,6 +11,7 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
 import DataLoader from 'dataloader';
 import cors from 'cors';
+import { isString } from 'lodash';
 import { port } from './config';
 
 import schema from './schema';
@@ -25,14 +26,26 @@ const GRAPHQL_PORT = port;
 
 const graphQLServer = express();
 
+function getAcceptLanguage(request: Request): string {
+  const language = request.headers['accept-language'];
+
+  if (isString(language)) {
+    return language;
+  }
+  return 'nb';
+}
+
 async function getContext(request: Request): Promise<Context> {
   const token = await getToken(request);
+  const language = getAcceptLanguage(request);
+  const defaultContext = { token, language };
+
   return {
-    token,
+    ...defaultContext,
     loaders: {
-      articlesLoader: articlesLoader({ token }),
-      filterLoader: filterLoader({ token }),
-      subjectTopicsLoader: subjectTopicsLoader({ token }),
+      articlesLoader: articlesLoader(defaultContext),
+      filterLoader: filterLoader(defaultContext),
+      subjectTopicsLoader: subjectTopicsLoader(defaultContext),
     },
   };
 }

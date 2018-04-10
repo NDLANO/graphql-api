@@ -13,14 +13,17 @@ export async function fetchResource(
   context: Context,
 ): Promise<GQLResource> {
   const response = await fetch(
-    `/taxonomy/v1/resources/${resourceId}/`,
+    `/taxonomy/v1/resources/${resourceId}/?language=${context.language}`,
     context,
   );
   return response.json();
 }
 
 export async function fetchFilters(context: Context): Promise<GQLFilter[]> {
-  const response = await fetch(`/taxonomy/v1/filters/`, context);
+  const response = await fetch(
+    `/taxonomy/v1/filters/?language=${context.language}`,
+    context,
+  );
   return response.json();
 }
 
@@ -29,7 +32,9 @@ export async function fetchResourceResourceTypes(
   context: Context,
 ): Promise<GQLResourceType[]> {
   const response = await fetch(
-    `/taxonomy/v1/resources/${resourceId}/resource-types`,
+    `/taxonomy/v1/resources/${resourceId}/resource-types?language=${
+      context.language
+    }`,
     context,
   );
   return response.json();
@@ -38,25 +43,36 @@ export async function fetchResourceResourceTypes(
 export async function fetchResourceTypes(
   context: Context,
 ): Promise<GQLResourceType[]> {
-  const response = await fetch(`/taxonomy/v1/resource-types`, context);
+  const response = await fetch(
+    `/taxonomy/v1/resource-types?language=${context.language}`,
+    context,
+  );
   return response.json();
 }
 
 export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
-  const response = await fetch(`/taxonomy/v1/subjects/`, context);
+  const response = await fetch(
+    `/taxonomy/v1/subjects/?language=${context.language}`,
+    context,
+  );
   return response.json();
 }
 
 export async function fetchSubjectTopics(subjectId: string, context: Context) {
   const response = await fetch(
-    `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true`,
+    `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true&language=${
+      context.language
+    }`,
     context,
   );
   return response.json();
 }
 
 export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
-  const response = await fetch(`/taxonomy/v1/topics/`, context);
+  const response = await fetch(
+    `/taxonomy/v1/topics/?language=${context.language}`,
+    context,
+  );
   return response.json();
 }
 
@@ -65,7 +81,7 @@ export async function fetchArticle(
   context: Context,
 ): Promise<GQLArticle> {
   const response = await fetch(
-    `/article-converter/json/nb/${articleId}`,
+    `/article-converter/json/${context.language}/${articleId}`,
     context,
   );
   return response.json();
@@ -77,7 +93,9 @@ export async function fetchTopicResources(
   context: Context,
 ): Promise<GQLResource[]> {
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}`,
+    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${
+      context.language
+    }`,
     context,
   );
   const json = await response.json();
