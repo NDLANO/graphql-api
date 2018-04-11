@@ -54,6 +54,16 @@ async function getOptions(request: Request) {
   return {
     context: await getContext(request),
     schema,
+    formatError(err: any) {
+      // todo: log error
+      return {
+        message: err.message,
+        locations: err.locations,
+        path: err.path,
+        status: err.originalError && err.originalError.status,
+        json: err.originalError && err.originalError.json,
+      };
+    },
   };
 }
 

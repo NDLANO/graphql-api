@@ -6,7 +6,7 @@
  *
  */
 
-import { fetch } from '../utils/apiHelpers';
+import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchResource(
   resourceId: string,
@@ -16,7 +16,7 @@ export async function fetchResource(
     `/taxonomy/v1/resources/${resourceId}/?language=${context.language}`,
     context,
   );
-  return response.json();
+  return resolveJson(response);
 }
 
 export async function fetchFilters(context: Context): Promise<GQLFilter[]> {
@@ -24,7 +24,7 @@ export async function fetchFilters(context: Context): Promise<GQLFilter[]> {
     `/taxonomy/v1/filters/?language=${context.language}`,
     context,
   );
-  return response.json();
+  return resolveJson(response);
 }
 
 export async function fetchResourceResourceTypes(
@@ -37,7 +37,7 @@ export async function fetchResourceResourceTypes(
     }`,
     context,
   );
-  return response.json();
+  return resolveJson(response);
 }
 
 export async function fetchResourceTypes(
@@ -47,7 +47,7 @@ export async function fetchResourceTypes(
     `/taxonomy/v1/resource-types?language=${context.language}`,
     context,
   );
-  return response.json();
+  return resolveJson(response);
 }
 
 export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
@@ -55,7 +55,7 @@ export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
     `/taxonomy/v1/subjects/?language=${context.language}`,
     context,
   );
-  return response.json();
+  return resolveJson(response);
 }
 
 export async function fetchSubjectTopics(subjectId: string, context: Context) {
@@ -65,7 +65,7 @@ export async function fetchSubjectTopics(subjectId: string, context: Context) {
     }`,
     context,
   );
-  return response.json();
+  return resolveJson(response);
 }
 
 export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
@@ -73,7 +73,7 @@ export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
     `/taxonomy/v1/topics/?language=${context.language}`,
     context,
   );
-  return response.json();
+  return resolveJson(response);
 }
 
 export async function fetchArticle(
@@ -84,7 +84,7 @@ export async function fetchArticle(
     `/article-converter/json/${context.language}/${articleId}`,
     context,
   );
-  return response.json();
+  return resolveJson(response);
 }
 
 export async function fetchTopicResources(
@@ -98,7 +98,7 @@ export async function fetchTopicResources(
     }`,
     context,
   );
-  const json = await response.json();
+  const json = await resolveJson(response);
   return json;
 }
 
@@ -110,7 +110,7 @@ export async function fetchArticles(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
     context,
   );
-  const json = await response.json();
+  const json = await resolveJson(response);
   return json.results.map((article: any) => {
     return {
       id: article.id,
