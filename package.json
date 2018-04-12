@@ -12,7 +12,7 @@
     "lint": "yarn run lint-prettier && eslint . --ext src",
     "lint-prettier": "prettier --l \"src/**/*.ts\"",
     "prettier": "prettier --write \"src/**/*.ts\"",
-    "generate-schema-types": "ts-node generateTypeScriptTypesFromSchema.ts",
+    "generate-schema-types": "ts-node ./scripts/generateTypeScriptTypesFromSchema.ts",
     "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"nodemon build/server.js\"",
     "start-prod": "node ./build/server.js"
   },

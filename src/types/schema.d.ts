@@ -32,10 +32,89 @@ declare global {
 
   export interface GQLArticle {
     id: number;
+    revision: number;
     title: string;
-    content: string;
     introduction: string;
+    content: string;
+    created: string;
+    updated: string;
+    visualElement?: string;
+    metaImage?: string;
     metaDescription: string;
+    articleType: string;
+    oldNdlaUrl: string;
+    requiredLibraries?: (GQLArticleRequiredLibrary | null)[];
+    metaData?: GQLArticleMetaData;
+    supportedLanguages?: (string | null)[];
+    copyright: GQLCopyright;
+  }
+
+  export interface GQLArticleRequiredLibrary {
+    name: string;
+    url: string;
+    mediaType: string;
+  }
+
+  export interface GQLArticleMetaData {
+    footnotes?: (GQLFootNote | null)[];
+    images?: (GQLImageLicense | null)[];
+    audios?: (GQLAudioLicense | null)[];
+    brightcoves?: (GQLBrightcoveLicense | null)[];
+  }
+
+  export interface GQLFootNote {
+    ref: number;
+    title: string;
+    year: string;
+    authors: (string | null)[];
+    edition?: string;
+    publisher?: string;
+    url?: string;
+  }
+
+  export interface GQLImageLicense {
+    title: string;
+    src: string;
+    altText: string;
+    copyright: GQLCopyright;
+  }
+
+  export interface GQLCopyright {
+    license?: GQLLicense;
+    creators?: (GQLContributor | null)[];
+    processors?: (GQLContributor | null)[];
+    rightsholders?: (GQLContributor | null)[];
+  }
+
+  export interface GQLLicense {
+    license: string;
+    url: string;
+    description: string;
+  }
+
+  export interface GQLContributor {
+    type: string;
+    name: string;
+  }
+
+  export interface GQLAudioLicense {
+    title: string;
+    src: string;
+    copyright: GQLCopyright;
+  }
+
+  export interface GQLBrightcoveLicense {
+    title: string;
+    cover?: string;
+    src?: string;
+    iframe?: GQLBrightcoveIframe;
+    copyright: GQLCopyright;
+  }
+
+  export interface GQLBrightcoveIframe {
+    src: string;
+    height: number;
+    width: number;
   }
 
   export interface GQLResourceType {

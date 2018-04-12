@@ -1,9 +1,15 @@
 import { generateTypeScriptTypes } from 'graphql-schema-typescript';
-import schema from './src/schema';
+import schema from '../src/schema';
 import { join } from 'path';
 import chalk from 'chalk';
 
-const typeDefinitionFileName = join(__dirname, 'src', 'types', 'schema.d.ts');
+const typeDefinitionFileName = join(
+  __dirname,
+  '..',
+  'src',
+  'types',
+  'schema.d.ts',
+);
 
 async function generate(): Promise<void> {
   try {
@@ -12,7 +18,7 @@ async function generate(): Promise<void> {
       global: true,
     });
     console.log(
-      `${chalk.green(`CREATED`)} ${chalk.dim(typeDefinitionFileName)}`
+      `${chalk.green(`CREATED`)} ${chalk.dim(typeDefinitionFileName)}`,
     );
   } catch (error) {
     console.error(error);
