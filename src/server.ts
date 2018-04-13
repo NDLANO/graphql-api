@@ -12,8 +12,9 @@ import bodyParser from 'body-parser';
 import DataLoader from 'dataloader';
 import cors from 'cors';
 import { isString } from 'lodash';
-import { port } from './config';
 
+import { port } from './config';
+import logger from './utils/logger';
 import schema from './schema';
 import { getToken } from './auth';
 import {
@@ -21,6 +22,7 @@ import {
   articlesLoader,
   subjectTopicsLoader,
 } from './data/loaders';
+import { nonExecutableDefinitionMessage } from 'graphql/validation/rules/ExecutableDefinitions';
 
 const GRAPHQL_PORT = port;
 
@@ -51,11 +53,18 @@ async function getContext(request: Request): Promise<Context> {
 }
 
 async function getOptions(request: Request) {
+  let context;
+  try {
+    context = await getContext(request);
+  } catch (error) {
+    logger.error(error);
+  }
   return {
-    context: await getContext(request),
+    context,
     schema,
+    debug: false, // log errors in formatError
     formatError(err: any) {
-      // todo: log error
+      logger.error(err);
       return {
         message: err.message,
         locations: err.locations,
