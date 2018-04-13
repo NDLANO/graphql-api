@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`can run query on schema 1`] = `
+Object {
+  "data": Object {
+    "resource": Object {
+      "id": "Hello World",
+      "name": "Hello World",
+    },
+  },
+}
+`;

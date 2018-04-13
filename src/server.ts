@@ -22,7 +22,6 @@ import {
   articlesLoader,
   subjectTopicsLoader,
 } from './data/loaders';
-import { nonExecutableDefinitionMessage } from 'graphql/validation/rules/ExecutableDefinitions';
 
 const GRAPHQL_PORT = port;
 
