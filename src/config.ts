@@ -13,8 +13,18 @@ export const getEnvironmentVariabel = (
   return variabel || fallback;
 };
 
+const ndlaEnvironment = getEnvironmentVariabel('NDLA_ENVIRONMENT', 'test');
+
+const ndlaApiUrl = () => {
+  switch (ndlaEnvironment) {
+    case 'local':
+      return 'http://api-gateway.ndla-local';
+    case 'prod':
+      return 'https://api.ndla.no';
+    default:
+      return `https://${ndlaEnvironment}.api.ndla.no`;
+  }
+};
+
 export const port = getEnvironmentVariabel(process.env.PORT, '4000');
-export const apiUrl = getEnvironmentVariabel(
-  process.env.API_URL,
-  'https://test.api.ndla.no',
-);
+export const apiUrl = getEnvironmentVariabel(process.env.API_URL, ndlaApiUrl());

@@ -14,7 +14,7 @@
     "prettier": "prettier --write \"src/**/*.ts\"",
     "generate-schema-types": "ts-node ./scripts/generateTypeScriptTypesFromSchema.ts",
     "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"nodemon build/server.js | bunyan\"",
-    "start-prod": "node ./build/server.js"
+    "start-prod": "NODE_ENV=production node ./build/server.js"
   },
   "dependencies": {
     "apollo-server-express": "^1.3.2",
