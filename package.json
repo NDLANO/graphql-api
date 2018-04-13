@@ -1,7 +1,7 @@
 {
   "name": "ndla-graphql-api",
   "version": "1.0.0",
-  "description": "Ndla GraphQL server",
+  "description": "NDLA GraphQL server",
   "main": "src/server.js",
   "author": "ndla@knowit.no",
   "license": "GPL-3.0",
