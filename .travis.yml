@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+- '8'
+before_install:
+- curl -o- -L https://yarnpkg.com/install.sh | bash
+- export PATH="$HOME/.yarn/bin:$PATH"
+script:
+- yarn check-all
+notifications:
+  slack:
+    on_success: change
+    on_failure: always
+    rooms:
+      secure: UfrXQBxAC7PvxMll52rmCWxDkbXinH8B2FFpCzmrhFDAWbeFmDzMcS/0/92dnrsSoGq9zEQckfEeXW0LYfVaTNanmNg4WKi2Si3sC/FNVAwW3g2QEnV5AiYHiEfDxVzWOjeHMh7tl8yG7HG5PleexMnYIHz6v7KtpXmOxQew9ULbrIDVtpTGQxo//O+YzYUEh/HdxH44PT/lVIr/93iINoq6Tz3EsSzctqX6r02NU8qmOI99bHb2sZbBwHtbm5388uCoa207RUlGHG9yHSap/uH7fRoRA/3qCwnF2Xd8+cWGAl+yI80wjj9B5GkV7NyhWlQsV4kIiHNss/nvqDRl04Pmu0Y+u1AbOZU6XjzmxY8sOGg5cYgrwrvjabOVhswjmDN0OKxU54h/M5dnEUERU/sZri20edvOuFi8t4AJmy4kjawhXRjW7ZFV5pdCObRH9etIx3Dl1ZN8O7hI45lROuRIthTVmbfxceQfDl4k3fzBu0GadkhLuxY8dU37wznp6Q5Wsow5Xr9Ojt4tsZybwVAMzT3slMYEDuAp9Xr8celoUzUO2QWSHnDuA9mKmETKPjg2Gp/FHUh0+oUUe9r8ZHqd6DPi4txILmo8ozKfR7hqI6KSDOvjuyfjFPQx2uL/STFlR2adoIIe7ZvcuBO5W3PH3KdyeM7nYWfwgYyd1Ds=
