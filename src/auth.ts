@@ -26,7 +26,7 @@ export async function getToken(request: Request): Promise<AuthToken> {
   if (process.env.NODE_ENV === 'production') {
     const authorization = request.headers.authorization;
     if (isString(authorization)) {
-      return { access_token: authorization };
+      return { access_token: authorization.replace('Bearer ', '') };
     }
     throw new Error('No authorization token provided');
   }
