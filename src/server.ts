@@ -6,7 +6,7 @@
  *
  */
 
-import express, { Request } from 'express';
+import express, { Request, Response } from 'express';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
 import DataLoader from 'dataloader';
@@ -74,6 +74,10 @@ async function getOptions(request: Request) {
     },
   };
 }
+
+graphQLServer.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ status: 200, text: 'Health check ok' });
+});
 
 graphQLServer.use(
   '/graphql',
