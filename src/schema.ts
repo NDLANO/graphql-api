@@ -151,7 +151,7 @@ type Subject {
   name: String!
   path: String!
   filters: [Filter]
-  topics: [Topic]
+  topics(all: Boolean): [Topic]
 }
 
 

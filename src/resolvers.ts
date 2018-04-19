@@ -109,10 +109,13 @@ export const resolvers = {
   Subject: {
     async topics(
       subject: GQLSubject,
-      _: any,
+      args: any,
       context: Context,
     ): Promise<GQLTopic[]> {
       const topics = await context.loaders.subjectTopicsLoader.load(subject.id);
+      if (args.all) {
+        return topics;
+      }
       return topics.filter((topic: GQLTopic) => topic.parent === subject.id);
     },
     async filters(
