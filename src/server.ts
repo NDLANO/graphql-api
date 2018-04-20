@@ -80,13 +80,13 @@ graphQLServer.get('/health', (req: Request, res: Response) => {
 });
 
 graphQLServer.use(
-  '/graphql',
+  '/graphql-api/graphql',
   cors(),
   bodyParser.json(),
   graphqlExpress(getOptions),
 );
 
-graphQLServer.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+graphQLServer.use('/graphql-api/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 graphQLServer.listen(GRAPHQL_PORT, () =>
   console.log(
