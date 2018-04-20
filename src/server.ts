@@ -86,7 +86,10 @@ graphQLServer.use(
   graphqlExpress(getOptions),
 );
 
-graphQLServer.use('/graphql-api/graphiql', graphiqlExpress({ endpointURL: '/graphql-api/graphql' }));
+graphQLServer.use(
+  '/graphql-api/graphiql',
+  graphiqlExpress({ endpointURL: '/graphql-api/graphql' }),
+);
 
 graphQLServer.listen(GRAPHQL_PORT, () =>
   console.log(
