@@ -111,16 +111,26 @@ export async function fetchArticles(
     context,
   );
   const json = await resolveJson(response);
-  return json.results.map((article: any) => {
-    return {
-      id: article.id,
-      title: article.title.title,
-      introduction: article.introduction
-        ? article.introduction.introduction
-        : undefined,
-      metaDescription: article.metaDescription
-        ? article.metaDescription.metaDescription
-        : undefined,
-    };
+
+  // The api does not always return the exact number of results as ids provided.
+  // So always map over ids so that dataLoader gets the right amount of results in correct order.
+  return articleIds.map(id => {
+    const article = json.results.find((item: { id: number }) => {
+      return item.id.toString() === id;
+    });
+
+    if (article) {
+      return {
+        id: article.id,
+        title: article.title.title,
+        introduction: article.introduction
+          ? article.introduction.introduction
+          : undefined,
+        metaDescription: article.metaDescription
+          ? article.metaDescription.metaDescription
+          : undefined,
+      };
+    }
+    return null;
   });
 }
