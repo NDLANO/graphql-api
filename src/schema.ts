@@ -33,8 +33,8 @@ type Resource {
 
 type License {
   license: String!
-  url: String!
-  description: String!
+  url: String
+  description: String
 }
 
 type Contributor {
@@ -104,7 +104,7 @@ type Article {
   id: Int!
   revision: Int!
   title: String!
-  introduction: String!
+  introduction: String
   content: String!
   created: String!
   updated: String!
@@ -112,7 +112,7 @@ type Article {
   metaImage: String
   metaDescription: String!
   articleType: String!
-  oldNdlaUrl: String!
+  oldNdlaUrl: String
   requiredLibraries: [ArticleRequiredLibrary]
   metaData: ArticleMetaData
   supportedLanguages: [String]
