@@ -26,5 +26,5 @@ const ndlaApiUrl = () => {
   }
 };
 
-export const port = getEnvironmentVariabel(process.env.PORT, '4000');
-export const apiUrl = getEnvironmentVariabel(process.env.API_URL, ndlaApiUrl());
+export const port = getEnvironmentVariabel('PORT', '4000');
+export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
