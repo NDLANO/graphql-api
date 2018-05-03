@@ -154,6 +154,9 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResourceType[]> {
+      if (resource.resourceTypes) {
+        return resource.resourceTypes;
+      }
       return fetchResourceResourceTypes(resource.id, context);
     },
   },
