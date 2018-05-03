@@ -20,13 +20,14 @@ type ResourceTypeDefinition {
 type ResourceType {
   id: String!
   name: String!
+  resources(topicId: String!): [Resource]
 }
 
 type Resource {
   id: String!
   name: String!
   contentUri: String
-  path: String!
+  path: String
   article: Article
   resourceTypes: [ResourceType]
 }
