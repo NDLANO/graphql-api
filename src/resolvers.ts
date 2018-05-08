@@ -66,6 +66,10 @@ export const resolvers = {
           context,
         );
       }
+      throw Object.assign(
+        new Error('Missing article contentUri for topic with id: ' + topic.id),
+        { status: 404 },
+      );
     },
     async meta(
       topic: GQLTopic,
@@ -148,6 +152,12 @@ export const resolvers = {
           context,
         );
       }
+      throw Object.assign(
+        new Error(
+          'Missing article contentUri for resource with id: ' + resource.id,
+        ),
+        { status: 404 },
+      );
     },
     async resourceTypes(
       resource: GQLResource,
