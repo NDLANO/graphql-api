@@ -26,8 +26,12 @@ export function filterLoader(context: Context): DataLoader<string, any> {
 
 export function subjectTopicsLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async ids => {
-    return ids.map(async subjectId => {
-      return fetchSubjectTopics(subjectId, context);
-    });
+    return ids.map(async ({subjectId, filterId}) => {
+      console.log(subjectId, filterId)
+      return fetchSubjectTopics(subjectId, filterId, context);
+    },
+    {
+      cacheKeyFn: key => JSON.stringify(key)
+    };
   });
 }

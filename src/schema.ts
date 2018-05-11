@@ -141,7 +141,8 @@ type Topic {
   parent: String
   article: Article
   meta: ArticleSubset
-  subtopics: [Topic]
+  subtopics(filterId: String): [Topic]
+  filters: [Filter]
   coreResources: [Resource]
   supplementaryResources: [Resource]
 }
@@ -152,7 +153,7 @@ type Subject {
   name: String!
   path: String!
   filters: [Filter]
-  topics(all: Boolean): [Topic]
+  topics(all: Boolean filterId: String): [Topic]
 }
 
 

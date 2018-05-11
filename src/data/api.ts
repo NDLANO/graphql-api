@@ -58,19 +58,28 @@ export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
   return resolveJson(response);
 }
 
-export async function fetchSubjectTopics(subjectId: string, context: Context) {
+export async function fetchSubjectTopics(subjectId: string, filterId: String context: Context) {
   const response = await fetch(
     `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true&language=${
       context.language
-    }`,
+    }&${filterId ? `&filter=${filterId}` : ''}`,
     context,
   );
+  console.log("subjecjjcjcjcjcjc", filterId)
   return resolveJson(response);
 }
 
 export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
   const response = await fetch(
     `/taxonomy/v1/topics/?language=${context.language}`,
+    context,
+  );
+  return resolveJson(response);
+}
+
+export async function fetchTopicFilters(topicId: string, context: Context): Promise<GQLFilter[]> {
+  const response = await fetch(
+    `/taxonomy/v1/topics/${topicId}/filters`,
     context,
   );
   return resolveJson(response);

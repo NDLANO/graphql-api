@@ -12,6 +12,7 @@ import {
   fetchSubjects,
   fetchFilters,
   fetchTopics,
+  fetchTopicFilters,
   fetchResourceResourceTypes,
   fetchTopicResources,
   fetchResourceTypes,
@@ -19,6 +20,10 @@ import {
 
 type Id = {
   id: string;
+};
+
+type FilterId = {
+  filterId: string;
 };
 
 export const resolvers = {
@@ -71,6 +76,13 @@ export const resolvers = {
         { status: 404 },
       );
     },
+    async filters(
+      topic: GQLTopic,
+      _: any,
+      context: Context,
+    ): Promise<GQLFilter[]> {
+      return fetchTopicFilters(topic.id, context);
+    },
     async meta(
       topic: GQLTopic,
       _: any,
@@ -91,11 +103,11 @@ export const resolvers = {
     },
     async subtopics(
       topic: GQLTopic,
-      _: any,
+      args: any,
       context: Context,
     ): Promise<GQLTopic[]> {
       const subjectId = 'urn:' + topic.path.split('/')[1];
-      const topics = await context.loaders.subjectTopicsLoader.load(subjectId);
+      const topics = await context.loaders.subjectTopicsLoader.load({subjectId, filterId: args.filterId});
       return topics.filter((t: GQLTopic) => t.parent === topic.id);
     },
     async supplementaryResources(
@@ -116,7 +128,7 @@ export const resolvers = {
       args: any,
       context: Context,
     ): Promise<GQLTopic[]> {
-      const topics = await context.loaders.subjectTopicsLoader.load(subject.id);
+      const topics = await context.loaders.subjectTopicsLoader.load({subjectId: subject.id, filterId: args.filterId});
       if (args.all) {
         return topics;
       }
