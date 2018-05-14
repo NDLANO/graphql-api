@@ -22,10 +22,6 @@ type Id = {
   id: string;
 };
 
-type FilterId = {
-  filterId: string;
-};
-
 export const resolvers = {
   Query: {
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
@@ -107,7 +103,10 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLTopic[]> {
       const subjectId = 'urn:' + topic.path.split('/')[1];
-      const topics = await context.loaders.subjectTopicsLoader.load({subjectId, filterId: args.filterId});
+      const topics = await context.loaders.subjectTopicsLoader.load({
+        subjectId,
+        filterIds: args.filterIds,
+      });
       return topics.filter((t: GQLTopic) => t.parent === topic.id);
     },
     async supplementaryResources(
@@ -128,7 +127,11 @@ export const resolvers = {
       args: any,
       context: Context,
     ): Promise<GQLTopic[]> {
-      const topics = await context.loaders.subjectTopicsLoader.load({subjectId: subject.id, filterId: args.filterId});
+      console.log(args);
+      const topics = await context.loaders.subjectTopicsLoader.load({
+        subjectId: subject.id,
+        filterIds: args.filterIds,
+      });
       if (args.all) {
         return topics;
       }
