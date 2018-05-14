@@ -99,7 +99,7 @@ export const resolvers = {
     },
     async subtopics(
       topic: GQLTopic,
-      args: any,
+      args: { filterIds: string },
       context: Context,
     ): Promise<GQLTopic[]> {
       const subjectId = 'urn:' + topic.path.split('/')[1];
@@ -124,10 +124,9 @@ export const resolvers = {
   Subject: {
     async topics(
       subject: GQLSubject,
-      args: any,
+      args: { all: boolean; filterIds: string },
       context: Context,
     ): Promise<GQLTopic[]> {
-      console.log(args);
       const topics = await context.loaders.subjectTopicsLoader.load({
         subjectId: subject.id,
         filterIds: args.filterIds,

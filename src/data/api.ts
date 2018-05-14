@@ -63,6 +63,7 @@ export async function fetchSubjectTopics(
   filterIds: string,
   context: Context,
 ) {
+  console.log('HALLA!');
   const response = await fetch(
     `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true&language=${
       context.language

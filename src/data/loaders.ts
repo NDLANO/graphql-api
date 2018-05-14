@@ -24,15 +24,20 @@ export function filterLoader(context: Context): DataLoader<string, any> {
   });
 }
 
-export function subjectTopicsLoader(context: Context): DataLoader<string, any> {
-  return new DataLoader(async ids => {
-    return ids.map(
-      async ({ subjectId, filterIds }) => {
+type Input = {
+  subjectId: string;
+  filterIds: string;
+};
+
+export function subjectTopicsLoader(context: Context): DataLoader<Input, any> {
+  return new DataLoader(
+    async ids => {
+      return ids.map(async ({ subjectId, filterIds }) => {
         return fetchSubjectTopics(subjectId, filterIds, context);
-      },
-      {
-        cacheKeyFn: key => JSON.stringify(key),
-      },
-    );
-  });
+      });
+    },
+    {
+      cacheKeyFn: (key: Input) => JSON.stringify(key),
+    },
+  );
 }
