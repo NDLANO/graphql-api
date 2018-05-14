@@ -147,15 +147,47 @@ type Topic {
   supplementaryResources: [Resource]
 }
 
+type FrontpageSubjects {
+  category: String
+  articleIds: [String]
+}
+
+type Frontpage {
+  topical: [String]
+  subjects: [FrontpageSubjects]
+}
+
+type SubjectPageArticles {
+  location: String
+  articleIds: [String]
+}
+
+type SubjectPageTopical {
+  location: String
+  id: String
+}
+
+type SubjectPage {
+  topical: SubjectPageTopical
+  mostRead: SubjectPageArticles
+  banner: String
+  id: Int!
+  facebook: String
+  editorChoices: SubjectPageArticles
+  latestContent: SubjectPageArticles
+  subjectListLocation: String
+  twitter: String
+}
+
 type Subject {
   id: String!
   contentUri: String
   name: String!
   path: String!
   filters: [Filter]
+  subjectpage: SubjectPage,
   topics(all: Boolean filterIds: String): [Topic]
 }
-
 
 type Query {
   resource(id: String!): Resource
@@ -164,9 +196,12 @@ type Query {
   subjects: [Subject]
   topic(id: String!): Topic
   topics: [Topic]
+  frontpage: Frontpage
   filters: [Filter]
   resourceTypes: [ResourceTypeDefinition]
 }
+
+
 
 `;
 

@@ -149,3 +149,24 @@ export async function fetchArticles(
     return null;
   });
 }
+
+export async function fetchFrontpage(
+  context: Context,
+): Promise<GQLArticle> {
+  const response = await fetch(
+    `/frontpage-api/v1/frontpage/`,
+    context,
+  );
+  return resolveJson(response);
+}
+
+export async function fetchSubjectPage(
+  frontpageId: string,
+  context: Context,
+): Promise<GQLSubjectPage> {
+  const response = await fetch(
+    `/frontpage-api/v1/subjectpage/${frontpageId}`,
+    context,
+  );
+  return resolveJson(response);
+}

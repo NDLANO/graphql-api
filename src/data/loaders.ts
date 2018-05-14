@@ -7,7 +7,7 @@
  */
 
 import DataLoader from 'dataloader';
-import { fetchArticles, fetchSubjectTopics, fetchFilters } from './api';
+import { fetchArticles, fetchSubjectTopics, fetchFilters, fetchSubjectPage } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async articleIds => {

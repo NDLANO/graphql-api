@@ -16,6 +16,7 @@ import {
   fetchResourceResourceTypes,
   fetchTopicResources,
   fetchResourceTypes,
+  fetchSubjectPage,
 } from './data/api';
 
 type Id = {
@@ -142,6 +143,13 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLFilter[]> {
       return context.loaders.filterLoader.load(subject.id);
+    },
+    async subjectpage(
+      subject: GQLSubject,
+      __: any,
+      context: Context,
+    ): Promise<GQLSubjectPage> {
+      return fetchSubjectPage(subject.id.split(':')[2], context);
     },
   },
   ResourceTypeDefinition: {
