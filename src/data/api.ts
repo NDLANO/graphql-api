@@ -156,11 +156,11 @@ export async function fetchFrontpage(context: Context): Promise<GQLFrontpage> {
 }
 
 export async function fetchSubjectPage(
-  frontpageId: string,
+  subjectPageId: string,
   context: Context,
 ): Promise<GQLSubjectPage> {
   const response = await fetch(
-    `/frontpage-api/v1/subjectpage/${frontpageId}`,
+    `/frontpage-api/v1/subjectpage/${subjectPageId}`,
     context,
   );
   return resolveJson(response);
