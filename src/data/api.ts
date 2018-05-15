@@ -150,13 +150,8 @@ export async function fetchArticles(
   });
 }
 
-export async function fetchFrontpage(
-  context: Context,
-): Promise<GQLArticle> {
-  const response = await fetch(
-    `/frontpage-api/v1/frontpage/`,
-    context,
-  );
+export async function fetchFrontpage(context: Context): Promise<GQLFrontpage> {
+  const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
   return resolveJson(response);
 }
 

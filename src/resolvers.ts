@@ -17,6 +17,7 @@ import {
   fetchTopicResources,
   fetchResourceTypes,
   fetchSubjectPage,
+  fetchFrontpage,
 } from './data/api';
 
 type Id = {
@@ -54,6 +55,9 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLResourceType[]> {
       return fetchResourceTypes(context);
+    },
+    async frontpage(_: any, __: any, context: Context): Promise<GQLFrontpage> {
+      return fetchFrontpage(context);
     },
   },
   Topic: {

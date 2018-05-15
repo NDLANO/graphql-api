@@ -149,7 +149,7 @@ type Topic {
 
 type FrontpageSubjects {
   category: String
-  articleIds: [String]
+  subjects: [String]
 }
 
 type Frontpage {
