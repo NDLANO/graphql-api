@@ -201,8 +201,6 @@ type Query {
   resourceTypes: [ResourceTypeDefinition]
 }
 
-
-
 `;
 
 const schema = makeExecutableSchema({ typeDefs, resolvers });
