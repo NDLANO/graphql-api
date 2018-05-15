@@ -157,9 +157,16 @@ type Frontpage {
   subjects: [FrontpageSubjects]
 }
 
+type SubjectPageArticle {
+  path: String
+  contentUri: String
+  id: String
+  name: String
+}
+
 type SubjectPageArticles {
   location: String
-  articleIds: [String]
+  articles: [SubjectPageArticle]
 }
 
 type SubjectPageTopical {
