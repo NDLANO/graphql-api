@@ -157,16 +157,9 @@ type Frontpage {
   subjects: [FrontpageSubjects]
 }
 
-type SubjectPageArticle {
-  path: String
-  contentUri: String
-  id: String
-  name: String
-}
-
 type SubjectPageArticles {
   location: String
-  articles: [SubjectPageArticle]
+  resources: [Resource]
 }
 
 type SubjectPageTopical {
@@ -180,7 +173,7 @@ type SubjectPage {
   banner: String
   id: Int!
   facebook: String
-  editorChoices: SubjectPageArticles
+  editorsChoices: SubjectPageArticles
   latestContent: SubjectPageArticles
   subjectListLocation: String
   twitter: String

@@ -17,6 +17,7 @@ declare global {
         { subjectId: string; filterIds: string },
         any
       >;
+      resourcesLoader: DataLoader<string, any>;
     };
   }
 }

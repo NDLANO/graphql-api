@@ -48,12 +48,12 @@ export function subjectTopicsLoader(context: Context): DataLoader<Input, any> {
   );
 }
 
-export function resourcesLoader(context: Context): DataLoader<[string], any> {
+export function resourcesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async resourceIds => {
-    console.log("IDS", resourceIds)
+    console.log('IDS', resourceIds);
     return resourceIds.map(async resourceId => {
-      console.log(resourceId)
+      console.log(resourceId);
       return fetchResource(resourceId, context);
-    }
+    });
   });
 }

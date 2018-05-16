@@ -126,6 +126,17 @@ export const resolvers = {
       );
     },
   },
+  SubjectPageArticles: {
+    async resources(
+      subjectPageArticles: { location: string; articleIds: [string] },
+      _: any,
+      context: Context,
+    ): Promise<GQLResource[]> {
+      return context.loaders.resourcesLoader.loadMany(
+        subjectPageArticles.articleIds,
+      );
+    },
+  },
   Subject: {
     async topics(
       subject: GQLSubject,
@@ -153,25 +164,7 @@ export const resolvers = {
       __: any,
       context: Context,
     ): Promise<GQLSubjectPage> {
-      const fieldsToMap = ['mostRead', 'editorsChoices', 'latestContent'];
-
-      const subjectPage = await fetchSubjectPage(subject.id.split(':')[2], context);
-      const newFields = await Promise.all(fieldsToMap.map(async field => {
-        console.log(field)
-        console.log("YOYO", subjectPage[field].articleIds, subjectPage[field].location);
-        const articles = await context.loaders.resourcesLoader.loadMany(subjectPage[field].articleIds)
-        return {[field]: { location: subjectPage[field].location, articles}}
-      }));
-
-      console.log("LEL", newFields)
-      var obj = newFields.reduce(function(acc, cur, i) {
-        acc[i] = cur;
-        console.log(acc);
-        return {...acc};
-      }, {});
-      const t =  {...subjectPage, ...obj};
-      console.log(t);
-      return t;
+      return fetchSubjectPage(subject.id.split(':')[2], context);
     },
   },
   ResourceTypeDefinition: {

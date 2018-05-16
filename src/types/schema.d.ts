@@ -141,20 +141,25 @@ declare global {
   }
 
   export interface GQLSubjectPage {
-    topical?: (string | null)[];
+    topical?: GQLSubjectPageTopical;
     mostRead?: GQLSubjectPageArticles;
     banner?: string;
     id: number;
     facebook?: string;
-    editorChoices?: GQLSubjectPageArticles;
+    editorsChoices?: GQLSubjectPageArticles;
     latestContent?: GQLSubjectPageArticles;
     subjectListLocation?: string;
     twitter?: string;
   }
 
+  export interface GQLSubjectPageTopical {
+    location?: string;
+    id?: string;
+  }
+
   export interface GQLSubjectPageArticles {
     location?: string;
-    articleIds?: (string | null)[];
+    resources?: (GQLResource | null)[];
   }
 
   export interface GQLTopic {
@@ -185,7 +190,7 @@ declare global {
 
   export interface GQLFrontpageSubjects {
     category?: string;
-    articleIds?: (string | null)[];
+    subjects?: (string | null)[];
   }
 
   export interface GQLResourceTypeDefinition {
