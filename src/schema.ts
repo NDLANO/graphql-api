@@ -30,6 +30,7 @@ type Resource {
   path: String
   article: Article
   resourceTypes: [ResourceType]
+  meta: ArticleSubset
 }
 
 type License {
@@ -149,7 +150,7 @@ type Topic {
 
 type FrontpageSubjects {
   category: String
-  subjects: [String]
+  subjects: [Subject]
 }
 
 type Frontpage {
@@ -164,7 +165,7 @@ type SubjectPageArticles {
 
 type SubjectPageTopical {
   location: String
-  id: String
+  resource: Resource
 }
 
 type SubjectPage {

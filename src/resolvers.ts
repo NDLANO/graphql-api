@@ -60,6 +60,18 @@ export const resolvers = {
       return fetchFrontpage(context);
     },
   },
+  FrontpageSubjects: {
+    async subjects(
+      frontpageSubjects: { subjects: [string]; category: string },
+      _: any,
+      context: Context,
+    ): Promise<GQLSubject[]> {
+      const list = await fetchSubjects(context);
+      return list.filter(subject =>
+        frontpageSubjects.subjects.includes(subject.id),
+      );
+    },
+  },
   Topic: {
     async article(
       topic: GQLTopic,
@@ -137,6 +149,15 @@ export const resolvers = {
       );
     },
   },
+  SubjectPageTopical: {
+    async resource(
+      subjectPageTopical: { location: string; id: string },
+      _: any,
+      context: Context,
+    ): Promise<GQLResource[]> {
+      return context.loaders.resourcesLoader.load(subjectPageTopical.id);
+    },
+  },
   Subject: {
     async topics(
       subject: GQLSubject,
@@ -195,6 +216,20 @@ export const resolvers = {
         ),
         { status: 404 },
       );
+    },
+    async meta(
+      resource: GQLResource,
+      _: any,
+      context: Context,
+    ): Promise<GQLArticleSubset> {
+      if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:article')
+      ) {
+        return context.loaders.articlesLoader.load(
+          resource.contentUri.replace('urn:article:', ''),
+        );
+      }
     },
     async resourceTypes(
       resource: GQLResource,
