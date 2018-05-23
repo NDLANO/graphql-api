@@ -183,16 +183,11 @@ export async function fetchArticleMeta(
     context,
   );
   const article = await resolveJson(response);
-
   return {
     id: article.id,
-    title: article.title.title,
-    introduction: article.introduction
-      ? article.introduction.introduction
-      : undefined,
-    metaDescription: article.metaDescription
-      ? article.metaDescription.metaDescription
-      : undefined,
+    title: article.title,
+    introduction: article.introduction,
+    metaDescription: article.metaDescription,
     metaImage: article.metaImage ? article.metaImage.url : undefined,
   };
 }
