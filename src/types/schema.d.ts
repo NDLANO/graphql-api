@@ -27,9 +27,22 @@ declare global {
     name: string;
     contentUri?: string;
     path?: string;
-    article?: GQLArticle;
     resourceTypes?: (GQLResourceType | null)[];
-    meta?: GQLArticleSubset;
+    meta?: GQLResourceMeta;
+  }
+
+  export interface GQLResourceType {
+    id: string;
+    name: string;
+    resources?: (GQLResource | null)[];
+  }
+
+  export interface GQLResourceMeta {
+    id: number;
+    title: string;
+    introduction?: string;
+    metaDescription?: string;
+    metaImage?: string;
   }
 
   export interface GQLArticle {
@@ -119,19 +132,6 @@ declare global {
     width: number;
   }
 
-  export interface GQLResourceType {
-    id: string;
-    name: string;
-    resources?: (GQLResource | null)[];
-  }
-
-  export interface GQLArticleSubset {
-    id: number;
-    title: string;
-    introduction?: string;
-    metaDescription?: string;
-  }
-
   export interface GQLSubject {
     id: string;
     contentUri?: string;
@@ -182,6 +182,13 @@ declare global {
     filters?: (GQLFilter | null)[];
     coreResources?: (GQLResource | null)[];
     supplementaryResources?: (GQLResource | null)[];
+  }
+
+  export interface GQLArticleSubset {
+    id: number;
+    title: string;
+    introduction?: string;
+    metaDescription?: string;
   }
 
   export interface GQLFrontpage {

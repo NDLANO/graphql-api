@@ -150,6 +150,53 @@ export async function fetchArticles(
   });
 }
 
+export async function fetchLearningpathMeta(
+  learningPathId: string,
+  context: Context,
+): Promise<GQLResourceMeta> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/${learningPathId}`,
+    context,
+  );
+  const learningPath = await resolveJson(response);
+  return {
+    id: learningPath.id,
+    title: learningPath.title.title,
+    introduction: learningPath.introduction
+      ? learningPath.introduction.introduction
+      : undefined,
+    metaDescription: learningPath.description
+      ? learningPath.description.description
+      : undefined,
+    metaImage: learningPath.coverPhoto
+      ? learningPath.coverPhoto.url
+      : undefined,
+  };
+}
+
+export async function fetchArticleMeta(
+  articleId: string,
+  context: Context,
+): Promise<GQLResourceMeta> {
+  const response = await fetch(
+    `/article-converter/json/${context.language}/${articleId}`,
+    context,
+  );
+  const article = await resolveJson(response);
+
+  return {
+    id: article.id,
+    title: article.title.title,
+    introduction: article.introduction
+      ? article.introduction.introduction
+      : undefined,
+    metaDescription: article.metaDescription
+      ? article.metaDescription.metaDescription
+      : undefined,
+    metaImage: article.metaImage ? article.metaImage.url : undefined,
+  };
+}
+
 export async function fetchFrontpage(context: Context): Promise<GQLFrontpage> {
   const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
   return resolveJson(response);

@@ -18,6 +18,8 @@ import {
   fetchResourceTypes,
   fetchSubjectPage,
   fetchFrontpage,
+  fetchLearningpathMeta,
+  fetchArticleMeta,
 } from './data/api';
 
 type Id = {
@@ -196,40 +198,35 @@ export const resolvers = {
     },
   },
   Resource: {
-    async article(
+    async meta(
       resource: GQLResource,
       _: any,
       context: Context,
-    ): Promise<GQLArticle> {
+    ): Promise<GQLResourceMeta> {
       if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:learningpath')
+      ) {
+        return fetchLearningpathMeta(
+          resource.contentUri.replace('urn:learningpath:', ''),
+          context,
+        );
+      } else if (
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        return fetchArticle(
+        return fetchArticleMeta(
           resource.contentUri.replace('urn:article:', ''),
           context,
         );
       }
       throw Object.assign(
         new Error(
-          'Missing article contentUri for resource with id: ' + resource.id,
+          'Missing learningpath contentUri for resource with id: ' +
+            resource.id,
         ),
         { status: 404 },
       );
-    },
-    async meta(
-      resource: GQLResource,
-      _: any,
-      context: Context,
-    ): Promise<GQLArticleSubset> {
-      if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:article')
-      ) {
-        return context.loaders.articlesLoader.load(
-          resource.contentUri.replace('urn:article:', ''),
-        );
-      }
     },
     async resourceTypes(
       resource: GQLResource,

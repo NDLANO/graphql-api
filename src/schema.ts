@@ -23,14 +23,21 @@ type ResourceType {
   resources(topicId: String!): [Resource]
 }
 
+type ResourceMeta {
+  id: Int!
+  title: String!
+  introduction: String
+  metaDescription: String
+  metaImage: String
+}
+
 type Resource {
   id: String!
   name: String!
   contentUri: String
   path: String
-  article: Article
   resourceTypes: [ResourceType]
-  meta: ArticleSubset
+  meta: ResourceMeta
 }
 
 type License {
