@@ -171,6 +171,7 @@ export async function fetchLearningpathMeta(
     metaImage: learningPath.coverPhoto
       ? learningPath.coverPhoto.url
       : undefined,
+    lastUpdated: learningPath.lastUpdated,
   };
 }
 
@@ -189,6 +190,7 @@ export async function fetchArticleMeta(
     introduction: article.introduction,
     metaDescription: article.metaDescription,
     metaImage: article.metaImage ? article.metaImage.url : undefined,
+    lastUpdated: article.updated,
   };
 }
 

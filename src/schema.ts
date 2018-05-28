@@ -29,6 +29,7 @@ type ResourceMeta {
   introduction: String
   metaDescription: String
   metaImage: String
+  lastUpdated: String
 }
 
 type Resource {
@@ -38,6 +39,7 @@ type Resource {
   path: String
   resourceTypes: [ResourceType]
   meta: ResourceMeta
+  article: Article
 }
 
 type License {

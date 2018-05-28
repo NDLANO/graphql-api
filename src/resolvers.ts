@@ -228,6 +228,27 @@ export const resolvers = {
         { status: 404 },
       );
     },
+    async article(
+      resource: GQLResource,
+      _: any,
+      context: Context,
+    ): Promise<GQLArticle> {
+      if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:article')
+      ) {
+        return fetchArticle(
+          resource.contentUri.replace('urn:article:', ''),
+          context,
+        );
+      }
+      throw Object.assign(
+        new Error(
+          'Missing article contentUri for resource with id: ' + resource.id,
+        ),
+        { status: 404 },
+      );
+    },
     async resourceTypes(
       resource: GQLResource,
       _: any,
