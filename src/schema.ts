@@ -158,13 +158,13 @@ type Topic {
 }
 
 type FrontpageSubjects {
-  category: String
+  name: String
   subjects: [Subject]
 }
 
 type Frontpage {
-  topical: [String]
-  subjects: [FrontpageSubjects]
+  topical: [Resource]
+  categories: [FrontpageSubjects]
 }
 
 type SubjectPageArticles {

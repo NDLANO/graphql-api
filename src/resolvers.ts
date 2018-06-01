@@ -62,9 +62,20 @@ export const resolvers = {
       return fetchFrontpage(context);
     },
   },
+  Frontpage: {
+    async topical(
+      frontpage: {topical: [string]},
+      _: any,
+      context: Context,
+    ): Promise<GQLResource[]> {
+      return context.loaders.resourcesLoader.loadMany(
+        frontpage.topical,
+      );
+    },
+  },
   FrontpageSubjects: {
     async subjects(
-      frontpageSubjects: { subjects: [string]; category: string },
+      frontpageSubjects: { subjects: [string]; name: string },
       _: any,
       context: Context,
     ): Promise<GQLSubject[]> {
