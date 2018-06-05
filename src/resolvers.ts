@@ -237,7 +237,7 @@ export const resolvers = {
       }
       throw Object.assign(
         new Error(
-          'Missing learningpath contentUri for resource with id: ' +
+          'Missing contentUri for resource with id: ' +
             resource.id,
         ),
         { status: 404 },
