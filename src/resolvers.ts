@@ -190,7 +190,21 @@ export const resolvers = {
       __: any,
       context: Context,
     ): Promise<GQLSubjectPage> {
-      return fetchSubjectPage(subject.id.split(':')[2], context);
+      if (
+        subject.contentUri &&
+        subject.contentUri.startsWith('urn:frontpage')
+      ) {
+        return fetchSubjectPage(
+          subject.contentUri.replace('urn:frontpage:', ''),
+          context,
+        );
+      }
+      throw Object.assign(
+        new Error(
+          'Missing subjectpage contentUri for subject with id: ' + subject.id,
+        ),
+        { status: 404 },
+      );
     },
   },
   ResourceTypeDefinition: {
@@ -213,10 +227,6 @@ export const resolvers = {
         return context.loaders.learningpathsLoader.load(
           resource.contentUri.replace('urn:learningpath:', ''),
         );
-        /*return fetchLearningpathMeta(
-          resource.contentUri.replace('urn:learningpath:', ''),
-          context,
-        );*/
       } else if (
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
@@ -224,11 +234,6 @@ export const resolvers = {
         return context.loaders.articlesLoader.load(
           resource.contentUri.replace('urn:article:', ''),
         );
-
-        /*return fetchArticleMeta(
-          resource.contentUri.replace('urn:article:', ''),
-          context,
-        );*/
       }
       throw Object.assign(
         new Error(
