@@ -17,6 +17,9 @@ const apiBaseUrl = (() => {
 })();
 
 function apiResourceUrl(path: string): string {
+  if (path.startsWith('http')) {
+    return path;
+  }
   return apiBaseUrl + path;
 }
 

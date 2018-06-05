@@ -7,6 +7,7 @@
  */
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
+import { localConverter } from '../config';
 
 export async function fetchResource(
   resourceId: string,
@@ -95,8 +96,9 @@ export async function fetchArticle(
   articleId: string,
   context: Context,
 ): Promise<GQLArticle> {
+  const host = localConverter ? 'http://localhost:3100' : '';
   const response = await fetch(
-    `/article-converter/json/${context.language}/${articleId}`,
+    `${host}/article-converter/json/${context.language}/${articleId}`,
     context,
   );
   return resolveJson(response);
