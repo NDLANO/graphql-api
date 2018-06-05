@@ -120,7 +120,7 @@ export async function fetchTopicResources(
 export async function fetchArticles(
   articleIds: string[],
   context: Context,
-): Promise<GQLArticleSubset[]> {
+): Promise<GQLMeta[]> {
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
     context,
@@ -144,54 +144,47 @@ export async function fetchArticles(
         metaDescription: article.metaDescription
           ? article.metaDescription.metaDescription
           : undefined,
+        lastUpdated: article.lastUpdated || undefined,
+        metaImage: article.metaImage ? article.metaImage.metaImage : undefined,
       };
     }
     return null;
   });
 }
 
-export async function fetchLearningpathMeta(
-  learningPathId: string,
+export async function fetchLearningpaths(
+  learningpathIds: string[],
   context: Context,
-): Promise<GQLResourceMeta> {
+): Promise<GQLMeta[]> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${learningPathId}`,
+    `/learningpath-api/v2/learningpaths/?ids=${learningpathIds.join(',')}`,
     context,
   );
-  const learningPath = await resolveJson(response);
-  return {
-    id: learningPath.id,
-    title: learningPath.title.title,
-    introduction: learningPath.introduction
-      ? learningPath.introduction.introduction
-      : undefined,
-    metaDescription: learningPath.description
-      ? learningPath.description.description
-      : undefined,
-    metaImage: learningPath.coverPhoto
-      ? learningPath.coverPhoto.url
-      : undefined,
-    lastUpdated: learningPath.lastUpdated,
-  };
-}
+  const json = await resolveJson(response);
 
-export async function fetchArticleMeta(
-  articleId: string,
-  context: Context,
-): Promise<GQLResourceMeta> {
-  const response = await fetch(
-    `/article-converter/json/${context.language}/${articleId}`,
-    context,
-  );
-  const article = await resolveJson(response);
-  return {
-    id: article.id,
-    title: article.title,
-    introduction: article.introduction,
-    metaDescription: article.metaDescription,
-    metaImage: article.metaImage ? article.metaImage.url : undefined,
-    lastUpdated: article.updated,
-  };
+  // The api does not always return the exact number of results as ids provided.
+  // So always map over ids so that dataLoader gets the right amount of results in correct order.
+  return learningpathIds.map(id => {
+    const learningpath = json.results.find((item: { id: number }) => {
+      return item.id.toString() === id;
+    });
+
+    if (learningpath) {
+      return {
+        id: learningpath.id,
+        title: learningpath.title.title,
+        introduction: learningpath.introduction
+          ? learningpath.introduction.introduction
+          : undefined,
+        metaDescription: learningpath.description
+          ? learningpath.description.description
+          : undefined,
+        lastUpdated: learningpath.lastUpdated,
+        metaImage: learningpath.coverPhotoUrl,
+      };
+    }
+    return null;
+  });
 }
 
 export async function fetchFrontpage(context: Context): Promise<GQLFrontpage> {

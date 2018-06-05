@@ -18,8 +18,6 @@ import {
   fetchResourceTypes,
   fetchSubjectPage,
   fetchFrontpage,
-  fetchLearningpathMeta,
-  fetchArticleMeta,
 } from './data/api';
 
 type Id = {
@@ -107,11 +105,7 @@ export const resolvers = {
     ): Promise<GQLFilter[]> {
       return fetchTopicFilters(topic.id, context);
     },
-    async meta(
-      topic: GQLTopic,
-      _: any,
-      context: Context,
-    ): Promise<GQLArticleSubset> {
+    async meta(topic: GQLTopic, _: any, context: Context): Promise<GQLMeta> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         return context.loaders.articlesLoader.load(
           topic.contentUri.replace('urn:article:', ''),
@@ -211,23 +205,30 @@ export const resolvers = {
       resource: GQLResource,
       _: any,
       context: Context,
-    ): Promise<GQLResourceMeta> {
+    ): Promise<GQLMeta> {
       if (
         resource.contentUri &&
         resource.contentUri.startsWith('urn:learningpath')
       ) {
-        return fetchLearningpathMeta(
+        return context.loaders.learningpathsLoader.load(
+          resource.contentUri.replace('urn:learningpath:', ''),
+        );
+        /*return fetchLearningpathMeta(
           resource.contentUri.replace('urn:learningpath:', ''),
           context,
-        );
+        );*/
       } else if (
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        return fetchArticleMeta(
+        return context.loaders.articlesLoader.load(
+          resource.contentUri.replace('urn:article:', ''),
+        );
+
+        /*return fetchArticleMeta(
           resource.contentUri.replace('urn:article:', ''),
           context,
-        );
+        );*/
       }
       throw Object.assign(
         new Error(
@@ -246,9 +247,8 @@ export const resolvers = {
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        return fetchArticle(
+        return context.loaders.articlesLoader.load(
           resource.contentUri.replace('urn:article:', ''),
-          context,
         );
       }
       throw Object.assign(

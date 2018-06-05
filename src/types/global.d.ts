@@ -12,6 +12,7 @@ declare global {
     language: string;
     loaders?: {
       articlesLoader: DataLoader<string, any>;
+      learningpathsLoader: DataLoader<string, any>;
       filterLoader: DataLoader<string, any>;
       subjectTopicsLoader: DataLoader<
         { subjectId: string; filterIds: string },

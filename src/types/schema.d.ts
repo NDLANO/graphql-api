@@ -28,7 +28,7 @@ declare global {
     contentUri?: string;
     path?: string;
     resourceTypes?: (GQLResourceType | null)[];
-    meta?: GQLResourceMeta;
+    meta?: GQLMeta;
     article?: GQLArticle;
   }
 
@@ -38,7 +38,7 @@ declare global {
     resources?: (GQLResource | null)[];
   }
 
-  export interface GQLResourceMeta {
+  export interface GQLMeta {
     id: number;
     title: string;
     introduction?: string;
@@ -179,18 +179,11 @@ declare global {
     path: string;
     parent?: string;
     article?: GQLArticle;
-    meta?: GQLArticleSubset;
+    meta?: GQLMeta;
     subtopics?: (GQLTopic | null)[];
     filters?: (GQLFilter | null)[];
     coreResources?: (GQLResource | null)[];
     supplementaryResources?: (GQLResource | null)[];
-  }
-
-  export interface GQLArticleSubset {
-    id: number;
-    title: string;
-    introduction?: string;
-    metaDescription?: string;
   }
 
   export interface GQLFrontpage {

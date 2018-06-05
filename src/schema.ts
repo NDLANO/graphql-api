@@ -23,7 +23,7 @@ type ResourceType {
   resources(topicId: String!): [Resource]
 }
 
-type ResourceMeta {
+type Meta {
   id: Int!
   title: String!
   introduction: String
@@ -38,7 +38,7 @@ type Resource {
   contentUri: String
   path: String
   resourceTypes: [ResourceType]
-  meta: ResourceMeta
+  meta: Meta
   article: Article
 }
 
@@ -130,13 +130,6 @@ type Article {
   copyright: Copyright!
 }
 
-type ArticleSubset {
-  id: Int!
-  title: String!
-  introduction: String
-  metaDescription: String
-}
-
 type Filter {
   id: String!
   name: String!
@@ -150,7 +143,7 @@ type Topic {
   path: String!
   parent: String
   article: Article
-  meta: ArticleSubset
+  meta: Meta
   subtopics(filterIds: String): [Topic]
   filters: [Filter]
   coreResources: [Resource]

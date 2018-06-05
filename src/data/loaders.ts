@@ -13,11 +13,18 @@ import {
   fetchFilters,
   fetchSubjectPage,
   fetchResource,
+  fetchLearningpaths,
 } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async articleIds => {
     return fetchArticles(articleIds, context);
+  });
+}
+
+export function learningpathsLoader(context: Context): DataLoader<string, any> {
+  return new DataLoader(async learningpathIds => {
+    return fetchLearningpaths(learningpathIds, context);
   });
 }
 

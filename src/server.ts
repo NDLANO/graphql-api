@@ -22,6 +22,7 @@ import {
   articlesLoader,
   subjectTopicsLoader,
   resourcesLoader,
+  learningpathsLoader,
 } from './data/loaders';
 
 const GRAPHQL_PORT = port;
@@ -49,6 +50,7 @@ async function getContext(request: Request): Promise<Context> {
       filterLoader: filterLoader(defaultContext),
       subjectTopicsLoader: subjectTopicsLoader(defaultContext),
       resourcesLoader: resourcesLoader(defaultContext),
+      learningpathsLoader: learningpathsLoader(defaultContext),
     },
   };
 }
