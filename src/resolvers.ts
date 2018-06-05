@@ -64,13 +64,11 @@ export const resolvers = {
   },
   Frontpage: {
     async topical(
-      frontpage: {topical: [string]},
+      frontpage: { topical: [string] },
       _: any,
       context: Context,
     ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.loadMany(
-        frontpage.topical,
-      );
+      return context.loaders.resourcesLoader.loadMany(frontpage.topical);
     },
   },
   FrontpageSubjects: {

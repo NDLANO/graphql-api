@@ -29,6 +29,7 @@ declare global {
     path?: string;
     resourceTypes?: (GQLResourceType | null)[];
     meta?: GQLResourceMeta;
+    article?: GQLArticle;
   }
 
   export interface GQLResourceType {
@@ -43,6 +44,7 @@ declare global {
     introduction?: string;
     metaDescription?: string;
     metaImage?: string;
+    lastUpdated?: string;
   }
 
   export interface GQLArticle {
@@ -192,12 +194,12 @@ declare global {
   }
 
   export interface GQLFrontpage {
-    topical?: (string | null)[];
-    subjects?: (GQLFrontpageSubjects | null)[];
+    topical?: (GQLResource | null)[];
+    categories?: (GQLFrontpageSubjects | null)[];
   }
 
   export interface GQLFrontpageSubjects {
-    category?: string;
+    name?: string;
     subjects?: (GQLSubject | null)[];
   }
 

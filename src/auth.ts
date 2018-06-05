@@ -23,11 +23,12 @@ const clientSecret = getEnvironmentVariabel(
 );
 
 export async function getToken(request: Request): Promise<AuthToken> {
+  const authorization = request.headers.authorization;
+  if (isString(authorization)) {
+    return { access_token: authorization.replace('Bearer ', '') };
+  }
+
   if (process.env.NODE_ENV === 'production') {
-    const authorization = request.headers.authorization;
-    if (isString(authorization)) {
-      return { access_token: authorization.replace('Bearer ', '') };
-    }
     throw new Error('No authorization token provided');
   }
 
