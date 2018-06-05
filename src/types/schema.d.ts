@@ -17,6 +17,7 @@ declare global {
     subjects?: (GQLSubject | null)[];
     topic?: GQLTopic;
     topics?: (GQLTopic | null)[];
+    frontpage?: GQLFrontpage;
     filters?: (GQLFilter | null)[];
     resourceTypes?: (GQLResourceTypeDefinition | null)[];
   }
@@ -25,16 +26,32 @@ declare global {
     id: string;
     name: string;
     contentUri?: string;
-    path: string;
-    article?: GQLArticle;
+    path?: string;
     resourceTypes?: (GQLResourceType | null)[];
+    meta?: GQLMeta;
+    article?: GQLArticle;
+  }
+
+  export interface GQLResourceType {
+    id: string;
+    name: string;
+    resources?: (GQLResource | null)[];
+  }
+
+  export interface GQLMeta {
+    id: number;
+    title: string;
+    introduction?: string;
+    metaDescription?: string;
+    metaImage?: string;
+    lastUpdated?: string;
   }
 
   export interface GQLArticle {
     id: number;
     revision: number;
     title: string;
-    introduction: string;
+    introduction?: string;
     content: string;
     created: string;
     updated: string;
@@ -42,7 +59,7 @@ declare global {
     metaImage?: string;
     metaDescription: string;
     articleType: string;
-    oldNdlaUrl: string;
+    oldNdlaUrl?: string;
     requiredLibraries?: (GQLArticleRequiredLibrary | null)[];
     metaData?: GQLArticleMetaData;
     supportedLanguages?: (string | null)[];
@@ -88,8 +105,8 @@ declare global {
 
   export interface GQLLicense {
     license: string;
-    url: string;
-    description: string;
+    url?: string;
+    description?: string;
   }
 
   export interface GQLContributor {
@@ -117,17 +134,13 @@ declare global {
     width: number;
   }
 
-  export interface GQLResourceType {
-    id: string;
-    name: string;
-  }
-
   export interface GQLSubject {
     id: string;
     contentUri?: string;
     name: string;
     path: string;
     filters?: (GQLFilter | null)[];
+    subjectpage?: GQLSubjectPage;
     topics?: (GQLTopic | null)[];
   }
 
@@ -137,6 +150,28 @@ declare global {
     subjectId: string;
   }
 
+  export interface GQLSubjectPage {
+    topical?: GQLSubjectPageTopical;
+    mostRead?: GQLSubjectPageArticles;
+    banner?: string;
+    id: number;
+    facebook?: string;
+    editorsChoices?: GQLSubjectPageArticles;
+    latestContent?: GQLSubjectPageArticles;
+    subjectListLocation?: string;
+    twitter?: string;
+  }
+
+  export interface GQLSubjectPageTopical {
+    location?: string;
+    resource?: GQLResource;
+  }
+
+  export interface GQLSubjectPageArticles {
+    location?: string;
+    resources?: (GQLResource | null)[];
+  }
+
   export interface GQLTopic {
     id: string;
     contentUri?: string;
@@ -144,17 +179,21 @@ declare global {
     path: string;
     parent?: string;
     article?: GQLArticle;
-    meta?: GQLArticleSubset;
+    meta?: GQLMeta;
     subtopics?: (GQLTopic | null)[];
+    filters?: (GQLFilter | null)[];
     coreResources?: (GQLResource | null)[];
     supplementaryResources?: (GQLResource | null)[];
   }
 
-  export interface GQLArticleSubset {
-    id: number;
-    title: string;
-    introduction?: string;
-    metaDescription?: string;
+  export interface GQLFrontpage {
+    topical?: (GQLResource | null)[];
+    categories?: (GQLFrontpageSubjects | null)[];
+  }
+
+  export interface GQLFrontpageSubjects {
+    name?: string;
+    subjects?: (GQLSubject | null)[];
   }
 
   export interface GQLResourceTypeDefinition {

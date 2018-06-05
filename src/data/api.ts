@@ -120,7 +120,7 @@ export async function fetchTopicResources(
 export async function fetchArticles(
   articleIds: string[],
   context: Context,
-): Promise<GQLArticleSubset[]> {
+): Promise<GQLMeta[]> {
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
     context,
@@ -144,8 +144,61 @@ export async function fetchArticles(
         metaDescription: article.metaDescription
           ? article.metaDescription.metaDescription
           : undefined,
+        lastUpdated: article.lastUpdated || undefined,
+        metaImage: article.metaImage ? article.metaImage.metaImage : undefined,
       };
     }
     return null;
   });
+}
+
+export async function fetchLearningpaths(
+  learningpathIds: string[],
+  context: Context,
+): Promise<GQLMeta[]> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/?ids=${learningpathIds.join(',')}`,
+    context,
+  );
+  const json = await resolveJson(response);
+
+  // The api does not always return the exact number of results as ids provided.
+  // So always map over ids so that dataLoader gets the right amount of results in correct order.
+  return learningpathIds.map(id => {
+    const learningpath = json.results.find((item: { id: number }) => {
+      return item.id.toString() === id;
+    });
+
+    if (learningpath) {
+      return {
+        id: learningpath.id,
+        title: learningpath.title.title,
+        introduction: learningpath.introduction
+          ? learningpath.introduction.introduction
+          : undefined,
+        metaDescription: learningpath.description
+          ? learningpath.description.description
+          : undefined,
+        lastUpdated: learningpath.lastUpdated,
+        metaImage: learningpath.coverPhotoUrl,
+      };
+    }
+    return null;
+  });
+}
+
+export async function fetchFrontpage(context: Context): Promise<GQLFrontpage> {
+  const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
+  return resolveJson(response);
+}
+
+export async function fetchSubjectPage(
+  subjectPageId: string,
+  context: Context,
+): Promise<GQLSubjectPage> {
+  const response = await fetch(
+    `/frontpage-api/v1/subjectpage/${subjectPageId}`,
+    context,
+  );
+  return resolveJson(response);
 }

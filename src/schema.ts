@@ -23,13 +23,23 @@ type ResourceType {
   resources(topicId: String!): [Resource]
 }
 
+type Meta {
+  id: Int!
+  title: String!
+  introduction: String
+  metaDescription: String
+  metaImage: String
+  lastUpdated: String
+}
+
 type Resource {
   id: String!
   name: String!
   contentUri: String
   path: String
-  article: Article
   resourceTypes: [ResourceType]
+  meta: Meta
+  article: Article
 }
 
 type License {
@@ -120,13 +130,6 @@ type Article {
   copyright: Copyright!
 }
 
-type ArticleSubset {
-  id: Int!
-  title: String!
-  introduction: String
-  metaDescription: String
-}
-
 type Filter {
   id: String!
   name: String!
@@ -140,11 +143,43 @@ type Topic {
   path: String!
   parent: String
   article: Article
-  meta: ArticleSubset
+  meta: Meta
   subtopics(filterIds: String): [Topic]
   filters: [Filter]
   coreResources: [Resource]
   supplementaryResources: [Resource]
+}
+
+type FrontpageSubjects {
+  name: String
+  subjects: [Subject]
+}
+
+type Frontpage {
+  topical: [Resource]
+  categories: [FrontpageSubjects]
+}
+
+type SubjectPageArticles {
+  location: String
+  resources: [Resource]
+}
+
+type SubjectPageTopical {
+  location: String
+  resource: Resource
+}
+
+type SubjectPage {
+  topical: SubjectPageTopical
+  mostRead: SubjectPageArticles
+  banner: String
+  id: Int!
+  facebook: String
+  editorsChoices: SubjectPageArticles
+  latestContent: SubjectPageArticles
+  subjectListLocation: String
+  twitter: String
 }
 
 type Subject {
@@ -153,9 +188,9 @@ type Subject {
   name: String!
   path: String!
   filters: [Filter]
+  subjectpage: SubjectPage,
   topics(all: Boolean filterIds: String): [Topic]
 }
-
 
 type Query {
   resource(id: String!): Resource
@@ -164,6 +199,7 @@ type Query {
   subjects: [Subject]
   topic(id: String!): Topic
   topics: [Topic]
+  frontpage: Frontpage
   filters: [Filter]
   resourceTypes: [ResourceTypeDefinition]
 }

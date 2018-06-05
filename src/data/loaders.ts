@@ -7,11 +7,24 @@
  */
 
 import DataLoader from 'dataloader';
-import { fetchArticles, fetchSubjectTopics, fetchFilters } from './api';
+import {
+  fetchArticles,
+  fetchSubjectTopics,
+  fetchFilters,
+  fetchSubjectPage,
+  fetchResource,
+  fetchLearningpaths,
+} from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async articleIds => {
     return fetchArticles(articleIds, context);
+  });
+}
+
+export function learningpathsLoader(context: Context): DataLoader<string, any> {
+  return new DataLoader(async learningpathIds => {
+    return fetchLearningpaths(learningpathIds, context);
   });
 }
 
@@ -40,4 +53,12 @@ export function subjectTopicsLoader(context: Context): DataLoader<Input, any> {
       cacheKeyFn: (key: Input) => JSON.stringify(key),
     },
   );
+}
+
+export function resourcesLoader(context: Context): DataLoader<string, any> {
+  return new DataLoader(async resourceIds => {
+    return resourceIds.map(async resourceId => {
+      return fetchResource(resourceId, context);
+    });
+  });
 }

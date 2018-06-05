@@ -16,6 +16,8 @@ import {
   fetchResourceResourceTypes,
   fetchTopicResources,
   fetchResourceTypes,
+  fetchSubjectPage,
+  fetchFrontpage,
 } from './data/api';
 
 type Id = {
@@ -54,6 +56,30 @@ export const resolvers = {
     ): Promise<GQLResourceType[]> {
       return fetchResourceTypes(context);
     },
+    async frontpage(_: any, __: any, context: Context): Promise<GQLFrontpage> {
+      return fetchFrontpage(context);
+    },
+  },
+  Frontpage: {
+    async topical(
+      frontpage: { topical: [string] },
+      _: any,
+      context: Context,
+    ): Promise<GQLResource[]> {
+      return context.loaders.resourcesLoader.loadMany(frontpage.topical);
+    },
+  },
+  FrontpageSubjects: {
+    async subjects(
+      frontpageSubjects: { subjects: [string]; name: string },
+      _: any,
+      context: Context,
+    ): Promise<GQLSubject[]> {
+      const list = await fetchSubjects(context);
+      return list.filter(subject =>
+        frontpageSubjects.subjects.includes(subject.id),
+      );
+    },
   },
   Topic: {
     async article(
@@ -79,11 +105,7 @@ export const resolvers = {
     ): Promise<GQLFilter[]> {
       return fetchTopicFilters(topic.id, context);
     },
-    async meta(
-      topic: GQLTopic,
-      _: any,
-      context: Context,
-    ): Promise<GQLArticleSubset> {
+    async meta(topic: GQLTopic, _: any, context: Context): Promise<GQLMeta> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         return context.loaders.articlesLoader.load(
           topic.contentUri.replace('urn:article:', ''),
@@ -121,6 +143,26 @@ export const resolvers = {
       );
     },
   },
+  SubjectPageArticles: {
+    async resources(
+      subjectPageArticles: { location: string; articleIds: [string] },
+      _: any,
+      context: Context,
+    ): Promise<GQLResource[]> {
+      return context.loaders.resourcesLoader.loadMany(
+        subjectPageArticles.articleIds,
+      );
+    },
+  },
+  SubjectPageTopical: {
+    async resource(
+      subjectPageTopical: { location: string; id: string },
+      _: any,
+      context: Context,
+    ): Promise<GQLResource[]> {
+      return context.loaders.resourcesLoader.load(subjectPageTopical.id);
+    },
+  },
   Subject: {
     async topics(
       subject: GQLSubject,
@@ -143,6 +185,27 @@ export const resolvers = {
     ): Promise<GQLFilter[]> {
       return context.loaders.filterLoader.load(subject.id);
     },
+    async subjectpage(
+      subject: GQLSubject,
+      __: any,
+      context: Context,
+    ): Promise<GQLSubjectPage> {
+      if (
+        subject.contentUri &&
+        subject.contentUri.startsWith('urn:frontpage')
+      ) {
+        return fetchSubjectPage(
+          subject.contentUri.replace('urn:frontpage:', ''),
+          context,
+        );
+      }
+      throw Object.assign(
+        new Error(
+          'Missing subjectpage contentUri for subject with id: ' + subject.id,
+        ),
+        { status: 404 },
+      );
+    },
   },
   ResourceTypeDefinition: {
     async subtypes(
@@ -152,6 +215,31 @@ export const resolvers = {
     },
   },
   Resource: {
+    async meta(
+      resource: GQLResource,
+      _: any,
+      context: Context,
+    ): Promise<GQLMeta> {
+      if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:learningpath')
+      ) {
+        return context.loaders.learningpathsLoader.load(
+          resource.contentUri.replace('urn:learningpath:', ''),
+        );
+      } else if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:article')
+      ) {
+        return context.loaders.articlesLoader.load(
+          resource.contentUri.replace('urn:article:', ''),
+        );
+      }
+      throw Object.assign(
+        new Error('Missing contentUri for resource with id: ' + resource.id),
+        { status: 404 },
+      );
+    },
     async article(
       resource: GQLResource,
       _: any,
@@ -161,9 +249,8 @@ export const resolvers = {
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        return fetchArticle(
+        return context.loaders.articlesLoader.load(
           resource.contentUri.replace('urn:article:', ''),
-          context,
         );
       }
       throw Object.assign(
