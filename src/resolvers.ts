@@ -236,10 +236,7 @@ export const resolvers = {
         );
       }
       throw Object.assign(
-        new Error(
-          'Missing contentUri for resource with id: ' +
-            resource.id,
-        ),
+        new Error('Missing contentUri for resource with id: ' + resource.id),
         { status: 404 },
       );
     },
