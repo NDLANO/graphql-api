@@ -14,6 +14,7 @@ export const typeDefs = `
 type ResourceTypeDefinition {
   id: String!
   name: String!
+  parentId: String
   subtypes: [ResourceTypeDefinition]
 }
 
@@ -170,6 +171,18 @@ type SubjectPageTopical {
   resource: Resource
 }
 
+type SubjectPageAbout {
+  location: String
+  title: String
+  description: String
+  visualElement: String
+}
+
+type SubjectPageGoTo {
+  location: String
+  resourceTypes: [ResourceTypeDefinition]
+}
+
 type SubjectPage {
   topical: SubjectPageTopical
   mostRead: SubjectPageArticles
@@ -179,6 +192,9 @@ type SubjectPage {
   editorsChoices: SubjectPageArticles
   latestContent: SubjectPageArticles
   subjectListLocation: String
+  about: SubjectPageAbout
+  goTo: SubjectPageGoTo
+  displayInTwoColumns: Boolean
   twitter: String
 }
 

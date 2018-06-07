@@ -16,6 +16,7 @@ import {
   fetchResourceResourceTypes,
   fetchTopicResources,
   fetchResourceTypes,
+  fetchResourceType,
   fetchSubjectPage,
   fetchFrontpage,
 } from './data/api';
@@ -161,6 +162,15 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLResource[]> {
       return context.loaders.resourcesLoader.load(subjectPageTopical.id);
+    },
+  },
+  SubjectPageGoTo: {
+    async resourceTypes(
+      goTo: { resourceTypeIds: [string]; location: string },
+      _: any,
+      context: Context,
+    ): Promise<GQLResourceTypeDefinition[]> {
+      return context.loaders.resourceTypeLoader.loadMany(goTo.resourceTypeIds);
     },
   },
   Subject: {

@@ -50,6 +50,19 @@ export async function fetchResourceTypes(
   return resolveJson(response);
 }
 
+export async function fetchResourceType(
+  resourceTypeId: string,
+  context: Context,
+): Promise<GQLResourceTypeDefinition> {
+  const response = await fetch(
+    `/taxonomy/v1/resource-types/${resourceTypeId}?language=${
+      context.language
+    }`,
+    context,
+  );
+  return resolveJson(response);
+}
+
 export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
   const response = await fetch(
     `/taxonomy/v1/subjects/?language=${context.language}`,

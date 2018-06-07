@@ -14,6 +14,7 @@ import {
   fetchSubjectPage,
   fetchResource,
   fetchLearningpaths,
+  fetchResourceType,
 } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
@@ -59,6 +60,14 @@ export function resourcesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async resourceIds => {
     return resourceIds.map(async resourceId => {
       return fetchResource(resourceId, context);
+    });
+  });
+}
+
+export function resourceTypeLoader(context: Context): DataLoader<string, any> {
+  return new DataLoader(async resourceTypeIds => {
+    return resourceTypeIds.map(async resourceTypeId => {
+      return fetchResourceType(resourceTypeId, context);
     });
   });
 }
