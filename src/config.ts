@@ -7,7 +7,7 @@
  */
 export const getEnvironmentVariabel = (
   key: string,
-  fallback: string = undefined,
+  fallback: string | boolean = undefined,
 ) => {
   const variabel = process.env[key];
   return variabel || fallback;
@@ -28,3 +28,4 @@ const ndlaApiUrl = () => {
 
 export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
+export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);

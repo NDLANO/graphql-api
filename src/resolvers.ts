@@ -255,12 +255,14 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLArticle> {
+      console.log(resource);
       if (
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        return context.loaders.articlesLoader.load(
+        return fetchArticle(
           resource.contentUri.replace('urn:article:', ''),
+          context,
         );
       }
       throw Object.assign(

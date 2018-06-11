@@ -10,11 +10,12 @@
     "build": "npm run build-ts",
     "build-ts": "tsc",
     "check-all": "yarn lint && yarn build-ts && yarn test",
-    "lint": "yarn run lint-prettier && eslint . --ext src",
+    "lint": "yarn lint-prettier && eslint . --ext src",
     "lint-prettier": "prettier --l \"src/**/*.ts\"",
     "prettier": "prettier --write \"src/**/*.ts\"",
     "generate-schema-types": "ts-node ./scripts/generateTypeScriptTypesFromSchema.ts",
     "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"nodemon build/server.js | bunyan\"",
+    "start-with-local-converter": "LOCAL_CONVERTER=true yarn start",
     "start-prod": "NODE_ENV=production node ./build/server.js",
     "test": "jest",
     "tdd": "jest --watch"
