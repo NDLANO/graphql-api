@@ -179,7 +179,13 @@ declare global {
     location?: string;
     title?: string;
     description?: string;
-    visualElement?: string;
+    visualElement?: GQLSubjectPageVisualElement;
+  }
+
+  export interface GQLSubjectPageVisualElement {
+    type?: string;
+    url?: string;
+    alt?: string;
   }
 
   export interface GQLSubjectPageGoTo {

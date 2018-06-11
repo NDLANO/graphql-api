@@ -171,11 +171,17 @@ type SubjectPageTopical {
   resource: Resource
 }
 
+type SubjectPageVisualElement {
+  type: String
+  url: String
+  alt: String
+}
+
 type SubjectPageAbout {
   location: String
   title: String
   description: String
-  visualElement: String
+  visualElement: SubjectPageVisualElement
 }
 
 type SubjectPageGoTo {
