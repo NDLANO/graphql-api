@@ -146,8 +146,8 @@ type Topic {
   meta: Meta
   subtopics(filterIds: String): [Topic]
   filters: [Filter]
-  coreResources: [Resource]
-  supplementaryResources: [Resource]
+  coreResources(filterIds: String): [Resource]
+  supplementaryResources(filterIds: String): [Resource]
 }
 
 type FrontpageSubjects {

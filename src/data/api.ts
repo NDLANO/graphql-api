@@ -107,6 +107,7 @@ export async function fetchArticle(
 export async function fetchTopicResources(
   topicId: string,
   relevance: string = 'urn:relevance:core',
+  filterIds: string,
   context: Context,
 ): Promise<GQLResource[]> {
   const response = await fetch(

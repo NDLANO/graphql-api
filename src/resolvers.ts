@@ -114,10 +114,15 @@ export const resolvers = {
     },
     async coreResources(
       topic: GQLTopic,
-      _: any,
+      args: { filterIds: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      return fetchTopicResources(topic.id, 'urn:relevance:core', context);
+      return fetchTopicResources(
+        topic.id,
+        'urn:relevance:core',
+        args.filterIds,
+        context,
+      );
     },
     async subtopics(
       topic: GQLTopic,
@@ -133,12 +138,13 @@ export const resolvers = {
     },
     async supplementaryResources(
       topic: GQLTopic,
-      _: any,
+      args: { filterIds: string },
       context: Context,
     ): Promise<GQLResource[]> {
       return fetchTopicResources(
         topic.id,
         'urn:relevance:supplementary',
+        args.filterIds,
         context,
       );
     },
@@ -245,7 +251,6 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLArticle> {
-      console.log(resource);
       if (
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
