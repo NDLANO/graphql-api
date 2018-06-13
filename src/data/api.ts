@@ -110,10 +110,13 @@ export async function fetchTopicResources(
   filterIds: string,
   context: Context,
 ): Promise<GQLResource[]> {
+  const filterParam =
+    filterIds && filterIds.length > 0 ? `&filter=${filterIds}` : '';
+
   const response = await fetch(
     `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${
       context.language
-    }`,
+    }${filterParam}`,
     context,
   );
   const json = await resolveJson(response);
