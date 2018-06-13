@@ -43,7 +43,7 @@ export async function fetchResourceResourceTypes(
 
 export async function fetchResourceTypes(
   context: Context,
-): Promise<GQLResourceType[]> {
+): Promise<GQLResourceTypeDefinition[]> {
   const response = await fetch(
     `/taxonomy/v1/resource-types?language=${context.language}`,
     context,

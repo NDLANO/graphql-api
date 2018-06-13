@@ -159,6 +159,9 @@ declare global {
     editorsChoices?: GQLSubjectPageArticles;
     latestContent?: GQLSubjectPageArticles;
     subjectListLocation?: string;
+    about?: GQLSubjectPageAbout;
+    goTo?: GQLSubjectPageGoTo;
+    displayInTwoColumns?: boolean;
     twitter?: string;
   }
 
@@ -170,6 +173,30 @@ declare global {
   export interface GQLSubjectPageArticles {
     location?: string;
     resources?: (GQLResource | null)[];
+  }
+
+  export interface GQLSubjectPageAbout {
+    location?: string;
+    title?: string;
+    description?: string;
+    visualElement?: GQLSubjectPageVisualElement;
+  }
+
+  export interface GQLSubjectPageVisualElement {
+    type?: string;
+    url?: string;
+    alt?: string;
+  }
+
+  export interface GQLSubjectPageGoTo {
+    location?: string;
+    resourceTypes?: (GQLResourceTypeDefinition | null)[];
+  }
+
+  export interface GQLResourceTypeDefinition {
+    id: string;
+    name: string;
+    subtypes?: (GQLResourceTypeDefinition | null)[];
   }
 
   export interface GQLTopic {
@@ -194,12 +221,6 @@ declare global {
   export interface GQLFrontpageSubjects {
     name?: string;
     subjects?: (GQLSubject | null)[];
-  }
-
-  export interface GQLResourceTypeDefinition {
-    id: string;
-    name: string;
-    subtypes?: (GQLResourceTypeDefinition | null)[];
   }
 
   /*********************************

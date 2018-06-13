@@ -11,9 +11,9 @@ import {
   fetchArticles,
   fetchSubjectTopics,
   fetchFilters,
-  fetchSubjectPage,
   fetchResource,
   fetchLearningpaths,
+  fetchResourceTypes,
 } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
@@ -59,6 +59,23 @@ export function resourcesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async resourceIds => {
     return resourceIds.map(async resourceId => {
       return fetchResource(resourceId, context);
+    });
+  });
+}
+
+export function resourceTypesLoader(context: Context): DataLoader<string, any> {
+  return new DataLoader(async resourceTypeIds => {
+    const resourceTypes = await fetchResourceTypes(context);
+
+    const allResourceTypes = resourceTypes.reduce((acc, resourceType) => {
+      const subtypes = resourceType.subtypes || [];
+      return [...acc, resourceType, ...subtypes];
+    }, []);
+
+    return resourceTypeIds.map(resourceTypeId => {
+      return allResourceTypes.find(
+        resourceType => resourceType.id === resourceTypeId,
+      );
     });
   });
 }

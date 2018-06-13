@@ -170,6 +170,24 @@ type SubjectPageTopical {
   resource: Resource
 }
 
+type SubjectPageVisualElement {
+  type: String
+  url: String
+  alt: String
+}
+
+type SubjectPageAbout {
+  location: String
+  title: String
+  description: String
+  visualElement: SubjectPageVisualElement
+}
+
+type SubjectPageGoTo {
+  location: String
+  resourceTypes: [ResourceTypeDefinition]
+}
+
 type SubjectPage {
   topical: SubjectPageTopical
   mostRead: SubjectPageArticles
@@ -179,6 +197,9 @@ type SubjectPage {
   editorsChoices: SubjectPageArticles
   latestContent: SubjectPageArticles
   subjectListLocation: String
+  about: SubjectPageAbout
+  goTo: SubjectPageGoTo
+  displayInTwoColumns: Boolean
   twitter: String
 }
 
