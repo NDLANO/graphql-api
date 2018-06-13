@@ -163,6 +163,19 @@ export const resolvers = {
       return context.loaders.resourcesLoader.load(subjectPageTopical.id);
     },
   },
+  SubjectPageGoTo: {
+    async resourceTypes(
+      goTo: { resourceTypeIds: [string]; location: string },
+      _: any,
+      context: Context,
+    ): Promise<GQLResourceTypeDefinition[]> {
+      return Promise.all(
+        goTo.resourceTypeIds.map(id =>
+          context.loaders.resourceTypesLoader.load(id),
+        ),
+      );
+    },
+  },
   Subject: {
     async topics(
       subject: GQLSubject,
