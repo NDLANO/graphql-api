@@ -196,7 +196,6 @@ declare global {
   export interface GQLResourceTypeDefinition {
     id: string;
     name: string;
-    parentId?: string;
     subtypes?: (GQLResourceTypeDefinition | null)[];
   }
 

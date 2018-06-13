@@ -14,7 +14,6 @@ export const typeDefs = `
 type ResourceTypeDefinition {
   id: String!
   name: String!
-  parentId: String
   subtypes: [ResourceTypeDefinition]
 }
 
