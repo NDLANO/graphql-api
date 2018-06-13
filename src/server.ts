@@ -22,7 +22,7 @@ import {
   articlesLoader,
   subjectTopicsLoader,
   resourcesLoader,
-  resourceTypeLoader,
+  resourceTypesLoader,
   learningpathsLoader,
 } from './data/loaders';
 
@@ -52,7 +52,7 @@ async function getContext(request: Request): Promise<Context> {
       subjectTopicsLoader: subjectTopicsLoader(defaultContext),
       resourcesLoader: resourcesLoader(defaultContext),
       learningpathsLoader: learningpathsLoader(defaultContext),
-      resourceTypeLoader: resourceTypeLoader(defaultContext),
+      resourceTypesLoader: resourceTypesLoader(defaultContext),
     },
   };
 }

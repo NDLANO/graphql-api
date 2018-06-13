@@ -16,7 +16,6 @@ import {
   fetchResourceResourceTypes,
   fetchTopicResources,
   fetchResourceTypes,
-  fetchResourceType,
   fetchSubjectPage,
   fetchFrontpage,
 } from './data/api';
@@ -170,7 +169,11 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResourceTypeDefinition[]> {
-      return context.loaders.resourceTypeLoader.loadMany(goTo.resourceTypeIds);
+      return Promise.all(
+        goTo.resourceTypeIds.map(id =>
+          context.loaders.resourceTypesLoader.load(id),
+        ),
+      );
     },
   },
   Subject: {
