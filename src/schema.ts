@@ -11,6 +11,15 @@ import { resolvers } from './resolvers';
 
 export const typeDefs = `
 
+type Image {
+  id: String!
+  copyright: Copyright
+  alttext: String
+  caption: String
+  title: String
+  imageUrl: String
+}
+
 type ResourceTypeDefinition {
   id: String!
   name: String!
@@ -161,12 +170,10 @@ type Frontpage {
 }
 
 type SubjectPageArticles {
-  location: String
   resources: [Resource]
 }
 
 type SubjectPageTopical {
-  location: String
   resource: Resource
 }
 
@@ -187,8 +194,8 @@ type SubjectPageGoTo {
 }
 
 type SubjectPageBanner {
-  desktop: String
-  mobile: String
+  desktop: Image
+  mobile: Image
 }
 
 type SubjectPage {
@@ -200,7 +207,6 @@ type SubjectPage {
   facebook: String
   editorsChoices: SubjectPageArticles
   latestContent: SubjectPageArticles
-  subjectListLocation: String
   about: SubjectPageAbout
   goTo: SubjectPageGoTo
   displayInTwoColumns: Boolean
@@ -213,7 +219,7 @@ type Subject {
   name: String!
   path: String!
   filters: [Filter]
-  subjectpage: SubjectPage,
+  subjectpage: SubjectPage
   topics(all: Boolean filterIds: String): [Topic]
 }
 

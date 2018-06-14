@@ -18,6 +18,7 @@ import {
   fetchResourceTypes,
   fetchSubjectPage,
   fetchFrontpage,
+  fetchImage,
 } from './data/api';
 
 type Id = {
@@ -145,35 +146,47 @@ export const resolvers = {
   },
   SubjectPageArticles: {
     async resources(
-      subjectPageArticles: { location: string; articleIds: [string] },
+      subjectPageArticles: [string],
       _: any,
       context: Context,
     ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.loadMany(
-        subjectPageArticles.articleIds,
-      );
+      return context.loaders.resourcesLoader.loadMany(subjectPageArticles);
     },
   },
   SubjectPageTopical: {
     async resource(
-      subjectPageTopical: { location: string; id: string },
+      subjectPageTopicalId: string,
       _: any,
       context: Context,
     ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.load(subjectPageTopical.id);
+      return context.loaders.resourcesLoader.load(subjectPageTopicalId);
     },
   },
   SubjectPageGoTo: {
     async resourceTypes(
-      goTo: { resourceTypeIds: [string]; location: string },
+      resourceTypeIds: [string],
       _: any,
       context: Context,
     ): Promise<GQLResourceTypeDefinition[]> {
       return Promise.all(
-        goTo.resourceTypeIds.map(id =>
-          context.loaders.resourceTypesLoader.load(id),
-        ),
+        resourceTypeIds.map(id => context.loaders.resourceTypesLoader.load(id)),
       );
+    },
+  },
+  SubjectPageBanner: {
+    async desktop(
+      banner: { desktopId: String; mobileId: String },
+      _: any,
+      context: Context,
+    ): Promise<GQLImage> {
+      return fetchImage(banner.desktopId, context);
+    },
+    async mobile(
+      banner: { desktopId: String; mobileId: String },
+      _: any,
+      context: Context,
+    ): Promise<GQLImage> {
+      return fetchImage(banner.mobileId, context);
     },
   },
   Subject: {

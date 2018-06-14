@@ -159,7 +159,6 @@ declare global {
     facebook?: string;
     editorsChoices?: GQLSubjectPageArticles;
     latestContent?: GQLSubjectPageArticles;
-    subjectListLocation?: string;
     about?: GQLSubjectPageAbout;
     goTo?: GQLSubjectPageGoTo;
     displayInTwoColumns?: boolean;
@@ -167,18 +166,25 @@ declare global {
   }
 
   export interface GQLSubjectPageTopical {
-    location?: string;
     resource?: GQLResource;
   }
 
   export interface GQLSubjectPageArticles {
-    location?: string;
     resources?: (GQLResource | null)[];
   }
 
   export interface GQLSubjectPageBanner {
-    desktop?: string;
-    mobile?: string;
+    desktop?: GQLImage;
+    mobile?: GQLImage;
+  }
+
+  export interface GQLImage {
+    id: string;
+    copyright?: GQLCopyright;
+    alttext?: string;
+    caption?: string;
+    title?: string;
+    imageUrl?: string;
   }
 
   export interface GQLSubjectPageAbout {
