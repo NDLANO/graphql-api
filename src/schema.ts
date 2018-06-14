@@ -177,22 +177,26 @@ type SubjectPageVisualElement {
 }
 
 type SubjectPageAbout {
-  location: String
   title: String
   description: String
   visualElement: SubjectPageVisualElement
 }
 
 type SubjectPageGoTo {
-  location: String
   resourceTypes: [ResourceTypeDefinition]
+}
+
+type SubjectPageBanner {
+  desktop: String
+  mobile: String
 }
 
 type SubjectPage {
   topical: SubjectPageTopical
   mostRead: SubjectPageArticles
-  banner: String
+  banner: SubjectPageBanner
   id: Int!
+  name: String
   facebook: String
   editorsChoices: SubjectPageArticles
   latestContent: SubjectPageArticles
