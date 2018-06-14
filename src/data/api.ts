@@ -189,23 +189,6 @@ export async function fetchLearningpaths(
   });
 }
 
-export async function fetchImage(
-  imageId: String,
-  context: Context,
-): Promise<GQLImage> {
-  const response = await fetch(`/image-api/v2/images/${imageId}`, context);
-  const image = await resolveJson(response);
-  if (image) {
-    return {
-      ...image,
-      id: image.id,
-      title: image.title ? image.title.title : undefined,
-      alttext: image.alttext ? image.alttext.alttext : undefined,
-      imageUrl: image.imageUrl,
-      caption: image.caption ? image.caption.caption : undefined,
-    };
-  }
-}
 export async function fetchFrontpage(context: Context): Promise<GQLFrontpage> {
   const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
   return resolveJson(response);

@@ -174,17 +174,10 @@ declare global {
   }
 
   export interface GQLSubjectPageBanner {
-    desktop?: GQLImage;
-    mobile?: GQLImage;
-  }
-
-  export interface GQLImage {
-    id: string;
-    copyright?: GQLCopyright;
-    alttext?: string;
-    caption?: string;
-    title?: string;
-    imageUrl?: string;
+    desktopUrl?: string;
+    desktopId?: string;
+    mobileUrl?: string;
+    mobileId?: string;
   }
 
   export interface GQLSubjectPageAbout {

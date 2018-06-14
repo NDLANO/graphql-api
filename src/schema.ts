@@ -11,15 +11,6 @@ import { resolvers } from './resolvers';
 
 export const typeDefs = `
 
-type Image {
-  id: String!
-  copyright: Copyright
-  alttext: String
-  caption: String
-  title: String
-  imageUrl: String
-}
-
 type ResourceTypeDefinition {
   id: String!
   name: String!
@@ -194,8 +185,10 @@ type SubjectPageGoTo {
 }
 
 type SubjectPageBanner {
-  desktop: Image
-  mobile: Image
+  desktopUrl: String
+  desktopId: String
+  mobileUrl: String
+  mobileId: String
 }
 
 type SubjectPage {

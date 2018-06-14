@@ -18,7 +18,6 @@ import {
   fetchResourceTypes,
   fetchSubjectPage,
   fetchFrontpage,
-  fetchImage,
 } from './data/api';
 
 type Id = {
@@ -171,22 +170,6 @@ export const resolvers = {
       return Promise.all(
         resourceTypeIds.map(id => context.loaders.resourceTypesLoader.load(id)),
       );
-    },
-  },
-  SubjectPageBanner: {
-    async desktop(
-      banner: { desktopId: String; mobileId: String },
-      _: any,
-      context: Context,
-    ): Promise<GQLImage> {
-      return fetchImage(banner.desktopId, context);
-    },
-    async mobile(
-      banner: { desktopId: String; mobileId: String },
-      _: any,
-      context: Context,
-    ): Promise<GQLImage> {
-      return fetchImage(banner.mobileId, context);
     },
   },
   Subject: {
