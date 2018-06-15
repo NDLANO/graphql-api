@@ -153,12 +153,12 @@ declare global {
   export interface GQLSubjectPage {
     topical?: GQLSubjectPageTopical;
     mostRead?: GQLSubjectPageArticles;
-    banner?: string;
+    banner?: GQLSubjectPageBanner;
     id: number;
+    name?: string;
     facebook?: string;
     editorsChoices?: GQLSubjectPageArticles;
     latestContent?: GQLSubjectPageArticles;
-    subjectListLocation?: string;
     about?: GQLSubjectPageAbout;
     goTo?: GQLSubjectPageGoTo;
     displayInTwoColumns?: boolean;
@@ -166,17 +166,21 @@ declare global {
   }
 
   export interface GQLSubjectPageTopical {
-    location?: string;
     resource?: GQLResource;
   }
 
   export interface GQLSubjectPageArticles {
-    location?: string;
     resources?: (GQLResource | null)[];
   }
 
+  export interface GQLSubjectPageBanner {
+    desktopUrl?: string;
+    desktopId?: string;
+    mobileUrl?: string;
+    mobileId?: string;
+  }
+
   export interface GQLSubjectPageAbout {
-    location?: string;
     title?: string;
     description?: string;
     visualElement?: GQLSubjectPageVisualElement;
@@ -189,7 +193,6 @@ declare global {
   }
 
   export interface GQLSubjectPageGoTo {
-    location?: string;
     resourceTypes?: (GQLResourceTypeDefinition | null)[];
   }
 

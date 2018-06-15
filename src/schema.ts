@@ -161,12 +161,10 @@ type Frontpage {
 }
 
 type SubjectPageArticles {
-  location: String
   resources: [Resource]
 }
 
 type SubjectPageTopical {
-  location: String
   resource: Resource
 }
 
@@ -177,26 +175,31 @@ type SubjectPageVisualElement {
 }
 
 type SubjectPageAbout {
-  location: String
   title: String
   description: String
   visualElement: SubjectPageVisualElement
 }
 
 type SubjectPageGoTo {
-  location: String
   resourceTypes: [ResourceTypeDefinition]
+}
+
+type SubjectPageBanner {
+  desktopUrl: String
+  desktopId: String
+  mobileUrl: String
+  mobileId: String
 }
 
 type SubjectPage {
   topical: SubjectPageTopical
   mostRead: SubjectPageArticles
-  banner: String
+  banner: SubjectPageBanner
   id: Int!
+  name: String
   facebook: String
   editorsChoices: SubjectPageArticles
   latestContent: SubjectPageArticles
-  subjectListLocation: String
   about: SubjectPageAbout
   goTo: SubjectPageGoTo
   displayInTwoColumns: Boolean
@@ -209,7 +212,7 @@ type Subject {
   name: String!
   path: String!
   filters: [Filter]
-  subjectpage: SubjectPage,
+  subjectpage: SubjectPage
   topics(all: Boolean filterIds: String): [Topic]
 }
 
