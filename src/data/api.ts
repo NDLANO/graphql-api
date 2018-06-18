@@ -151,7 +151,7 @@ export async function fetchArticles(
           ? article.metaDescription.metaDescription
           : undefined,
         lastUpdated: article.lastUpdated || undefined,
-        metaImage: article.metaImage ? article.metaImage.metaImage : undefined,
+        metaImage: article.metaImage ? article.metaImage.url : undefined,
       };
     }
     return null;
