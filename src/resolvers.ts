@@ -276,16 +276,6 @@ export const resolvers = {
         { status: 404 },
       );
     },
-    async resourceTypes(
-      resource: GQLResource,
-      _: any,
-      context: Context,
-    ): Promise<GQLResourceType[]> {
-      if (resource.resourceTypes) {
-        return resource.resourceTypes;
-      }
-      return fetchResourceResourceTypes(resource.id, context);
-    },
   },
   // Mutation: {},
 };
