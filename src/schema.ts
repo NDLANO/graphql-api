@@ -39,7 +39,9 @@ type Resource {
   path: String
   resourceTypes: [ResourceType]
   meta: Meta
-  article: Article
+  article: Article,
+  filters: [Filter],
+  parentTopics: [Topic]
 }
 
 type License {
@@ -133,14 +135,16 @@ type Article {
 type Filter {
   id: String!
   name: String!
-  subjectId: String!
+  connectionId: String
+  relevanceId: String
 }
 
 type Topic {
   id: String!
   contentUri: String
   name: String!
-  path: String!
+  path: String
+  isPrimary: Boolean
   parent: String
   article: Article
   meta: Meta

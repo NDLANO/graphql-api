@@ -14,7 +14,7 @@ export async function fetchResource(
   context: Context,
 ): Promise<GQLResource> {
   const response = await fetch(
-    `/taxonomy/v1/resources/${resourceId}/?language=${context.language}`,
+    `/taxonomy/v1/resources/${resourceId}/full?language=${context.language}`,
     context,
   );
   return resolveJson(response);
