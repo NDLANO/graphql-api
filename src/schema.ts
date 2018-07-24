@@ -8,7 +8,6 @@
 
 import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
-import { resolvers } from './resolvers';
 
 export const typeDefs = gql`
   type ResourceTypeDefinition {
@@ -138,6 +137,12 @@ export const typeDefs = gql`
     relevanceId: String
   }
 
+  type SubjectFilter {
+    id: String!
+    name: String!
+    subjectId: String!
+  }
+
   type Topic {
     id: String!
     contentUri: String
@@ -214,7 +219,7 @@ export const typeDefs = gql`
     contentUri: String
     name: String!
     path: String!
-    filters: [Filter]
+    filters: [SubjectFilter]
     subjectpage: SubjectPage
     topics(all: Boolean, filterIds: String): [Topic]
   }
@@ -227,11 +232,11 @@ export const typeDefs = gql`
     topic(id: String!): Topic
     topics: [Topic]
     frontpage: Frontpage
-    filters: [Filter]
+    filters: [SubjectFilter]
     resourceTypes: [ResourceTypeDefinition]
   }
 `;
 
-const schema = makeExecutableSchema({ typeDefs, resolvers });
+const schema = makeExecutableSchema({ typeDefs });
 
 export default schema;

@@ -20,7 +20,9 @@ export async function fetchResource(
   return resolveJson(response);
 }
 
-export async function fetchFilters(context: Context): Promise<GQLFilter[]> {
+export async function fetchFilters(
+  context: Context,
+): Promise<GQLSubjectFilter[]> {
   const response = await fetch(
     `/taxonomy/v1/filters/?language=${context.language}`,
     context,
