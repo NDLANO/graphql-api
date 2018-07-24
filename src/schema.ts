@@ -28,7 +28,7 @@ type Meta {
   title: String!
   introduction: String
   metaDescription: String
-  metaImage: String
+  metaImage: MetaImage
   lastUpdated: String
 }
 
@@ -113,6 +113,11 @@ type ArticleMetaData {
   brightcoves: [BrightcoveLicense]
 }
 
+type MetaImage {
+  url: String
+  alt: String
+}
+
 type Article {
   id: Int!
   revision: Int!
@@ -122,7 +127,7 @@ type Article {
   created: String!
   updated: String!
   visualElement: String
-  metaImage: String
+  metaImage: MetaImage
   metaDescription: String!
   articleType: String!
   oldNdlaUrl: String
