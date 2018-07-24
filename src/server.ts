@@ -7,12 +7,20 @@
  */
 
 import express, { Request, Response } from 'express';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { graphiqlExpress } from 'apollo-server-express';
 import bodyParser from 'body-parser';
 import DataLoader from 'dataloader';
 import cors from 'cors';
 import { isString } from 'lodash';
 
+import {
+  graphqlExpress,
+  graphqlResponseHandler,
+  extensionsFilter,
+  getFromCacheIfAny,
+  storeInCache,
+  createLRUCache,
+} from './middleware';
 import { port } from './config';
 import logger from './utils/logger';
 import schema from './schema';
@@ -68,6 +76,8 @@ async function getOptions(request: Request) {
     context,
     schema,
     debug: false, // log errors in formatError
+    tracing: true,
+    cacheControl: true,
     formatError(err: any) {
       logger.error(err);
       return {
@@ -85,11 +95,19 @@ graphQLServer.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 200, text: 'Health check ok' });
 });
 
+const storeCache = createLRUCache();
+
 graphQLServer.use(
   '/graphql-api/graphql',
   cors(),
   bodyParser.json(),
+  getFromCacheIfAny(storeCache),
   graphqlExpress(getOptions),
+  storeInCache(storeCache),
+  // graphqlExpress,
+  extensionsFilter,
+  // send the response
+  graphqlResponseHandler,
 );
 
 graphQLServer.use(
