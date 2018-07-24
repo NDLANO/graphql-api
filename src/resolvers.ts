@@ -13,7 +13,6 @@ import {
   fetchFilters,
   fetchTopics,
   fetchTopicFilters,
-  fetchResourceResourceTypes,
   fetchTopicResources,
   fetchResourceTypes,
   fetchSubjectPage,

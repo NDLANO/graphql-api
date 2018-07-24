@@ -30,19 +30,6 @@ export async function fetchFilters(
   return resolveJson(response);
 }
 
-export async function fetchResourceResourceTypes(
-  resourceId: string,
-  context: Context,
-): Promise<GQLResourceType[]> {
-  const response = await fetch(
-    `/taxonomy/v1/resources/${resourceId}/resource-types?language=${
-      context.language
-    }`,
-    context,
-  );
-  return resolveJson(response);
-}
-
 export async function fetchResourceTypes(
   context: Context,
 ): Promise<GQLResourceTypeDefinition[]> {
