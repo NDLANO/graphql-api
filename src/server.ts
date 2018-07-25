@@ -13,7 +13,8 @@ import { isString } from 'lodash';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
-import { getFromCacheIfAny, storeInCache, createLRUCache } from './middleware';
+import { getFromCacheIfAny, storeInCache } from './middleware';
+import { createCache } from './cache';
 import { port } from './config';
 import logger from './utils/logger';
 import { typeDefs } from './schema';
@@ -64,7 +65,7 @@ app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 200, text: 'Health check ok' });
 });
 
-const storeCache = createLRUCache();
+const storeCache = createCache();
 
 // Apollo server 2 includes cors and bodyparser middlware, but we need to run it before getFromCacheIfAny
 app.use(cors(), bodyParser.json(), getFromCacheIfAny(storeCache));
@@ -85,8 +86,8 @@ const server = new ApolloServer({
       json: err.originalError && err.originalError.json,
     };
   },
-  formatResponse(gqlResponse: any, options: GraphQLOptions<Context>) {
-    storeInCache(storeCache)(options.context.req, gqlResponse);
+  async formatResponse(gqlResponse: any, options: GraphQLOptions<Context>) {
+    await storeInCache(storeCache)(options.context.req, gqlResponse);
     return gqlResponse;
   },
   context: getContext,

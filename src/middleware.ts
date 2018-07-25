@@ -7,36 +7,8 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import createCache from 'lru-cache';
+import { KeyValueCache } from './cache';
 import crypto from 'crypto';
-
-export interface KeyValueCache {
-  get(key: string): Promise<string | undefined>;
-  set(key: string, value: string, duration?: number): Promise<void>;
-}
-
-// size: 50 mb default
-export const createLRUCache = (
-  options: { size: number } = { size: 50000000 },
-): KeyValueCache => {
-  const cache = createCache({
-    max: options.size,
-    length: (n: string, key: string) => n.length + key.length,
-  });
-
-  return {
-    async get(key) {
-      return cache.get(key);
-    },
-    async set(key, value, maxAge) {
-      if (maxAge) {
-        cache.set(key, value, maxAge);
-      } else {
-        cache.set(key, value);
-      }
-    },
-  };
-};
 
 const hashPostBody = (query: string) => {
   // trim query
@@ -56,7 +28,7 @@ const sendContent = (res: Response, value: string) => {
   res.end();
 };
 
-export const getFromCacheIfAny = (store: KeyValueCache) => async (
+export const getFromCacheIfAny = (cache: KeyValueCache) => async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -70,7 +42,7 @@ export const getFromCacheIfAny = (store: KeyValueCache) => async (
     data.query.trim().indexOf('query') === 0 // only if query, don't cache mutations
   ) {
     const key = hashPostBody(data.query);
-    const value = await store.get(key);
+    const value = await cache.get(key);
 
     if (value) {
       // Cache hit. End response and don't call next middleware
@@ -81,7 +53,7 @@ export const getFromCacheIfAny = (store: KeyValueCache) => async (
   next();
 };
 
-export const storeInCache = (store: KeyValueCache) => async (
+export const storeInCache = (cache: KeyValueCache) => async (
   req: Request,
   gqlResponse: any,
 ) => {
@@ -103,7 +75,7 @@ export const storeInCache = (store: KeyValueCache) => async (
       const key = hashPostBody(data.query);
 
       delete gqlResponse.extensions;
-      await store.set(key, JSON.stringify(gqlResponse), minAgeInMs);
+      await cache.set(key, JSON.stringify(gqlResponse), minAgeInMs);
     }
   }
 };
