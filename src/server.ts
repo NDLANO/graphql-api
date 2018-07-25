@@ -8,7 +8,6 @@
 
 import express, { Request, Response } from 'express';
 import { ApolloServer } from 'apollo-server-express';
-import { GraphQLOptions } from 'apollo-server-core';
 import { isString } from 'lodash';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -49,7 +48,6 @@ async function getContext({ req }: { req: Request }): Promise<Context> {
 
   return {
     ...defaultContext,
-    req,
     loaders: {
       articlesLoader: articlesLoader(defaultContext),
       filterLoader: filterLoader(defaultContext),
@@ -86,9 +84,8 @@ const server = new ApolloServer({
       json: err.originalError && err.originalError.json,
     };
   },
-  async formatResponse(gqlResponse: any, options: GraphQLOptions<Context>) {
-    await storeInCache(storeCache)(options.context.req, gqlResponse);
-    return gqlResponse;
+  async formatResponse(gqlResponse: any, options: any) {
+    return storeInCache(storeCache)(options.queryString, gqlResponse);
   },
   context: getContext,
 });

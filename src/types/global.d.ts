@@ -1,5 +1,4 @@
 import DataLoader from 'dataloader';
-import { Request } from 'express';
 
 declare global {
   interface AuthToken {
@@ -11,7 +10,6 @@ declare global {
   interface Context {
     token: AuthToken;
     language: string;
-    req?: Request;
     loaders?: {
       articlesLoader: DataLoader<string, any>;
       learningpathsLoader: DataLoader<string, any>;

@@ -10,6 +10,12 @@ import { Request, Response, NextFunction } from 'express';
 import { KeyValueCache } from './cache';
 import crypto from 'crypto';
 
+interface Operation {
+  query: string;
+  variables?: any;
+  operationName: string;
+}
+
 const hashPostBody = (query: string) => {
   // trim query
   const q = query.replace(/\s+/g, '');
@@ -28,40 +34,74 @@ const sendContent = (res: Response, value: string) => {
   res.end();
 };
 
+function isOperation(data: any): data is Operation {
+  return data.query;
+}
+
+function isOperationArray(data: any): data is Operation[] {
+  return Array.isArray(data);
+}
+
+async function lookup(
+  cache: KeyValueCache,
+  data: Operation[] | Operation,
+): Promise<string | undefined> {
+  if (
+    isOperation(data) &&
+    data.query.trim().indexOf('query') === 0 // only if query, don't cache mutations
+  ) {
+    const key = hashPostBody(data.query);
+    const value = await cache.get(key);
+    return value;
+  } else if (isOperationArray(data)) {
+    const values = await Promise.all(
+      data.map(async (operation: Operation) => {
+        const key = hashPostBody(operation.query);
+        const value = await cache.get(key);
+        return value ? JSON.parse(value) : value;
+      }),
+    );
+
+    if (values.every(value => value !== undefined)) {
+      return JSON.stringify(values);
+    }
+  }
+  return undefined;
+}
+
 export const getFromCacheIfAny = (cache: KeyValueCache) => async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   const { method } = req;
-  const data = req.method === 'POST' ? req.body : req.query;
+  // (N.B! we don't handle persisted queries)
 
-  if (
-    method === 'POST' &&
-    data.query &&
-    data.query.trim().indexOf('query') === 0 // only if query, don't cache mutations
-  ) {
-    const key = hashPostBody(data.query);
-    const value = await cache.get(key);
-
+  if (method === 'POST') {
+    const data: Operation[] | Operation = req.body;
+    const value = await lookup(cache, data);
     if (value) {
       // Cache hit. End response and don't call next middleware
       sendContent(res, value);
       return;
     }
   }
+
   next();
 };
 
 export const storeInCache = (cache: KeyValueCache) => async (
-  req: Request,
+  query: string,
   gqlResponse: any,
-) => {
-  const { method } = req;
-  const data = req.method === 'POST' ? req.body : req.query;
+): Promise<any> => {
+  if (gqlResponse.errors) {
+    // skip caching for responses with errors
+    delete gqlResponse.extensions;
+    return gqlResponse;
+  }
 
-  // only cache POST request (N.B! we don't handle persisted queries)
-  if (method === 'POST' && data.query) {
+  // only if query, we don't cache mutations
+  if (query && query.trim().indexOf('query') === 0) {
     const extensions = gqlResponse.extensions;
     // only cache if cache control is enabled
     if (extensions && extensions.cacheControl) {
@@ -72,10 +112,11 @@ export const storeInCache = (cache: KeyValueCache) => async (
       );
 
       const minAgeInMs = minAge * 1000;
-      const key = hashPostBody(data.query);
+      const key = hashPostBody(query);
 
       delete gqlResponse.extensions;
       await cache.set(key, JSON.stringify(gqlResponse), minAgeInMs);
     }
   }
+  return gqlResponse;
 };
