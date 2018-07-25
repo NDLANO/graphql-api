@@ -13,7 +13,6 @@ import {
   fetchFilters,
   fetchTopics,
   fetchTopicFilters,
-  fetchResourceResourceTypes,
   fetchTopicResources,
   fetchResourceTypes,
   fetchSubjectPage,
@@ -46,7 +45,11 @@ export const resolvers = {
     async topics(_: any, __: any, context: Context): Promise<GQLTopic[]> {
       return fetchTopics(context);
     },
-    async filters(_: any, __: any, context: Context): Promise<GQLFilter[]> {
+    async filters(
+      _: any,
+      __: any,
+      context: Context,
+    ): Promise<GQLSubjectFilter[]> {
       return fetchFilters(context);
     },
     async resourceTypes(

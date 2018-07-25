@@ -7,14 +7,11 @@
  */
 
 import express, { Request, Response } from 'express';
-import { graphiqlExpress } from 'apollo-server-express';
-import bodyParser from 'body-parser';
-import DataLoader from 'dataloader';
-import cors from 'cors';
+import { ApolloServer } from 'apollo-server-express';
 import { isString } from 'lodash';
 
 import {
-  graphqlExpress,
+  // graphqlExpress,
   graphqlResponseHandler,
   extensionsFilter,
   getFromCacheIfAny,
@@ -23,7 +20,7 @@ import {
 } from './middleware';
 import { port } from './config';
 import logger from './utils/logger';
-import schema from './schema';
+import { typeDefs } from './schema';
 import { getToken } from './auth';
 import {
   filterLoader,
@@ -33,10 +30,11 @@ import {
   resourceTypesLoader,
   learningpathsLoader,
 } from './data/loaders';
+import { resolvers } from './resolvers';
 
 const GRAPHQL_PORT = port;
 
-const graphQLServer = express();
+const app = express();
 
 function getAcceptLanguage(request: Request): string {
   const language = request.headers['accept-language'];
@@ -47,9 +45,9 @@ function getAcceptLanguage(request: Request): string {
   return 'nb';
 }
 
-async function getContext(request: Request): Promise<Context> {
-  const token = await getToken(request);
-  const language = getAcceptLanguage(request);
+async function getContext({ req }: { req: Request }): Promise<Context> {
+  const token = await getToken(req);
+  const language = getAcceptLanguage(req);
   const defaultContext = { token, language };
 
   return {
@@ -65,57 +63,30 @@ async function getContext(request: Request): Promise<Context> {
   };
 }
 
-async function getOptions(request: Request) {
-  let context;
-  try {
-    context = await getContext(request);
-  } catch (error) {
-    logger.error(error);
-  }
-  return {
-    context,
-    schema,
-    debug: false, // log errors in formatError
-    tracing: true,
-    cacheControl: true,
-    formatError(err: any) {
-      logger.error(err);
-      return {
-        message: err.message,
-        locations: err.locations,
-        path: err.path,
-        status: err.originalError && err.originalError.status,
-        json: err.originalError && err.originalError.json,
-      };
-    },
-  };
-}
-
-graphQLServer.get('/health', (req: Request, res: Response) => {
+app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 200, text: 'Health check ok' });
 });
 
-const storeCache = createLRUCache();
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  debug: false, // log errors in formatError
+  formatError(err: any) {
+    logger.error(err);
+    return {
+      message: err.message,
+      locations: err.locations,
+      path: err.path,
+      status: err.originalError && err.originalError.status,
+      json: err.originalError && err.originalError.json,
+    };
+  },
+  context: getContext,
+});
 
-graphQLServer.use(
-  '/graphql-api/graphql',
-  cors(),
-  bodyParser.json(),
-  getFromCacheIfAny(storeCache),
-  graphqlExpress(getOptions),
-  storeInCache(storeCache),
-  // graphqlExpress,
-  extensionsFilter,
-  // send the response
-  graphqlResponseHandler,
-);
+server.applyMiddleware({ app: app, path: '/graphql-api/graphql' });
 
-graphQLServer.use(
-  '/graphql-api/graphiql',
-  graphiqlExpress({ endpointURL: '/graphql-api/graphql' }),
-);
-
-graphQLServer.listen(GRAPHQL_PORT, () =>
+app.listen(GRAPHQL_PORT, () =>
   console.log(
     `GraphiQL is now running on http://localhost:${GRAPHQL_PORT}/graphql-api/graphiql`,
   ),

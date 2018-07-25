@@ -20,22 +20,11 @@ export async function fetchResource(
   return resolveJson(response);
 }
 
-export async function fetchFilters(context: Context): Promise<GQLFilter[]> {
+export async function fetchFilters(
+  context: Context,
+): Promise<GQLSubjectFilter[]> {
   const response = await fetch(
     `/taxonomy/v1/filters/?language=${context.language}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchResourceResourceTypes(
-  resourceId: string,
-  context: Context,
-): Promise<GQLResourceType[]> {
-  const response = await fetch(
-    `/taxonomy/v1/resources/${resourceId}/resource-types?language=${
-      context.language
-    }`,
     context,
   );
   return resolveJson(response);

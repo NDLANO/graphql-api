@@ -4,10 +4,6 @@ import {
   runHttpQuery,
 } from 'apollo-server-core';
 import * as express from 'express';
-import {
-  ExpressGraphQLOptionsFunction,
-  ExpressHandler,
-} from 'apollo-server-express';
 import createCache from 'lru-cache';
 import crypto from 'crypto';
 
@@ -205,49 +201,49 @@ export const graphqlResponseHandler = (
   sendContent(res, res['gqlResponse']);
 };
 
-export function graphqlExpress(
-  options: GraphQLOptions | ExpressGraphQLOptionsFunction,
-): ExpressHandler {
-  if (!options) {
-    throw new Error('Apollo Server requires options.');
-  }
+// export function graphqlExpress(
+//   options: GraphQLOptions | ExpressGraphQLOptionsFunction,
+// ): ExpressHandler {
+//   if (!options) {
+//     throw new Error('Apollo Server requires options.');
+//   }
 
-  if (arguments.length > 1) {
-    throw new Error(
-      `Apollo Server expects exactly one argument, got ${arguments.length}`,
-    );
-  }
+//   if (arguments.length > 1) {
+//     throw new Error(
+//       `Apollo Server expects exactly one argument, got ${arguments.length}`,
+//     );
+//   }
 
-  const graphqlHandler = (
-    req: express.Request,
-    res: Response,
-    next: express.NextFunction,
-  ): void => {
-    runHttpQuery([req, res], {
-      method: req.method,
-      options: options,
-      query: req.method === 'POST' ? req.body : req.query,
-    }).then(
-      gqlResponse => {
-        res.gqlResponse = gqlResponse;
-        next();
-      },
-      (error: HttpQueryError) => {
-        if ('HttpQueryError' !== error.name) {
-          return next(error);
-        }
+//   const graphqlHandler = (
+//     req: express.Request,
+//     res: Response,
+//     next: express.NextFunction,
+//   ): void => {
+//     runHttpQuery([req, res], {
+//       method: req.method,
+//       options: options,
+//       query: req.method === 'POST' ? req.body : req.query,
+//     }).then(
+//       gqlResponse => {
+//         res.gqlResponse = gqlResponse;
+//         next();
+//       },
+//       (error: HttpQueryError) => {
+//         if ('HttpQueryError' !== error.name) {
+//           return next(error);
+//         }
 
-        if (error.headers) {
-          Object.keys(error.headers).forEach(header => {
-            res.setHeader(header, error.headers[header]);
-          });
-        }
-        res.statusCode = error.statusCode;
-        res.write(error.message);
-        res.end();
-      },
-    );
-  };
+//         if (error.headers) {
+//           Object.keys(error.headers).forEach(header => {
+//             res.setHeader(header, error.headers[header]);
+//           });
+//         }
+//         res.statusCode = error.statusCode;
+//         res.write(error.message);
+//         res.end();
+//       },
+//     );
+//   };
 
-  return graphqlHandler;
-}
+//   return graphqlHandler;
+// }
