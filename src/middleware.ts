@@ -21,8 +21,7 @@ interface Operation {
   operationName: string;
 }
 
-function hashPostBody(query: string) {
-  // trim query
+function hashQuery(query: string) {
   const q = query.replace(/\s+/g, '');
   const key = crypto
     .createHash('sha256')
@@ -43,17 +42,14 @@ export async function lookup(
   cache: KeyValueCache,
   data: Operation[] | Operation,
 ): Promise<string | undefined> {
-  if (
-    isOperation(data) &&
-    data.query.trim().indexOf('query') === 0 // only if query, don't cache mutations
-  ) {
-    const key = hashPostBody(data.query);
+  if (isOperation(data)) {
+    const key = hashQuery(data.query);
     const value = await cache.get(key);
     return value;
   } else if (isOperationArray(data)) {
     const values = await Promise.all(
       data.map(async (operation: Operation) => {
-        const key = hashPostBody(operation.query);
+        const key = hashQuery(operation.query);
         const value = await cache.get(key);
         return value ? JSON.parse(value) : value;
       }),
@@ -113,7 +109,6 @@ export const storeInCache = (cache: KeyValueCache) => async (
   }
 
   // only if query, we don't cache mutations
-
   if (query && query.trim().indexOf('query') === 0) {
     const extensions = gqlResponse.extensions;
     // only cache if cache control is enabled
@@ -126,7 +121,7 @@ export const storeInCache = (cache: KeyValueCache) => async (
 
       const minAgeInMs = hintWithMinAge.maxAge * 1000;
 
-      const key = hashPostBody(query);
+      const key = hashQuery(query);
 
       delete gqlResponse.extensions;
       await cache.set(key, JSON.stringify(gqlResponse), minAgeInMs);
