@@ -12,8 +12,10 @@ export interface KeyValueCache {
   set(key: string, value: string, maxAge?: number): Promise<void>;
 }
 
-// size: 50 mb default
+// Create a cache with a generic interface.
+// Uses lru-cache now, but should be simple to switch to a redis/memcache implementation using the same interface
 export const createCache = (
+  // size: 50 mb default
   options: { size: number } = { size: 50000000 },
 ): KeyValueCache => {
   const cache = createLRUCache({

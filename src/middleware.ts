@@ -21,7 +21,7 @@ interface Operation {
   operationName: string;
 }
 
-const hashPostBody = (query: string) => {
+function hashPostBody(query: string) {
   // trim query
   const q = query.replace(/\s+/g, '');
   const key = crypto
@@ -29,7 +29,7 @@ const hashPostBody = (query: string) => {
     .update(q)
     .digest('hex');
   return key;
-};
+}
 
 function isOperation(data: any): data is Operation {
   return data.query;
@@ -39,7 +39,7 @@ function isOperationArray(data: any): data is Operation[] {
   return Array.isArray(data);
 }
 
-async function lookup(
+export async function lookup(
   cache: KeyValueCache,
   data: Operation[] | Operation,
 ): Promise<string | undefined> {
@@ -113,6 +113,7 @@ export const storeInCache = (cache: KeyValueCache) => async (
   }
 
   // only if query, we don't cache mutations
+
   if (query && query.trim().indexOf('query') === 0) {
     const extensions = gqlResponse.extensions;
     // only cache if cache control is enabled
