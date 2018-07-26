@@ -9,7 +9,11 @@
 import express, { Request, Response } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { isString } from 'lodash';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 
+import { getFromCacheIfAny, storeInCache } from './middleware';
+import { createCache } from './cache';
 import { port } from './config';
 import logger from './utils/logger';
 import { typeDefs } from './schema';
@@ -59,10 +63,19 @@ app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 200, text: 'Health check ok' });
 });
 
+const storeCache = createCache();
+
+// Apollo server 2 includes cors and bodyparser middlware, but we need to run it before getFromCacheIfAny
+app.use(cors(), bodyParser.json(), getFromCacheIfAny(storeCache));
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   debug: false, // log errors in formatError
+  tracing: true,
+  cacheControl: {
+    defaultMaxAge: 10 * 60, // 10 min
+  },
   formatError(err: any) {
     logger.error(err);
     return {
@@ -72,6 +85,9 @@ const server = new ApolloServer({
       status: err.originalError && err.originalError.status,
       json: err.originalError && err.originalError.json,
     };
+  },
+  async formatResponse(gqlResponse: any, options: any) {
+    return storeInCache(storeCache)(options.queryString, gqlResponse);
   },
   context: getContext,
 });
