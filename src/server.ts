@@ -73,7 +73,9 @@ const server = new ApolloServer({
   resolvers,
   debug: false, // log errors in formatError
   tracing: true,
-  cacheControl: true,
+  cacheControl: {
+    defaultMaxAge: 10 * 60, // 10 min
+  },
   formatError(err: any) {
     logger.error(err);
     return {

@@ -10,6 +10,11 @@ import { Request, Response, NextFunction } from 'express';
 import { KeyValueCache } from './cache';
 import crypto from 'crypto';
 
+interface Hint {
+  path: Array<any>;
+  maxAge: number;
+}
+
 interface Operation {
   query: string;
   variables?: any;
@@ -24,14 +29,6 @@ const hashPostBody = (query: string) => {
     .update(q)
     .digest('hex');
   return key;
-};
-
-const sendContent = (res: Response, value: string) => {
-  res.setHeader('X-Cache', 'HIT');
-  res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Content-Length', Buffer.byteLength(value, 'utf8').toString());
-  res.write(value);
-  res.end();
 };
 
 function isOperation(data: any): data is Operation {
@@ -76,13 +73,19 @@ export const getFromCacheIfAny = (cache: KeyValueCache) => async (
 ) => {
   const { method } = req;
   // (N.B! we don't handle persisted queries)
-
   if (method === 'POST') {
     const data: Operation[] | Operation = req.body;
     const value = await lookup(cache, data);
     if (value) {
       // Cache hit. End response and don't call next middleware
-      sendContent(res, value);
+      res.setHeader('X-Cache', 'HIT');
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader(
+        'Content-Length',
+        Buffer.byteLength(value, 'utf8').toString(),
+      );
+      res.write(value);
+      res.end();
       return;
     }
   }
@@ -105,13 +108,14 @@ export const storeInCache = (cache: KeyValueCache) => async (
     const extensions = gqlResponse.extensions;
     // only cache if cache control is enabled
     if (extensions && extensions.cacheControl) {
-      // get extensions cache duration
-      const minAge = extensions.cacheControl.hints.reduce(
-        (min: number, p: any) => (p.maxAge < min ? p.maxAge : min),
-        60,
+      // Find min maxAge in all hints and set it
+      const hintWithMinAge = extensions.cacheControl.hints.reduce(
+        (minHint: Hint, cur: Hint) =>
+          cur.maxAge < minHint.maxAge ? cur : minHint,
       );
 
-      const minAgeInMs = minAge * 1000;
+      const minAgeInMs = hintWithMinAge.maxAge * 1000;
+
       const key = hashPostBody(query);
 
       delete gqlResponse.extensions;
