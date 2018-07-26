@@ -9,7 +9,7 @@ import createLRUCache from 'lru-cache';
 
 export interface KeyValueCache {
   get(key: string): Promise<string | undefined>;
-  set(key: string, value: string, duration?: number): Promise<void>;
+  set(key: string, value: string, maxAge?: number): Promise<void>;
 }
 
 // size: 50 mb default

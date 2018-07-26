@@ -93,6 +93,15 @@ export const getFromCacheIfAny = (cache: KeyValueCache) => async (
   next();
 };
 
+function hasCacheControl(extensions: any) {
+  return (
+    extensions &&
+    extensions.cacheControl &&
+    extensions.cacheControl.hints &&
+    extensions.cacheControl.hints.length > 0
+  );
+}
+
 export const storeInCache = (cache: KeyValueCache) => async (
   query: string,
   gqlResponse: any,
@@ -107,7 +116,7 @@ export const storeInCache = (cache: KeyValueCache) => async (
   if (query && query.trim().indexOf('query') === 0) {
     const extensions = gqlResponse.extensions;
     // only cache if cache control is enabled
-    if (extensions && extensions.cacheControl) {
+    if (hasCacheControl(extensions)) {
       // Find min maxAge in all hints and set it
       const hintWithMinAge = extensions.cacheControl.hints.reduce(
         (minHint: Hint, cur: Hint) =>
