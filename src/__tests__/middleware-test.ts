@@ -6,16 +6,16 @@
  *
  */
 
-import { storeInCache, lookup } from '../middleware';
+import { storeInCache, lookup, getFromCacheIfAny } from '../middleware';
 
 import { createCache } from '../cache';
 
-const gqlResponse = {
+const gqlResponse = () => ({
   data: {
     subjects: [{ name: 'Testfag' }, { name: 'Kinesisk' }],
   },
   extensions: { cacheControl: { hints: [{ maxAge: 300 }] } },
-};
+});
 
 const cache = createCache({ size: 5000 });
 
@@ -29,7 +29,7 @@ test('can store gql response in cache', async () => {
     }
   `;
 
-  const response = await storeInCacheFn(query, gqlResponse);
+  const response = await storeInCacheFn(query, gqlResponse());
   // should delete extensions
   expect(response.extensions).toBe(undefined);
 
@@ -48,7 +48,7 @@ test('should not store mutations in cache', async () => {
     }
   `;
 
-  const response = await storeInCacheFn(mutation, gqlResponse);
+  const response = await storeInCacheFn(mutation, gqlResponse());
 
   // should delete extensions
   expect(response.extensions).toBe(undefined);
@@ -84,4 +84,34 @@ test('should not store responses with errors', async () => {
   });
 
   expect(cachedValue).toBe(undefined);
+});
+
+test('can get response from cache', async () => {
+  const storeInCacheFn = storeInCache(cache);
+  const getFromCacheIfAnyFn = getFromCacheIfAny(cache);
+  const query = `
+    query article {
+      article(id: "1337") {
+        title
+      }
+    }
+  `;
+
+  await storeInCacheFn(query, gqlResponse());
+
+  const req = {
+    method: 'POST',
+    body: { query, operationName: 'test' },
+  };
+  const res = {
+    setHeader: jest.fn(),
+    write: jest.fn(),
+    end: jest.fn(),
+  };
+  const next = jest.fn();
+  // @ts-ignore
+  await getFromCacheIfAnyFn(req, res, next);
+
+  expect(res.write).toBeCalled();
+  expect(res.end).toBeCalled();
 });
