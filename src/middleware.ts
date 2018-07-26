@@ -98,14 +98,17 @@ function hasCacheControl(extensions: any) {
   );
 }
 
+function removeExtensions(gqlResponse: any) {
+  return { ...gqlResponse, extensions: undefined };
+}
+
 export const storeInCache = (cache: KeyValueCache) => async (
   query: string,
   gqlResponse: any,
 ): Promise<any> => {
   if (gqlResponse.errors) {
     // skip caching for responses with errors
-    delete gqlResponse.extensions;
-    return gqlResponse;
+    return removeExtensions(gqlResponse);
   }
 
   // only if query, we don't cache mutations
@@ -123,9 +126,12 @@ export const storeInCache = (cache: KeyValueCache) => async (
 
       const key = hashQuery(query);
 
-      delete gqlResponse.extensions;
-      await cache.set(key, JSON.stringify(gqlResponse), minAgeInMs);
+      await cache.set(
+        key,
+        JSON.stringify(removeExtensions(gqlResponse)),
+        minAgeInMs,
+      );
     }
   }
-  return gqlResponse;
+  return removeExtensions(gqlResponse);
 };
