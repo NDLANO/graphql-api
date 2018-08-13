@@ -6,6 +6,7 @@
  *
  */
 
+import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
 
@@ -196,4 +197,26 @@ export async function fetchSubjectPage(
     context,
   );
   return resolveJson(response);
+}
+
+export type SearchQuery = {
+  query: string;
+  'page-size': string;
+  'context-types': string;
+  language: string;
+  ids: string;
+  'resource-types': string;
+  levels: string;
+  sort: string;
+  fallback: boolean;
+  subjects: string;
+  'language-filter': [string];
+};
+
+export async function search(
+  searchQuery: SearchQuery,
+  context: Context,
+): Promise<GQLSearch> {
+  const response = await fetch(`/search-api/v1/search/?${queryString.stringify(searchQuery)}`, context);
+  return resolveJson(response)
 }

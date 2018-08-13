@@ -223,6 +223,20 @@ export const typeDefs = gql`
     subjectpage: SubjectPage
     topics(all: Boolean, filterIds: String): [Topic]
   }
+  type SearchResult {
+    id: String!
+    title: String
+    supportedLanguages: [String]
+    url: String,
+    metaDescription: String
+  }
+  type Search {
+    pageSize: String
+    page: String
+    language: String
+    totalCount: String
+    results: [SearchResult]
+  }
 
   type Query {
     resource(id: String!): Resource
@@ -233,6 +247,7 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
+    search(query: String): Search
     resourceTypes: [ResourceTypeDefinition]
   }
 `;

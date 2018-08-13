@@ -17,10 +17,25 @@ import {
   fetchResourceTypes,
   fetchSubjectPage,
   fetchFrontpage,
+  search,
 } from './data/api';
 
 type Id = {
   id: string;
+};
+
+type SearchQuery = {
+  query: string;
+  'page-size': string;
+  'context-types': string;
+  language: string;
+  ids: string;
+  'resource-types': string;
+  levels: string;
+  sort: string;
+  fallback: boolean;
+  subjects: string;
+  'language-filter': [string];
 };
 
 export const resolvers = {
@@ -30,6 +45,9 @@ export const resolvers = {
     },
     async article(_: any, { id }: Id, context: Context): Promise<GQLArticle> {
       return fetchArticle(id, context);
+    },
+    async search(_: any, searchQuery: SearchQuery, context: Context): Promise<GQLSearch> {
+      return search(searchQuery, context)
     },
     async subject(_: any, { id }: Id, context: Context): Promise<GQLSubject> {
       const list = await fetchSubjects(context);
