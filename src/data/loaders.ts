@@ -56,17 +56,6 @@ export function subjectTopicsLoader(context: Context): DataLoader<Input, any> {
   );
 }
 
-export function resourcesLoader(context: Context): DataLoader<string, any> {
-  return new DataLoader(async resourceIds => {
-    return resourceIds.map(async resourceId => {
-      if (resourceId.startsWith('urn:topic')){
-        return fetchTopic(resourceId, context);
-      }
-      return fetchResource(resourceId, context);
-    });
-  });
-}
-
 export function resourceTypesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async resourceTypeIds => {
     const resourceTypes = await fetchResourceTypes(context);

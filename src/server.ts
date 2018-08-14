@@ -17,7 +17,6 @@ import {
   filterLoader,
   articlesLoader,
   subjectTopicsLoader,
-  resourcesLoader,
   resourceTypesLoader,
   learningpathsLoader,
 } from './data/loaders';
@@ -47,7 +46,6 @@ async function getContext({ req }: { req: Request }): Promise<Context> {
       articlesLoader: articlesLoader(defaultContext),
       filterLoader: filterLoader(defaultContext),
       subjectTopicsLoader: subjectTopicsLoader(defaultContext),
-      resourcesLoader: resourcesLoader(defaultContext),
       learningpathsLoader: learningpathsLoader(defaultContext),
       resourceTypesLoader: resourceTypesLoader(defaultContext),
     },

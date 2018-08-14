@@ -70,7 +70,7 @@ export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
   return resolveJson(response);
 }
 
-export async function fetchTopic(id: string, context: Context){
+export async function fetchTopic(id: string, context: Context) {
   const response = await fetch(
     `/taxonomy/v1/topics/${id}?language=${context.language}`,
     context,
