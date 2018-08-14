@@ -227,7 +227,7 @@ export const typeDefs = gql`
     id: String!
     title: String
     supportedLanguages: [String]
-    url: String,
+    url: String
     metaDescription: String
   }
   type Search {
@@ -247,7 +247,20 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
-    search(query: String): Search
+    search(
+      query: String
+      page: String
+      pageSize: String
+      contextTypes: String
+      language: String
+      ids: String
+      resourceTypes: String
+      levels: String
+      sort: String
+      fallback: Boolean
+      subjects: String
+      languageFilter: [String]
+    ): Search
     resourceTypes: [ResourceTypeDefinition]
   }
 `;

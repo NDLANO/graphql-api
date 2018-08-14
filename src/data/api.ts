@@ -199,24 +199,39 @@ export async function fetchSubjectPage(
   return resolveJson(response);
 }
 
-export type SearchQuery = {
+type SearchQuery = {
   query: string;
-  'page-size': string;
-  'context-types': string;
+  pageSize: string;
+  page: string;
+  contextTypes: string;
   language: string;
   ids: string;
-  'resource-types': string;
+  resourceTypes: string;
   levels: string;
   sort: string;
   fallback: boolean;
   subjects: string;
-  'language-filter': [string];
+  languageFilter: [string];
 };
 
 export async function search(
   searchQuery: SearchQuery,
   context: Context,
 ): Promise<GQLSearch> {
-  const response = await fetch(`/search-api/v1/search/?${queryString.stringify(searchQuery)}`, context);
-  return resolveJson(response)
+  const query = {
+    ...searchQuery,
+    pageSize: undefined,
+    contextTypes: undefined,
+    resourceTypes: undefined,
+    languageFilter: undefined,
+    'page-size': searchQuery.pageSize,
+    'context-types': searchQuery.contextTypes,
+    'resource-types': searchQuery.resourceTypes,
+    'language-filter': searchQuery.languageFilter,
+  };
+  const response = await fetch(
+    `/search-api/v1/search/?${queryString.stringify(searchQuery)}`,
+    context,
+  );
+  return resolveJson(response);
 }
