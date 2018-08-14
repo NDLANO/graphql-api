@@ -158,7 +158,7 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.loadMany(subjectPageArticles);
+      return []
     },
   },
   SubjectPageTopical: {
