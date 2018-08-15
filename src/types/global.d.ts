@@ -19,7 +19,6 @@ declare global {
         any
       >;
       resourceTypesLoader: DataLoader<string, any>;
-      resourcesLoader: DataLoader<string, any>;
     };
   }
 }

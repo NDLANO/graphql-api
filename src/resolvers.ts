@@ -17,6 +17,7 @@ import {
   fetchResourceTypes,
   fetchSubjectPage,
   fetchFrontpage,
+  fetchTopic,
 } from './data/api';
 
 type Id = {
@@ -69,7 +70,9 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.loadMany(frontpage.topical);
+      return Promise.all(
+        frontpage.topical.map(resourceId => fetchResource(resourceId, context)),
+      );
     },
   },
   FrontpageSubjects: {
@@ -158,7 +161,14 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.loadMany(subjectPageArticles);
+      return Promise.all(
+        subjectPageArticles.map(id => {
+          if (id.startsWith('urn:topic')) {
+            return fetchTopic(id, context);
+          }
+          return fetchResource(id, context);
+        }),
+      );
     },
   },
   SubjectPageTopical: {
@@ -166,8 +176,8 @@ export const resolvers = {
       subjectPageTopicalId: string,
       _: any,
       context: Context,
-    ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.load(subjectPageTopicalId);
+    ): Promise<GQLResource> {
+      return fetchResource(subjectPageTopicalId, context);
     },
   },
   SubjectPageGoTo: {

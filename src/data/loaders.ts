@@ -14,6 +14,7 @@ import {
   fetchResource,
   fetchLearningpaths,
   fetchResourceTypes,
+  fetchTopic,
 } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
@@ -53,14 +54,6 @@ export function subjectTopicsLoader(context: Context): DataLoader<Input, any> {
       cacheKeyFn: (key: Input) => JSON.stringify(key),
     },
   );
-}
-
-export function resourcesLoader(context: Context): DataLoader<string, any> {
-  return new DataLoader(async resourceIds => {
-    return resourceIds.map(async resourceId => {
-      return fetchResource(resourceId, context);
-    });
-  });
 }
 
 export function resourceTypesLoader(context: Context): DataLoader<string, any> {
