@@ -77,6 +77,6 @@ server.applyMiddleware({ app: app, path: '/graphql-api/graphql' });
 
 app.listen(GRAPHQL_PORT, () =>
   console.log(
-    `GraphiQL is now running on http://localhost:${GRAPHQL_PORT}/graphql-api/graphiql`,
+    `GraphQL Playground is now running on http://localhost:${GRAPHQL_PORT}/graphql-api/graphql`,
   ),
 );
