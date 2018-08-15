@@ -46,8 +46,13 @@ declare global {
     title: string;
     introduction?: string;
     metaDescription?: string;
-    metaImage?: string;
+    metaImage?: GQLMetaImage;
     lastUpdated?: string;
+  }
+
+  export interface GQLMetaImage {
+    url?: string;
+    alt?: string;
   }
 
   export interface GQLArticle {
@@ -59,7 +64,7 @@ declare global {
     created: string;
     updated: string;
     visualElement?: string;
-    metaImage?: string;
+    metaImage?: GQLMetaImage;
     metaDescription: string;
     articleType: string;
     oldNdlaUrl?: string;
@@ -252,6 +257,7 @@ declare global {
     Resource?: GQLResourceTypeResolver;
     ResourceType?: GQLResourceTypeTypeResolver;
     Meta?: GQLMetaTypeResolver;
+    MetaImage?: GQLMetaImageTypeResolver;
     Article?: GQLArticleTypeResolver;
     ArticleRequiredLibrary?: GQLArticleRequiredLibraryTypeResolver;
     ArticleMetaData?: GQLArticleMetaDataTypeResolver;
@@ -576,6 +582,29 @@ declare global {
   }
 
   export interface MetaToLastUpdatedResolver<TParent = any, TResult = any> {
+    (
+      parent: TParent,
+      args: {},
+      context: any,
+      info: GraphQLResolveInfo,
+    ): TResult;
+  }
+
+  export interface GQLMetaImageTypeResolver<TParent = any> {
+    url?: MetaImageToUrlResolver<TParent>;
+    alt?: MetaImageToAltResolver<TParent>;
+  }
+
+  export interface MetaImageToUrlResolver<TParent = any, TResult = any> {
+    (
+      parent: TParent,
+      args: {},
+      context: any,
+      info: GraphQLResolveInfo,
+    ): TResult;
+  }
+
+  export interface MetaImageToAltResolver<TParent = any, TResult = any> {
     (
       parent: TParent,
       args: {},

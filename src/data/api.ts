@@ -148,7 +148,9 @@ export async function fetchArticles(
           ? article.metaDescription.metaDescription
           : undefined,
         lastUpdated: article.lastUpdated || undefined,
-        metaImage: article.metaImage ? article.metaImage.url : undefined,
+        metaImage: article.metaImage
+          ? { url: article.metaImage.url, alt: article.metaImage.alt }
+          : undefined,
       };
     }
     return null;
@@ -183,7 +185,12 @@ export async function fetchLearningpaths(
           ? learningpath.description.description
           : undefined,
         lastUpdated: learningpath.lastUpdated,
-        metaImage: learningpath.coverPhotoUrl,
+        metaImage: {
+          url: learningpath.coverPhotoUrl,
+          alt: learningpath.introduction
+            ? learningpath.introduction.introduction
+            : '',
+        },
       };
     }
     return null;
