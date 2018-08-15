@@ -19,6 +19,7 @@ import {
   subjectTopicsLoader,
   resourceTypesLoader,
   learningpathsLoader,
+  subjectsLoader,
 } from './data/loaders';
 import { resolvers } from './resolvers';
 
@@ -48,6 +49,7 @@ async function getContext({ req }: { req: Request }): Promise<Context> {
       subjectTopicsLoader: subjectTopicsLoader(defaultContext),
       learningpathsLoader: learningpathsLoader(defaultContext),
       resourceTypesLoader: resourceTypesLoader(defaultContext),
+      subjectsLoader: subjectsLoader(defaultContext),
     },
   };
 }

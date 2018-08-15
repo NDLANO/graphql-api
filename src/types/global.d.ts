@@ -18,7 +18,8 @@ declare global {
         { subjectId: string; filterIds: string },
         any
       >;
-      resourceTypesLoader: DataLoader<string, any>;
+      subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
+      resourceTypesLoader: DataLoader<any, any>;
     };
   }
 }

@@ -81,8 +81,8 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLSubject[]> {
-      const list = await fetchSubjects(context);
-      return list.filter(subject =>
+      const list = await context.loaders.subjectsLoader.load('all');
+      return list.subjects.filter(subject =>
         frontpageSubjects.subjects.includes(subject.id),
       );
     },

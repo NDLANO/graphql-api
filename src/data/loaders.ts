@@ -15,6 +15,7 @@ import {
   fetchLearningpaths,
   fetchResourceTypes,
   fetchTopic,
+  fetchSubjects,
 } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
@@ -35,6 +36,15 @@ export function filterLoader(context: Context): DataLoader<string, any> {
     return subjectIds.map(subjectId =>
       filterList.filter(filter => filter.subjectId === subjectId),
     );
+  });
+}
+
+export function subjectsLoader(context: Context): DataLoader<string, any> {
+  return new DataLoader(async ids => {
+    console.log(ids);
+
+    const subjects = await fetchSubjects(context);
+    return Promise.resolve([{ subjects }]);
   });
 }
 
