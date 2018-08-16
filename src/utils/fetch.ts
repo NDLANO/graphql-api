@@ -27,31 +27,24 @@ export default function createFetch(options: { cache: KeyValueCache }) {
     });
   }
 
-  function cachingFetch(url: string, options: RequestOptions) {
-    return nodeFetch(url, options).then((response: Response) => {
-      if (response.status === 200) {
-        return response
-          .clone()
-          .text()
-          .then(body => {
-            return cache.set(
-              url,
-              JSON.stringify({
-                body: body,
-                headers: response.headers.raw(),
-              }),
-              1000 * 60 * 5, // 5 min
-            );
-          })
-          .then(() => {
-            return response;
-          });
-      }
-      return response;
-    });
+  async function cachingFetch(url: string, options: RequestOptions) {
+    const response = await nodeFetch(url, options);
+    if (response.status === 200) {
+      const clonedResponse = response.clone();
+      const body = await clonedResponse.text();
+      await cache.set(
+        url,
+        JSON.stringify({
+          body,
+          headers: clonedResponse.headers.raw(),
+        }),
+        1000 * 60 * 5, // 5 min
+      );
+    }
+    return response;
   }
 
-  return function cachedFetch(
+  return async function cachedFetch(
     url: string,
     options: RequestOptions = {},
   ): Promise<Response> {
@@ -64,15 +57,12 @@ export default function createFetch(options: { cache: KeyValueCache }) {
       return nodeFetch(url, options);
     }
 
-    return cache
-      .get(url)
-      .then(data => cachedResponse(url, data))
-      .then(cached => {
-        // return the cached result if it exist
-        if (cached) return cached;
+    const data = await cache.get(url);
 
-        // return fetch request after setting cache
-        return cachingFetch(url, options);
-      });
+    const cached = await cachedResponse(url, data);
+
+    if (cached) return cached;
+
+    return cachingFetch(url, options);
   };
 }
