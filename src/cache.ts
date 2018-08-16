@@ -15,8 +15,8 @@ export interface KeyValueCache {
 // Create a cache with a generic interface.
 // Uses lru-cache now, but should be simple to switch to a redis/memcache implementation using the same interface
 export const createCache = (
-  // size: 50 mb default
-  options: { size: number } = { size: 50000000 },
+  // size: 100 mb default
+  options: { size: number } = { size: 100000000 },
 ): KeyValueCache => {
   const cache = createLRUCache({
     max: options.size,

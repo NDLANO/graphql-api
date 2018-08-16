@@ -1,4 +1,5 @@
 import DataLoader from 'dataloader';
+import { RequestInit, RequestCache } from 'node-fetch';
 
 declare global {
   interface AuthToken {
@@ -20,5 +21,9 @@ declare global {
       >;
       resourceTypesLoader: DataLoader<string, any>;
     };
+  }
+
+  interface RequestOptions extends RequestInit {
+    cache?: RequestCache;
   }
 }
