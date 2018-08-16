@@ -21,7 +21,7 @@ export default function createFetch(options: { cache: KeyValueCache }) {
 
     return new Response(parsed.body, {
       // @ts-ignore
-      url: url,
+      url,
       headers: parsed.headers,
       status: 200,
     });
@@ -30,16 +30,21 @@ export default function createFetch(options: { cache: KeyValueCache }) {
   async function cachingFetch(url: string, options: RequestOptions) {
     const response = await nodeFetch(url, options);
     if (response.status === 200) {
-      const clonedResponse = response.clone();
-      const body = await clonedResponse.text();
+      const body = await response.text();
       await cache.set(
         url,
         JSON.stringify({
           body,
-          headers: clonedResponse.headers.raw(),
+          headers: response.headers,
         }),
         1000 * 60 * 5, // 5 min
       );
+      return new Response(body, {
+        // @ts-ignore
+        url,
+        headers: response.headers,
+        status: 200,
+      });
     }
     return response;
   }
