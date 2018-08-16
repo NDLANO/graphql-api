@@ -39,12 +39,12 @@ export function filterLoader(context: Context): DataLoader<string, any> {
   });
 }
 
-export function subjectsLoader(context: Context): DataLoader<string, any> {
-  return new DataLoader(async ids => {
-    console.log(ids);
-
+export function subjectsLoader(
+  context: Context,
+): DataLoader<string, { subjects: GQLSubject[] }> {
+  return new DataLoader(async () => {
     const subjects = await fetchSubjects(context);
-    return Promise.resolve([{ subjects }]);
+    return [{ subjects }];
   });
 }
 
