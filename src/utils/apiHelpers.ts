@@ -6,8 +6,10 @@
  *
  */
 
-import nodeFetch, { Response } from 'node-fetch';
+import { Response } from 'node-fetch';
 import { apiUrl } from '../config';
+import createFetch from './fetch';
+import { createCache } from '../cache';
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
@@ -23,12 +25,18 @@ function apiResourceUrl(path: string): string {
   return apiBaseUrl + path;
 }
 
+const cache = createCache();
+
 async function fetchHelper(
   path: string,
   context: Context,
-  options?: any,
+  options?: RequestOptions,
 ): Promise<Response> {
-  return nodeFetch(apiResourceUrl(path), {
+  const fetch = createFetch({
+    cache,
+  });
+
+  return fetch(apiResourceUrl(path), {
     headers: {
       Authorization: `Bearer ${context.token.access_token}`,
     },
