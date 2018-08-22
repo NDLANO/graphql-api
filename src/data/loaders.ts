@@ -14,6 +14,8 @@ import {
   fetchResource,
   fetchLearningpaths,
   fetchResourceTypes,
+  fetchTopic,
+  fetchSubjects,
 } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
@@ -37,6 +39,15 @@ export function filterLoader(context: Context): DataLoader<string, any> {
   });
 }
 
+export function subjectsLoader(
+  context: Context,
+): DataLoader<string, { subjects: GQLSubject[] }> {
+  return new DataLoader(async () => {
+    const subjects = await fetchSubjects(context);
+    return [{ subjects }];
+  });
+}
+
 type Input = {
   subjectId: string;
   filterIds: string;
@@ -53,14 +64,6 @@ export function subjectTopicsLoader(context: Context): DataLoader<Input, any> {
       cacheKeyFn: (key: Input) => JSON.stringify(key),
     },
   );
-}
-
-export function resourcesLoader(context: Context): DataLoader<string, any> {
-  return new DataLoader(async resourceIds => {
-    return resourceIds.map(async resourceId => {
-      return fetchResource(resourceId, context);
-    });
-  });
 }
 
 export function resourceTypesLoader(context: Context): DataLoader<string, any> {

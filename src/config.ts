@@ -10,6 +10,7 @@ export const getEnvironmentVariabel = (
   fallback: string | boolean = undefined,
 ) => {
   const variabel = process.env[key];
+
   return variabel || fallback;
 };
 

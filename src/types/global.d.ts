@@ -1,4 +1,5 @@
 import DataLoader from 'dataloader';
+import { RequestInit, RequestCache } from 'node-fetch';
 
 declare global {
   interface AuthToken {
@@ -18,8 +19,12 @@ declare global {
         { subjectId: string; filterIds: string },
         any
       >;
-      resourceTypesLoader: DataLoader<string, any>;
-      resourcesLoader: DataLoader<string, any>;
+      subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
+      resourceTypesLoader: DataLoader<any, any>;
     };
+  }
+
+  interface RequestOptions extends RequestInit {
+    cache?: RequestCache;
   }
 }

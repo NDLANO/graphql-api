@@ -1,12 +1,13 @@
 # NDLA GraphQL server
 
 ## Getting started
+
 ```bash
 yarn install
 yarn start
 ```
 
-Open [http://localhost:4000/graphiql](http://localhost:4000/graphiql)
+Open [http://localhost:4000/graphql-api/graphql](http://localhost:4000/graphql-api/graphql)
 
 Paste this on the left side
 

@@ -71,6 +71,14 @@ export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
   return resolveJson(response);
 }
 
+export async function fetchTopic(id: string, context: Context) {
+  const response = await fetch(
+    `/taxonomy/v1/topics/${id}?language=${context.language}`,
+    context,
+  );
+  return resolveJson(response);
+}
+
 export async function fetchTopicFilters(
   topicId: string,
   context: Context,
@@ -141,7 +149,9 @@ export async function fetchArticles(
           ? article.metaDescription.metaDescription
           : undefined,
         lastUpdated: article.lastUpdated || undefined,
-        metaImage: article.metaImage ? article.metaImage.url : undefined,
+        metaImage: article.metaImage
+          ? { url: article.metaImage.url, alt: article.metaImage.alt }
+          : undefined,
       };
     }
     return null;
@@ -176,7 +186,12 @@ export async function fetchLearningpaths(
           ? learningpath.description.description
           : undefined,
         lastUpdated: learningpath.lastUpdated,
-        metaImage: learningpath.coverPhotoUrl,
+        metaImage: {
+          url: learningpath.coverPhotoUrl,
+          alt: learningpath.introduction
+            ? learningpath.introduction.introduction
+            : '',
+        },
       };
     }
     return null;

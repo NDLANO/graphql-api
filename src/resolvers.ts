@@ -17,6 +17,7 @@ import {
   fetchResourceTypes,
   fetchSubjectPage,
   fetchFrontpage,
+  fetchTopic,
   search,
 } from './data/api';
 
@@ -92,7 +93,9 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.loadMany(frontpage.topical);
+      return Promise.all(
+        frontpage.topical.map(resourceId => fetchResource(resourceId, context)),
+      );
     },
   },
   FrontpageSubjects: {
@@ -101,8 +104,8 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLSubject[]> {
-      const list = await fetchSubjects(context);
-      return list.filter(subject =>
+      const data = await context.loaders.subjectsLoader.load('all');
+      return data.subjects.filter(subject =>
         frontpageSubjects.subjects.includes(subject.id),
       );
     },
@@ -181,7 +184,14 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.loadMany(subjectPageArticles);
+      return Promise.all(
+        subjectPageArticles.map(id => {
+          if (id.startsWith('urn:topic')) {
+            return fetchTopic(id, context);
+          }
+          return fetchResource(id, context);
+        }),
+      );
     },
   },
   SubjectPageTopical: {
@@ -189,8 +199,8 @@ export const resolvers = {
       subjectPageTopicalId: string,
       _: any,
       context: Context,
-    ): Promise<GQLResource[]> {
-      return context.loaders.resourcesLoader.load(subjectPageTopicalId);
+    ): Promise<GQLResource> {
+      return fetchResource(subjectPageTopicalId, context);
     },
   },
   SubjectPageGoTo: {

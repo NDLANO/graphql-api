@@ -6,7 +6,7 @@
  *
  */
 
-import { storeInCache, lookup } from '../middleware';
+import { storeInCache, lookup, getFromCacheIfAny } from '../middleware';
 
 import { createCache } from '../cache';
 
@@ -17,19 +17,25 @@ const gqlResponse = {
   extensions: { cacheControl: { hints: [{ maxAge: 300 }] } },
 };
 
-const cache = createCache({ size: 5000 });
-
-test('can store gql response in cache', async () => {
-  const storeInCacheFn = storeInCache(cache);
-  const query = `
+const prepareStoreInCache = async (
+  query = `
     query subjects {
       subjects {
         name
       }
     }
-  `;
+  `,
+) => {
+  const cache = createCache({ size: 5000 });
+  const storeInCacheFn = storeInCache(cache);
 
   const response = await storeInCacheFn(query, gqlResponse);
+  return { query, response, cache };
+};
+
+test('can store gql response in cache', async () => {
+  const { response, query, cache } = await prepareStoreInCache();
+
   // should delete extensions
   expect(response.extensions).toBe(undefined);
 
@@ -42,13 +48,11 @@ test('can store gql response in cache', async () => {
 });
 
 test('should not store mutations in cache', async () => {
-  const storeInCacheFn = storeInCache(cache);
   const mutation = `
     mutation createSubjects {
     }
   `;
-
-  const response = await storeInCacheFn(mutation, gqlResponse);
+  const { response, cache } = await prepareStoreInCache(mutation);
 
   // should delete extensions
   expect(response.extensions).toBe(undefined);
@@ -62,6 +66,7 @@ test('should not store mutations in cache', async () => {
 });
 
 test('should not store responses with errors', async () => {
+  const cache = createCache({ size: 5000 });
   const storeInCacheFn = storeInCache(cache);
   const query = `
     query subject {
@@ -84,4 +89,26 @@ test('should not store responses with errors', async () => {
   });
 
   expect(cachedValue).toBe(undefined);
+});
+
+test('can get response from cache', async () => {
+  const { query, cache } = await prepareStoreInCache();
+  // const storeInCacheFn = storeInCache(cache);
+  const getFromCacheIfAnyFn = getFromCacheIfAny(cache);
+
+  const req = {
+    method: 'POST',
+    body: { query, operationName: 'test' },
+  };
+  const res = {
+    setHeader: jest.fn(),
+    write: jest.fn(),
+    end: jest.fn(),
+  };
+  const next = jest.fn();
+  // @ts-ignore
+  await getFromCacheIfAnyFn(req, res, next);
+
+  expect(res.write).toBeCalled();
+  expect(res.end).toBeCalled();
 });

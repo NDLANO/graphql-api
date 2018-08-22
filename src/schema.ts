@@ -22,12 +22,17 @@ export const typeDefs = gql`
     resources(topicId: String!): [Resource]
   }
 
+  type MetaImage {
+    url: String
+    alt: String
+  }
+
   type Meta {
     id: Int!
     title: String!
     introduction: String
     metaDescription: String
-    metaImage: String
+    metaImage: MetaImage
     lastUpdated: String
   }
 
@@ -120,7 +125,7 @@ export const typeDefs = gql`
     created: String!
     updated: String!
     visualElement: String
-    metaImage: String
+    metaImage: MetaImage
     metaDescription: String!
     articleType: String!
     oldNdlaUrl: String
