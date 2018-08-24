@@ -71,7 +71,12 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLResource[]> {
       return Promise.all(
-        frontpage.topical.map(resourceId => fetchResource(resourceId, context)),
+        frontpage.topical.map(id => {
+          if (id.startsWith('urn:topic')) {
+            return fetchTopic(id, context);
+          }
+          return fetchResource(id, context);
+        }),
       );
     },
   },
@@ -177,6 +182,9 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResource> {
+      if (subjectPageTopicalId.startsWith('urn:topic')) {
+        return fetchTopic(subjectPageTopicalId, context);
+      }
       return fetchResource(subjectPageTopicalId, context);
     },
   },
