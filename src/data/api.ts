@@ -248,5 +248,20 @@ export async function search(
     `/search-api/v1/search/?${queryString.stringify(searchQuery)}`,
     context,
   );
-  return resolveJson(response);
+  const json = await resolveJson(response);
+
+  return {
+    ...json,
+    results: json.results.map(result => ({
+      ...result,
+      id: result.id,
+      title: result.title.title,
+      metaDescription: result.metaDescription
+        ? result.metaDescription.metaDescription
+        : undefined,
+      metaImage: result.metaImage
+        ? { url: result.metaImage.url, alt: result.metaImage.alt }
+        : undefined,
+    })),
+  };
 }

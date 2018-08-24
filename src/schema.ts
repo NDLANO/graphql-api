@@ -228,13 +228,39 @@ export const typeDefs = gql`
     subjectpage: SubjectPage
     topics(all: Boolean, filterIds: String): [Topic]
   }
+
   type SearchResult {
     id: String!
     title: String
     supportedLanguages: [String]
     url: String
     metaDescription: String
+    metaImage: MetaImage
+    contexts: [SearchContext]
   }
+
+  type SearchContext {
+    breadcrumbs: [String]
+    learningResourceType: String
+    resourceTypes: [SearchContextResourceTypes]
+    subject: String
+    path: String
+    id: String
+    language: String
+    filters: [SearchContextFilter]
+  }
+
+  type SearchContextResourceTypes {
+    id: String
+    name: String
+    language: String
+  }
+
+  type SearchContextFilter {
+    name: String
+    relevance: String
+  }
+
   type Search {
     pageSize: String
     page: String
