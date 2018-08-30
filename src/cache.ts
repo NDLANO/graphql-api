@@ -7,7 +7,7 @@
  */
 import createLRUCache from 'lru-cache';
 
-export interface KeyValueCache {
+export interface IKeyValueCache {
   get(key: string): Promise<string | undefined>;
   set(key: string, value: string, maxAge?: number): Promise<void>;
 }
@@ -17,7 +17,7 @@ export interface KeyValueCache {
 export const createCache = (
   // size: 100 mb default
   options: { size: number } = { size: 100000000 },
-): KeyValueCache => {
+): IKeyValueCache => {
   const cache = createLRUCache({
     max: options.size,
     length: (n: string, key: string) => n.length + key.length,
