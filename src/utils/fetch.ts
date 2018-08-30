@@ -7,9 +7,9 @@
  */
 
 import nodeFetch, { Response } from 'node-fetch';
-import { KeyValueCache } from '../cache';
+import { IKeyValueCache } from '../cache';
 
-export default function createFetch(options: { cache: KeyValueCache }) {
+export default function createFetch(options: { cache: IKeyValueCache }) {
   if (!options || !options.cache) throw Error('cache is a required option');
 
   const { cache } = options;
@@ -27,8 +27,8 @@ export default function createFetch(options: { cache: KeyValueCache }) {
     });
   }
 
-  async function cachingFetch(url: string, options: RequestOptions) {
-    const response = await nodeFetch(url, options);
+  async function cachingFetch(url: string, reqOptions: RequestOptions) {
+    const response = await nodeFetch(url, reqOptions);
     if (response.status === 200) {
       const body = await response.text();
       await cache.set(
@@ -51,15 +51,15 @@ export default function createFetch(options: { cache: KeyValueCache }) {
 
   return async function cachedFetch(
     url: string,
-    options: RequestOptions = {},
+    reqOptions: RequestOptions = {},
   ): Promise<Response> {
     const isCachable =
-      (options.method === undefined || options.method === 'GET') &&
-      options.cache !== 'no-store' &&
-      options.cache !== 'reload';
+      (reqOptions.method === undefined || reqOptions.method === 'GET') &&
+      reqOptions.cache !== 'no-store' &&
+      reqOptions.cache !== 'reload';
 
     if (!isCachable) {
-      return nodeFetch(url, options);
+      return nodeFetch(url, reqOptions);
     }
 
     const data = await cache.get(url);
@@ -68,6 +68,6 @@ export default function createFetch(options: { cache: KeyValueCache }) {
 
     if (cached) return cached;
 
-    return cachingFetch(url, options);
+    return cachingFetch(url, reqOptions);
   };
 }

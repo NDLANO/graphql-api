@@ -7,15 +7,15 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
-import { KeyValueCache } from './cache';
+import { IKeyValueCache } from './cache';
 import crypto from 'crypto';
 
-interface Hint {
-  path: Array<any>;
+interface IHint {
+  path: any[];
   maxAge: number;
 }
 
-interface Operation {
+interface IOperation {
   query: string;
   variables?: any;
   operationName: string;
@@ -30,17 +30,17 @@ function hashQuery(query: string) {
   return key;
 }
 
-function isOperation(data: any): data is Operation {
+function isOperation(data: any): data is IOperation {
   return data.query;
 }
 
-function isOperationArray(data: any): data is Operation[] {
+function isOperationArray(data: any): data is IOperation[] {
   return Array.isArray(data);
 }
 
 export async function lookup(
-  cache: KeyValueCache,
-  data: Operation[] | Operation,
+  cache: IKeyValueCache,
+  data: IOperation[] | IOperation,
 ): Promise<string | undefined> {
   if (isOperation(data)) {
     const key = hashQuery(data.query);
@@ -48,7 +48,7 @@ export async function lookup(
     return value;
   } else if (isOperationArray(data)) {
     const values = await Promise.all(
-      data.map(async (operation: Operation) => {
+      data.map(async (operation: IOperation) => {
         const key = hashQuery(operation.query);
         const value = await cache.get(key);
         return value ? JSON.parse(value) : value;
@@ -62,7 +62,7 @@ export async function lookup(
   return undefined;
 }
 
-export const getFromCacheIfAny = (cache: KeyValueCache) => async (
+export const getFromCacheIfAny = (cache: IKeyValueCache) => async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -70,7 +70,7 @@ export const getFromCacheIfAny = (cache: KeyValueCache) => async (
   const { method } = req;
   // (N.B! we don't handle persisted queries)
   if (method === 'POST') {
-    const data: Operation[] | Operation = req.body;
+    const data: IOperation[] | IOperation = req.body;
     const value = await lookup(cache, data);
     if (value) {
       // Cache hit. End response and don't call next middleware
@@ -102,7 +102,7 @@ function removeExtensions(gqlResponse: any) {
   return { ...gqlResponse, extensions: undefined };
 }
 
-export const storeInCache = (cache: KeyValueCache) => async (
+export const storeInCache = (cache: IKeyValueCache) => async (
   query: string,
   gqlResponse: any,
 ): Promise<any> => {
@@ -118,7 +118,7 @@ export const storeInCache = (cache: KeyValueCache) => async (
     if (hasCacheControl(extensions)) {
       // Find min maxAge in all hints and set it
       const hintWithMinAge = extensions.cacheControl.hints.reduce(
-        (minHint: Hint, cur: Hint) =>
+        (minHint: IHint, cur: IHint) =>
           cur.maxAge < minHint.maxAge ? cur : minHint,
       );
 

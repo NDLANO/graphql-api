@@ -10,7 +10,8 @@
     "build": "npm run build-ts",
     "build-ts": "tsc",
     "check-all": "yarn lint && yarn build-ts && yarn test",
-    "lint": "yarn lint-prettier && eslint . --ext src",
+    "lint": "yarn lint-prettier && yarn lint-ts",
+    "lint-ts": "tslint --project . --format stylish",
     "lint-prettier": "prettier --l \"src/**/*.ts\"",
     "prettier": "prettier --write \"src/**/*.ts\"",
     "generate-schema-types": "ts-node ./scripts/generateTypeScriptTypesFromSchema.ts",
@@ -43,14 +44,14 @@
     "@types/node-fetch": "^2.1.2",
     "chalk": "^2.4.1",
     "concurrently": "^3.6.0",
-    "eslint": "^4.18.2",
     "graphql-schema-typescript": "^1.2.2",
     "jest": "^23.4.1",
     "nodemon": "^1.18.3",
     "prettier": "^1.13.7",
     "ts-jest": "^23.0.1",
     "ts-node": "^7.0.0",
-    "typescript": "^2.9.2",
-    "typescript-eslint-parser": "^16.0.1"
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "^2.9.2"
   }
 }

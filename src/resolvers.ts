@@ -20,9 +20,9 @@ import {
   fetchTopic,
 } from './data/api';
 
-type Id = {
+interface Id {
   id: string;
-};
+}
 
 export const resolvers = {
   Query: {

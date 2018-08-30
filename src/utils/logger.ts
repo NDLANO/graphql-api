@@ -6,18 +6,14 @@
  *
  */
 
-import bunyan, {
-  default as Logger,
-  LoggerOptions,
-  LogLevelString,
-} from 'bunyan';
+import bunyan, { default as Logger, LogLevelString } from 'bunyan';
 import 'source-map-support/register';
 
-interface NdlaLogger extends Logger {
+interface INdlaLogger extends Logger {
   logAndReturnValue(level: LogLevelString, msg: string, value: any): any;
 }
 
-let log = bunyan.createLogger({ name: 'ndla-graphql-api' }) as NdlaLogger;
+let log = bunyan.createLogger({ name: 'ndla-graphql-api' }) as INdlaLogger;
 
 log.logAndReturnValue = (level, msg, value) => {
   log[level](msg, value);

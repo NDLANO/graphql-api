@@ -75,9 +75,10 @@ const server = new ApolloServer({
   context: getContext,
 });
 
-server.applyMiddleware({ app: app, path: '/graphql-api/graphql' });
+server.applyMiddleware({ app, path: '/graphql-api/graphql' });
 
 app.listen(GRAPHQL_PORT, () =>
+  // tslint:disable-next-line
   console.log(
     `GraphQL Playground is now running on http://localhost:${GRAPHQL_PORT}/graphql-api/graphql`,
   ),
