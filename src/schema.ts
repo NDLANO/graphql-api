@@ -163,14 +163,14 @@ export const typeDefs = gql`
     supplementaryResources(filterIds: String): [Resource]
   }
 
-  type FrontpageSubjects {
+  type Category {
     name: String
     subjects: [Subject]
   }
 
   type Frontpage {
     topical: [Resource]
-    categories: [FrontpageSubjects]
+    categories: [Category]
   }
 
   type SubjectPageArticles {

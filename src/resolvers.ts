@@ -83,7 +83,7 @@ export const resolvers = {
       );
     },
   },
-  FrontpageSubjects: {
+  Category: {
     async subjects(
       category: RCategory,
       _: any,
