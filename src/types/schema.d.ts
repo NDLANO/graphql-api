@@ -170,6 +170,7 @@ declare global {
     name: string;
     path: string;
     filters?: Array<GQLSubjectFilter | null>;
+    frontpageFilters?: Array<GQLSubjectFilter | null>;
     subjectpage?: GQLSubjectPage;
     topics?: Array<GQLTopic | null>;
   }
@@ -234,10 +235,10 @@ declare global {
 
   export interface GQLFrontpage {
     topical?: Array<GQLResource | null>;
-    categories?: Array<GQLFrontpageSubjects | null>;
+    categories?: Array<GQLCategory | null>;
   }
 
-  export interface GQLFrontpageSubjects {
+  export interface GQLCategory {
     name?: string;
     subjects?: Array<GQLSubject | null>;
   }
@@ -282,7 +283,7 @@ declare global {
     SubjectPageGoTo?: GQLSubjectPageGoToTypeResolver;
     ResourceTypeDefinition?: GQLResourceTypeDefinitionTypeResolver;
     Frontpage?: GQLFrontpageTypeResolver;
-    FrontpageSubjects?: GQLFrontpageSubjectsTypeResolver;
+    Category?: GQLCategoryTypeResolver;
   }
   export interface GQLQueryTypeResolver<TParent = any> {
     resource?: QueryToResourceResolver<TParent>;
@@ -1433,6 +1434,7 @@ declare global {
     name?: SubjectToNameResolver<TParent>;
     path?: SubjectToPathResolver<TParent>;
     filters?: SubjectToFiltersResolver<TParent>;
+    frontpageFilters?: SubjectToFrontpageFiltersResolver<TParent>;
     subjectpage?: SubjectToSubjectpageResolver<TParent>;
     topics?: SubjectToTopicsResolver<TParent>;
   }
@@ -1474,6 +1476,18 @@ declare global {
   }
 
   export interface SubjectToFiltersResolver<TParent = any, TResult = any> {
+    (
+      parent: TParent,
+      args: {},
+      context: any,
+      info: GraphQLResolveInfo,
+    ): TResult;
+  }
+
+  export interface SubjectToFrontpageFiltersResolver<
+    TParent = any,
+    TResult = any
+  > {
     (
       parent: TParent,
       args: {},
@@ -1924,15 +1938,12 @@ declare global {
     ): TResult;
   }
 
-  export interface GQLFrontpageSubjectsTypeResolver<TParent = any> {
-    name?: FrontpageSubjectsToNameResolver<TParent>;
-    subjects?: FrontpageSubjectsToSubjectsResolver<TParent>;
+  export interface GQLCategoryTypeResolver<TParent = any> {
+    name?: CategoryToNameResolver<TParent>;
+    subjects?: CategoryToSubjectsResolver<TParent>;
   }
 
-  export interface FrontpageSubjectsToNameResolver<
-    TParent = any,
-    TResult = any
-  > {
+  export interface CategoryToNameResolver<TParent = any, TResult = any> {
     (
       parent: TParent,
       args: {},
@@ -1941,10 +1952,7 @@ declare global {
     ): TResult;
   }
 
-  export interface FrontpageSubjectsToSubjectsResolver<
-    TParent = any,
-    TResult = any
-  > {
+  export interface CategoryToSubjectsResolver<TParent = any, TResult = any> {
     (
       parent: TParent,
       args: {},
