@@ -16,7 +16,6 @@ import {
   fetchTopicResources,
   fetchResourceTypes,
   fetchSubjectPage,
-  fetchFrontpage,
   fetchTopic,
 } from './data/api';
 
@@ -60,8 +59,12 @@ export const resolvers = {
     ): Promise<GQLResourceType[]> {
       return fetchResourceTypes(context);
     },
-    async frontpage(_: any, __: any, context: Context): Promise<GQLFrontpage> {
-      return fetchFrontpage(context);
+    async frontpage(
+      _: any,
+      __: any,
+      context: Context,
+    ): Promise<FrontpageResponse> {
+      return context.loaders.frontpageLoader.load('frontpage');
     },
   },
   Frontpage: {
@@ -222,6 +225,33 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLFilter[]> {
       return context.loaders.filterLoader.load(subject.id);
+    },
+    async frontpageFilters(
+      subject: GQLSubject,
+      __: any,
+      context: Context,
+    ): Promise<GQLFilter[]> {
+      const frontpage = await context.loaders.frontpageLoader.load('frontpage');
+
+      const allCategorySubjects = frontpage.categories.reduce(
+        (acc, category) => [...acc, ...category.subjects],
+        [],
+      ) as RSubjectCategory[];
+
+      const categorySubject = allCategorySubjects.find(
+        cs => cs.id === subject.id,
+      );
+
+      const frontpageFilterIds = categorySubject ? categorySubject.filters : [];
+
+      const allSubjectFilters = await context.loaders.filterLoader.load(
+        subject.id,
+      );
+
+      // Only return filters specified in frontpage
+      return allSubjectFilters.filter(filter =>
+        frontpageFilterIds.includes(filter.id),
+      );
     },
     async subjectpage(
       subject: GQLSubject,

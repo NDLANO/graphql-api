@@ -225,6 +225,7 @@ export const typeDefs = gql`
     name: String!
     path: String!
     filters: [SubjectFilter]
+    frontpageFilters: [SubjectFilter]
     subjectpage: SubjectPage
     topics(all: Boolean, filterIds: String): [Topic]
   }
