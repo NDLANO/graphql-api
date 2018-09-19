@@ -82,13 +82,15 @@ export const resolvers = {
   },
   FrontpageSubjects: {
     async subjects(
-      frontpageSubjects: { subjects: [string]; name: string },
+      category: RCategory,
       _: any,
       context: Context,
     ): Promise<GQLSubject[]> {
       const data = await context.loaders.subjectsLoader.load('all');
       return data.subjects.filter(subject =>
-        frontpageSubjects.subjects.includes(subject.id),
+        category.subjects.find(categorySubject => {
+          return categorySubject.id === subject.id;
+        }),
       );
     },
   },

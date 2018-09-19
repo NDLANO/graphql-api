@@ -8,6 +8,7 @@
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
+import { isString } from 'lodash';
 
 export async function fetchResource(
   resourceId: string,
@@ -197,9 +198,33 @@ export async function fetchLearningpaths(
   });
 }
 
-export async function fetchFrontpage(context: Context): Promise<GQLFrontpage> {
+export async function fetchFrontpage(
+  context: Context,
+): Promise<FrontpageResponse> {
   const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
-  return resolveJson(response);
+
+  const frontpage: any = await resolveJson(response);
+
+  // TODO: remove transform fallback when frontpage-api is updated in all environments
+  const transformedCategories = frontpage.categories.map((category: any) => {
+    const subjects = category.subjects.map((subject: any) => {
+      // Handle old/deprecated frontpage-api response
+      if (isString(subject)) {
+        return { id: subject };
+      }
+      return subject;
+    });
+
+    return {
+      ...category,
+      subjects,
+    };
+  });
+
+  return {
+    ...frontpage,
+    categories: transformedCategories,
+  };
 }
 
 export async function fetchSubjectPage(
