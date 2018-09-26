@@ -10,6 +10,10 @@ import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 
 export const typeDefs = gql`
+  directive @deprecated(
+    reason: String = "No longer supported"
+  ) on FIELD_DEFINITION | ENUM_VALUE
+
   type ResourceTypeDefinition {
     id: String!
     name: String!
@@ -215,7 +219,8 @@ export const typeDefs = gql`
     latestContent: SubjectPageArticles
     about: SubjectPageAbout
     goTo: SubjectPageGoTo
-    displayInTwoColumns: Boolean
+    displayInTwoColumns: Boolean @deprecated(reason: "Use layout field.")
+    layout: String
     twitter: String
   }
 
