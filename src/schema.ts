@@ -10,10 +10,6 @@ import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 
 export const typeDefs = gql`
-  directive @deprecated(
-    reason: String = "No longer supported"
-  ) on FIELD_DEFINITION | ENUM_VALUE
-
   type ResourceTypeDefinition {
     id: String!
     name: String!
