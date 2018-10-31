@@ -24,21 +24,6 @@ interface Id {
   id: string;
 }
 
-type SearchQuery = {
-  query: string;
-  pageSize: string;
-  page: string;
-  contextTypes: string;
-  language: string;
-  ids: string;
-  resourceTypes: string;
-  levels: string;
-  sort: string;
-  fallback: boolean;
-  subjects: string;
-  languageFilter: [string];
-};
-
 export const resolvers = {
   Query: {
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
@@ -49,7 +34,7 @@ export const resolvers = {
     },
     async search(
       _: any,
-      searchQuery: SearchQuery,
+      searchQuery: QueryToSearchArgs,
       context: Context,
     ): Promise<GQLSearch> {
       return search(searchQuery, context);

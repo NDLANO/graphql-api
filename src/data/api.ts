@@ -254,31 +254,12 @@ export async function fetchSubjectPage(
   };
 }
 
-type SearchQuery = {
-  query: string;
-  pageSize: string;
-  page: string;
-  contextTypes: string;
-  language: string;
-  ids: string;
-  resourceTypes: string;
-  levels: string;
-  sort: string;
-  fallback: boolean;
-  subjects: string;
-  languageFilter: [string];
-};
-
 export async function search(
-  searchQuery: SearchQuery,
+  searchQuery: QueryToSearchArgs,
   context: Context,
 ): Promise<GQLSearch> {
   const query = {
     ...searchQuery,
-    pageSize: undefined,
-    contextTypes: undefined,
-    resourceTypes: undefined,
-    languageFilter: undefined,
     'page-size': searchQuery.pageSize,
     'context-types': searchQuery.contextTypes,
     'resource-types': searchQuery.resourceTypes,
@@ -289,7 +270,7 @@ export async function search(
     context,
   );
   const json = await resolveJson(response);
-
+  console.log(json);
   return {
     ...json,
     results: json.results.map(result => ({
