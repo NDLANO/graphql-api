@@ -32,11 +32,11 @@ async function fetchHelper(
   context: Context,
   options?: RequestOptions,
 ): Promise<Response> {
-  const fetch = createFetch({
+  const fetchFn = createFetch({
     cache,
   });
 
-  return fetch(apiResourceUrl(path), {
+  return fetchFn(apiResourceUrl(path), {
     headers: {
       Authorization: `Bearer ${context.token.access_token}`,
     },

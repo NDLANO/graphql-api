@@ -163,14 +163,14 @@ export const typeDefs = gql`
     supplementaryResources(filterIds: String): [Resource]
   }
 
-  type FrontpageSubjects {
+  type Category {
     name: String
     subjects: [Subject]
   }
 
   type Frontpage {
     topical: [Resource]
-    categories: [FrontpageSubjects]
+    categories: [Category]
   }
 
   type SubjectPageArticles {
@@ -215,7 +215,8 @@ export const typeDefs = gql`
     latestContent: SubjectPageArticles
     about: SubjectPageAbout
     goTo: SubjectPageGoTo
-    displayInTwoColumns: Boolean
+    displayInTwoColumns: Boolean @deprecated(reason: "Use layout field.")
+    layout: String
     twitter: String
   }
 
@@ -225,6 +226,7 @@ export const typeDefs = gql`
     name: String!
     path: String!
     filters: [SubjectFilter]
+    frontpageFilters: [SubjectFilter]
     subjectpage: SubjectPage
     topics(all: Boolean, filterIds: String): [Topic]
   }

@@ -14,13 +14,14 @@ declare global {
     loaders?: {
       articlesLoader: DataLoader<string, any>;
       learningpathsLoader: DataLoader<string, any>;
-      filterLoader: DataLoader<string, any>;
+      filterLoader: DataLoader<string, GQLSubjectFilter[]>;
       subjectTopicsLoader: DataLoader<
         { subjectId: string; filterIds: string },
         any
       >;
       subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
       resourceTypesLoader: DataLoader<any, any>;
+      frontpageLoader: DataLoader<string, FrontpageResponse>;
     };
   }
 

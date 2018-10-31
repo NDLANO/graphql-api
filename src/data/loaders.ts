@@ -11,11 +11,10 @@ import {
   fetchArticles,
   fetchSubjectTopics,
   fetchFilters,
-  fetchResource,
   fetchLearningpaths,
   fetchResourceTypes,
-  fetchTopic,
   fetchSubjects,
+  fetchFrontpage,
 } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
@@ -30,12 +29,23 @@ export function learningpathsLoader(context: Context): DataLoader<string, any> {
   });
 }
 
-export function filterLoader(context: Context): DataLoader<string, any> {
+export function filterLoader(
+  context: Context,
+): DataLoader<string, GQLSubjectFilter[]> {
   return new DataLoader(async subjectIds => {
     const filterList = await fetchFilters(context);
     return subjectIds.map(subjectId =>
       filterList.filter(filter => filter.subjectId === subjectId),
     );
+  });
+}
+
+export function frontpageLoader(
+  context: Context,
+): DataLoader<string, FrontpageResponse> {
+  return new DataLoader(async () => {
+    const frontpage = await fetchFrontpage(context);
+    return [frontpage];
   });
 }
 
@@ -48,12 +58,12 @@ export function subjectsLoader(
   });
 }
 
-type Input = {
+interface IInput {
   subjectId: string;
   filterIds: string;
-};
+}
 
-export function subjectTopicsLoader(context: Context): DataLoader<Input, any> {
+export function subjectTopicsLoader(context: Context): DataLoader<IInput, any> {
   return new DataLoader(
     async ids => {
       return ids.map(async ({ subjectId, filterIds }) => {
@@ -61,7 +71,7 @@ export function subjectTopicsLoader(context: Context): DataLoader<Input, any> {
       });
     },
     {
-      cacheKeyFn: (key: Input) => JSON.stringify(key),
+      cacheKeyFn: (key: IInput) => JSON.stringify(key),
     },
   );
 }
