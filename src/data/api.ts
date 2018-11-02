@@ -254,7 +254,7 @@ export async function fetchSubjectPage(
   };
 }
 
-type jsonResult = {
+interface jsonResult {
   title: {
     title: string;
   };
@@ -263,7 +263,7 @@ type jsonResult = {
     metaDescription: string;
   };
   metaImage: { url: string; alt: string };
-};
+}
 
 export async function search(
   searchQuery: QueryToSearchArgs,
