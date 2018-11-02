@@ -232,12 +232,13 @@ export const typeDefs = gql`
   }
 
   type SearchResult {
-    id: String!
+    id: Int!
     title: String
     supportedLanguages: [String]
     url: String
     metaDescription: String
     metaImage: MetaImage
+    contentType: String
     contexts: [SearchContext]
   }
 
@@ -264,10 +265,10 @@ export const typeDefs = gql`
   }
 
   type Search {
-    pageSize: String
-    page: String
+    pageSize: Int
+    page: Int
     language: String
-    totalCount: String
+    totalCount: Int
     results: [SearchResult]
   }
 
@@ -292,7 +293,7 @@ export const typeDefs = gql`
       sort: String
       fallback: Boolean
       subjects: String
-      languageFilter: [String]
+      languageFilter: String
     ): Search
     resourceTypes: [ResourceTypeDefinition]
   }

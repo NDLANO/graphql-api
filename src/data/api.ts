@@ -266,7 +266,7 @@ export async function search(
     'language-filter': searchQuery.languageFilter,
   };
   const response = await fetch(
-    `/search-api/v1/search/?${queryString.stringify(searchQuery)}`,
+    `/search-api/v1/search/?${queryString.stringify(query)}`,
     context,
   );
   const json = await resolveJson(response);
