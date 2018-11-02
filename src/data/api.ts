@@ -254,6 +254,17 @@ export async function fetchSubjectPage(
   };
 }
 
+type jsonResult = {
+  title: {
+    title: string;
+  };
+  id: number;
+  metaDescription: {
+    metaDescription: string;
+  };
+  metaImage: { url: string; alt: string };
+};
+
 export async function search(
   searchQuery: QueryToSearchArgs,
   context: Context,
@@ -270,12 +281,10 @@ export async function search(
     context,
   );
   const json = await resolveJson(response);
-  console.log(json);
   return {
     ...json,
-    results: json.results.map(result => ({
+    results: json.results.map((result: jsonResult) => ({
       ...result,
-      id: result.id,
       title: result.title.title,
       metaDescription: result.metaDescription
         ? result.metaDescription.metaDescription
