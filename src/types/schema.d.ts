@@ -23,6 +23,17 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
   }
+
+  export interface JsonResult {
+    title: {
+      title: string;
+    };
+    id: number;
+    metaDescription: {
+      metaDescription: string;
+    };
+    metaImage: { url: string; alt: string };
+  }
   
   export interface GQLResource {
     id: string;
