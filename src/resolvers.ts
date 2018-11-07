@@ -17,6 +17,7 @@ import {
   fetchResourceTypes,
   fetchSubjectPage,
   fetchTopic,
+  search,
 } from './data/api';
 
 interface Id {
@@ -30,6 +31,13 @@ export const resolvers = {
     },
     async article(_: any, { id }: Id, context: Context): Promise<GQLArticle> {
       return fetchArticle(id, context);
+    },
+    async search(
+      _: any,
+      searchQuery: QueryToSearchArgs,
+      context: Context,
+    ): Promise<GQLSearch> {
+      return search(searchQuery, context);
     },
     async subject(_: any, { id }: Id, context: Context): Promise<GQLSubject> {
       const list = await fetchSubjects(context);

@@ -20,7 +20,19 @@ declare global {
     topics?: Array<GQLTopic | null>;
     frontpage?: GQLFrontpage;
     filters?: Array<GQLSubjectFilter | null>;
+    search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
+  }
+
+  export interface JsonResult {
+    title: {
+      title: string;
+    };
+    id: number;
+    metaDescription: {
+      metaDescription: string;
+    };
+    metaImage: { url: string; alt: string };
   }
   
   export interface GQLResource {
@@ -249,6 +261,46 @@ declare global {
     subjects?: Array<GQLSubject | null>;
   }
   
+  export interface GQLSearch {
+    pageSize?: string;
+    page?: string;
+    language?: string;
+    totalCount?: string;
+    results?: Array<GQLSearchResult | null>;
+  }
+  
+  export interface GQLSearchResult {
+    id: string;
+    title?: string;
+    supportedLanguages?: Array<string | null>;
+    url?: string;
+    metaDescription?: string;
+    metaImage?: GQLMetaImage;
+    contexts?: Array<GQLSearchContext | null>;
+  }
+  
+  export interface GQLSearchContext {
+    breadcrumbs?: Array<string | null>;
+    learningResourceType?: string;
+    resourceTypes?: Array<GQLSearchContextResourceTypes | null>;
+    subject?: string;
+    path?: string;
+    id?: string;
+    language?: string;
+    filters?: Array<GQLSearchContextFilter | null>;
+  }
+  
+  export interface GQLSearchContextResourceTypes {
+    id?: string;
+    name?: string;
+    language?: string;
+  }
+  
+  export interface GQLSearchContextFilter {
+    name?: string;
+    relevance?: string;
+  }
+  
   /*********************************
    *                               *
    *         TYPE RESOLVERS        *
@@ -290,6 +342,11 @@ declare global {
     ResourceTypeDefinition?: GQLResourceTypeDefinitionTypeResolver;
     Frontpage?: GQLFrontpageTypeResolver;
     Category?: GQLCategoryTypeResolver;
+    Search?: GQLSearchTypeResolver;
+    SearchResult?: GQLSearchResultTypeResolver;
+    SearchContext?: GQLSearchContextTypeResolver;
+    SearchContextResourceTypes?: GQLSearchContextResourceTypesTypeResolver;
+    SearchContextFilter?: GQLSearchContextFilterTypeResolver;
   }
   export interface GQLQueryTypeResolver<TParent = any> {
     resource?: QueryToResourceResolver<TParent>;
@@ -300,6 +357,7 @@ declare global {
     topics?: QueryToTopicsResolver<TParent>;
     frontpage?: QueryToFrontpageResolver<TParent>;
     filters?: QueryToFiltersResolver<TParent>;
+    search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
   }
   
@@ -345,6 +403,24 @@ declare global {
   
   export interface QueryToFiltersResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface QueryToSearchArgs {
+    query?: string;
+    page?: string;
+    pageSize?: string;
+    contextTypes?: string;
+    language?: string;
+    ids?: string;
+    resourceTypes?: string;
+    levels?: string;
+    sort?: string;
+    fallback?: boolean;
+    subjects?: string;
+    languageFilter?: Array<string | null>;
+  }
+  export interface QueryToSearchResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface QueryToResourceTypesResolver<TParent = any, TResult = any> {
@@ -1121,6 +1197,146 @@ declare global {
   }
   
   export interface CategoryToSubjectsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface GQLSearchTypeResolver<TParent = any> {
+    pageSize?: SearchToPageSizeResolver<TParent>;
+    page?: SearchToPageResolver<TParent>;
+    language?: SearchToLanguageResolver<TParent>;
+    totalCount?: SearchToTotalCountResolver<TParent>;
+    results?: SearchToResultsResolver<TParent>;
+  }
+  
+  export interface SearchToPageSizeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchToPageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface GQLSearchResultTypeResolver<TParent = any> {
+    id?: SearchResultToIdResolver<TParent>;
+    title?: SearchResultToTitleResolver<TParent>;
+    supportedLanguages?: SearchResultToSupportedLanguagesResolver<TParent>;
+    url?: SearchResultToUrlResolver<TParent>;
+    metaDescription?: SearchResultToMetaDescriptionResolver<TParent>;
+    metaImage?: SearchResultToMetaImageResolver<TParent>;
+    contexts?: SearchResultToContextsResolver<TParent>;
+  }
+  
+  export interface SearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchResultToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchResultToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchResultToContextsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface GQLSearchContextTypeResolver<TParent = any> {
+    breadcrumbs?: SearchContextToBreadcrumbsResolver<TParent>;
+    learningResourceType?: SearchContextToLearningResourceTypeResolver<TParent>;
+    resourceTypes?: SearchContextToResourceTypesResolver<TParent>;
+    subject?: SearchContextToSubjectResolver<TParent>;
+    path?: SearchContextToPathResolver<TParent>;
+    id?: SearchContextToIdResolver<TParent>;
+    language?: SearchContextToLanguageResolver<TParent>;
+    filters?: SearchContextToFiltersResolver<TParent>;
+  }
+  
+  export interface SearchContextToBreadcrumbsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextToLearningResourceTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextToSubjectResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextToFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface GQLSearchContextResourceTypesTypeResolver<TParent = any> {
+    id?: SearchContextResourceTypesToIdResolver<TParent>;
+    name?: SearchContextResourceTypesToNameResolver<TParent>;
+    language?: SearchContextResourceTypesToLanguageResolver<TParent>;
+  }
+  
+  export interface SearchContextResourceTypesToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextResourceTypesToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextResourceTypesToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface GQLSearchContextFilterTypeResolver<TParent = any> {
+    name?: SearchContextFilterToNameResolver<TParent>;
+    relevance?: SearchContextFilterToRelevanceResolver<TParent>;
+  }
+  
+  export interface SearchContextFilterToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchContextFilterToRelevanceResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

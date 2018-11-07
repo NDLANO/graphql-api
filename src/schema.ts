@@ -231,6 +231,47 @@ export const typeDefs = gql`
     topics(all: Boolean, filterIds: String): [Topic]
   }
 
+  type SearchResult {
+    id: Int!
+    title: String
+    supportedLanguages: [String]
+    url: String
+    metaDescription: String
+    metaImage: MetaImage
+    contentType: String
+    contexts: [SearchContext]
+  }
+
+  type SearchContext {
+    breadcrumbs: [String]
+    learningResourceType: String
+    resourceTypes: [SearchContextResourceTypes]
+    subject: String
+    path: String
+    id: String
+    language: String
+    filters: [SearchContextFilter]
+  }
+
+  type SearchContextResourceTypes {
+    id: String
+    name: String
+    language: String
+  }
+
+  type SearchContextFilter {
+    name: String
+    relevance: String
+  }
+
+  type Search {
+    pageSize: Int
+    page: Int
+    language: String
+    totalCount: Int
+    results: [SearchResult]
+  }
+
   type Query {
     resource(id: String!): Resource
     article(id: String!): Article
@@ -240,6 +281,20 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
+    search(
+      query: String
+      page: String
+      pageSize: String
+      contextTypes: String
+      language: String
+      ids: String
+      resourceTypes: String
+      levels: String
+      sort: String
+      fallback: Boolean
+      subjects: String
+      languageFilter: String
+    ): Search
     resourceTypes: [ResourceTypeDefinition]
   }
 `;
