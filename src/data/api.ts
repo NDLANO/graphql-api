@@ -127,7 +127,9 @@ export async function fetchArticles(
   context: Context,
 ): Promise<GQLMeta[]> {
   const response = await fetch(
-    `/article-api/v2/articles/?ids=${articleIds.join(',')}`,
+    `/article-api/v2/articles/?ids=${articleIds.join(',')}&language=${
+      context.language
+    }`,
     context,
   );
   const json = await resolveJson(response);
