@@ -268,7 +268,7 @@ export async function search(
   const response = await fetch(
     `/search-api/v1/search/?${queryString.stringify(query)}`,
     context,
-    {cache: 'no-store'}
+    { cache: 'no-store' },
   );
   const json = await resolveJson(response);
   return {
