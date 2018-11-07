@@ -129,7 +129,7 @@ export async function fetchArticles(
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}&language=${
       context.language
-    }`,
+    }&fallback=true`,
     context,
   );
   const json = await resolveJson(response);
