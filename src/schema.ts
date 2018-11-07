@@ -299,6 +299,8 @@ export const typeDefs = gql`
   }
 `;
 
+// Not sure why this fails. Should test if we can remove it next time we bump apollo/graphql dependencies
+// @ts-ignore
 const schema = makeExecutableSchema({ typeDefs });
 
 export default schema;
