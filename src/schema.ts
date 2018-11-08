@@ -272,6 +272,19 @@ export const typeDefs = gql`
     results: [SearchResult]
   }
 
+  type GroupSearchResult {
+    path: String
+    name: String
+    resourceType: String
+  }
+
+  type GroupSearch {
+    language: String
+    resourceType: String
+    resources: [GroupSearchResult]
+    totalCount: Int
+  }
+
   type Query {
     resource(id: String!): Resource
     article(id: String!): Article
@@ -296,6 +309,11 @@ export const typeDefs = gql`
       languageFilter: String
     ): Search
     resourceTypes: [ResourceTypeDefinition]
+    groupSearch(
+      query: String
+      subjects: String
+      resourceTypes: String
+    ): [GroupSearch]
   }
 `;
 
