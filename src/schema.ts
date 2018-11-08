@@ -275,7 +275,6 @@ export const typeDefs = gql`
   type GroupSearchResult {
     path: String
     name: String
-    resourceType: String
   }
 
   type GroupSearch {
