@@ -133,6 +133,19 @@ export const typeDefs = gql`
     metaData: ArticleMetaData
     supportedLanguages: [String]
     copyright: Copyright!
+    competanceGoals: [CompetanceGoals]
+  }
+
+  type CompetanceGoals {
+    curriculumId: String
+    link: String
+    names: [CompetanceNames]
+    status: String
+  }
+
+  type CompetanceNames {
+    scopes: [String]
+    name: String
   }
 
   type Filter {

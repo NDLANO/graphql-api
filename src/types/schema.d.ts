@@ -23,17 +23,6 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
   }
-
-  export interface JsonResult {
-    title: {
-      title: string;
-    };
-    id: number;
-    metaDescription: {
-      metaDescription: string;
-    };
-    metaImage: { url: string; alt: string };
-  }
   
   export interface GQLResource {
     id: string;
@@ -84,6 +73,7 @@ declare global {
     metaData?: GQLArticleMetaData;
     supportedLanguages?: Array<string | null>;
     copyright: GQLCopyright;
+    competanceGoals?: Array<GQLCompetanceGoals | null>;
   }
   
   export interface GQLArticleRequiredLibrary {
@@ -152,6 +142,18 @@ declare global {
     src: string;
     height: number;
     width: number;
+  }
+  
+  export interface GQLCompetanceGoals {
+    curriculumId?: string;
+    link?: string;
+    names?: Array<GQLCompetanceNames | null>;
+    status?: string;
+  }
+  
+  export interface GQLCompetanceNames {
+    scopes?: Array<string | null>;
+    name?: string;
   }
   
   export interface GQLFilter {
@@ -262,20 +264,21 @@ declare global {
   }
   
   export interface GQLSearch {
-    pageSize?: string;
-    page?: string;
+    pageSize?: number;
+    page?: number;
     language?: string;
-    totalCount?: string;
+    totalCount?: number;
     results?: Array<GQLSearchResult | null>;
   }
   
   export interface GQLSearchResult {
-    id: string;
+    id: number;
     title?: string;
     supportedLanguages?: Array<string | null>;
     url?: string;
     metaDescription?: string;
     metaImage?: GQLMetaImage;
+    contentType?: string;
     contexts?: Array<GQLSearchContext | null>;
   }
   
@@ -328,6 +331,8 @@ declare global {
     AudioLicense?: GQLAudioLicenseTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
+    CompetanceGoals?: GQLCompetanceGoalsTypeResolver;
+    CompetanceNames?: GQLCompetanceNamesTypeResolver;
     Filter?: GQLFilterTypeResolver;
     Topic?: GQLTopicTypeResolver;
     Subject?: GQLSubjectTypeResolver;
@@ -417,7 +422,7 @@ declare global {
     sort?: string;
     fallback?: boolean;
     subjects?: string;
-    languageFilter?: Array<string | null>;
+    languageFilter?: string;
   }
   export interface QueryToSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult;
@@ -559,6 +564,7 @@ declare global {
     metaData?: ArticleToMetaDataResolver<TParent>;
     supportedLanguages?: ArticleToSupportedLanguagesResolver<TParent>;
     copyright?: ArticleToCopyrightResolver<TParent>;
+    competanceGoals?: ArticleToCompetanceGoalsResolver<TParent>;
   }
   
   export interface ArticleToIdResolver<TParent = any, TResult = any> {
@@ -622,6 +628,10 @@ declare global {
   }
   
   export interface ArticleToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ArticleToCompetanceGoalsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -842,6 +852,42 @@ declare global {
   }
   
   export interface BrightcoveIframeToWidthResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface GQLCompetanceGoalsTypeResolver<TParent = any> {
+    curriculumId?: CompetanceGoalsToCurriculumIdResolver<TParent>;
+    link?: CompetanceGoalsToLinkResolver<TParent>;
+    names?: CompetanceGoalsToNamesResolver<TParent>;
+    status?: CompetanceGoalsToStatusResolver<TParent>;
+  }
+  
+  export interface CompetanceGoalsToCurriculumIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface CompetanceGoalsToLinkResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface CompetanceGoalsToNamesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface CompetanceGoalsToStatusResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface GQLCompetanceNamesTypeResolver<TParent = any> {
+    scopes?: CompetanceNamesToScopesResolver<TParent>;
+    name?: CompetanceNamesToNameResolver<TParent>;
+  }
+  
+  export interface CompetanceNamesToScopesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface CompetanceNamesToNameResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -1235,6 +1281,7 @@ declare global {
     url?: SearchResultToUrlResolver<TParent>;
     metaDescription?: SearchResultToMetaDescriptionResolver<TParent>;
     metaImage?: SearchResultToMetaImageResolver<TParent>;
+    contentType?: SearchResultToContentTypeResolver<TParent>;
     contexts?: SearchResultToContextsResolver<TParent>;
   }
   
@@ -1259,6 +1306,10 @@ declare global {
   }
   
   export interface SearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface SearchResultToContentTypeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

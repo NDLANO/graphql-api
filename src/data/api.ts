@@ -100,7 +100,27 @@ export async function fetchArticle(
     `${host}/article-converter/json/${context.language}/${articleId}`,
     context,
   );
-  return resolveJson(response);
+  const json = await resolveJson(response);
+  console.log(json);
+  const { oldNdlaUrl } = json;
+  const oldNdlaId = oldNdlaUrl.split('/').pop();
+  const competanceResponse = await fetch(
+    `http://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${oldNdlaId}`,
+    context,
+  );
+  const { resource: competanceJson } = await resolveJson(competanceResponse);
+  const competanceGoals = competanceJson.relations.map(
+    (relation: { competenceAim: { links: { self: string } } }) => ({
+      ...relation,
+      ...relation.competenceAim,
+      link: relation.competenceAim.links.self,
+    }),
+  );
+
+  return {
+    ...json,
+    competanceGoals,
+  };
 }
 
 export async function fetchTopicResources(
