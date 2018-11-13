@@ -166,7 +166,9 @@ export async function fetchLearningpaths(
   context: Context,
 ): Promise<GQLMeta[]> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/?ids=${learningpathIds.join(',')}`,
+    `/learningpath-api/v2/learningpaths/?language=${
+      context.language
+    }&fallback=true&ids=${learningpathIds.join(',')}`,
     context,
   );
   const json = await resolveJson(response);
