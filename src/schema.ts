@@ -137,15 +137,9 @@ export const typeDefs = gql`
   }
 
   type CompetanceGoals {
-    curriculumId: String
-    link: String
-    names: [CompetanceNames]
-    status: String
-  }
-
-  type CompetanceNames {
-    scopes: [String]
-    name: String
+    id: String!
+    curriculumId: String!
+    name: String!
   }
 
   type Filter {

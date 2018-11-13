@@ -19,6 +19,7 @@ import {
   fetchTopic,
   search,
   groupSearch,
+  fetchCompetenceGoals,
 } from './data/api';
 
 interface Id {
@@ -346,5 +347,17 @@ export const resolvers = {
       );
     },
   },
-  // Mutation: {},
+  Article: {
+    async competanceGoals(
+      article: GQLArticle,
+      _: any,
+      context: Context,
+    ): Promise<GQLCompetanceGoals[]> {
+      if (article.oldNdlaUrl) {
+        const nodeId = article.oldNdlaUrl.split('/').pop();
+        return fetchCompetenceGoals(nodeId, context);
+      }
+      return null;
+    },
+  },
 };
