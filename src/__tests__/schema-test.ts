@@ -11,9 +11,7 @@ import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { graphql } from 'graphql';
 
 test('can run query on schema', async () => {
-  // Not sure why this fails. Should test if we can remove it next time we bump apollo/graphql dependencies
-  // @ts-ignore
-  const schema = makeExecutableSchema({ typeDefs: typeDefs });
+  const schema = makeExecutableSchema({ typeDefs });
   addMockFunctionsToSchema({ schema });
   const query = `
     query resource {
