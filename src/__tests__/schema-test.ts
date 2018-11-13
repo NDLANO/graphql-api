@@ -11,7 +11,7 @@ import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { graphql } from 'graphql';
 
 test('can run query on schema', async () => {
-  const schema = makeExecutableSchema({ typeDefs: typeDefs });
+  const schema = makeExecutableSchema({ typeDefs });
   addMockFunctionsToSchema({ schema });
   const query = `
     query resource {
