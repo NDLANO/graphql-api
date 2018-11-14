@@ -20,7 +20,6 @@ import {
   search,
   groupSearch,
   fetchCompetenceGoals,
-  fetchCurriculum,
 } from './data/api';
 
 interface Id {
@@ -368,7 +367,9 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLCompetanceCurriculum> {
       if (competanceGoal.curriculumId) {
-        return fetchCurriculum(competanceGoal.curriculumId, context);
+        return context.loaders.curriculumLoader.load(
+          competanceGoal.curriculumId,
+        );
       }
       return null;
     },
