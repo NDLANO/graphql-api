@@ -77,7 +77,7 @@ declare global {
     metaData?: GQLArticleMetaData;
     supportedLanguages?: Array<string | null>;
     copyright: GQLCopyright;
-    competanceGoals?: Array<GQLCompetanceGoals | null>;
+    competanceGoals?: Array<GQLCompetanceGoal | null>;
   }
   
   export interface GQLArticleRequiredLibrary {
@@ -148,9 +148,15 @@ declare global {
     width: number;
   }
   
-  export interface GQLCompetanceGoals {
+  export interface GQLCompetanceGoal {
     id: string;
     curriculumId: string;
+    name: string;
+    curriculum?: GQLCompetanceCurriculum;
+  }
+  
+  export interface GQLCompetanceCurriculum {
+    id: string;
     name: string;
   }
   
@@ -341,7 +347,8 @@ declare global {
     AudioLicense?: GQLAudioLicenseTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
-    CompetanceGoals?: GQLCompetanceGoalsTypeResolver;
+    CompetanceGoal?: GQLCompetanceGoalTypeResolver;
+    CompetanceCurriculum?: GQLCompetanceCurriculumTypeResolver;
     Filter?: GQLFilterTypeResolver;
     Topic?: GQLTopicTypeResolver;
     Subject?: GQLSubjectTypeResolver;
@@ -876,21 +883,39 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface GQLCompetanceGoalsTypeResolver<TParent = any> {
-    id?: CompetanceGoalsToIdResolver<TParent>;
-    curriculumId?: CompetanceGoalsToCurriculumIdResolver<TParent>;
-    name?: CompetanceGoalsToNameResolver<TParent>;
+  export interface GQLCompetanceGoalTypeResolver<TParent = any> {
+    id?: CompetanceGoalToIdResolver<TParent>;
+    curriculumId?: CompetanceGoalToCurriculumIdResolver<TParent>;
+    name?: CompetanceGoalToNameResolver<TParent>;
+    curriculum?: CompetanceGoalToCurriculumResolver<TParent>;
   }
   
-  export interface CompetanceGoalsToIdResolver<TParent = any, TResult = any> {
+  export interface CompetanceGoalToIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface CompetanceGoalsToCurriculumIdResolver<TParent = any, TResult = any> {
+  export interface CompetanceGoalToCurriculumIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface CompetanceGoalsToNameResolver<TParent = any, TResult = any> {
+  export interface CompetanceGoalToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface CompetanceGoalToCurriculumResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface GQLCompetanceCurriculumTypeResolver<TParent = any> {
+    id?: CompetanceCurriculumToIdResolver<TParent>;
+    name?: CompetanceCurriculumToNameResolver<TParent>;
+  }
+  
+  export interface CompetanceCurriculumToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface CompetanceCurriculumToNameResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

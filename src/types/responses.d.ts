@@ -19,27 +19,3 @@ declare global {
     categories: Array<RCategory>;
   }
 }
-
-/* Curriculum/Competence types */
-interface CompetenceAimName {
-  scopes: string[];
-  name: string;
-  isLanguageNeutral: boolean;
-}
-
-interface CompetenceAim {
-  id: string;
-  links: { parents: string[] };
-  names: CompetenceAimName[];
-}
-
-interface CurriculumRelation {
-  curriculumId: string;
-  competenceAim: CompetenceAim;
-}
-
-export interface CurriculumResource {
-  resource: {
-    relations: CurriculumRelation[];
-  };
-}

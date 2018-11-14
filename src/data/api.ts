@@ -10,8 +10,6 @@ import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
 import { isString } from 'lodash';
-import { curriculumLanguageMapping } from '../utils/mapping';
-import { CurriculumResource } from 'responses';
 
 export async function fetchResource(
   resourceId: string,
@@ -91,40 +89,6 @@ export async function fetchTopicFilters(
     context,
   );
   return resolveJson(response);
-}
-
-export async function fetchCompetenceGoals(
-  nodeId: string,
-  context: Context,
-): Promise<GQLCompetanceGoals[]> {
-  const response = await fetch(
-    `http://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
-    context,
-  );
-  const json: CurriculumResource = await resolveJson(response);
-
-  const competanceGoals = json.resource.relations.map(relation => {
-    // find fallback name language
-    const { name: fallbackName } = relation.competenceAim.names.find(
-      aim => aim.isLanguageNeutral === true,
-    );
-
-    // Try to find competenceAim name for context.kanguage
-    const competenceAimI18N = relation.competenceAim.names.find(
-      aim => aim.scopes[0] === curriculumLanguageMapping[context.language],
-    );
-
-    const name = competenceAimI18N ? competenceAimI18N.name : fallbackName;
-
-    return {
-      id: relation.competenceAim.id,
-      curriculumId: relation.curriculumId,
-      name,
-      parentLinks: relation.competenceAim.links.parents,
-    };
-  });
-
-  return competanceGoals;
 }
 
 export async function fetchArticle(
@@ -352,3 +316,5 @@ export async function groupSearch(
     })),
   }));
 }
+
+export { fetchCompetenceGoals, fetchCurriculum } from './curriculumApi';

@@ -20,6 +20,7 @@ import {
   search,
   groupSearch,
   fetchCompetenceGoals,
+  fetchCurriculum,
 } from './data/api';
 
 interface Id {
@@ -352,10 +353,22 @@ export const resolvers = {
       article: GQLArticle,
       _: any,
       context: Context,
-    ): Promise<GQLCompetanceGoals[]> {
+    ): Promise<GQLCompetanceGoal[]> {
       if (article.oldNdlaUrl) {
         const nodeId = article.oldNdlaUrl.split('/').pop();
         return fetchCompetenceGoals(nodeId, context);
+      }
+      return null;
+    },
+  },
+  CompetanceGoal: {
+    async curriculum(
+      competanceGoal: GQLCompetanceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLCompetanceCurriculum> {
+      if (competanceGoal.curriculumId) {
+        return fetchCurriculum(competanceGoal.curriculumId, context);
       }
       return null;
     },

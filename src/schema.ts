@@ -133,12 +133,18 @@ export const typeDefs = gql`
     metaData: ArticleMetaData
     supportedLanguages: [String]
     copyright: Copyright!
-    competanceGoals: [CompetanceGoals]
+    competanceGoals: [CompetanceGoal]
   }
 
-  type CompetanceGoals {
+  type CompetanceGoal {
     id: String!
     curriculumId: String!
+    name: String!
+    curriculum: CompetanceCurriculum
+  }
+
+  type CompetanceCurriculum {
+    id: String!
     name: String!
   }
 
