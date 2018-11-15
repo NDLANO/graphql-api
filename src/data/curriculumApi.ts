@@ -6,10 +6,7 @@
  *
  */
 
-import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { localConverter } from '../config';
-import { isString } from 'lodash';
 import { curriculumLanguageMapping } from '../utils/mapping';
 
 interface Name {
@@ -42,12 +39,13 @@ interface Curriculum {
   };
 }
 
-function findAcceptLangName(names: Name[], language: string) {
+function findNameForAcceptLanguage(names: Name[], language: string) {
+  // find fallback name language
   const { name: fallbackName } = names.find(
     nameObj => nameObj.isLanguageNeutral === true,
   );
 
-  // Try to find competenceAim name for context.language
+  // Try to find competenceAim name for language
   const competenceAimI18N = names.find(
     nameObj => nameObj.scopes[0] === curriculumLanguageMapping[language],
   );
@@ -67,7 +65,7 @@ export async function fetchCurriculum(
   const json: Curriculum = await resolveJson(response);
   const curriculum = json.curriculum;
 
-  const name = findAcceptLangName(curriculum.names, context.language);
+  const name = findNameForAcceptLanguage(curriculum.names, context.language);
 
   return {
     id: curriculum.id,
@@ -86,7 +84,7 @@ export async function fetchCompetenceGoals(
   const json: Resource = await resolveJson(response);
 
   const competanceGoals = json.resource.relations.map(relation => {
-    const name = findAcceptLangName(
+    const name = findNameForAcceptLanguage(
       relation.competenceAim.names,
       context.language,
     );
