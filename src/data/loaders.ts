@@ -32,7 +32,7 @@ export function learningpathsLoader(context: Context): DataLoader<string, any> {
 
 export function curriculumLoader(
   context: Context,
-): DataLoader<string, GQLCompetanceCurriculum> {
+): DataLoader<string, GQLCompetenceCurriculum> {
   return new DataLoader(async curriculumIds => {
     const uniqueCurriculumIds = Array.from(new Set(curriculumIds));
     const responses = await Promise.all(

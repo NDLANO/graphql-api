@@ -57,7 +57,7 @@ function findNameForAcceptLanguage(names: Name[], language: string) {
 export async function fetchCurriculum(
   curriculumId: string,
   context: Context,
-): Promise<GQLCompetanceCurriculum> {
+): Promise<GQLCompetenceCurriculum> {
   const response = await fetch(
     `https://mycurriculum.ndla.no/v1/users/ndla/curriculums/${curriculumId}`,
     context,
@@ -76,14 +76,14 @@ export async function fetchCurriculum(
 export async function fetchCompetenceGoals(
   nodeId: string,
   context: Context,
-): Promise<GQLCompetanceGoal[]> {
+): Promise<GQLCompetenceGoal[]> {
   const response = await fetch(
     `http://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
     context,
   );
   const json: Resource = await resolveJson(response);
 
-  const competanceGoals = json.resource.relations.map(relation => {
+  const competenceGoals = json.resource.relations.map(relation => {
     const name = findNameForAcceptLanguage(
       relation.competenceAim.names,
       context.language,
@@ -97,5 +97,5 @@ export async function fetchCompetenceGoals(
     };
   });
 
-  return competanceGoals;
+  return competenceGoals;
 }

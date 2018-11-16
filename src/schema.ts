@@ -133,17 +133,17 @@ export const typeDefs = gql`
     metaData: ArticleMetaData
     supportedLanguages: [String]
     copyright: Copyright!
-    competanceGoals: [CompetanceGoal]
+    competenceGoals: [CompetenceGoal]
   }
 
-  type CompetanceGoal {
+  type CompetenceGoal {
     id: String!
     curriculumId: String!
     name: String!
-    curriculum: CompetanceCurriculum
+    curriculum: CompetenceCurriculum
   }
 
-  type CompetanceCurriculum {
+  type CompetenceCurriculum {
     id: String!
     name: String!
   }
@@ -306,6 +306,7 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
+    competenceGoals(nodeId: String!): [CompetenceGoal]
     search(
       query: String
       page: String

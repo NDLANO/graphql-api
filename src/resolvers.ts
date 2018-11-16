@@ -83,6 +83,14 @@ export const resolvers = {
     ): Promise<FrontpageResponse> {
       return context.loaders.frontpageLoader.load('frontpage');
     },
+
+    async competenceGoals(
+      _: any,
+      { nodeId }: { nodeId: string },
+      context: Context,
+    ): Promise<GQLCompetenceGoal[]> {
+      return fetchCompetenceGoals(nodeId, context);
+    },
   },
   Frontpage: {
     async topical(
@@ -348,11 +356,11 @@ export const resolvers = {
     },
   },
   Article: {
-    async competanceGoals(
+    async competenceGoals(
       article: GQLArticle,
       _: any,
       context: Context,
-    ): Promise<GQLCompetanceGoal[]> {
+    ): Promise<GQLCompetenceGoal[]> {
       if (article.oldNdlaUrl) {
         const nodeId = article.oldNdlaUrl.split('/').pop();
         return fetchCompetenceGoals(nodeId, context);
@@ -360,15 +368,15 @@ export const resolvers = {
       return null;
     },
   },
-  CompetanceGoal: {
+  CompetenceGoal: {
     async curriculum(
-      competanceGoal: GQLCompetanceGoal,
+      competenceGoal: GQLCompetenceGoal,
       _: any,
       context: Context,
-    ): Promise<GQLCompetanceCurriculum> {
-      if (competanceGoal.curriculumId) {
+    ): Promise<GQLCompetenceCurriculum> {
+      if (competenceGoal.curriculumId) {
         return context.loaders.curriculumLoader.load(
-          competanceGoal.curriculumId,
+          competenceGoal.curriculumId,
         );
       }
       return null;
