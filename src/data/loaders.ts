@@ -15,8 +15,8 @@ import {
   fetchResourceTypes,
   fetchSubjects,
   fetchFrontpage,
+  fetchCurriculum,
 } from './api';
-import { fetchCurriculum } from './curriculumApi';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async articleIds => {
