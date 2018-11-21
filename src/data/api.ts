@@ -318,3 +318,5 @@ export async function groupSearch(
     })),
   }));
 }
+
+export { fetchCompetenceGoals, fetchCurriculum } from './curriculumApi';

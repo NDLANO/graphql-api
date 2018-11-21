@@ -15,6 +15,7 @@ import {
   fetchResourceTypes,
   fetchSubjects,
   fetchFrontpage,
+  fetchCurriculum,
 } from './api';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
@@ -26,6 +27,22 @@ export function articlesLoader(context: Context): DataLoader<string, any> {
 export function learningpathsLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async learningpathIds => {
     return fetchLearningpaths(learningpathIds, context);
+  });
+}
+
+export function curriculumLoader(
+  context: Context,
+): DataLoader<string, GQLCompetenceCurriculum> {
+  return new DataLoader(async curriculumIds => {
+    const uniqueCurriculumIds = Array.from(new Set(curriculumIds));
+    const responses = await Promise.all(
+      uniqueCurriculumIds.map(async id => {
+        return fetchCurriculum(id, context);
+      }),
+    );
+    return uniqueCurriculumIds.map(id => {
+      return responses.find(response => response.id === id);
+    });
   });
 }
 

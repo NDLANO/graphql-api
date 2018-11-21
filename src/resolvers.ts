@@ -19,6 +19,7 @@ import {
   fetchTopic,
   search,
   groupSearch,
+  fetchCompetenceGoals,
 } from './data/api';
 
 interface Id {
@@ -81,6 +82,14 @@ export const resolvers = {
       context: Context,
     ): Promise<FrontpageResponse> {
       return context.loaders.frontpageLoader.load('frontpage');
+    },
+
+    async competenceGoals(
+      _: any,
+      { nodeId }: { nodeId: string },
+      context: Context,
+    ): Promise<GQLCompetenceGoal[]> {
+      return fetchCompetenceGoals(nodeId, context);
     },
   },
   Frontpage: {
@@ -346,5 +355,31 @@ export const resolvers = {
       );
     },
   },
-  // Mutation: {},
+  Article: {
+    async competenceGoals(
+      article: GQLArticle,
+      _: any,
+      context: Context,
+    ): Promise<GQLCompetenceGoal[]> {
+      if (article.oldNdlaUrl) {
+        const nodeId = article.oldNdlaUrl.split('/').pop();
+        return fetchCompetenceGoals(nodeId, context);
+      }
+      return null;
+    },
+  },
+  CompetenceGoal: {
+    async curriculum(
+      competenceGoal: GQLCompetenceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLCompetenceCurriculum> {
+      if (competenceGoal.curriculumId) {
+        return context.loaders.curriculumLoader.load(
+          competenceGoal.curriculumId,
+        );
+      }
+      return null;
+    },
+  },
 };
