@@ -286,8 +286,9 @@ export const typeDefs = gql`
   }
 
   type GroupSearchResult {
-    path: String
-    name: String
+    id: Int!
+    path: String!
+    name: String!
   }
 
   type GroupSearch {
