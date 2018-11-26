@@ -7,11 +7,11 @@
  */
 
 import fetch from 'node-fetch';
-import { getEnvironmentVariabel } from './config';
+import { getEnvironmentVariabel, auth0Hostname } from './config';
 import { Request } from 'express';
 import { isString } from 'lodash';
 
-const url = `https://ndla.eu.auth0.com/oauth/token`;
+const url = `https://${auth0Hostname}/oauth/token`;
 
 const clientId = getEnvironmentVariabel(
   'NDLA_GRAPHQL_CLIENT_ID',
