@@ -244,8 +244,8 @@ export async function fetchSubjectPage(
   );
   const subjectPage: GQLSubjectPage = await resolveJson(response);
   return {
-    ...subjectPage
-  }
+    ...subjectPage,
+  };
 }
 
 export async function search(
