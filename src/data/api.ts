@@ -243,19 +243,9 @@ export async function fetchSubjectPage(
     context,
   );
   const subjectPage: GQLSubjectPage = await resolveJson(response);
-
-  // TODO: remove deprecated displayInTwoColumns when frontpage-api is updated in all environments
-  if (subjectPage.layout) {
-    return {
-      ...subjectPage,
-      displayInTwoColumns: subjectPage.layout === 'double',
-    };
-  }
-
   return {
-    ...subjectPage,
-    layout: subjectPage.displayInTwoColumns ? 'double' : 'single',
-  };
+    ...subjectPage
+  }
 }
 
 export async function search(

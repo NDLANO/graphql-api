@@ -228,7 +228,7 @@ export const typeDefs = gql`
     latestContent: SubjectPageArticles
     about: SubjectPageAbout
     goTo: SubjectPageGoTo
-    displayInTwoColumns: Boolean @deprecated(reason: "Use layout field.")
+    metaDescription: String
     layout: String
     twitter: String
   }
