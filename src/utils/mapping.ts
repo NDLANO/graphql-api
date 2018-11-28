@@ -10,6 +10,6 @@ export const curriculumLanguageMapping: {
   [index: string]: string;
 } = {
   en: 'http://psi.oasis-open.org/iso/639/#eng',
-  nb: 'http://psi.oasis-open.org/iso/639/#nb',
-  nn: 'http://psi.oasis-open.org/iso/639/#nn',
+  nb: 'http://psi.oasis-open.org/iso/639/#nob',
+  nn: 'http://psi.oasis-open.org/iso/639/#nno',
 };
