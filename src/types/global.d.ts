@@ -29,28 +29,4 @@ declare global {
   interface RequestOptions extends RequestInit {
     cache?: RequestCache;
   }
-
-  export interface JsonResult {
-    title: {
-      title: string;
-    };
-    id: number;
-    metaDescription: {
-      metaDescription: string;
-    };
-    metaImage: { url: string; alt: string };
-  }
-
-  export interface GroupSearchJSON {
-    results: [ContentTypeJSON];
-    resourceType: string;
-  }
-
-  export interface ContentTypeJSON {
-    paths: [string];
-    url: string;
-    title: {
-      title: string;
-    };
-  }
 }
