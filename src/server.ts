@@ -66,6 +66,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   debug: false, // log errors in formatError
+  introspection: true,
   formatError(err: any) {
     logger.error(err);
     return {
