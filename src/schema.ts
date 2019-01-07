@@ -321,6 +321,7 @@ export const typeDefs = gql`
       fallback: Boolean
       subjects: String
       languageFilter: String
+      relevance: String
     ): Search
     resourceTypes: [ResourceTypeDefinition]
     groupSearch(

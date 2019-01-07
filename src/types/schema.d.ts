@@ -447,6 +447,7 @@ declare global {
     fallback?: boolean;
     subjects?: string;
     languageFilter?: string;
+    relevance?: string;
   }
   export interface QueryToSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult;
