@@ -172,8 +172,8 @@ export const typeDefs = gql`
     meta: Meta
     subtopics(filterIds: String): [Topic]
     filters: [Filter]
-    coreResources(filterIds: String): [Resource]
-    supplementaryResources(filterIds: String): [Resource]
+    coreResources(filterIds: String, subjectId: String): [Resource]
+    supplementaryResources(filterIds: String, subjectId: String): [Resource]
   }
 
   type Category {

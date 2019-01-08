@@ -155,12 +155,40 @@ export const resolvers = {
     },
     async coreResources(
       topic: GQLTopic,
-      args: { filterIds: string },
+      args: { filterIds: string; subjectId: string },
       context: Context,
     ): Promise<GQLResource[]> {
+      let filters = args.filterIds;
+
+      if (!filters && args.subjectId) {
+        const allSubjectFilters = await context.loaders.filterLoader.load(
+          args.subjectId,
+        );
+        filters = allSubjectFilters.map(filter => filter.id).join('&');
+      }
       return fetchTopicResources(
         topic.id,
         'urn:relevance:core',
+        filters,
+        context,
+      );
+    },
+    async supplementaryResources(
+      topic: GQLTopic,
+      args: { filterIds: string; subjectId: string },
+      context: Context,
+    ): Promise<GQLResource[]> {
+      let filters = args.filterIds;
+
+      if (!filters && args.subjectId) {
+        const allSubjectFilters = await context.loaders.filterLoader.load(
+          args.subjectId,
+        );
+        filters = allSubjectFilters.map(filter => filter.id).join('&');
+      }
+      return fetchTopicResources(
+        topic.id,
+        'urn:relevance:supplementary',
         args.filterIds,
         context,
       );
@@ -176,18 +204,6 @@ export const resolvers = {
         filterIds: args.filterIds,
       });
       return topics.filter((t: GQLTopic) => t.parent === topic.id);
-    },
-    async supplementaryResources(
-      topic: GQLTopic,
-      args: { filterIds: string },
-      context: Context,
-    ): Promise<GQLResource[]> {
-      return fetchTopicResources(
-        topic.id,
-        'urn:relevance:supplementary',
-        args.filterIds,
-        context,
-      );
     },
   },
   SubjectPageArticles: {
