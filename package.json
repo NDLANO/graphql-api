@@ -7,8 +7,9 @@
   "license": "GPL-3.0",
   "private": true,
   "scripts": {
-    "build": "npm run build-ts",
+    "build": "yarn build-ts",
     "build-ts": "tsc",
+    "ncc": "ncc build src/server.ts -o build",
     "check-all": "yarn lint && yarn build-ts && yarn test",
     "lint": "yarn lint-prettier && yarn lint-ts",
     "lint-ts": "tslint --project . --format stylish",
@@ -44,6 +45,7 @@
     "@types/node": "^10.12.6",
     "@types/node-fetch": "^2.1.2",
     "@types/query-string": "^6.1.1",
+    "@zeit/ncc": "^0.8.1",
     "chalk": "^2.4.1",
     "concurrently": "^4.0.1",
     "graphql-schema-typescript": "^1.2.8",
