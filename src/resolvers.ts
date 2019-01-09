@@ -155,41 +155,43 @@ export const resolvers = {
     },
     async coreResources(
       topic: GQLTopic,
-      args: { filterIds: string; subjectId: string },
+      args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      let filters = args.filterIds;
+      let filterIds = args.filterIds;
 
-      if (!filters && args.subjectId) {
+      if (!filterIds && args.subjectId) {
         const allSubjectFilters = await context.loaders.filterLoader.load(
           args.subjectId,
         );
-        filters = allSubjectFilters.map(filter => filter.id).join('&');
+        filterIds = allSubjectFilters.map(filter => filter.id).join(',');
       }
+
       return fetchTopicResources(
         topic.id,
         'urn:relevance:core',
-        filters,
+        filterIds,
         context,
       );
     },
     async supplementaryResources(
       topic: GQLTopic,
-      args: { filterIds: string; subjectId: string },
+      args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      let filters = args.filterIds;
+      let filterIds = args.filterIds;
 
-      if (!filters && args.subjectId) {
+      if (!filterIds && args.subjectId) {
         const allSubjectFilters = await context.loaders.filterLoader.load(
           args.subjectId,
         );
-        filters = allSubjectFilters.map(filter => filter.id).join('&');
+        filterIds = allSubjectFilters.map(filter => filter.id).join(',');
       }
+
       return fetchTopicResources(
         topic.id,
         'urn:relevance:supplementary',
-        args.filterIds,
+        filterIds,
         context,
       );
     },
