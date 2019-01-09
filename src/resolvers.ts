@@ -26,6 +26,32 @@ interface Id {
   id: string;
 }
 
+// Fetching resources for a topic can include resources from several
+// different subjects (if the topic is reused in different subjects).
+// If the subjectId arg is provided we fetch the subject filters and
+// pass these  when fetching resources to make sure only resources
+// related to this subject is returned.
+async function getFiltersIdsForFetchTopicResources(
+  args: {
+    filterIds?: string;
+    subjectId?: string;
+  },
+  context: Context,
+): Promise<string> {
+  if (args.filterIds) {
+    return args.filterIds;
+  }
+
+  if (args.subjectId) {
+    const allSubjectFilters = await context.loaders.filterLoader.load(
+      args.subjectId,
+    );
+    return allSubjectFilters.map(filter => filter.id).join(',');
+  }
+
+  return '';
+}
+
 export const resolvers = {
   Query: {
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
@@ -158,14 +184,10 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      let filterIds = args.filterIds;
-
-      if (!filterIds && args.subjectId) {
-        const allSubjectFilters = await context.loaders.filterLoader.load(
-          args.subjectId,
-        );
-        filterIds = allSubjectFilters.map(filter => filter.id).join(',');
-      }
+      const filterIds = await getFiltersIdsForFetchTopicResources(
+        args,
+        context,
+      );
 
       return fetchTopicResources(
         topic.id,
@@ -179,14 +201,10 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      let filterIds = args.filterIds;
-
-      if (!filterIds && args.subjectId) {
-        const allSubjectFilters = await context.loaders.filterLoader.load(
-          args.subjectId,
-        );
-        filterIds = allSubjectFilters.map(filter => filter.id).join(',');
-      }
+      const filterIds = await getFiltersIdsForFetchTopicResources(
+        args,
+        context,
+      );
 
       return fetchTopicResources(
         topic.id,
