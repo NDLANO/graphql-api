@@ -26,6 +26,32 @@ interface Id {
   id: string;
 }
 
+// Fetching resources for a topic can include resources from several
+// different subjects (if the topic is reused in different subjects).
+// If the subjectId arg is provided we fetch the subject filters and
+// pass these  when fetching resources to make sure only resources
+// related to this subject is returned.
+async function getFiltersIdsForFetchTopicResources(
+  args: {
+    filterIds?: string;
+    subjectId?: string;
+  },
+  context: Context,
+): Promise<string> {
+  if (args.filterIds) {
+    return args.filterIds;
+  }
+
+  if (args.subjectId) {
+    const allSubjectFilters = await context.loaders.filterLoader.load(
+      args.subjectId,
+    );
+    return allSubjectFilters.map(filter => filter.id).join(',');
+  }
+
+  return '';
+}
+
 export const resolvers = {
   Query: {
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
@@ -155,13 +181,35 @@ export const resolvers = {
     },
     async coreResources(
       topic: GQLTopic,
-      args: { filterIds: string },
+      args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
+      const filterIds = await getFiltersIdsForFetchTopicResources(
+        args,
+        context,
+      );
+
       return fetchTopicResources(
         topic.id,
         'urn:relevance:core',
-        args.filterIds,
+        filterIds,
+        context,
+      );
+    },
+    async supplementaryResources(
+      topic: GQLTopic,
+      args: { filterIds?: string; subjectId?: string },
+      context: Context,
+    ): Promise<GQLResource[]> {
+      const filterIds = await getFiltersIdsForFetchTopicResources(
+        args,
+        context,
+      );
+
+      return fetchTopicResources(
+        topic.id,
+        'urn:relevance:supplementary',
+        filterIds,
         context,
       );
     },
@@ -176,18 +224,6 @@ export const resolvers = {
         filterIds: args.filterIds,
       });
       return topics.filter((t: GQLTopic) => t.parent === topic.id);
-    },
-    async supplementaryResources(
-      topic: GQLTopic,
-      args: { filterIds: string },
-      context: Context,
-    ): Promise<GQLResource[]> {
-      return fetchTopicResources(
-        topic.id,
-        'urn:relevance:supplementary',
-        args.filterIds,
-        context,
-      );
     },
   },
   SubjectPageArticles: {
