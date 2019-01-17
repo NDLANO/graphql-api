@@ -116,6 +116,7 @@ declare global {
     creators?: Array<GQLContributor | null>;
     processors?: Array<GQLContributor | null>;
     rightsholders?: Array<GQLContributor | null>;
+    origin?: string;
   }
   
   export interface GQLLicense {
@@ -776,6 +777,7 @@ declare global {
     creators?: CopyrightToCreatorsResolver<TParent>;
     processors?: CopyrightToProcessorsResolver<TParent>;
     rightsholders?: CopyrightToRightsholdersResolver<TParent>;
+    origin?: CopyrightToOriginResolver<TParent>;
   }
   
   export interface CopyrightToLicenseResolver<TParent = any, TResult = any> {
@@ -791,6 +793,10 @@ declare global {
   }
   
   export interface CopyrightToRightsholdersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface CopyrightToOriginResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

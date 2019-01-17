@@ -64,6 +64,7 @@ export const typeDefs = gql`
     creators: [Contributor]
     processors: [Contributor]
     rightsholders: [Contributor]
+    origin: String
   }
 
   type ArticleRequiredLibrary {
