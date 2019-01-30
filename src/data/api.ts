@@ -98,7 +98,7 @@ export async function fetchArticle(
   const host = localConverter ? 'http://localhost:3100' : '';
   const response = await fetch(
     `${host}/article-converter/json/${context.language}/${articleId}${
-      filterIds ? `?filter=${filterIds}` : ''
+      filterIds ? `?filters=${filterIds}` : ''
     }`,
     context,
   );
