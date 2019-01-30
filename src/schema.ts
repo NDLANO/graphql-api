@@ -43,7 +43,7 @@ export const typeDefs = gql`
     path: String
     resourceTypes: [ResourceType]
     meta: Meta
-    article: Article
+    article(filterIds: String, subjectId: String): Article
     filters: [Filter]
     parentTopics: [Topic]
   }
@@ -169,7 +169,7 @@ export const typeDefs = gql`
     path: String
     isPrimary: Boolean
     parent: String
-    article: Article
+    article(filterIds: String, subjectId: String): Article
     meta: Meta
     subtopics(filterIds: String): [Topic]
     filters: [Filter]
@@ -301,7 +301,7 @@ export const typeDefs = gql`
 
   type Query {
     resource(id: String!): Resource
-    article(id: String!): Article
+    article(id: String!, filterIds: String): Article
     subject(id: String!): Subject
     subjects: [Subject]
     topic(id: String!): Topic

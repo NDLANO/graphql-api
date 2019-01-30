@@ -393,6 +393,7 @@ declare global {
   
   export interface QueryToArticleArgs {
     id: string;
+    filterIds?: string;
   }
   export interface QueryToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToArticleArgs, context: any, info: GraphQLResolveInfo): TResult;
@@ -503,8 +504,12 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
+  export interface ResourceToArticleArgs {
+    filterIds?: string;
+    subjectId?: string;
+  }
   export interface ResourceToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: ResourceToArticleArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface ResourceToFiltersResolver<TParent = any, TResult = any> {
@@ -993,8 +998,12 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
+  export interface TopicToArticleArgs {
+    filterIds?: string;
+    subjectId?: string;
+  }
   export interface TopicToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface TopicToMetaResolver<TParent = any, TResult = any> {
@@ -1014,6 +1023,7 @@ declare global {
   
   export interface TopicToCoreResourcesArgs {
     filterIds?: string;
+    subjectId?: string;
   }
   export interface TopicToCoreResourcesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: TopicToCoreResourcesArgs, context: any, info: GraphQLResolveInfo): TResult;
@@ -1021,6 +1031,7 @@ declare global {
   
   export interface TopicToSupplementaryResourcesArgs {
     filterIds?: string;
+    subjectId?: string;
   }
   export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult;
