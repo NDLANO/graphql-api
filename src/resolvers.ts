@@ -164,10 +164,7 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        const filters = await findApplicableFilters(
-          args,
-          context,
-        );
+        const filters = await findApplicableFilters(args, context);
         return fetchArticle(
           topic.contentUri.replace('urn:article:', ''),
           filters,
@@ -198,10 +195,7 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      const filters = await findApplicableFilters(
-        args,
-        context,
-      );
+      const filters = await findApplicableFilters(args, context);
 
       return fetchTopicResources(
         topic.id,
@@ -215,10 +209,7 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      const filters = await findApplicableFilters(
-        args,
-        context,
-      );
+      const filters = await findApplicableFilters(args, context);
 
       return fetchTopicResources(
         topic.id,
@@ -392,10 +383,7 @@ export const resolvers = {
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        const filters = await findApplicableFilters(
-          args,
-          context,
-        );
+        const filters = await findApplicableFilters(args, context);
         return fetchArticle(
           resource.contentUri.replace('urn:article:', ''),
           filters,
