@@ -34,9 +34,9 @@ interface IdWithFilter {
 // Fetching resources for a topic can include resources from several
 // different subjects (if the topic is reused in different subjects).
 // If the subjectId arg is provided we fetch the subject filters and
-// pass these  when fetching resources to make sure only resources
+// pass these when fetching resources to make sure only resources
 // related to this subject is returned.
-async function getFiltersIdsForFetchTopicResources(
+async function findApplicableFilters(
   args: {
     filterIds?: string;
     subjectId?: string;
@@ -164,7 +164,7 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        const filters = await getFiltersIdsForFetchTopicResources(
+        const filters = await findApplicableFilters(
           args,
           context,
         );
@@ -198,7 +198,7 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      const filterIds = await getFiltersIdsForFetchTopicResources(
+      const filters = await findApplicableFilters(
         args,
         context,
       );
@@ -206,7 +206,7 @@ export const resolvers = {
       return fetchTopicResources(
         topic.id,
         'urn:relevance:core',
-        filterIds,
+        filters,
         context,
       );
     },
@@ -215,7 +215,7 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      const filterIds = await getFiltersIdsForFetchTopicResources(
+      const filters = await findApplicableFilters(
         args,
         context,
       );
@@ -223,7 +223,7 @@ export const resolvers = {
       return fetchTopicResources(
         topic.id,
         'urn:relevance:supplementary',
-        filterIds,
+        filters,
         context,
       );
     },
@@ -392,7 +392,7 @@ export const resolvers = {
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        const filters = await getFiltersIdsForFetchTopicResources(
+        const filters = await findApplicableFilters(
           args,
           context,
         );
