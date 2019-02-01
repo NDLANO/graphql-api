@@ -92,11 +92,14 @@ export async function fetchTopicFilters(
 
 export async function fetchArticle(
   articleId: string,
+  filterIds: string,
   context: Context,
 ): Promise<GQLArticle> {
   const host = localConverter ? 'http://localhost:3100' : '';
   const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${articleId}`,
+    `${host}/article-converter/json/${context.language}/${articleId}${
+      filterIds ? `?filters=${filterIds}` : ''
+    }`,
     context,
   );
   return resolveJson(response);

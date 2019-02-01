@@ -26,12 +26,17 @@ interface Id {
   id: string;
 }
 
+interface IdWithFilter {
+  id: string;
+  filterIds?: string;
+}
+
 // Fetching resources for a topic can include resources from several
 // different subjects (if the topic is reused in different subjects).
 // If the subjectId arg is provided we fetch the subject filters and
-// pass these  when fetching resources to make sure only resources
+// pass these when fetching resources to make sure only resources
 // related to this subject is returned.
-async function getFiltersIdsForFetchTopicResources(
+async function findApplicableFilters(
   args: {
     filterIds?: string;
     subjectId?: string;
@@ -57,8 +62,12 @@ export const resolvers = {
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
       return fetchResource(id, context);
     },
-    async article(_: any, { id }: Id, context: Context): Promise<GQLArticle> {
-      return fetchArticle(id, context);
+    async article(
+      _: any,
+      { id, filterIds }: IdWithFilter,
+      context: Context,
+    ): Promise<GQLArticle> {
+      return fetchArticle(id, filterIds, context);
     },
     async search(
       _: any,
@@ -151,12 +160,14 @@ export const resolvers = {
   Topic: {
     async article(
       topic: GQLTopic,
-      _: any,
+      args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
+        const filters = await findApplicableFilters(args, context);
         return fetchArticle(
           topic.contentUri.replace('urn:article:', ''),
+          filters,
           context,
         );
       }
@@ -184,15 +195,12 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      const filterIds = await getFiltersIdsForFetchTopicResources(
-        args,
-        context,
-      );
+      const filters = await findApplicableFilters(args, context);
 
       return fetchTopicResources(
         topic.id,
         'urn:relevance:core',
-        filterIds,
+        filters,
         context,
       );
     },
@@ -201,15 +209,12 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLResource[]> {
-      const filterIds = await getFiltersIdsForFetchTopicResources(
-        args,
-        context,
-      );
+      const filters = await findApplicableFilters(args, context);
 
       return fetchTopicResources(
         topic.id,
         'urn:relevance:supplementary',
-        filterIds,
+        filters,
         context,
       );
     },
@@ -371,15 +376,17 @@ export const resolvers = {
     },
     async article(
       resource: GQLResource,
-      _: any,
+      args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLArticle> {
       if (
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
+        const filters = await findApplicableFilters(args, context);
         return fetchArticle(
           resource.contentUri.replace('urn:article:', ''),
+          filters,
           context,
         );
       }
