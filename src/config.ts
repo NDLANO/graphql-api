@@ -23,7 +23,9 @@ const ndlaApiUrl = () => {
     case 'prod':
       return 'https://api.ndla.no';
     default:
-      return `https://${ndlaEnvironment}.api.ndla.no`;
+      return `https://${ndlaEnvironment
+        .toString()
+        .replace('_', '-')}.api.ndla.no`;
   }
 };
 
