@@ -41,7 +41,10 @@ export async function search(
     ...searchQuery,
     'page-size': searchQuery.pageSize,
     'context-types': searchQuery.contextTypes,
-    'resource-types': searchQuery.resourceTypes,
+    'resource-types':
+      searchQuery.resourceTypes + searchQuery.contextFilters
+        ? searchQuery.contextFilters
+        : '',
     'language-filter': searchQuery.languageFilter,
   };
   const response = await fetch(
