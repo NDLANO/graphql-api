@@ -444,6 +444,7 @@ declare global {
     language?: string;
     ids?: string;
     resourceTypes?: string;
+    contextFilters?: string;
     levels?: string;
     sort?: string;
     fallback?: boolean;

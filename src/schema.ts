@@ -317,6 +317,7 @@ export const typeDefs = gql`
       language: String
       ids: String
       resourceTypes: String
+      contextFilters: String
       levels: String
       sort: String
       fallback: Boolean
