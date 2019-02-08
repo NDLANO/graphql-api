@@ -38,7 +38,7 @@ export async function search(
   context: Context,
 ): Promise<GQLSearch> {
   const combinedResourceTypes = searchQuery.contextFilters
-    ? searchQuery.resourceTypes + searchQuery.contextFilters
+    ? searchQuery.resourceTypes + ',' + searchQuery.contextFilters
     : searchQuery.resourceTypes;
   const query = {
     ...searchQuery,
