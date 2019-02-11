@@ -37,15 +37,13 @@ export async function search(
   searchQuery: QueryToSearchArgs,
   context: Context,
 ): Promise<GQLSearch> {
-  const combinedResourceTypes = searchQuery.contextFilters
-    ? searchQuery.resourceTypes + ',' + searchQuery.contextFilters
-    : searchQuery.resourceTypes;
   const query = {
     ...searchQuery,
     'page-size': searchQuery.pageSize,
     'context-types': searchQuery.contextTypes,
-    'resource-types': combinedResourceTypes,
+    'resource-types': searchQuery.resourceTypes,
     'language-filter': searchQuery.languageFilter,
+    'context-filters': searchQuery.contextFilters,
   };
   const response = await fetch(
     `/search-api/v1/search/?${queryString.stringify(query)}`,
