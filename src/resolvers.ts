@@ -198,9 +198,12 @@ export const resolvers = {
       const filters = await findApplicableFilters(args, context);
 
       return fetchTopicResources(
-        topic.id,
-        'urn:relevance:core',
-        filters,
+        {
+          topicId: topic.id,
+          relevance: 'urn:relevance:core',
+          filters,
+          subjectId: args.subjectId,
+        },
         context,
       );
     },
@@ -212,9 +215,12 @@ export const resolvers = {
       const filters = await findApplicableFilters(args, context);
 
       return fetchTopicResources(
-        topic.id,
-        'urn:relevance:supplementary',
-        filters,
+        {
+          topicId: topic.id,
+          relevance: 'urn:relevance:supplementary',
+          filters,
+          subjectId: args.subjectId,
+        },
         context,
       );
     },

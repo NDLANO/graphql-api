@@ -105,14 +105,19 @@ export async function fetchArticle(
   return resolveJson(response);
 }
 
+interface FetchTopicResourcesParams {
+  topicId: string;
+  relevance: string;
+  subjectId?: string;
+  filters?: string;
+}
 export async function fetchTopicResources(
-  topicId: string,
-  relevance: string = 'urn:relevance:core',
-  filterIds: string,
+  params: FetchTopicResourcesParams,
   context: Context,
 ): Promise<GQLResource[]> {
-  const filterParam =
-    filterIds && filterIds.length > 0 ? `&filter=${filterIds}` : '';
+  const { filters, relevance, topicId } = params;
+
+  const filterParam = filters && filters.length > 0 ? `&filter=${filters}` : '';
 
   const response = await fetch(
     `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${
