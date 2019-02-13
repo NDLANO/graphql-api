@@ -9,7 +9,7 @@ declare global {
   }
 
   interface Context {
-    token: AuthToken;
+    token?: AuthToken;
     language: string;
     loaders?: {
       articlesLoader: DataLoader<string, any>;
