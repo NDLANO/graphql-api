@@ -36,10 +36,13 @@ async function fetchHelper(
     cache,
   });
 
+  const headers = context.token
+    ? {
+        Authorization: `Bearer ${context.token.access_token}`,
+      }
+    : {};
   return fetchFn(apiResourceUrl(path), {
-    headers: {
-      Authorization: `Bearer ${context.token.access_token}`,
-    },
+    headers,
     ...options,
   });
 }

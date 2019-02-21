@@ -36,18 +36,6 @@ const ndlaApiUrl = () => {
   }
 };
 
-const getAuth0Hostname = () => {
-  switch (ndlaEnvironment) {
-    case 'prod':
-      return 'ndla.eu.auth0.com';
-    case 'staging':
-      return 'ndla-staging.eu.auth0.com';
-    default:
-      return 'ndla-test.eu.auth0.com';
-  }
-};
-
 export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);
-export const auth0Hostname = getAuth0Hostname();

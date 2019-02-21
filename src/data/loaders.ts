@@ -52,16 +52,7 @@ export function filterLoader(
   return new DataLoader(async subjectIds => {
     const filterList = await fetchFilters(context);
     return subjectIds.map(subjectId =>
-      filterList
-        .filter(filter => filter.subjectId === subjectId)
-        .sort((filterA, filterB) => {
-          if (filterA.name > filterB.name) {
-            return 1;
-          } else if (filterA.name < filterB.name) {
-            return -1;
-          }
-          return 0;
-        }),
+      filterList.filter(filter => filter.subjectId === subjectId),
     );
   });
 }
