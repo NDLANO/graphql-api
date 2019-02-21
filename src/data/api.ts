@@ -10,86 +10,6 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
 import { isString } from 'lodash';
 
-export async function fetchResource(
-  resourceId: string,
-  context: Context,
-): Promise<GQLResource> {
-  const response = await fetch(
-    `/taxonomy/v1/resources/${resourceId}/full?language=${context.language}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchFilters(
-  context: Context,
-): Promise<GQLSubjectFilter[]> {
-  const response = await fetch(
-    `/taxonomy/v1/filters/?language=${context.language}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchResourceTypes(
-  context: Context,
-): Promise<GQLResourceTypeDefinition[]> {
-  const response = await fetch(
-    `/taxonomy/v1/resource-types?language=${context.language}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
-  const response = await fetch(
-    `/taxonomy/v1/subjects/?language=${context.language}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchSubjectTopics(
-  subjectId: string,
-  filterIds: string,
-  context: Context,
-) {
-  const response = await fetch(
-    `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true&language=${
-      context.language
-    }${filterIds ? `&filter=${filterIds}` : ''}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
-  const response = await fetch(
-    `/taxonomy/v1/topics/?language=${context.language}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchTopic(id: string, context: Context) {
-  const response = await fetch(
-    `/taxonomy/v1/topics/${id}?language=${context.language}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchTopicFilters(
-  topicId: string,
-  context: Context,
-): Promise<GQLFilter[]> {
-  const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/filters`,
-    context,
-  );
-  return resolveJson(response);
-}
-
 export async function fetchArticle(
   articleId: string,
   filterIds: string,
@@ -103,30 +23,6 @@ export async function fetchArticle(
     context,
   );
   return resolveJson(response);
-}
-
-interface FetchTopicResourcesParams {
-  topicId: string;
-  relevance: string;
-  subjectId?: string;
-  filters?: string;
-}
-export async function fetchTopicResources(
-  params: FetchTopicResourcesParams,
-  context: Context,
-): Promise<GQLResource[]> {
-  const { filters, relevance, topicId } = params;
-
-  const filterParam = filters && filters.length > 0 ? `&filter=${filters}` : '';
-
-  const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${
-      context.language
-    }${filterParam}`,
-    context,
-  );
-  const json = await resolveJson(response);
-  return json;
 }
 
 export async function fetchArticles(
@@ -250,10 +146,19 @@ export async function fetchSubjectPage(
     context,
   );
   const subjectPage: GQLSubjectPage = await resolveJson(response);
-  return {
-    ...subjectPage,
-  };
+  return subjectPage;
 }
 
 export { fetchCompetenceGoals, fetchCurriculum } from './curriculumApi';
+export {
+  fetchFilters,
+  fetchResource,
+  fetchResourceTypes,
+  fetchSubjectTopics,
+  fetchSubjects,
+  fetchTopic,
+  fetchTopicFilters,
+  fetchTopicResources,
+  fetchTopics,
+} from './taxonomyApi';
 export { search, groupSearch } from './searchApi';

@@ -60,7 +60,7 @@ async function findApplicableFilters(
 export const resolvers = {
   Query: {
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
-      return fetchResource(id, context);
+      return fetchResource({ resourceId: id }, context);
     },
     async article(
       _: any,
@@ -138,7 +138,8 @@ export const resolvers = {
           if (id.startsWith('urn:topic')) {
             return fetchTopic(id, context);
           }
-          return fetchResource(id, context);
+
+          return fetchResource({ resourceId: id }, context);
         }),
       );
     },
@@ -202,7 +203,6 @@ export const resolvers = {
           topicId: topic.id,
           relevance: 'urn:relevance:core',
           filters,
-          subjectId: args.subjectId,
         },
         context,
       );
@@ -219,7 +219,6 @@ export const resolvers = {
           topicId: topic.id,
           relevance: 'urn:relevance:supplementary',
           filters,
-          subjectId: args.subjectId,
         },
         context,
       );
@@ -248,21 +247,17 @@ export const resolvers = {
           if (id.startsWith('urn:topic')) {
             return fetchTopic(id, context);
           }
-          return fetchResource(id, context);
+          return fetchResource({ resourceId: id }, context);
         }),
       );
     },
   },
   SubjectPageTopical: {
-    async resource(
-      subjectPageTopicalId: string,
-      _: any,
-      context: Context,
-    ): Promise<GQLResource> {
-      if (subjectPageTopicalId.startsWith('urn:topic')) {
-        return fetchTopic(subjectPageTopicalId, context);
+    async resource(id: string, _: any, context: Context): Promise<GQLResource> {
+      if (id.startsWith('urn:topic')) {
+        return fetchTopic(id, context);
       }
-      return fetchResource(subjectPageTopicalId, context);
+      return fetchResource({ resourceId: id }, context);
     },
   },
   SubjectPageGoTo: {
