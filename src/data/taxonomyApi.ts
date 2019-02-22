@@ -7,7 +7,6 @@
  */
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
-export const removeUrn = (str: string) => str.replace('urn:', '');
 
 interface FetchTopicResourcesParams {
   topicId: string;
@@ -28,9 +27,15 @@ interface Resource {
   paths?: string[];
 }
 
-function findPrimaryPath(paths: string[], subjectId: string) {
-  const found = paths.find(path => path.indexOf(subjectId) > -1);
-  return found;
+function removeUrn(str: string): string {
+  return str.replace('urn:', '');
+}
+
+function findPrimaryPath(
+  paths: string[],
+  subjectId: string,
+): string | undefined {
+  return paths.find(path => path.indexOf(removeUrn(subjectId)) > -1);
 }
 
 export async function fetchResource(
@@ -44,7 +49,9 @@ export async function fetchResource(
   const resource: Resource = await resolveJson(response);
 
   if (subjectId) {
-    return { ...resource, path: findPrimaryPath(resource.paths, subjectId) };
+    const primaryPath = findPrimaryPath(resource.paths, subjectId);
+    const path = primaryPath ? primaryPath : resource.path;
+    return { ...resource, path };
   }
   return resource;
 }
@@ -135,4 +142,19 @@ export async function fetchTopicResources(
   const json: Resource[] = await resolveJson(response);
 
   return json;
+}
+
+export async function fetchResourcesAndTopics(
+  params: { ids: [string]; subjectId?: string },
+  context: Context,
+): Promise<Array<GQLResource | GQLTopic>> {
+  const { ids, ...args } = params;
+  return Promise.all(
+    ids.map(id => {
+      if (id.startsWith('urn:topic')) {
+        return fetchTopic(id, context);
+      }
+      return fetchResource({ resourceId: id, ...args }, context);
+    }),
+  );
 }

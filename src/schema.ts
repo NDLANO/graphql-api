@@ -48,6 +48,21 @@ export const typeDefs = gql`
     parentTopics: [Topic]
   }
 
+  type Topic {
+    id: String!
+    contentUri: String
+    name: String!
+    path: String
+    isPrimary: Boolean
+    parent: String
+    article(filterIds: String, subjectId: String): Article
+    meta: Meta
+    subtopics(filterIds: String): [Topic]
+    filters: [Filter]
+    coreResources(filterIds: String, subjectId: String): [Resource]
+    supplementaryResources(filterIds: String, subjectId: String): [Resource]
+  }
+
   type License {
     license: String!
     url: String
@@ -162,21 +177,6 @@ export const typeDefs = gql`
     subjectId: String!
   }
 
-  type Topic {
-    id: String!
-    contentUri: String
-    name: String!
-    path: String
-    isPrimary: Boolean
-    parent: String
-    article(filterIds: String, subjectId: String): Article
-    meta: Meta
-    subtopics(filterIds: String): [Topic]
-    filters: [Filter]
-    coreResources(filterIds: String, subjectId: String): [Resource]
-    supplementaryResources(filterIds: String, subjectId: String): [Resource]
-  }
-
   type Category {
     name: String
     subjects: [Subject]
@@ -185,14 +185,6 @@ export const typeDefs = gql`
   type Frontpage {
     topical: [Resource]
     categories: [Category]
-  }
-
-  type SubjectPageArticles {
-    resources: [Resource]
-  }
-
-  type SubjectPageTopical {
-    resource: Resource
   }
 
   type SubjectPageVisualElement {
@@ -219,14 +211,14 @@ export const typeDefs = gql`
   }
 
   type SubjectPage {
-    topical: SubjectPageTopical
-    mostRead: SubjectPageArticles
+    topical(subjectId: String): Resource
+    mostRead(subjectId: String): [Resource]
     banner: SubjectPageBanner
     id: Int!
     name: String
     facebook: String
-    editorsChoices: SubjectPageArticles
-    latestContent: SubjectPageArticles
+    editorsChoices(subjectId: String): [Resource]
+    latestContent(subjectId: String): [Resource]
     about: SubjectPageAbout
     goTo: SubjectPageGoTo
     metaDescription: String

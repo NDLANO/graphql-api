@@ -160,5 +160,6 @@ export {
   fetchTopicFilters,
   fetchTopicResources,
   fetchTopics,
+  fetchResourcesAndTopics,
 } from './taxonomyApi';
 export { search, groupSearch } from './searchApi';

@@ -20,6 +20,7 @@ import {
   search,
   groupSearch,
   fetchCompetenceGoals,
+  fetchResourcesAndTopics,
 } from './data/api';
 
 interface Id {
@@ -236,30 +237,6 @@ export const resolvers = {
       return topics.filter((t: GQLTopic) => t.parent === topic.id);
     },
   },
-  SubjectPageArticles: {
-    async resources(
-      subjectPageArticles: [string],
-      _: any,
-      context: Context,
-    ): Promise<GQLResource[]> {
-      return Promise.all(
-        subjectPageArticles.map(id => {
-          if (id.startsWith('urn:topic')) {
-            return fetchTopic(id, context);
-          }
-          return fetchResource({ resourceId: id }, context);
-        }),
-      );
-    },
-  },
-  SubjectPageTopical: {
-    async resource(id: string, _: any, context: Context): Promise<GQLResource> {
-      if (id.startsWith('urn:topic')) {
-        return fetchTopic(id, context);
-      }
-      return fetchResource({ resourceId: id }, context);
-    },
-  },
   SubjectPageGoTo: {
     async resourceTypes(
       resourceTypeIds: [string],
@@ -340,6 +317,55 @@ export const resolvers = {
         ),
         { status: 404 },
       );
+    },
+  },
+  SubjectPage: {
+    async mostRead(
+      subjectPage: { mostRead: [string] },
+      args: { subjectId?: string },
+      context: Context,
+    ): Promise<Array<GQLResource | GQLTopic>> {
+      return fetchResourcesAndTopics(
+        { ids: subjectPage.mostRead, ...args },
+        context,
+      );
+    },
+    async editorsChoices(
+      subjectPage: { editorsChoices: [string] },
+      args: { subjectId?: string },
+      context: Context,
+    ): Promise<Array<GQLResource | GQLTopic>> {
+      return fetchResourcesAndTopics(
+        { ids: subjectPage.editorsChoices, ...args },
+        context,
+      );
+    },
+    async latestContent(
+      subjectPage: { latestContent: [string] },
+      args: { subjectId?: string },
+      context: Context,
+    ): Promise<Array<GQLResource | GQLTopic>> {
+      return fetchResourcesAndTopics(
+        { ids: subjectPage.latestContent, ...args },
+        context,
+      );
+    },
+    async topical(
+      subjectPage: { topical?: string },
+      args: { subjectId?: string },
+      context: Context,
+    ): Promise<GQLResource | GQLTopic> {
+      if (!subjectPage.topical) {
+        return null;
+      }
+
+      const items: Array<
+        GQLResource | GQLTopic
+      > = await fetchResourcesAndTopics(
+        { ids: [subjectPage.topical], ...args },
+        context,
+      );
+      return items[0];
     },
   },
   ResourceTypeDefinition: {
