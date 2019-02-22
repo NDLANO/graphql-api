@@ -147,7 +147,7 @@ export async function fetchTopicResources(
 export async function fetchResourcesAndTopics(
   params: { ids: [string]; subjectId?: string },
   context: Context,
-): Promise<Array<GQLResource | GQLTopic>> {
+): Promise<GQLTaxonomyEntity[]> {
   const { ids, ...args } = params;
   return Promise.all(
     ids.map(id => {

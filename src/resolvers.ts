@@ -324,7 +324,7 @@ export const resolvers = {
       subjectPage: { mostRead: [string] },
       args: { subjectId?: string },
       context: Context,
-    ): Promise<Array<GQLResource | GQLTopic>> {
+    ): Promise<GQLTaxonomyEntity[]> {
       return fetchResourcesAndTopics(
         { ids: subjectPage.mostRead, ...args },
         context,
@@ -334,7 +334,7 @@ export const resolvers = {
       subjectPage: { editorsChoices: [string] },
       args: { subjectId?: string },
       context: Context,
-    ): Promise<Array<GQLResource | GQLTopic>> {
+    ): Promise<GQLTaxonomyEntity[]> {
       return fetchResourcesAndTopics(
         { ids: subjectPage.editorsChoices, ...args },
         context,
@@ -344,7 +344,7 @@ export const resolvers = {
       subjectPage: { latestContent: [string] },
       args: { subjectId?: string },
       context: Context,
-    ): Promise<Array<GQLResource | GQLTopic>> {
+    ): Promise<GQLTaxonomyEntity[]> {
       return fetchResourcesAndTopics(
         { ids: subjectPage.latestContent, ...args },
         context,
@@ -354,14 +354,12 @@ export const resolvers = {
       subjectPage: { topical?: string },
       args: { subjectId?: string },
       context: Context,
-    ): Promise<GQLResource | GQLTopic> {
+    ): Promise<GQLTaxonomyEntity> {
       if (!subjectPage.topical) {
         return null;
       }
 
-      const items: Array<
-        GQLResource | GQLTopic
-      > = await fetchResourcesAndTopics(
+      const items: GQLTaxonomyEntity[] = await fetchResourcesAndTopics(
         { ids: [subjectPage.topical], ...args },
         context,
       );
@@ -450,6 +448,19 @@ export const resolvers = {
         );
       }
       return null;
+    },
+  },
+  TaxonomyEntity: {
+    __resolveType(
+      entity: any,
+      context: Context,
+      _: any,
+    ): GQLPossibleTaxonomyEntityTypeNames {
+      if (entity.id.startsWith('urn:topic')) {
+        return 'Topic';
+      }
+
+      return 'Resource';
     },
   },
 };

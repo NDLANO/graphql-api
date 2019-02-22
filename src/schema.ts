@@ -36,29 +36,39 @@ export const typeDefs = gql`
     lastUpdated: String
   }
 
-  type Resource {
+  interface TaxonomyEntity {
     id: String!
     name: String!
     contentUri: String
     path: String
-    resourceTypes: [ResourceType]
     meta: Meta
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
+  }
+
+  type Resource implements TaxonomyEntity {
+    id: String!
+    name: String!
+    contentUri: String
+    path: String
+    meta: Meta
+    article(filterIds: String, subjectId: String): Article
+    filters: [Filter]
+    resourceTypes: [ResourceType]
     parentTopics: [Topic]
   }
 
-  type Topic {
+  type Topic implements TaxonomyEntity {
     id: String!
-    contentUri: String
     name: String!
+    contentUri: String
+    meta: Meta
+    article(filterIds: String, subjectId: String): Article
+    filters: [Filter]
     path: String
     isPrimary: Boolean
     parent: String
-    article(filterIds: String, subjectId: String): Article
-    meta: Meta
     subtopics(filterIds: String): [Topic]
-    filters: [Filter]
     coreResources(filterIds: String, subjectId: String): [Resource]
     supplementaryResources(filterIds: String, subjectId: String): [Resource]
   }
@@ -211,14 +221,14 @@ export const typeDefs = gql`
   }
 
   type SubjectPage {
-    topical(subjectId: String): Resource
-    mostRead(subjectId: String): [Resource]
+    topical(subjectId: String): TaxonomyEntity
+    mostRead(subjectId: String): [TaxonomyEntity]
     banner: SubjectPageBanner
     id: Int!
     name: String
     facebook: String
-    editorsChoices(subjectId: String): [Resource]
-    latestContent(subjectId: String): [Resource]
+    editorsChoices(subjectId: String): [TaxonomyEntity]
+    latestContent(subjectId: String): [TaxonomyEntity]
     about: SubjectPageAbout
     goTo: SubjectPageGoTo
     metaDescription: String
