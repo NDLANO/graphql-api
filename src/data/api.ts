@@ -106,31 +106,8 @@ export async function fetchLearningpaths(
   });
 }
 
-export async function fetchFrontpage(
-  context: Context,
-): Promise<FrontpageResponse> {
-  const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
-
-  const frontpage: FrontpageResponse = await resolveJson(response);
-
-  return frontpage;
-}
-
-export async function fetchSubjectPage(
-  subjectPageId: string,
-  context: Context,
-): Promise<GQLSubjectPage> {
-  const response = await fetch(
-    `/frontpage-api/v1/subjectpage/${subjectPageId}?language=${
-      context.language
-    }`,
-    context,
-  );
-  const subjectPage: GQLSubjectPage = await resolveJson(response);
-  return subjectPage;
-}
-
 export { fetchCompetenceGoals, fetchCurriculum } from './curriculumApi';
+export { fetchFrontpage, fetchSubjectPage } from './frontpageApi';
 export {
   fetchFilters,
   fetchResource,

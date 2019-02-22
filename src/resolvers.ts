@@ -22,6 +22,11 @@ import {
   fetchCompetenceGoals,
   fetchResourcesAndTopics,
 } from './data/api';
+import {
+  RSubjectCategory,
+  FrontpageResponse,
+  RCategory,
+} from './data/frontpageApi';
 
 interface Id {
   id: string;
