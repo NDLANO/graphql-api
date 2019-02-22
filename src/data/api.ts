@@ -111,28 +111,9 @@ export async function fetchFrontpage(
 ): Promise<FrontpageResponse> {
   const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
 
-  const frontpage: any = await resolveJson(response);
+  const frontpage: FrontpageResponse = await resolveJson(response);
 
-  // TODO: remove transform fallback when frontpage-api is updated in all environments
-  const transformedCategories = frontpage.categories.map((category: any) => {
-    const subjects = category.subjects.map((subject: any) => {
-      // Handle old/deprecated frontpage-api response
-      if (isString(subject)) {
-        return { id: subject };
-      }
-      return subject;
-    });
-
-    return {
-      ...category,
-      subjects,
-    };
-  });
-
-  return {
-    ...frontpage,
-    categories: transformedCategories,
-  };
+  return frontpage;
 }
 
 export async function fetchSubjectPage(
