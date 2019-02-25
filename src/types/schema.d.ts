@@ -18,6 +18,7 @@ declare global {
     resource?: GQLResource;
     article?: GQLArticle;
     subject?: GQLSubject;
+    subjectpage?: GQLSubjectPage;
     subjects?: Array<GQLSubject | null>;
     topic?: GQLTopic;
     topics?: Array<GQLTopic | null>;
@@ -230,7 +231,7 @@ declare global {
     editorsChoices?: Array<GQLTaxonomyEntity | null>;
     latestContent?: Array<GQLTaxonomyEntity | null>;
     about?: GQLSubjectPageAbout;
-    goTo?: GQLSubjectPageGoTo;
+    goTo?: Array<GQLResourceTypeDefinition | null>;
     metaDescription?: string;
     layout?: string;
     twitter?: string;
@@ -253,10 +254,6 @@ declare global {
     type?: string;
     url?: string;
     alt?: string;
-  }
-  
-  export interface GQLSubjectPageGoTo {
-    resourceTypes?: Array<GQLResourceTypeDefinition | null>;
   }
   
   export interface GQLResourceTypeDefinition {
@@ -370,7 +367,6 @@ declare global {
     SubjectPageBanner?: GQLSubjectPageBannerTypeResolver;
     SubjectPageAbout?: GQLSubjectPageAboutTypeResolver;
     SubjectPageVisualElement?: GQLSubjectPageVisualElementTypeResolver;
-    SubjectPageGoTo?: GQLSubjectPageGoToTypeResolver;
     ResourceTypeDefinition?: GQLResourceTypeDefinitionTypeResolver;
     Frontpage?: GQLFrontpageTypeResolver;
     Category?: GQLCategoryTypeResolver;
@@ -386,6 +382,7 @@ declare global {
     resource?: QueryToResourceResolver<TParent>;
     article?: QueryToArticleResolver<TParent>;
     subject?: QueryToSubjectResolver<TParent>;
+    subjectpage?: QueryToSubjectpageResolver<TParent>;
     subjects?: QueryToSubjectsResolver<TParent>;
     topic?: QueryToTopicResolver<TParent>;
     topics?: QueryToTopicsResolver<TParent>;
@@ -417,6 +414,13 @@ declare global {
   }
   export interface QueryToSubjectResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSubjectArgs, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface QueryToSubjectpageArgs {
+    id: string;
+  }
+  export interface QueryToSubjectpageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToSubjectpageArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface QueryToSubjectsResolver<TParent = any, TResult = any> {
@@ -1255,14 +1259,6 @@ declare global {
   }
   
   export interface SubjectPageVisualElementToAltResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-  }
-  
-  export interface GQLSubjectPageGoToTypeResolver<TParent = any> {
-    resourceTypes?: SubjectPageGoToToResourceTypesResolver<TParent>;
-  }
-  
-  export interface SubjectPageGoToToResourceTypesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
