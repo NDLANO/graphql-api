@@ -11,8 +11,13 @@ import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { graphql } from 'graphql';
 
 test('can run query on schema', async () => {
-  const schema = makeExecutableSchema({ typeDefs });
-  addMockFunctionsToSchema({ schema });
+  const schema = makeExecutableSchema({
+    typeDefs,
+    resolverValidationOptions: { requireResolversForResolveType: false },
+  });
+  addMockFunctionsToSchema({
+    schema,
+  });
   const query = `
     query resource {
       resource(id: "6") { id, name }
