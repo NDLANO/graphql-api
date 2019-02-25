@@ -242,17 +242,6 @@ export const resolvers = {
       return topics.filter((t: GQLTopic) => t.parent === topic.id);
     },
   },
-  SubjectPageGoTo: {
-    async resourceTypes(
-      resourceTypeIds: [string],
-      _: any,
-      context: Context,
-    ): Promise<GQLResourceTypeDefinition[]> {
-      return Promise.all(
-        resourceTypeIds.map(id => context.loaders.resourceTypesLoader.load(id)),
-      );
-    },
-  },
   Subject: {
     async topics(
       subject: GQLSubject,
@@ -369,6 +358,17 @@ export const resolvers = {
         context,
       );
       return items[0];
+    },
+    async goTo(
+      subjectPage: { goTo: string[] },
+      _: any,
+      context: Context,
+    ): Promise<GQLResourceTypeDefinition[]> {
+      return Promise.all(
+        subjectPage.goTo.map(id =>
+          context.loaders.resourceTypesLoader.load(id),
+        ),
+      );
     },
   },
   ResourceTypeDefinition: {

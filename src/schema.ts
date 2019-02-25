@@ -209,10 +209,6 @@ export const typeDefs = gql`
     visualElement: SubjectPageVisualElement
   }
 
-  type SubjectPageGoTo {
-    resourceTypes: [ResourceTypeDefinition]
-  }
-
   type SubjectPageBanner {
     desktopUrl: String
     desktopId: String
@@ -230,7 +226,7 @@ export const typeDefs = gql`
     editorsChoices(subjectId: String): [TaxonomyEntity]
     latestContent(subjectId: String): [TaxonomyEntity]
     about: SubjectPageAbout
-    goTo: SubjectPageGoTo
+    goTo: [ResourceTypeDefinition]
     metaDescription: String
     layout: String
     twitter: String
