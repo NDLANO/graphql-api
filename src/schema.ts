@@ -301,6 +301,7 @@ export const typeDefs = gql`
     resource(id: String!): Resource
     article(id: String!, filterIds: String): Article
     subject(id: String!): Subject
+    subjectpage(id: String!): SubjectPage
     subjects: [Subject]
     topic(id: String!): Topic
     topics: [Topic]

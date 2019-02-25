@@ -132,6 +132,14 @@ export const resolvers = {
     ): Promise<GQLCompetenceGoal[]> {
       return fetchCompetenceGoals(nodeId, context);
     },
+
+    async subjectpage(
+      _: any,
+      { id }: Id,
+      context: Context,
+    ): Promise<GQLSubjectPage> {
+      return fetchSubjectPage(id, context);
+    },
   },
   Frontpage: {
     async topical(
