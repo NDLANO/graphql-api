@@ -9,10 +9,7 @@
 import {
   fetchArticle,
   fetchResource,
-  fetchSubjects,
-  fetchFilters,
   fetchResourceTypes,
-  fetchSubjectPage,
   search,
   groupSearch,
   fetchCompetenceGoals,
@@ -23,10 +20,13 @@ import {
   resolvers as topicResolvers,
 } from './resolvers/Topic';
 import {
+  Query as SubjectQuery,
+  resolvers as subjectResolvers,
+} from './resolvers/Subject';
+import {
   Query as FrontpageQuery,
   resolvers as frontpageResolvers,
 } from './resolvers/Frontpage';
-import { RSubjectCategory, FrontpageResponse } from './data/frontpageApi';
 import { findApplicableFilters } from './resolvers/findApplicableFilters';
 
 interface Id {
@@ -41,6 +41,7 @@ interface IdWithFilter {
 export const resolvers = {
   Query: {
     ...TopicQuery,
+    ...SubjectQuery,
     ...FrontpageQuery,
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
       return fetchResource({ resourceId: id }, context);
@@ -66,20 +67,6 @@ export const resolvers = {
     ): Promise<GQLSearch> {
       return groupSearch(searchQuery, context);
     },
-    async subject(_: any, { id }: Id, context: Context): Promise<GQLSubject> {
-      const list = await fetchSubjects(context);
-      return list.find(subject => subject.id === id);
-    },
-    async subjects(_: any, __: any, context: Context): Promise<GQLSubject[]> {
-      return fetchSubjects(context);
-    },
-    async filters(
-      _: any,
-      __: any,
-      context: Context,
-    ): Promise<GQLSubjectFilter[]> {
-      return fetchFilters(context);
-    },
     async resourceTypes(
       _: any,
       __: any,
@@ -87,14 +74,6 @@ export const resolvers = {
     ): Promise<GQLResourceType[]> {
       return fetchResourceTypes(context);
     },
-    async frontpage(
-      _: any,
-      __: any,
-      context: Context,
-    ): Promise<FrontpageResponse> {
-      return context.loaders.frontpageLoader.load('frontpage');
-    },
-
     async competenceGoals(
       _: any,
       { nodeId }: { nodeId: string },
@@ -102,88 +81,10 @@ export const resolvers = {
     ): Promise<GQLCompetenceGoal[]> {
       return fetchCompetenceGoals(nodeId, context);
     },
-
-    async subjectpage(
-      _: any,
-      { id }: Id,
-      context: Context,
-    ): Promise<GQLSubjectPage> {
-      return fetchSubjectPage(id, context);
-    },
   },
+  ...subjectResolvers,
   ...topicResolvers,
   ...frontpageResolvers,
-  Subject: {
-    async topics(
-      subject: GQLSubject,
-      args: { all: boolean; filterIds: string },
-      context: Context,
-    ): Promise<GQLTopic[]> {
-      const topics = await context.loaders.subjectTopicsLoader.load({
-        subjectId: subject.id,
-        filterIds: args.filterIds,
-      });
-      if (args.all) {
-        return topics;
-      }
-      return topics.filter((topic: GQLTopic) => topic.parent === subject.id);
-    },
-    async filters(
-      subject: GQLSubject,
-      __: any,
-      context: Context,
-    ): Promise<GQLFilter[]> {
-      return context.loaders.filterLoader.load(subject.id);
-    },
-    async frontpageFilters(
-      subject: GQLSubject,
-      __: any,
-      context: Context,
-    ): Promise<GQLFilter[]> {
-      const frontpage = await context.loaders.frontpageLoader.load('frontpage');
-
-      const allCategorySubjects = frontpage.categories.reduce(
-        (acc, category) => [...acc, ...category.subjects],
-        [],
-      ) as RSubjectCategory[];
-
-      const categorySubject = allCategorySubjects.find(
-        cs => cs.id === subject.id,
-      );
-
-      const frontpageFilterIds = categorySubject ? categorySubject.filters : [];
-
-      const allSubjectFilters = await context.loaders.filterLoader.load(
-        subject.id,
-      );
-
-      // Only return filters specified in frontpage
-      return allSubjectFilters.filter(filter =>
-        frontpageFilterIds.includes(filter.id),
-      );
-    },
-    async subjectpage(
-      subject: GQLSubject,
-      __: any,
-      context: Context,
-    ): Promise<GQLSubjectPage> {
-      if (
-        subject.contentUri &&
-        subject.contentUri.startsWith('urn:frontpage')
-      ) {
-        return fetchSubjectPage(
-          subject.contentUri.replace('urn:frontpage:', ''),
-          context,
-        );
-      }
-      throw Object.assign(
-        new Error(
-          'Missing subjectpage contentUri for subject with id: ' + subject.id,
-        ),
-        { status: 404 },
-      );
-    },
-  },
   ResourceTypeDefinition: {
     async subtypes(
       resourceType: GQLResourceTypeDefinition,
