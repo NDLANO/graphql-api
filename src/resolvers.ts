@@ -16,19 +16,19 @@ import {
 import {
   Query as TopicQuery,
   resolvers as topicResolvers,
-} from './resolvers/Topic';
+} from './resolvers/topicResolvers';
 import {
   Query as SubjectQuery,
   resolvers as subjectResolvers,
-} from './resolvers/Subject';
+} from './resolvers/subjectResolvers';
 import {
   Query as FrontpageQuery,
   resolvers as frontpageResolvers,
-} from './resolvers/Frontpage';
+} from './resolvers/frontpageResolvers';
 import {
   Query as ResourceQuery,
   resolvers as resourceResolvers,
-} from './resolvers/Resource';
+} from './resolvers/resourceResolvers';
 
 interface Id {
   id: string;
