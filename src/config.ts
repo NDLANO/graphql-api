@@ -5,6 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+import dotenv from 'dotenv';
+const result = dotenv.config();
+
+if (result.error) {
+  throw result.error;
+}
+
 export const getEnvironmentVariabel = (
   key: string,
   fallback: string | boolean = undefined,

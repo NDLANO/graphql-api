@@ -36,16 +36,41 @@ export const typeDefs = gql`
     lastUpdated: String
   }
 
-  type Resource {
+  interface TaxonomyEntity {
     id: String!
     name: String!
     contentUri: String
     path: String
-    resourceTypes: [ResourceType]
     meta: Meta
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
+  }
+
+  type Resource implements TaxonomyEntity {
+    id: String!
+    name: String!
+    contentUri: String
+    path: String
+    meta: Meta
+    article(filterIds: String, subjectId: String): Article
+    filters: [Filter]
+    resourceTypes: [ResourceType]
     parentTopics: [Topic]
+  }
+
+  type Topic implements TaxonomyEntity {
+    id: String!
+    name: String!
+    contentUri: String
+    meta: Meta
+    article(filterIds: String, subjectId: String): Article
+    filters: [Filter]
+    path: String
+    isPrimary: Boolean
+    parent: String
+    subtopics(filterIds: String): [Topic]
+    coreResources(filterIds: String, subjectId: String): [Resource]
+    supplementaryResources(filterIds: String, subjectId: String): [Resource]
   }
 
   type License {
@@ -162,21 +187,6 @@ export const typeDefs = gql`
     subjectId: String!
   }
 
-  type Topic {
-    id: String!
-    contentUri: String
-    name: String!
-    path: String
-    isPrimary: Boolean
-    parent: String
-    article(filterIds: String, subjectId: String): Article
-    meta: Meta
-    subtopics(filterIds: String): [Topic]
-    filters: [Filter]
-    coreResources(filterIds: String, subjectId: String): [Resource]
-    supplementaryResources(filterIds: String, subjectId: String): [Resource]
-  }
-
   type Category {
     name: String
     subjects: [Subject]
@@ -185,14 +195,6 @@ export const typeDefs = gql`
   type Frontpage {
     topical: [Resource]
     categories: [Category]
-  }
-
-  type SubjectPageArticles {
-    resources: [Resource]
-  }
-
-  type SubjectPageTopical {
-    resource: Resource
   }
 
   type SubjectPageVisualElement {
@@ -207,10 +209,6 @@ export const typeDefs = gql`
     visualElement: SubjectPageVisualElement
   }
 
-  type SubjectPageGoTo {
-    resourceTypes: [ResourceTypeDefinition]
-  }
-
   type SubjectPageBanner {
     desktopUrl: String
     desktopId: String
@@ -219,16 +217,16 @@ export const typeDefs = gql`
   }
 
   type SubjectPage {
-    topical: SubjectPageTopical
-    mostRead: SubjectPageArticles
+    topical(subjectId: String): TaxonomyEntity
+    mostRead(subjectId: String): [TaxonomyEntity]
     banner: SubjectPageBanner
     id: Int!
     name: String
     facebook: String
-    editorsChoices: SubjectPageArticles
-    latestContent: SubjectPageArticles
+    editorsChoices(subjectId: String): [TaxonomyEntity]
+    latestContent(subjectId: String): [TaxonomyEntity]
     about: SubjectPageAbout
-    goTo: SubjectPageGoTo
+    goTo: [ResourceTypeDefinition]
     metaDescription: String
     layout: String
     twitter: String
@@ -303,6 +301,7 @@ export const typeDefs = gql`
     resource(id: String!): Resource
     article(id: String!, filterIds: String): Article
     subject(id: String!): Subject
+    subjectpage(id: String!): SubjectPage
     subjects: [Subject]
     topic(id: String!): Topic
     topics: [Topic]
@@ -334,6 +333,9 @@ export const typeDefs = gql`
   }
 `;
 
-const schema = makeExecutableSchema({ typeDefs });
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolverValidationOptions: { requireResolversForResolveType: false },
+});
 
 export default schema;

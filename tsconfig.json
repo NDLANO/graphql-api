@@ -16,5 +16,6 @@
   "include": ["src/**/*"],
   "exclude": [
     "**/*-test.ts"
-  ]
+  ],
+  "preset": "ts-jest"
 }

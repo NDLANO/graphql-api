@@ -17,6 +17,7 @@ import {
   fetchFrontpage,
   fetchCurriculum,
 } from './api';
+import { FrontpageResponse } from './frontpageApi';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async articleIds => {

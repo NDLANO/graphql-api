@@ -20,7 +20,13 @@ import {
   search,
   groupSearch,
   fetchCompetenceGoals,
+  fetchResourcesAndTopics,
 } from './data/api';
+import {
+  RSubjectCategory,
+  FrontpageResponse,
+  RCategory,
+} from './data/frontpageApi';
 
 interface Id {
   id: string;
@@ -60,7 +66,7 @@ async function findApplicableFilters(
 export const resolvers = {
   Query: {
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
-      return fetchResource(id, context);
+      return fetchResource({ resourceId: id }, context);
     },
     async article(
       _: any,
@@ -126,6 +132,14 @@ export const resolvers = {
     ): Promise<GQLCompetenceGoal[]> {
       return fetchCompetenceGoals(nodeId, context);
     },
+
+    async subjectpage(
+      _: any,
+      { id }: Id,
+      context: Context,
+    ): Promise<GQLSubjectPage> {
+      return fetchSubjectPage(id, context);
+    },
   },
   Frontpage: {
     async topical(
@@ -138,7 +152,8 @@ export const resolvers = {
           if (id.startsWith('urn:topic')) {
             return fetchTopic(id, context);
           }
-          return fetchResource(id, context);
+
+          return fetchResource({ resourceId: id }, context);
         }),
       );
     },
@@ -198,9 +213,11 @@ export const resolvers = {
       const filters = await findApplicableFilters(args, context);
 
       return fetchTopicResources(
-        topic.id,
-        'urn:relevance:core',
-        filters,
+        {
+          topicId: topic.id,
+          relevance: 'urn:relevance:core',
+          filters,
+        },
         context,
       );
     },
@@ -212,9 +229,11 @@ export const resolvers = {
       const filters = await findApplicableFilters(args, context);
 
       return fetchTopicResources(
-        topic.id,
-        'urn:relevance:supplementary',
-        filters,
+        {
+          topicId: topic.id,
+          relevance: 'urn:relevance:supplementary',
+          filters,
+        },
         context,
       );
     },
@@ -229,45 +248,6 @@ export const resolvers = {
         filterIds: args.filterIds,
       });
       return topics.filter((t: GQLTopic) => t.parent === topic.id);
-    },
-  },
-  SubjectPageArticles: {
-    async resources(
-      subjectPageArticles: [string],
-      _: any,
-      context: Context,
-    ): Promise<GQLResource[]> {
-      return Promise.all(
-        subjectPageArticles.map(id => {
-          if (id.startsWith('urn:topic')) {
-            return fetchTopic(id, context);
-          }
-          return fetchResource(id, context);
-        }),
-      );
-    },
-  },
-  SubjectPageTopical: {
-    async resource(
-      subjectPageTopicalId: string,
-      _: any,
-      context: Context,
-    ): Promise<GQLResource> {
-      if (subjectPageTopicalId.startsWith('urn:topic')) {
-        return fetchTopic(subjectPageTopicalId, context);
-      }
-      return fetchResource(subjectPageTopicalId, context);
-    },
-  },
-  SubjectPageGoTo: {
-    async resourceTypes(
-      resourceTypeIds: [string],
-      _: any,
-      context: Context,
-    ): Promise<GQLResourceTypeDefinition[]> {
-      return Promise.all(
-        resourceTypeIds.map(id => context.loaders.resourceTypesLoader.load(id)),
-      );
     },
   },
   Subject: {
@@ -338,6 +318,64 @@ export const resolvers = {
           'Missing subjectpage contentUri for subject with id: ' + subject.id,
         ),
         { status: 404 },
+      );
+    },
+  },
+  SubjectPage: {
+    async mostRead(
+      subjectPage: { mostRead: [string] },
+      args: { subjectId?: string },
+      context: Context,
+    ): Promise<GQLTaxonomyEntity[]> {
+      return fetchResourcesAndTopics(
+        { ids: subjectPage.mostRead, ...args },
+        context,
+      );
+    },
+    async editorsChoices(
+      subjectPage: { editorsChoices: [string] },
+      args: { subjectId?: string },
+      context: Context,
+    ): Promise<GQLTaxonomyEntity[]> {
+      return fetchResourcesAndTopics(
+        { ids: subjectPage.editorsChoices, ...args },
+        context,
+      );
+    },
+    async latestContent(
+      subjectPage: { latestContent: [string] },
+      args: { subjectId?: string },
+      context: Context,
+    ): Promise<GQLTaxonomyEntity[]> {
+      return fetchResourcesAndTopics(
+        { ids: subjectPage.latestContent, ...args },
+        context,
+      );
+    },
+    async topical(
+      subjectPage: { topical?: string },
+      args: { subjectId?: string },
+      context: Context,
+    ): Promise<GQLTaxonomyEntity> {
+      if (!subjectPage.topical) {
+        return null;
+      }
+
+      const items: GQLTaxonomyEntity[] = await fetchResourcesAndTopics(
+        { ids: [subjectPage.topical], ...args },
+        context,
+      );
+      return items[0];
+    },
+    async goTo(
+      subjectPage: { goTo: string[] },
+      _: any,
+      context: Context,
+    ): Promise<GQLResourceTypeDefinition[]> {
+      return Promise.all(
+        subjectPage.goTo.map(id =>
+          context.loaders.resourceTypesLoader.load(id),
+        ),
       );
     },
   },
@@ -423,6 +461,19 @@ export const resolvers = {
         );
       }
       return null;
+    },
+  },
+  TaxonomyEntity: {
+    __resolveType(
+      entity: any,
+      context: Context,
+      _: any,
+    ): GQLPossibleTaxonomyEntityTypeNames {
+      if (entity.id.startsWith('urn:topic')) {
+        return 'Topic';
+      }
+
+      return 'Resource';
     },
   },
 };

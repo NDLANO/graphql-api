@@ -26,6 +26,7 @@
     "apollo-server-express": "^2.2.1",
     "bunyan": "^1.8.12",
     "dataloader": "^1.4.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "graphql": "^14.0.2",
     "graphql-tools": "^4.0.3",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@types/bunyan": "^1.8.5",
     "@types/cors": "^2.8.4",
+    "@types/dotenv": "^6.1.0",
     "@types/express": "^4.16.0",
     "@types/graphql": "^14.0.3",
     "@types/jest": "^23.3.9",
