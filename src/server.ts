@@ -64,6 +64,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 const server = new ApolloServer({
   typeDefs,
+  // @ts-ignore
   resolvers,
   debug: false, // log errors in formatError
   introspection: true,

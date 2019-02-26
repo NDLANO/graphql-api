@@ -35,7 +35,7 @@ import {
   resolvers as curriculumResolvers,
 } from './curriculumResolvers';
 
-export const resolvers = {
+export const resolvers: GQLResolver = {
   Query: {
     ...TopicQuery,
     ...SubjectQuery,
