@@ -11,9 +11,9 @@ import {
   fetchSubjectPage,
   fetchTopic,
   fetchResourcesAndTopics,
-} from '../data/api';
+} from '../api';
 
-import { RCategory, FrontpageResponse } from '../data/frontpageApi';
+import { RCategory, FrontpageResponse } from '../api/frontpageApi';
 
 interface Id {
   id: string;

@@ -11,7 +11,7 @@ import {
   fetchTopics,
   fetchTopicFilters,
   fetchTopicResources,
-} from '../data/api';
+} from '../api';
 
 import { findApplicableFilters } from './findApplicableFilters';
 

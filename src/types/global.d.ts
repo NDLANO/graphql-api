@@ -1,6 +1,6 @@
 import DataLoader from 'dataloader';
 import { RequestInit, RequestCache } from 'node-fetch';
-import { FrontpageResponse } from '../data/frontpageApi';
+import { FrontpageResponse } from '../api/frontpageApi';
 
 declare global {
   interface AuthToken {

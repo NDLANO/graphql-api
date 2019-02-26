@@ -6,9 +6,9 @@
  *
  */
 
-import { fetchSubjects, fetchSubjectPage, fetchFilters } from '../data/api';
+import { fetchSubjects, fetchSubjectPage, fetchFilters } from '../api';
 
-import { RSubjectCategory } from '../data/frontpageApi';
+import { RSubjectCategory } from '../api/frontpageApi';
 
 interface Id {
   id: string;

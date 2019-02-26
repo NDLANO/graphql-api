@@ -22,7 +22,7 @@ import {
   subjectsLoader,
   frontpageLoader,
   curriculumLoader,
-} from './data/loaders';
+} from './loaders';
 import { resolvers } from './resolvers';
 
 const GRAPHQL_PORT = port;

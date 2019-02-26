@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchResource, fetchResourceTypes, fetchArticle } from '../data/api';
+import { fetchResource, fetchResourceTypes, fetchArticle } from '../api';
 import { findApplicableFilters } from './findApplicableFilters';
 
 interface Id {

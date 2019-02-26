@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchCompetenceGoals } from '../data/api';
+import { fetchCompetenceGoals } from '../api';
 
 export const Query = {
   async competenceGoals(

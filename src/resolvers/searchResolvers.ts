@@ -6,7 +6,7 @@
  *
  */
 
-import { search, groupSearch } from '../data/api';
+import { search, groupSearch } from '../api';
 
 export const Query = {
   async search(
