@@ -11,9 +11,6 @@ import {
   fetchResource,
   fetchSubjects,
   fetchFilters,
-  fetchTopics,
-  fetchTopicFilters,
-  fetchTopicResources,
   fetchResourceTypes,
   fetchSubjectPage,
   fetchTopic,
@@ -22,11 +19,14 @@ import {
   fetchCompetenceGoals,
   fetchResourcesAndTopics,
 } from './data/api';
+
+import { Query as TopicQuery, Topic } from './resolvers/Topic';
 import {
   RSubjectCategory,
   FrontpageResponse,
   RCategory,
 } from './data/frontpageApi';
+import { findApplicableFilters } from './resolvers/findApplicableFilters';
 
 interface Id {
   id: string;
@@ -37,34 +37,9 @@ interface IdWithFilter {
   filterIds?: string;
 }
 
-// Fetching resources for a topic can include resources from several
-// different subjects (if the topic is reused in different subjects).
-// If the subjectId arg is provided we fetch the subject filters and
-// pass these when fetching resources to make sure only resources
-// related to this subject is returned.
-async function findApplicableFilters(
-  args: {
-    filterIds?: string;
-    subjectId?: string;
-  },
-  context: Context,
-): Promise<string> {
-  if (args.filterIds) {
-    return args.filterIds;
-  }
-
-  if (args.subjectId) {
-    const allSubjectFilters = await context.loaders.filterLoader.load(
-      args.subjectId,
-    );
-    return allSubjectFilters.map(filter => filter.id).join(',');
-  }
-
-  return '';
-}
-
 export const resolvers = {
   Query: {
+    ...TopicQuery,
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
       return fetchResource({ resourceId: id }, context);
     },
@@ -95,13 +70,6 @@ export const resolvers = {
     },
     async subjects(_: any, __: any, context: Context): Promise<GQLSubject[]> {
       return fetchSubjects(context);
-    },
-    async topic(_: any, { id }: Id, context: Context): Promise<GQLTopic> {
-      const list = await fetchTopics(context);
-      return list.find(topic => topic.id === id);
-    },
-    async topics(_: any, __: any, context: Context): Promise<GQLTopic[]> {
-      return fetchTopics(context);
     },
     async filters(
       _: any,
@@ -141,6 +109,7 @@ export const resolvers = {
       return fetchSubjectPage(id, context);
     },
   },
+  Topic,
   Frontpage: {
     async topical(
       frontpage: { topical: [string] },
@@ -170,84 +139,6 @@ export const resolvers = {
           return categorySubject.id === subject.id;
         }),
       );
-    },
-  },
-  Topic: {
-    async article(
-      topic: GQLTopic,
-      args: { filterIds?: string; subjectId?: string },
-      context: Context,
-    ): Promise<GQLArticle> {
-      if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        const filters = await findApplicableFilters(args, context);
-        return fetchArticle(
-          topic.contentUri.replace('urn:article:', ''),
-          filters,
-          context,
-        );
-      }
-      throw Object.assign(
-        new Error('Missing article contentUri for topic with id: ' + topic.id),
-        { status: 404 },
-      );
-    },
-    async filters(
-      topic: GQLTopic,
-      _: any,
-      context: Context,
-    ): Promise<GQLFilter[]> {
-      return fetchTopicFilters(topic.id, context);
-    },
-    async meta(topic: GQLTopic, _: any, context: Context): Promise<GQLMeta> {
-      if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        return context.loaders.articlesLoader.load(
-          topic.contentUri.replace('urn:article:', ''),
-        );
-      }
-    },
-    async coreResources(
-      topic: GQLTopic,
-      args: { filterIds?: string; subjectId?: string },
-      context: Context,
-    ): Promise<GQLResource[]> {
-      const filters = await findApplicableFilters(args, context);
-
-      return fetchTopicResources(
-        {
-          topicId: topic.id,
-          relevance: 'urn:relevance:core',
-          filters,
-        },
-        context,
-      );
-    },
-    async supplementaryResources(
-      topic: GQLTopic,
-      args: { filterIds?: string; subjectId?: string },
-      context: Context,
-    ): Promise<GQLResource[]> {
-      const filters = await findApplicableFilters(args, context);
-
-      return fetchTopicResources(
-        {
-          topicId: topic.id,
-          relevance: 'urn:relevance:supplementary',
-          filters,
-        },
-        context,
-      );
-    },
-    async subtopics(
-      topic: GQLTopic,
-      args: { filterIds: string },
-      context: Context,
-    ): Promise<GQLTopic[]> {
-      const subjectId = 'urn:' + topic.path.split('/')[1];
-      const topics = await context.loaders.subjectTopicsLoader.load({
-        subjectId,
-        filterIds: args.filterIds,
-      });
-      return topics.filter((t: GQLTopic) => t.parent === topic.id);
     },
   },
   Subject: {
