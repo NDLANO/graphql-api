@@ -15,6 +15,7 @@ async function generate(): Promise<void> {
   try {
     await generateTypeScriptTypes(schema, typeDefinitionFileName, {
       global: true,
+      asyncResult: true,
     });
     console.log(
       `${chalk.green(`CREATED`)} ${chalk.dim(typeDefinitionFileName)}`,

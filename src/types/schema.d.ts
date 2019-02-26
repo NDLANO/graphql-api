@@ -398,7 +398,7 @@ declare global {
     id: string;
   }
   export interface QueryToResourceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToResourceArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToResourceArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToArticleArgs {
@@ -406,51 +406,51 @@ declare global {
     filterIds?: string;
   }
   export interface QueryToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToArticleArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToSubjectArgs {
     id: string;
   }
   export interface QueryToSubjectResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToSubjectArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToSubjectArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToSubjectpageArgs {
     id: string;
   }
   export interface QueryToSubjectpageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToSubjectpageArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToSubjectpageArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToSubjectsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToTopicArgs {
     id: string;
   }
   export interface QueryToTopicResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToTopicArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToTopicArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToFrontpageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToCompetenceGoalsArgs {
     nodeId: string;
   }
   export interface QueryToCompetenceGoalsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToCompetenceGoalsArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToCompetenceGoalsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToSearchArgs {
@@ -470,11 +470,11 @@ declare global {
     relevance?: string;
   }
   export interface QueryToSearchResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToGroupSearchArgs {
@@ -483,7 +483,7 @@ declare global {
     resourceTypes?: string;
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLResourceTypeResolver<TParent = any> {
@@ -499,23 +499,23 @@ declare global {
   }
   
   export interface ResourceToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToContentUriResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToMetaResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToArticleArgs {
@@ -523,19 +523,19 @@ declare global {
     subjectId?: string;
   }
   export interface ResourceToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: ResourceToArticleArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: ResourceToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToParentTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLTaxonomyEntityTypeResolver<TParent = any> {
@@ -551,27 +551,27 @@ declare global {
   }
   
   export interface MetaToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface MetaToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface MetaToIntroductionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface MetaToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface MetaToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface MetaToLastUpdatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLMetaImageTypeResolver<TParent = any> {
@@ -580,11 +580,11 @@ declare global {
   }
   
   export interface MetaImageToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface MetaImageToAltResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLArticleTypeResolver<TParent = any> {
@@ -608,71 +608,71 @@ declare global {
   }
   
   export interface ArticleToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToRevisionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToIntroductionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToContentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToCreatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToUpdatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToVisualElementResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToArticleTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToOldNdlaUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToRequiredLibrariesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToMetaDataResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToCompetenceGoalsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLArticleRequiredLibraryTypeResolver<TParent = any> {
@@ -682,15 +682,15 @@ declare global {
   }
   
   export interface ArticleRequiredLibraryToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleRequiredLibraryToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleRequiredLibraryToMediaTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLArticleMetaDataTypeResolver<TParent = any> {
@@ -701,19 +701,19 @@ declare global {
   }
   
   export interface ArticleMetaDataToFootnotesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleMetaDataToImagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleMetaDataToAudiosResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleMetaDataToBrightcovesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLFootNoteTypeResolver<TParent = any> {
@@ -727,31 +727,31 @@ declare global {
   }
   
   export interface FootNoteToRefResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FootNoteToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FootNoteToYearResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FootNoteToAuthorsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FootNoteToEditionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FootNoteToPublisherResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FootNoteToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLImageLicenseTypeResolver<TParent = any> {
@@ -762,19 +762,19 @@ declare global {
   }
   
   export interface ImageLicenseToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ImageLicenseToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ImageLicenseToAltTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ImageLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLCopyrightTypeResolver<TParent = any> {
@@ -786,23 +786,23 @@ declare global {
   }
   
   export interface CopyrightToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CopyrightToCreatorsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CopyrightToProcessorsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CopyrightToRightsholdersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CopyrightToOriginResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLLicenseTypeResolver<TParent = any> {
@@ -812,15 +812,15 @@ declare global {
   }
   
   export interface LicenseToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface LicenseToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface LicenseToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLContributorTypeResolver<TParent = any> {
@@ -829,11 +829,11 @@ declare global {
   }
   
   export interface ContributorToTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ContributorToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLAudioLicenseTypeResolver<TParent = any> {
@@ -843,15 +843,15 @@ declare global {
   }
   
   export interface AudioLicenseToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface AudioLicenseToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface AudioLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLBrightcoveLicenseTypeResolver<TParent = any> {
@@ -863,23 +863,23 @@ declare global {
   }
   
   export interface BrightcoveLicenseToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface BrightcoveLicenseToCoverResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface BrightcoveLicenseToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface BrightcoveLicenseToIframeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface BrightcoveLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLBrightcoveIframeTypeResolver<TParent = any> {
@@ -889,15 +889,15 @@ declare global {
   }
   
   export interface BrightcoveIframeToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface BrightcoveIframeToHeightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface BrightcoveIframeToWidthResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLCompetenceGoalTypeResolver<TParent = any> {
@@ -908,19 +908,19 @@ declare global {
   }
   
   export interface CompetenceGoalToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CompetenceGoalToCurriculumIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CompetenceGoalToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CompetenceGoalToCurriculumResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLCompetenceCurriculumTypeResolver<TParent = any> {
@@ -929,11 +929,11 @@ declare global {
   }
   
   export interface CompetenceCurriculumToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CompetenceCurriculumToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLFilterTypeResolver<TParent = any> {
@@ -944,19 +944,19 @@ declare global {
   }
   
   export interface FilterToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FilterToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FilterToConnectionIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FilterToRelevanceIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLResourceTypeTypeResolver<TParent = any> {
@@ -966,18 +966,18 @@ declare global {
   }
   
   export interface ResourceTypeToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceTypeToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceTypeToResourcesArgs {
     topicId: string;
   }
   export interface ResourceTypeToResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: ResourceTypeToResourcesArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: ResourceTypeToResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLTopicTypeResolver<TParent = any> {
@@ -996,19 +996,19 @@ declare global {
   }
   
   export interface TopicToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToContentUriResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToMetaResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToArticleArgs {
@@ -1016,30 +1016,30 @@ declare global {
     subjectId?: string;
   }
   export interface TopicToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToIsPrimaryResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToParentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToSubtopicsArgs {
     filterIds?: string;
   }
   export interface TopicToSubtopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToSubtopicsArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: TopicToSubtopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToCoreResourcesArgs {
@@ -1047,7 +1047,7 @@ declare global {
     subjectId?: string;
   }
   export interface TopicToCoreResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToCoreResourcesArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: TopicToCoreResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToSupplementaryResourcesArgs {
@@ -1055,7 +1055,7 @@ declare global {
     subjectId?: string;
   }
   export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectTypeResolver<TParent = any> {
@@ -1070,31 +1070,31 @@ declare global {
   }
   
   export interface SubjectToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectToContentUriResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectToFrontpageFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectToSubjectpageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectToTopicsArgs {
@@ -1102,7 +1102,7 @@ declare global {
     filterIds?: string;
   }
   export interface SubjectToTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectToTopicsArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: SubjectToTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectFilterTypeResolver<TParent = any> {
@@ -1112,15 +1112,15 @@ declare global {
   }
   
   export interface SubjectFilterToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectFilterToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectFilterToSubjectIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectPageTypeResolver<TParent = any> {
@@ -1143,64 +1143,64 @@ declare global {
     subjectId?: string;
   }
   export interface SubjectPageToTopicalResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectPageToTopicalArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: SubjectPageToTopicalArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToMostReadArgs {
     subjectId?: string;
   }
   export interface SubjectPageToMostReadResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectPageToMostReadArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: SubjectPageToMostReadArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToBannerResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToFacebookResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToEditorsChoicesArgs {
     subjectId?: string;
   }
   export interface SubjectPageToEditorsChoicesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectPageToEditorsChoicesArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: SubjectPageToEditorsChoicesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToLatestContentArgs {
     subjectId?: string;
   }
   export interface SubjectPageToLatestContentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectPageToLatestContentArgs, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: SubjectPageToLatestContentArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToAboutResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToGoToResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToLayoutResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageToTwitterResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectPageBannerTypeResolver<TParent = any> {
@@ -1211,19 +1211,19 @@ declare global {
   }
   
   export interface SubjectPageBannerToDesktopUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageBannerToDesktopIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageBannerToMobileUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageBannerToMobileIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectPageAboutTypeResolver<TParent = any> {
@@ -1233,15 +1233,15 @@ declare global {
   }
   
   export interface SubjectPageAboutToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageAboutToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageAboutToVisualElementResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectPageVisualElementTypeResolver<TParent = any> {
@@ -1251,15 +1251,15 @@ declare global {
   }
   
   export interface SubjectPageVisualElementToTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageVisualElementToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SubjectPageVisualElementToAltResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLResourceTypeDefinitionTypeResolver<TParent = any> {
@@ -1269,15 +1269,15 @@ declare global {
   }
   
   export interface ResourceTypeDefinitionToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceTypeDefinitionToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceTypeDefinitionToSubtypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLFrontpageTypeResolver<TParent = any> {
@@ -1286,11 +1286,11 @@ declare global {
   }
   
   export interface FrontpageToTopicalResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface FrontpageToCategoriesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLCategoryTypeResolver<TParent = any> {
@@ -1299,11 +1299,11 @@ declare global {
   }
   
   export interface CategoryToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface CategoryToSubjectsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSearchTypeResolver<TParent = any> {
@@ -1315,23 +1315,23 @@ declare global {
   }
   
   export interface SearchToPageSizeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchToPageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchToTotalCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchToResultsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSearchResultTypeResolver<TParent = any> {
@@ -1346,35 +1346,35 @@ declare global {
   }
   
   export interface SearchResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchResultToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchResultToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchResultToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchResultToContentTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchResultToContextsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSearchContextTypeResolver<TParent = any> {
@@ -1389,35 +1389,35 @@ declare global {
   }
   
   export interface SearchContextToBreadcrumbsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextToLearningResourceTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextToSubjectResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSearchContextResourceTypesTypeResolver<TParent = any> {
@@ -1427,15 +1427,15 @@ declare global {
   }
   
   export interface SearchContextResourceTypesToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextResourceTypesToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextResourceTypesToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSearchContextFilterTypeResolver<TParent = any> {
@@ -1444,11 +1444,11 @@ declare global {
   }
   
   export interface SearchContextFilterToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextFilterToRelevanceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLGroupSearchTypeResolver<TParent = any> {
@@ -1459,19 +1459,19 @@ declare global {
   }
   
   export interface GroupSearchToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GroupSearchToResourceTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GroupSearchToResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GroupSearchToTotalCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLGroupSearchResultTypeResolver<TParent = any> {
@@ -1481,15 +1481,15 @@ declare global {
   }
   
   export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GroupSearchResultToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
 }
