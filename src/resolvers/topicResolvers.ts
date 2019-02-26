@@ -37,7 +37,7 @@ export const Query = {
   },
 };
 
-export const resolvers = {
+export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
   Topic: {
     async article(
       topic: TopicResponse,
