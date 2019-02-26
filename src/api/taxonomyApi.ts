@@ -114,6 +114,20 @@ export async function fetchTopic(id: string, context: Context) {
   return resolveJson(response);
 }
 
+export async function fetchSubtopics(
+  params: { id: string; filterIds?: string },
+  context: Context,
+): Promise<GQLTopic[]> {
+  const { id, filterIds } = params;
+  const response = await fetch(
+    `/taxonomy/v1/topics/${id}/topics?language=${context.language}${
+      filterIds ? `&filter=${filterIds}` : ''
+    }`,
+    context,
+  );
+  return resolveJson(response);
+}
+
 export async function fetchTopicFilters(
   topicId: string,
   context: Context,
