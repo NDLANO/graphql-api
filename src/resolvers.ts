@@ -6,12 +6,7 @@
  *
  */
 
-import {
-  fetchArticle,
-  search,
-  groupSearch,
-  fetchCompetenceGoals,
-} from './data/api';
+import { search, groupSearch, fetchCompetenceGoals } from './data/api';
 
 import {
   Query as TopicQuery,
@@ -30,28 +25,12 @@ import {
   resolvers as resourceResolvers,
 } from './resolvers/resourceResolvers';
 
-interface Id {
-  id: string;
-}
-
-interface IdWithFilter {
-  id: string;
-  filterIds?: string;
-}
-
 export const resolvers = {
   Query: {
     ...TopicQuery,
     ...SubjectQuery,
     ...FrontpageQuery,
     ...ResourceQuery,
-    async article(
-      _: any,
-      { id, filterIds }: IdWithFilter,
-      context: Context,
-    ): Promise<GQLArticle> {
-      return fetchArticle(id, filterIds, context);
-    },
     async search(
       _: any,
       searchQuery: QueryToSearchArgs,
@@ -78,19 +57,6 @@ export const resolvers = {
   ...topicResolvers,
   ...frontpageResolvers,
   ...resourceResolvers,
-  Article: {
-    async competenceGoals(
-      article: GQLArticle,
-      _: any,
-      context: Context,
-    ): Promise<GQLCompetenceGoal[]> {
-      if (article.oldNdlaUrl) {
-        const nodeId = article.oldNdlaUrl.split('/').pop();
-        return fetchCompetenceGoals(nodeId, context);
-      }
-      return null;
-    },
-  },
   CompetenceGoal: {
     async curriculum(
       competenceGoal: GQLCompetenceGoal,
@@ -106,11 +72,7 @@ export const resolvers = {
     },
   },
   TaxonomyEntity: {
-    __resolveType(
-      entity: any,
-      context: Context,
-      _: any,
-    ): GQLPossibleTaxonomyEntityTypeNames {
+    __resolveType(entity: any): GQLPossibleTaxonomyEntityTypeNames {
       if (entity.id.startsWith('urn:topic')) {
         return 'Topic';
       }
