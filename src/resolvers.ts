@@ -13,19 +13,20 @@ import {
   fetchFilters,
   fetchResourceTypes,
   fetchSubjectPage,
-  fetchTopic,
   search,
   groupSearch,
   fetchCompetenceGoals,
-  fetchResourcesAndTopics,
 } from './data/api';
 
-import { Query as TopicQuery, Topic } from './resolvers/Topic';
 import {
-  RSubjectCategory,
-  FrontpageResponse,
-  RCategory,
-} from './data/frontpageApi';
+  Query as TopicQuery,
+  resolvers as topicResolvers,
+} from './resolvers/Topic';
+import {
+  Query as FrontpageQuery,
+  resolvers as frontpageResolvers,
+} from './resolvers/Frontpage';
+import { RSubjectCategory, FrontpageResponse } from './data/frontpageApi';
 import { findApplicableFilters } from './resolvers/findApplicableFilters';
 
 interface Id {
@@ -40,6 +41,7 @@ interface IdWithFilter {
 export const resolvers = {
   Query: {
     ...TopicQuery,
+    ...FrontpageQuery,
     async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
       return fetchResource({ resourceId: id }, context);
     },
@@ -109,38 +111,8 @@ export const resolvers = {
       return fetchSubjectPage(id, context);
     },
   },
-  Topic,
-  Frontpage: {
-    async topical(
-      frontpage: { topical: [string] },
-      _: any,
-      context: Context,
-    ): Promise<GQLResource[]> {
-      return Promise.all(
-        frontpage.topical.map(id => {
-          if (id.startsWith('urn:topic')) {
-            return fetchTopic(id, context);
-          }
-
-          return fetchResource({ resourceId: id }, context);
-        }),
-      );
-    },
-  },
-  Category: {
-    async subjects(
-      category: RCategory,
-      _: any,
-      context: Context,
-    ): Promise<GQLSubject[]> {
-      const data = await context.loaders.subjectsLoader.load('all');
-      return data.subjects.filter(subject =>
-        category.subjects.find(categorySubject => {
-          return categorySubject.id === subject.id;
-        }),
-      );
-    },
-  },
+  ...topicResolvers,
+  ...frontpageResolvers,
   Subject: {
     async topics(
       subject: GQLSubject,
@@ -209,64 +181,6 @@ export const resolvers = {
           'Missing subjectpage contentUri for subject with id: ' + subject.id,
         ),
         { status: 404 },
-      );
-    },
-  },
-  SubjectPage: {
-    async mostRead(
-      subjectPage: { mostRead: [string] },
-      args: { subjectId?: string },
-      context: Context,
-    ): Promise<GQLTaxonomyEntity[]> {
-      return fetchResourcesAndTopics(
-        { ids: subjectPage.mostRead, ...args },
-        context,
-      );
-    },
-    async editorsChoices(
-      subjectPage: { editorsChoices: [string] },
-      args: { subjectId?: string },
-      context: Context,
-    ): Promise<GQLTaxonomyEntity[]> {
-      return fetchResourcesAndTopics(
-        { ids: subjectPage.editorsChoices, ...args },
-        context,
-      );
-    },
-    async latestContent(
-      subjectPage: { latestContent: [string] },
-      args: { subjectId?: string },
-      context: Context,
-    ): Promise<GQLTaxonomyEntity[]> {
-      return fetchResourcesAndTopics(
-        { ids: subjectPage.latestContent, ...args },
-        context,
-      );
-    },
-    async topical(
-      subjectPage: { topical?: string },
-      args: { subjectId?: string },
-      context: Context,
-    ): Promise<GQLTaxonomyEntity> {
-      if (!subjectPage.topical) {
-        return null;
-      }
-
-      const items: GQLTaxonomyEntity[] = await fetchResourcesAndTopics(
-        { ids: [subjectPage.topical], ...args },
-        context,
-      );
-      return items[0];
-    },
-    async goTo(
-      subjectPage: { goTo: string[] },
-      _: any,
-      context: Context,
-    ): Promise<GQLResourceTypeDefinition[]> {
-      return Promise.all(
-        subjectPage.goTo.map(id =>
-          context.loaders.resourceTypesLoader.load(id),
-        ),
       );
     },
   },
