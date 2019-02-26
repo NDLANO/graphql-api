@@ -8,8 +8,6 @@
 
 import {
   fetchArticle,
-  fetchResource,
-  fetchResourceTypes,
   search,
   groupSearch,
   fetchCompetenceGoals,
@@ -27,7 +25,10 @@ import {
   Query as FrontpageQuery,
   resolvers as frontpageResolvers,
 } from './resolvers/Frontpage';
-import { findApplicableFilters } from './resolvers/findApplicableFilters';
+import {
+  Query as ResourceQuery,
+  resolvers as resourceResolvers,
+} from './resolvers/Resource';
 
 interface Id {
   id: string;
@@ -43,9 +44,7 @@ export const resolvers = {
     ...TopicQuery,
     ...SubjectQuery,
     ...FrontpageQuery,
-    async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
-      return fetchResource({ resourceId: id }, context);
-    },
+    ...ResourceQuery,
     async article(
       _: any,
       { id, filterIds }: IdWithFilter,
@@ -67,13 +66,6 @@ export const resolvers = {
     ): Promise<GQLSearch> {
       return groupSearch(searchQuery, context);
     },
-    async resourceTypes(
-      _: any,
-      __: any,
-      context: Context,
-    ): Promise<GQLResourceType[]> {
-      return fetchResourceTypes(context);
-    },
     async competenceGoals(
       _: any,
       { nodeId }: { nodeId: string },
@@ -85,63 +77,7 @@ export const resolvers = {
   ...subjectResolvers,
   ...topicResolvers,
   ...frontpageResolvers,
-  ResourceTypeDefinition: {
-    async subtypes(
-      resourceType: GQLResourceTypeDefinition,
-    ): Promise<GQLResourceTypeDefinition[]> {
-      return resourceType.subtypes;
-    },
-  },
-  Resource: {
-    async meta(
-      resource: GQLResource,
-      _: any,
-      context: Context,
-    ): Promise<GQLMeta> {
-      if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:learningpath')
-      ) {
-        return context.loaders.learningpathsLoader.load(
-          resource.contentUri.replace('urn:learningpath:', ''),
-        );
-      } else if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:article')
-      ) {
-        return context.loaders.articlesLoader.load(
-          resource.contentUri.replace('urn:article:', ''),
-        );
-      }
-      throw Object.assign(
-        new Error('Missing contentUri for resource with id: ' + resource.id),
-        { status: 404 },
-      );
-    },
-    async article(
-      resource: GQLResource,
-      args: { filterIds?: string; subjectId?: string },
-      context: Context,
-    ): Promise<GQLArticle> {
-      if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:article')
-      ) {
-        const filters = await findApplicableFilters(args, context);
-        return fetchArticle(
-          resource.contentUri.replace('urn:article:', ''),
-          filters,
-          context,
-        );
-      }
-      throw Object.assign(
-        new Error(
-          'Missing article contentUri for resource with id: ' + resource.id,
-        ),
-        { status: 404 },
-      );
-    },
-  },
+  ...resourceResolvers,
   Article: {
     async competenceGoals(
       article: GQLArticle,
