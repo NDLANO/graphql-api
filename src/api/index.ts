@@ -21,5 +21,6 @@ export {
   fetchTopicResources,
   fetchTopics,
   fetchResourcesAndTopics,
+  fetchSubtopics,
 } from './taxonomyApi';
 export { search, groupSearch } from './searchApi';

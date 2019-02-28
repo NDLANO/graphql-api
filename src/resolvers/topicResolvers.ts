@@ -11,6 +11,7 @@ import {
   fetchTopics,
   fetchTopicFilters,
   fetchTopicResources,
+  fetchSubtopics,
 } from '../api';
 
 import { findApplicableFilters } from './findApplicableFilters';
@@ -111,12 +112,10 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       args: TopicToSubtopicsArgs,
       context: Context,
     ): Promise<GQLTopic[]> {
-      const subjectId = 'urn:' + topic.path.split('/')[1];
-      const topics = await context.loaders.subjectTopicsLoader.load({
-        subjectId,
-        filterIds: args.filterIds,
-      });
-      return topics.filter((t: GQLTopic) => t.parent === topic.id);
+      return fetchSubtopics(
+        { id: topic.id, filterIds: args.filterIds },
+        context,
+      );
     },
   },
 };
