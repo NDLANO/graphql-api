@@ -9,10 +9,6 @@
 import { fetchResource, fetchResourceTypes, fetchArticle } from '../api';
 import { findApplicableFilters } from './findApplicableFilters';
 
-interface Id {
-  id: string;
-}
-
 export const Query = {
   async resource(
     _: any,
