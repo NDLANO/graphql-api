@@ -30,7 +30,7 @@ export const Query = {
     { id, subjectId }: QueryToTopicArgs,
     context: Context,
   ): Promise<GQLTopic> {
-    return fetchTopic({id, subjectId}, context);
+    return fetchTopic({ id, subjectId }, context);
   },
   async topics(_: any, __: any, context: Context): Promise<GQLTopic[]> {
     return fetchTopics(context);

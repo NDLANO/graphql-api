@@ -185,7 +185,7 @@ export async function fetchResourcesAndTopics(
   return Promise.all(
     ids.map(id => {
       if (id.startsWith('urn:topic')) {
-        return fetchTopic({id, ...args}, context);
+        return fetchTopic({ id, ...args }, context);
       }
       return fetchResource({ resourceId: id, ...args }, context);
     }),
