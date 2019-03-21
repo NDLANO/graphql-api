@@ -14,8 +14,12 @@ interface Id {
 }
 
 export const Query = {
-  async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
-    return fetchResource({ resourceId: id }, context);
+  async resource(
+    _: any,
+    { id, subjectId }: QueryToResourceArgs,
+    context: Context,
+  ): Promise<GQLResource> {
+    return fetchResource({ resourceId: id, subjectId: subjectId }, context);
   },
   async resourceTypes(
     _: any,

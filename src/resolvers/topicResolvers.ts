@@ -9,6 +9,7 @@
 import {
   fetchArticle,
   fetchTopics,
+  fetchTopic,
   fetchTopicFilters,
   fetchTopicResources,
   fetchSubtopics,
@@ -23,14 +24,13 @@ interface TopicResponse {
   path?: string;
 }
 
-interface Id {
-  id: string;
-}
-
 export const Query = {
-  async topic(_: any, { id }: Id, context: Context): Promise<GQLTopic> {
-    const list = await fetchTopics(context);
-    return list.find(topic => topic.id === id);
+  async topic(
+    _: any,
+    { id, subjectId }: QueryToTopicArgs,
+    context: Context,
+  ): Promise<GQLTopic> {
+    return fetchTopic({id, subjectId}, context);
   },
   async topics(_: any, __: any, context: Context): Promise<GQLTopic[]> {
     return fetchTopics(context);
@@ -81,10 +81,10 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       context: Context,
     ): Promise<GQLResource[]> {
       const filters = await findApplicableFilters(args, context);
-
       return fetchTopicResources(
         {
           topicId: topic.id,
+          subjectId: args.subjectId,
           relevance: 'urn:relevance:core',
           filters,
         },
@@ -97,10 +97,10 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       context: Context,
     ): Promise<GQLResource[]> {
       const filters = await findApplicableFilters(args, context);
-
       return fetchTopicResources(
         {
           topicId: topic.id,
+          subjectId: args.subjectId,
           relevance: 'urn:relevance:supplementary',
           filters,
         },

@@ -12,6 +12,7 @@ interface FetchTopicResourcesParams {
   topicId: string;
   relevance: string;
   filters?: string;
+  subjectId?: string;
 }
 
 interface FetchResourceParams {
@@ -19,7 +20,7 @@ interface FetchResourceParams {
   subjectId?: string;
 }
 
-interface Resource {
+interface TaxonomyEntity {
   id: string;
   name: string;
   contentUri?: string;
@@ -46,7 +47,7 @@ export async function fetchResource(
     `/taxonomy/v1/resources/${resourceId}/full?language=${context.language}`,
     context,
   );
-  const resource: Resource = await resolveJson(response);
+  const resource: TaxonomyEntity = await resolveJson(response);
 
   if (subjectId) {
     const primaryPath = findPrimaryPath(resource.paths, subjectId);
@@ -106,12 +107,22 @@ export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
   return resolveJson(response);
 }
 
-export async function fetchTopic(id: string, context: Context) {
+export async function fetchTopic(
+  params: { id: string; subjectId?: string },
+  context: Context,
+) {
   const response = await fetch(
-    `/taxonomy/v1/topics/${id}?language=${context.language}`,
+    `/taxonomy/v1/topics/${params.id}?language=${context.language}`,
     context,
   );
-  return resolveJson(response);
+  const topic: TaxonomyEntity = await resolveJson(response);
+
+  if (params.subjectId) {
+    const primaryPath = findPrimaryPath(topic.paths, params.subjectId);
+    const path = primaryPath ? primaryPath : topic.path;
+    return { ...topic, path };
+  }
+  return topic;
 }
 
 export async function fetchSubtopics(
@@ -143,7 +154,7 @@ export async function fetchTopicResources(
   params: FetchTopicResourcesParams,
   context: Context,
 ): Promise<GQLResource[]> {
-  const { filters, relevance, topicId } = params;
+  const { filters, subjectId, relevance, topicId } = params;
 
   const filterParam = filters && filters.length > 0 ? `&filter=${filters}` : '';
 
@@ -153,9 +164,17 @@ export async function fetchTopicResources(
     }${filterParam}`,
     context,
   );
-  const json: Resource[] = await resolveJson(response);
+  const resources: TaxonomyEntity[] = await resolveJson(response);
 
-  return json;
+  resources.forEach(resource => {
+    if (subjectId) {
+      const primaryPath = findPrimaryPath(resource.paths, subjectId);
+      const path = primaryPath ? primaryPath : resource.path;
+      return { ...resource, path };
+    }
+  });
+
+  return resources;
 }
 
 export async function fetchResourcesAndTopics(
@@ -166,7 +185,7 @@ export async function fetchResourcesAndTopics(
   return Promise.all(
     ids.map(id => {
       if (id.startsWith('urn:topic')) {
-        return fetchTopic(id, context);
+        return fetchTopic({id, ...args}, context);
       }
       return fetchResource({ resourceId: id, ...args }, context);
     }),

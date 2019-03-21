@@ -35,6 +35,7 @@ declare global {
     name: string;
     contentUri?: string;
     path?: string;
+    paths?: Array<string | null>;
     meta?: GQLMeta;
     article?: GQLArticle;
     filters?: Array<GQLFilter | null>;
@@ -47,6 +48,7 @@ declare global {
     name: string;
     contentUri?: string;
     path?: string;
+    paths?: Array<string | null>;
     meta?: GQLMeta;
     article?: GQLArticle;
     filters?: Array<GQLFilter | null>;
@@ -197,6 +199,7 @@ declare global {
     article?: GQLArticle;
     filters?: Array<GQLFilter | null>;
     path?: string;
+    paths?: Array<string | null>;
     isPrimary?: boolean;
     parent?: string;
     subtopics?: Array<GQLTopic | null>;
@@ -396,6 +399,7 @@ declare global {
   
   export interface QueryToResourceArgs {
     id: string;
+    subjectId?: string;
   }
   export interface QueryToResourceResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToResourceArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -429,6 +433,7 @@ declare global {
   
   export interface QueryToTopicArgs {
     id: string;
+    subjectId?: string;
   }
   export interface QueryToTopicResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToTopicArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -491,6 +496,7 @@ declare global {
     name?: ResourceToNameResolver<TParent>;
     contentUri?: ResourceToContentUriResolver<TParent>;
     path?: ResourceToPathResolver<TParent>;
+    paths?: ResourceToPathsResolver<TParent>;
     meta?: ResourceToMetaResolver<TParent>;
     article?: ResourceToArticleResolver<TParent>;
     filters?: ResourceToFiltersResolver<TParent>;
@@ -511,6 +517,10 @@ declare global {
   }
   
   export interface ResourceToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToPathsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -988,6 +998,7 @@ declare global {
     article?: TopicToArticleResolver<TParent>;
     filters?: TopicToFiltersResolver<TParent>;
     path?: TopicToPathResolver<TParent>;
+    paths?: TopicToPathsResolver<TParent>;
     isPrimary?: TopicToIsPrimaryResolver<TParent>;
     parent?: TopicToParentResolver<TParent>;
     subtopics?: TopicToSubtopicsResolver<TParent>;
@@ -1024,6 +1035,10 @@ declare global {
   }
   
   export interface TopicToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToPathsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
