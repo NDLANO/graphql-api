@@ -11,6 +11,9 @@ import {
   fetchSubjectPage,
   fetchTopic,
   fetchResourcesAndTopics,
+  fetchFilmFrontpage,
+  fetchMovieMeta,
+  fetchMovieTax,
 } from '../api';
 
 import { RCategory, FrontpageResponse } from '../api/frontpageApi';
@@ -34,6 +37,14 @@ export const Query = {
     context: Context,
   ): Promise<GQLSubjectPage> {
     return fetchSubjectPage(id, context);
+  },
+
+  async filmfrontpage(
+    _: any,
+    __: any,
+    context: Context,
+  ): Promise<GQLFilmFrontpage> {
+    return fetchFilmFrontpage(context);
   },
 };
 
@@ -67,6 +78,23 @@ export const resolvers = {
           return categorySubject.id === subject.id;
         }),
       );
+    },
+  },
+
+  Movie: {
+    async id(id: string) {
+      return id;
+    },
+    async movieMeta(
+      id: string,
+      _: any,
+      context: Context,
+    ): Promise<GQLMovieMeta> {
+      const res = fetchMovieMeta(id, context);
+      return res;
+    },
+    async movieTax(id: string, _: any, context: Context): Promise<GQLMovieTax> {
+      return fetchMovieTax(id, context);
     },
   },
 

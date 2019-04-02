@@ -7,8 +7,12 @@
  */
 
 export { fetchCompetenceGoals, fetchCurriculum } from './curriculumApi';
-export { fetchFrontpage, fetchSubjectPage } from './frontpageApi';
-export { fetchArticle, fetchArticles } from './articleApi';
+export {
+  fetchFrontpage,
+  fetchSubjectPage,
+  fetchFilmFrontpage,
+} from './frontpageApi';
+export { fetchArticle, fetchArticles, fetchMovieMeta } from './articleApi';
 export { fetchLearningpaths } from './learningpathApi';
 export {
   fetchFilters,
@@ -22,5 +26,6 @@ export {
   fetchTopics,
   fetchResourcesAndTopics,
   fetchSubtopics,
+  fetchMovieTax,
 } from './taxonomyApi';
 export { search, groupSearch } from './searchApi';

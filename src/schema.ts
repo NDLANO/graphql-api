@@ -232,6 +232,40 @@ export const typeDefs = gql`
     twitter: String
   }
 
+  type FilmFrontpage {
+    name: String
+    about: SubjectPageAbout
+    movieThemes: [MovieTheme]
+    slideShow: [Movie]
+  }
+
+  type MovieTheme {
+    name: [Name]
+    movies: [Movie]
+  }
+
+  type Name {
+    name: String
+    language: String
+  }
+
+  type Movie {
+    id: String!
+    movieMeta: MovieMeta
+    movieTax: MovieTax
+  }
+
+  type MovieMeta {
+    title: String
+    metaImage: MetaImage
+    metaDescription: String
+  }
+
+  type MovieTax {
+    resourceTypes: [String]
+    url: String
+  }
+
   type Subject {
     id: String!
     contentUri: String
@@ -302,6 +336,7 @@ export const typeDefs = gql`
     article(id: String!, filterIds: String): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
+    filmfrontpage: FilmFrontpage
     subjects: [Subject]
     topic(id: String!): Topic
     topics: [Topic]

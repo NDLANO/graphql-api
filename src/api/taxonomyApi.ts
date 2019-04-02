@@ -172,3 +172,29 @@ export async function fetchResourcesAndTopics(
     }),
   );
 }
+
+export async function fetchMovieTax(
+  id: string,
+  context: Context,
+): Promise<GQLMovieTax> {
+  const response = await fetch(
+    `/taxonomy/v1/queries/resources?contentURI=${id}`,
+    context,
+  );
+  const json = await resolveJson(response);
+
+  const taxonomy = json.find((item: { contentUri: string }) => {
+    return item.contentUri === id;
+  });
+
+  if (taxonomy) {
+    const thing = {
+      resourceTypes: taxonomy.resourceTypes
+        ? taxonomy.resourceTypes.map((rt: { id: string }) => rt.id)
+        : undefined,
+      url: taxonomy.path,
+    };
+    return thing;
+  }
+  return null;
+}

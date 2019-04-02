@@ -17,7 +17,7 @@ export const getEnvironmentVariabel = (
   return variabel || fallback;
 };
 
-const ndlaEnvironment = getEnvironmentVariabel('NDLA_ENVIRONMENT', 'test');
+const ndlaEnvironment = 'brukertest'; //getEnvironmentVariabel('NDLA_ENVIRONMENT', 'test');
 
 const ndlaApiUrl = () => {
   switch (ndlaEnvironment) {
