@@ -251,8 +251,11 @@ export const typeDefs = gql`
 
   type Movie {
     id: String!
-    movieMeta: MovieMeta
-    movieTax: MovieTax
+    title: String
+    metaImage: MetaImage
+    metaDescription: String
+    resourceTypes: [String]
+    url: String
   }
 
   type MovieMeta {

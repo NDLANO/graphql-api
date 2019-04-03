@@ -85,16 +85,37 @@ export const resolvers = {
     async id(id: string) {
       return id;
     },
-    async movieMeta(
+    async title(id: string, _: any, context: Context): Promise<String> {
+      const movieMeta = await fetchMovieMeta(id, context);
+      return movieMeta.title;
+    },
+    async metaImage(
       id: string,
       _: any,
       context: Context,
-    ): Promise<GQLMovieMeta> {
-      const res = fetchMovieMeta(id, context);
-      return res;
+    ): Promise<GQLMetaImage> {
+      const movieMeta = await fetchMovieMeta(id, context);
+      return movieMeta.metaImage;
     },
-    async movieTax(id: string, _: any, context: Context): Promise<GQLMovieTax> {
-      return fetchMovieTax(id, context);
+    async metaDescription(
+      id: string,
+      _: any,
+      context: Context,
+    ): Promise<String> {
+      const movieMeta = await fetchMovieMeta(id, context);
+      return movieMeta.metaDescription;
+    },
+    async url(id: string, _: any, context: Context): Promise<String> {
+      const movieTax: GQLMovieTax = await fetchMovieTax(id, context);
+      return movieTax.url;
+    },
+    async resourceTypes(
+      id: string,
+      _: any,
+      context: Context,
+    ): Promise<String[]> {
+      const movieTax: GQLMovieTax = await fetchMovieTax(id, context);
+      return movieTax.resourceTypes;
     },
   },
 

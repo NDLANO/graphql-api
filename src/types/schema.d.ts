@@ -282,17 +282,9 @@ declare global {
   
   export interface GQLMovie {
     id: string;
-    movieMeta?: GQLMovieMeta;
-    movieTax?: GQLMovieTax;
-  }
-  
-  export interface GQLMovieMeta {
     title?: string;
     metaImage?: GQLMetaImage;
     metaDescription?: string;
-  }
-  
-  export interface GQLMovieTax {
     resourceTypes?: Array<string | null>;
     url?: string;
   }
@@ -361,6 +353,17 @@ declare global {
     name: string;
   }
   
+  export interface GQLMovieMeta {
+    title?: string;
+    metaImage?: GQLMetaImage;
+    metaDescription?: string;
+  }
+  
+  export interface GQLMovieTax {
+    resourceTypes?: Array<string | null>;
+    url?: string;
+  }
+  
   /*********************************
    *                               *
    *         TYPE RESOLVERS        *
@@ -407,8 +410,6 @@ declare global {
     MovieTheme?: GQLMovieThemeTypeResolver;
     Name?: GQLNameTypeResolver;
     Movie?: GQLMovieTypeResolver;
-    MovieMeta?: GQLMovieMetaTypeResolver;
-    MovieTax?: GQLMovieTaxTypeResolver;
     Frontpage?: GQLFrontpageTypeResolver;
     Category?: GQLCategoryTypeResolver;
     Search?: GQLSearchTypeResolver;
@@ -418,6 +419,8 @@ declare global {
     SearchContextFilter?: GQLSearchContextFilterTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
+    MovieMeta?: GQLMovieMetaTypeResolver;
+    MovieTax?: GQLMovieTaxTypeResolver;
   }
   export interface GQLQueryTypeResolver<TParent = any> {
     resource?: QueryToResourceResolver<TParent>;
@@ -1377,50 +1380,34 @@ declare global {
   
   export interface GQLMovieTypeResolver<TParent = any> {
     id?: MovieToIdResolver<TParent>;
-    movieMeta?: MovieToMovieMetaResolver<TParent>;
-    movieTax?: MovieToMovieTaxResolver<TParent>;
+    title?: MovieToTitleResolver<TParent>;
+    metaImage?: MovieToMetaImageResolver<TParent>;
+    metaDescription?: MovieToMetaDescriptionResolver<TParent>;
+    resourceTypes?: MovieToResourceTypesResolver<TParent>;
+    url?: MovieToUrlResolver<TParent>;
   }
   
   export interface MovieToIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface MovieToMovieMetaResolver<TParent = any, TResult = any> {
+  export interface MovieToTitleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface MovieToMovieTaxResolver<TParent = any, TResult = any> {
+  export interface MovieToMetaImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLMovieMetaTypeResolver<TParent = any> {
-    title?: MovieMetaToTitleResolver<TParent>;
-    metaImage?: MovieMetaToMetaImageResolver<TParent>;
-    metaDescription?: MovieMetaToMetaDescriptionResolver<TParent>;
-  }
-  
-  export interface MovieMetaToTitleResolver<TParent = any, TResult = any> {
+  export interface MovieToMetaDescriptionResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface MovieMetaToMetaImageResolver<TParent = any, TResult = any> {
+  export interface MovieToResourceTypesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface MovieMetaToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLMovieTaxTypeResolver<TParent = any> {
-    resourceTypes?: MovieTaxToResourceTypesResolver<TParent>;
-    url?: MovieTaxToUrlResolver<TParent>;
-  }
-  
-  export interface MovieTaxToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieTaxToUrlResolver<TParent = any, TResult = any> {
+  export interface MovieToUrlResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1633,6 +1620,37 @@ declare global {
   }
   
   export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMovieMetaTypeResolver<TParent = any> {
+    title?: MovieMetaToTitleResolver<TParent>;
+    metaImage?: MovieMetaToMetaImageResolver<TParent>;
+    metaDescription?: MovieMetaToMetaDescriptionResolver<TParent>;
+  }
+  
+  export interface MovieMetaToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieMetaToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieMetaToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMovieTaxTypeResolver<TParent = any> {
+    resourceTypes?: MovieTaxToResourceTypesResolver<TParent>;
+    url?: MovieTaxToUrlResolver<TParent>;
+  }
+  
+  export interface MovieTaxToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieTaxToUrlResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

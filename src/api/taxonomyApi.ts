@@ -178,7 +178,7 @@ export async function fetchMovieTax(
   context: Context,
 ): Promise<GQLMovieTax> {
   const response = await fetch(
-    `/taxonomy/v1/queries/resources?contentURI=${id}`,
+    `/taxonomy/v1/queries/topics?contentURI=${id}`,
     context,
   );
   const json = await resolveJson(response);
