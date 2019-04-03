@@ -144,12 +144,12 @@ export const typeDefs = gql`
     authors: [H5pAuthorCopyrightInfo]
     contentType: String!
     license: String!
-    licenseVersion:	String!
+    licenseVersion: String!
     source: String!
     thumbnail: String!
     title: String!
-    yearFrom:	String!
-    yearTo:	String!
+    yearFrom: String!
+    yearTo: String!
   }
 
   type H5pLicense {
