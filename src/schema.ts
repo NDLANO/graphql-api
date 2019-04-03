@@ -135,11 +135,34 @@ export const typeDefs = gql`
     copyright: Copyright!
   }
 
+  type H5pAuthorCopyrightInfo {
+    name: String!
+    role: String!
+  }
+
+  type H5pCopyrightInfo {
+    authors: [H5pAuthorCopyrightInfo]
+    contentType: String!
+    license: String!
+    licenseVersion:	String!
+    source: String!
+    thumbnail: String!
+    title: String!
+    yearFrom:	String!
+    yearTo:	String!
+  }
+
+  type H5pLicense {
+    assets: [H5pCopyrightInfo]
+    h5p: H5pCopyrightInfo
+  }
+
   type ArticleMetaData {
     footnotes: [FootNote]
     images: [ImageLicense]
     audios: [AudioLicense]
     brightcoves: [BrightcoveLicense]
+    h5p: [H5pLicense]
   }
 
   type Article {
