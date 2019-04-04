@@ -106,7 +106,7 @@ declare global {
     images?: Array<GQLImageLicense | null>;
     audios?: Array<GQLAudioLicense | null>;
     brightcoves?: Array<GQLBrightcoveLicense | null>;
-    h5p?: Array<GQLH5pLicense | null>;
+    h5p?: Array<GQLCopyright | null>;
   }
   
   export interface GQLFootNote {
@@ -163,28 +163,6 @@ declare global {
     src: string;
     height: number;
     width: number;
-  }
-  
-  export interface GQLH5pLicense {
-    assets?: Array<GQLH5pCopyrightInfo | null>;
-    h5p?: GQLH5pCopyrightInfo;
-  }
-  
-  export interface GQLH5pCopyrightInfo {
-    authors?: Array<GQLH5pAuthorCopyrightInfo | null>;
-    contentType: string;
-    license: string;
-    licenseVersion: string;
-    source: string;
-    thumbnail: string;
-    title: string;
-    yearFrom: string;
-    yearTo: string;
-  }
-  
-  export interface GQLH5pAuthorCopyrightInfo {
-    name: string;
-    role: string;
   }
   
   export interface GQLCompetenceGoal {
@@ -379,9 +357,6 @@ declare global {
     AudioLicense?: GQLAudioLicenseTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
-    H5pLicense?: GQLH5pLicenseTypeResolver;
-    H5pCopyrightInfo?: GQLH5pCopyrightInfoTypeResolver;
-    H5pAuthorCopyrightInfo?: GQLH5pAuthorCopyrightInfoTypeResolver;
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
     CompetenceCurriculum?: GQLCompetenceCurriculumTypeResolver;
     Filter?: GQLFilterTypeResolver;
@@ -928,80 +903,6 @@ declare global {
   }
   
   export interface BrightcoveIframeToWidthResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLH5pLicenseTypeResolver<TParent = any> {
-    assets?: H5pLicenseToAssetsResolver<TParent>;
-    h5p?: H5pLicenseToH5pResolver<TParent>;
-  }
-  
-  export interface H5pLicenseToAssetsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pLicenseToH5pResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLH5pCopyrightInfoTypeResolver<TParent = any> {
-    authors?: H5pCopyrightInfoToAuthorsResolver<TParent>;
-    contentType?: H5pCopyrightInfoToContentTypeResolver<TParent>;
-    license?: H5pCopyrightInfoToLicenseResolver<TParent>;
-    licenseVersion?: H5pCopyrightInfoToLicenseVersionResolver<TParent>;
-    source?: H5pCopyrightInfoToSourceResolver<TParent>;
-    thumbnail?: H5pCopyrightInfoToThumbnailResolver<TParent>;
-    title?: H5pCopyrightInfoToTitleResolver<TParent>;
-    yearFrom?: H5pCopyrightInfoToYearFromResolver<TParent>;
-    yearTo?: H5pCopyrightInfoToYearToResolver<TParent>;
-  }
-  
-  export interface H5pCopyrightInfoToAuthorsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pCopyrightInfoToContentTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pCopyrightInfoToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pCopyrightInfoToLicenseVersionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pCopyrightInfoToSourceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pCopyrightInfoToThumbnailResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pCopyrightInfoToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pCopyrightInfoToYearFromResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pCopyrightInfoToYearToResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLH5pAuthorCopyrightInfoTypeResolver<TParent = any> {
-    name?: H5pAuthorCopyrightInfoToNameResolver<TParent>;
-    role?: H5pAuthorCopyrightInfoToRoleResolver<TParent>;
-  }
-  
-  export interface H5pAuthorCopyrightInfoToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pAuthorCopyrightInfoToRoleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
