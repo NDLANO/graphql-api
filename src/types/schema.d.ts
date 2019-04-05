@@ -286,7 +286,7 @@ declare global {
     metaImage?: GQLMetaImage;
     metaDescription?: string;
     resourceTypes?: Array<string | null>;
-    url?: string;
+    path?: string;
   }
   
   export interface GQLFrontpage {
@@ -361,7 +361,7 @@ declare global {
   
   export interface GQLMovieTax {
     resourceTypes?: Array<string | null>;
-    url?: string;
+    path?: string;
   }
   
   /*********************************
@@ -1384,7 +1384,7 @@ declare global {
     metaImage?: MovieToMetaImageResolver<TParent>;
     metaDescription?: MovieToMetaDescriptionResolver<TParent>;
     resourceTypes?: MovieToResourceTypesResolver<TParent>;
-    url?: MovieToUrlResolver<TParent>;
+    path?: MovieToPathResolver<TParent>;
   }
   
   export interface MovieToIdResolver<TParent = any, TResult = any> {
@@ -1407,7 +1407,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface MovieToUrlResolver<TParent = any, TResult = any> {
+  export interface MovieToPathResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1643,14 +1643,14 @@ declare global {
   
   export interface GQLMovieTaxTypeResolver<TParent = any> {
     resourceTypes?: MovieTaxToResourceTypesResolver<TParent>;
-    url?: MovieTaxToUrlResolver<TParent>;
+    path?: MovieTaxToPathResolver<TParent>;
   }
   
   export interface MovieTaxToResourceTypesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface MovieTaxToUrlResolver<TParent = any, TResult = any> {
+  export interface MovieTaxToPathResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

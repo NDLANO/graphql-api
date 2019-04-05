@@ -192,7 +192,7 @@ export async function fetchMovieTax(
       resourceTypes: taxonomy.resourceTypes
         ? taxonomy.resourceTypes.map((rt: { id: string }) => rt.id)
         : undefined,
-      url: taxonomy.path,
+      path: taxonomy.path,
     };
     return thing;
   }

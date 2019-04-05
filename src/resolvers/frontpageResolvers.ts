@@ -105,9 +105,9 @@ export const resolvers = {
       const movieMeta = await fetchMovieMeta(id, context);
       return movieMeta.metaDescription;
     },
-    async url(id: string, _: any, context: Context): Promise<String> {
+    async path(id: string, _: any, context: Context): Promise<String> {
       const movieTax: GQLMovieTax = await fetchMovieTax(id, context);
-      return movieTax.url;
+      return movieTax.path;
     },
     async resourceTypes(
       id: string,

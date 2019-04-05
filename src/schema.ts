@@ -255,7 +255,7 @@ export const typeDefs = gql`
     metaImage: MetaImage
     metaDescription: String
     resourceTypes: [String]
-    url: String
+    path: String
   }
 
   type MovieMeta {
@@ -266,7 +266,7 @@ export const typeDefs = gql`
 
   type MovieTax {
     resourceTypes: [String]
-    url: String
+    path: String
   }
 
   type Subject {
