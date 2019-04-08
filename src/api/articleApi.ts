@@ -10,15 +10,19 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
 
 export async function fetchArticle(
-  articleId: string,
-  filterIds: string,
+  params: {
+    articleId: string;
+    filterIds?: string;
+    subjectId?: string;
+  },
   context: Context,
 ): Promise<GQLArticle> {
   const host = localConverter ? 'http://localhost:3100' : '';
   const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${articleId}${
-      filterIds ? `?filters=${filterIds}` : ''
-    }`,
+    `${host}/article-converter/json/${context.language}/${
+      params.articleId
+    }?1=1${params.filterIds ? `&filters=${params.filterIds}` : ''}
+      ${params.subjectId ? `&subject=${params.subjectId}` : ''}`,
     context,
   );
   return resolveJson(response);

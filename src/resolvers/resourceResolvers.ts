@@ -7,7 +7,6 @@
  */
 
 import { fetchResource, fetchResourceTypes, fetchArticle } from '../api';
-import { findApplicableFilters } from './findApplicableFilters';
 
 export const Query = {
   async resource(
@@ -69,10 +68,13 @@ export const resolvers = {
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        const filters = await findApplicableFilters(args, context);
+        const articleId = resource.contentUri.replace('urn:article:', '');
         return fetchArticle(
-          resource.contentUri.replace('urn:article:', ''),
-          filters,
+          {
+            articleId,
+            filterIds: args.filterIds,
+            subjectId: args.subjectId,
+          },
           context,
         );
       }

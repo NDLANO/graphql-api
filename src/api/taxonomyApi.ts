@@ -157,11 +157,12 @@ export async function fetchTopicResources(
   const { filters, subjectId, relevance, topicId } = params;
 
   const filterParam = filters && filters.length > 0 ? `&filter=${filters}` : '';
+  const subjectParam = subjectId ? `&subject=${subjectId}` : '';
 
   const response = await fetch(
     `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${
       context.language
-    }${filterParam}`,
+    }${filterParam}${subjectParam}`,
     context,
   );
   const resources: TaxonomyEntity[] = await resolveJson(response);
