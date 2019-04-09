@@ -173,10 +173,10 @@ export async function fetchResourcesAndTopics(
   );
 }
 
-export async function fetchMovieTax(
+export async function fetchMoviePath(
   id: string,
   context: Context,
-): Promise<GQLMovieTax> {
+): Promise<GQLMoviePath> {
   const response = await fetch(
     `/taxonomy/v1/queries/topics?contentURI=${id}`,
     context,
@@ -186,15 +186,21 @@ export async function fetchMovieTax(
   const taxonomy = json.find((item: { contentUri: string }) => {
     return item.contentUri === id;
   });
+  return taxonomy;
+}
 
-  if (taxonomy) {
-    const thing = {
-      resourceTypes: taxonomy.resourceTypes
-        ? taxonomy.resourceTypes.map((rt: { id: string }) => rt.id)
-        : undefined,
-      path: taxonomy.path,
-    };
-    return thing;
-  }
-  return null;
+export async function fetchMovieResourceTypes(
+  id: string,
+  context: Context,
+): Promise<GQLMovieResourceTypes> {
+  const response = await fetch(
+    `/taxonomy/v1/queries/resources?contentURI=${id}`,
+    context,
+  );
+  const json = await resolveJson(response);
+
+  const taxonomy = json.find((item: { contentUri: string }) => {
+    return item.contentUri === id;
+  });
+  return taxonomy;
 }

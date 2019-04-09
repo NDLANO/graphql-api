@@ -13,7 +13,8 @@ import {
   fetchResourcesAndTopics,
   fetchFilmFrontpage,
   fetchMovieMeta,
-  fetchMovieTax,
+  fetchMoviePath,
+  fetchMovieResourceTypes,
 } from '../api';
 
 import { RCategory, FrontpageResponse } from '../api/frontpageApi';
@@ -106,16 +107,19 @@ export const resolvers = {
       return movieMeta.metaDescription;
     },
     async path(id: string, _: any, context: Context): Promise<String> {
-      const movieTax: GQLMovieTax = await fetchMovieTax(id, context);
-      return movieTax.path;
+      const moviePath: GQLMoviePath = await fetchMoviePath(id, context);
+      return moviePath.path;
     },
     async resourceTypes(
       id: string,
       _: any,
       context: Context,
-    ): Promise<String[]> {
-      const movieTax: GQLMovieTax = await fetchMovieTax(id, context);
-      return movieTax.resourceTypes;
+    ): Promise<GQLResourceType[]> {
+      const movieResourceTypes: GQLMovieResourceTypes = await fetchMovieResourceTypes(
+        id,
+        context,
+      );
+      return movieResourceTypes.resourceTypes;
     },
   },
 

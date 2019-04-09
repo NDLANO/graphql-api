@@ -26,6 +26,7 @@ export {
   fetchTopics,
   fetchResourcesAndTopics,
   fetchSubtopics,
-  fetchMovieTax,
+  fetchMoviePath,
+  fetchMovieResourceTypes,
 } from './taxonomyApi';
 export { search, groupSearch } from './searchApi';

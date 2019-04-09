@@ -232,9 +232,16 @@ export const typeDefs = gql`
     twitter: String
   }
 
+  type FilmPageAbout {
+    title: String
+    description: String
+    visualElement: SubjectPageVisualElement
+    language: String
+  }
+
   type FilmFrontpage {
     name: String
-    about: SubjectPageAbout
+    about: [FilmPageAbout]
     movieThemes: [MovieTheme]
     slideShow: [Movie]
   }
@@ -254,7 +261,7 @@ export const typeDefs = gql`
     title: String
     metaImage: MetaImage
     metaDescription: String
-    resourceTypes: [String]
+    resourceTypes: [ResourceType]
     path: String
   }
 
@@ -264,9 +271,12 @@ export const typeDefs = gql`
     metaDescription: String
   }
 
-  type MovieTax {
-    resourceTypes: [String]
+  type MoviePath {
     path: String
+  }
+
+  type MovieResourceTypes {
+    resourceTypes: [ResourceType]
   }
 
   type Subject {
