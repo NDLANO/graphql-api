@@ -60,9 +60,59 @@ export async function resolveJson(response: Response): Promise<any> {
   const json = await response.json();
 
   if (ok) {
-    return json;
+    return externalsToH5pMetaData(json);
   }
 
   const message = `Api call to ${url} failed with status ${status} ${statusText}`;
   throw Object.assign(new Error(message), { status, json });
+}
+
+// converting h5p object from externals to graphQL schema type (Copyright-type)
+function externalsToH5pMetaData(obj: any) {
+  // looking for externals array
+  if (
+    obj &&
+    obj.metaData &&
+    obj.metaData.externals &&
+    obj.metaData.externals.length
+  ) {
+    const h5pArray: any[] = [];
+    obj.metaData.externals.map((i: { h5p: any }) => {
+      if (i.h5p) {
+        // this element have h5p object
+        let copyrightElement = {
+          license: {
+            license: licenseFixer(
+              i.h5p.license || '',
+              i.h5p.licenseVersion || '',
+            ),
+            url: i.h5p.source || '',
+            description: i.h5p.licenseExtras || '',
+          },
+          // creators: [],
+          // processors: [],
+          rightsholders: i.h5p.authors.map(
+            (author: { role: any; name: any }) => {
+              return { type: author.role, name: author.name };
+            },
+          ),
+          origin: i.h5p.source || '',
+        };
+        h5pArray.push(copyrightElement);
+      }
+      return i;
+    });
+
+    // adding h5p array
+    if (h5pArray.length > 0) {
+      obj.metaData.h5p = h5pArray;
+    }
+    return obj;
+  }
+  return obj;
+}
+
+// convert the license format from h5p format to license format that we use on other elements
+function licenseFixer(lic: any, licVer: any) {
+  return `${lic.replace(' ', '-')}-${licVer}`;
 }
