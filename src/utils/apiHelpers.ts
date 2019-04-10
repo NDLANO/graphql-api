@@ -105,7 +105,7 @@ function externalsToH5pMetaData(obj: any) {
 
     // adding h5p array
     if (h5pArray.length > 0) {
-      obj.metaData.h5p = h5pArray;
+      obj.metaData.h5ps = h5pArray;
     }
     return obj;
   }
