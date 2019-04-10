@@ -106,7 +106,7 @@ declare global {
     images?: Array<GQLImageLicense | null>;
     audios?: Array<GQLAudioLicense | null>;
     brightcoves?: Array<GQLBrightcoveLicense | null>;
-    h5p?: Array<GQLCopyright | null>;
+    h5ps?: Array<GQLCopyright | null>;
   }
   
   export interface GQLFootNote {
@@ -699,7 +699,7 @@ declare global {
     images?: ArticleMetaDataToImagesResolver<TParent>;
     audios?: ArticleMetaDataToAudiosResolver<TParent>;
     brightcoves?: ArticleMetaDataToBrightcovesResolver<TParent>;
-    h5p?: ArticleMetaDataToH5pResolver<TParent>;
+    h5ps?: ArticleMetaDataToH5psResolver<TParent>;
   }
   
   export interface ArticleMetaDataToFootnotesResolver<TParent = any, TResult = any> {
@@ -718,7 +718,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleMetaDataToH5pResolver<TParent = any, TResult = any> {
+  export interface ArticleMetaDataToH5psResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
