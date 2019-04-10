@@ -89,8 +89,8 @@ function externalsToH5pMetaData(obj: any) {
             url: i.h5p.source || '',
             description: i.h5p.licenseExtras || '',
           },
-          // creators: [],
-          // processors: [],
+          creators: new Array(),
+          processors: new Array(),
           rightsholders: i.h5p.authors.map(
             (author: { role: any; name?: string }) => {
               return { type: roleMapper(author.role || ''), name: author.name };
