@@ -98,7 +98,11 @@ function externalsToH5pMetaData(obj: any) {
           ),
           origin: i.h5p.source || '',
         };
-        h5pArray.push(copyrightElement);
+        h5pArray.push({
+          copyright: copyrightElement,
+          title: i.h5p.title,
+          src: i.h5p.source || '',
+        });
       }
       return i;
     });

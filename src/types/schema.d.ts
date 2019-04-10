@@ -106,7 +106,7 @@ declare global {
     images?: Array<GQLImageLicense | null>;
     audios?: Array<GQLAudioLicense | null>;
     brightcoves?: Array<GQLBrightcoveLicense | null>;
-    h5ps?: Array<GQLCopyright | null>;
+    h5ps?: Array<GQLH5pLicense | null>;
   }
   
   export interface GQLFootNote {
@@ -163,6 +163,12 @@ declare global {
     src: string;
     height: number;
     width: number;
+  }
+  
+  export interface GQLH5pLicense {
+    title: string;
+    src?: string;
+    copyright: GQLCopyright;
   }
   
   export interface GQLCompetenceGoal {
@@ -357,6 +363,7 @@ declare global {
     AudioLicense?: GQLAudioLicenseTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
+    H5pLicense?: GQLH5pLicenseTypeResolver;
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
     CompetenceCurriculum?: GQLCompetenceCurriculumTypeResolver;
     Filter?: GQLFilterTypeResolver;
@@ -903,6 +910,24 @@ declare global {
   }
   
   export interface BrightcoveIframeToWidthResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLH5pLicenseTypeResolver<TParent = any> {
+    title?: H5pLicenseToTitleResolver<TParent>;
+    src?: H5pLicenseToSrcResolver<TParent>;
+    copyright?: H5pLicenseToCopyrightResolver<TParent>;
+  }
+  
+  export interface H5pLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pLicenseToCopyrightResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
