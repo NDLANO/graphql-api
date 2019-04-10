@@ -6,12 +6,7 @@
  *
  */
 
-import {
-  fetchArticle,
-  fetchCompetenceGoals,
-  fetchMovieMeta,
-  fetchMovieTax,
-} from '../api';
+import { fetchArticle, fetchCompetenceGoals } from '../api';
 
 interface IdWithFilter {
   id: string;

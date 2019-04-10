@@ -86,7 +86,7 @@ export const resolvers = {
     async id(id: string) {
       return id;
     },
-    async title(id: string, _: any, context: Context): Promise<String> {
+    async title(id: string, _: any, context: Context): Promise<string> {
       const movieMeta = await fetchMovieMeta(id, context);
       return movieMeta.title;
     },
@@ -102,11 +102,11 @@ export const resolvers = {
       id: string,
       _: any,
       context: Context,
-    ): Promise<String> {
+    ): Promise<string> {
       const movieMeta = await fetchMovieMeta(id, context);
       return movieMeta.metaDescription;
     },
-    async path(id: string, _: any, context: Context): Promise<String> {
+    async path(id: string, _: any, context: Context): Promise<string> {
       const moviePath: GQLMoviePath = await fetchMoviePath(id, context);
       return moviePath.path;
     },
