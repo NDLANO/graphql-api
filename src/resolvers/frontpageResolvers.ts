@@ -47,7 +47,7 @@ export const resolvers = {
       return Promise.all(
         frontpage.topical.map(id => {
           if (id.startsWith('urn:topic')) {
-            return fetchTopic(id, context);
+            return fetchTopic({ id }, context);
           }
 
           return fetchResource({ resourceId: id }, context);

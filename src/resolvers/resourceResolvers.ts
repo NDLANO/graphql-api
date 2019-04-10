@@ -7,15 +7,14 @@
  */
 
 import { fetchResource, fetchResourceTypes, fetchArticle } from '../api';
-import { findApplicableFilters } from './findApplicableFilters';
-
-interface Id {
-  id: string;
-}
 
 export const Query = {
-  async resource(_: any, { id }: Id, context: Context): Promise<GQLResource> {
-    return fetchResource({ resourceId: id }, context);
+  async resource(
+    _: any,
+    { id, subjectId }: QueryToResourceArgs,
+    context: Context,
+  ): Promise<GQLResource> {
+    return fetchResource({ resourceId: id, subjectId }, context);
   },
   async resourceTypes(
     _: any,
@@ -69,10 +68,13 @@ export const resolvers = {
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        const filters = await findApplicableFilters(args, context);
+        const articleId = resource.contentUri.replace('urn:article:', '');
         return fetchArticle(
-          resource.contentUri.replace('urn:article:', ''),
-          filters,
+          {
+            articleId,
+            filterIds: args.filterIds,
+            subjectId: args.subjectId,
+          },
           context,
         );
       }

@@ -15,6 +15,7 @@
     "lint-ts": "tslint --project . --format stylish",
     "lint-prettier": "prettier --l \"src/**/*.ts\"",
     "prettier": "prettier --write \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\"",
     "generate-schema-types": "ts-node ./scripts/generateTypeScriptTypesFromSchema.ts",
     "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"nodemon build/server.js | bunyan\"",
     "start-with-local-converter": "LOCAL_CONVERTER=true yarn start",

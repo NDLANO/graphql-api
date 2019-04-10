@@ -41,6 +41,7 @@ export const typeDefs = gql`
     name: String!
     contentUri: String
     path: String
+    paths: [String]
     meta: Meta
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
@@ -51,6 +52,7 @@ export const typeDefs = gql`
     name: String!
     contentUri: String
     path: String
+    paths: [String]
     meta: Meta
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
@@ -66,6 +68,7 @@ export const typeDefs = gql`
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
     path: String
+    paths: [String]
     isPrimary: Boolean
     parent: String
     subtopics(filterIds: String): [Topic]
@@ -298,12 +301,12 @@ export const typeDefs = gql`
   }
 
   type Query {
-    resource(id: String!): Resource
-    article(id: String!, filterIds: String): Article
+    resource(id: String!, subjectId: String): Resource
+    article(id: String!, filterIds: String, subjectId: String): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
     subjects: [Subject]
-    topic(id: String!): Topic
+    topic(id: String!, subjectId: String): Topic
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
