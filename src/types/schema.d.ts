@@ -85,6 +85,7 @@ declare global {
     content: string;
     created: string;
     updated: string;
+    published: string;
     visualElement?: string;
     metaImage?: GQLMetaImage;
     metaDescription: string;
@@ -606,6 +607,7 @@ declare global {
     content?: ArticleToContentResolver<TParent>;
     created?: ArticleToCreatedResolver<TParent>;
     updated?: ArticleToUpdatedResolver<TParent>;
+    published?: ArticleToPublishedResolver<TParent>;
     visualElement?: ArticleToVisualElementResolver<TParent>;
     metaImage?: ArticleToMetaImageResolver<TParent>;
     metaDescription?: ArticleToMetaDescriptionResolver<TParent>;
@@ -643,6 +645,10 @@ declare global {
   }
   
   export interface ArticleToUpdatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToPublishedResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
