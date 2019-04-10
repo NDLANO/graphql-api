@@ -92,8 +92,8 @@ function externalsToH5pMetaData(obj: any) {
           // creators: [],
           // processors: [],
           rightsholders: i.h5p.authors.map(
-            (author: { role: any; name: any }) => {
-              return { type: author.role, name: author.name };
+            (author: { role: any; name?: string }) => {
+              return { type: roleMapper(author.role || ''), name: author.name };
             },
           ),
           origin: i.h5p.source || '',
@@ -110,6 +110,16 @@ function externalsToH5pMetaData(obj: any) {
     return obj;
   }
   return obj;
+}
+
+// map roles to same roles we use
+function roleMapper(role: string): string {
+  const objRoles: { [key: string]: string } = {
+    Author: 'Writer',
+    Editor: 'Editorial',
+    Licensee: 'Rightsholder',
+  };
+  return objRoles[role] || role;
 }
 
 // convert the license format from h5p format to license format that we use on other elements
