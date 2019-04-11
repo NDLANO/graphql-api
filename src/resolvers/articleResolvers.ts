@@ -8,18 +8,13 @@
 
 import { fetchArticle, fetchCompetenceGoals } from '../api';
 
-interface IdWithFilter {
-  id: string;
-  filterIds?: string;
-}
-
 export const Query = {
   async article(
     _: any,
-    { id, filterIds }: IdWithFilter,
+    { id, filterIds, subjectId }: QueryToArticleArgs,
     context: Context,
   ): Promise<GQLArticle> {
-    return fetchArticle(id, filterIds, context);
+    return fetchArticle({ articleId: id, filterIds, subjectId }, context);
   },
 };
 

@@ -9,12 +9,11 @@
 import {
   fetchArticle,
   fetchTopics,
+  fetchTopic,
   fetchTopicFilters,
   fetchTopicResources,
   fetchSubtopics,
 } from '../api';
-
-import { findApplicableFilters } from './findApplicableFilters';
 
 interface TopicResponse {
   id: string;
@@ -23,14 +22,13 @@ interface TopicResponse {
   path?: string;
 }
 
-interface Id {
-  id: string;
-}
-
 export const Query = {
-  async topic(_: any, { id }: Id, context: Context): Promise<GQLTopic> {
-    const list = await fetchTopics(context);
-    return list.find(topic => topic.id === id);
+  async topic(
+    _: any,
+    { id, subjectId }: QueryToTopicArgs,
+    context: Context,
+  ): Promise<GQLTopic> {
+    return fetchTopic({ id, subjectId }, context);
   },
   async topics(_: any, __: any, context: Context): Promise<GQLTopic[]> {
     return fetchTopics(context);
@@ -45,10 +43,13 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       context: Context,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        const filters = await findApplicableFilters(args, context);
+        const articleId = topic.contentUri.replace('urn:article:', '');
         return fetchArticle(
-          topic.contentUri.replace('urn:article:', ''),
-          filters,
+          {
+            articleId,
+            filterIds: args.filterIds,
+            subjectId: args.subjectId,
+          },
           context,
         );
       }
@@ -80,13 +81,12 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       args: TopicToCoreResourcesArgs,
       context: Context,
     ): Promise<GQLResource[]> {
-      const filters = await findApplicableFilters(args, context);
-
       return fetchTopicResources(
         {
           topicId: topic.id,
+          subjectId: args.subjectId,
           relevance: 'urn:relevance:core',
-          filters,
+          filters: args.filterIds,
         },
         context,
       );
@@ -96,13 +96,12 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       args: TopicToSupplementaryResourcesArgs,
       context: Context,
     ): Promise<GQLResource[]> {
-      const filters = await findApplicableFilters(args, context);
-
       return fetchTopicResources(
         {
           topicId: topic.id,
+          subjectId: args.subjectId,
           relevance: 'urn:relevance:supplementary',
-          filters,
+          filters: args.filterIds,
         },
         context,
       );
