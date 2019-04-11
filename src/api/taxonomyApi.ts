@@ -192,3 +192,35 @@ export async function fetchResourcesAndTopics(
     }),
   );
 }
+
+export async function fetchMoviePath(
+  id: string,
+  context: Context,
+): Promise<GQLMoviePath> {
+  const response = await fetch(
+    `/taxonomy/v1/queries/topics?contentURI=${id}`,
+    context,
+  );
+  const json = await resolveJson(response);
+
+  const taxonomy = json.find((item: { contentUri: string }) => {
+    return item.contentUri === id;
+  });
+  return taxonomy;
+}
+
+export async function fetchMovieResourceTypes(
+  id: string,
+  context: Context,
+): Promise<GQLMovieResourceTypes> {
+  const response = await fetch(
+    `/taxonomy/v1/queries/resources?contentURI=${id}`,
+    context,
+  );
+  const json = await resolveJson(response);
+
+  const taxonomy = json.find((item: { contentUri: string }) => {
+    return item.contentUri === id;
+  });
+  return taxonomy;
+}

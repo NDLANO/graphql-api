@@ -45,3 +45,11 @@ export async function fetchSubjectPage(
   const subjectPage: GQLSubjectPage = await resolveJson(response);
   return subjectPage;
 }
+
+export async function fetchFilmFrontpage(
+  context: Context,
+): Promise<GQLFilmFrontpage> {
+  const response = await fetch(`/frontpage-api/v1/filmfrontpage`, context);
+  const filmFrontpage: GQLFilmFrontpage = await resolveJson(response);
+  return filmFrontpage;
+}

@@ -11,6 +11,10 @@ import {
   fetchSubjectPage,
   fetchTopic,
   fetchResourcesAndTopics,
+  fetchFilmFrontpage,
+  fetchMovieMeta,
+  fetchMoviePath,
+  fetchMovieResourceTypes,
 } from '../api';
 
 import { RCategory, FrontpageResponse } from '../api/frontpageApi';
@@ -34,6 +38,14 @@ export const Query = {
     context: Context,
   ): Promise<GQLSubjectPage> {
     return fetchSubjectPage(id, context);
+  },
+
+  async filmfrontpage(
+    _: any,
+    __: any,
+    context: Context,
+  ): Promise<GQLFilmFrontpage> {
+    return fetchFilmFrontpage(context);
   },
 };
 
@@ -67,6 +79,47 @@ export const resolvers = {
           return categorySubject.id === subject.id;
         }),
       );
+    },
+  },
+
+  Movie: {
+    async id(id: string) {
+      return id;
+    },
+    async title(id: string, _: any, context: Context): Promise<string> {
+      const movieMeta = await fetchMovieMeta(id, context);
+      return movieMeta.title;
+    },
+    async metaImage(
+      id: string,
+      _: any,
+      context: Context,
+    ): Promise<GQLMetaImage> {
+      const movieMeta = await fetchMovieMeta(id, context);
+      return movieMeta.metaImage;
+    },
+    async metaDescription(
+      id: string,
+      _: any,
+      context: Context,
+    ): Promise<string> {
+      const movieMeta = await fetchMovieMeta(id, context);
+      return movieMeta.metaDescription;
+    },
+    async path(id: string, _: any, context: Context): Promise<string> {
+      const moviePath: GQLMoviePath = await fetchMoviePath(id, context);
+      return moviePath.path;
+    },
+    async resourceTypes(
+      id: string,
+      _: any,
+      context: Context,
+    ): Promise<GQLResourceType[]> {
+      const movieResourceTypes: GQLMovieResourceTypes = await fetchMovieResourceTypes(
+        id,
+        context,
+      );
+      return movieResourceTypes.resourceTypes;
     },
   },
 

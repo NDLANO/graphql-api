@@ -15,6 +15,7 @@ import {
   fetchResourceTypes,
   fetchSubjects,
   fetchFrontpage,
+  fetchFilmFrontpage,
   fetchCurriculum,
 } from './api';
 import { FrontpageResponse } from './api/frontpageApi';
@@ -64,6 +65,15 @@ export function frontpageLoader(
   return new DataLoader(async () => {
     const frontpage = await fetchFrontpage(context);
     return [frontpage];
+  });
+}
+
+export function filmFrontpageLoader(
+  context: Context,
+): DataLoader<string, GQLFilmFrontpage> {
+  return new DataLoader(async () => {
+    const filmFrontpage = await fetchFilmFrontpage(context);
+    return [filmFrontpage];
   });
 }
 
