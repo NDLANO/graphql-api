@@ -160,6 +160,7 @@ export const typeDefs = gql`
     content: String!
     created: String!
     updated: String!
+    published: String!
     visualElement: String
     metaImage: MetaImage
     metaDescription: String!
