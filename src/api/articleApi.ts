@@ -45,7 +45,6 @@ export async function fetchArticles(
     const article = json.results.find((item: { id: number }) => {
       return item.id.toString() === id;
     });
-
     if (article) {
       return {
         id: article.id,
