@@ -51,7 +51,7 @@ export async function search(
     { cache: 'no-store' },
   );
   const json = await resolveJson(response);
-  // converet all search result paths with ending slash if it is not a resource type
+  // convert all search result paths with ending slash if it is not a resource type
   if (json && json.totalCount && json.results) {
     const xLength = json.results.length;
     for (let x = 0; x < xLength; x++) {
