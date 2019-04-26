@@ -53,7 +53,7 @@ export async function search(
   const json = await resolveJson(response);
   // convert all search result paths with ending slash if it is not a resource type
   if (json && json.totalCount && json.results) {
-    const xLength = json.results.length;
+    const resultLength = json.results.length;
     for (let x = 0; x < xLength; x++) {
       if (json.results[x].contexts && json.results[x].contexts.length) {
         const yLength = json.results[x].contexts.length;
