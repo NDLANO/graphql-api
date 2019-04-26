@@ -57,7 +57,7 @@ export async function search(
     for (let x = 0; x < resultLength; x++) {
       if (json.results[x].contexts && json.results[x].contexts.length) {
         const contextsLength = json.results[x].contexts.length;
-        for (let y = 0; y < yLength; y++) {
+        for (let y = 0; y < contextsLength; y++) {
           if (json.results[x].contexts[y] && json.results[x].contexts[y].path) {
             let newPath = json.results[x].contexts[y].path;
             const pattern = new RegExp(/resource/gi);
