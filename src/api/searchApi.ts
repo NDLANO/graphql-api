@@ -56,7 +56,7 @@ export async function search(
     const resultLength = json.results.length;
     for (let x = 0; x < resultLength; x++) {
       if (json.results[x].contexts && json.results[x].contexts.length) {
-        const yLength = json.results[x].contexts.length;
+        const contextsLength = json.results[x].contexts.length;
         for (let y = 0; y < yLength; y++) {
           if (json.results[x].contexts[y] && json.results[x].contexts[y].path) {
             let newPath = json.results[x].contexts[y].path;
