@@ -51,6 +51,24 @@ export async function search(
     { cache: 'no-store' },
   );
   const json = await resolveJson(response);
+  // converet all search result paths with ending slash if it is not a resource type
+  if (json && json.totalCount && json.results) {
+    const xLength = json.results.length;
+    for (let x = 0; x < xLength; x++) {
+      if (json.results[x].contexts && json.results[x].contexts.length) {
+        const yLength = json.results[x].contexts.length;
+        for (let y = 0; y < yLength; y++) {
+          if (json.results[x].contexts[y] && json.results[x].contexts[y].path) {
+            let newPath = json.results[x].contexts[y].path;
+            const pattern = new RegExp(/resource/gi);
+            if (!pattern.test(newPath)) {
+              json.results[x].contexts[y].path = `${newPath}/`;
+            }
+          }
+        }
+      }
+    }
+  }
   return {
     ...json,
     results: json.results.map((result: JsonResult) => ({
