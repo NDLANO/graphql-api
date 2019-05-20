@@ -119,7 +119,7 @@ export const resolvers = {
         id,
         context,
       );
-      return movieResourceTypes.resourceTypes;
+      return movieResourceTypes ? movieResourceTypes.resourceTypes : [];
     },
   },
 
