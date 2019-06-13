@@ -8,7 +8,6 @@
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
-import { Response } from 'apollo-env';
 
 export async function fetchArticle(
   params: {
