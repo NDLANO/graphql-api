@@ -27,7 +27,9 @@ async function filterMissingArticles(
   context: Context,
 ): Promise<GQLTaxonomyEntity[]> {
   const articles = await context.loaders.articlesLoader.loadMany(
-    entities.map(t => t.contentUri.replace('urn:article:', '')),
+    entities.map(taxonomyEntity =>
+      taxonomyEntity.contentUri.replace('urn:article:', ''),
+    ),
   );
   const nonNullArticles = articles.filter(article => !!article);
   return entities.filter(taxonomyEnity =>
