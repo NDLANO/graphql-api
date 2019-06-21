@@ -7,6 +7,7 @@
  */
 
 import { fetchResource, fetchResourceTypes, fetchArticle } from '../api';
+import { getArticleIdFromUrn } from '../utils/articleHelpers';
 
 export const Query = {
   async resource(
@@ -51,7 +52,7 @@ export const resolvers = {
         resource.contentUri.startsWith('urn:article')
       ) {
         return context.loaders.articlesLoader.load(
-          resource.contentUri.replace('urn:article:', ''),
+          getArticleIdFromUrn(resource.contentUri),
         );
       }
       throw Object.assign(
@@ -68,7 +69,7 @@ export const resolvers = {
         resource.contentUri &&
         resource.contentUri.startsWith('urn:article')
       ) {
-        const articleId = resource.contentUri.replace('urn:article:', '');
+        const articleId = getArticleIdFromUrn(resource.contentUri);
         return fetchArticle(
           {
             articleId,

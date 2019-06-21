@@ -4,25 +4,26 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+export function getArticleIdFromUrn(urn: string): string {
+  return urn.replace('urn:article', '');
+}
 export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
   context: Context,
 ): Promise<GQLTaxonomyEntity[]> {
+  const entitiesWithContentUri = entities.filter(
+    taxonomyEntity => !!taxonomyEntity.contentUri,
+  );
   const articles = await context.loaders.articlesLoader.loadMany(
-    entities
-      .filter(taxonomyEntity => !!taxonomyEntity.contentUri)
-      .map(taxonomyEntity =>
-        taxonomyEntity.contentUri.replace('urn:article:', ''),
-      ),
+    entitiesWithContentUri.map(taxonomyEntity =>
+      getArticleIdFromUrn(taxonomyEntity.contentUri),
+    ),
   );
   const nonNullArticles = articles.filter(article => !!article);
-  return entities
-    .filter(taxonomyEntity => !!taxonomyEntity.contentUri)
-    .filter(taxonomyEntity =>
-      nonNullArticles.find(
-        article =>
-          taxonomyEntity.contentUri.replace('urn:article:', '') ===
-          `${article.id}`,
-      ),
-    );
+  return entitiesWithContentUri.filter(taxonomyEntity =>
+    nonNullArticles.find(
+      article =>
+        getArticleIdFromUrn(taxonomyEntity.contentUri) === `${article.id}`,
+    ),
+  );
 }

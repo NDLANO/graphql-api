@@ -14,7 +14,10 @@ import {
   fetchTopicResources,
   fetchSubtopics,
 } from '../api';
-import { filterMissingArticles } from '../utils/articleHelpers';
+import {
+  filterMissingArticles,
+  getArticleIdFromUrn,
+} from '../utils/articleHelpers';
 
 interface TopicResponse {
   id: string;
@@ -44,7 +47,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       context: Context,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        const articleId = topic.contentUri.replace('urn:article:', '');
+        const articleId = getArticleIdFromUrn(topic.contentUri);
         return fetchArticle(
           {
             articleId,
@@ -73,7 +76,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     ): Promise<GQLMeta> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         return context.loaders.articlesLoader.load(
-          topic.contentUri.replace('urn:article:', ''),
+          getArticleIdFromUrn(topic.contentUri),
         );
       }
     },
