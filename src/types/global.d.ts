@@ -9,22 +9,26 @@ declare global {
     token_type?: string;
   }
 
+  interface Loaders {
+    articlesLoader: DataLoader<string, any>;
+    learningpathsLoader: DataLoader<string, any>;
+    filterLoader: DataLoader<string, GQLSubjectFilter[]>;
+    subjectTopicsLoader: DataLoader<
+      { subjectId: string; filterIds: string },
+      any
+    >;
+    subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
+    resourceTypesLoader: DataLoader<any, any>;
+    frontpageLoader: DataLoader<string, FrontpageResponse>;
+    curriculumLoader: DataLoader<string, GQLCompetenceCurriculum>;
+    [loaderName: string]: DataLoader<any, any>;
+  }
+
   interface Context {
     token?: AuthToken;
     language: string;
-    loaders?: {
-      articlesLoader: DataLoader<string, any>;
-      learningpathsLoader: DataLoader<string, any>;
-      filterLoader: DataLoader<string, GQLSubjectFilter[]>;
-      subjectTopicsLoader: DataLoader<
-        { subjectId: string; filterIds: string },
-        any
-      >;
-      subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
-      resourceTypesLoader: DataLoader<any, any>;
-      frontpageLoader: DataLoader<string, FrontpageResponse>;
-      curriculumLoader: DataLoader<string, GQLCompetenceCurriculum>;
-    };
+    getLoader?(loaderName: string): DataLoader<any, any>;
+    loaders?: Loaders;
   }
 
   interface RequestOptions extends RequestInit {

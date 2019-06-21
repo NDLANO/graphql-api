@@ -9,6 +9,7 @@
 import express, { Request, Response } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { isString } from 'lodash';
+import DataLoader from 'dataloader';
 import { port } from './config';
 import logger from './utils/logger';
 import { typeDefs } from './schema';
@@ -41,20 +42,26 @@ function getAcceptLanguage(request: Request): string {
 async function getContext({ req }: { req: Request }): Promise<Context> {
   const token = await getToken(req);
   const language = getAcceptLanguage(req);
-  const defaultContext = { token, language };
+  const defaultContext = { language, token, getLoader };
+  const loaders = {
+    articlesLoader: articlesLoader(defaultContext),
+    filterLoader: filterLoader(defaultContext),
+    subjectTopicsLoader: subjectTopicsLoader(defaultContext),
+    learningpathsLoader: learningpathsLoader(defaultContext),
+    resourceTypesLoader: resourceTypesLoader(defaultContext),
+    subjectsLoader: subjectsLoader(defaultContext),
+    frontpageLoader: frontpageLoader(defaultContext),
+    curriculumLoader: curriculumLoader(defaultContext),
+  };
+
+  function getLoader(loaderName: string): DataLoader<string, any> {
+    return (loaders as Loaders)[loaderName];
+  }
 
   return {
     ...defaultContext,
-    loaders: {
-      articlesLoader: articlesLoader(defaultContext),
-      filterLoader: filterLoader(defaultContext),
-      subjectTopicsLoader: subjectTopicsLoader(defaultContext),
-      learningpathsLoader: learningpathsLoader(defaultContext),
-      resourceTypesLoader: resourceTypesLoader(defaultContext),
-      subjectsLoader: subjectsLoader(defaultContext),
-      frontpageLoader: frontpageLoader(defaultContext),
-      curriculumLoader: curriculumLoader(defaultContext),
-    },
+    getLoader,
+    loaders,
   };
 }
 

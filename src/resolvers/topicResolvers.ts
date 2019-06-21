@@ -22,21 +22,6 @@ interface TopicResponse {
   path?: string;
 }
 
-async function filterMissingArticles(
-  entities: GQLTaxonomyEntity[],
-  context: Context,
-): Promise<GQLTaxonomyEntity[]> {
-  const articles = await context.loaders.articlesLoader.loadMany(
-    entities.map(taxonomyEntity =>
-      taxonomyEntity.contentUri.replace('urn:article:', ''),
-    ),
-  );
-  const nonNullArticles = articles.filter(article => !!article);
-  return entities.filter(taxonomyEnity =>
-    nonNullArticles.find(article => taxonomyEnity.article.id === article.id),
-  );
-}
-
 export const Query = {
   async topic(
     _: any,
@@ -96,7 +81,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       args: TopicToCoreResourcesArgs,
       context: Context,
     ): Promise<GQLResource[]> {
-      const topicResources = await fetchTopicResources(
+      return fetchTopicResources(
         {
           topicId: topic.id,
           subjectId: args.subjectId,
@@ -105,14 +90,13 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
         },
         context,
       );
-      return filterMissingArticles(topicResources, context);
     },
     async supplementaryResources(
       topic: TopicResponse,
       args: TopicToSupplementaryResourcesArgs,
       context: Context,
     ): Promise<GQLResource[]> {
-      const topicResources = await fetchTopicResources(
+      return fetchTopicResources(
         {
           topicId: topic.id,
           subjectId: args.subjectId,
@@ -121,18 +105,16 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
         },
         context,
       );
-      return filterMissingArticles(topicResources, context);
     },
     async subtopics(
       topic: TopicResponse,
       args: TopicToSubtopicsArgs,
       context: Context,
     ): Promise<GQLTopic[]> {
-      const subTopics = await fetchSubtopics(
+      return fetchSubtopics(
         { id: topic.id, filterIds: args.filterIds },
         context,
       );
-      return filterMissingArticles(subTopics, context);
     },
   },
 };
