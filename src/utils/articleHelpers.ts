@@ -5,7 +5,7 @@
  */
 
 export function getArticleIdFromUrn(urn: string): string {
-  return urn.replace('urn:article', '');
+  return urn.replace('urn:article:', '');
 }
 export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
