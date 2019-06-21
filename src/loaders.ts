@@ -95,14 +95,9 @@ interface IInput {
 export function subjectTopicsLoader(context: Context): DataLoader<IInput, any> {
   return new DataLoader(
     async ids => {
-      return ids.map(async ({ subjectId, filterIds }) => {
-        const subjectTopics = await fetchSubjectTopics(
-          subjectId,
-          filterIds,
-          context,
-        );
-        return filterMissingArticles(subjectTopics, context);
-      });
+      return ids.map(async ({ subjectId, filterIds }) =>
+        fetchSubjectTopics(subjectId, filterIds, context),
+      );
     },
     {
       cacheKeyFn: (key: IInput) => JSON.stringify(key),

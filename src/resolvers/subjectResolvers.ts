@@ -9,6 +9,7 @@
 import { fetchSubjects, fetchSubjectPage, fetchFilters } from '../api';
 
 import { RSubjectCategory } from '../api/frontpageApi';
+import { filterMissingArticles } from '../utils/articleHelpers';
 
 interface Id {
   id: string;
@@ -45,7 +46,10 @@ export const resolvers = {
       if (args.all) {
         return topics;
       }
-      return topics.filter((topic: GQLTopic) => topic.parent === subject.id);
+      return filterMissingArticles(
+        topics.filter((topic: GQLTopic) => topic.parent === subject.id),
+        context,
+      );
     },
     async filters(
       subject: GQLSubject,

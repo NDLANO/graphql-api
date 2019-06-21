@@ -8,10 +8,9 @@ export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
   context: Context,
 ): Promise<GQLTaxonomyEntity[]> {
-  const articlesLoader = context.getLoader('articlesLoader');
-  const articles = await articlesLoader.loadMany(
+  const articles = await context.loaders.articlesLoader.loadMany(
     entities
-      .filter(t => !!t.contentUri)
+      .filter(taxonomyEntity => !!taxonomyEntity.contentUri)
       .map(taxonomyEntity =>
         taxonomyEntity.contentUri.replace('urn:article:', ''),
       ),

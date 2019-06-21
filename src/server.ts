@@ -42,26 +42,20 @@ function getAcceptLanguage(request: Request): string {
 async function getContext({ req }: { req: Request }): Promise<Context> {
   const token = await getToken(req);
   const language = getAcceptLanguage(req);
-  const defaultContext = { language, token, getLoader };
-  const loaders = {
-    articlesLoader: articlesLoader(defaultContext),
-    filterLoader: filterLoader(defaultContext),
-    subjectTopicsLoader: subjectTopicsLoader(defaultContext),
-    learningpathsLoader: learningpathsLoader(defaultContext),
-    resourceTypesLoader: resourceTypesLoader(defaultContext),
-    subjectsLoader: subjectsLoader(defaultContext),
-    frontpageLoader: frontpageLoader(defaultContext),
-    curriculumLoader: curriculumLoader(defaultContext),
-  };
-
-  function getLoader(loaderName: string): DataLoader<string, any> {
-    return (loaders as Loaders)[loaderName];
-  }
+  const defaultContext = { language, token };
 
   return {
     ...defaultContext,
-    getLoader,
-    loaders,
+    loaders: {
+      articlesLoader: articlesLoader(defaultContext),
+      filterLoader: filterLoader(defaultContext),
+      subjectTopicsLoader: subjectTopicsLoader(defaultContext),
+      learningpathsLoader: learningpathsLoader(defaultContext),
+      resourceTypesLoader: resourceTypesLoader(defaultContext),
+      subjectsLoader: subjectsLoader(defaultContext),
+      frontpageLoader: frontpageLoader(defaultContext),
+      curriculumLoader: curriculumLoader(defaultContext),
+    },
   };
 }
 

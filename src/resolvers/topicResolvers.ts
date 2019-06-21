@@ -14,6 +14,7 @@ import {
   fetchTopicResources,
   fetchSubtopics,
 } from '../api';
+import { filterMissingArticles } from '../utils/articleHelpers';
 
 interface TopicResponse {
   id: string;
@@ -81,7 +82,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       args: TopicToCoreResourcesArgs,
       context: Context,
     ): Promise<GQLResource[]> {
-      return fetchTopicResources(
+      const topicResources = await fetchTopicResources(
         {
           topicId: topic.id,
           subjectId: args.subjectId,
@@ -90,13 +91,14 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
         },
         context,
       );
+      return filterMissingArticles(topicResources, context);
     },
     async supplementaryResources(
       topic: TopicResponse,
       args: TopicToSupplementaryResourcesArgs,
       context: Context,
     ): Promise<GQLResource[]> {
-      return fetchTopicResources(
+      const topicResources = await fetchTopicResources(
         {
           topicId: topic.id,
           subjectId: args.subjectId,
@@ -105,16 +107,18 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
         },
         context,
       );
+      return filterMissingArticles(topicResources, context);
     },
     async subtopics(
       topic: TopicResponse,
       args: TopicToSubtopicsArgs,
       context: Context,
     ): Promise<GQLTopic[]> {
-      return fetchSubtopics(
+      const subtopics = await fetchSubtopics(
         { id: topic.id, filterIds: args.filterIds },
         context,
       );
+      return filterMissingArticles(subtopics, context);
     },
   },
 };
