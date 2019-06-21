@@ -19,6 +19,7 @@ import {
   fetchCurriculum,
 } from './api';
 import { FrontpageResponse } from './api/frontpageApi';
+import { filterMissingArticles } from './utils/articleHelpers';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async articleIds => {
@@ -94,9 +95,9 @@ interface IInput {
 export function subjectTopicsLoader(context: Context): DataLoader<IInput, any> {
   return new DataLoader(
     async ids => {
-      return ids.map(async ({ subjectId, filterIds }) => {
-        return fetchSubjectTopics(subjectId, filterIds, context);
-      });
+      return ids.map(async ({ subjectId, filterIds }) =>
+        fetchSubjectTopics(subjectId, filterIds, context),
+      );
     },
     {
       cacheKeyFn: (key: IInput) => JSON.stringify(key),

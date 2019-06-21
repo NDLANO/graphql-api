@@ -9,6 +9,7 @@
 import express, { Request, Response } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { isString } from 'lodash';
+import DataLoader from 'dataloader';
 import { port } from './config';
 import logger from './utils/logger';
 import { typeDefs } from './schema';
@@ -41,7 +42,7 @@ function getAcceptLanguage(request: Request): string {
 async function getContext({ req }: { req: Request }): Promise<Context> {
   const token = await getToken(req);
   const language = getAcceptLanguage(req);
-  const defaultContext = { token, language };
+  const defaultContext = { language, token };
 
   return {
     ...defaultContext,

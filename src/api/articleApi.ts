@@ -8,6 +8,7 @@
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
+import { getArticleIdFromUrn } from '../utils/articleHelpers';
 
 export async function fetchArticle(
   params: {
@@ -84,12 +85,12 @@ export async function fetchArticles(
 }
 
 export async function fetchMovieMeta(
-  articleId: string,
+  articleUrn: string,
   context: Context,
 ): Promise<GQLMovieMeta> {
-  const id = articleId.replace('urn:article:', '');
+  const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
-    `/article-api/v2/articles/?ids=${id}&language=${
+    `/article-api/v2/articles/?ids=${articleId}&language=${
       context.language
     }&fallback=true`,
     context,
@@ -97,7 +98,7 @@ export async function fetchMovieMeta(
   const json = await resolveJson(response);
 
   const article = json.results.find((item: { id: number }) => {
-    return item.id.toString() === id;
+    return item.id.toString() === articleId;
   });
 
   if (article) {

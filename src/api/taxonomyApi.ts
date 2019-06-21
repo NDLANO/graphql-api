@@ -175,7 +175,7 @@ export async function fetchTopicResources(
     }
   });
 
-  return resources.filter(resource => !!resource.contentUri);
+  return resources;
 }
 
 export async function fetchResourcesAndTopics(
