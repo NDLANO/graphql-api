@@ -91,11 +91,14 @@ function externalsToH5pMetaData(obj: any) {
           },
           creators: new Array(),
           processors: new Array(),
-          rightsholders: i.h5p.authors.map(
-            (author: { role: any; name?: string }) => {
-              return { type: roleMapper(author.role || ''), name: author.name };
-            },
-          ),
+          rightsholders: i.h5p.authors
+            ? i.h5p.authors.map((author: { role: any; name?: string }) => {
+                return {
+                  type: roleMapper(author.role || ''),
+                  name: author.name,
+                };
+              })
+            : [],
           origin: i.h5p.source || '',
         };
         h5pArray.push({
