@@ -7,6 +7,7 @@
 export function getArticleIdFromUrn(urn: string): string {
   return urn.replace('urn:article:', '');
 }
+
 export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
   context: Context,
@@ -14,16 +15,28 @@ export async function filterMissingArticles(
   const entitiesWithContentUri = entities.filter(
     taxonomyEntity => !!taxonomyEntity.contentUri,
   );
+
+  const learningpathResources = entitiesWithContentUri.filter(taxonomyEntity =>
+    taxonomyEntity.contentUri.includes('urn:learningpath'),
+  );
+
+  const articleResources = entitiesWithContentUri.filter(taxonomyEntity =>
+    taxonomyEntity.contentUri.includes('urn:article'),
+  );
+
   const articles = await context.loaders.articlesLoader.loadMany(
-    entitiesWithContentUri.map(taxonomyEntity =>
+    articleResources.map(taxonomyEntity =>
       getArticleIdFromUrn(taxonomyEntity.contentUri),
     ),
   );
   const nonNullArticles = articles.filter(article => !!article);
-  return entitiesWithContentUri.filter(taxonomyEntity =>
-    nonNullArticles.find(
-      article =>
-        getArticleIdFromUrn(taxonomyEntity.contentUri) === `${article.id}`,
+  return [
+    ...learningpathResources,
+    ...articleResources.filter(taxonomyEntity =>
+      nonNullArticles.find(
+        article =>
+          getArticleIdFromUrn(taxonomyEntity.contentUri) === `${article.id}`,
+      ),
     ),
-  );
+  ];
 }
