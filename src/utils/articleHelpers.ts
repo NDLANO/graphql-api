@@ -14,17 +14,24 @@ export async function filterMissingArticles(
   const entitiesWithContentUri = entities.filter(
     taxonomyEntity => !!taxonomyEntity.contentUri,
   );
-  const learningpaths = entitiesWithContentUri.filter(taxonomyEntity => taxonomyEntity.contentUri.includes('urn:learningpath'));
+  const learningpaths = entitiesWithContentUri.filter(taxonomyEntity =>
+    taxonomyEntity.contentUri.includes('urn:learningpath'),
+  );
   const articles = await context.loaders.articlesLoader.loadMany(
-    entitiesWithContentUri.filter(taxonomyEntity => taxonomyEntity.contentUri.includes('urn:article')).map(taxonomyEntity =>
-      getArticleIdFromUrn(taxonomyEntity.contentUri),
-    ),
+    entitiesWithContentUri
+      .filter(taxonomyEntity =>
+        taxonomyEntity.contentUri.includes('urn:article'),
+      )
+      .map(taxonomyEntity => getArticleIdFromUrn(taxonomyEntity.contentUri)),
   );
   const nonNullArticles = articles.filter(article => !!article);
-  return [...learningpaths, ...entitiesWithContentUri.filter(taxonomyEntity =>
-    nonNullArticles.find(
-      article =>
-        getArticleIdFromUrn(taxonomyEntity.contentUri) === `${article.id}`,
+  return [
+    ...learningpaths,
+    ...entitiesWithContentUri.filter(taxonomyEntity =>
+      nonNullArticles.find(
+        article =>
+          getArticleIdFromUrn(taxonomyEntity.contentUri) === `${article.id}`,
+      ),
     ),
-  )];
+  ];
 }
