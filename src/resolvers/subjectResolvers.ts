@@ -44,7 +44,7 @@ export const resolvers = {
         filterIds: args.filterIds,
       });
       if (args.all) {
-        return topics;
+        return filterMissingArticles(topics, context);
       }
       return filterMissingArticles(
         topics.filter((topic: GQLTopic) => topic.parent === subject.id),
