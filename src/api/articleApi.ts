@@ -52,8 +52,10 @@ export async function fetchArticles(
   const numberOfPages = Math.ceil(firstPage.totalCount / firstPage.pageSize);
 
   const requests = [firstPage];
-  for (let i = 1; i < numberOfPages; i += 1) {
-    requests.push(fetchArticlesPage(articleIds, context, pageSize, i));
+  if (numberOfPages > 1) {
+    for (let i = 2; i <= numberOfPages; i += 1) {
+      requests.push(fetchArticlesPage(articleIds, context, pageSize, i));
+    }
   }
   const results = await Promise.all(requests);
   const articles = results.reduce((acc, res) => [...acc, ...res.results], []);
@@ -62,7 +64,7 @@ export async function fetchArticles(
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
   return articleIds.map(id => {
     const article = articles.find((item: { id: number }) => {
-      return item.id.toString() === id;
+      return item.id.toString() == id;
     });
     if (article) {
       return {
