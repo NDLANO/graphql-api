@@ -64,7 +64,7 @@ export async function fetchArticles(
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
   return articleIds.map(id => {
     const article = articles.find((item: { id: number }) => {
-      return item.id.toString() == id;
+      return item.id.toString() === id;
     });
     if (article) {
       return {
