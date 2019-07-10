@@ -9,7 +9,6 @@
 import express, { Request, Response } from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { isString } from 'lodash';
-import DataLoader from 'dataloader';
 import { port } from './config';
 import logger from './utils/logger';
 import { typeDefs } from './schema';

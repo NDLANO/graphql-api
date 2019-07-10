@@ -52,8 +52,10 @@ export async function fetchArticles(
   const numberOfPages = Math.ceil(firstPage.totalCount / firstPage.pageSize);
 
   const requests = [firstPage];
-  for (let i = 1; i < numberOfPages; i += 1) {
-    requests.push(fetchArticlesPage(articleIds, context, pageSize, i));
+  if (numberOfPages > 1) {
+    for (let i = 2; i <= numberOfPages; i += 1) {
+      requests.push(fetchArticlesPage(articleIds, context, pageSize, i));
+    }
   }
   const results = await Promise.all(requests);
   const articles = results.reduce((acc, res) => [...acc, ...res.results], []);
