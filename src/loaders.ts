@@ -22,9 +22,12 @@ import { FrontpageResponse } from './api/frontpageApi';
 import { filterMissingArticles } from './utils/articleHelpers';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
-  return new DataLoader(async articleIds => {
-    return fetchArticles(articleIds, context);
-  });
+  return new DataLoader(
+    async articleIds => {
+      return fetchArticles(articleIds, context);
+    },
+    { maxBatchSize: 100 },
+  );
 }
 
 export function learningpathsLoader(context: Context): DataLoader<string, any> {
