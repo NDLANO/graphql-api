@@ -34,6 +34,10 @@ import {
   Query as CurriculumQuery,
   resolvers as curriculumResolvers,
 } from './curriculumResolvers';
+import {
+  Query as LearningpathQuery,
+  resolvers as learningpathResolvers,
+} from './learningpathResolvers';
 
 export const resolvers: GQLResolver = {
   Query: {
@@ -44,6 +48,7 @@ export const resolvers: GQLResolver = {
     ...ArticleQuery,
     ...SearchQuery,
     ...CurriculumQuery,
+    ...LearningpathQuery,
   },
   ...articleResolvers,
   ...subjectResolvers,
@@ -52,6 +57,7 @@ export const resolvers: GQLResolver = {
   ...resourceResolvers,
   ...searchResolvers,
   ...curriculumResolvers,
+  ...learningpathResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any): GQLPossibleTaxonomyEntityTypeNames {

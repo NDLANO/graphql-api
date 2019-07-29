@@ -355,12 +355,58 @@ export const typeDefs = gql`
     totalCount: Int
   }
 
+  type LearningpathStepEmbedUrl {
+    url: String
+    embedType: String
+  }
+
+  type LearningpathStep {
+    id: Int!
+    title: String!
+    seqNo: Int!
+    description: String
+    embedUrl: LearningpathStepEmbedUrl
+    license: License
+    metaUrl: String
+    revision: Int
+    status: String
+    supportedLanguages: [String]
+    type: String
+    article: Article
+  }
+
+  type LearningpathCoverphoto {
+    url: String
+    metaUrl: String
+  }
+
+  type Learningpath {
+    id: Int!
+    title: String!
+    description: String
+    copyright: Copyright
+    duration: Int
+    canEdit: Boolean
+    verificationStatus: String
+    lastUpdated: String
+    tags: [String]
+    isBasedOn: Int
+    learningsteps: [LearningpathStep]
+    metaUrl: String
+    revision: Int
+    learningstepUrl: String
+    status: String
+    coverphoto: LearningpathCoverphoto
+  }
+
   type Query {
     resource(id: String!, subjectId: String): Resource
     article(id: String!, filterIds: String, subjectId: String): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
     filmfrontpage: FilmFrontpage
+    learningpath(pathId: String!): Learningpath
+    learningpathStep(pathId: String!, stepId: String!): LearningpathStep
     subjects: [Subject]
     topic(id: String!, subjectId: String): Topic
     topics: [Topic]
