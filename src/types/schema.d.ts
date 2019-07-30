@@ -41,6 +41,7 @@ declare global {
     paths?: Array<string | null>;
     meta?: GQLMeta;
     article?: GQLArticle;
+    learningpath?: GQLLearningpath;
     filters?: Array<GQLFilter | null>;
     resourceTypes?: Array<GQLResourceType | null>;
     parentTopics?: Array<GQLTopic | null>;
@@ -196,6 +197,56 @@ declare global {
     relevanceId?: string;
   }
   
+  export interface GQLLearningpath {
+    id: number;
+    title: string;
+    description?: string;
+    copyright?: GQLLearningpathCopyright;
+    duration?: number;
+    canEdit?: boolean;
+    verificationStatus?: string;
+    lastUpdated?: string;
+    tags?: Array<string | null>;
+    isBasedOn?: number;
+    learningsteps?: Array<GQLLearningpathStep | null>;
+    metaUrl?: string;
+    revision?: number;
+    learningstepUrl?: string;
+    status?: string;
+    coverphoto?: GQLLearningpathCoverphoto;
+  }
+  
+  export interface GQLLearningpathCopyright {
+    license?: GQLLicense;
+    contributors?: Array<GQLContributor | null>;
+  }
+  
+  export interface GQLLearningpathStep {
+    id: number;
+    title: string;
+    seqNo: number;
+    description?: string;
+    embedUrl?: GQLLearningpathStepEmbedUrl;
+    license?: GQLLicense;
+    metaUrl?: string;
+    revision?: number;
+    status?: string;
+    supportedLanguages?: Array<string | null>;
+    type?: string;
+    article?: GQLArticle;
+    showTitle?: boolean;
+  }
+  
+  export interface GQLLearningpathStepEmbedUrl {
+    url?: string;
+    embedType?: string;
+  }
+  
+  export interface GQLLearningpathCoverphoto {
+    url?: string;
+    metaUrl?: string;
+  }
+  
   export interface GQLResourceType {
     id: string;
     name: string;
@@ -307,50 +358,6 @@ declare global {
     metaDescription?: string;
     resourceTypes?: Array<GQLResourceType | null>;
     path?: string;
-  }
-  
-  export interface GQLLearningpath {
-    id: number;
-    title: string;
-    description?: string;
-    copyright?: GQLCopyright;
-    duration?: number;
-    canEdit?: boolean;
-    verificationStatus?: string;
-    lastUpdated?: string;
-    tags?: Array<string | null>;
-    isBasedOn?: number;
-    learningsteps?: Array<GQLLearningpathStep | null>;
-    metaUrl?: string;
-    revision?: number;
-    learningstepUrl?: string;
-    status?: string;
-    coverphoto?: GQLLearningpathCoverphoto;
-  }
-  
-  export interface GQLLearningpathStep {
-    id: number;
-    title: string;
-    seqNo: number;
-    description?: string;
-    embedUrl?: GQLLearningpathStepEmbedUrl;
-    license?: GQLLicense;
-    metaUrl?: string;
-    revision?: number;
-    status?: string;
-    supportedLanguages?: Array<string | null>;
-    type?: string;
-    article?: GQLArticle;
-  }
-  
-  export interface GQLLearningpathStepEmbedUrl {
-    url?: string;
-    embedType?: string;
-  }
-  
-  export interface GQLLearningpathCoverphoto {
-    url?: string;
-    metaUrl?: string;
   }
   
   export interface GQLFrontpage {
@@ -465,6 +472,11 @@ declare global {
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
     CompetenceCurriculum?: GQLCompetenceCurriculumTypeResolver;
     Filter?: GQLFilterTypeResolver;
+    Learningpath?: GQLLearningpathTypeResolver;
+    LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
+    LearningpathStep?: GQLLearningpathStepTypeResolver;
+    LearningpathStepEmbedUrl?: GQLLearningpathStepEmbedUrlTypeResolver;
+    LearningpathCoverphoto?: GQLLearningpathCoverphotoTypeResolver;
     ResourceType?: GQLResourceTypeTypeResolver;
     Topic?: GQLTopicTypeResolver;
     Subject?: GQLSubjectTypeResolver;
@@ -479,10 +491,6 @@ declare global {
     MovieTheme?: GQLMovieThemeTypeResolver;
     Name?: GQLNameTypeResolver;
     Movie?: GQLMovieTypeResolver;
-    Learningpath?: GQLLearningpathTypeResolver;
-    LearningpathStep?: GQLLearningpathStepTypeResolver;
-    LearningpathStepEmbedUrl?: GQLLearningpathStepEmbedUrlTypeResolver;
-    LearningpathCoverphoto?: GQLLearningpathCoverphotoTypeResolver;
     Frontpage?: GQLFrontpageTypeResolver;
     Category?: GQLCategoryTypeResolver;
     Search?: GQLSearchTypeResolver;
@@ -637,6 +645,7 @@ declare global {
     paths?: ResourceToPathsResolver<TParent>;
     meta?: ResourceToMetaResolver<TParent>;
     article?: ResourceToArticleResolver<TParent>;
+    learningpath?: ResourceToLearningpathResolver<TParent>;
     filters?: ResourceToFiltersResolver<TParent>;
     resourceTypes?: ResourceToResourceTypesResolver<TParent>;
     parentTopics?: ResourceToParentTopicsResolver<TParent>;
@@ -672,6 +681,10 @@ declare global {
   }
   export interface ResourceToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: ResourceToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToLearningpathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ResourceToFiltersResolver<TParent = any, TResult = any> {
@@ -1135,6 +1148,196 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLLearningpathTypeResolver<TParent = any> {
+    id?: LearningpathToIdResolver<TParent>;
+    title?: LearningpathToTitleResolver<TParent>;
+    description?: LearningpathToDescriptionResolver<TParent>;
+    copyright?: LearningpathToCopyrightResolver<TParent>;
+    duration?: LearningpathToDurationResolver<TParent>;
+    canEdit?: LearningpathToCanEditResolver<TParent>;
+    verificationStatus?: LearningpathToVerificationStatusResolver<TParent>;
+    lastUpdated?: LearningpathToLastUpdatedResolver<TParent>;
+    tags?: LearningpathToTagsResolver<TParent>;
+    isBasedOn?: LearningpathToIsBasedOnResolver<TParent>;
+    learningsteps?: LearningpathToLearningstepsResolver<TParent>;
+    metaUrl?: LearningpathToMetaUrlResolver<TParent>;
+    revision?: LearningpathToRevisionResolver<TParent>;
+    learningstepUrl?: LearningpathToLearningstepUrlResolver<TParent>;
+    status?: LearningpathToStatusResolver<TParent>;
+    coverphoto?: LearningpathToCoverphotoResolver<TParent>;
+  }
+  
+  export interface LearningpathToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToDurationResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToCanEditResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToVerificationStatusResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToLastUpdatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToIsBasedOnResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToLearningstepsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToMetaUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToRevisionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToLearningstepUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToStatusResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToCoverphotoResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathCopyrightTypeResolver<TParent = any> {
+    license?: LearningpathCopyrightToLicenseResolver<TParent>;
+    contributors?: LearningpathCopyrightToContributorsResolver<TParent>;
+  }
+  
+  export interface LearningpathCopyrightToLicenseResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathCopyrightToContributorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathStepTypeResolver<TParent = any> {
+    id?: LearningpathStepToIdResolver<TParent>;
+    title?: LearningpathStepToTitleResolver<TParent>;
+    seqNo?: LearningpathStepToSeqNoResolver<TParent>;
+    description?: LearningpathStepToDescriptionResolver<TParent>;
+    embedUrl?: LearningpathStepToEmbedUrlResolver<TParent>;
+    license?: LearningpathStepToLicenseResolver<TParent>;
+    metaUrl?: LearningpathStepToMetaUrlResolver<TParent>;
+    revision?: LearningpathStepToRevisionResolver<TParent>;
+    status?: LearningpathStepToStatusResolver<TParent>;
+    supportedLanguages?: LearningpathStepToSupportedLanguagesResolver<TParent>;
+    type?: LearningpathStepToTypeResolver<TParent>;
+    article?: LearningpathStepToArticleResolver<TParent>;
+    showTitle?: LearningpathStepToShowTitleResolver<TParent>;
+  }
+  
+  export interface LearningpathStepToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToSeqNoResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToEmbedUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToLicenseResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToMetaUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToRevisionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToStatusResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToArticleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToShowTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathStepEmbedUrlTypeResolver<TParent = any> {
+    url?: LearningpathStepEmbedUrlToUrlResolver<TParent>;
+    embedType?: LearningpathStepEmbedUrlToEmbedTypeResolver<TParent>;
+  }
+  
+  export interface LearningpathStepEmbedUrlToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepEmbedUrlToEmbedTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathCoverphotoTypeResolver<TParent = any> {
+    url?: LearningpathCoverphotoToUrlResolver<TParent>;
+    metaUrl?: LearningpathCoverphotoToMetaUrlResolver<TParent>;
+  }
+  
+  export interface LearningpathCoverphotoToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathCoverphotoToMetaUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLResourceTypeTypeResolver<TParent = any> {
     id?: ResourceTypeToIdResolver<TParent>;
     name?: ResourceTypeToNameResolver<TParent>;
@@ -1563,178 +1766,6 @@ declare global {
   }
   
   export interface MovieToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathTypeResolver<TParent = any> {
-    id?: LearningpathToIdResolver<TParent>;
-    title?: LearningpathToTitleResolver<TParent>;
-    description?: LearningpathToDescriptionResolver<TParent>;
-    copyright?: LearningpathToCopyrightResolver<TParent>;
-    duration?: LearningpathToDurationResolver<TParent>;
-    canEdit?: LearningpathToCanEditResolver<TParent>;
-    verificationStatus?: LearningpathToVerificationStatusResolver<TParent>;
-    lastUpdated?: LearningpathToLastUpdatedResolver<TParent>;
-    tags?: LearningpathToTagsResolver<TParent>;
-    isBasedOn?: LearningpathToIsBasedOnResolver<TParent>;
-    learningsteps?: LearningpathToLearningstepsResolver<TParent>;
-    metaUrl?: LearningpathToMetaUrlResolver<TParent>;
-    revision?: LearningpathToRevisionResolver<TParent>;
-    learningstepUrl?: LearningpathToLearningstepUrlResolver<TParent>;
-    status?: LearningpathToStatusResolver<TParent>;
-    coverphoto?: LearningpathToCoverphotoResolver<TParent>;
-  }
-  
-  export interface LearningpathToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToDurationResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToCanEditResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToVerificationStatusResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToLastUpdatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToIsBasedOnResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToLearningstepsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToMetaUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToRevisionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToLearningstepUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToStatusResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToCoverphotoResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathStepTypeResolver<TParent = any> {
-    id?: LearningpathStepToIdResolver<TParent>;
-    title?: LearningpathStepToTitleResolver<TParent>;
-    seqNo?: LearningpathStepToSeqNoResolver<TParent>;
-    description?: LearningpathStepToDescriptionResolver<TParent>;
-    embedUrl?: LearningpathStepToEmbedUrlResolver<TParent>;
-    license?: LearningpathStepToLicenseResolver<TParent>;
-    metaUrl?: LearningpathStepToMetaUrlResolver<TParent>;
-    revision?: LearningpathStepToRevisionResolver<TParent>;
-    status?: LearningpathStepToStatusResolver<TParent>;
-    supportedLanguages?: LearningpathStepToSupportedLanguagesResolver<TParent>;
-    type?: LearningpathStepToTypeResolver<TParent>;
-    article?: LearningpathStepToArticleResolver<TParent>;
-  }
-  
-  export interface LearningpathStepToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToSeqNoResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToEmbedUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToMetaUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToRevisionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToStatusResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathStepEmbedUrlTypeResolver<TParent = any> {
-    url?: LearningpathStepEmbedUrlToUrlResolver<TParent>;
-    embedType?: LearningpathStepEmbedUrlToEmbedTypeResolver<TParent>;
-  }
-  
-  export interface LearningpathStepEmbedUrlToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepEmbedUrlToEmbedTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathCoverphotoTypeResolver<TParent = any> {
-    url?: LearningpathCoverphotoToUrlResolver<TParent>;
-    metaUrl?: LearningpathCoverphotoToMetaUrlResolver<TParent>;
-  }
-  
-  export interface LearningpathCoverphotoToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathCoverphotoToMetaUrlResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
