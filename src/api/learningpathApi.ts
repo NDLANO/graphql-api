@@ -92,7 +92,7 @@ export async function fetchLearningpathStep(
   const learningpathStep = await resolveJson(response);
   return {
     ...learningpathStep,
-    title: learningpathStep.title.title,
+    title: learningpathStep.title ? learningpathStep.title.title : '',
     description: learningpathStep.description
       ? learningpathStep.description.description
       : undefined,

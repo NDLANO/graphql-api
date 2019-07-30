@@ -11,29 +11,19 @@ import {
   fetchLearningpathStep,
   fetchResource,
   fetchArticle,
-  queryResourcesOnContentURI,
 } from '../api';
-
-interface LearningpathArgument {
-  pathId: string;
-}
-
-interface LearningpathStepArgument {
-  pathId: string;
-  stepId: string;
-}
 
 export const Query = {
   async learningpath(
     _: any,
-    { pathId }: LearningpathArgument,
+    { pathId }: QueryToLearningpathArgs,
     context: Context,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
   },
   async learningpathStep(
     _: any,
-    { pathId, stepId }: LearningpathStepArgument,
+    { pathId, stepId }: QueryToLearningpathStepArgs,
     context: Context,
   ): Promise<GQLLearningpath> {
     return fetchLearningpathStep(pathId, stepId, context);
