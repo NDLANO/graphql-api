@@ -30,7 +30,7 @@ export {
   fetchTopics,
   fetchResourcesAndTopics,
   fetchSubtopics,
-  fetchMoviePath,
-  fetchMovieResourceTypes,
+  queryTopicsOnContentURI,
+  queryResourcesOnContentURI,
 } from './taxonomyApi';
 export { search, groupSearch } from './searchApi';

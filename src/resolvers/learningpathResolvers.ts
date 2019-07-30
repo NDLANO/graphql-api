@@ -11,6 +11,7 @@ import {
   fetchLearningpathStep,
   fetchResource,
   fetchArticle,
+  queryResourcesOnContentURI,
 } from '../api';
 
 interface LearningpathArgument {

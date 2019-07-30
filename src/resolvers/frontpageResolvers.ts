@@ -13,8 +13,8 @@ import {
   fetchResourcesAndTopics,
   fetchFilmFrontpage,
   fetchMovieMeta,
-  fetchMoviePath,
-  fetchMovieResourceTypes,
+  queryTopicsOnContentURI,
+  queryResourcesOnContentURI,
 } from '../api';
 
 import { RCategory, FrontpageResponse } from '../api/frontpageApi';
@@ -107,7 +107,10 @@ export const resolvers = {
       return movieMeta.metaDescription;
     },
     async path(id: string, _: any, context: Context): Promise<string> {
-      const moviePath: GQLMoviePath = await fetchMoviePath(id, context);
+      const moviePath: GQLMoviePath = await queryTopicsOnContentURI(
+        id,
+        context,
+      );
       return moviePath.path;
     },
     async resourceTypes(
@@ -115,7 +118,7 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLResourceType[]> {
-      const movieResourceTypes: GQLMovieResourceTypes = await fetchMovieResourceTypes(
+      const movieResourceTypes: GQLMovieResourceTypes = await queryResourcesOnContentURI(
         id,
         context,
       );

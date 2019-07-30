@@ -193,10 +193,10 @@ export async function fetchResourcesAndTopics(
   );
 }
 
-export async function fetchMoviePath(
+export async function queryTopicsOnContentURI(
   id: string,
   context: Context,
-): Promise<GQLMoviePath> {
+): Promise<GQLTopic> {
   const response = await fetch(
     `/taxonomy/v1/queries/topics?contentURI=${id}`,
     context,
@@ -209,10 +209,10 @@ export async function fetchMoviePath(
   return taxonomy;
 }
 
-export async function fetchMovieResourceTypes(
+export async function queryResourcesOnContentURI(
   id: string,
   context: Context,
-): Promise<GQLMovieResourceTypes> {
+): Promise<GQLResource> {
   const response = await fetch(
     `/taxonomy/v1/queries/resources?contentURI=${id}`,
     context,
