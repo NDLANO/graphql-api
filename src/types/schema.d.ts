@@ -207,6 +207,7 @@ declare global {
     verificationStatus?: string;
     lastUpdated?: string;
     tags?: Array<string | null>;
+    supportedLanguages?: Array<string | null>;
     isBasedOn?: number;
     learningsteps?: Array<GQLLearningpathStep | null>;
     metaUrl?: string;
@@ -1158,6 +1159,7 @@ declare global {
     verificationStatus?: LearningpathToVerificationStatusResolver<TParent>;
     lastUpdated?: LearningpathToLastUpdatedResolver<TParent>;
     tags?: LearningpathToTagsResolver<TParent>;
+    supportedLanguages?: LearningpathToSupportedLanguagesResolver<TParent>;
     isBasedOn?: LearningpathToIsBasedOnResolver<TParent>;
     learningsteps?: LearningpathToLearningstepsResolver<TParent>;
     metaUrl?: LearningpathToMetaUrlResolver<TParent>;
@@ -1200,6 +1202,10 @@ declare global {
   }
   
   export interface LearningpathToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToSupportedLanguagesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

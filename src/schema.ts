@@ -87,6 +87,7 @@ export const typeDefs = gql`
     verificationStatus: String
     lastUpdated: String
     tags: [String]
+    supportedLanguages: [String]
     isBasedOn: Int
     learningsteps: [LearningpathStep]
     metaUrl: String
