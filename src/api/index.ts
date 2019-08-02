@@ -13,7 +13,11 @@ export {
   fetchFilmFrontpage,
 } from './frontpageApi';
 export { fetchArticle, fetchArticles, fetchMovieMeta } from './articleApi';
-export { fetchLearningpaths } from './learningpathApi';
+export {
+  fetchLearningpaths,
+  fetchLearningpath,
+  fetchLearningpathStep,
+} from './learningpathApi';
 export {
   fetchFilters,
   fetchResource,
@@ -26,7 +30,7 @@ export {
   fetchTopics,
   fetchResourcesAndTopics,
   fetchSubtopics,
-  fetchMoviePath,
-  fetchMovieResourceTypes,
+  queryTopicsOnContentURI,
+  queryResourcesOnContentURI,
 } from './taxonomyApi';
 export { search, groupSearch } from './searchApi';

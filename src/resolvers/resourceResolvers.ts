@@ -6,8 +6,16 @@
  *
  */
 
-import { fetchResource, fetchResourceTypes, fetchArticle } from '../api';
-import { getArticleIdFromUrn } from '../utils/articleHelpers';
+import {
+  fetchResource,
+  fetchResourceTypes,
+  fetchArticle,
+  fetchLearningpath,
+} from '../api';
+import {
+  getArticleIdFromUrn,
+  getLearningpathIdFromUrn,
+} from '../utils/articleHelpers';
 
 export const Query = {
   async resource(
@@ -57,6 +65,25 @@ export const resolvers = {
       }
       throw Object.assign(
         new Error('Missing contentUri for resource with id: ' + resource.id),
+        { status: 404 },
+      );
+    },
+    async learningpath(
+      resource: GQLResource,
+      _: any,
+      context: Context,
+    ): Promise<GQLLearningpath> {
+      if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:learningpath')
+      ) {
+        const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
+        return fetchLearningpath(learningpathId, context);
+      }
+      throw Object.assign(
+        new Error(
+          'Missing article contentUri for resource with id: ' + resource.id,
+        ),
         { status: 404 },
       );
     },

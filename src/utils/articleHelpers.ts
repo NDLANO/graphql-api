@@ -8,6 +8,10 @@ export function getArticleIdFromUrn(urn: string): string {
   return urn.replace('urn:article:', '');
 }
 
+export function getLearningpathIdFromUrn(urn: string): string {
+  return urn.replace('urn:learningpath:', '');
+}
+
 export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
   context: Context,

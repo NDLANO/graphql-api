@@ -46,6 +46,56 @@ export const typeDefs = gql`
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
   }
+  type LearningpathStepEmbedUrl {
+    url: String
+    embedType: String
+  }
+
+  type LearningpathStep {
+    id: Int!
+    title: String!
+    seqNo: Int!
+    description: String
+    embedUrl: LearningpathStepEmbedUrl
+    license: License
+    metaUrl: String
+    revision: Int
+    status: String
+    supportedLanguages: [String]
+    type: String
+    article: Article
+    showTitle: Boolean
+  }
+
+  type LearningpathCoverphoto {
+    url: String
+    metaUrl: String
+  }
+
+  type LearningpathCopyright {
+    license: License
+    contributors: [Contributor]
+  }
+
+  type Learningpath {
+    id: Int!
+    title: String!
+    description: String
+    copyright: LearningpathCopyright
+    duration: Int
+    canEdit: Boolean
+    verificationStatus: String
+    lastUpdated: String
+    tags: [String]
+    supportedLanguages: [String]
+    isBasedOn: Int
+    learningsteps: [LearningpathStep]
+    metaUrl: String
+    revision: Int
+    learningstepUrl: String
+    status: String
+    coverphoto: LearningpathCoverphoto
+  }
 
   type Resource implements TaxonomyEntity {
     id: String!
@@ -55,6 +105,7 @@ export const typeDefs = gql`
     paths: [String]
     meta: Meta
     article(filterIds: String, subjectId: String): Article
+    learningpath: Learningpath
     filters: [Filter]
     resourceTypes: [ResourceType]
     parentTopics: [Topic]
@@ -361,6 +412,8 @@ export const typeDefs = gql`
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
     filmfrontpage: FilmFrontpage
+    learningpath(pathId: String!): Learningpath
+    learningpathStep(pathId: String!, stepId: String!): LearningpathStep
     subjects: [Subject]
     topic(id: String!, subjectId: String): Topic
     topics: [Topic]

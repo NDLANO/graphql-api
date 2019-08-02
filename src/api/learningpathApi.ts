@@ -49,3 +49,52 @@ export async function fetchLearningpaths(
     return null;
   });
 }
+
+export async function fetchLearningpath(
+  id: string,
+  context: Context,
+): Promise<GQLLearningpath> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/${id}?language=${
+      context.language
+    }&fallback=true`,
+    context,
+  );
+  const learningpath = await resolveJson(response);
+  return {
+    ...learningpath,
+    title: learningpath.title.title,
+    description: learningpath.description
+      ? learningpath.description.description
+      : undefined,
+    lastUpdated: learningpath.lastUpdated,
+    coverphoto: {
+      url: learningpath.coverPhotoUrl,
+      alt: learningpath.introduction
+        ? learningpath.introduction.introduction
+        : '',
+    },
+    tags: learningpath.tags ? learningpath.tags.tags : [],
+  };
+}
+
+export async function fetchLearningpathStep(
+  pathId: string,
+  stepId: string,
+  context: Context,
+): Promise<GQLLearningpathStep> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/${pathId}/learningsteps/${stepId}?language=${
+      context.language
+    }&fallback=true`,
+    context,
+  );
+  const learningpathStep = await resolveJson(response);
+  return {
+    ...learningpathStep,
+    title: learningpathStep.title ? learningpathStep.title.title : '',
+    description: learningpathStep.description
+      ? learningpathStep.description.description
+      : undefined,
+  };
+}
