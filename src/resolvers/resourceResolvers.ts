@@ -80,9 +80,16 @@ export const resolvers = {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
         return fetchLearningpath(learningpathId, context);
       }
+      if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:article')
+      ) {
+        return null;
+      }
       throw Object.assign(
         new Error(
-          'Missing article contentUri for resource with id: ' + resource.id,
+          'Missing learningpath contentUri for resource with id: ' +
+            resource.id,
         ),
         { status: 404 },
       );
@@ -105,6 +112,12 @@ export const resolvers = {
           },
           context,
         );
+      }
+      if (
+        resource.contentUri &&
+        resource.contentUri.startsWith('urn:learningpath')
+      ) {
+        return null;
       }
       throw Object.assign(
         new Error(
