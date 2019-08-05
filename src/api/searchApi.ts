@@ -18,6 +18,12 @@ interface JsonResult {
     metaDescription: string;
   };
   metaImage: { url: string; alt: string };
+  contexts?: Array<{
+    id: string;
+    path: string;
+    subject: string;
+    resourceTypes: Array<{ name: string }>;
+  }>;
 }
 
 interface GroupSearchJSON {
@@ -104,11 +110,80 @@ export async function groupSearch(
       ...contentTypeResult,
       path:
         contentTypeResult.paths && contentTypeResult.paths.length > 0
-          ? contentTypeResult.paths[0]
+          ? `/subjects${contentTypeResult.paths[0]}`
           : contentTypeResult.url,
       name: contentTypeResult.title
         ? contentTypeResult.title.title
         : contentTypeResult.title,
     })),
   }));
+}
+
+export async function frontpageSearch(
+  searchQuery: QueryToSearchArgs,
+  context: Context,
+): Promise<GQLFrontpageSearch> {
+  const topicQuery = {
+    ...searchQuery,
+    'context-types': 'topic-article',
+  };
+  const resourceQuery = {
+    ...searchQuery,
+    'context-types': 'standard',
+  };
+  const [topicReponse, resourceResponse] = await Promise.all([
+    fetch(
+      `/search-api/v1/search/?${queryString.stringify(topicQuery)}`,
+      context,
+      { cache: 'no-store' },
+    ),
+    fetch(
+      `/search-api/v1/search/?${queryString.stringify(resourceQuery)}`,
+      context,
+      { cache: 'no-store' },
+    ),
+  ]);
+
+  const topicJson = await resolveJson(topicReponse);
+  const resourceJson = await resolveJson(resourceResponse);
+  return {
+    topicResources: {
+      ...topicJson,
+      results: topicJson.results.reduce(
+        (allResults: [], topicResource: JsonResult) => {
+          return [
+            ...allResults,
+            ...topicResource.contexts.map(ctx => ({
+              ...ctx,
+              path: `/subjects${ctx.path}`,
+              boldName: `${ctx.subject}:`,
+              name: topicResource.title.title,
+              subName:
+                ctx.resourceTypes.map(type => type.name).join(', ') || '', // TODO: translate
+            })),
+          ];
+        },
+        [],
+      ),
+    },
+    learningResources: {
+      ...resourceJson,
+      results: resourceJson.results.reduce(
+        (allResults: [], learningResource: JsonResult) => {
+          return [
+            ...allResults,
+            ...learningResource.contexts.map(ctx => ({
+              ...ctx,
+              path: `/subjects${ctx.path}`,
+              boldName: `${ctx.subject}:`,
+              name: learningResource.title.title,
+              subName:
+                ctx.resourceTypes.map(type => type.name).join(', ') || '', // TODO: translate
+            })),
+          ];
+        },
+        [],
+      ),
+    },
+  };
 }

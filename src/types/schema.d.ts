@@ -31,6 +31,7 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
+    frontpageSearch?: GQLFrontpageSearch;
   }
   
   export interface GQLResource extends GQLTaxonomyEntity {
@@ -425,6 +426,24 @@ declare global {
     name: string;
   }
   
+  export interface GQLFrontpageSearch {
+    topicResources?: GQLFrontPageResources;
+    learningResources?: GQLFrontPageResources;
+  }
+  
+  export interface GQLFrontPageResources {
+    results?: Array<GQLFrontpageSearchResult | null>;
+    totalCount?: number;
+  }
+  
+  export interface GQLFrontpageSearchResult {
+    id: string;
+    name?: string;
+    subName?: string;
+    boldName?: string;
+    path?: string;
+  }
+  
   export interface GQLMovieMeta {
     title?: string;
     metaImage?: GQLMetaImage;
@@ -501,6 +520,9 @@ declare global {
     SearchContextFilter?: GQLSearchContextFilterTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
+    FrontpageSearch?: GQLFrontpageSearchTypeResolver;
+    FrontPageResources?: GQLFrontPageResourcesTypeResolver;
+    FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
     MovieMeta?: GQLMovieMetaTypeResolver;
     MoviePath?: GQLMoviePathTypeResolver;
     MovieResourceTypes?: GQLMovieResourceTypesTypeResolver;
@@ -522,6 +544,7 @@ declare global {
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
+    frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
   }
   
   export interface QueryToResourceArgs {
@@ -636,6 +659,13 @@ declare global {
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToFrontpageSearchArgs {
+    query?: string;
+  }
+  export interface QueryToFrontpageSearchResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToFrontpageSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLResourceTypeResolver<TParent = any> {
@@ -1984,6 +2014,60 @@ declare global {
   }
   
   export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFrontpageSearchTypeResolver<TParent = any> {
+    topicResources?: FrontpageSearchToTopicResourcesResolver<TParent>;
+    learningResources?: FrontpageSearchToLearningResourcesResolver<TParent>;
+  }
+  
+  export interface FrontpageSearchToTopicResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchToLearningResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFrontPageResourcesTypeResolver<TParent = any> {
+    results?: FrontPageResourcesToResultsResolver<TParent>;
+    totalCount?: FrontPageResourcesToTotalCountResolver<TParent>;
+  }
+  
+  export interface FrontPageResourcesToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontPageResourcesToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFrontpageSearchResultTypeResolver<TParent = any> {
+    id?: FrontpageSearchResultToIdResolver<TParent>;
+    name?: FrontpageSearchResultToNameResolver<TParent>;
+    subName?: FrontpageSearchResultToSubNameResolver<TParent>;
+    boldName?: FrontpageSearchResultToBoldNameResolver<TParent>;
+    path?: FrontpageSearchResultToPathResolver<TParent>;
+  }
+  
+  export interface FrontpageSearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToSubNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToBoldNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToPathResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

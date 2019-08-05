@@ -33,4 +33,4 @@ export {
   queryTopicsOnContentURI,
   queryResourcesOnContentURI,
 } from './taxonomyApi';
-export { search, groupSearch } from './searchApi';
+export { search, groupSearch, frontpageSearch } from './searchApi';

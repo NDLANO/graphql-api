@@ -363,6 +363,14 @@ export const typeDefs = gql`
     contexts: [SearchContext]
   }
 
+  type FrontpageSearchResult {
+    id: String!
+    name: String
+    subName: String
+    boldName: String
+    path: String
+  }
+
   type SearchContext {
     breadcrumbs: [String]
     learningResourceType: String
@@ -406,6 +414,16 @@ export const typeDefs = gql`
     totalCount: Int
   }
 
+  type FrontPageResources {
+    results: [FrontpageSearchResult]
+    totalCount: Int
+  }
+
+  type FrontpageSearch {
+    topicResources: FrontPageResources
+    learningResources: FrontPageResources
+  }
+
   type Query {
     resource(id: String!, subjectId: String): Resource
     article(id: String!, filterIds: String, subjectId: String): Article
@@ -442,6 +460,7 @@ export const typeDefs = gql`
       subjects: String
       resourceTypes: String
     ): [GroupSearch]
+    frontpageSearch(query: String): FrontpageSearch
   }
 `;
 
