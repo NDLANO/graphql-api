@@ -51,6 +51,14 @@ export const typeDefs = gql`
     embedType: String
   }
 
+  type LearningpathStepOembed {
+    type: String
+    version: String
+    height: Int
+    html: String
+    width: Int
+  }
+
   type LearningpathStep {
     id: Int!
     title: String!
@@ -65,6 +73,7 @@ export const typeDefs = gql`
     type: String
     article: Article
     showTitle: Boolean
+    oembed: LearningpathStepOembed
   }
 
   type LearningpathCoverphoto {

@@ -236,11 +236,20 @@ declare global {
     type?: string;
     article?: GQLArticle;
     showTitle?: boolean;
+    oembed?: GQLLearningpathStepOembed;
   }
   
   export interface GQLLearningpathStepEmbedUrl {
     url?: string;
     embedType?: string;
+  }
+  
+  export interface GQLLearningpathStepOembed {
+    type?: string;
+    version?: string;
+    height?: number;
+    html?: string;
+    width?: number;
   }
   
   export interface GQLLearningpathCoverphoto {
@@ -477,6 +486,7 @@ declare global {
     LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
     LearningpathStep?: GQLLearningpathStepTypeResolver;
     LearningpathStepEmbedUrl?: GQLLearningpathStepEmbedUrlTypeResolver;
+    LearningpathStepOembed?: GQLLearningpathStepOembedTypeResolver;
     LearningpathCoverphoto?: GQLLearningpathCoverphotoTypeResolver;
     ResourceType?: GQLResourceTypeTypeResolver;
     Topic?: GQLTopicTypeResolver;
@@ -1264,6 +1274,7 @@ declare global {
     type?: LearningpathStepToTypeResolver<TParent>;
     article?: LearningpathStepToArticleResolver<TParent>;
     showTitle?: LearningpathStepToShowTitleResolver<TParent>;
+    oembed?: LearningpathStepToOembedResolver<TParent>;
   }
   
   export interface LearningpathStepToIdResolver<TParent = any, TResult = any> {
@@ -1318,6 +1329,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface LearningpathStepToOembedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLLearningpathStepEmbedUrlTypeResolver<TParent = any> {
     url?: LearningpathStepEmbedUrlToUrlResolver<TParent>;
     embedType?: LearningpathStepEmbedUrlToEmbedTypeResolver<TParent>;
@@ -1328,6 +1343,34 @@ declare global {
   }
   
   export interface LearningpathStepEmbedUrlToEmbedTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathStepOembedTypeResolver<TParent = any> {
+    type?: LearningpathStepOembedToTypeResolver<TParent>;
+    version?: LearningpathStepOembedToVersionResolver<TParent>;
+    height?: LearningpathStepOembedToHeightResolver<TParent>;
+    html?: LearningpathStepOembedToHtmlResolver<TParent>;
+    width?: LearningpathStepOembedToWidthResolver<TParent>;
+  }
+  
+  export interface LearningpathStepOembedToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepOembedToVersionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepOembedToHeightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepOembedToHtmlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepOembedToWidthResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
