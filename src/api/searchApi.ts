@@ -94,7 +94,7 @@ export async function groupSearch(
       ...contentTypeResult,
       path:
         contentTypeResult.paths && contentTypeResult.paths.length > 0
-          ? `/subjects${contentTypeResult.paths[0]}`
+          ? contentTypeResult.paths[0]
           : contentTypeResult.url,
       name: contentTypeResult.title
         ? contentTypeResult.title.title

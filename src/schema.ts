@@ -366,8 +366,8 @@ export const typeDefs = gql`
   type FrontpageSearchResult {
     id: String!
     name: String
-    subName: String
-    boldName: String
+    resourceTypes: [SearchContextResourceTypes]
+    subject: String
     path: String
   }
 
