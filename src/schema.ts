@@ -52,11 +52,11 @@ export const typeDefs = gql`
   }
 
   type LearningpathStepOembed {
-    type: String
-    version: String
-    height: Int
-    html: String
-    width: Int
+    type: String!
+    version: String!
+    height: Int!
+    html: String!
+    width: Int!
   }
 
   type LearningpathStep {

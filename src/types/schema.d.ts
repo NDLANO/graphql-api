@@ -245,11 +245,11 @@ declare global {
   }
   
   export interface GQLLearningpathStepOembed {
-    type?: string;
-    version?: string;
-    height?: number;
-    html?: string;
-    width?: number;
+    type: string;
+    version: string;
+    height: number;
+    html: string;
+    width: number;
   }
   
   export interface GQLLearningpathCoverphoto {
