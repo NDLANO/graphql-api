@@ -145,7 +145,7 @@ export const expandResourcesFromAllContexts = (
         path: `/subjects${ctx.path}`,
         boldName: `${ctx.subject}:`,
         name: resource.title.title,
-        subName: ctx.resourceTypes.map(type => type.name).join(', ') || '', // TODO: translate
+        subName: ctx.resourceTypes.map(type => type.name).join(', ') || '',
       })),
     ];
   }, []);
