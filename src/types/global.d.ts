@@ -30,4 +30,21 @@ declare global {
   interface RequestOptions extends RequestInit {
     cache?: RequestCache;
   }
+
+  interface SearchResultJson {
+    title: {
+      title: string;
+    };
+    id: number;
+    metaDescription: {
+      metaDescription: string;
+    };
+    metaImage: { url: string; alt: string };
+    contexts?: Array<{
+      id: string;
+      path: string;
+      subject: string;
+      resourceTypes: Array<{ name: string }>;
+    }>;
+  }
 }

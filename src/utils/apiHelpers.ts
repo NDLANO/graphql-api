@@ -133,3 +133,19 @@ function roleMapper(role: string): string {
 function licenseFixer(lic: any, licVer: any) {
   return `${lic.replace(' ', '-')}-${licVer}`;
 }
+
+export const expandResourcesFromAllContexts = (
+  resourceResult: [SearchResultJson],
+) =>
+  resourceResult.reduce((allResults: [], resource: SearchResultJson) => {
+    return [
+      ...allResults,
+      ...resource.contexts.map(ctx => ({
+        ...ctx,
+        path: `/subjects${ctx.path}`,
+        boldName: `${ctx.subject}:`,
+        name: resource.title.title,
+        subName: ctx.resourceTypes.map(type => type.name).join(', ') || '', // TODO: translate
+      })),
+    ];
+  }, []);

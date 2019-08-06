@@ -1,3 +1,4 @@
+import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -8,23 +9,6 @@
 
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-
-interface JsonResult {
-  title: {
-    title: string;
-  };
-  id: number;
-  metaDescription: {
-    metaDescription: string;
-  };
-  metaImage: { url: string; alt: string };
-  contexts?: Array<{
-    id: string;
-    path: string;
-    subject: string;
-    resourceTypes: Array<{ name: string }>;
-  }>;
-}
 
 interface GroupSearchJSON {
   results: [ContentTypeJSON];
@@ -77,7 +61,7 @@ export async function search(
   }
   return {
     ...json,
-    results: json.results.map((result: JsonResult) => ({
+    results: json.results.map((result: SearchResultJson) => ({
       ...result,
       title: result.title.title,
       metaDescription: result.metaDescription
@@ -149,41 +133,11 @@ export async function frontpageSearch(
   return {
     topicResources: {
       ...topicJson,
-      results: topicJson.results.reduce(
-        (allResults: [], topicResource: JsonResult) => {
-          return [
-            ...allResults,
-            ...topicResource.contexts.map(ctx => ({
-              ...ctx,
-              path: `/subjects${ctx.path}`,
-              boldName: `${ctx.subject}:`,
-              name: topicResource.title.title,
-              subName:
-                ctx.resourceTypes.map(type => type.name).join(', ') || '', // TODO: translate
-            })),
-          ];
-        },
-        [],
-      ),
+      results: expandResourcesFromAllContexts(topicJson.results),
     },
     learningResources: {
       ...resourceJson,
-      results: resourceJson.results.reduce(
-        (allResults: [], learningResource: JsonResult) => {
-          return [
-            ...allResults,
-            ...learningResource.contexts.map(ctx => ({
-              ...ctx,
-              path: `/subjects${ctx.path}`,
-              boldName: `${ctx.subject}:`,
-              name: learningResource.title.title,
-              subName:
-                ctx.resourceTypes.map(type => type.name).join(', ') || '', // TODO: translate
-            })),
-          ];
-        },
-        [],
-      ),
+      results: expandResourcesFromAllContexts(resourceJson.results),
     },
   };
 }
