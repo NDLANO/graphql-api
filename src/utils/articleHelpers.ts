@@ -5,8 +5,8 @@
  */
 
 export function isNDLAEmbedUrl(url: string) {
-  const urlIsProductionNDLA = /^(http|https):\/\/ndla.no/.test(url);
-  const urlIsTestNDLA = /^(http|https):\/\/ndla-frontend.([a-zA-Z]+.)api.ndla.no/.test(
+  const urlIsProductionNDLA = /^(http|https):\/\/(www.)?ndla.no/.test(url);
+  const urlIsTestNDLA = /^(http|https):\/\/(www.)?(ndla-frontend.)?([a-zA-Z]+.)api.ndla.no/.test(
     url,
   );
   return urlIsProductionNDLA || urlIsTestNDLA;
