@@ -4,6 +4,17 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+export function isNDLAEmbedUrl(url: string) {
+  const urlIsProductionNDLA = /^(http|https):\/\/(www.)?ndla.no/.test(url);
+  const urlIsTestNDLA = /^(http|https):\/\/ndla-frontend.([a-zA-Z]+.)api.ndla.no/.test(
+    url,
+  );
+  const urlIsTestWWWNDLAUrl = /^(http|https):\/\/www.([a-zA-Z]+.)api.ndla.no/.test(
+    url,
+  );
+  return urlIsProductionNDLA || urlIsTestNDLA || urlIsTestWWWNDLAUrl;
+}
+
 export function getArticleIdFromUrn(urn: string): string {
   return urn.replace('urn:article:', '');
 }

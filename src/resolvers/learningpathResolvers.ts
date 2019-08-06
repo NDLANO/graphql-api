@@ -11,7 +11,9 @@ import {
   fetchLearningpathStep,
   fetchResource,
   fetchArticle,
+  fetchOembed,
 } from '../api';
+import { isNDLAEmbedUrl } from '../utils/articleHelpers';
 
 export const Query = {
   async learningpath(
@@ -49,12 +51,30 @@ export const resolvers = {
     },
   },
   LearningpathStep: {
+    async oembed(
+      learningpathStep: GQLLearningpathStep,
+      _: any,
+      context: Context,
+    ): Promise<GQLLearningpathStepOembed> {
+      if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
+        return null;
+      }
+      if (learningpathStep.embedUrl.embedType === 'oembed') {
+        return fetchOembed(learningpathStep.embedUrl.url, context);
+      }
+      return null;
+    },
     async article(
       learningpathStep: GQLLearningpathStep,
       _: any,
       context: Context,
     ): Promise<GQLArticle> {
-      if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
+      if (
+        !learningpathStep.embedUrl ||
+        !learningpathStep.embedUrl.url ||
+        learningpathStep.embedUrl.embedType !== 'oembed' ||
+        !isNDLAEmbedUrl(learningpathStep.embedUrl.url)
+      ) {
         return null;
       }
 

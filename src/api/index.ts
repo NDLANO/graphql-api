@@ -34,3 +34,4 @@ export {
   queryResourcesOnContentURI,
 } from './taxonomyApi';
 export { search, groupSearch, frontpageSearch } from './searchApi';
+export { fetchOembed } from './oembedApi';
