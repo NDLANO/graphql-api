@@ -6,10 +6,13 @@
 
 export function isNDLAEmbedUrl(url: string) {
   const urlIsProductionNDLA = /^(http|https):\/\/(www.)?ndla.no/.test(url);
-  const urlIsTestNDLA = /^(http|https):\/\/(www.)?(ndla-frontend.)?([a-zA-Z]+.)api.ndla.no/.test(
+  const urlIsTestNDLA = /^(http|https):\/\/ndla-frontend.([a-zA-Z]+.)api.ndla.no/.test(
     url,
   );
-  return urlIsProductionNDLA || urlIsTestNDLA;
+  const urlIsTestWWWNDLAUrl = /^(http|https):\/\/www.([a-zA-Z]+.)api.ndla.no/.test(
+    url,
+  );
+  return urlIsProductionNDLA || urlIsTestNDLA || urlIsTestWWWNDLAUrl;
 }
 
 export function getArticleIdFromUrn(urn: string): string {
