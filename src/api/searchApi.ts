@@ -1,3 +1,4 @@
+import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -8,17 +9,6 @@
 
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-
-interface JsonResult {
-  title: {
-    title: string;
-  };
-  id: number;
-  metaDescription: {
-    metaDescription: string;
-  };
-  metaImage: { url: string; alt: string };
-}
 
 interface GroupSearchJSON {
   results: [ContentTypeJSON];
@@ -71,7 +61,7 @@ export async function search(
   }
   return {
     ...json,
-    results: json.results.map((result: JsonResult) => ({
+    results: json.results.map((result: SearchResultJson) => ({
       ...result,
       title: result.title.title,
       metaDescription: result.metaDescription
@@ -111,4 +101,43 @@ export async function groupSearch(
         : contentTypeResult.title,
     })),
   }));
+}
+
+export async function frontpageSearch(
+  searchQuery: QueryToSearchArgs,
+  context: Context,
+): Promise<GQLFrontpageSearch> {
+  const topicQuery = {
+    ...searchQuery,
+    'context-types': 'topic-article',
+  };
+  const resourceQuery = {
+    ...searchQuery,
+    'context-types': 'standard',
+  };
+  const [topicReponse, resourceResponse] = await Promise.all([
+    fetch(
+      `/search-api/v1/search/?${queryString.stringify(topicQuery)}`,
+      context,
+      { cache: 'no-store' },
+    ),
+    fetch(
+      `/search-api/v1/search/?${queryString.stringify(resourceQuery)}`,
+      context,
+      { cache: 'no-store' },
+    ),
+  ]);
+
+  const topicJson = await resolveJson(topicReponse);
+  const resourceJson = await resolveJson(resourceResponse);
+  return {
+    topicResources: {
+      ...topicJson,
+      results: expandResourcesFromAllContexts(topicJson.results),
+    },
+    learningResources: {
+      ...resourceJson,
+      results: expandResourcesFromAllContexts(resourceJson.results),
+    },
+  };
 }

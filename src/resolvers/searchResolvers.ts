@@ -6,7 +6,7 @@
  *
  */
 
-import { search, groupSearch } from '../api';
+import { search, groupSearch, frontpageSearch } from '../api';
 
 export const Query = {
   async search(
@@ -22,6 +22,13 @@ export const Query = {
     context: Context,
   ): Promise<GQLSearch> {
     return groupSearch(searchQuery, context);
+  },
+  async frontpageSearch(
+    _: any,
+    searchQuery: QueryToSearchArgs,
+    context: Context,
+  ): Promise<GQLFrontpageSearch> {
+    return frontpageSearch(searchQuery, context);
   },
 };
 
