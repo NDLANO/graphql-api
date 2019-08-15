@@ -38,7 +38,7 @@ async function fetchArticlesPage(
   return fetch(
     `/article-api/v2/articles/?ids=${articleIds.join(',')}&language=${
       context.language
-    }&pageSize=${pageSize}&page=${page}&licenses=all&fallback=true`,
+    }&pageSize=${pageSize}&page=${page}&license=all&fallback=true`,
     context,
   ).then(res => res.json());
 }
