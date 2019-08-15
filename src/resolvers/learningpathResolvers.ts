@@ -64,11 +64,11 @@ export const resolvers = {
       }
       return null;
     },
-    async article(
+    async resource(
       learningpathStep: GQLLearningpathStep,
       _: any,
       context: Context,
-    ): Promise<GQLArticle> {
+    ): Promise<GQLResource> {
       if (
         !learningpathStep.embedUrl ||
         !learningpathStep.embedUrl.url ||
@@ -80,21 +80,7 @@ export const resolvers = {
 
       const lastPartOfUrl = learningpathStep.embedUrl.url.split('/').pop();
       if (lastPartOfUrl.includes('resource')) {
-        const resource = await fetchResource(
-          { resourceId: `urn:${lastPartOfUrl}` },
-          context,
-        );
-        if (!resource.contentUri) {
-          return null;
-        }
-        return fetchArticle(
-          { articleId: resource.contentUri.replace('urn:article:', '') },
-          context,
-        );
-      }
-
-      if (isNaN(parseInt(lastPartOfUrl, 10))) {
-        return fetchArticle({ articleId: lastPartOfUrl }, context);
+        return fetchResource({ resourceId: `urn:${lastPartOfUrl}` }, context);
       }
       return null;
     },

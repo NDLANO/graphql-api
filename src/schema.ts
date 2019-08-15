@@ -72,6 +72,7 @@ export const typeDefs = gql`
     supportedLanguages: [String]
     type: String
     article: Article
+    resource: Resource
     showTitle: Boolean
     oembed: LearningpathStepOembed
   }
