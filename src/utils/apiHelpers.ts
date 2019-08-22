@@ -142,7 +142,7 @@ export const expandResourcesFromAllContexts = (
       ...allResults,
       ...resource.contexts.map(ctx => ({
         ...ctx,
-        path: `/subjects${ctx.path}`,
+        path: `${ctx.path}`,
         name: resource.title.title,
       })),
     ];
