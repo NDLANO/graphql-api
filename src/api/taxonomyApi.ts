@@ -36,7 +36,7 @@ function findPrimaryPath(
   paths: string[],
   subjectId: string,
 ): string | undefined {
-  return paths.find(path => path.indexOf(removeUrn(subjectId)) > -1);
+  return paths.find(path => path.split('/')[1] === removeUrn(subjectId));
 }
 
 export async function fetchResource(
