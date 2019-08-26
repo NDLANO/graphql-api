@@ -124,8 +124,8 @@ export async function frontpageSearch(
   };
 }
 
-const queryWithPage = (
-  searchQuery: QueryToSearchArgs,
+const query = (
+  searchQuery: QueryToSearchWithoutPaginationArgs,
   page: String,
   context: Context,
 ) =>
@@ -147,9 +147,8 @@ export async function searchWithoutPagination(
   searchQuery: QueryToSearchWithoutPaginationArgs,
   context: Context,
 ): Promise<GQLSearch> {
-  const firstQuery = queryWithPage(searchQuery, '1', context);
-  const firstQueryResponse = await firstQuery;
-  const firstPageJson = await resolveJson(firstQueryResponse);
+  const firstQuery = await query(searchQuery, '1', context);
+  const firstPageJson = await resolveJson(firstQuery);
   const numberOfPages = Math.ceil(
     firstPageJson.totalCount / firstPageJson.pageSize,
   );
@@ -157,7 +156,7 @@ export async function searchWithoutPagination(
   const requests = [];
   if (numberOfPages > 1) {
     for (let i = 2; i <= numberOfPages; i += 1) {
-      requests.push(queryWithPage(searchQuery, i.toString(), context));
+      requests.push(query(searchQuery, i.toString(), context));
     }
   }
   const response = await Promise.all(requests);
