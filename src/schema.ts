@@ -471,6 +471,20 @@ export const typeDefs = gql`
       resourceTypes: String
     ): [GroupSearch]
     frontpageSearch(query: String): FrontpageSearch
+    searchWithoutPagination(
+      query: String
+      contextTypes: String
+      language: String
+      ids: String
+      resourceTypes: String
+      contextFilters: String
+      levels: String
+      sort: String
+      fallback: Boolean
+      subjects: String
+      languageFilter: String
+      relevance: String
+    ): Search
   }
 `;
 

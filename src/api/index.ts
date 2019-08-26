@@ -33,5 +33,10 @@ export {
   queryTopicsOnContentURI,
   queryResourcesOnContentURI,
 } from './taxonomyApi';
-export { search, groupSearch, frontpageSearch } from './searchApi';
+export {
+  search,
+  groupSearch,
+  frontpageSearch,
+  searchWithoutPagination,
+} from './searchApi';
 export { fetchOembed } from './oembedApi';

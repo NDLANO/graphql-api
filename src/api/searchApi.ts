@@ -41,27 +41,10 @@ export async function search(
     { cache: 'no-store' },
   );
   const json = await resolveJson(response);
-  // convert all search result paths with ending slash if it is not a resource type
-  if (json && json.totalCount && json.results) {
-    const resultLength = json.results.length;
-    for (let x = 0; x < resultLength; x++) {
-      if (json.results[x].contexts && json.results[x].contexts.length) {
-        const contextsLength = json.results[x].contexts.length;
-        for (let y = 0; y < contextsLength; y++) {
-          if (json.results[x].contexts[y] && json.results[x].contexts[y].path) {
-            let newPath = json.results[x].contexts[y].path;
-            const pattern = new RegExp(/resource/gi);
-            if (!pattern.test(newPath)) {
-              json.results[x].contexts[y].path = `${newPath}/`;
-            }
-          }
-        }
-      }
-    }
-  }
+  const convertedJson = convertSearchResultPaths(json);
   return {
-    ...json,
-    results: json.results.map((result: SearchResultJson) => ({
+    ...convertedJson,
+    results: convertedJson.results.map((result: SearchResultJson) => ({
       ...result,
       title: result.title.title,
       metaDescription: result.metaDescription
@@ -139,5 +122,87 @@ export async function frontpageSearch(
       ...resourceJson,
       results: expandResourcesFromAllContexts(resourceJson.results),
     },
+  };
+}
+
+const queryWithPage = (
+  searchQuery: QueryToSearchArgs,
+  page: String,
+  context: Context,
+) =>
+  fetch(
+    `/search-api/v1/search/?${queryString.stringify({
+      ...searchQuery,
+      page: page,
+      'page-size': '100',
+      'context-types': searchQuery.contextTypes,
+      'resource-types': searchQuery.resourceTypes,
+      'language-filter': searchQuery.languageFilter,
+      'context-filters': searchQuery.contextFilters,
+    })}`,
+    context,
+    { cache: 'no-store' },
+  );
+
+const convertSearchResultPaths = (json: any) => {
+  // convert all search result paths with ending slash if it is not a resource type
+  if (json && json.totalCount && json.results) {
+    const resultLength = json.results.length;
+    for (let x = 0; x < resultLength; x++) {
+      if (json.results[x].contexts && json.results[x].contexts.length) {
+        const contextsLength = json.results[x].contexts.length;
+        for (let y = 0; y < contextsLength; y++) {
+          if (json.results[x].contexts[y] && json.results[x].contexts[y].path) {
+            let newPath = json.results[x].contexts[y].path;
+            const pattern = new RegExp(/resource/gi);
+            if (!pattern.test(newPath)) {
+              json.results[x].contexts[y].path = `${newPath}/`;
+            }
+          }
+        }
+      }
+    }
+  }
+  return json;
+};
+
+export async function searchWithoutPagination(
+  searchQuery: QueryToSearchWithoutPaginationArgs,
+  context: Context,
+): Promise<GQLSearch> {
+  const firstQuery = queryWithPage(searchQuery, '1', context);
+  const firstQueryResponse = await firstQuery;
+  const firstPageJson = await resolveJson(firstQueryResponse);
+  const numberOfPages = Math.ceil(
+    firstPageJson.totalCount / firstPageJson.pageSize,
+  );
+
+  const requests = [];
+  if (numberOfPages > 1) {
+    for (let i = 2; i <= numberOfPages; i += 1) {
+      requests.push(queryWithPage(searchQuery, i.toString(), context));
+    }
+  }
+  const response = await Promise.all(requests);
+  const allResultsJson = await Promise.all(response.map(resolveJson));
+  allResultsJson.push(firstPageJson);
+  const convertedJson = allResultsJson.map(json =>
+    convertSearchResultPaths(json),
+  );
+
+  return {
+    ...convertedJson,
+    results: convertedJson.flatMap(json =>
+      json.results.map((result: SearchResultJson) => ({
+        ...result,
+        title: result.title.title,
+        metaDescription: result.metaDescription
+          ? result.metaDescription.metaDescription
+          : undefined,
+        metaImage: result.metaImage
+          ? { url: result.metaImage.url, alt: result.metaImage.alt }
+          : undefined,
+      })),
+    ),
   };
 }
