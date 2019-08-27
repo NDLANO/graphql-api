@@ -163,7 +163,6 @@ export async function searchWithoutPagination(
   const allResultsJson = await Promise.all(response.map(resolveJson));
   allResultsJson.push(firstPageJson);
   return {
-    ...allResultsJson,
     results: allResultsJson.flatMap(json =>
       json.results.map((result: SearchResultJson) => transformResult(result)),
     ),
