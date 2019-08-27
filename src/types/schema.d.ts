@@ -32,6 +32,7 @@ declare global {
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
     frontpageSearch?: GQLFrontpageSearch;
+    searchWithoutPagination?: GQLSearch;
   }
   
   export interface GQLResource extends GQLTaxonomyEntity {
@@ -556,6 +557,7 @@ declare global {
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
     frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
+    searchWithoutPagination?: QueryToSearchWithoutPaginationResolver<TParent>;
   }
   
   export interface QueryToResourceArgs {
@@ -677,6 +679,24 @@ declare global {
   }
   export interface QueryToFrontpageSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToFrontpageSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToSearchWithoutPaginationArgs {
+    query?: string;
+    contextTypes?: string;
+    language?: string;
+    ids?: string;
+    resourceTypes?: string;
+    contextFilters?: string;
+    levels?: string;
+    sort?: string;
+    fallback?: boolean;
+    subjects?: string;
+    languageFilter?: string;
+    relevance?: string;
+  }
+  export interface QueryToSearchWithoutPaginationResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToSearchWithoutPaginationArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLResourceTypeResolver<TParent = any> {

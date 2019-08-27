@@ -23,6 +23,13 @@ interface ContentTypeJSON {
   };
 }
 
+interface SearchResultContexts {
+  id: string;
+  path: string;
+  subject: string;
+  resourceTypes: Array<{ name: string }>;
+}
+
 export async function search(
   searchQuery: QueryToSearchArgs,
   context: Context,
@@ -40,37 +47,12 @@ export async function search(
     context,
     { cache: 'no-store' },
   );
-  const json = await resolveJson(response);
-  // convert all search result paths with ending slash if it is not a resource type
-  if (json && json.totalCount && json.results) {
-    const resultLength = json.results.length;
-    for (let x = 0; x < resultLength; x++) {
-      if (json.results[x].contexts && json.results[x].contexts.length) {
-        const contextsLength = json.results[x].contexts.length;
-        for (let y = 0; y < contextsLength; y++) {
-          if (json.results[x].contexts[y] && json.results[x].contexts[y].path) {
-            let newPath = json.results[x].contexts[y].path;
-            const pattern = new RegExp(/resource/gi);
-            if (!pattern.test(newPath)) {
-              json.results[x].contexts[y].path = `${newPath}/`;
-            }
-          }
-        }
-      }
-    }
-  }
+  const searchResults = await resolveJson(response);
   return {
-    ...json,
-    results: json.results.map((result: SearchResultJson) => ({
-      ...result,
-      title: result.title.title,
-      metaDescription: result.metaDescription
-        ? result.metaDescription.metaDescription
-        : undefined,
-      metaImage: result.metaImage
-        ? { url: result.metaImage.url, alt: result.metaImage.alt }
-        : undefined,
-    })),
+    ...searchResults,
+    results: searchResults.results.map((result: SearchResultJson) =>
+      transformResult(result),
+    ),
   };
 }
 
@@ -141,3 +123,68 @@ export async function frontpageSearch(
     },
   };
 }
+
+const queryOnGivenPage = (
+  searchQuery: QueryToSearchWithoutPaginationArgs,
+  page: string,
+  context: Context,
+) =>
+  fetch(
+    `/search-api/v1/search/?${queryString.stringify({
+      ...searchQuery,
+      page,
+      'page-size': '100',
+      'context-types': searchQuery.contextTypes,
+      'resource-types': searchQuery.resourceTypes,
+      'language-filter': searchQuery.languageFilter,
+      'context-filters': searchQuery.contextFilters,
+    })}`,
+    context,
+    { cache: 'no-store' },
+  );
+
+export async function searchWithoutPagination(
+  searchQuery: QueryToSearchWithoutPaginationArgs,
+  context: Context,
+): Promise<GQLSearch> {
+  const firstQuery = await queryOnGivenPage(searchQuery, '1', context);
+  const firstPageJson = await resolveJson(firstQuery);
+  const numberOfPages = Math.ceil(
+    firstPageJson.totalCount / firstPageJson.pageSize,
+  );
+
+  const requests = [];
+  if (numberOfPages > 1) {
+    for (let i = 2; i <= numberOfPages; i += 1) {
+      requests.push(queryOnGivenPage(searchQuery, i.toString(), context));
+    }
+  }
+  const response = await Promise.all(requests);
+  const allResultsJson = await Promise.all(response.map(resolveJson));
+  allResultsJson.push(firstPageJson);
+  return {
+    results: allResultsJson.flatMap(json =>
+      json.results.map((result: SearchResultJson) => transformResult(result)),
+    ),
+  };
+}
+
+const transformResult = (result: SearchResultJson) => ({
+  ...result,
+  title: result.title.title,
+  contexts: fixContext(result.contexts),
+  metaDescription: result.metaDescription
+    ? result.metaDescription.metaDescription
+    : undefined,
+  metaImage: result.metaImage
+    ? { url: result.metaImage.url, alt: result.metaImage.alt }
+    : undefined,
+});
+
+const fixContext = (contexts: SearchResultContexts[]) =>
+  contexts.map(context => ({
+    ...context,
+    path: context.path.includes('/resource/')
+      ? `${context.path}/`
+      : context.path,
+  }));
