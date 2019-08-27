@@ -124,15 +124,15 @@ export async function frontpageSearch(
   };
 }
 
-const query = (
+const queryOnGivenPage = (
   searchQuery: QueryToSearchWithoutPaginationArgs,
-  page: String,
+  page: string,
   context: Context,
 ) =>
   fetch(
     `/search-api/v1/search/?${queryString.stringify({
       ...searchQuery,
-      page: page,
+      page,
       'page-size': '100',
       'context-types': searchQuery.contextTypes,
       'resource-types': searchQuery.resourceTypes,
@@ -147,7 +147,7 @@ export async function searchWithoutPagination(
   searchQuery: QueryToSearchWithoutPaginationArgs,
   context: Context,
 ): Promise<GQLSearch> {
-  const firstQuery = await query(searchQuery, '1', context);
+  const firstQuery = await queryOnGivenPage(searchQuery, '1', context);
   const firstPageJson = await resolveJson(firstQuery);
   const numberOfPages = Math.ceil(
     firstPageJson.totalCount / firstPageJson.pageSize,
@@ -156,7 +156,7 @@ export async function searchWithoutPagination(
   const requests = [];
   if (numberOfPages > 1) {
     for (let i = 2; i <= numberOfPages; i += 1) {
-      requests.push(query(searchQuery, i.toString(), context));
+      requests.push(queryOnGivenPage(searchQuery, i.toString(), context));
     }
   }
   const response = await Promise.all(requests);
@@ -182,7 +182,7 @@ const transformResult = (result: SearchResultJson) => ({
     : undefined,
 });
 
-const fixContext = (contexts: Array<SearchResultContexts>) =>
+const fixContext = (contexts: SearchResultContexts[]) =>
   contexts.map(context => ({
     ...context,
     path: context.path.includes('/resource/')
