@@ -48,13 +48,14 @@ export async function fetchArticles(
   context: Context,
 ): Promise<GQLMeta[]> {
   const pageSize = 100;
-  const firstPage = await fetchArticlesPage(articleIds, context, pageSize, 1);
+  const ids = articleIds.filter(id => id && id !== 'undefined');
+  const firstPage = await fetchArticlesPage(ids, context, pageSize, 1);
   const numberOfPages = Math.ceil(firstPage.totalCount / firstPage.pageSize);
 
   const requests = [firstPage];
   if (numberOfPages > 1) {
     for (let i = 2; i <= numberOfPages; i += 1) {
-      requests.push(fetchArticlesPage(articleIds, context, pageSize, i));
+      requests.push(fetchArticlesPage(ids, context, pageSize, i));
     }
   }
   const results = await Promise.all(requests);

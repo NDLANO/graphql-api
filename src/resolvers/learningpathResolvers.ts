@@ -59,7 +59,10 @@ export const resolvers = {
       if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
         return null;
       }
-      if (learningpathStep.embedUrl.embedType === 'oembed') {
+      if (
+        learningpathStep.embedUrl.embedType === 'oembed' &&
+        learningpathStep.embedUrl.url !== 'https://ndla.no'
+      ) {
         return fetchOembed(learningpathStep.embedUrl.url, context);
       }
       return null;
