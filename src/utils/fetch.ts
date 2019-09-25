@@ -41,7 +41,7 @@ export default function createFetch(options: { cache: IKeyValueCache }) {
       logger.warn(
         `Fetching '${url}' took ${elapsedTime.toFixed(
           2,
-        )}ms which is slower than soft the timeout of ${slowLogTimeout}ms`,
+        )}ms which is slower than slow log timeout of ${slowLogTimeout}ms`,
       );
     }
 
