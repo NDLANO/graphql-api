@@ -8,6 +8,8 @@
 
 import nodeFetch, { Response } from 'node-fetch';
 import { IKeyValueCache } from '../cache';
+import { performance } from 'perf_hooks';
+import logger from '../utils/logger';
 
 export default function createFetch(options: { cache: IKeyValueCache }) {
   if (!options || !options.cache) throw Error('cache is a required option');
@@ -28,7 +30,21 @@ export default function createFetch(options: { cache: IKeyValueCache }) {
   }
 
   async function cachingFetch(url: string, reqOptions: RequestOptions) {
+    const startTime = performance.now();
+    const slowLogTimeout = 500;
+
     const response = await nodeFetch(url, reqOptions);
+
+    const elapsedTime = performance.now() - startTime;
+
+    if (elapsedTime > slowLogTimeout) {
+      logger.warn(
+        `Fetching '${url}' took ${elapsedTime.toFixed(
+          2,
+        )}ms which is slower than slow log timeout of ${slowLogTimeout}ms`,
+      );
+    }
+
     if (response.status === 200) {
       const body = await response.text();
       await cache.set(
