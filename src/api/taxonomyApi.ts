@@ -52,7 +52,7 @@ export async function fetchResource(
   if (subjectId) {
     const primaryPath = findPrimaryPath(resource.paths, subjectId);
     const path = primaryPath ? primaryPath : resource.path;
-    return { ...resource, path };
+    resource.path = path;
   }
   return resource;
 }
@@ -120,7 +120,7 @@ export async function fetchTopic(
   if (params.subjectId) {
     const primaryPath = findPrimaryPath(topic.paths, params.subjectId);
     const path = primaryPath ? primaryPath : topic.path;
-    return { ...topic, path };
+    topic.path = path;
   }
   return topic;
 }
@@ -171,10 +171,9 @@ export async function fetchTopicResources(
     if (subjectId) {
       const primaryPath = findPrimaryPath(resource.paths, subjectId);
       const path = primaryPath ? primaryPath : resource.path;
-      return { ...resource, path };
+      resource.path = path;
     }
   });
-
   return resources;
 }
 

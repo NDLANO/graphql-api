@@ -60,6 +60,7 @@ export const resolvers = {
         return null;
       }
       if (
+        learningpathStep.embedUrl &&
         learningpathStep.embedUrl.embedType === 'oembed' &&
         learningpathStep.embedUrl.url !== 'https://ndla.no'
       ) {
@@ -80,7 +81,6 @@ export const resolvers = {
       ) {
         return null;
       }
-
       const lastPartOfUrl = learningpathStep.embedUrl.url.split('/').pop();
       if (lastPartOfUrl.includes('resource')) {
         return fetchResource({ resourceId: `urn:${lastPartOfUrl}` }, context);
