@@ -171,10 +171,9 @@ export async function fetchTopicResources(
     if (subjectId) {
       const primaryPath = findPrimaryPath(resource.paths, subjectId);
       const path = primaryPath ? primaryPath : resource.path;
-      return { ...resource, path };
+      resource.path = path;
     }
   });
-
   return resources;
 }
 
