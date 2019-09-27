@@ -52,7 +52,7 @@ export async function fetchResource(
   if (subjectId) {
     const primaryPath = findPrimaryPath(resource.paths, subjectId);
     const path = primaryPath ? primaryPath : resource.path;
-    resource.path = path;
+    return { ...resource, path };
   }
   return resource;
 }
@@ -120,7 +120,7 @@ export async function fetchTopic(
   if (params.subjectId) {
     const primaryPath = findPrimaryPath(topic.paths, params.subjectId);
     const path = primaryPath ? primaryPath : topic.path;
-    topic.path = path;
+    return { ...topic, path };
   }
   return topic;
 }
