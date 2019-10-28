@@ -99,12 +99,6 @@ export const resolvers = {
           context,
         );
       }
-      throw Object.assign(
-        new Error(
-          'Missing subjectpage contentUri for subject with id: ' + subject.id,
-        ),
-        { status: 404 },
-      );
     },
   },
 };
