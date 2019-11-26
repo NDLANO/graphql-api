@@ -20,15 +20,20 @@ export const getEnvironmentVariabel = (
 const ndlaEnvironment = getEnvironmentVariabel('NDLA_ENVIRONMENT', 'test');
 
 const ndlaApiUrl = () => {
-  switch (ndlaEnvironment) {
-    case 'local':
-      return 'http://api-gateway.ndla-local';
-    case 'prod':
-      return 'https://api.ndla.no';
-    default:
-      return `https://${ndlaEnvironment
-        .toString()
-        .replace('_', '-')}.api.ndla.no`;
+  const host = getEnvironmentVariabel('API_GATEWAY_HOST');
+  if (!host) {
+    switch (ndlaEnvironment) {
+      case 'local':
+        return 'http://api-gateway.ndla-local';
+      case 'prod':
+        return 'https://api.ndla.no';
+      default:
+        return `https://${ndlaEnvironment
+          .toString()
+          .replace('_', '-')}.api.ndla.no`;
+    }
+  } else {
+    return `http://${host}`;
   }
 };
 
