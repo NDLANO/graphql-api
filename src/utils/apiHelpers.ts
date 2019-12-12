@@ -34,13 +34,17 @@ async function fetchHelper(
 ): Promise<Response> {
   const fetchFn = createFetch({
     cache,
+    disableCache: !context.shouldUseCache,
   });
 
-  const headers = context.token
-    ? {
-        Authorization: `Bearer ${context.token.access_token}`,
-      }
+  const authHeaders = context.token
+    ? { Authorization: `Bearer ${context.token.access_token}` }
     : {};
+  const cacheHeaders = !context.shouldUseCache
+    ? { 'Cache-Control': 'no-cache' }
+    : {};
+  const headers = { ...cacheHeaders, ...authHeaders };
+
   return fetchFn(apiResourceUrl(path), {
     headers,
     ...options,

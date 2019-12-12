@@ -38,10 +38,16 @@ function getAcceptLanguage(request: Request): string {
   return 'nb';
 }
 
+function getShouldUseCache(request: Request): boolean {
+  const cacheControl = request.headers['cache-control'];
+  return cacheControl !== 'no-cache';
+}
+
 async function getContext({ req }: { req: Request }): Promise<Context> {
   const token = await getToken(req);
   const language = getAcceptLanguage(req);
-  const defaultContext = { language, token };
+  const shouldUseCache = getShouldUseCache(req);
+  const defaultContext = { language, token, shouldUseCache };
 
   return {
     ...defaultContext,
