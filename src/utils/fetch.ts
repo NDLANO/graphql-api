@@ -6,15 +6,37 @@
  *
  */
 
-import nodeFetch, { Response } from 'node-fetch';
+import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
 import { IKeyValueCache } from '../cache';
 import { performance } from 'perf_hooks';
 import logger from '../utils/logger';
 
-export default function createFetch(options: { cache: IKeyValueCache }) {
+export default function createFetch(options: {
+  cache: IKeyValueCache;
+  disableCache: boolean;
+}) {
   if (!options || !options.cache) throw Error('cache is a required option');
 
   const { cache } = options;
+
+  async function pureFetch(
+    url: string | Request,
+    init?: RequestInit,
+  ): Promise<Response> {
+    const startTime = performance.now();
+    const slowLogTimeout = 500;
+
+    const res = await nodeFetch(url, init);
+    const elapsedTime = performance.now() - startTime;
+    if (elapsedTime > slowLogTimeout) {
+      logger.warn(
+        `Fetching '${url}' took ${elapsedTime.toFixed(
+          2,
+        )}ms which is slower than slow log timeout of ${slowLogTimeout}ms`,
+      );
+    }
+    return res;
+  }
 
   function cachedResponse(url: string, data: string): Response {
     if (!data) return null;
@@ -30,20 +52,7 @@ export default function createFetch(options: { cache: IKeyValueCache }) {
   }
 
   async function cachingFetch(url: string, reqOptions: RequestOptions) {
-    const startTime = performance.now();
-    const slowLogTimeout = 500;
-
-    const response = await nodeFetch(url, reqOptions);
-
-    const elapsedTime = performance.now() - startTime;
-
-    if (elapsedTime > slowLogTimeout) {
-      logger.warn(
-        `Fetching '${url}' took ${elapsedTime.toFixed(
-          2,
-        )}ms which is slower than slow log timeout of ${slowLogTimeout}ms`,
-      );
-    }
+    const response = await pureFetch(url, reqOptions);
 
     if (response.status === 200) {
       const body = await response.text();
@@ -74,14 +83,12 @@ export default function createFetch(options: { cache: IKeyValueCache }) {
       reqOptions.cache !== 'no-store' &&
       reqOptions.cache !== 'reload';
 
-    if (!isCachable) {
-      return nodeFetch(url, reqOptions);
+    if (!isCachable || options.disableCache === true) {
+      return pureFetch(url, reqOptions);
     }
 
     const data = await cache.get(url);
-
     const cached = await cachedResponse(url, data);
-
     if (cached) return cached;
 
     return cachingFetch(url, reqOptions);

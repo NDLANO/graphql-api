@@ -12,6 +12,7 @@ declare global {
   interface Context {
     token?: AuthToken;
     language: string;
+    shouldUseCache: boolean;
     loaders?: {
       articlesLoader: DataLoader<string, any>;
       learningpathsLoader: DataLoader<string, any>;
