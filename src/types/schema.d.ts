@@ -101,6 +101,7 @@ declare global {
     metaData?: GQLArticleMetaData;
     supportedLanguages?: Array<string | null>;
     copyright: GQLCopyright;
+    tags?: Array<string | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
   }
   
@@ -828,6 +829,7 @@ declare global {
     metaData?: ArticleToMetaDataResolver<TParent>;
     supportedLanguages?: ArticleToSupportedLanguagesResolver<TParent>;
     copyright?: ArticleToCopyrightResolver<TParent>;
+    tags?: ArticleToTagsResolver<TParent>;
     competenceGoals?: ArticleToCompetenceGoalsResolver<TParent>;
   }
   
@@ -896,6 +898,10 @@ declare global {
   }
   
   export interface ArticleToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToTagsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
