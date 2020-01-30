@@ -231,6 +231,7 @@ export const typeDefs = gql`
     metaData: ArticleMetaData
     supportedLanguages: [String]
     copyright: Copyright!
+    tags: [String]
     competenceGoals: [CompetenceGoal]
   }
 
