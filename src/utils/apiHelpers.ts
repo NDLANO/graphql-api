@@ -88,7 +88,7 @@ function externalsToH5pMetaData(obj: any) {
           license: {
             license: licenseFixer(
               i.h5p.license || '',
-              i.h5p.licenseVersion || '',
+              i.h5p.licenseVersion || '4.0',
             ),
             url: i.h5p.source || '',
             description: i.h5p.licenseExtras || '',
