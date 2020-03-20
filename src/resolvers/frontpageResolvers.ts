@@ -19,6 +19,13 @@ import {
 
 import { RCategory, FrontpageResponse } from '../api/frontpageApi';
 
+import { ndlaEnvironment } from '../config';
+
+const queryFunctionOnContentURI =
+  ndlaEnvironment === 'ff'
+    ? queryResourcesOnContentURI
+    : queryTopicsOnContentURI;
+
 interface Id {
   id: string;
 }
@@ -107,7 +114,7 @@ export const resolvers = {
       return movieMeta.metaDescription;
     },
     async path(id: string, _: any, context: Context): Promise<string> {
-      const moviePath: GQLMoviePath = await queryTopicsOnContentURI(
+      const moviePath: GQLMoviePath = await queryFunctionOnContentURI(
         id,
         context,
       );
