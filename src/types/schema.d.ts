@@ -403,6 +403,17 @@ declare global {
     contexts?: Array<GQLSearchContext | null>;
   }
   
+  /** Use this to resolve interface type SearchResult */
+  export type GQLPossibleSearchResultTypeNames =
+  'ArticleSearchResult' |
+  'LearningpathSearchResult';
+  
+  export interface GQLSearchResultNameMap {
+    SearchResult: GQLSearchResult;
+    ArticleSearchResult: GQLArticleSearchResult;
+    LearningpathSearchResult: GQLLearningpathSearchResult;
+  }
+  
   export interface GQLSearchContext {
     breadcrumbs?: Array<string | null>;
     learningResourceType?: string;
@@ -470,6 +481,28 @@ declare global {
     resourceTypes?: Array<GQLResourceType | null>;
   }
   
+  export interface GQLArticleSearchResult extends GQLSearchResult {
+    id: number;
+    title?: string;
+    supportedLanguages?: Array<string | null>;
+    url?: string;
+    metaDescription?: string;
+    metaImage?: GQLMetaImage;
+    contentType?: string;
+    contexts?: Array<GQLSearchContext | null>;
+  }
+  
+  export interface GQLLearningpathSearchResult extends GQLSearchResult {
+    id: number;
+    title?: string;
+    supportedLanguages?: Array<string | null>;
+    url?: string;
+    metaDescription?: string;
+    metaImage?: GQLMetaImage;
+    contentType?: string;
+    contexts?: Array<GQLSearchContext | null>;
+  }
+  
   /*********************************
    *                               *
    *         TYPE RESOLVERS        *
@@ -527,7 +560,10 @@ declare global {
     Frontpage?: GQLFrontpageTypeResolver;
     Category?: GQLCategoryTypeResolver;
     Search?: GQLSearchTypeResolver;
-    SearchResult?: GQLSearchResultTypeResolver;
+    SearchResult?: {
+      __resolveType: GQLSearchResultTypeResolver
+    };
+    
     SearchContext?: GQLSearchContextTypeResolver;
     SearchContextResourceTypes?: GQLSearchContextResourceTypesTypeResolver;
     SearchContextFilter?: GQLSearchContextFilterTypeResolver;
@@ -539,6 +575,8 @@ declare global {
     MovieMeta?: GQLMovieMetaTypeResolver;
     MoviePath?: GQLMoviePathTypeResolver;
     MovieResourceTypes?: GQLMovieResourceTypesTypeResolver;
+    ArticleSearchResult?: GQLArticleSearchResultTypeResolver;
+    LearningpathSearchResult?: GQLLearningpathSearchResultTypeResolver;
   }
   export interface GQLQueryTypeResolver<TParent = any> {
     resource?: QueryToResourceResolver<TParent>;
@@ -1935,48 +1973,8 @@ declare global {
   }
   
   export interface GQLSearchResultTypeResolver<TParent = any> {
-    id?: SearchResultToIdResolver<TParent>;
-    title?: SearchResultToTitleResolver<TParent>;
-    supportedLanguages?: SearchResultToSupportedLanguagesResolver<TParent>;
-    url?: SearchResultToUrlResolver<TParent>;
-    metaDescription?: SearchResultToMetaDescriptionResolver<TParent>;
-    metaImage?: SearchResultToMetaImageResolver<TParent>;
-    contentType?: SearchResultToContentTypeResolver<TParent>;
-    contexts?: SearchResultToContextsResolver<TParent>;
+    (parent: TParent, context: any, info: GraphQLResolveInfo): 'ArticleSearchResult' | 'LearningpathSearchResult';
   }
-  
-  export interface SearchResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchResultToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchResultToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchResultToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchResultToContentTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchResultToContextsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface GQLSearchContextTypeResolver<TParent = any> {
     breadcrumbs?: SearchContextToBreadcrumbsResolver<TParent>;
     learningResourceType?: SearchContextToLearningResourceTypeResolver<TParent>;
@@ -2177,6 +2175,92 @@ declare global {
   }
   
   export interface MovieResourceTypesToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLArticleSearchResultTypeResolver<TParent = any> {
+    id?: ArticleSearchResultToIdResolver<TParent>;
+    title?: ArticleSearchResultToTitleResolver<TParent>;
+    supportedLanguages?: ArticleSearchResultToSupportedLanguagesResolver<TParent>;
+    url?: ArticleSearchResultToUrlResolver<TParent>;
+    metaDescription?: ArticleSearchResultToMetaDescriptionResolver<TParent>;
+    metaImage?: ArticleSearchResultToMetaImageResolver<TParent>;
+    contentType?: ArticleSearchResultToContentTypeResolver<TParent>;
+    contexts?: ArticleSearchResultToContextsResolver<TParent>;
+  }
+  
+  export interface ArticleSearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToContentTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToContextsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathSearchResultTypeResolver<TParent = any> {
+    id?: LearningpathSearchResultToIdResolver<TParent>;
+    title?: LearningpathSearchResultToTitleResolver<TParent>;
+    supportedLanguages?: LearningpathSearchResultToSupportedLanguagesResolver<TParent>;
+    url?: LearningpathSearchResultToUrlResolver<TParent>;
+    metaDescription?: LearningpathSearchResultToMetaDescriptionResolver<TParent>;
+    metaImage?: LearningpathSearchResultToMetaImageResolver<TParent>;
+    contentType?: LearningpathSearchResultToContentTypeResolver<TParent>;
+    contexts?: LearningpathSearchResultToContextsResolver<TParent>;
+  }
+  
+  export interface LearningpathSearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToContentTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToContextsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

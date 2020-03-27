@@ -68,4 +68,13 @@ export const resolvers: GQLResolver = {
       return 'Resource';
     },
   },
+  SearchResult: {
+    // Resolves SearchResult interface
+    __resolveType(searchResult: any): GQLPossibleSearchResultTypeNames {
+      if (searchResult.learningResourceType === 'learningpath') {
+        return 'LearningpathSearchResult';
+      }
+      return 'ArticleSearchResult';
+    },
+  },
 };
