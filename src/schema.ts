@@ -36,16 +36,6 @@ export const typeDefs = gql`
     lastUpdated: String
   }
 
-  interface TaxonomyEntity {
-    id: String!
-    name: String!
-    contentUri: String
-    path: String
-    paths: [String]
-    meta: Meta
-    article(filterIds: String, subjectId: String): Article
-    filters: [Filter]
-  }
   type LearningpathStepEmbedUrl {
     url: String
     embedType: String
@@ -119,6 +109,17 @@ export const typeDefs = gql`
     filters: [Filter]
     resourceTypes: [ResourceType]
     parentTopics: [Topic]
+  }
+
+  interface TaxonomyEntity {
+    id: String!
+    name: String!
+    contentUri: String
+    path: String
+    paths: [String]
+    meta: Meta
+    article(filterIds: String, subjectId: String): Article
+    filters: [Filter]
   }
 
   type Topic implements TaxonomyEntity {
@@ -363,7 +364,29 @@ export const typeDefs = gql`
     topics(all: Boolean, filterIds: String): [Topic]
   }
 
-  type SearchResult {
+  interface SearchResult {
+    id: Int!
+    title: String
+    supportedLanguages: [String]
+    url: String
+    metaDescription: String
+    metaImage: MetaImage
+    contentType: String
+    contexts: [SearchContext]
+  }
+
+  type ArticleSearchResult implements SearchResult {
+    id: Int!
+    title: String
+    supportedLanguages: [String]
+    url: String
+    metaDescription: String
+    metaImage: MetaImage
+    contentType: String
+    contexts: [SearchContext]
+  }
+
+  type LearningpathSearchResult implements SearchResult {
     id: Int!
     title: String
     supportedLanguages: [String]
