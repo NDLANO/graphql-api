@@ -471,7 +471,8 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
-    competenceGoals(nodeId: String!): [CompetenceGoal]
+    competenceGoals(code: String!): [CompetenceGoal]
+    competenceGoal(code: String!): CompetenceGoal
     search(
       query: String
       page: String

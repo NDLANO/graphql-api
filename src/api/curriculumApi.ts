@@ -39,6 +39,19 @@ interface Curriculum {
   };
 }
 
+interface Title {
+  spraak: string;
+  verdi: string;
+}
+
+interface CompetenceGoal {
+  id: string;
+  kode: string;
+  tittel: {
+    tekst: Title[];
+  }
+}
+
 function findNameForAcceptLanguage(names: Name[], language: string) {
   // find fallback name language
   const { name: fallbackName } = names.find(
@@ -98,4 +111,20 @@ export async function fetchCompetenceGoals(
   });
 
   return competenceGoals;
+}
+
+export async function fetchCompetenceGoal(
+  code: string,
+  context: Context,
+): Promise<GQLCompetenceGoal> {
+  const response = await fetch(
+    `https://data.udir.no/kl06/v201906/kompetansemaal-lk20/${code}`,
+    context,
+  );
+  const json: CompetenceGoal = await resolveJson(response);
+  return {
+    id: json.id,
+    curriculumId: json.kode,
+    name: context.language
+  }
 }

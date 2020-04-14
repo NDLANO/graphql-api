@@ -26,8 +26,8 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLCompetenceGoal[]> {
       if (article.oldNdlaUrl) {
-        const nodeId = article.oldNdlaUrl.split('/').pop();
-        return fetchCompetenceGoals(nodeId, context);
+        const code = article.oldNdlaUrl.split('/').pop();
+        return fetchCompetenceGoals(code, context);
       }
       return null;
     },
