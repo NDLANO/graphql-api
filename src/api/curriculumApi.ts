@@ -7,7 +7,7 @@
  */
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { curriculumLanguageMapping } from '../utils/mapping';
+import { curriculumLanguageMapping, isoLanguageMapping } from '../utils/mapping';
 
 interface Name {
   scopes: string[];
@@ -65,6 +65,15 @@ function findNameForAcceptLanguage(names: Name[], language: string) {
 
   const name = competenceAimI18N ? competenceAimI18N.name : fallbackName;
   return name;
+}
+
+function filterTitleForLanguage(titles: Title[], language: string) {
+  const isoCode = isoLanguageMapping[language.substring(0,2)] || 'default';
+  let title = titles.find(title => title.spraak === isoCode);
+  if (!title) {
+    title = titles.find(title => title.spraak === 'default');
+  }
+  return title.verdi;
 }
 
 export async function fetchCurriculum(
@@ -125,6 +134,6 @@ export async function fetchCompetenceGoal(
   return {
     id: json.id,
     curriculumId: json.kode,
-    name: context.language
+    name: filterTitleForLanguage(json.tittel.tekst, context.language)
   }
 }
