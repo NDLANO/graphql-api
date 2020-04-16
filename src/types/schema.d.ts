@@ -203,11 +203,6 @@ declare global {
     title: string;
   }
   
-  export interface GQLCompetenceCurriculum {
-    id: string;
-    name: string;
-  }
-  
   export interface GQLFilter {
     id: string;
     name: string;
@@ -550,7 +545,6 @@ declare global {
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
     H5pLicense?: GQLH5pLicenseTypeResolver;
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
-    CompetenceCurriculum?: GQLCompetenceCurriculumTypeResolver;
     Filter?: GQLFilterTypeResolver;
     Learningpath?: GQLLearningpathTypeResolver;
     LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
@@ -1210,39 +1204,11 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLCompetenceGoalTypeResolver<TParent = any> {
-    id?: CompetenceGoalToIdResolver<TParent>;
-    curriculumId?: CompetenceGoalToCurriculumIdResolver<TParent>;
-    name?: CompetenceGoalToNameResolver<TParent>;
-    curriculum?: CompetenceGoalToCurriculumResolver<TParent>;
-  }
-  
   export interface CompetenceGoalToIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface CompetenceGoalToCurriculumIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface CompetenceGoalToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCurriculumResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLCompetenceCurriculumTypeResolver<TParent = any> {
-    id?: CompetenceCurriculumToIdResolver<TParent>;
-    name?: CompetenceCurriculumToNameResolver<TParent>;
-  }
-  
-  export interface CompetenceCurriculumToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceCurriculumToNameResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

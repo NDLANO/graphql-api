@@ -7,37 +7,7 @@
  */
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { curriculumLanguageMapping, isoLanguageMapping } from '../utils/mapping';
-
-interface Name {
-  scopes: string[];
-  name: string;
-  isLanguageNeutral: boolean;
-}
-
-interface CompetenceAim {
-  id: string;
-  links: { parents: string[] };
-  names: Name[];
-}
-
-interface CurriculumRelation {
-  curriculumId: string;
-  competenceAim: CompetenceAim;
-}
-
-interface Resource {
-  resource: {
-    relations: CurriculumRelation[];
-  };
-}
-
-interface Curriculum {
-  curriculum: {
-    id: string;
-    names: Name[];
-  };
-}
+import { isoLanguageMapping } from '../utils/mapping';
 
 interface Title {
   spraak: string;
@@ -49,7 +19,7 @@ interface CompetenceGoal {
   kode: string;
   tittel: {
     tekst: Title[];
-  }
+  };
   'tilhoerer-laereplan': Reference;
   'tilhoerer-kompetansemaalsett': Reference;
   'tilknyttede-tverrfaglige-temaer': Element[];
@@ -72,57 +42,23 @@ function mapReference(reference: Reference) {
     id: reference.id,
     code: reference.kode,
     title: reference.tittel,
-  }
+  };
 }
 
 function mapElements(elements: Element[]) {
   return elements.map(element => ({
     reference: mapReference(element.referanse),
     explanation: element.forklaring,
-  }))
-}
-
-function findNameForAcceptLanguage(names: Name[], language: string) {
-  // find fallback name language
-  const { name: fallbackName } = names.find(
-    nameObj => nameObj.isLanguageNeutral === true,
-  );
-
-  // Try to find competenceAim name for language
-  const competenceAimI18N = names.find(
-    nameObj => nameObj.scopes[0] === curriculumLanguageMapping[language],
-  );
-
-  const name = competenceAimI18N ? competenceAimI18N.name : fallbackName;
-  return name;
+  }));
 }
 
 function filterTitleForLanguage(titles: Title[], language: string) {
-  const isoCode = isoLanguageMapping[language.substring(0,2)] || 'default';
+  const isoCode = isoLanguageMapping[language.substring(0, 2)] || 'default';
   let title = titles.find(title => title.spraak === isoCode);
   if (!title) {
     title = titles.find(title => title.spraak === 'default');
   }
   return title.verdi;
-}
-
-export async function fetchCurriculum(
-  curriculumId: string,
-  context: Context,
-): Promise<GQLCompetenceCurriculum> {
-  const response = await fetch(
-    `https://mycurriculum.ndla.no/v1/users/ndla/curriculums/${curriculumId}`,
-    context,
-  );
-  const json: Curriculum = await resolveJson(response);
-  const curriculum = json.curriculum;
-
-  const name = findNameForAcceptLanguage(curriculum.names, context.language);
-
-  return {
-    id: curriculum.id,
-    name,
-  };
 }
 
 export async function fetchCompetenceGoal(
@@ -142,5 +78,5 @@ export async function fetchCompetenceGoal(
     competenceGoalSet: mapReference(json['tilhoerer-kompetansemaalsett']),
     crossSubjectTopics: mapElements(json['tilknyttede-tverrfaglige-temaer']),
     coreElements: mapElements(json['tilknyttede-tverrfaglige-temaer']),
-  }
+  };
 }
