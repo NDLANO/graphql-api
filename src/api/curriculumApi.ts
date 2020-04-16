@@ -50,6 +50,36 @@ interface CompetenceGoal {
   tittel: {
     tekst: Title[];
   }
+  'tilhoerer-laereplan': Reference;
+  'tilhoerer-kompetansemaalsett': Reference;
+  'tilknyttede-tverrfaglige-temaer': Element[];
+  'tilknyttede-kjerneelementer': Element[];
+}
+
+interface Element {
+  referanse: Reference;
+  forklaring: string[];
+}
+
+interface Reference {
+  id: string;
+  kode: string;
+  tittel: string;
+}
+
+function mapReference(reference: Reference) {
+  return {
+    id: reference.id,
+    code: reference.kode,
+    title: reference.tittel,
+  }
+}
+
+function mapElements(elements: Element[]) {
+  return elements.map(element => ({
+    reference: mapReference(element.referanse),
+    explanation: element.forklaring,
+  }))
 }
 
 function findNameForAcceptLanguage(names: Name[], language: string) {
@@ -106,7 +136,11 @@ export async function fetchCompetenceGoal(
   const json: CompetenceGoal = await resolveJson(response);
   return {
     id: json.id,
-    curriculumId: json.kode,
-    name: filterTitleForLanguage(json.tittel.tekst, context.language)
+    code: json.kode,
+    title: filterTitleForLanguage(json.tittel.tekst, context.language),
+    curriculum: mapReference(json['tilhoerer-laereplan']),
+    competenceGoalSet: mapReference(json['tilhoerer-kompetansemaalsett']),
+    crossSubjectTopics: mapElements(json['tilknyttede-tverrfaglige-temaer']),
+    coreElements: mapElements(json['tilknyttede-tverrfaglige-temaer']),
   }
 }

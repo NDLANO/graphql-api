@@ -17,15 +17,3 @@ export const Query = {
     return fetchCompetenceGoal(code, context);
   },
 };
-
-export const resolvers = {
-  CompetenceGoal: {
-    async curriculum(
-      competenceGoal: GQLCompetenceGoal,
-      _: any,
-      context: Context,
-    ): Promise<GQLCompetenceCurriculum> {
-      return competenceGoal;
-    },
-  },
-};

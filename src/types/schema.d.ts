@@ -28,7 +28,6 @@ declare global {
     frontpage?: GQLFrontpage;
     filters?: Array<GQLSubjectFilter | null>;
     competenceGoal?: GQLCompetenceGoal | null;
-    competenceGoals?: Array<GQLCompetenceGoal | null>;
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
@@ -185,9 +184,23 @@ declare global {
   
   export interface GQLCompetenceGoal {
     id: string;
-    curriculumId: string;
-    name: string;
-    curriculum?: GQLCompetenceCurriculum;
+    code: string;
+    title: string;
+    curriculum?: GQLReference;
+    competenceGoalSet?: GQLReference;
+    crossSubjectTopics?: GQLElement[];
+    coreElements?: GQLElement[];
+  }
+
+  export interface GQLElement {
+    reference: GQLReference;
+    explanation: string[];
+  }
+
+  export interface GQLReference {
+    id: string;
+    code: string;
+    title: string;
   }
   
   export interface GQLCompetenceCurriculum {
