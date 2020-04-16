@@ -95,33 +95,6 @@ export async function fetchCurriculum(
   };
 }
 
-export async function fetchCompetenceGoals(
-  nodeId: string,
-  context: Context,
-): Promise<GQLCompetenceGoal[]> {
-  const response = await fetch(
-    `http://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
-    context,
-  );
-  const json: Resource = await resolveJson(response);
-
-  const competenceGoals = json.resource.relations.map(relation => {
-    const name = findNameForAcceptLanguage(
-      relation.competenceAim.names,
-      context.language,
-    );
-
-    return {
-      id: relation.competenceAim.id,
-      curriculumId: relation.curriculumId,
-      name,
-      parentLinks: relation.competenceAim.links.parents,
-    };
-  });
-
-  return competenceGoals;
-}
-
 export async function fetchCompetenceGoal(
   code: string,
   context: Context,

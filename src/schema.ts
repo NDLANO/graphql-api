@@ -227,12 +227,13 @@ export const typeDefs = gql`
     metaImage: MetaImage
     metaDescription: String!
     articleType: String!
-    oldNdlaUrl: String
+    url: String
     requiredLibraries: [ArticleRequiredLibrary]
     metaData: ArticleMetaData
     supportedLanguages: [String]
     copyright: Copyright!
     tags: [String]
+    grepCodes: [String]
     competenceGoals: [CompetenceGoal]
   }
 

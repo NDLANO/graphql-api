@@ -97,12 +97,13 @@ declare global {
     metaImage?: GQLMetaImage;
     metaDescription: string;
     articleType: string;
-    oldNdlaUrl?: string;
+    url?: string;
     requiredLibraries?: Array<GQLArticleRequiredLibrary | null>;
     metaData?: GQLArticleMetaData;
     supportedLanguages?: Array<string | null>;
     copyright: GQLCopyright;
     tags?: Array<string | null>;
+    grepCodes?: Array<string>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
   }
   
