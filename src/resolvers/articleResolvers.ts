@@ -25,9 +25,12 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLCompetenceGoal[]> {
-      return Promise.all(
-        article.grepCodes.map(code => fetchCompetenceGoal(code, context)),
-      );
+      if (article.grepCodes) {
+        return Promise.all(
+          article.grepCodes.map(code => fetchCompetenceGoal(code, context)),
+        );
+      }
+      return null;
     },
   },
 };
