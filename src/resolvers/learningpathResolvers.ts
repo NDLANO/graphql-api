@@ -83,7 +83,7 @@ export const resolvers = {
       }
       const lastPartOfUrl = learningpathStep.embedUrl.url.split('/').pop();
       if (lastPartOfUrl.includes('resource')) {
-        return fetchResource({ resourceId: `urn:${lastPartOfUrl}` }, context);
+        return fetchResource({ id: `urn:${lastPartOfUrl}` }, context);
       }
       return null;
     },

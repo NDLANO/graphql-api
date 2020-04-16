@@ -42,6 +42,7 @@ declare global {
     path?: string;
     paths?: Array<string | null>;
     meta?: GQLMeta;
+    metadata?: GQLTaxonomyMetadata;
     article?: GQLArticle;
     learningpath?: GQLLearningpath;
     filters?: Array<GQLFilter | null>;
@@ -56,6 +57,7 @@ declare global {
     path?: string;
     paths?: Array<string | null>;
     meta?: GQLMeta;
+    metadata?: GQLTaxonomyMetadata;
     article?: GQLArticle;
     filters?: Array<GQLFilter | null>;
   }
@@ -81,6 +83,11 @@ declare global {
   export interface GQLMetaImage {
     url?: string;
     alt?: string;
+  }
+  
+  export interface GQLTaxonomyMetadata {
+    grepCodes?: Array<string | null>;
+    visible?: boolean;
   }
   
   export interface GQLArticle {
@@ -272,6 +279,7 @@ declare global {
     name: string;
     contentUri?: string;
     meta?: GQLMeta;
+    metadata?: GQLTaxonomyMetadata;
     article?: GQLArticle;
     filters?: Array<GQLFilter | null>;
     path?: string;
@@ -288,6 +296,7 @@ declare global {
     contentUri?: string;
     name: string;
     path: string;
+    metadata?: GQLTaxonomyMetadata;
     filters?: Array<GQLSubjectFilter | null>;
     frontpageFilters?: Array<GQLSubjectFilter | null>;
     subjectpage?: GQLSubjectPage;
@@ -522,6 +531,7 @@ declare global {
     
     Meta?: GQLMetaTypeResolver;
     MetaImage?: GQLMetaImageTypeResolver;
+    TaxonomyMetadata?: GQLTaxonomyMetadataTypeResolver;
     Article?: GQLArticleTypeResolver;
     ArticleRequiredLibrary?: GQLArticleRequiredLibraryTypeResolver;
     ArticleMetaData?: GQLArticleMetaDataTypeResolver;
@@ -745,6 +755,7 @@ declare global {
     path?: ResourceToPathResolver<TParent>;
     paths?: ResourceToPathsResolver<TParent>;
     meta?: ResourceToMetaResolver<TParent>;
+    metadata?: ResourceToMetadataResolver<TParent>;
     article?: ResourceToArticleResolver<TParent>;
     learningpath?: ResourceToLearningpathResolver<TParent>;
     filters?: ResourceToFiltersResolver<TParent>;
@@ -773,6 +784,10 @@ declare global {
   }
   
   export interface ResourceToMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToMetadataResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -846,6 +861,19 @@ declare global {
   }
   
   export interface MetaImageToAltResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLTaxonomyMetadataTypeResolver<TParent = any> {
+    grepCodes?: TaxonomyMetadataToGrepCodesResolver<TParent>;
+    visible?: TaxonomyMetadataToVisibleResolver<TParent>;
+  }
+  
+  export interface TaxonomyMetadataToGrepCodesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TaxonomyMetadataToVisibleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1513,6 +1541,7 @@ declare global {
     name?: TopicToNameResolver<TParent>;
     contentUri?: TopicToContentUriResolver<TParent>;
     meta?: TopicToMetaResolver<TParent>;
+    metadata?: TopicToMetadataResolver<TParent>;
     article?: TopicToArticleResolver<TParent>;
     filters?: TopicToFiltersResolver<TParent>;
     path?: TopicToPathResolver<TParent>;
@@ -1537,6 +1566,10 @@ declare global {
   }
   
   export interface TopicToMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToMetadataResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1596,6 +1629,7 @@ declare global {
     contentUri?: SubjectToContentUriResolver<TParent>;
     name?: SubjectToNameResolver<TParent>;
     path?: SubjectToPathResolver<TParent>;
+    metadata?: SubjectToMetadataResolver<TParent>;
     filters?: SubjectToFiltersResolver<TParent>;
     frontpageFilters?: SubjectToFrontpageFiltersResolver<TParent>;
     subjectpage?: SubjectToSubjectpageResolver<TParent>;
@@ -1615,6 +1649,10 @@ declare global {
   }
   
   export interface SubjectToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToMetadataResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

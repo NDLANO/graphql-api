@@ -11,12 +11,12 @@ import { fetchSubjects, fetchSubjectPage, fetchFilters } from '../api';
 import { RSubjectCategory } from '../api/frontpageApi';
 import { filterMissingArticles } from '../utils/articleHelpers';
 
-interface Id {
-  id: string;
-}
-
 export const Query = {
-  async subject(_: any, { id }: Id, context: Context): Promise<GQLSubject> {
+  async subject(
+    _: any,
+    { id }: QueryToSubjectArgs,
+    context: Context,
+  ): Promise<GQLSubject> {
     const list = await fetchSubjects(context);
     return list.find(subject => subject.id === id);
   },

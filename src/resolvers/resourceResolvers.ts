@@ -23,7 +23,7 @@ export const Query = {
     { id, subjectId }: QueryToResourceArgs,
     context: Context,
   ): Promise<GQLResource> {
-    return fetchResource({ resourceId: id, subjectId }, context);
+    return fetchResource({ id, subjectId }, context);
   },
   async resourceTypes(
     _: any,

@@ -15,19 +15,6 @@ interface FetchTopicResourcesParams {
   subjectId?: string;
 }
 
-interface FetchResourceParams {
-  resourceId: string;
-  subjectId?: string;
-}
-
-interface TaxonomyEntity {
-  id: string;
-  name: string;
-  contentUri?: string;
-  path?: string;
-  paths?: string[];
-}
-
 function removeUrn(str: string): string {
   return str.replace('urn:', '');
 }
@@ -40,14 +27,14 @@ function findPrimaryPath(
 }
 
 export async function fetchResource(
-  { resourceId, subjectId }: FetchResourceParams,
+  { id, subjectId }: QueryToResourceArgs,
   context: Context,
 ): Promise<GQLResource> {
   const response = await fetch(
-    `/taxonomy/v1/resources/${resourceId}/full?language=${context.language}`,
+    `/taxonomy/v1/resources/${id}/full?language=${context.language}`,
     context,
   );
-  const resource: TaxonomyEntity = await resolveJson(response);
+  const resource: GQLTaxonomyEntity = await resolveJson(response);
 
   if (subjectId) {
     const primaryPath = findPrimaryPath(resource.paths, subjectId);
@@ -79,7 +66,7 @@ export async function fetchResourceTypes(
 
 export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
   const response = await fetch(
-    `/taxonomy/v1/subjects/?language=${context.language}`,
+    `/taxonomy/v1/subjects/?includeMetadata=true&language=${context.language}`,
     context,
   );
   return resolveJson(response);
@@ -91,7 +78,7 @@ export async function fetchSubjectTopics(
   context: Context,
 ) {
   const response = await fetch(
-    `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true&language=${
+    `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${
       context.language
     }${filterIds ? `&filter=${filterIds}` : ''}`,
     context,
@@ -101,7 +88,7 @@ export async function fetchSubjectTopics(
 
 export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
   const response = await fetch(
-    `/taxonomy/v1/topics/?language=${context.language}`,
+    `/taxonomy/v1/topics/?includeMetadata=true&language=${context.language}`,
     context,
   );
   return resolveJson(response);
@@ -112,10 +99,12 @@ export async function fetchTopic(
   context: Context,
 ) {
   const response = await fetch(
-    `/taxonomy/v1/topics/${params.id}?language=${context.language}`,
+    `/taxonomy/v1/topics/${params.id}?includeMetadata=true&language=${
+      context.language
+    }`,
     context,
   );
-  const topic: TaxonomyEntity = await resolveJson(response);
+  const topic: GQLTaxonomyEntity = await resolveJson(response);
 
   if (params.subjectId) {
     const primaryPath = findPrimaryPath(topic.paths, params.subjectId);
@@ -160,12 +149,12 @@ export async function fetchTopicResources(
   const subjectParam = subjectId ? `&subject=${subjectId}` : '';
 
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${
+    `/taxonomy/v1/topics/${topicId}/resources?includeMetadata=true&relevance=${relevance}&language=${
       context.language
     }${filterParam}${subjectParam}`,
     context,
   );
-  const resources: TaxonomyEntity[] = await resolveJson(response);
+  const resources: GQLTaxonomyEntity[] = await resolveJson(response);
 
   resources.forEach(resource => {
     if (subjectId) {
@@ -187,7 +176,7 @@ export async function fetchResourcesAndTopics(
       if (id.startsWith('urn:topic')) {
         return fetchTopic({ id, ...args }, context);
       }
-      return fetchResource({ resourceId: id, ...args }, context);
+      return fetchResource({ id, ...args }, context);
     }),
   );
 }
