@@ -227,7 +227,7 @@ export const typeDefs = gql`
     metaImage: MetaImage
     metaDescription: String!
     articleType: String!
-    url: String
+    oldNdlaUrl: String
     requiredLibraries: [ArticleRequiredLibrary]
     metaData: ArticleMetaData
     supportedLanguages: [String]

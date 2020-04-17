@@ -30,7 +30,7 @@ export const resolvers = {
           article.grepCodes.map(code => fetchCompetenceGoal(code, context)),
         );
       }
-      return null;
+      return [];
     },
   },
 };

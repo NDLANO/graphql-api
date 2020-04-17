@@ -97,7 +97,7 @@ declare global {
     metaImage?: GQLMetaImage;
     metaDescription: string;
     articleType: string;
-    url?: string;
+    oldNdlaUrl?: string;
     requiredLibraries?: Array<GQLArticleRequiredLibrary | null>;
     metaData?: GQLArticleMetaData;
     supportedLanguages?: Array<string | null>;
@@ -882,7 +882,7 @@ declare global {
     metaImage?: ArticleToMetaImageResolver<TParent>;
     metaDescription?: ArticleToMetaDescriptionResolver<TParent>;
     articleType?: ArticleToArticleTypeResolver<TParent>;
-    url?: ArticleToUrlResolver<TParent>;
+    oldNdlaUrl?: ArticleToOldNdlaUrlResolver<TParent>;
     requiredLibraries?: ArticleToRequiredLibrariesResolver<TParent>;
     metaData?: ArticleToMetaDataResolver<TParent>;
     supportedLanguages?: ArticleToSupportedLanguagesResolver<TParent>;
@@ -940,7 +940,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleToUrlResolver<TParent = any, TResult = any> {
+  export interface ArticleToOldNdlaUrlResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
