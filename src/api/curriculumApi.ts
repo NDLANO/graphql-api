@@ -54,10 +54,9 @@ function mapElements(elements: Element[]) {
 
 function filterTitleForLanguage(titles: Title[], language: string) {
   const isoCode = isoLanguageMapping[language.substring(0, 2)] || 'default';
-  let title = titles.find(title => title.spraak === isoCode);
-  if (!title) {
-    title = titles.find(title => title.spraak === 'default');
-  }
+  const title =
+    titles.find(t => t.spraak === isoCode) ||
+    titles.find(t => t.spraak === 'default');
   return title.verdi;
 }
 
