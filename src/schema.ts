@@ -233,19 +233,29 @@ export const typeDefs = gql`
     supportedLanguages: [String]
     copyright: Copyright!
     tags: [String]
+    grepCodes: [String]
     competenceGoals: [CompetenceGoal]
   }
 
   type CompetenceGoal {
     id: String!
-    curriculumId: String!
-    name: String!
-    curriculum: CompetenceCurriculum
+    code: String!
+    title: String!
+    curriculum: Reference!
+    competenceGoalSet: Reference!
+    crossSubjectTopics: [Element]!
+    coreElements: [Element]!
   }
 
-  type CompetenceCurriculum {
+  type Element {
+    reference: Reference!
+    explanation: [String]!
+  }
+
+  type Reference {
     id: String!
-    name: String!
+    code: String!
+    title: String!
   }
 
   type Filter {
@@ -471,7 +481,8 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
-    competenceGoals(nodeId: String!): [CompetenceGoal]
+    competenceGoals(codes: [String!]): [CompetenceGoal]
+    competenceGoal(code: String!): CompetenceGoal
     search(
       query: String
       page: String
