@@ -30,9 +30,7 @@ import {
   Query as SearchQuery,
   resolvers as searchResolvers,
 } from './searchResolvers';
-import {
-  Query as CurriculumQuery,
-} from './curriculumResolvers';
+import { Query as CurriculumQuery } from './curriculumResolvers';
 import {
   Query as LearningpathQuery,
   resolvers as learningpathResolvers,

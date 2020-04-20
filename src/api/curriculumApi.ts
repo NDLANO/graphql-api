@@ -80,3 +80,10 @@ export async function fetchCompetenceGoal(
     coreElements: mapElements(json['tilknyttede-tverrfaglige-temaer']),
   };
 }
+
+export async function fetchCompetenceGoals(
+  codes: string[],
+  context: Context,
+): Promise<GQLCompetenceGoal[]> {
+  return Promise.all(codes.map(code => fetchCompetenceGoal(code, context)));
+}

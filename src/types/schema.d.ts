@@ -687,7 +687,7 @@ declare global {
   }
   
   export interface QueryToCompetenceGoalsArgs {
-    code: string;
+    codes?: Array<string>;
   }
   export interface QueryToCompetenceGoalsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCompetenceGoalsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

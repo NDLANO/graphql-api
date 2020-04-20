@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchCompetenceGoal } from '../api';
+import { fetchCompetenceGoal, fetchCompetenceGoals } from '../api';
 
 export const Query = {
   async competenceGoal(
@@ -15,5 +15,12 @@ export const Query = {
     context: Context,
   ): Promise<GQLCompetenceGoal> {
     return fetchCompetenceGoal(code, context);
+  },
+  async competenceGoals(
+    _: any,
+    { codes }: { codes: string[] },
+    context: Context,
+  ): Promise<GQLCompetenceGoal[]> {
+    return fetchCompetenceGoals(codes, context);
   },
 };
