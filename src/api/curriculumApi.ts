@@ -85,5 +85,5 @@ export async function fetchCompetenceGoals(
   codes: string[],
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  return Promise.all(codes.map(code => fetchCompetenceGoal(code, context)));
+  return Promise.all(codes.filter(code => code.startsWith('KM')).map(code => fetchCompetenceGoal(code, context)));
 }
