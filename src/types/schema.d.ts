@@ -28,6 +28,7 @@ declare global {
     frontpage?: GQLFrontpage;
     filters?: Array<GQLSubjectFilter | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
+    competenceGoal?: GQLCompetenceGoal;
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
@@ -109,6 +110,7 @@ declare global {
     supportedLanguages?: Array<string | null>;
     copyright: GQLCopyright;
     tags?: Array<string | null>;
+    grepCodes?: Array<string | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
   }
   
@@ -190,14 +192,23 @@ declare global {
   
   export interface GQLCompetenceGoal {
     id: string;
-    curriculumId: string;
-    name: string;
-    curriculum?: GQLCompetenceCurriculum;
+    code: string;
+    title: string;
+    curriculum: GQLReference;
+    competenceGoalSet: GQLReference;
+    crossSubjectTopics: Array<GQLElement | null>;
+    coreElements: Array<GQLElement | null>;
   }
   
-  export interface GQLCompetenceCurriculum {
+  export interface GQLReference {
     id: string;
-    name: string;
+    code: string;
+    title: string;
+  }
+  
+  export interface GQLElement {
+    reference: GQLReference;
+    explanation: Array<string | null>;
   }
   
   export interface GQLFilter {
@@ -545,7 +556,8 @@ declare global {
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
     H5pLicense?: GQLH5pLicenseTypeResolver;
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
-    CompetenceCurriculum?: GQLCompetenceCurriculumTypeResolver;
+    Reference?: GQLReferenceTypeResolver;
+    Element?: GQLElementTypeResolver;
     Filter?: GQLFilterTypeResolver;
     Learningpath?: GQLLearningpathTypeResolver;
     LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
@@ -602,6 +614,7 @@ declare global {
     frontpage?: QueryToFrontpageResolver<TParent>;
     filters?: QueryToFiltersResolver<TParent>;
     competenceGoals?: QueryToCompetenceGoalsResolver<TParent>;
+    competenceGoal?: QueryToCompetenceGoalResolver<TParent>;
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
@@ -684,10 +697,17 @@ declare global {
   }
   
   export interface QueryToCompetenceGoalsArgs {
-    nodeId: string;
+    codes?: Array<string>;
   }
   export interface QueryToCompetenceGoalsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCompetenceGoalsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToCompetenceGoalArgs {
+    code: string;
+  }
+  export interface QueryToCompetenceGoalResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToCompetenceGoalArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToSearchArgs {
@@ -896,6 +916,7 @@ declare global {
     supportedLanguages?: ArticleToSupportedLanguagesResolver<TParent>;
     copyright?: ArticleToCopyrightResolver<TParent>;
     tags?: ArticleToTagsResolver<TParent>;
+    grepCodes?: ArticleToGrepCodesResolver<TParent>;
     competenceGoals?: ArticleToCompetenceGoalsResolver<TParent>;
   }
   
@@ -968,6 +989,10 @@ declare global {
   }
   
   export interface ArticleToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToGrepCodesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1225,20 +1250,23 @@ declare global {
   
   export interface GQLCompetenceGoalTypeResolver<TParent = any> {
     id?: CompetenceGoalToIdResolver<TParent>;
-    curriculumId?: CompetenceGoalToCurriculumIdResolver<TParent>;
-    name?: CompetenceGoalToNameResolver<TParent>;
+    code?: CompetenceGoalToCodeResolver<TParent>;
+    title?: CompetenceGoalToTitleResolver<TParent>;
     curriculum?: CompetenceGoalToCurriculumResolver<TParent>;
+    competenceGoalSet?: CompetenceGoalToCompetenceGoalSetResolver<TParent>;
+    crossSubjectTopics?: CompetenceGoalToCrossSubjectTopicsResolver<TParent>;
+    coreElements?: CompetenceGoalToCoreElementsResolver<TParent>;
   }
   
   export interface CompetenceGoalToIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface CompetenceGoalToCurriculumIdResolver<TParent = any, TResult = any> {
+  export interface CompetenceGoalToCodeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface CompetenceGoalToNameResolver<TParent = any, TResult = any> {
+  export interface CompetenceGoalToTitleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1246,16 +1274,46 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLCompetenceCurriculumTypeResolver<TParent = any> {
-    id?: CompetenceCurriculumToIdResolver<TParent>;
-    name?: CompetenceCurriculumToNameResolver<TParent>;
-  }
-  
-  export interface CompetenceCurriculumToIdResolver<TParent = any, TResult = any> {
+  export interface CompetenceGoalToCompetenceGoalSetResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface CompetenceCurriculumToNameResolver<TParent = any, TResult = any> {
+  export interface CompetenceGoalToCrossSubjectTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCoreElementsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLReferenceTypeResolver<TParent = any> {
+    id?: ReferenceToIdResolver<TParent>;
+    code?: ReferenceToCodeResolver<TParent>;
+    title?: ReferenceToTitleResolver<TParent>;
+  }
+  
+  export interface ReferenceToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ReferenceToCodeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ReferenceToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLElementTypeResolver<TParent = any> {
+    reference?: ElementToReferenceResolver<TParent>;
+    explanation?: ElementToExplanationResolver<TParent>;
+  }
+  
+  export interface ElementToReferenceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ElementToExplanationResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

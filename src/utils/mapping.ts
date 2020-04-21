@@ -13,3 +13,11 @@ export const curriculumLanguageMapping: {
   nb: 'http://psi.oasis-open.org/iso/639/#nob',
   nn: 'http://psi.oasis-open.org/iso/639/#nno',
 };
+
+export const isoLanguageMapping: {
+  [index: string]: string;
+} = {
+  en: 'eng',
+  no: 'nob',
+  nn: 'nno',
+};
