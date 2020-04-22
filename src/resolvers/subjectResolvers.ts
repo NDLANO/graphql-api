@@ -24,7 +24,6 @@ export const Query = {
   },
   async subjects(_: any, __: any, context: Context): Promise<GQLSubject[]> {
     const subjects = await fetchSubjects(context);
-    console.log(subjects);
     return subjects.filter(s => s.metadata.visible === true);
   },
   async filters(
