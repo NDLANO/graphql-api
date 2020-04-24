@@ -97,18 +97,9 @@ export const typeDefs = gql`
     coverphoto: LearningpathCoverphoto
   }
 
-  type Resource implements TaxonomyEntity {
-    id: String!
-    name: String!
-    contentUri: String
-    path: String
-    paths: [String]
-    meta: Meta
-    article(filterIds: String, subjectId: String): Article
-    learningpath: Learningpath
-    filters: [Filter]
-    resourceTypes: [ResourceType]
-    parentTopics: [Topic]
+  type TaxonomyMetadata {
+    grepCodes: [String]
+    visible: Boolean
   }
 
   interface TaxonomyEntity {
@@ -118,8 +109,24 @@ export const typeDefs = gql`
     path: String
     paths: [String]
     meta: Meta
+    metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
+  }
+
+  type Resource implements TaxonomyEntity {
+    id: String!
+    name: String!
+    contentUri: String
+    path: String
+    paths: [String]
+    meta: Meta
+    metadata: TaxonomyMetadata
+    article(filterIds: String, subjectId: String): Article
+    learningpath: Learningpath
+    filters: [Filter]
+    resourceTypes: [ResourceType]
+    parentTopics: [Topic]
   }
 
   type Topic implements TaxonomyEntity {
@@ -127,6 +134,7 @@ export const typeDefs = gql`
     name: String!
     contentUri: String
     meta: Meta
+    metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
     path: String
@@ -368,6 +376,7 @@ export const typeDefs = gql`
     contentUri: String
     name: String!
     path: String!
+    metadata: TaxonomyMetadata
     filters: [SubjectFilter]
     frontpageFilters: [SubjectFilter]
     subjectpage: SubjectPage

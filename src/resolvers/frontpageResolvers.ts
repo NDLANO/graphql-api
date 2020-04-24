@@ -69,7 +69,7 @@ export const resolvers = {
             return fetchTopic({ id }, context);
           }
 
-          return fetchResource({ resourceId: id }, context);
+          return fetchResource({ id }, context);
         }),
       );
     },

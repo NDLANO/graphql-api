@@ -27,7 +27,11 @@ export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
   context: Context,
 ): Promise<GQLTaxonomyEntity[]> {
-  const entitiesWithContentUri = entities.filter(
+  const visibleEntities = entities.filter(taxonomyEntity =>
+    taxonomyEntity.metadata ? taxonomyEntity.metadata.visible === true : true,
+  );
+
+  const entitiesWithContentUri = visibleEntities.filter(
     taxonomyEntity => !!taxonomyEntity.contentUri,
   );
 

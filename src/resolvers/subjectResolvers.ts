@@ -11,17 +11,20 @@ import { fetchSubjects, fetchSubjectPage, fetchFilters } from '../api';
 import { RSubjectCategory } from '../api/frontpageApi';
 import { filterMissingArticles } from '../utils/articleHelpers';
 
-interface Id {
-  id: string;
-}
-
 export const Query = {
-  async subject(_: any, { id }: Id, context: Context): Promise<GQLSubject> {
+  async subject(
+    _: any,
+    { id }: QueryToSubjectArgs,
+    context: Context,
+  ): Promise<GQLSubject> {
     const list = await fetchSubjects(context);
-    return list.find(subject => subject.id === id);
+    return list
+      .filter(s => s.metadata.visible === true)
+      .find(subject => subject.id === id);
   },
   async subjects(_: any, __: any, context: Context): Promise<GQLSubject[]> {
-    return fetchSubjects(context);
+    const subjects = await fetchSubjects(context);
+    return subjects.filter(s => s.metadata.visible === true);
   },
   async filters(
     _: any,
