@@ -113,8 +113,6 @@ export async function fetchMovieMeta(
         ? { url: article.metaImage.url, alt: article.metaImage.alt }
         : undefined,
     };
-  } else {
-    console.log(articleId);
   }
   return null;
 }
