@@ -19,12 +19,12 @@ export const Query = {
   ): Promise<GQLSubject> {
     const list = await fetchSubjects(context);
     return list
-      .filter(s => (s.metadata && s.metadata.visible) || true)
+      .filter(s => (s.metadata ? s.metadata.visible : true))
       .find(subject => subject.id === id);
   },
   async subjects(_: any, __: any, context: Context): Promise<GQLSubject[]> {
     const subjects = await fetchSubjects(context);
-    return subjects.filter(s => (s.metadata && s.metadata.visible) || true);
+    return subjects.filter(s => (s.metadata ? s.metadata.visible : true));
   },
   async filters(
     _: any,
