@@ -95,11 +95,10 @@ export async function fetchMovieMeta(
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleId}&language=${
       context.language
-    }&fallback=true`,
+    }&license=all&fallback=true`,
     context,
   );
   const json = await resolveJson(response);
-
   const article = json.results.find((item: { id: number }) => {
     return item.id.toString() === articleId;
   });
@@ -114,6 +113,8 @@ export async function fetchMovieMeta(
         ? { url: article.metaImage.url, alt: article.metaImage.alt }
         : undefined,
     };
+  } else {
+    console.log(articleId);
   }
   return null;
 }
