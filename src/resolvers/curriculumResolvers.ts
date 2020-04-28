@@ -6,7 +6,11 @@
  *
  */
 
-import { fetchCompetenceGoal, fetchCompetenceGoals } from '../api';
+import {
+  fetchCompetenceGoal,
+  fetchCompetenceGoals,
+  fetchOldCompetenceGoals,
+} from '../api';
 
 export const Query = {
   async competenceGoal(
@@ -18,9 +22,31 @@ export const Query = {
   },
   async competenceGoals(
     _: any,
-    { codes }: { codes: string[] },
+    { codes, nodeId }: { codes: string[]; nodeId: string },
     context: Context,
   ): Promise<GQLCompetenceGoal[]> {
-    return fetchCompetenceGoals(codes, context);
+    if (codes) {
+      return fetchCompetenceGoals(codes, context);
+    } else if (nodeId) {
+      return fetchOldCompetenceGoals(nodeId, context);
+    }
+    return [];
+  },
+};
+
+export const resolvers = {
+  CompetenceGoal: {
+    async curriculum(
+      competenceGoal: GQLCompetenceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLReference> {
+      if (competenceGoal.curriculumId) {
+        return context.loaders.curriculumLoader.load(
+          competenceGoal.curriculumId,
+        );
+      }
+      return null;
+    },
   },
 };

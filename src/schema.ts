@@ -247,12 +247,13 @@ export const typeDefs = gql`
 
   type CompetenceGoal {
     id: String!
-    code: String!
     title: String!
-    curriculum: Reference!
-    competenceGoalSet: Reference!
-    crossSubjectTopics: [Element]!
-    coreElements: [Element]!
+    curriculumId: String
+    code: String
+    curriculum: Reference
+    competenceGoalSet: Reference
+    crossSubjectTopics: [Element]
+    coreElements: [Element]
   }
 
   type Element {
@@ -262,8 +263,8 @@ export const typeDefs = gql`
 
   type Reference {
     id: String!
-    code: String!
     title: String!
+    code: String
   }
 
   type Filter {
@@ -490,7 +491,7 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
-    competenceGoals(codes: [String!]): [CompetenceGoal]
+    competenceGoals(codes: [String], nodeId: String): [CompetenceGoal]
     competenceGoal(code: String!): CompetenceGoal
     search(
       query: String

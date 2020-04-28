@@ -6,7 +6,12 @@
  *
  */
 
-export { fetchCompetenceGoal, fetchCompetenceGoals } from './curriculumApi';
+export {
+  fetchCompetenceGoal,
+  fetchCompetenceGoals,
+  fetchOldCompetenceGoals,
+  fetchCurriculum,
+} from './curriculumApi';
 export {
   fetchFrontpage,
   fetchSubjectPage,

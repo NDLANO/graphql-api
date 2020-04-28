@@ -21,6 +21,7 @@ import {
   learningpathsLoader,
   subjectsLoader,
   frontpageLoader,
+  curriculumLoader,
 } from './loaders';
 import { resolvers } from './resolvers';
 
@@ -58,6 +59,7 @@ async function getContext({ req }: { req: Request }): Promise<Context> {
       resourceTypesLoader: resourceTypesLoader(defaultContext),
       subjectsLoader: subjectsLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
+      curriculumLoader: curriculumLoader(defaultContext),
     },
   };
 }
