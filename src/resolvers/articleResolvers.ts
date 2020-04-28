@@ -30,7 +30,7 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLCompetenceGoal[]> {
       if (article?.grepCodes.length) {
-        fetchCompetenceGoals(article.grepCodes, context);
+        return fetchCompetenceGoals(article.grepCodes, context);
       } else if (article.oldNdlaUrl) {
         const nodeId = article.oldNdlaUrl.split('/').pop();
         return fetchOldCompetenceGoals(nodeId, context);

@@ -25,7 +25,7 @@ export const Query = {
     { codes, nodeId }: { codes: string[]; nodeId: string },
     context: Context,
   ): Promise<GQLCompetenceGoal[]> {
-    if (codes) {
+    if (codes?.length) {
       return fetchCompetenceGoals(codes, context);
     } else if (nodeId) {
       return fetchOldCompetenceGoals(nodeId, context);
@@ -46,7 +46,7 @@ export const resolvers = {
           competenceGoal.curriculumId,
         );
       }
-      return null;
+      return competenceGoal.curriculum;
     },
   },
 };
