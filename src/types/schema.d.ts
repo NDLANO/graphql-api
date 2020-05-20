@@ -721,7 +721,7 @@ declare global {
     contextFilters?: string;
     levels?: string;
     sort?: string;
-    fallback?: boolean;
+    fallback?: string;
     subjects?: string;
     languageFilter?: string;
     relevance?: string;
@@ -759,7 +759,7 @@ declare global {
     contextFilters?: string;
     levels?: string;
     sort?: string;
-    fallback?: boolean;
+    fallback?: string;
     subjects?: string;
     languageFilter?: string;
     relevance?: string;

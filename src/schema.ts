@@ -503,7 +503,7 @@ export const typeDefs = gql`
       contextFilters: String
       levels: String
       sort: String
-      fallback: Boolean
+      fallback: String
       subjects: String
       languageFilter: String
       relevance: String
@@ -524,7 +524,7 @@ export const typeDefs = gql`
       contextFilters: String
       levels: String
       sort: String
-      fallback: Boolean
+      fallback: String
       subjects: String
       languageFilter: String
       relevance: String
