@@ -15,6 +15,7 @@ export async function fetchArticle(
     articleId: string;
     filterIds?: string;
     subjectId?: string;
+    removeRelatedContent?: string;
   },
   context: Context,
 ): Promise<GQLArticle> {
@@ -23,7 +24,12 @@ export async function fetchArticle(
     `${host}/article-converter/json/${context.language}/${
       params.articleId
     }?1=1${params.filterIds ? `&filters=${params.filterIds}` : ''}
-      ${params.subjectId ? `&subject=${params.subjectId}` : ''}`,
+      ${params.subjectId ? `&subject=${params.subjectId}` : ''}
+      ${
+        params.removeRelatedContent
+          ? `&removeRelatedContent=${params.removeRelatedContent}`
+          : ''
+      }`,
     context,
   );
   return resolveJson(response);

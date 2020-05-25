@@ -634,6 +634,7 @@ declare global {
     id: string;
     filterIds?: string;
     subjectId?: string;
+    removeRelatedContent?: string;
   }
   export interface QueryToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
