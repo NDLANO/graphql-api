@@ -479,7 +479,12 @@ export const typeDefs = gql`
 
   type Query {
     resource(id: String!, subjectId: String): Resource
-    article(id: String!, filterIds: String, subjectId: String): Article
+    article(
+      id: String!
+      filterIds: String
+      subjectId: String
+      removeRelatedContent: String
+    ): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
     filmfrontpage: FilmFrontpage
