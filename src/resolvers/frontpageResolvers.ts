@@ -22,7 +22,7 @@ import { RCategory, FrontpageResponse } from '../api/frontpageApi';
 import { ndlaEnvironment } from '../config';
 
 const queryFunctionOnContentURI =
-  ndlaEnvironment === 'ff'
+  ndlaEnvironment === 'ff' || ndlaEnvironment === 'staging'
     ? queryResourcesOnContentURI
     : queryTopicsOnContentURI;
 
