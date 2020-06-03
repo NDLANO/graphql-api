@@ -185,10 +185,7 @@ export async function queryTopicsOnContentURI(
   id: string,
   context: Context,
 ): Promise<GQLTopic> {
-  const response = await fetch(
-    `/taxonomy/v1/queries/topics?contentURI=${id}`,
-    context,
-  );
+  const response = await fetch(`/taxonomy/v1/topics?contentURI=${id}`, context);
   const json = await resolveJson(response);
 
   const taxonomy = json.find((item: { contentUri: string }) => {
@@ -202,7 +199,7 @@ export async function queryResourcesOnContentURI(
   context: Context,
 ): Promise<GQLResource> {
   const response = await fetch(
-    `/taxonomy/v1/queries/resources?contentURI=${id}`,
+    `/taxonomy/v1/resources?contentURI=${id}`,
     context,
   );
   const json = await resolveJson(response);
