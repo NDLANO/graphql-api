@@ -24,7 +24,7 @@
     "tdd": "jest --watch"
   },
   "dependencies": {
-    "apollo-server-express": "^2.2.1",
+    "apollo-server-express": "^2.14.2",
     "bunyan": "^1.8.12",
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
