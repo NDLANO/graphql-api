@@ -74,7 +74,7 @@ export async function resolveJson(response: Response): Promise<any> {
 // converting h5p object from externals to graphQL schema type (Copyright-type)
 function externalsToH5pMetaData(obj: any) {
   // looking for externals array
-  if (obj?.metaData?.h5ps?.length) {
+  if (obj && obj.metaData && obj.metaData.h5ps && obj.metaData.h5ps.length) {
     const h5pArray: any[] = [];
     obj.metaData.h5ps.map((i: { h5p: any; url: string }) => {
       if (i && i.h5p) {
