@@ -17,6 +17,7 @@ import {
   getArticleIdFromUrn,
   getLearningpathIdFromUrn,
 } from '../utils/articleHelpers';
+import { ndlaUrl } from '../config';
 
 export const Query = {
   async resource(
@@ -97,7 +98,7 @@ export const resolvers = {
     },
     async article(
       resource: GQLResource,
-      args: { filterIds?: string; subjectId?: string; url?: string },
+      args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLArticle> {
       if (
@@ -114,12 +115,12 @@ export const resolvers = {
             },
             context,
           ).then(article => {
-            if (args.url !== undefined)
-              return Object.assign({}, article, {
-                oembed: fetchOembed(args.url, context).then(
-                  oembed => oembed.html.split('"')[3],
-                ),
-              });
+            return Object.assign({}, article, {
+              oembed: fetchOembed(
+                `${ndlaUrl}/subjects${resource.path}`,
+                context,
+              ).then(oembed => oembed.html.split('"')[3]),
+            });
           }),
         );
       }

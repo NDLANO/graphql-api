@@ -19,6 +19,7 @@ import {
   filterMissingArticles,
   getArticleIdFromUrn,
 } from '../utils/articleHelpers';
+import { ndlaUrl } from '../config';
 
 interface TopicResponse {
   id: string;
@@ -58,12 +59,12 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
             },
             context,
           ).then(article => {
-            if (args.url !== undefined)
-              return Object.assign({}, article, {
-                oembed: fetchOembed(args.url, context).then(
-                  oembed => oembed.html.split('"')[3],
-                ),
-              });
+            return Object.assign({}, article, {
+              oembed: fetchOembed(
+                `${ndlaUrl}/subjects${topic.path}`,
+                context,
+              ).then(oembed => oembed.html.split('"')[3]),
+            });
           }),
         );
       }

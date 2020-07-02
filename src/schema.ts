@@ -122,7 +122,7 @@ export const typeDefs = gql`
     paths: [String]
     meta: Meta
     metadata: TaxonomyMetadata
-    article(filterIds: String, subjectId: String, url: String): Article
+    article(filterIds: String, subjectId: String): Article
     learningpath: Learningpath
     filters: [Filter]
     resourceTypes: [ResourceType]
@@ -135,7 +135,7 @@ export const typeDefs = gql`
     contentUri: String
     meta: Meta
     metadata: TaxonomyMetadata
-    article(filterIds: String, subjectId: String, url: String): Article
+    article(filterIds: String, subjectId: String): Article
     filters: [Filter]
     path: String
     paths: [String]
@@ -479,13 +479,12 @@ export const typeDefs = gql`
   }
 
   type Query {
-    resource(id: String!, subjectId: String, url: String): Resource
+    resource(id: String!, subjectId: String): Resource
     article(
       id: String!
       filterIds: String
       subjectId: String
       removeRelatedContent: String
-      url: String
     ): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
@@ -493,7 +492,7 @@ export const typeDefs = gql`
     learningpath(pathId: String!): Learningpath
     learningpathStep(pathId: String!, stepId: String!): LearningpathStep
     subjects: [Subject]
-    topic(id: String!, subjectId: String, url: String): Topic
+    topic(id: String!, subjectId: String): Topic
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]

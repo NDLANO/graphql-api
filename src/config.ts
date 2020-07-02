@@ -40,6 +40,18 @@ const ndlaApiUrl = () => {
   }
 };
 
+const ndlaFrontendUrl = () => {
+  switch (ndlaEnvironment) {
+    case 'local':
+      return 'https://test.ndla.no';
+    case 'prod':
+      return 'https://ndla.no';
+    default:
+      return `https://${ndlaEnvironment.toString().replace('_', '-')}.ndla.no`;
+  }
+};
+
 export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);
+export const ndlaUrl = getEnvironmentVariabel('NDLA_URL', ndlaFrontendUrl());

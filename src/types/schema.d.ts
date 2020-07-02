@@ -626,7 +626,6 @@ declare global {
   export interface QueryToResourceArgs {
     id: string;
     subjectId?: string;
-    url?: string;
   }
   export interface QueryToResourceResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToResourceArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -637,7 +636,6 @@ declare global {
     filterIds?: string;
     subjectId?: string;
     removeRelatedContent?: string;
-    url?: string;
   }
   export interface QueryToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -683,7 +681,6 @@ declare global {
   export interface QueryToTopicArgs {
     id: string;
     subjectId?: string;
-    url?: string;
   }
   export interface QueryToTopicResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToTopicArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -819,7 +816,6 @@ declare global {
   export interface ResourceToArticleArgs {
     filterIds?: string;
     subjectId?: string;
-    url?: string;
   }
   export interface ResourceToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: ResourceToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -1645,7 +1641,6 @@ declare global {
   export interface TopicToArticleArgs {
     filterIds?: string;
     subjectId?: string;
-    url?: string;
   }
   export interface TopicToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
