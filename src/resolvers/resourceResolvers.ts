@@ -97,7 +97,7 @@ export const resolvers = {
     },
     async article(
       resource: GQLResource,
-      args: { filterIds?: string; subjectId?: string, url?: string },
+      args: { filterIds?: string; subjectId?: string; url?: string },
       context: Context,
     ): Promise<GQLArticle> {
       if (
@@ -105,17 +105,23 @@ export const resolvers = {
         resource.contentUri.startsWith('urn:article')
       ) {
         const articleId = getArticleIdFromUrn(resource.contentUri);
-        return Promise.resolve(fetchArticle(
-          {
-            articleId,
-            filterIds: args.filterIds,
-            subjectId: args.subjectId,
-          },
-          context,
-        ).then(article => {
-          if (args.url !== undefined)
-            return Object.assign({}, article, {oembed: fetchOembed(args.url, context).then(oembed => oembed.html.split('"')[3])})
-          }));
+        return Promise.resolve(
+          fetchArticle(
+            {
+              articleId,
+              filterIds: args.filterIds,
+              subjectId: args.subjectId,
+            },
+            context,
+          ).then(article => {
+            if (args.url !== undefined)
+              return Object.assign({}, article, {
+                oembed: fetchOembed(args.url, context).then(
+                  oembed => oembed.html.split('"')[3],
+                ),
+              });
+          }),
+        );
       }
       if (
         resource.contentUri &&

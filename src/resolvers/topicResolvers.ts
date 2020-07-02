@@ -49,16 +49,23 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         const articleId = getArticleIdFromUrn(topic.contentUri);
-        return Promise.resolve(fetchArticle(
-          {
-            articleId,
-            filterIds: args.filterIds,
-            subjectId: args.subjectId,
-          },
-          context).then(article => {
+        return Promise.resolve(
+          fetchArticle(
+            {
+              articleId,
+              filterIds: args.filterIds,
+              subjectId: args.subjectId,
+            },
+            context,
+          ).then(article => {
             if (args.url !== undefined)
-              return Object.assign({}, article, {oembed: fetchOembed(args.url, context).then(oembed => oembed.html.split('"')[3])})
-            }));
+              return Object.assign({}, article, {
+                oembed: fetchOembed(args.url, context).then(
+                  oembed => oembed.html.split('"')[3],
+                ),
+              });
+          }),
+        );
       }
       throw Object.assign(
         new Error('Missing article contentUri for topic with id: ' + topic.id),
