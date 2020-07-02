@@ -243,6 +243,7 @@ export const typeDefs = gql`
     tags: [String]
     grepCodes: [String]
     competenceGoals: [CompetenceGoal]
+    oembed: String
   }
 
   type CompetenceGoal {

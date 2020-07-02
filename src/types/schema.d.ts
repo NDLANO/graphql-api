@@ -112,6 +112,7 @@ declare global {
     tags?: Array<string | null>;
     grepCodes?: Array<string | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
+    oembed?: string;
   }
   
   export interface GQLArticleRequiredLibrary {
@@ -919,6 +920,7 @@ declare global {
     tags?: ArticleToTagsResolver<TParent>;
     grepCodes?: ArticleToGrepCodesResolver<TParent>;
     competenceGoals?: ArticleToCompetenceGoalsResolver<TParent>;
+    oembed?: ArticleToOembedResolver<TParent>;
   }
   
   export interface ArticleToIdResolver<TParent = any, TResult = any> {
@@ -998,6 +1000,10 @@ declare global {
   }
   
   export interface ArticleToCompetenceGoalsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToOembedResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
