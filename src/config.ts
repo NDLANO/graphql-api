@@ -41,7 +41,6 @@ const ndlaApiUrl = () => {
 };
 
 const ndlaFrontendUrl = () => {
-  console.log('eyy');
   switch (ndlaEnvironment) {
     case 'local':
       return 'http://localhost:3000';
