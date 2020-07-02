@@ -41,9 +41,10 @@ const ndlaApiUrl = () => {
 };
 
 const ndlaFrontendUrl = () => {
+  console.log('eyy')
   switch (ndlaEnvironment) {
     case 'local':
-      return 'https://test.ndla.no';
+      return 'http://localhost:3000';
     case 'prod':
       return 'https://ndla.no';
     default:
