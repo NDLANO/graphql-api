@@ -453,6 +453,12 @@ export const typeDefs = gql`
     language: String
     totalCount: Int
     results: [SearchResult]
+    suggestions: [SuggestionResult]
+  }
+  
+  type SuggestionResult {
+    name: String!
+    suggestions: [GroupSearchResult]
   }
 
   type GroupSearchResult {

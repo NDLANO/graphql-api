@@ -411,6 +411,7 @@ declare global {
     language?: string;
     totalCount?: number;
     results?: Array<GQLSearchResult | null>;
+    suggestions?: Array<GQLSuggestionResult | null>;
   }
   
   export interface GQLSearchResult {
@@ -457,17 +458,22 @@ declare global {
     relevance?: string;
   }
   
-  export interface GQLGroupSearch {
-    language?: string;
-    resourceType?: string;
-    resources?: Array<GQLGroupSearchResult | null>;
-    totalCount?: number;
+  export interface GQLSuggestionResult {
+    name: string;
+    suggestions?: Array<GQLGroupSearchResult | null>;
   }
   
   export interface GQLGroupSearchResult {
     id: number;
     path: string;
     name: string;
+  }
+  
+  export interface GQLGroupSearch {
+    language?: string;
+    resourceType?: string;
+    resources?: Array<GQLGroupSearchResult | null>;
+    totalCount?: number;
   }
   
   export interface GQLFrontpageSearch {
@@ -590,8 +596,9 @@ declare global {
     SearchContext?: GQLSearchContextTypeResolver;
     SearchContextResourceTypes?: GQLSearchContextResourceTypesTypeResolver;
     SearchContextFilter?: GQLSearchContextFilterTypeResolver;
-    GroupSearch?: GQLGroupSearchTypeResolver;
+    SuggestionResult?: GQLSuggestionResultTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
+    GroupSearch?: GQLGroupSearchTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
@@ -2053,6 +2060,7 @@ declare global {
     language?: SearchToLanguageResolver<TParent>;
     totalCount?: SearchToTotalCountResolver<TParent>;
     results?: SearchToResultsResolver<TParent>;
+    suggestions?: SearchToSuggestionsResolver<TParent>;
   }
   
   export interface SearchToPageSizeResolver<TParent = any, TResult = any> {
@@ -2072,6 +2080,10 @@ declare global {
   }
   
   export interface SearchToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToSuggestionsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2152,6 +2164,37 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLSuggestionResultTypeResolver<TParent = any> {
+    name?: SuggestionResultToNameResolver<TParent>;
+    suggestions?: SuggestionResultToSuggestionsResolver<TParent>;
+  }
+  
+  export interface SuggestionResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SuggestionResultToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLGroupSearchResultTypeResolver<TParent = any> {
+    id?: GroupSearchResultToIdResolver<TParent>;
+    path?: GroupSearchResultToPathResolver<TParent>;
+    name?: GroupSearchResultToNameResolver<TParent>;
+  }
+  
+  export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLGroupSearchTypeResolver<TParent = any> {
     language?: GroupSearchToLanguageResolver<TParent>;
     resourceType?: GroupSearchToResourceTypeResolver<TParent>;
@@ -2172,24 +2215,6 @@ declare global {
   }
   
   export interface GroupSearchToTotalCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLGroupSearchResultTypeResolver<TParent = any> {
-    id?: GroupSearchResultToIdResolver<TParent>;
-    path?: GroupSearchResultToPathResolver<TParent>;
-    name?: GroupSearchResultToNameResolver<TParent>;
-  }
-  
-  export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
