@@ -455,10 +455,22 @@ export const typeDefs = gql`
     results: [SearchResult]
     suggestions: [SuggestionResult]
   }
-  
+
   type SuggestionResult {
-    name: String!
-    suggestions: [GroupSearchResult]
+    name: String
+    suggestions: [SearchSuggestion]
+  }
+
+  type SearchSuggestion {
+    text: String
+    offset: Int
+    length: Int
+    options: [SuggestOption]
+  }
+
+  type SuggestOption {
+    text: String
+    score: Float
   }
 
   type GroupSearchResult {
