@@ -411,6 +411,7 @@ declare global {
     language?: string;
     totalCount?: number;
     results?: Array<GQLSearchResult | null>;
+    suggestions?: Array<GQLSuggestionResult | null>;
   }
   
   export interface GQLSearchResult {
@@ -455,6 +456,23 @@ declare global {
   export interface GQLSearchContextFilter {
     name?: string;
     relevance?: string;
+  }
+  
+  export interface GQLSuggestionResult {
+    name?: string;
+    suggestions?: Array<GQLSearchSuggestion | null>;
+  }
+  
+  export interface GQLSearchSuggestion {
+    text?: string;
+    offset?: number;
+    length?: number;
+    options?: Array<GQLSuggestOption | null>;
+  }
+  
+  export interface GQLSuggestOption {
+    text?: string;
+    score?: number;
   }
   
   export interface GQLGroupSearch {
@@ -590,6 +608,9 @@ declare global {
     SearchContext?: GQLSearchContextTypeResolver;
     SearchContextResourceTypes?: GQLSearchContextResourceTypesTypeResolver;
     SearchContextFilter?: GQLSearchContextFilterTypeResolver;
+    SuggestionResult?: GQLSuggestionResultTypeResolver;
+    SearchSuggestion?: GQLSearchSuggestionTypeResolver;
+    SuggestOption?: GQLSuggestOptionTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
@@ -2053,6 +2074,7 @@ declare global {
     language?: SearchToLanguageResolver<TParent>;
     totalCount?: SearchToTotalCountResolver<TParent>;
     results?: SearchToResultsResolver<TParent>;
+    suggestions?: SearchToSuggestionsResolver<TParent>;
   }
   
   export interface SearchToPageSizeResolver<TParent = any, TResult = any> {
@@ -2072,6 +2094,10 @@ declare global {
   }
   
   export interface SearchToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToSuggestionsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2149,6 +2175,55 @@ declare global {
   }
   
   export interface SearchContextFilterToRelevanceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSuggestionResultTypeResolver<TParent = any> {
+    name?: SuggestionResultToNameResolver<TParent>;
+    suggestions?: SuggestionResultToSuggestionsResolver<TParent>;
+  }
+  
+  export interface SuggestionResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SuggestionResultToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSearchSuggestionTypeResolver<TParent = any> {
+    text?: SearchSuggestionToTextResolver<TParent>;
+    offset?: SearchSuggestionToOffsetResolver<TParent>;
+    length?: SearchSuggestionToLengthResolver<TParent>;
+    options?: SearchSuggestionToOptionsResolver<TParent>;
+  }
+  
+  export interface SearchSuggestionToTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchSuggestionToOffsetResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchSuggestionToLengthResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchSuggestionToOptionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSuggestOptionTypeResolver<TParent = any> {
+    text?: SuggestOptionToTextResolver<TParent>;
+    score?: SuggestOptionToScoreResolver<TParent>;
+  }
+  
+  export interface SuggestOptionToTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SuggestOptionToScoreResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

@@ -99,9 +99,7 @@ export async function fetchTopic(
   context: Context,
 ) {
   const response = await fetch(
-    `/taxonomy/v1/topics/${params.id}?includeMetadata=true&language=${
-      context.language
-    }`,
+    `/taxonomy/v1/topics/${params.id}?includeMetadata=true&language=${context.language}`,
     context,
   );
   const topic: GQLTaxonomyEntity = await resolveJson(response);
@@ -149,9 +147,7 @@ export async function fetchTopicResources(
   const subjectParam = subjectId ? `&subject=${subjectId}` : '';
 
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/resources?includeMetadata=true&relevance=${relevance}&language=${
-      context.language
-    }${filterParam}${subjectParam}`,
+    `/taxonomy/v1/topics/${topicId}/resources?includeMetadata=true&relevance=${relevance}&language=${context.language}${filterParam}${subjectParam}`,
     context,
   );
   const resources: GQLTaxonomyEntity[] = await resolveJson(response);
