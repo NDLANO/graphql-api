@@ -13,11 +13,13 @@ import {
   fetchTopicFilters,
   fetchTopicResources,
   fetchSubtopics,
+  fetchOembed,
 } from '../api';
 import {
   filterMissingArticles,
   getArticleIdFromUrn,
 } from '../utils/articleHelpers';
+import { ndlaUrl } from '../config';
 
 interface TopicResponse {
   id: string;
@@ -48,13 +50,22 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         const articleId = getArticleIdFromUrn(topic.contentUri);
-        return fetchArticle(
-          {
-            articleId,
-            filterIds: args.filterIds,
-            subjectId: args.subjectId,
-          },
-          context,
+        return Promise.resolve(
+          fetchArticle(
+            {
+              articleId,
+              filterIds: args.filterIds,
+              subjectId: args.subjectId,
+            },
+            context,
+          ).then(article => {
+            return Object.assign({}, article, {
+              oembed: fetchOembed(
+                `${ndlaUrl}/subjects${topic.path}`,
+                context,
+              ).then(oembed => oembed.html.split('"')[3]),
+            });
+          }),
         );
       }
       throw Object.assign(

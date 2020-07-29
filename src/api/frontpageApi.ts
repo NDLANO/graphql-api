@@ -37,9 +37,7 @@ export async function fetchSubjectPage(
   context: Context,
 ): Promise<GQLSubjectPage> {
   const response = await fetch(
-    `/frontpage-api/v1/subjectpage/${subjectPageId}?language=${
-      context.language
-    }`,
+    `/frontpage-api/v1/subjectpage/${subjectPageId}?language=${context.language}`,
     context,
   );
   const subjectPage: GQLSubjectPage = await resolveJson(response);

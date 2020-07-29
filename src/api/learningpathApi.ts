@@ -55,9 +55,7 @@ export async function fetchLearningpath(
   context: Context,
 ): Promise<GQLLearningpath> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${id}?language=${
-      context.language
-    }&fallback=true`,
+    `/learningpath-api/v2/learningpaths/${id}?language=${context.language}&fallback=true`,
     context,
   );
   const learningpath = await resolveJson(response);
@@ -84,9 +82,7 @@ export async function fetchLearningpathStep(
   context: Context,
 ): Promise<GQLLearningpathStep> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${pathId}/learningsteps/${stepId}?language=${
-      context.language
-    }&fallback=true`,
+    `/learningpath-api/v2/learningpaths/${pathId}/learningsteps/${stepId}?language=${context.language}&fallback=true`,
     context,
   );
   const learningpathStep = await resolveJson(response);

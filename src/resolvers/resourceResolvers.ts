@@ -11,11 +11,13 @@ import {
   fetchResourceTypes,
   fetchArticle,
   fetchLearningpath,
+  fetchOembed,
 } from '../api';
 import {
   getArticleIdFromUrn,
   getLearningpathIdFromUrn,
 } from '../utils/articleHelpers';
+import { ndlaUrl } from '../config';
 
 export const Query = {
   async resource(
@@ -104,13 +106,22 @@ export const resolvers = {
         resource.contentUri.startsWith('urn:article')
       ) {
         const articleId = getArticleIdFromUrn(resource.contentUri);
-        return fetchArticle(
-          {
-            articleId,
-            filterIds: args.filterIds,
-            subjectId: args.subjectId,
-          },
-          context,
+        return Promise.resolve(
+          fetchArticle(
+            {
+              articleId,
+              filterIds: args.filterIds,
+              subjectId: args.subjectId,
+            },
+            context,
+          ).then(article => {
+            return Object.assign({}, article, {
+              oembed: fetchOembed(
+                `${ndlaUrl}/subjects${resource.path}`,
+                context,
+              ).then(oembed => oembed.html.split('"')[3]),
+            });
+          }),
         );
       }
       if (

@@ -243,6 +243,7 @@ export const typeDefs = gql`
     tags: [String]
     grepCodes: [String]
     competenceGoals: [CompetenceGoal]
+    oembed: String
   }
 
   type CompetenceGoal {
@@ -452,6 +453,24 @@ export const typeDefs = gql`
     language: String
     totalCount: Int
     results: [SearchResult]
+    suggestions: [SuggestionResult]
+  }
+
+  type SuggestionResult {
+    name: String
+    suggestions: [SearchSuggestion]
+  }
+
+  type SearchSuggestion {
+    text: String
+    offset: Int
+    length: Int
+    options: [SuggestOption]
+  }
+
+  type SuggestOption {
+    text: String
+    score: Float
   }
 
   type GroupSearchResult {

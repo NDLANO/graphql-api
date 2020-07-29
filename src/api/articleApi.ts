@@ -99,9 +99,7 @@ export async function fetchMovieMeta(
 ): Promise<GQLMovieMeta> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
-    `/article-api/v2/articles/?ids=${articleId}&language=${
-      context.language
-    }&license=all&fallback=true`,
+    `/article-api/v2/articles/?ids=${articleId}&language=${context.language}&license=all&fallback=true`,
     context,
   );
   const json = await resolveJson(response);
