@@ -6,7 +6,7 @@
  *
  */
 
-import { storeInCache, lookup } from '../middleware';
+import { storeInCache, lookup, getFromCacheIfAny } from '../middleware';
 
 import { createCache } from '../cache';
 
@@ -91,7 +91,7 @@ test('should not store responses with errors', async () => {
   expect(cachedValue).toBe(undefined);
 });
 
-/*test('can get response from cache', async () => {
+test('can get response from cache', async () => {
   const { query, cache } = await prepareStoreInCache();
   // const storeInCacheFn = storeInCache(cache);
   const getFromCacheIfAnyFn = getFromCacheIfAny(cache);
@@ -111,4 +111,4 @@ test('should not store responses with errors', async () => {
 
   expect(res.write).toBeCalled();
   expect(res.end).toBeCalled();
-});*/
+});
