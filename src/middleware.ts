@@ -62,7 +62,7 @@ export async function lookup(
   return undefined;
 }
 
-export const getFromCacheIfAny = (cache: IKeyValueCache) => async (
+/*export const getFromCacheIfAny = (cache: IKeyValueCache) => async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -87,7 +87,7 @@ export const getFromCacheIfAny = (cache: IKeyValueCache) => async (
   }
 
   next();
-};
+};*/
 
 function hasCacheControl(extensions: any) {
   return (
