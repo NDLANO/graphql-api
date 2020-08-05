@@ -77,10 +77,9 @@ export async function fetchSubjectTopics(
   filterIds: string,
   context: Context,
 ) {
+  const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${
-      context.language
-    }${filterIds ? `&filter=${filterIds}` : ''}`,
+    `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${context.language}${filterParam}`,
     context,
   );
   return resolveJson(response);
@@ -117,10 +116,9 @@ export async function fetchSubtopics(
   context: Context,
 ): Promise<GQLTopic[]> {
   const { id, filterIds } = params;
+  const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/taxonomy/v1/topics/${id}/topics?language=${context.language}${
-      filterIds ? `&filter=${filterIds}` : ''
-    }`,
+    `/taxonomy/v1/topics/${id}/topics?language=${context.language}${filterParam}`,
     context,
   );
   return resolveJson(response);

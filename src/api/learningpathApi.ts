@@ -31,18 +31,12 @@ export async function fetchLearningpaths(
       return {
         id: learningpath.id,
         title: learningpath.title.title,
-        introduction: learningpath.introduction
-          ? learningpath.introduction.introduction
-          : undefined,
-        metaDescription: learningpath.description
-          ? learningpath.description.description
-          : undefined,
+        introduction: learningpath.introduction?.introduction || undefined,
+        metaDescription: learningpath.description?.description || undefined,
         lastUpdated: learningpath.lastUpdated,
         metaImage: {
           url: learningpath.coverPhotoUrl,
-          alt: learningpath.introduction
-            ? learningpath.introduction.introduction
-            : '',
+          alt: learningpath.introduction?.introduction || undefined,
         },
       };
     }
@@ -62,17 +56,13 @@ export async function fetchLearningpath(
   return {
     ...learningpath,
     title: learningpath.title.title,
-    description: learningpath.description
-      ? learningpath.description.description
-      : undefined,
+    description: learningpath.description?.description || undefined,
     lastUpdated: learningpath.lastUpdated,
     coverphoto: {
       url: learningpath.coverPhotoUrl,
-      alt: learningpath.introduction
-        ? learningpath.introduction.introduction
-        : '',
+      alt: learningpath.introduction?.introduction || '',
     },
-    tags: learningpath.tags ? learningpath.tags.tags : [],
+    tags: learningpath.tags?.tags || [],
   };
 }
 
@@ -88,9 +78,7 @@ export async function fetchLearningpathStep(
   const learningpathStep = await resolveJson(response);
   return {
     ...learningpathStep,
-    title: learningpathStep.title ? learningpathStep.title.title : '',
-    description: learningpathStep.description
-      ? learningpathStep.description.description
-      : undefined,
+    title: learningpathStep.title?.title || '',
+    description: learningpathStep.description?.description || undefined,
   };
 }

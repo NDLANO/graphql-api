@@ -20,16 +20,13 @@ export async function fetchArticle(
   context: Context,
 ): Promise<GQLArticle> {
   const host = localConverter ? 'http://localhost:3100' : '';
+  const filterParam = params.filterIds ? `&filters=${params.filterIds}` : '';
+  const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : '';
+  const relatedParam = params.removeRelatedContent
+    ? `&removeRelatedContent=${params.removeRelatedContent}`
+    : '';
   const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${
-      params.articleId
-    }?1=1${params.filterIds ? `&filters=${params.filterIds}` : ''}
-      ${params.subjectId ? `&subject=${params.subjectId}` : ''}
-      ${
-        params.removeRelatedContent
-          ? `&removeRelatedContent=${params.removeRelatedContent}`
-          : ''
-      }`,
+    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${relatedParam}`,
     context,
   );
   return resolveJson(response);
@@ -77,12 +74,8 @@ export async function fetchArticles(
       return {
         id: article.id,
         title: article.title.title,
-        introduction: article.introduction
-          ? article.introduction.introduction
-          : undefined,
-        metaDescription: article.metaDescription
-          ? article.metaDescription.metaDescription
-          : undefined,
+        introduction: article.introduction?.introduction || undefined,
+        metaDescription: article.metaDescription?.metaDescription || undefined,
         lastUpdated: article.lastUpdated || undefined,
         metaImage: article.metaImage
           ? { url: article.metaImage.url, alt: article.metaImage.alt }
@@ -110,9 +103,7 @@ export async function fetchMovieMeta(
   if (article) {
     return {
       title: article.title.title,
-      metaDescription: article.metaDescription
-        ? article.metaDescription.metaDescription
-        : undefined,
+      metaDescription: article.metaDescription?.metaDescription || undefined,
       metaImage: article.metaImage
         ? { url: article.metaImage.url, alt: article.metaImage.alt }
         : undefined,
