@@ -74,9 +74,9 @@ export async function fetchArticles(
       return {
         id: article.id,
         title: article.title.title,
-        introduction: article.introduction?.introduction || undefined,
-        metaDescription: article.metaDescription?.metaDescription || undefined,
-        lastUpdated: article.lastUpdated || undefined,
+        introduction: article.introduction?.introduction,
+        metaDescription: article.metaDescription?.metaDescription,
+        lastUpdated: article.lastUpdated,
         metaImage: article.metaImage
           ? { url: article.metaImage.url, alt: article.metaImage.alt }
           : undefined,
@@ -103,10 +103,8 @@ export async function fetchMovieMeta(
   if (article) {
     return {
       title: article.title.title,
-      metaDescription: article.metaDescription?.metaDescription || undefined,
-      metaImage: article.metaImage
-        ? { url: article.metaImage.url, alt: article.metaImage.alt }
-        : undefined,
+      metaDescription: article.metaDescription?.metaDescription,
+      metaImage: article.metaImage,
     };
   }
   return null;

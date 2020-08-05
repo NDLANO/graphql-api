@@ -31,12 +31,12 @@ export async function fetchLearningpaths(
       return {
         id: learningpath.id,
         title: learningpath.title.title,
-        introduction: learningpath.introduction?.introduction || undefined,
-        metaDescription: learningpath.description?.description || undefined,
+        introduction: learningpath.introduction?.introduction,
+        metaDescription: learningpath.description?.description,
         lastUpdated: learningpath.lastUpdated,
         metaImage: {
           url: learningpath.coverPhotoUrl,
-          alt: learningpath.introduction?.introduction || undefined,
+          alt: learningpath.introduction?.introduction,
         },
       };
     }
@@ -56,7 +56,7 @@ export async function fetchLearningpath(
   return {
     ...learningpath,
     title: learningpath.title.title,
-    description: learningpath.description?.description || undefined,
+    description: learningpath.description?.description,
     lastUpdated: learningpath.lastUpdated,
     coverphoto: {
       url: learningpath.coverPhotoUrl,
@@ -79,6 +79,6 @@ export async function fetchLearningpathStep(
   return {
     ...learningpathStep,
     title: learningpathStep.title?.title || '',
-    description: learningpathStep.description?.description || undefined,
+    description: learningpathStep.description?.description,
   };
 }
