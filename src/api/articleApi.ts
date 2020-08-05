@@ -77,9 +77,7 @@ export async function fetchArticles(
         introduction: article.introduction?.introduction,
         metaDescription: article.metaDescription?.metaDescription,
         lastUpdated: article.lastUpdated,
-        metaImage: article.metaImage
-          ? { url: article.metaImage.url, alt: article.metaImage.alt }
-          : undefined,
+        metaImage: article.metaImage,
       };
     }
     return null;
