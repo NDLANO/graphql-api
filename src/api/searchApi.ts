@@ -173,10 +173,8 @@ const transformResult = (result: SearchResultJson) => ({
   ...result,
   title: result.title.title,
   contexts: fixContext(result.contexts),
-  metaDescription: result.metaDescription
-    ? result.metaDescription.metaDescription
-    : undefined,
-  metaImage: result.metaImage || undefined,
+  metaDescription: result.metaDescription?.metaDescription,
+  metaImage: result.metaImage,
 });
 
 const fixContext = (contexts: SearchResultContexts[]) =>

@@ -50,17 +50,11 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLMeta> {
-      if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:learningpath')
-      ) {
+      if (resource.contentUri?.startsWith('urn:learningpath')) {
         return context.loaders.learningpathsLoader.load(
           resource.contentUri.replace('urn:learningpath:', ''),
         );
-      } else if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:article')
-      ) {
+      } else if (resource.contentUri?.startsWith('urn:article')) {
         return context.loaders.articlesLoader.load(
           getArticleIdFromUrn(resource.contentUri),
         );
@@ -75,17 +69,11 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLLearningpath> {
-      if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:learningpath')
-      ) {
+      if (resource.contentUri?.startsWith('urn:learningpath')) {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
         return fetchLearningpath(learningpathId, context);
       }
-      if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:article')
-      ) {
+      if (resource.contentUri?.startsWith('urn:article')) {
         return null;
       }
       throw Object.assign(
@@ -101,10 +89,7 @@ export const resolvers = {
       args: { filterIds?: string; subjectId?: string },
       context: Context,
     ): Promise<GQLArticle> {
-      if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:article')
-      ) {
+      if (resource.contentUri?.startsWith('urn:article')) {
         const articleId = getArticleIdFromUrn(resource.contentUri);
         return Promise.resolve(
           fetchArticle(
@@ -124,10 +109,7 @@ export const resolvers = {
           }),
         );
       }
-      if (
-        resource.contentUri &&
-        resource.contentUri.startsWith('urn:learningpath')
-      ) {
+      if (resource.contentUri?.startsWith('urn:learningpath')) {
         return null;
       }
       throw Object.assign(
