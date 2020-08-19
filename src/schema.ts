@@ -493,6 +493,7 @@ export const typeDefs = gql`
     filters: [SubjectFilter]
     competenceGoals(codes: [String], nodeId: String): [CompetenceGoal]
     competenceGoal(code: String!): CompetenceGoal
+    oldCompetenceGoals(nodeId: String): [CompetenceGoal]
     search(
       query: String
       page: String

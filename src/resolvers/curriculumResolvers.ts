@@ -22,15 +22,17 @@ export const Query = {
   },
   async competenceGoals(
     _: any,
-    { codes, nodeId }: { codes: string[]; nodeId: string },
+    { codes }: { codes: string[] },
     context: Context,
   ): Promise<GQLCompetenceGoal[]> {
-    if (codes?.length) {
-      return fetchCompetenceGoals(codes, context);
-    } else if (nodeId) {
-      return fetchOldCompetenceGoals(nodeId, context);
-    }
-    return [];
+    return codes.length ? fetchCompetenceGoals(codes, context) : [];
+  },
+  async oldCompetenceGoals(
+    _: any,
+    { nodeId }: { nodeId: string },
+    context: Context,
+  ): Promise<GQLCompetenceGoal[]> {
+    return nodeId ? fetchOldCompetenceGoals(nodeId, context) : [];
   },
 };
 

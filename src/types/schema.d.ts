@@ -29,6 +29,7 @@ declare global {
     filters?: Array<GQLSubjectFilter | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
     competenceGoal?: GQLCompetenceGoal;
+    oldCompetenceGoals?: Array<GQLCompetenceGoal | null>;
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
@@ -616,6 +617,7 @@ declare global {
     filters?: QueryToFiltersResolver<TParent>;
     competenceGoals?: QueryToCompetenceGoalsResolver<TParent>;
     competenceGoal?: QueryToCompetenceGoalResolver<TParent>;
+    oldCompetenceGoals?: QueryToOldCompetenceGoalsResolver<TParent>;
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
@@ -710,6 +712,13 @@ declare global {
   }
   export interface QueryToCompetenceGoalResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCompetenceGoalArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToOldCompetenceGoalsArgs {
+    nodeId?: string;
+  }
+  export interface QueryToOldCompetenceGoalsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToOldCompetenceGoalsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToSearchArgs {
