@@ -26,22 +26,28 @@ export const Query = {
     { codes }: { codes: string[] },
     context: Context,
   ): Promise<GQLCompetenceGoal[]> {
-    return codes.length ? fetchCompetenceGoals(codes, context) : [];
+    if (codes?.length) {
+      return fetchCompetenceGoals(codes, context);
+    }
   },
   async oldCompetenceGoals(
     _: any,
     { nodeId }: { nodeId: string },
     context: Context,
   ): Promise<GQLCompetenceGoal[]> {
-    return nodeId ? fetchOldCompetenceGoals(nodeId, context) : [];
+    if (nodeId) {
+      return fetchOldCompetenceGoals(nodeId, context);
+    }
   },
   async coreElements(
     _: any,
     { codes }: { codes: string[] },
     context: Context,
   ): Promise<GQLCoreElement[]> {
-    return fetchCoreElements(codes, context);
-  }
+    if (codes?.length) {
+      return fetchCoreElements(codes, context);
+    }
+  },
 };
 
 export const resolvers = {

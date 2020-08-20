@@ -74,10 +74,10 @@ interface CoreElement {
   id: string;
   tittel: {
     tekst: Text[];
-  }
+  };
   beskrivelse: {
     tekst: Text[];
-  }
+  };
 }
 
 function mapReference(reference: Reference) {
@@ -142,16 +142,12 @@ export async function fetchCompetenceGoals(
   codes: string[],
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  return Promise.all(
-    codes
-      .filter(code => code.startsWith('KM'))
-      .map(code => fetchCompetenceGoal(code, context)),
-  );
+  return Promise.all(codes.map(code => fetchCompetenceGoal(code, context)));
 }
 
 export async function fetchCoreElement(
   code: string,
-  context: Context
+  context: Context,
 ): Promise<GQLCoreElement> {
   const response = await fetch(
     `https://data.udir.no/kl06/v201906/kjerneelementer-lk20/${code}`,
@@ -161,19 +157,20 @@ export async function fetchCoreElement(
   return {
     id: json.id,
     title: filterTextsForLanguage(json.tittel.tekst, context.language),
-    description: he.decode(filterTextsForLanguage(json.beskrivelse.tekst, context.language).replace(/<[^>]*>?/gm, '')),
-  }
+    description: he.decode(
+      filterTextsForLanguage(json.beskrivelse.tekst, context.language).replace(
+        /<[^>]*>?/gm,
+        '',
+      ),
+    ),
+  };
 }
 
 export async function fetchCoreElements(
   codes: string[],
   context: Context,
 ): Promise<GQLCoreElement[]> {
-  return Promise.all(
-    codes
-      .filter(code => code.startsWith('KE'))
-      .map(code => fetchCoreElement(code, context))
-  )
+  return Promise.all(codes.map(code => fetchCoreElement(code, context)));
 }
 
 export async function fetchOldCompetenceGoals(
