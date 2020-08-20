@@ -77,10 +77,9 @@ export async function fetchSubjectTopics(
   filterIds: string,
   context: Context,
 ) {
+  const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${
-      context.language
-    }${filterIds ? `&filter=${filterIds}` : ''}`,
+    `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${context.language}${filterParam}`,
     context,
   );
   return resolveJson(response);
@@ -117,10 +116,9 @@ export async function fetchSubtopics(
   context: Context,
 ): Promise<GQLTopic[]> {
   const { id, filterIds } = params;
+  const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/taxonomy/v1/topics/${id}/topics?language=${context.language}${
-      filterIds ? `&filter=${filterIds}` : ''
-    }`,
+    `/taxonomy/v1/topics/${id}/topics?language=${context.language}${filterParam}`,
     context,
   );
   return resolveJson(response);
@@ -181,10 +179,7 @@ export async function queryTopicsOnContentURI(
   id: string,
   context: Context,
 ): Promise<GQLTopic> {
-  const response = await fetch(
-    `/taxonomy/v1/queries/topics?contentURI=${id}`,
-    context,
-  );
+  const response = await fetch(`/taxonomy/v1/topics?contentURI=${id}`, context);
   const json = await resolveJson(response);
 
   const taxonomy = json.find((item: { contentUri: string }) => {
@@ -198,7 +193,7 @@ export async function queryResourcesOnContentURI(
   context: Context,
 ): Promise<GQLResource> {
   const response = await fetch(
-    `/taxonomy/v1/queries/resources?contentURI=${id}`,
+    `/taxonomy/v1/resources?contentURI=${id}`,
     context,
   );
   const json = await resolveJson(response);

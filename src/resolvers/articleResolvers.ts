@@ -15,10 +15,13 @@ import {
 export const Query = {
   async article(
     _: any,
-    { id, filterIds, subjectId }: QueryToArticleArgs,
+    { id, filterIds, subjectId, removeRelatedContent }: QueryToArticleArgs,
     context: Context,
   ): Promise<GQLArticle> {
-    return fetchArticle({ articleId: id, filterIds, subjectId }, context);
+    return fetchArticle(
+      { articleId: id, filterIds, subjectId, removeRelatedContent },
+      context,
+    );
   },
 };
 

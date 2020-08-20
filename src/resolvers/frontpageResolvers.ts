@@ -22,9 +22,9 @@ import { RCategory, FrontpageResponse } from '../api/frontpageApi';
 import { ndlaEnvironment } from '../config';
 
 const queryFunctionOnContentURI =
-  ndlaEnvironment === 'ff'
-    ? queryResourcesOnContentURI
-    : queryTopicsOnContentURI;
+  ndlaEnvironment === 'test'
+    ? queryTopicsOnContentURI
+    : queryResourcesOnContentURI;
 
 interface Id {
   id: string;

@@ -243,6 +243,7 @@ export const typeDefs = gql`
     tags: [String]
     grepCodes: [String]
     competenceGoals: [CompetenceGoal]
+    oembed: String
   }
 
   type CompetenceGoal {
@@ -459,6 +460,24 @@ export const typeDefs = gql`
     language: String
     totalCount: Int
     results: [SearchResult]
+    suggestions: [SuggestionResult]
+  }
+
+  type SuggestionResult {
+    name: String
+    suggestions: [SearchSuggestion]
+  }
+
+  type SearchSuggestion {
+    text: String
+    offset: Int
+    length: Int
+    options: [SuggestOption]
+  }
+
+  type SuggestOption {
+    text: String
+    score: Float
   }
 
   type GroupSearchResult {
@@ -486,7 +505,12 @@ export const typeDefs = gql`
 
   type Query {
     resource(id: String!, subjectId: String): Resource
-    article(id: String!, filterIds: String, subjectId: String): Article
+    article(
+      id: String!
+      filterIds: String
+      subjectId: String
+      removeRelatedContent: String
+    ): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
     filmfrontpage: FilmFrontpage
@@ -513,7 +537,7 @@ export const typeDefs = gql`
       contextFilters: String
       levels: String
       sort: String
-      fallback: Boolean
+      fallback: String
       subjects: String
       languageFilter: String
       relevance: String
@@ -534,7 +558,7 @@ export const typeDefs = gql`
       contextFilters: String
       levels: String
       sort: String
-      fallback: Boolean
+      fallback: String
       subjects: String
       languageFilter: String
       relevance: String
