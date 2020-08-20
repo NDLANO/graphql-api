@@ -32,14 +32,17 @@ declare global {
   }
 
   interface SearchResultJson {
+    id: number;
     title: {
       title: string;
     };
-    id: number;
-    metaDescription: {
+    content?: {
+      content: string;
+    };
+    metaDescription?: {
       metaDescription: string;
     };
-    metaImage: { url: string; alt: string };
+    metaImage?: { url: string; alt: string };
     contexts?: Array<{
       id: string;
       path: string;
