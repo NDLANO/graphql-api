@@ -9,6 +9,7 @@
 import {
   fetchCompetenceGoal,
   fetchCompetenceGoals,
+  fetchCoreElements,
   fetchOldCompetenceGoals,
 } from '../api';
 
@@ -34,6 +35,13 @@ export const Query = {
   ): Promise<GQLCompetenceGoal[]> {
     return nodeId ? fetchOldCompetenceGoals(nodeId, context) : [];
   },
+  async coreElements(
+    _: any,
+    { codes }: { codes: string[] },
+    context: Context,
+  ): Promise<GQLCoreElement[]> {
+    return fetchCoreElements(codes, context);
+  }
 };
 
 export const resolvers = {

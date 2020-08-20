@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
+import he from 'he';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import {
   isoLanguageMapping,
   curriculumLanguageMapping,
 } from '../utils/mapping';
 
-interface Title {
+interface Text {
   spraak: string;
   verdi: string;
 }
@@ -21,7 +21,7 @@ interface CompetenceGoal {
   id: string;
   kode: string;
   tittel: {
-    tekst: Title[];
+    tekst: Text[];
   };
   'tilhoerer-laereplan': Reference;
   'tilhoerer-kompetansemaalsett': Reference;
@@ -70,6 +70,16 @@ interface Curriculum {
   };
 }
 
+interface CoreElement {
+  id: string;
+  tittel: {
+    tekst: Text[];
+  }
+  beskrivelse: {
+    tekst: Text[];
+  }
+}
+
 function mapReference(reference: Reference) {
   return {
     id: reference.id,
@@ -85,12 +95,12 @@ function mapElements(elements: Element[]) {
   }));
 }
 
-function filterTitleForLanguage(titles: Title[], language: string) {
+function filterTextsForLanguage(texts: Text[], language: string) {
   const isoCode = isoLanguageMapping[language.substring(0, 2)] || 'default';
-  const title =
-    titles.find(t => t.spraak === isoCode) ||
-    titles.find(t => t.spraak === 'default');
-  return title.verdi;
+  const text =
+    texts.find(t => t.spraak === isoCode) ||
+    texts.find(t => t.spraak === 'default');
+  return text.verdi;
 }
 
 function findNameForAcceptLanguage(names: Name[], language: string) {
@@ -120,7 +130,7 @@ export async function fetchCompetenceGoal(
   return {
     id: json.id,
     code: json.kode,
-    title: filterTitleForLanguage(json.tittel.tekst, context.language),
+    title: filterTextsForLanguage(json.tittel.tekst, context.language),
     curriculum: mapReference(json['tilhoerer-laereplan']),
     competenceGoalSet: mapReference(json['tilhoerer-kompetansemaalsett']),
     crossSubjectTopics: mapElements(json['tilknyttede-tverrfaglige-temaer']),
@@ -137,6 +147,33 @@ export async function fetchCompetenceGoals(
       .filter(code => code.startsWith('KM'))
       .map(code => fetchCompetenceGoal(code, context)),
   );
+}
+
+export async function fetchCoreElement(
+  code: string,
+  context: Context
+): Promise<GQLCoreElement> {
+  const response = await fetch(
+    `https://data.udir.no/kl06/v201906/kjerneelementer-lk20/${code}`,
+    context,
+  );
+  const json: CoreElement = await resolveJson(response);
+  return {
+    id: json.id,
+    title: filterTextsForLanguage(json.tittel.tekst, context.language),
+    description: he.decode(filterTextsForLanguage(json.beskrivelse.tekst, context.language).replace(/<[^>]*>?/gm, '')),
+  }
+}
+
+export async function fetchCoreElements(
+  codes: string[],
+  context: Context,
+): Promise<GQLCoreElement[]> {
+  return Promise.all(
+    codes
+      .filter(code => code.startsWith('KE'))
+      .map(code => fetchCoreElement(code, context))
+  )
 }
 
 export async function fetchOldCompetenceGoals(

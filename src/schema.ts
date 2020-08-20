@@ -256,6 +256,12 @@ export const typeDefs = gql`
     coreElements: [Element]
   }
 
+  type CoreElement {
+    id: String!
+    title: String!
+    description: String
+  }
+
   type Element {
     reference: Reference!
     explanation: [String]!
@@ -493,6 +499,8 @@ export const typeDefs = gql`
     filters: [SubjectFilter]
     competenceGoals(codes: [String], nodeId: String): [CompetenceGoal]
     competenceGoal(code: String!): CompetenceGoal
+    coreElements(codes: [String]): [CoreElement]
+    coreElement(code: String!): CoreElement
     oldCompetenceGoals(nodeId: String): [CompetenceGoal]
     search(
       query: String

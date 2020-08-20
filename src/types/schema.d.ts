@@ -29,6 +29,8 @@ declare global {
     filters?: Array<GQLSubjectFilter | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
     competenceGoal?: GQLCompetenceGoal;
+    coreElements?: Array<GQLCoreElement | null>;
+    coreElement?: GQLCoreElement;
     oldCompetenceGoals?: Array<GQLCompetenceGoal | null>;
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
@@ -406,6 +408,12 @@ declare global {
     subjects?: Array<GQLSubject | null>;
   }
   
+  export interface GQLCoreElement {
+    id: string;
+    title: string;
+    description?: string;
+  }
+  
   export interface GQLSearch {
     pageSize?: number;
     page?: number;
@@ -583,6 +591,7 @@ declare global {
     Movie?: GQLMovieTypeResolver;
     Frontpage?: GQLFrontpageTypeResolver;
     Category?: GQLCategoryTypeResolver;
+    CoreElement?: GQLCoreElementTypeResolver;
     Search?: GQLSearchTypeResolver;
     SearchResult?: {
       __resolveType: GQLSearchResultTypeResolver
@@ -617,6 +626,8 @@ declare global {
     filters?: QueryToFiltersResolver<TParent>;
     competenceGoals?: QueryToCompetenceGoalsResolver<TParent>;
     competenceGoal?: QueryToCompetenceGoalResolver<TParent>;
+    coreElements?: QueryToCoreElementsResolver<TParent>;
+    coreElement?: QueryToCoreElementResolver<TParent>;
     oldCompetenceGoals?: QueryToOldCompetenceGoalsResolver<TParent>;
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
@@ -712,6 +723,20 @@ declare global {
   }
   export interface QueryToCompetenceGoalResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCompetenceGoalArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToCoreElementsArgs {
+    codes?: Array<string | null>;
+  }
+  export interface QueryToCoreElementsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToCoreElementsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToCoreElementArgs {
+    code: string;
+  }
+  export interface QueryToCoreElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToCoreElementArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToOldCompetenceGoalsArgs {
@@ -2053,6 +2078,24 @@ declare global {
   }
   
   export interface CategoryToSubjectsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCoreElementTypeResolver<TParent = any> {
+    id?: CoreElementToIdResolver<TParent>;
+    title?: CoreElementToTitleResolver<TParent>;
+    description?: CoreElementToDescriptionResolver<TParent>;
+  }
+  
+  export interface CoreElementToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToDescriptionResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
