@@ -16,7 +16,7 @@ export async function searchConcepts(
 ): Promise<[GQLConcept]> {
   const query = {
     query: searchquery,
-    language: language,
+    language,
     fallback: true,
     'exact-match': true,
     sort: '-title',
