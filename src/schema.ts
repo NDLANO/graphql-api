@@ -249,6 +249,7 @@ export const typeDefs = gql`
   type CompetenceGoal {
     id: String!
     title: String!
+    type: String!
     curriculumId: String
     code: String
     curriculum: Reference

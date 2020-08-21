@@ -129,8 +129,9 @@ export async function fetchCompetenceGoal(
   const json: CompetenceGoal = await resolveJson(response);
   return {
     id: json.id,
-    code: json.kode,
     title: filterTextsForLanguage(json.tittel.tekst, context.language),
+    type: 'LK20',
+    code: json.kode,
     curriculum: mapReference(json['tilhoerer-laereplan']),
     competenceGoalSet: mapReference(json['tilhoerer-kompetansemaalsett']),
     crossSubjectTopics: mapElements(json['tilknyttede-tverrfaglige-temaer']),
@@ -191,8 +192,9 @@ export async function fetchOldCompetenceGoals(
 
     return {
       id: relation.competenceAim.id,
-      curriculumId: relation.curriculumId,
       title,
+      type: 'LK06',
+      curriculumId: relation.curriculumId,
       parentLinks: relation.competenceAim.links.parents,
     };
   });
