@@ -59,9 +59,7 @@ export async function search(
     results: searchResults.results.map((result: SearchResultJson) =>
       transformResult(result),
     ),
-    concepts: {
-      concepts: concepts,
-    },
+    concepts: { concepts },
   };
 }
 
