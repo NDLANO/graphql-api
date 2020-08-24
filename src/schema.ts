@@ -526,7 +526,6 @@ export const typeDefs = gql`
     competenceGoal(code: String!): CompetenceGoal
     coreElements(codes: [String]): [CoreElement]
     coreElement(code: String!): CoreElement
-    oldCompetenceGoals(nodeId: String): [CompetenceGoal]
     search(
       query: String
       page: String

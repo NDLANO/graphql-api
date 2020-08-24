@@ -7,11 +7,9 @@
  */
 
 export {
-  fetchCompetenceGoal,
   fetchCompetenceGoals,
   fetchCoreElement,
   fetchCoreElements,
-  fetchOldCompetenceGoals,
   fetchCurriculum,
 } from './curriculumApi';
 export {

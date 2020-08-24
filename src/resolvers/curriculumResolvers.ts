@@ -6,38 +6,15 @@
  *
  */
 
-import {
-  fetchCompetenceGoal,
-  fetchCompetenceGoals,
-  fetchCoreElements,
-  fetchOldCompetenceGoals,
-} from '../api';
+import { fetchCompetenceGoals, fetchCoreElements } from '../api';
 
 export const Query = {
-  async competenceGoal(
-    _: any,
-    { code }: { code: string },
-    context: Context,
-  ): Promise<GQLCompetenceGoal> {
-    return fetchCompetenceGoal(code, context);
-  },
   async competenceGoals(
     _: any,
-    { codes }: { codes: string[] },
+    { codes, nodeId }: { codes: string[]; nodeId: string },
     context: Context,
   ): Promise<GQLCompetenceGoal[]> {
-    if (codes?.length) {
-      return fetchCompetenceGoals(codes, context);
-    }
-  },
-  async oldCompetenceGoals(
-    _: any,
-    { nodeId }: { nodeId: string },
-    context: Context,
-  ): Promise<GQLCompetenceGoal[]> {
-    if (nodeId) {
-      return fetchOldCompetenceGoals(nodeId, context);
-    }
+    return fetchCompetenceGoals(codes, nodeId, context);
   },
   async coreElements(
     _: any,

@@ -118,7 +118,18 @@ function findNameForAcceptLanguage(names: Name[], language: string) {
   return name;
 }
 
-export async function fetchCompetenceGoal(
+export async function fetchCompetenceGoals(
+  codes: string[],
+  nodeId: string,
+  context: Context,
+): Promise<GQLCompetenceGoal[]> {
+  return [
+    ...(codes ? await fetchLK20CompetenceGoals(codes, context) : []),
+    ...(nodeId ? await fetchLK06CompetenceGoals(nodeId, context) : []),
+  ];
+}
+
+export async function fetchLK20CompetenceGoal(
   code: string,
   context: Context,
 ): Promise<GQLCompetenceGoal> {
@@ -139,11 +150,11 @@ export async function fetchCompetenceGoal(
   };
 }
 
-export async function fetchCompetenceGoals(
+export async function fetchLK20CompetenceGoals(
   codes: string[],
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  return Promise.all(codes.map(code => fetchCompetenceGoal(code, context)));
+  return Promise.all(codes.map(code => fetchLK20CompetenceGoal(code, context)));
 }
 
 export async function fetchCoreElement(
@@ -174,7 +185,7 @@ export async function fetchCoreElements(
   return Promise.all(codes.map(code => fetchCoreElement(code, context)));
 }
 
-export async function fetchOldCompetenceGoals(
+export async function fetchLK06CompetenceGoals(
   nodeId: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
@@ -183,22 +194,16 @@ export async function fetchOldCompetenceGoals(
     context,
   );
   const json: Resource = await resolveJson(response);
-
-  const competenceGoals = json.resource.relations.map(relation => {
-    const title = findNameForAcceptLanguage(
+  const competenceGoals = json.resource.relations.map(relation => ({
+    id: relation.competenceAim.id,
+    title: findNameForAcceptLanguage(
       relation.competenceAim.names,
       context.language,
-    );
-
-    return {
-      id: relation.competenceAim.id,
-      title,
-      type: 'LK06',
-      curriculumId: relation.curriculumId,
-      parentLinks: relation.competenceAim.links.parents,
-    };
-  });
-
+    ),
+    type: 'LK06',
+    curriculumId: relation.curriculumId,
+    parentLinks: relation.competenceAim.links.parents,
+  }));
   return competenceGoals;
 }
 

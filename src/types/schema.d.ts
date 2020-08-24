@@ -32,7 +32,6 @@ declare global {
     competenceGoal?: GQLCompetenceGoal;
     coreElements?: Array<GQLCoreElement | null>;
     coreElement?: GQLCoreElement;
-    oldCompetenceGoals?: Array<GQLCompetenceGoal | null>;
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
@@ -652,7 +651,6 @@ declare global {
     competenceGoal?: QueryToCompetenceGoalResolver<TParent>;
     coreElements?: QueryToCoreElementsResolver<TParent>;
     coreElement?: QueryToCoreElementResolver<TParent>;
-    oldCompetenceGoals?: QueryToOldCompetenceGoalsResolver<TParent>;
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
@@ -762,13 +760,6 @@ declare global {
   }
   export interface QueryToCoreElementResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCoreElementArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface QueryToOldCompetenceGoalsArgs {
-    nodeId?: string;
-  }
-  export interface QueryToOldCompetenceGoalsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToOldCompetenceGoalsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToSearchArgs {

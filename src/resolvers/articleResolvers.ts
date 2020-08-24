@@ -9,7 +9,6 @@
 import {
   fetchArticle,
   fetchCompetenceGoals,
-  fetchOldCompetenceGoals,
 } from '../api';
 
 export const Query = {
@@ -32,13 +31,8 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLCompetenceGoal[]> {
-      if (article?.grepCodes.length) {
-        return fetchCompetenceGoals(article.grepCodes, context);
-      } else if (article.oldNdlaUrl) {
-        const nodeId = article.oldNdlaUrl.split('/').pop();
-        return fetchOldCompetenceGoals(nodeId, context);
-      }
-      return [];
+      const nodeId = article.oldNdlaUrl?.split('/').pop();
+      return fetchCompetenceGoals(article.grepCodes, nodeId, context);
     },
   },
 };
