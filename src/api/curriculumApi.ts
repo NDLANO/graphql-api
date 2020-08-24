@@ -72,6 +72,7 @@ interface Curriculum {
 
 interface CoreElement {
   id: string;
+  kode: string;
   tittel: {
     tekst: Text[];
   };
@@ -139,7 +140,7 @@ export async function fetchLK20CompetenceGoal(
   );
   const json: CompetenceGoal = await resolveJson(response);
   return {
-    id: json.id,
+    id: json.kode,
     title: filterTextsForLanguage(json.tittel.tekst, context.language),
     type: 'LK20',
     code: json.kode,
@@ -171,7 +172,7 @@ export async function fetchCoreElement(
   );
   const json: CoreElement = await resolveJson(response);
   return {
-    id: json.id,
+    id: json.kode,
     title: filterTextsForLanguage(json.tittel.tekst, context.language),
     description: he.decode(
       filterTextsForLanguage(json.beskrivelse.tekst, context.language).replace(
