@@ -96,6 +96,10 @@ function mapElements(elements: Element[]) {
   }));
 }
 
+function htmlToText(html: string) {
+  return he.decode(html).replace(/<[^>]*>?/gm, '');
+}
+
 function filterTextsForLanguage(texts: Text[], language: string) {
   const isoCode = isoLanguageMapping[language.substring(0, 2)] || 'default';
   const text =
@@ -174,11 +178,8 @@ export async function fetchCoreElement(
   return {
     id: json.kode,
     title: filterTextsForLanguage(json.tittel.tekst, context.language),
-    description: he.decode(
-      filterTextsForLanguage(json.beskrivelse.tekst, context.language).replace(
-        /<[^>]*>?/gm,
-        '',
-      ),
+    description: htmlToText(
+      filterTextsForLanguage(json.beskrivelse.tekst, context.language),
     ),
   };
 }
