@@ -5,11 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
+import he from 'he';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { isoLanguageMapping } from '../utils/mapping';
+import {
+  isoLanguageMapping,
+  curriculumLanguageMapping,
+} from '../utils/mapping';
 
-interface Title {
+interface Text {
   spraak: string;
   verdi: string;
 }
@@ -18,7 +21,7 @@ interface CompetenceGoal {
   id: string;
   kode: string;
   tittel: {
-    tekst: Title[];
+    tekst: Text[];
   };
   'tilhoerer-laereplan': Reference;
   'tilhoerer-kompetansemaalsett': Reference;
@@ -37,9 +40,50 @@ interface Reference {
   tittel: string;
 }
 
+interface Name {
+  scopes: string[];
+  name: string;
+  isLanguageNeutral: boolean;
+}
+
+interface CompetenceAim {
+  id: string;
+  links: { parents: string[] };
+  names: Name[];
+}
+
+interface CurriculumRelation {
+  curriculumId: string;
+  competenceAim: CompetenceAim;
+}
+
+interface Resource {
+  resource: {
+    relations: CurriculumRelation[];
+  };
+}
+
+interface Curriculum {
+  curriculum: {
+    id: string;
+    names: Name[];
+  };
+}
+
+interface CoreElement {
+  id: string;
+  kode: string;
+  tittel: {
+    tekst: Text[];
+  };
+  beskrivelse: {
+    tekst: Text[];
+  };
+}
+
 function mapReference(reference: Reference) {
   return {
-    id: reference.id,
+    id: reference.kode,
     code: reference.kode,
     title: reference.tittel,
   };
@@ -52,15 +96,45 @@ function mapElements(elements: Element[]) {
   }));
 }
 
-function filterTitleForLanguage(titles: Title[], language: string) {
-  const isoCode = isoLanguageMapping[language.substring(0, 2)] || 'default';
-  const title =
-    titles.find(t => t.spraak === isoCode) ||
-    titles.find(t => t.spraak === 'default');
-  return title.verdi;
+function htmlToText(html: string) {
+  return he.decode(html).replace(/<[^>]*>?/gm, '');
 }
 
-export async function fetchCompetenceGoal(
+function filterTextsForLanguage(texts: Text[], language: string) {
+  const isoCode = isoLanguageMapping[language.substring(0, 2)] || 'default';
+  const text =
+    texts.find(t => t.spraak === isoCode) ||
+    texts.find(t => t.spraak === 'default');
+  return text.verdi;
+}
+
+function findNameForAcceptLanguage(names: Name[], language: string) {
+  // find fallback name language
+  const { name: fallbackName } = names.find(
+    nameObj => nameObj.isLanguageNeutral === true,
+  );
+
+  // Try to find competenceAim name for language
+  const competenceAimI18N = names.find(
+    nameObj => nameObj.scopes[0] === curriculumLanguageMapping[language],
+  );
+
+  const name = competenceAimI18N ? competenceAimI18N.name : fallbackName;
+  return name;
+}
+
+export async function fetchCompetenceGoals(
+  codes: string[],
+  nodeId: string,
+  context: Context,
+): Promise<GQLCompetenceGoal[]> {
+  return [
+    ...(codes ? await fetchLK20CompetenceGoals(codes, context) : []),
+    ...(nodeId ? await fetchLK06CompetenceGoals(nodeId, context) : []),
+  ];
+}
+
+export async function fetchLK20CompetenceGoal(
   code: string,
   context: Context,
 ): Promise<GQLCompetenceGoal> {
@@ -70,9 +144,10 @@ export async function fetchCompetenceGoal(
   );
   const json: CompetenceGoal = await resolveJson(response);
   return {
-    id: json.id,
+    id: json.kode,
+    title: filterTextsForLanguage(json.tittel.tekst, context.language),
+    type: 'LK20',
     code: json.kode,
-    title: filterTitleForLanguage(json.tittel.tekst, context.language),
     curriculum: mapReference(json['tilhoerer-laereplan']),
     competenceGoalSet: mapReference(json['tilhoerer-kompetansemaalsett']),
     crossSubjectTopics: mapElements(json['tilknyttede-tverrfaglige-temaer']),
@@ -80,13 +155,83 @@ export async function fetchCompetenceGoal(
   };
 }
 
-export async function fetchCompetenceGoals(
+export async function fetchLK20CompetenceGoals(
   codes: string[],
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
   return Promise.all(
     codes
       .filter(code => code.startsWith('KM'))
-      .map(code => fetchCompetenceGoal(code, context)),
+      .map(code => fetchLK20CompetenceGoal(code, context)),
   );
+}
+
+export async function fetchCoreElement(
+  code: string,
+  context: Context,
+): Promise<GQLCoreElement> {
+  const response = await fetch(
+    `https://data.udir.no/kl06/v201906/kjerneelementer-lk20/${code}`,
+    context,
+  );
+  const json: CoreElement = await resolveJson(response);
+  return {
+    id: json.kode,
+    title: filterTextsForLanguage(json.tittel.tekst, context.language),
+    description: htmlToText(
+      filterTextsForLanguage(json.beskrivelse.tekst, context.language),
+    ),
+  };
+}
+
+export async function fetchCoreElements(
+  codes: string[],
+  context: Context,
+): Promise<GQLCoreElement[]> {
+  return Promise.all(
+    codes
+      .filter(code => code.startsWith('KE'))
+      .map(code => fetchCoreElement(code, context)),
+  );
+}
+
+export async function fetchLK06CompetenceGoals(
+  nodeId: string,
+  context: Context,
+): Promise<GQLCompetenceGoal[]> {
+  const response = await fetch(
+    `http://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
+    context,
+  );
+  const json: Resource = await resolveJson(response);
+  const competenceGoals = json.resource.relations.map(relation => ({
+    id: relation.competenceAim.id,
+    title: findNameForAcceptLanguage(
+      relation.competenceAim.names,
+      context.language,
+    ),
+    type: 'LK06',
+    curriculumId: relation.curriculumId,
+    parentLinks: relation.competenceAim.links.parents,
+  }));
+  return competenceGoals;
+}
+
+export async function fetchCurriculum(
+  curriculumId: string,
+  context: Context,
+): Promise<GQLReference> {
+  const response = await fetch(
+    `https://mycurriculum.ndla.no/v1/users/ndla/curriculums/${curriculumId}`,
+    context,
+  );
+  const json: Curriculum = await resolveJson(response);
+  const curriculum = json.curriculum;
+
+  const title = findNameForAcceptLanguage(curriculum.names, context.language);
+
+  return {
+    id: curriculum.id,
+    title,
+  };
 }
