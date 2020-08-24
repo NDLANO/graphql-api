@@ -255,7 +255,7 @@ export const typeDefs = gql`
     curriculum: Reference
     competenceGoalSet: Reference
     crossSubjectTopics: [Element]
-    coreElements: [Element]
+    coreElements: [CoreElement]
   }
 
   type CoreElement {
