@@ -6,10 +6,7 @@
  *
  */
 
-import {
-  fetchArticle,
-  fetchCompetenceGoals,
-} from '../api';
+import { fetchArticle, fetchCompetenceGoals } from '../api';
 
 export const Query = {
   async article(
