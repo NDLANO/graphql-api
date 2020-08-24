@@ -154,7 +154,11 @@ export async function fetchLK20CompetenceGoals(
   codes: string[],
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  return Promise.all(codes.map(code => fetchLK20CompetenceGoal(code, context)));
+  return Promise.all(
+    codes
+      .filter(code => code.startsWith('KM'))
+      .map(code => fetchLK20CompetenceGoal(code, context)),
+  );
 }
 
 export async function fetchCoreElement(
@@ -182,7 +186,11 @@ export async function fetchCoreElements(
   codes: string[],
   context: Context,
 ): Promise<GQLCoreElement[]> {
-  return Promise.all(codes.map(code => fetchCoreElement(code, context)));
+  return Promise.all(
+    codes
+      .filter(code => code.startsWith('KE'))
+      .map(code => fetchCoreElement(code, context)),
+  );
 }
 
 export async function fetchLK06CompetenceGoals(
