@@ -83,7 +83,7 @@ interface CoreElement {
 
 function mapReference(reference: Reference) {
   return {
-    id: reference.id,
+    id: reference.kode,
     code: reference.kode,
     title: reference.tittel,
   };
