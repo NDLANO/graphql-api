@@ -145,7 +145,9 @@ export async function fetchLK20CompetenceGoal(
   const json: CompetenceGoal = await resolveJson(response);
   return {
     id: json.kode,
-    title: filterTextsForLanguage(json.tittel.tekst, context.language),
+    title: `${filterTextsForLanguage(json.tittel.tekst, context.language)} (${
+      json.kode
+    })`,
     type: 'LK20',
     code: json.kode,
     curriculum: mapReference(json['tilhoerer-laereplan']),
@@ -177,7 +179,9 @@ export async function fetchCoreElement(
   const json: CoreElement = await resolveJson(response);
   return {
     id: json.kode,
-    title: filterTextsForLanguage(json.tittel.tekst, context.language),
+    title: `${filterTextsForLanguage(json.tittel.tekst, context.language)} (${
+      json.kode
+    })`,
     description: htmlToText(
       filterTextsForLanguage(json.beskrivelse.tekst, context.language),
     ),
@@ -206,10 +210,10 @@ export async function fetchLK06CompetenceGoals(
   const json: Resource = await resolveJson(response);
   const competenceGoals = json.resource.relations.map(relation => ({
     id: relation.competenceAim.id,
-    title: findNameForAcceptLanguage(
+    title: `${findNameForAcceptLanguage(
       relation.competenceAim.names,
       context.language,
-    ),
+    )} (${relation.competenceAim.id})`,
     type: 'LK06',
     curriculumId: relation.curriculumId,
     parentLinks: relation.competenceAim.links.parents,
