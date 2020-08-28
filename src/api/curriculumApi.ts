@@ -11,6 +11,7 @@ import {
   isoLanguageMapping,
   curriculumLanguageMapping,
 } from '../utils/mapping';
+import { grepUrl } from '../config';
 
 interface Text {
   spraak: string;
@@ -139,7 +140,7 @@ export async function fetchLK20CompetenceGoal(
   context: Context,
 ): Promise<GQLCompetenceGoal> {
   const response = await fetch(
-    `https://data.udir.no/kl06/v201906/kompetansemaal-lk20/${code}`,
+    `${grepUrl}/kl06/v201906/kompetansemaal-lk20/${code}`,
     context,
   );
   const json: CompetenceGoal = await resolveJson(response);
@@ -173,7 +174,7 @@ export async function fetchCoreElement(
   context: Context,
 ): Promise<GQLCoreElement> {
   const response = await fetch(
-    `https://data.udir.no/kl06/v201906/kjerneelementer-lk20/${code}`,
+    `${grepUrl}/kl06/v201906/kjerneelementer-lk20/${code}`,
     context,
   );
   const json: CoreElement = await resolveJson(response);
