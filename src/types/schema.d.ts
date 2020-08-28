@@ -115,6 +115,7 @@ declare global {
     tags?: Array<string | null>;
     grepCodes?: Array<string | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
+    coreElements?: Array<GQLCoreElement | null>;
     oembed?: string;
   }
   
@@ -215,6 +216,12 @@ declare global {
   export interface GQLElement {
     reference: GQLReference;
     explanation: Array<string | null>;
+  }
+  
+  export interface GQLCoreElement {
+    id: string;
+    title: string;
+    description?: string;
   }
   
   export interface GQLFilter {
@@ -410,12 +417,6 @@ declare global {
     subjects?: Array<GQLSubject | null>;
   }
   
-  export interface GQLCoreElement {
-    id: string;
-    title: string;
-    description?: string;
-  }
-  
   export interface GQLSearch {
     pageSize?: number;
     page?: number;
@@ -591,6 +592,7 @@ declare global {
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
     Reference?: GQLReferenceTypeResolver;
     Element?: GQLElementTypeResolver;
+    CoreElement?: GQLCoreElementTypeResolver;
     Filter?: GQLFilterTypeResolver;
     Learningpath?: GQLLearningpathTypeResolver;
     LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
@@ -614,7 +616,6 @@ declare global {
     Movie?: GQLMovieTypeResolver;
     Frontpage?: GQLFrontpageTypeResolver;
     Category?: GQLCategoryTypeResolver;
-    CoreElement?: GQLCoreElementTypeResolver;
     Search?: GQLSearchTypeResolver;
     SearchResult?: {
       __resolveType: GQLSearchResultTypeResolver
@@ -973,6 +974,7 @@ declare global {
     tags?: ArticleToTagsResolver<TParent>;
     grepCodes?: ArticleToGrepCodesResolver<TParent>;
     competenceGoals?: ArticleToCompetenceGoalsResolver<TParent>;
+    coreElements?: ArticleToCoreElementsResolver<TParent>;
     oembed?: ArticleToOembedResolver<TParent>;
   }
   
@@ -1053,6 +1055,10 @@ declare global {
   }
   
   export interface ArticleToCompetenceGoalsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToCoreElementsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1384,6 +1390,24 @@ declare global {
   }
   
   export interface ElementToExplanationResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCoreElementTypeResolver<TParent = any> {
+    id?: CoreElementToIdResolver<TParent>;
+    title?: CoreElementToTitleResolver<TParent>;
+    description?: CoreElementToDescriptionResolver<TParent>;
+  }
+  
+  export interface CoreElementToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToDescriptionResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2107,24 +2131,6 @@ declare global {
   }
   
   export interface CategoryToSubjectsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLCoreElementTypeResolver<TParent = any> {
-    id?: CoreElementToIdResolver<TParent>;
-    title?: CoreElementToTitleResolver<TParent>;
-    description?: CoreElementToDescriptionResolver<TParent>;
-  }
-  
-  export interface CoreElementToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoreElementToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoreElementToDescriptionResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

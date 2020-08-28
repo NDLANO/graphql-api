@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchArticle, fetchCompetenceGoals } from '../api';
+import { fetchArticle, fetchCompetenceGoals, fetchCoreElements } from '../api';
 
 export const Query = {
   async article(
@@ -30,6 +30,13 @@ export const resolvers = {
     ): Promise<GQLCompetenceGoal[]> {
       const nodeId = article.oldNdlaUrl?.split('/').pop();
       return fetchCompetenceGoals(article.grepCodes, nodeId, context);
+    },
+    async coreElements(
+      article: GQLArticle,
+      _: any,
+      context: Context,
+    ): Promise<GQLCoreElement[]> {
+      return fetchCoreElements(article.grepCodes, context);
     },
   },
 };
