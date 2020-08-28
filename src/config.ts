@@ -55,7 +55,3 @@ export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);
 export const ndlaUrl = getEnvironmentVariabel('NDLA_URL', ndlaFrontendUrl());
-export const grepUrl = getEnvironmentVariabel(
-  'NDLA_GREP_URL',
-  'https://data.udir.no',
-);
