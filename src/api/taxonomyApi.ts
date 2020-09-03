@@ -77,7 +77,7 @@ export async function fetchSubjectTopics(
   filterIds: string,
   context: Context,
 ) {
-  //Due to bug in taxonomy where topics without specified filter is returned, disable sending filterParam for now.
+  // Due to bug in taxonomy where topics without specified filter is returned, disable sending filterParam for now.
   // const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
     `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${context.language}`,
