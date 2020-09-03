@@ -77,12 +77,14 @@ export async function fetchSubjectTopics(
   filterIds: string,
   context: Context,
 ) {
-  const filterParam = filterIds ? `&filter=${filterIds}` : '';
+  //Due to bug in taxonomy where topics without specified filter is returned, disable sending filterParam for now.
+  // const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${context.language}${filterParam}`,
+    `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${context.language}`,
     context,
   );
   let topics: GQLTaxonomyEntity[] = await resolveJson(response);
+  // remove with topics from result when bug is fixed
   const filters = filterIds?.split(',') || [];
   if (filterIds) {
     topics = topics.filter(topic =>
