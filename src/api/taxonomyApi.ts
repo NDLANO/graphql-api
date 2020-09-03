@@ -82,7 +82,14 @@ export async function fetchSubjectTopics(
     `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${context.language}${filterParam}`,
     context,
   );
-  return resolveJson(response);
+  let topics: GQLTaxonomyEntity[] = await resolveJson(response);
+  const filters = filterIds?.split(',') || [];
+  if (filterIds) {
+    topics = topics.filter(topic =>
+      topic.filters.find(filter => filters.includes(filter.id)),
+    );
+  }
+  return topics;
 }
 
 export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
