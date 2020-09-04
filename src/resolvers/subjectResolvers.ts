@@ -58,8 +58,17 @@ export const resolvers = {
       subject: GQLSubject,
       __: any,
       context: Context,
-    ): Promise<GQLFilter[]> {
-      return context.loaders.filterLoader.load(subject.id);
+    ): Promise<GQLSubjectFilter[]> {
+      const filters = await context.loaders.filterLoader.load(subject.id);
+      filters.forEach(async filter => {
+        if (filter.contentUri?.startsWith('urn:frontpage')) {
+          filter.subjectpage = await fetchSubjectPage(
+            filter.contentUri.replace('urn:frontpage', ''),
+            context,
+          );
+        }
+      });
+      return filters;
     },
     async frontpageFilters(
       subject: GQLSubject,

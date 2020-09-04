@@ -287,6 +287,8 @@ export const typeDefs = gql`
     id: String!
     name: String!
     subjectId: String!
+    contentUri: String
+    subjectpage: SubjectPage
   }
 
   type Category {
