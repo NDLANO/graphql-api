@@ -58,7 +58,7 @@ export const resolvers = {
       subject: GQLSubject,
       __: any,
       context: Context,
-    ): Promise<GQLFilter[]> {
+    ): Promise<GQLSubjectFilter[]> {
       return context.loaders.filterLoader.load(subject.id);
     },
     async frontpageFilters(
@@ -93,10 +93,7 @@ export const resolvers = {
       __: any,
       context: Context,
     ): Promise<GQLSubjectPage> {
-      if (
-        subject.contentUri &&
-        subject.contentUri.startsWith('urn:frontpage')
-      ) {
+      if (subject.contentUri?.startsWith('urn:frontpage')) {
         return fetchSubjectPage(
           subject.contentUri.replace('urn:frontpage:', ''),
           context,

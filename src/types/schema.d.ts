@@ -331,6 +331,8 @@ declare global {
     id: string;
     name: string;
     subjectId: string;
+    contentUri?: string;
+    subjectpage?: GQLSubjectPage;
   }
   
   export interface GQLSubjectPage {
@@ -1832,6 +1834,8 @@ declare global {
     id?: SubjectFilterToIdResolver<TParent>;
     name?: SubjectFilterToNameResolver<TParent>;
     subjectId?: SubjectFilterToSubjectIdResolver<TParent>;
+    contentUri?: SubjectFilterToContentUriResolver<TParent>;
+    subjectpage?: SubjectFilterToSubjectpageResolver<TParent>;
   }
   
   export interface SubjectFilterToIdResolver<TParent = any, TResult = any> {
@@ -1843,6 +1847,14 @@ declare global {
   }
   
   export interface SubjectFilterToSubjectIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectFilterToContentUriResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectFilterToSubjectpageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
