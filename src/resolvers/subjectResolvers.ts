@@ -59,8 +59,7 @@ export const resolvers = {
       __: any,
       context: Context,
     ): Promise<GQLSubjectFilter[]> {
-      const filters = await context.loaders.filterLoader.load(subject.id);
-      return filters;
+      return context.loaders.filterLoader.load(subject.id);
     },
     async frontpageFilters(
       subject: GQLSubject,
