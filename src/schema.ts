@@ -444,6 +444,7 @@ export const typeDefs = gql`
     learningResourceType: String
     resourceTypes: [SearchContextResourceTypes]
     subject: String
+    subjectId: String
     path: String
     id: String
     language: String
@@ -457,6 +458,7 @@ export const typeDefs = gql`
   }
 
   type SearchContextFilter {
+    id: String
     name: String
     relevance: String
   }
