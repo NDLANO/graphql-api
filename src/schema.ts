@@ -457,6 +457,7 @@ export const typeDefs = gql`
   }
 
   type SearchContextFilter {
+    id: String
     name: String
     relevance: String
   }

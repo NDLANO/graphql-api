@@ -469,6 +469,7 @@ declare global {
   }
   
   export interface GQLSearchContextFilter {
+    id?: string;
     name?: string;
     relevance?: string;
   }
@@ -2244,8 +2245,13 @@ declare global {
   }
   
   export interface GQLSearchContextFilterTypeResolver<TParent = any> {
+    id?: SearchContextFilterToIdResolver<TParent>;
     name?: SearchContextFilterToNameResolver<TParent>;
     relevance?: SearchContextFilterToRelevanceResolver<TParent>;
+  }
+  
+  export interface SearchContextFilterToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface SearchContextFilterToNameResolver<TParent = any, TResult = any> {

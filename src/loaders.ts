@@ -19,7 +19,6 @@ import {
   fetchCurriculum,
 } from './api';
 import { FrontpageResponse } from './api/frontpageApi';
-import { filterMissingArticles } from './utils/articleHelpers';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(
