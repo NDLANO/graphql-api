@@ -456,6 +456,7 @@ declare global {
     learningResourceType?: string;
     resourceTypes?: Array<GQLSearchContextResourceTypes | null>;
     subject?: string;
+    subjectId?: string;
     path?: string;
     id?: string;
     language?: string;
@@ -2188,6 +2189,7 @@ declare global {
     learningResourceType?: SearchContextToLearningResourceTypeResolver<TParent>;
     resourceTypes?: SearchContextToResourceTypesResolver<TParent>;
     subject?: SearchContextToSubjectResolver<TParent>;
+    subjectId?: SearchContextToSubjectIdResolver<TParent>;
     path?: SearchContextToPathResolver<TParent>;
     id?: SearchContextToIdResolver<TParent>;
     language?: SearchContextToLanguageResolver<TParent>;
@@ -2207,6 +2209,10 @@ declare global {
   }
   
   export interface SearchContextToSubjectResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToSubjectIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
