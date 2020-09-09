@@ -44,7 +44,9 @@ export const resolvers = {
     ): Promise<GQLTopic[]> {
       const topics = await context.loaders.subjectTopicsLoader.load({
         subjectId: subject.id,
-        filterIds: args.filterIds,
+        filterIds:
+          args.filterIds ||
+          (await context.loaders.filterLoader.load(subject.id))[0].id,
       });
       if (args.all) {
         return filterMissingArticles(topics, context);
