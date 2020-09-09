@@ -521,6 +521,7 @@ declare global {
     resourceTypes?: Array<GQLSearchContextResourceTypes | null>;
     subject?: string;
     path?: string;
+    filters?: Array<GQLSearchContextFilter | null>;
   }
   
   export interface GQLMovieMeta {
@@ -2390,6 +2391,7 @@ declare global {
     resourceTypes?: FrontpageSearchResultToResourceTypesResolver<TParent>;
     subject?: FrontpageSearchResultToSubjectResolver<TParent>;
     path?: FrontpageSearchResultToPathResolver<TParent>;
+    filters?: FrontpageSearchResultToFiltersResolver<TParent>;
   }
   
   export interface FrontpageSearchResultToIdResolver<TParent = any, TResult = any> {
@@ -2409,6 +2411,10 @@ declare global {
   }
   
   export interface FrontpageSearchResultToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToFiltersResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

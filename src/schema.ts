@@ -437,6 +437,7 @@ export const typeDefs = gql`
     resourceTypes: [SearchContextResourceTypes]
     subject: String
     path: String
+    filters: [SearchContextFilter]
   }
 
   type SearchContext {
