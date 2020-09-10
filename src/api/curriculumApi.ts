@@ -79,6 +79,7 @@ interface CoreElement {
   beskrivelse: {
     tekst: Text[];
   };
+  'tilhoerer-laereplan': Reference;
 }
 
 function mapReference(reference: Reference) {
@@ -185,6 +186,7 @@ export async function fetchCoreElement(
     description: htmlToText(
       filterTextsForLanguage(json.beskrivelse.tekst, context.language),
     ),
+    curriculum: mapReference(json['tilhoerer-laereplan']),
   };
 }
 

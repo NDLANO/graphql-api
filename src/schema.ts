@@ -263,6 +263,7 @@ export const typeDefs = gql`
     id: String!
     title: String!
     description: String
+    curriculum: Reference
   }
 
   type Element {

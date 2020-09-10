@@ -222,6 +222,7 @@ declare global {
     id: string;
     title: string;
     description?: string;
+    curriculum?: GQLReference;
   }
   
   export interface GQLFilter {
@@ -1402,6 +1403,7 @@ declare global {
     id?: CoreElementToIdResolver<TParent>;
     title?: CoreElementToTitleResolver<TParent>;
     description?: CoreElementToDescriptionResolver<TParent>;
+    curriculum?: CoreElementToCurriculumResolver<TParent>;
   }
   
   export interface CoreElementToIdResolver<TParent = any, TResult = any> {
@@ -1413,6 +1415,10 @@ declare global {
   }
   
   export interface CoreElementToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToCurriculumResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
