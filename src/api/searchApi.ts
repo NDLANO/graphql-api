@@ -41,6 +41,7 @@ export async function search(
     'resource-types': searchQuery.resourceTypes,
     'language-filter': searchQuery.languageFilter,
     'context-filters': searchQuery.contextFilters,
+    'grep-codes': searchQuery.grepCodes,
   };
   const response = await fetch(
     `/search-api/v1/search/?${queryString.stringify(query)}`,

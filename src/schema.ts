@@ -551,6 +551,7 @@ export const typeDefs = gql`
       subjects: String
       languageFilter: String
       relevance: String
+      grepCodes: String
     ): Search
     resourceTypes: [ResourceTypeDefinition]
     groupSearch(
