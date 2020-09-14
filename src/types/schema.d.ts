@@ -427,6 +427,7 @@ declare global {
     totalCount?: number;
     results?: Array<GQLSearchResult | null>;
     suggestions?: Array<GQLSuggestionResult | null>;
+    concepts?: GQLConceptResult;
   }
   
   export interface GQLSearchResult {
@@ -491,6 +492,17 @@ declare global {
   export interface GQLSuggestOption {
     text?: string;
     score?: number;
+  }
+  
+  export interface GQLConceptResult {
+    concepts?: Array<GQLConcept | null>;
+  }
+  
+  export interface GQLConcept {
+    id?: number;
+    title?: string;
+    content?: string;
+    metaImage?: GQLMetaImage;
   }
   
   export interface GQLGroupSearch {
@@ -633,6 +645,8 @@ declare global {
     SuggestionResult?: GQLSuggestionResultTypeResolver;
     SearchSuggestion?: GQLSearchSuggestionTypeResolver;
     SuggestOption?: GQLSuggestOptionTypeResolver;
+    ConceptResult?: GQLConceptResultTypeResolver;
+    Concept?: GQLConceptTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
@@ -2163,6 +2177,7 @@ declare global {
     totalCount?: SearchToTotalCountResolver<TParent>;
     results?: SearchToResultsResolver<TParent>;
     suggestions?: SearchToSuggestionsResolver<TParent>;
+    concepts?: SearchToConceptsResolver<TParent>;
   }
   
   export interface SearchToPageSizeResolver<TParent = any, TResult = any> {
@@ -2186,6 +2201,10 @@ declare global {
   }
   
   export interface SearchToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToConceptsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2322,6 +2341,37 @@ declare global {
   }
   
   export interface SuggestOptionToScoreResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptResultTypeResolver<TParent = any> {
+    concepts?: ConceptResultToConceptsResolver<TParent>;
+  }
+  
+  export interface ConceptResultToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptTypeResolver<TParent = any> {
+    id?: ConceptToIdResolver<TParent>;
+    title?: ConceptToTitleResolver<TParent>;
+    content?: ConceptToContentResolver<TParent>;
+    metaImage?: ConceptToMetaImageResolver<TParent>;
+  }
+  
+  export interface ConceptToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToMetaImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

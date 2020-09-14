@@ -465,6 +465,17 @@ export const typeDefs = gql`
     relevance: String
   }
 
+  type ConceptResult {
+    concepts: [Concept]
+  }
+
+  type Concept {
+    id: Int
+    title: String
+    content: String
+    metaImage: MetaImage
+  }
+
   type Search {
     pageSize: Int
     page: Int
@@ -472,6 +483,7 @@ export const typeDefs = gql`
     totalCount: Int
     results: [SearchResult]
     suggestions: [SuggestionResult]
+    concepts: ConceptResult
   }
 
   type SuggestionResult {
