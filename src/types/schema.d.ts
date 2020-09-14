@@ -787,6 +787,7 @@ declare global {
     subjects?: string;
     languageFilter?: string;
     relevance?: string;
+    grepCodes?: string;
   }
   export interface QueryToSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
