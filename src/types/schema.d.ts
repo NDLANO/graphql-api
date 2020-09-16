@@ -230,6 +230,7 @@ declare global {
     name: string;
     connectionId?: string;
     relevanceId?: string;
+    subjectId?: string;
   }
   
   export interface GQLLearningpath {
@@ -1428,6 +1429,7 @@ declare global {
     name?: FilterToNameResolver<TParent>;
     connectionId?: FilterToConnectionIdResolver<TParent>;
     relevanceId?: FilterToRelevanceIdResolver<TParent>;
+    subjectId?: FilterToSubjectIdResolver<TParent>;
   }
   
   export interface FilterToIdResolver<TParent = any, TResult = any> {
@@ -1443,6 +1445,10 @@ declare global {
   }
   
   export interface FilterToRelevanceIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilterToSubjectIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

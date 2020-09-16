@@ -282,6 +282,7 @@ export const typeDefs = gql`
     name: String!
     connectionId: String
     relevanceId: String
+    subjectId: String
   }
 
   type SubjectFilter {
