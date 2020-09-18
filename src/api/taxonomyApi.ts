@@ -48,7 +48,7 @@ export async function fetchFilters(
   context: Context,
 ): Promise<GQLSubjectFilter[]> {
   const response = await fetch(
-    `/taxonomy/v1/filters/?language=${context.language}`,
+    `/taxonomy/v1/filters/?includeMetadata=true&language=${context.language}`,
     context,
   );
   return resolveJson(response);
@@ -129,7 +129,7 @@ export async function fetchTopicFilters(
   context: Context,
 ): Promise<GQLFilter[]> {
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/filters`,
+    `/taxonomy/v1/topics/${topicId}/filters?includeMetadata=true`,
     context,
   );
   return resolveJson(response);
