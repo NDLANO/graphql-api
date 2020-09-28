@@ -12,7 +12,7 @@ import { Query } from '../subjectResolvers';
 test('Fetch subject should filter out invisible elements', async () => {
   nock('https://api.test.ndla.no')
     .persist()
-    .get('/taxonomy/v1/subjects/?includeMetadata=true&language=nb')
+    .get('/taxonomy/v1/subjects/?language=nb')
     .reply(200, [
       {
         id: 'urn:subject:3',
@@ -47,7 +47,7 @@ test('Fetch subject should filter out invisible elements', async () => {
 test('Fetch subject filters should filter out invisible elements', async () => {
   nock('https://api.test.ndla.no')
     .persist()
-    .get('/taxonomy/v1/filters/?includeMetadata=true&language=nb')
+    .get('/taxonomy/v1/filters/?language=nb')
     .reply(200, [
       {
         id: 'urn:filter:1',

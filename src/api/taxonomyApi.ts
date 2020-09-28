@@ -48,7 +48,7 @@ export async function fetchFilters(
   context: Context,
 ): Promise<GQLSubjectFilter[]> {
   const response = await fetch(
-    `/taxonomy/v1/filters/?includeMetadata=true&language=${context.language}`,
+    `/taxonomy/v1/filters/?language=${context.language}`,
     context,
   );
   return resolveJson(response);
@@ -66,7 +66,7 @@ export async function fetchResourceTypes(
 
 export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
   const response = await fetch(
-    `/taxonomy/v1/subjects/?includeMetadata=true&language=${context.language}`,
+    `/taxonomy/v1/subjects/?language=${context.language}`,
     context,
   );
   return resolveJson(response);
@@ -79,7 +79,7 @@ export async function fetchSubjectTopics(
 ) {
   const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/taxonomy/v1/subjects/${subjectId}/topics/?includeMetadata=true&recursive=true&language=${context.language}${filterParam}`,
+    `/taxonomy/v1/subjects/${subjectId}/topics/?recursive=true&language=${context.language}${filterParam}`,
     context,
   );
   return resolveJson(response);
@@ -87,7 +87,7 @@ export async function fetchSubjectTopics(
 
 export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
   const response = await fetch(
-    `/taxonomy/v1/topics/?includeMetadata=true&language=${context.language}`,
+    `/taxonomy/v1/topics/?language=${context.language}`,
     context,
   );
   return resolveJson(response);
@@ -98,7 +98,7 @@ export async function fetchTopic(
   context: Context,
 ) {
   const response = await fetch(
-    `/taxonomy/v1/topics/${params.id}?includeMetadata=true&language=${context.language}`,
+    `/taxonomy/v1/topics/${params.id}?language=${context.language}`,
     context,
   );
   const topic: GQLTaxonomyEntity = await resolveJson(response);
@@ -129,7 +129,7 @@ export async function fetchTopicFilters(
   context: Context,
 ): Promise<GQLFilter[]> {
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/filters?includeMetadata=true`,
+    `/taxonomy/v1/topics/${topicId}/filters`,
     context,
   );
   return resolveJson(response);
@@ -145,7 +145,7 @@ export async function fetchTopicResources(
   const subjectParam = subjectId ? `&subject=${subjectId}` : '';
 
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/resources?includeMetadata=true&relevance=${relevance}&language=${context.language}${filterParam}${subjectParam}`,
+    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${context.language}${filterParam}${subjectParam}`,
     context,
   );
   const resources: GQLTaxonomyEntity[] = await resolveJson(response);
