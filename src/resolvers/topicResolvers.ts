@@ -132,7 +132,10 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
         { id: topic.id, filterIds: args.filterIds },
         context,
       );
-      return filterMissingArticles(subtopics, context);
+      const visibleTopics = subtopics.filter(sub =>
+        sub.metadata ? sub.metadata.visible : true,
+      );
+      return filterMissingArticles(visibleTopics, context);
     },
   },
 };
