@@ -31,7 +31,10 @@ export const Query = {
     __: any,
     context: Context,
   ): Promise<GQLSubjectFilter[]> {
-    return fetchFilters(context);
+    const filters = await fetchFilters(context);
+    return filters.filter(filter =>
+      filter.metadata ? filter.metadata.visible : true,
+    );
   },
 };
 

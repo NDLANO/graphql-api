@@ -231,6 +231,7 @@ declare global {
     connectionId?: string;
     relevanceId?: string;
     subjectId?: string;
+    metadata?: GQLTaxonomyMetadata;
   }
   
   export interface GQLLearningpath {
@@ -335,6 +336,7 @@ declare global {
     subjectId: string;
     contentUri?: string;
     subjectpage?: GQLSubjectPage;
+    metadata?: GQLTaxonomyMetadata;
   }
   
   export interface GQLSubjectPage {
@@ -1444,6 +1446,7 @@ declare global {
     connectionId?: FilterToConnectionIdResolver<TParent>;
     relevanceId?: FilterToRelevanceIdResolver<TParent>;
     subjectId?: FilterToSubjectIdResolver<TParent>;
+    metadata?: FilterToMetadataResolver<TParent>;
   }
   
   export interface FilterToIdResolver<TParent = any, TResult = any> {
@@ -1463,6 +1466,10 @@ declare global {
   }
   
   export interface FilterToSubjectIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilterToMetadataResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1866,6 +1873,7 @@ declare global {
     subjectId?: SubjectFilterToSubjectIdResolver<TParent>;
     contentUri?: SubjectFilterToContentUriResolver<TParent>;
     subjectpage?: SubjectFilterToSubjectpageResolver<TParent>;
+    metadata?: SubjectFilterToMetadataResolver<TParent>;
   }
   
   export interface SubjectFilterToIdResolver<TParent = any, TResult = any> {
@@ -1885,6 +1893,10 @@ declare global {
   }
   
   export interface SubjectFilterToSubjectpageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectFilterToMetadataResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

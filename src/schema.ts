@@ -283,6 +283,7 @@ export const typeDefs = gql`
     connectionId: String
     relevanceId: String
     subjectId: String
+    metadata: TaxonomyMetadata
   }
 
   type SubjectFilter {
@@ -291,6 +292,7 @@ export const typeDefs = gql`
     subjectId: String!
     contentUri: String
     subjectpage: SubjectPage
+    metadata: TaxonomyMetadata
   }
 
   type Category {

@@ -57,7 +57,9 @@ export function filterLoader(
   return new DataLoader(async subjectIds => {
     const filterList = await fetchFilters(context);
     return subjectIds.map(subjectId =>
-      filterList.filter(filter => filter.subjectId === subjectId),
+      filterList
+        .filter(filter => filter.subjectId === subjectId)
+        .filter(filter => (filter.metadata ? filter.metadata.visible : true)),
     );
   });
 }
