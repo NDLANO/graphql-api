@@ -6,7 +6,12 @@
  *
  */
 
-export { fetchCompetenceGoals, fetchCurriculum } from './curriculumApi';
+export {
+  fetchCompetenceGoals,
+  fetchCoreElement,
+  fetchCoreElements,
+  fetchCurriculum,
+} from './curriculumApi';
 export {
   fetchFrontpage,
   fetchSubjectPage,
@@ -40,3 +45,4 @@ export {
   searchWithoutPagination,
 } from './searchApi';
 export { fetchOembed } from './oembedApi';
+export { searchConcepts } from './conceptApi';

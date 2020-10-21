@@ -19,7 +19,6 @@ import {
   fetchCurriculum,
 } from './api';
 import { FrontpageResponse } from './api/frontpageApi';
-import { filterMissingArticles } from './utils/articleHelpers';
 
 export function articlesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(
@@ -38,7 +37,7 @@ export function learningpathsLoader(context: Context): DataLoader<string, any> {
 
 export function curriculumLoader(
   context: Context,
-): DataLoader<string, GQLCompetenceCurriculum> {
+): DataLoader<string, GQLReference> {
   return new DataLoader(async curriculumIds => {
     const uniqueCurriculumIds = Array.from(new Set(curriculumIds));
     const responses = await Promise.all(
@@ -58,7 +57,9 @@ export function filterLoader(
   return new DataLoader(async subjectIds => {
     const filterList = await fetchFilters(context);
     return subjectIds.map(subjectId =>
-      filterList.filter(filter => filter.subjectId === subjectId),
+      filterList
+        .filter(filter => filter.subjectId === subjectId)
+        .filter(filter => (filter.metadata ? filter.metadata.visible : true)),
     );
   });
 }

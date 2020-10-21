@@ -15,19 +15,6 @@ interface FetchTopicResourcesParams {
   subjectId?: string;
 }
 
-interface FetchResourceParams {
-  resourceId: string;
-  subjectId?: string;
-}
-
-interface TaxonomyEntity {
-  id: string;
-  name: string;
-  contentUri?: string;
-  path?: string;
-  paths?: string[];
-}
-
 function removeUrn(str: string): string {
   return str.replace('urn:', '');
 }
@@ -40,14 +27,14 @@ function findPrimaryPath(
 }
 
 export async function fetchResource(
-  { resourceId, subjectId }: FetchResourceParams,
+  { id, subjectId }: QueryToResourceArgs,
   context: Context,
 ): Promise<GQLResource> {
   const response = await fetch(
-    `/taxonomy/v1/resources/${resourceId}/full?language=${context.language}`,
+    `/taxonomy/v1/resources/${id}/full?language=${context.language}`,
     context,
   );
-  const resource: TaxonomyEntity = await resolveJson(response);
+  const resource: GQLTaxonomyEntity = await resolveJson(response);
 
   if (subjectId) {
     const primaryPath = findPrimaryPath(resource.paths, subjectId);
@@ -90,10 +77,9 @@ export async function fetchSubjectTopics(
   filterIds: string,
   context: Context,
 ) {
+  const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/taxonomy/v1/subjects/${subjectId}/topics?recursive=true&language=${
-      context.language
-    }${filterIds ? `&filter=${filterIds}` : ''}`,
+    `/taxonomy/v1/subjects/${subjectId}/topics/?recursive=true&language=${context.language}${filterParam}`,
     context,
   );
   return resolveJson(response);
@@ -115,7 +101,7 @@ export async function fetchTopic(
     `/taxonomy/v1/topics/${params.id}?language=${context.language}`,
     context,
   );
-  const topic: TaxonomyEntity = await resolveJson(response);
+  const topic: GQLTaxonomyEntity = await resolveJson(response);
 
   if (params.subjectId) {
     const primaryPath = findPrimaryPath(topic.paths, params.subjectId);
@@ -130,10 +116,9 @@ export async function fetchSubtopics(
   context: Context,
 ): Promise<GQLTopic[]> {
   const { id, filterIds } = params;
+  const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/taxonomy/v1/topics/${id}/topics?language=${context.language}${
-      filterIds ? `&filter=${filterIds}` : ''
-    }`,
+    `/taxonomy/v1/topics/${id}/topics?language=${context.language}${filterParam}`,
     context,
   );
   return resolveJson(response);
@@ -160,12 +145,10 @@ export async function fetchTopicResources(
   const subjectParam = subjectId ? `&subject=${subjectId}` : '';
 
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${
-      context.language
-    }${filterParam}${subjectParam}`,
+    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${context.language}${filterParam}${subjectParam}`,
     context,
   );
-  const resources: TaxonomyEntity[] = await resolveJson(response);
+  const resources: GQLTaxonomyEntity[] = await resolveJson(response);
 
   resources.forEach(resource => {
     if (subjectId) {
@@ -187,7 +170,7 @@ export async function fetchResourcesAndTopics(
       if (id.startsWith('urn:topic')) {
         return fetchTopic({ id, ...args }, context);
       }
-      return fetchResource({ resourceId: id, ...args }, context);
+      return fetchResource({ id, ...args }, context);
     }),
   );
 }
@@ -196,10 +179,7 @@ export async function queryTopicsOnContentURI(
   id: string,
   context: Context,
 ): Promise<GQLTopic> {
-  const response = await fetch(
-    `/taxonomy/v1/queries/topics?contentURI=${id}`,
-    context,
-  );
+  const response = await fetch(`/taxonomy/v1/topics?contentURI=${id}`, context);
   const json = await resolveJson(response);
 
   const taxonomy = json.find((item: { contentUri: string }) => {
@@ -213,7 +193,7 @@ export async function queryResourcesOnContentURI(
   context: Context,
 ): Promise<GQLResource> {
   const response = await fetch(
-    `/taxonomy/v1/queries/resources?contentURI=${id}`,
+    `/taxonomy/v1/resources?contentURI=${id}`,
     context,
   );
   const json = await resolveJson(response);

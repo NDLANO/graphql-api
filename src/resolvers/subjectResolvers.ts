@@ -11,24 +11,30 @@ import { fetchSubjects, fetchSubjectPage, fetchFilters } from '../api';
 import { RSubjectCategory } from '../api/frontpageApi';
 import { filterMissingArticles } from '../utils/articleHelpers';
 
-interface Id {
-  id: string;
-}
-
 export const Query = {
-  async subject(_: any, { id }: Id, context: Context): Promise<GQLSubject> {
+  async subject(
+    _: any,
+    { id }: QueryToSubjectArgs,
+    context: Context,
+  ): Promise<GQLSubject> {
     const list = await fetchSubjects(context);
-    return list.find(subject => subject.id === id);
+    return list
+      .filter(s => (s.metadata ? s.metadata.visible : true))
+      .find(subject => subject.id === id);
   },
   async subjects(_: any, __: any, context: Context): Promise<GQLSubject[]> {
-    return fetchSubjects(context);
+    const subjects = await fetchSubjects(context);
+    return subjects.filter(s => (s.metadata ? s.metadata.visible : true));
   },
   async filters(
     _: any,
     __: any,
     context: Context,
   ): Promise<GQLSubjectFilter[]> {
-    return fetchFilters(context);
+    const filters = await fetchFilters(context);
+    return filters.filter(filter =>
+      filter.metadata ? filter.metadata.visible : true,
+    );
   },
 };
 
@@ -55,7 +61,7 @@ export const resolvers = {
       subject: GQLSubject,
       __: any,
       context: Context,
-    ): Promise<GQLFilter[]> {
+    ): Promise<GQLSubjectFilter[]> {
       return context.loaders.filterLoader.load(subject.id);
     },
     async frontpageFilters(
@@ -74,7 +80,7 @@ export const resolvers = {
         cs => cs.id === subject.id,
       );
 
-      const frontpageFilterIds = categorySubject ? categorySubject.filters : [];
+      const frontpageFilterIds = categorySubject?.filters || [];
 
       const allSubjectFilters = await context.loaders.filterLoader.load(
         subject.id,
@@ -90,10 +96,7 @@ export const resolvers = {
       __: any,
       context: Context,
     ): Promise<GQLSubjectPage> {
-      if (
-        subject.contentUri &&
-        subject.contentUri.startsWith('urn:frontpage')
-      ) {
+      if (subject.contentUri?.startsWith('urn:frontpage')) {
         return fetchSubjectPage(
           subject.contentUri.replace('urn:frontpage:', ''),
           context,

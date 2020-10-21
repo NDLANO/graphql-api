@@ -38,6 +38,7 @@ import {
   Query as LearningpathQuery,
   resolvers as learningpathResolvers,
 } from './learningpathResolvers';
+import { resolvers as filterResolvers } from './filterResolvers';
 
 export const resolvers: GQLResolver = {
   Query: {
@@ -56,8 +57,9 @@ export const resolvers: GQLResolver = {
   ...frontpageResolvers,
   ...resourceResolvers,
   ...searchResolvers,
-  ...curriculumResolvers,
   ...learningpathResolvers,
+  ...curriculumResolvers,
+  ...filterResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any): GQLPossibleTaxonomyEntityTypeNames {
@@ -66,6 +68,15 @@ export const resolvers: GQLResolver = {
       }
 
       return 'Resource';
+    },
+  },
+  SearchResult: {
+    // Resolves SearchResult interface
+    __resolveType(searchResult: any): GQLPossibleSearchResultTypeNames {
+      if (searchResult.learningResourceType === 'learningpath') {
+        return 'LearningpathSearchResult';
+      }
+      return 'ArticleSearchResult';
     },
   },
 };

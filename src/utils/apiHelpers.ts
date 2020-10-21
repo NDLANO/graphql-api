@@ -74,21 +74,16 @@ export async function resolveJson(response: Response): Promise<any> {
 // converting h5p object from externals to graphQL schema type (Copyright-type)
 function externalsToH5pMetaData(obj: any) {
   // looking for externals array
-  if (
-    obj &&
-    obj.metaData &&
-    obj.metaData.externals &&
-    obj.metaData.externals.length
-  ) {
+  if (obj?.metaData?.h5ps?.length) {
     const h5pArray: any[] = [];
-    obj.metaData.externals.map((i: { h5p: any; url: string }) => {
+    obj.metaData.h5ps.map((i: { h5p: any; url: string }) => {
       if (i && i.h5p) {
         // this element have h5p object
         let copyrightElement = {
           license: {
             license: licenseFixer(
               i.h5p.license || '',
-              i.h5p.licenseVersion || '',
+              i.h5p.licenseVersion || '4.0',
             ),
             url: i.h5p.source || '',
             description: i.h5p.licenseExtras || '',
@@ -107,7 +102,7 @@ function externalsToH5pMetaData(obj: any) {
         };
         h5pArray.push({
           copyright: copyrightElement,
-          title: i.h5p.title,
+          title: i.h5p.title || '',
           src: i.url || '',
         });
       }

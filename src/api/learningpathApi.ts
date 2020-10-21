@@ -31,18 +31,12 @@ export async function fetchLearningpaths(
       return {
         id: learningpath.id,
         title: learningpath.title.title,
-        introduction: learningpath.introduction
-          ? learningpath.introduction.introduction
-          : undefined,
-        metaDescription: learningpath.description
-          ? learningpath.description.description
-          : undefined,
+        introduction: learningpath.introduction?.introduction,
+        metaDescription: learningpath.description?.description,
         lastUpdated: learningpath.lastUpdated,
         metaImage: {
           url: learningpath.coverPhotoUrl,
-          alt: learningpath.introduction
-            ? learningpath.introduction.introduction
-            : '',
+          alt: learningpath.introduction?.introduction,
         },
       };
     }
@@ -55,26 +49,20 @@ export async function fetchLearningpath(
   context: Context,
 ): Promise<GQLLearningpath> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${id}?language=${
-      context.language
-    }&fallback=true`,
+    `/learningpath-api/v2/learningpaths/${id}?language=${context.language}&fallback=true`,
     context,
   );
   const learningpath = await resolveJson(response);
   return {
     ...learningpath,
     title: learningpath.title.title,
-    description: learningpath.description
-      ? learningpath.description.description
-      : undefined,
+    description: learningpath.description?.description,
     lastUpdated: learningpath.lastUpdated,
     coverphoto: {
       url: learningpath.coverPhotoUrl,
-      alt: learningpath.introduction
-        ? learningpath.introduction.introduction
-        : '',
+      alt: learningpath.introduction?.introduction || '',
     },
-    tags: learningpath.tags ? learningpath.tags.tags : [],
+    tags: learningpath.tags?.tags || [],
   };
 }
 
@@ -84,17 +72,13 @@ export async function fetchLearningpathStep(
   context: Context,
 ): Promise<GQLLearningpathStep> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${pathId}/learningsteps/${stepId}?language=${
-      context.language
-    }&fallback=true`,
+    `/learningpath-api/v2/learningpaths/${pathId}/learningsteps/${stepId}?language=${context.language}&fallback=true`,
     context,
   );
   const learningpathStep = await resolveJson(response);
   return {
     ...learningpathStep,
-    title: learningpathStep.title ? learningpathStep.title.title : '',
-    description: learningpathStep.description
-      ? learningpathStep.description.description
-      : undefined,
+    title: learningpathStep.title?.title || '',
+    description: learningpathStep.description?.description,
   };
 }

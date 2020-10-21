@@ -17,7 +17,10 @@ export const getEnvironmentVariabel = (
   return variabel || fallback;
 };
 
-const ndlaEnvironment = getEnvironmentVariabel('NDLA_ENVIRONMENT', 'test');
+export const ndlaEnvironment = getEnvironmentVariabel(
+  'NDLA_ENVIRONMENT',
+  'test',
+);
 
 const ndlaApiUrl = () => {
   const host = getEnvironmentVariabel('API_GATEWAY_HOST');
@@ -28,15 +31,27 @@ const ndlaApiUrl = () => {
       case 'prod':
         return 'https://api.ndla.no';
       default:
-        return `https://${ndlaEnvironment
+        return `https://api.${ndlaEnvironment
           .toString()
-          .replace('_', '-')}.api.ndla.no`;
+          .replace('_', '-')}.ndla.no`;
     }
   } else {
     return `http://${host}`;
   }
 };
 
+const ndlaFrontendUrl = () => {
+  switch (ndlaEnvironment) {
+    case 'local':
+      return 'http://localhost:3000';
+    case 'prod':
+      return 'https://ndla.no';
+    default:
+      return `https://${ndlaEnvironment.toString().replace('_', '-')}.ndla.no`;
+  }
+};
+
 export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);
+export const ndlaUrl = getEnvironmentVariabel('NDLA_URL', ndlaFrontendUrl());

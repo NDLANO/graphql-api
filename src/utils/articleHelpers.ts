@@ -5,14 +5,7 @@
  */
 
 export function isNDLAEmbedUrl(url: string) {
-  const urlIsProductionNDLA = /^(http|https):\/\/(www.)?ndla.no/.test(url);
-  const urlIsTestNDLA = /^(http|https):\/\/ndla-frontend.([a-zA-Z]+.)api.ndla.no/.test(
-    url,
-  );
-  const urlIsTestWWWNDLAUrl = /^(http|https):\/\/www.([a-zA-Z]+.)api.ndla.no/.test(
-    url,
-  );
-  return urlIsProductionNDLA || urlIsTestNDLA || urlIsTestWWWNDLAUrl;
+  return /^https:\/(.*).ndla.no/.test(url);
 }
 
 export function getArticleIdFromUrn(urn: string): string {
@@ -27,7 +20,11 @@ export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
   context: Context,
 ): Promise<GQLTaxonomyEntity[]> {
-  const entitiesWithContentUri = entities.filter(
+  const visibleEntities = entities.filter(taxonomyEntity =>
+    taxonomyEntity.metadata ? taxonomyEntity.metadata.visible : true,
+  );
+
+  const entitiesWithContentUri = visibleEntities.filter(
     taxonomyEntity => !!taxonomyEntity.contentUri,
   );
 

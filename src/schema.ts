@@ -36,16 +36,6 @@ export const typeDefs = gql`
     lastUpdated: String
   }
 
-  interface TaxonomyEntity {
-    id: String!
-    name: String!
-    contentUri: String
-    path: String
-    paths: [String]
-    meta: Meta
-    article(filterIds: String, subjectId: String): Article
-    filters: [Filter]
-  }
   type LearningpathStepEmbedUrl {
     url: String
     embedType: String
@@ -107,6 +97,23 @@ export const typeDefs = gql`
     coverphoto: LearningpathCoverphoto
   }
 
+  type TaxonomyMetadata {
+    grepCodes: [String]
+    visible: Boolean
+  }
+
+  interface TaxonomyEntity {
+    id: String!
+    name: String!
+    contentUri: String
+    path: String
+    paths: [String]
+    meta: Meta
+    metadata: TaxonomyMetadata
+    article(filterIds: String, subjectId: String): Article
+    filters: [Filter]
+  }
+
   type Resource implements TaxonomyEntity {
     id: String!
     name: String!
@@ -114,6 +121,7 @@ export const typeDefs = gql`
     path: String
     paths: [String]
     meta: Meta
+    metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     learningpath: Learningpath
     filters: [Filter]
@@ -126,6 +134,7 @@ export const typeDefs = gql`
     name: String!
     contentUri: String
     meta: Meta
+    metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
     path: String
@@ -232,19 +241,40 @@ export const typeDefs = gql`
     supportedLanguages: [String]
     copyright: Copyright!
     tags: [String]
+    grepCodes: [String]
     competenceGoals: [CompetenceGoal]
+    coreElements: [CoreElement]
+    oembed: String
   }
 
   type CompetenceGoal {
     id: String!
-    curriculumId: String!
-    name: String!
-    curriculum: CompetenceCurriculum
+    title: String!
+    type: String!
+    curriculumId: String
+    code: String
+    curriculum: Reference
+    competenceGoalSet: Reference
+    crossSubjectTopics: [Element]
+    coreElements: [Element]
   }
 
-  type CompetenceCurriculum {
+  type CoreElement {
     id: String!
-    name: String!
+    title: String!
+    description: String
+    curriculum: Reference
+  }
+
+  type Element {
+    reference: Reference!
+    explanation: [String]!
+  }
+
+  type Reference {
+    id: String!
+    title: String!
+    code: String
   }
 
   type Filter {
@@ -252,12 +282,17 @@ export const typeDefs = gql`
     name: String!
     connectionId: String
     relevanceId: String
+    subjectId: String
+    metadata: TaxonomyMetadata
   }
 
   type SubjectFilter {
     id: String!
     name: String!
     subjectId: String!
+    contentUri: String
+    subjectpage: SubjectPage
+    metadata: TaxonomyMetadata
   }
 
   type Category {
@@ -357,13 +392,14 @@ export const typeDefs = gql`
     contentUri: String
     name: String!
     path: String!
+    metadata: TaxonomyMetadata
     filters: [SubjectFilter]
     frontpageFilters: [SubjectFilter]
     subjectpage: SubjectPage
     topics(all: Boolean, filterIds: String): [Topic]
   }
 
-  type SearchResult {
+  interface SearchResult {
     id: Int!
     title: String
     supportedLanguages: [String]
@@ -371,6 +407,31 @@ export const typeDefs = gql`
     metaDescription: String
     metaImage: MetaImage
     contentType: String
+    traits: [String]
+    contexts: [SearchContext]
+  }
+
+  type ArticleSearchResult implements SearchResult {
+    id: Int!
+    title: String
+    supportedLanguages: [String]
+    url: String
+    metaDescription: String
+    metaImage: MetaImage
+    contentType: String
+    traits: [String]
+    contexts: [SearchContext]
+  }
+
+  type LearningpathSearchResult implements SearchResult {
+    id: Int!
+    title: String
+    supportedLanguages: [String]
+    url: String
+    metaDescription: String
+    metaImage: MetaImage
+    contentType: String
+    traits: [String]
     contexts: [SearchContext]
   }
 
@@ -380,6 +441,7 @@ export const typeDefs = gql`
     resourceTypes: [SearchContextResourceTypes]
     subject: String
     path: String
+    filters: [SearchContextFilter]
   }
 
   type SearchContext {
@@ -387,6 +449,7 @@ export const typeDefs = gql`
     learningResourceType: String
     resourceTypes: [SearchContextResourceTypes]
     subject: String
+    subjectId: String
     path: String
     id: String
     language: String
@@ -400,8 +463,20 @@ export const typeDefs = gql`
   }
 
   type SearchContextFilter {
+    id: String
     name: String
     relevance: String
+  }
+
+  type ConceptResult {
+    concepts: [Concept]
+  }
+
+  type Concept {
+    id: Int
+    title: String
+    content: String
+    metaImage: MetaImage
   }
 
   type Search {
@@ -410,6 +485,25 @@ export const typeDefs = gql`
     language: String
     totalCount: Int
     results: [SearchResult]
+    suggestions: [SuggestionResult]
+    concepts: ConceptResult
+  }
+
+  type SuggestionResult {
+    name: String
+    suggestions: [SearchSuggestion]
+  }
+
+  type SearchSuggestion {
+    text: String
+    offset: Int
+    length: Int
+    options: [SuggestOption]
+  }
+
+  type SuggestOption {
+    text: String
+    score: Float
   }
 
   type GroupSearchResult {
@@ -437,7 +531,12 @@ export const typeDefs = gql`
 
   type Query {
     resource(id: String!, subjectId: String): Resource
-    article(id: String!, filterIds: String, subjectId: String): Article
+    article(
+      id: String!
+      filterIds: String
+      subjectId: String
+      removeRelatedContent: String
+    ): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
     filmfrontpage: FilmFrontpage
@@ -448,7 +547,10 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
-    competenceGoals(nodeId: String!): [CompetenceGoal]
+    competenceGoals(codes: [String], nodeId: String): [CompetenceGoal]
+    competenceGoal(code: String!): CompetenceGoal
+    coreElements(codes: [String]): [CoreElement]
+    coreElement(code: String!): CoreElement
     search(
       query: String
       page: String
@@ -460,10 +562,11 @@ export const typeDefs = gql`
       contextFilters: String
       levels: String
       sort: String
-      fallback: Boolean
+      fallback: String
       subjects: String
       languageFilter: String
       relevance: String
+      grepCodes: String
     ): Search
     resourceTypes: [ResourceTypeDefinition]
     groupSearch(
@@ -481,7 +584,7 @@ export const typeDefs = gql`
       contextFilters: String
       levels: String
       sort: String
-      fallback: Boolean
+      fallback: String
       subjects: String
       languageFilter: String
       relevance: String
