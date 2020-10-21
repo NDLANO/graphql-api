@@ -282,6 +282,8 @@ export const typeDefs = gql`
     name: String!
     connectionId: String
     relevanceId: String
+    subjectId: String
+    metadata: TaxonomyMetadata
   }
 
   type SubjectFilter {
@@ -290,6 +292,7 @@ export const typeDefs = gql`
     subjectId: String!
     contentUri: String
     subjectpage: SubjectPage
+    metadata: TaxonomyMetadata
   }
 
   type Category {
@@ -465,6 +468,17 @@ export const typeDefs = gql`
     relevance: String
   }
 
+  type ConceptResult {
+    concepts: [Concept]
+  }
+
+  type Concept {
+    id: Int
+    title: String
+    content: String
+    metaImage: MetaImage
+  }
+
   type Search {
     pageSize: Int
     page: Int
@@ -472,6 +486,7 @@ export const typeDefs = gql`
     totalCount: Int
     results: [SearchResult]
     suggestions: [SuggestionResult]
+    concepts: ConceptResult
   }
 
   type SuggestionResult {
@@ -551,6 +566,7 @@ export const typeDefs = gql`
       subjects: String
       languageFilter: String
       relevance: String
+      grepCodes: String
     ): Search
     resourceTypes: [ResourceTypeDefinition]
     groupSearch(

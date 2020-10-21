@@ -9,6 +9,7 @@ import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
+import { searchConcepts } from './conceptApi';
 
 interface GroupSearchJSON {
   results: [ContentTypeJSON];
@@ -41,6 +42,7 @@ export async function search(
     'resource-types': searchQuery.resourceTypes,
     'language-filter': searchQuery.languageFilter,
     'context-filters': searchQuery.contextFilters,
+    'grep-codes': searchQuery.grepCodes,
   };
   const response = await fetch(
     `/search-api/v1/search/?${queryString.stringify(query)}`,
@@ -48,11 +50,17 @@ export async function search(
     { cache: 'no-store' },
   );
   const searchResults = await resolveJson(response);
+  const concepts = await searchConcepts(
+    searchQuery.query,
+    searchQuery.language,
+    context,
+  );
   return {
     ...searchResults,
     results: searchResults.results.map((result: SearchResultJson) =>
       transformResult(result),
     ),
+    concepts: { concepts },
   };
 }
 

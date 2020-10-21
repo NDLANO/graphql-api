@@ -78,7 +78,10 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       _: any,
       context: Context,
     ): Promise<GQLFilter[]> {
-      return fetchTopicFilters(topic.id, context);
+      const filters = await fetchTopicFilters(topic.id, context);
+      return filters.filter(filter =>
+        filter.metadata ? filter.metadata.visible : true,
+      );
     },
     async meta(
       topic: TopicResponse,

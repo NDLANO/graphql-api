@@ -45,3 +45,4 @@ export {
   searchWithoutPagination,
 } from './searchApi';
 export { fetchOembed } from './oembedApi';
+export { searchConcepts } from './conceptApi';
