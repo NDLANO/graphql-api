@@ -202,10 +202,13 @@ export const typeDefs = gql`
 
   type BrightcoveLicense {
     title: String!
+    description: String
     cover: String
     src: String
+    download: String
     iframe: BrightcoveIframe
     copyright: Copyright!
+    uploadDate: String
   }
 
   type H5pLicense {
