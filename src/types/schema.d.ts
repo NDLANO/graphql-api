@@ -177,10 +177,13 @@ declare global {
   
   export interface GQLBrightcoveLicense {
     title: string;
+    description?: string;
     cover?: string;
     src?: string;
+    download?: string;
     iframe?: GQLBrightcoveIframe;
     copyright: GQLCopyright;
+    uploadDate?: string;
   }
   
   export interface GQLBrightcoveIframe {
@@ -1276,13 +1279,20 @@ declare global {
   
   export interface GQLBrightcoveLicenseTypeResolver<TParent = any> {
     title?: BrightcoveLicenseToTitleResolver<TParent>;
+    description?: BrightcoveLicenseToDescriptionResolver<TParent>;
     cover?: BrightcoveLicenseToCoverResolver<TParent>;
     src?: BrightcoveLicenseToSrcResolver<TParent>;
+    download?: BrightcoveLicenseToDownloadResolver<TParent>;
     iframe?: BrightcoveLicenseToIframeResolver<TParent>;
     copyright?: BrightcoveLicenseToCopyrightResolver<TParent>;
+    uploadDate?: BrightcoveLicenseToUploadDateResolver<TParent>;
   }
   
   export interface BrightcoveLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToDescriptionResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1294,11 +1304,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface BrightcoveLicenseToDownloadResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface BrightcoveLicenseToIframeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface BrightcoveLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToUploadDateResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
