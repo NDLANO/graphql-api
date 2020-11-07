@@ -77,19 +77,25 @@ export async function groupSearch(
     context,
     { cache: 'no-store' },
   );
+  const subjects = searchQuery.subjects?.split(',') || [];
   const json = await resolveJson(response);
   return json.map((result: GroupSearchJSON) => ({
     ...result,
-    resources: result.results.map((contentTypeResult: ContentTypeJSON) => ({
-      ...contentTypeResult,
-      path:
-        contentTypeResult.paths && contentTypeResult.paths.length > 0
-          ? contentTypeResult.paths[0]
-          : contentTypeResult.url,
-      name: contentTypeResult.title
-        ? contentTypeResult.title.title
-        : contentTypeResult.title,
-    })),
+    resources: result.results.map((contentTypeResult: ContentTypeJSON) => {
+      const path =
+        subjects.length === 1
+          ? contentTypeResult.paths?.find(
+              p => p.split('/')[1] === subjects[0].replace('urn:', ''),
+            )
+          : contentTypeResult.paths?.[0];
+      return {
+        ...contentTypeResult,
+        path: path ? path : contentTypeResult.url,
+        name: contentTypeResult.title
+          ? contentTypeResult.title.title
+          : contentTypeResult.title,
+      };
+    }),
   }));
 }
 
