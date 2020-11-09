@@ -129,7 +129,10 @@ function roleMapper(role: string): string {
 }
 
 // convert the license format from h5p format to license format that we use on other elements
-function licenseFixer(lic: any, licVer: any) {
+function licenseFixer(lic: string, licVer: string) {
+  if (!lic.includes('CC BY')) {
+    return lic.replace(' ', '-');
+  }
   return `${lic.replace(' ', '-')}-${licVer}`;
 }
 
