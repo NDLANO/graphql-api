@@ -131,6 +131,7 @@ declare global {
     audios?: Array<GQLAudioLicense | null>;
     brightcoves?: Array<GQLBrightcoveLicense | null>;
     h5ps?: Array<GQLH5pLicense | null>;
+    concepts?: Array<GQLConceptLicense | null>;
   }
   
   export interface GQLFootNote {
@@ -190,6 +191,12 @@ declare global {
   }
   
   export interface GQLH5pLicense {
+    title: string;
+    src?: string;
+    copyright: GQLCopyright;
+  }
+  
+  export interface GQLConceptLicense {
     title: string;
     src?: string;
     copyright: GQLCopyright;
@@ -610,6 +617,7 @@ declare global {
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
     H5pLicense?: GQLH5pLicenseTypeResolver;
+    ConceptLicense?: GQLConceptLicenseTypeResolver;
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
     Reference?: GQLReferenceTypeResolver;
     Element?: GQLElementTypeResolver;
@@ -1114,6 +1122,7 @@ declare global {
     audios?: ArticleMetaDataToAudiosResolver<TParent>;
     brightcoves?: ArticleMetaDataToBrightcovesResolver<TParent>;
     h5ps?: ArticleMetaDataToH5psResolver<TParent>;
+    concepts?: ArticleMetaDataToConceptsResolver<TParent>;
   }
   
   export interface ArticleMetaDataToFootnotesResolver<TParent = any, TResult = any> {
@@ -1133,6 +1142,10 @@ declare global {
   }
   
   export interface ArticleMetaDataToH5psResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToConceptsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1335,6 +1348,24 @@ declare global {
   }
   
   export interface H5pLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptLicenseTypeResolver<TParent = any> {
+    title?: ConceptLicenseToTitleResolver<TParent>;
+    src?: ConceptLicenseToSrcResolver<TParent>;
+    copyright?: ConceptLicenseToCopyrightResolver<TParent>;
+  }
+  
+  export interface ConceptLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptLicenseToCopyrightResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

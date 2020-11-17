@@ -214,12 +214,19 @@ export const typeDefs = gql`
     copyright: Copyright!
   }
 
+  type ConceptLicense {
+    title: String!
+    src: String
+    copyright: Copyright!
+  }
+
   type ArticleMetaData {
     footnotes: [FootNote]
     images: [ImageLicense]
     audios: [AudioLicense]
     brightcoves: [BrightcoveLicense]
     h5ps: [H5pLicense]
+    concepts: [ConceptLicense]
   }
 
   type Article {
