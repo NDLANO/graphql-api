@@ -15,12 +15,24 @@ interface GroupSearchJSON {
   resourceType: string;
 }
 
+interface ContentContext {
+  breadcrumbs: string[];
+}
+
 interface ContentTypeJSON {
   paths: [string];
   url: string;
   title: {
     title: string;
   };
+  metaDescription: {
+    metaDescription: string;
+  };
+  metaImage: {
+    url: string;
+    alt: string;
+  };
+  contexts: ContentContext[];
 }
 
 interface SearchResultContexts {
@@ -74,13 +86,16 @@ export async function groupSearch(
     ...result,
     resources: result.results.map((contentTypeResult: ContentTypeJSON) => ({
       ...contentTypeResult,
-      path:
-        contentTypeResult.paths && contentTypeResult.paths.length > 0
-          ? contentTypeResult.paths[0]
-          : contentTypeResult.url,
-      name: contentTypeResult.title
-        ? contentTypeResult.title.title
-        : contentTypeResult.title,
+      path: contentTypeResult.paths?.[0] || contentTypeResult.url,
+      name: contentTypeResult.title?.title,
+      ingress: contentTypeResult.metaDescription?.metaDescription,
+      breadcrumb: contentTypeResult.contexts?.[0].breadcrumbs,
+      ...(contentTypeResult.metaImage && {
+        img: {
+          url: contentTypeResult.metaImage?.url,
+          alt: contentTypeResult.metaImage?.alt
+        }
+      })
     })),
   }));
 }

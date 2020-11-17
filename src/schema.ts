@@ -494,6 +494,9 @@ export const typeDefs = gql`
     id: Int!
     path: String!
     name: String!
+    ingress: String
+    breadcrumb: [String]
+    img: MetaImage
   }
 
   type GroupSearch {

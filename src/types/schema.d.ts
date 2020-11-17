@@ -503,6 +503,9 @@ declare global {
     id: number;
     path: string;
     name: string;
+    ingress?: string;
+    breadcrumb?: Array<string | null>;
+    img?: GQLMetaImage;
   }
   
   export interface GQLFrontpageSearch {
@@ -2345,6 +2348,9 @@ declare global {
     id?: GroupSearchResultToIdResolver<TParent>;
     path?: GroupSearchResultToPathResolver<TParent>;
     name?: GroupSearchResultToNameResolver<TParent>;
+    ingress?: GroupSearchResultToIngressResolver<TParent>;
+    breadcrumb?: GroupSearchResultToBreadcrumbResolver<TParent>;
+    img?: GroupSearchResultToImgResolver<TParent>;
   }
   
   export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
@@ -2356,6 +2362,18 @@ declare global {
   }
   
   export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToIngressResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToBreadcrumbResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToImgResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
