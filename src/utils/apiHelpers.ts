@@ -94,7 +94,7 @@ function externalsToH5pMetaData(obj: any) {
             ? i.h5p.authors.map((author: { role: any; name?: string }) => {
                 return {
                   type: roleMapper(author.role || ''),
-                  name: author.name,
+                  name: author.name || '',
                 };
               })
             : [],
@@ -129,7 +129,10 @@ function roleMapper(role: string): string {
 }
 
 // convert the license format from h5p format to license format that we use on other elements
-function licenseFixer(lic: string, licVer: string) {
+export function licenseFixer(lic: string, licVer: string) {
+  if (lic === 'C') {
+    return 'COPYRIGHTED';
+  }
   if (!lic.includes('CC BY')) {
     return lic.replace(' ', '-');
   }
