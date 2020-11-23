@@ -74,6 +74,7 @@ export async function groupSearch(
 ): Promise<GQLGroupSearch> {
   const query = {
     ...searchQuery,
+    'page-size': searchQuery.pageSize,
     'resource-types': searchQuery.resourceTypes,
   };
   const response = await fetch(

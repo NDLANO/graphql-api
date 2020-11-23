@@ -559,6 +559,8 @@ export const typeDefs = gql`
       query: String
       subjects: String
       resourceTypes: String
+      page: String
+      pageSize: String
     ): [GroupSearch]
     frontpageSearch(query: String): FrontpageSearch
     searchWithoutPagination(

@@ -802,6 +802,8 @@ declare global {
     query?: string;
     subjects?: string;
     resourceTypes?: string;
+    page?: string;
+    pageSize?: string;
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
