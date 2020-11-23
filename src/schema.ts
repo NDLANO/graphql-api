@@ -202,13 +202,22 @@ export const typeDefs = gql`
 
   type BrightcoveLicense {
     title: String!
+    description: String
     cover: String
     src: String
+    download: String
     iframe: BrightcoveIframe
     copyright: Copyright!
+    uploadDate: String
   }
 
   type H5pLicense {
+    title: String!
+    src: String
+    copyright: Copyright!
+  }
+
+  type ConceptLicense {
     title: String!
     src: String
     copyright: Copyright!
@@ -220,6 +229,7 @@ export const typeDefs = gql`
     audios: [AudioLicense]
     brightcoves: [BrightcoveLicense]
     h5ps: [H5pLicense]
+    concepts: [ConceptLicense]
   }
 
   type Article {
@@ -263,6 +273,7 @@ export const typeDefs = gql`
     id: String!
     title: String!
     description: String
+    curriculum: Reference
   }
 
   type Element {
@@ -281,6 +292,8 @@ export const typeDefs = gql`
     name: String!
     connectionId: String
     relevanceId: String
+    subjectId: String
+    metadata: TaxonomyMetadata
   }
 
   type SubjectFilter {
@@ -289,6 +302,7 @@ export const typeDefs = gql`
     subjectId: String!
     contentUri: String
     subjectpage: SubjectPage
+    metadata: TaxonomyMetadata
   }
 
   type Category {
@@ -464,6 +478,17 @@ export const typeDefs = gql`
     relevance: String
   }
 
+  type ConceptResult {
+    concepts: [Concept]
+  }
+
+  type Concept {
+    id: Int
+    title: String
+    content: String
+    metaImage: MetaImage
+  }
+
   type Search {
     pageSize: Int
     page: Int
@@ -471,6 +496,7 @@ export const typeDefs = gql`
     totalCount: Int
     results: [SearchResult]
     suggestions: [SuggestionResult]
+    concepts: ConceptResult
   }
 
   type SuggestionResult {
@@ -553,6 +579,7 @@ export const typeDefs = gql`
       subjects: String
       languageFilter: String
       relevance: String
+      grepCodes: String
     ): Search
     resourceTypes: [ResourceTypeDefinition]
     groupSearch(

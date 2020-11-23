@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Fetch subject filters should filter out invisible elements 1`] = `
+Array [
+  Object {
+    "id": "urn:filter:1",
+    "metadata": Object {
+      "grepCodes": Array [],
+      "visible": true,
+    },
+    "name": "Filter 1",
+  },
+]
+`;
+
 exports[`Fetch subject should filter out invisible elements 1`] = `
 Array [
   Object {

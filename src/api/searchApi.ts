@@ -9,6 +9,7 @@ import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
+import { searchConcepts } from './conceptApi';
 
 interface GroupSearchJSON {
   results: [ContentTypeJSON];
@@ -53,6 +54,7 @@ export async function search(
     'resource-types': searchQuery.resourceTypes,
     'language-filter': searchQuery.languageFilter,
     'context-filters': searchQuery.contextFilters,
+    'grep-codes': searchQuery.grepCodes,
   };
   const response = await fetch(
     `/search-api/v1/search/?${queryString.stringify(query)}`,
@@ -60,11 +62,17 @@ export async function search(
     { cache: 'no-store' },
   );
   const searchResults = await resolveJson(response);
+  const concepts = await searchConcepts(
+    searchQuery.query,
+    searchQuery.language,
+    context,
+  );
   return {
     ...searchResults,
     results: searchResults.results.map((result: SearchResultJson) =>
       transformResult(result),
     ),
+    concepts: { concepts },
   };
 }
 
@@ -82,22 +90,31 @@ export async function groupSearch(
     context,
     { cache: 'no-store' },
   );
+  const subjects = searchQuery.subjects?.split(',') || [];
   const json = await resolveJson(response);
   return json.map((result: GroupSearchJSON) => ({
     ...result,
-    resources: result.results.map((contentTypeResult: ContentTypeJSON) => ({
-      ...contentTypeResult,
-      path: contentTypeResult.paths?.[0] || contentTypeResult.url,
-      name: contentTypeResult.title?.title,
-      ingress: contentTypeResult.metaDescription?.metaDescription,
-      breadcrumb: contentTypeResult.contexts?.[0].breadcrumbs,
-      ...(contentTypeResult.metaImage && {
-        img: {
-          url: contentTypeResult.metaImage?.url,
-          alt: contentTypeResult.metaImage?.alt
-        }
-      })
-    })),
+    resources: result.results.map((contentTypeResult: ContentTypeJSON) => {
+      const path =
+        subjects.length === 1
+          ? contentTypeResult.paths?.find(
+              p => p.split('/')[1] === subjects[0].replace('urn:', ''),
+            )
+          : contentTypeResult.paths?.[0];
+      return {
+        ...contentTypeResult,
+        path: path || contentTypeResult.url,
+        name: contentTypeResult.title?.title,
+        ingress: contentTypeResult.metaDescription?.metaDescription,
+        breadcrumb: contentTypeResult.contexts?.[0].breadcrumbs,
+        ...(contentTypeResult.metaImage && {
+          img: {
+            url: contentTypeResult.metaImage?.url,
+            alt: contentTypeResult.metaImage?.alt
+          }
+        })
+      }
+    }),
   }));
 }
 
