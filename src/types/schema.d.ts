@@ -522,6 +522,7 @@ declare global {
     language?: string;
     resourceType?: string;
     resources?: Array<GQLGroupSearchResult | null>;
+    suggestions?: Array<GQLSuggestionResult | null>;
     totalCount?: number;
   }
   
@@ -531,6 +532,7 @@ declare global {
     name: string;
     ingress?: string;
     breadcrumb?: Array<string | null>;
+    resourceTypes?: Array<string | null>;
     img?: GQLMetaImage;
   }
   
@@ -2451,6 +2453,7 @@ declare global {
     language?: GroupSearchToLanguageResolver<TParent>;
     resourceType?: GroupSearchToResourceTypeResolver<TParent>;
     resources?: GroupSearchToResourcesResolver<TParent>;
+    suggestions?: GroupSearchToSuggestionsResolver<TParent>;
     totalCount?: GroupSearchToTotalCountResolver<TParent>;
   }
   
@@ -2466,6 +2469,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GroupSearchToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GroupSearchToTotalCountResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
@@ -2476,6 +2483,7 @@ declare global {
     name?: GroupSearchResultToNameResolver<TParent>;
     ingress?: GroupSearchResultToIngressResolver<TParent>;
     breadcrumb?: GroupSearchResultToBreadcrumbResolver<TParent>;
+    resourceTypes?: GroupSearchResultToResourceTypesResolver<TParent>;
     img?: GroupSearchResultToImgResolver<TParent>;
   }
   
@@ -2496,6 +2504,10 @@ declare global {
   }
   
   export interface GroupSearchResultToBreadcrumbResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToResourceTypesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

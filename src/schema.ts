@@ -522,6 +522,7 @@ export const typeDefs = gql`
     name: String!
     ingress: String
     breadcrumb: [String]
+    resourceTypes: [String]
     img: MetaImage
   }
 
@@ -529,6 +530,7 @@ export const typeDefs = gql`
     language: String
     resourceType: String
     resources: [GroupSearchResult]
+    suggestions: [SuggestionResult]
     totalCount: Int
   }
 

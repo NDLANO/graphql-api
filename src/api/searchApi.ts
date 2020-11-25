@@ -18,6 +18,11 @@ interface GroupSearchJSON {
 
 interface ContentContext {
   breadcrumbs: string[];
+  resourceTypes: [{
+    id: string;
+    name: string;
+    language: string;
+  }]
 }
 
 interface ContentTypeJSON {
@@ -106,7 +111,8 @@ export async function groupSearch(
         path: path || contentTypeResult.url,
         name: contentTypeResult.title?.title,
         ingress: contentTypeResult.metaDescription?.metaDescription,
-        breadcrumb: contentTypeResult.contexts?.[0].breadcrumbs,
+        breadcrumb: contentTypeResult.contexts?.[0]?.breadcrumbs,
+        resourceTypes: contentTypeResult.contexts?.[0]?.resourceTypes.map(type => type.id);
         ...(contentTypeResult.metaImage && {
           img: {
             url: contentTypeResult.metaImage?.url,
