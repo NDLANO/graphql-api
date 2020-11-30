@@ -834,6 +834,7 @@ declare global {
     query?: string;
     subjects?: string;
     resourceTypes?: string;
+    contextTypes?: string;
     page?: string;
     pageSize?: string;
   }

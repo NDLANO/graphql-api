@@ -588,6 +588,7 @@ export const typeDefs = gql`
       query: String
       subjects: String
       resourceTypes: String
+      contextTypes: String
       page: String
       pageSize: String
     ): [GroupSearch]

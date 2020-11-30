@@ -91,6 +91,7 @@ export async function groupSearch(
     ...searchQuery,
     'page-size': searchQuery.pageSize,
     'resource-types': searchQuery.resourceTypes,
+    'context-types': searchQuery.contextTypes,
   };
   const response = await fetch(
     `/search-api/v1/search/group/?${queryString.stringify(query)}`,
