@@ -60,10 +60,9 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
             context,
           ).then(article => {
             return Object.assign({}, article, {
-              oembed: fetchOembed(
-                `${ndlaUrl}/subjects${topic.path}`,
-                context,
-              ).then(oembed => oembed.html.split('"')[3]),
+              oembed: fetchOembed(`${ndlaUrl}${topic.path}`, context).then(
+                oembed => oembed.html.split('"')[3],
+              ),
             });
           }),
         );
