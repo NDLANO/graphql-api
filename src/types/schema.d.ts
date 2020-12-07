@@ -531,9 +531,8 @@ declare global {
     path: string;
     name: string;
     ingress?: string;
-    breadcrumb?: Array<string | null>;
-    resourceTypes?: Array<string | null>;
-    img?: GQLMetaImage;
+    contexts?: Array<GQLSearchContext | null>;
+    metaImage?: GQLMetaImage;
   }
   
   export interface GQLFrontpageSearch {
@@ -2483,9 +2482,8 @@ declare global {
     path?: GroupSearchResultToPathResolver<TParent>;
     name?: GroupSearchResultToNameResolver<TParent>;
     ingress?: GroupSearchResultToIngressResolver<TParent>;
-    breadcrumb?: GroupSearchResultToBreadcrumbResolver<TParent>;
-    resourceTypes?: GroupSearchResultToResourceTypesResolver<TParent>;
-    img?: GroupSearchResultToImgResolver<TParent>;
+    contexts?: GroupSearchResultToContextsResolver<TParent>;
+    metaImage?: GroupSearchResultToMetaImageResolver<TParent>;
   }
   
   export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
@@ -2504,15 +2502,11 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GroupSearchResultToBreadcrumbResolver<TParent = any, TResult = any> {
+  export interface GroupSearchResultToContextsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GroupSearchResultToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToImgResolver<TParent = any, TResult = any> {
+  export interface GroupSearchResultToMetaImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
