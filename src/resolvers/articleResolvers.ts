@@ -29,14 +29,19 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLCompetenceGoal[]> {
       const nodeId = article.oldNdlaUrl?.split('/').pop();
-      return fetchCompetenceGoals(article.grepCodes, nodeId, context);
+      return fetchCompetenceGoals(
+        article.grepCodes,
+        nodeId,
+        'default',
+        context,
+      );
     },
     async coreElements(
       article: GQLArticle,
       _: any,
       context: Context,
     ): Promise<GQLCoreElement[]> {
-      return fetchCoreElements(article.grepCodes, context);
+      return fetchCoreElements(article.grepCodes, 'default', context);
     },
   },
 };

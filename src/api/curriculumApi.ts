@@ -102,7 +102,7 @@ function htmlToText(html: string) {
 }
 
 function filterTextsForLanguage(texts: Text[], language: string) {
-  const isoCode = isoLanguageMapping[language.substring(0, 2)] || 'default';
+  const isoCode = isoLanguageMapping[language?.split('-')?.[0]] || 'default';
   const text =
     texts.find(t => t.spraak === isoCode) ||
     texts.find(t => t.spraak === 'default');
@@ -127,16 +127,18 @@ function findNameForAcceptLanguage(names: Name[], language: string) {
 export async function fetchCompetenceGoals(
   codes: string[],
   nodeId: string,
+  language: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
   return [
-    ...(codes ? await fetchLK20CompetenceGoals(codes, context) : []),
+    ...(codes ? await fetchLK20CompetenceGoals(codes, language, context) : []),
     ...(nodeId ? await fetchLK06CompetenceGoals(nodeId, context) : []),
   ];
 }
 
 export async function fetchLK20CompetenceGoal(
   code: string,
+  language: string,
   context: Context,
 ): Promise<GQLCompetenceGoal> {
   const response = await fetch(
@@ -146,9 +148,10 @@ export async function fetchLK20CompetenceGoal(
   const json: CompetenceGoal = await resolveJson(response);
   return {
     id: json.kode,
-    title: `${filterTextsForLanguage(json.tittel.tekst, context.language)} (${
-      json.kode
-    })`,
+    title: `${filterTextsForLanguage(
+      json.tittel.tekst,
+      language || context.language,
+    )} (${json.kode})`,
     type: 'LK20',
     code: json.kode,
     curriculum: mapReference(json['tilhoerer-laereplan']),
@@ -160,17 +163,19 @@ export async function fetchLK20CompetenceGoal(
 
 export async function fetchLK20CompetenceGoals(
   codes: string[],
+  language: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
   return Promise.all(
     codes
       .filter(code => code.startsWith('KM'))
-      .map(code => fetchLK20CompetenceGoal(code, context)),
+      .map(code => fetchLK20CompetenceGoal(code, language, context)),
   );
 }
 
 export async function fetchCoreElement(
   code: string,
+  language: string,
   context: Context,
 ): Promise<GQLCoreElement> {
   const response = await fetch(
@@ -180,11 +185,15 @@ export async function fetchCoreElement(
   const json: CoreElement = await resolveJson(response);
   return {
     id: json.kode,
-    title: `${filterTextsForLanguage(json.tittel.tekst, context.language)} (${
-      json.kode
-    })`,
+    title: `${filterTextsForLanguage(
+      json.tittel.tekst,
+      language || context.language,
+    )} (${json.kode})`,
     description: htmlToText(
-      filterTextsForLanguage(json.beskrivelse.tekst, context.language),
+      filterTextsForLanguage(
+        json.beskrivelse.tekst,
+        language || context.language,
+      ),
     ),
     curriculum: mapReference(json['tilhoerer-laereplan']),
   };
@@ -192,12 +201,13 @@ export async function fetchCoreElement(
 
 export async function fetchCoreElements(
   codes: string[],
+  language: string,
   context: Context,
 ): Promise<GQLCoreElement[]> {
   return Promise.all(
     codes
       .filter(code => code.startsWith('KE'))
-      .map(code => fetchCoreElement(code, context)),
+      .map(code => fetchCoreElement(code, language, context)),
   );
 }
 

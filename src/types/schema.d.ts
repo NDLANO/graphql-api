@@ -774,6 +774,7 @@ declare global {
   export interface QueryToCompetenceGoalsArgs {
     codes?: Array<string | null>;
     nodeId?: string;
+    language?: string;
   }
   export interface QueryToCompetenceGoalsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCompetenceGoalsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -781,6 +782,7 @@ declare global {
   
   export interface QueryToCompetenceGoalArgs {
     code: string;
+    language?: string;
   }
   export interface QueryToCompetenceGoalResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCompetenceGoalArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -788,6 +790,7 @@ declare global {
   
   export interface QueryToCoreElementsArgs {
     codes?: Array<string | null>;
+    language?: string;
   }
   export interface QueryToCoreElementsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCoreElementsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -795,6 +798,7 @@ declare global {
   
   export interface QueryToCoreElementArgs {
     code: string;
+    language?: string;
   }
   export interface QueryToCoreElementResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCoreElementArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

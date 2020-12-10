@@ -11,18 +11,22 @@ import { fetchCompetenceGoals, fetchCoreElements } from '../api';
 export const Query = {
   async competenceGoals(
     _: any,
-    { codes, nodeId }: { codes: string[]; nodeId: string },
+    {
+      codes,
+      nodeId,
+      language,
+    }: { codes: string[]; nodeId?: string; language?: string },
     context: Context,
   ): Promise<GQLCompetenceGoal[]> {
-    return fetchCompetenceGoals(codes, nodeId, context);
+    return fetchCompetenceGoals(codes, nodeId, language, context);
   },
   async coreElements(
     _: any,
-    { codes }: { codes: string[] },
+    { codes, language }: { codes: string[]; language?: string },
     context: Context,
   ): Promise<GQLCoreElement[]> {
     if (codes?.length) {
-      return fetchCoreElements(codes, context);
+      return fetchCoreElements(codes, language, context);
     }
   },
 };

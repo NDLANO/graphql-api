@@ -557,10 +557,14 @@ export const typeDefs = gql`
     topics: [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
-    competenceGoals(codes: [String], nodeId: String): [CompetenceGoal]
-    competenceGoal(code: String!): CompetenceGoal
-    coreElements(codes: [String]): [CoreElement]
-    coreElement(code: String!): CoreElement
+    competenceGoals(
+      codes: [String]
+      nodeId: String
+      language: String
+    ): [CompetenceGoal]
+    competenceGoal(code: String!, language: String): CompetenceGoal
+    coreElements(codes: [String], language: String): [CoreElement]
+    coreElement(code: String!, language: String): CoreElement
     search(
       query: String
       page: String
