@@ -259,13 +259,18 @@ export const typeDefs = gql`
 
   type CompetenceGoal {
     id: String!
+    code: String
     title: String!
     type: String!
+    language: String
     curriculumId: String
-    code: String
+    curriculumCode: String
     curriculum: Reference
+    competenceGoalSetCode: String
     competenceGoalSet: Reference
+    crossSubjectTopicsCodes: [ElementCode]
     crossSubjectTopics: [Element]
+    coreElementsCodes: [ElementCode]
     coreElements: [Element]
   }
 
@@ -273,7 +278,14 @@ export const typeDefs = gql`
     id: String!
     title: String!
     description: String
+    language: String
+    curriculumCode: String
     curriculum: Reference
+  }
+
+  type ElementCode {
+    referenceCode: String!
+    explanation: [String]!
   }
 
   type Element {

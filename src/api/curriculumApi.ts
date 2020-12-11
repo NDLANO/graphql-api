@@ -17,7 +17,15 @@ interface Text {
   verdi: string;
 }
 
-interface CompetenceGoal {
+interface GrepElement {
+  id: string;
+  kode: string;
+  tittel: {
+    tekst: Text[];
+  };
+}
+
+interface CompetenceGoal extends GrepElement {
   id: string;
   kode: string;
   tittel: {
@@ -70,7 +78,7 @@ interface Curriculum {
   };
 }
 
-interface CoreElement {
+interface CoreElement extends GrepElement {
   id: string;
   kode: string;
   tittel: {
@@ -82,27 +90,12 @@ interface CoreElement {
   'tilhoerer-laereplan': Reference;
 }
 
-function mapReference(reference: Reference) {
-  return {
-    id: reference.kode,
-    code: reference.kode,
-    title: reference.tittel,
-  };
-}
-
-function mapElements(elements: Element[]) {
-  return elements.map(element => ({
-    reference: mapReference(element.referanse),
-    explanation: element.forklaring,
-  }));
-}
-
 function htmlToText(html: string) {
   return he.decode(html).replace(/<[^>]*>?/gm, '');
 }
 
 function filterTextsForLanguage(texts: Text[], language: string) {
-  const isoCode = isoLanguageMapping[language?.split('-')?.[0]] || 'default';
+  const isoCode = isoLanguageMapping[language] || 'default';
   const text =
     texts.find(t => t.spraak === isoCode) ||
     texts.find(t => t.spraak === 'default');
@@ -141,6 +134,7 @@ export async function fetchLK20CompetenceGoal(
   language: string,
   context: Context,
 ): Promise<GQLCompetenceGoal> {
+  const lang = language || context.language;
   const response = await fetch(
     `/grep/kl06/v201906/kompetansemaal-lk20/${code}`,
     context,
@@ -148,16 +142,26 @@ export async function fetchLK20CompetenceGoal(
   const json: CompetenceGoal = await resolveJson(response);
   return {
     id: json.kode,
-    title: `${filterTextsForLanguage(
-      json.tittel.tekst,
-      language || context.language,
-    )} (${json.kode})`,
+    title: `${filterTextsForLanguage(json.tittel.tekst, lang)} (${json.kode})`,
     type: 'LK20',
     code: json.kode,
-    curriculum: mapReference(json['tilhoerer-laereplan']),
-    competenceGoalSet: mapReference(json['tilhoerer-kompetansemaalsett']),
-    crossSubjectTopics: mapElements(json['tilknyttede-tverrfaglige-temaer']),
-    coreElements: mapElements(json['tilknyttede-tverrfaglige-temaer']),
+    language: lang,
+    curriculumCode: json['tilhoerer-laereplan'].kode,
+    competenceGoalSetCode: json['tilhoerer-kompetansemaalsett'].kode,
+    crossSubjectTopicsCodes: json['tilknyttede-tverrfaglige-temaer'].map(
+      element => {
+        return {
+          referenceCode: element.referanse.kode,
+          explanation: element.forklaring,
+        };
+      },
+    ),
+    coreElementsCodes: json['tilknyttede-kjerneelementer'].map(element => {
+      return {
+        referenceCode: element.referanse.kode,
+        explanation: element.forklaring,
+      };
+    }),
   };
 }
 
@@ -178,6 +182,7 @@ export async function fetchCoreElement(
   language: string,
   context: Context,
 ): Promise<GQLCoreElement> {
+  const lang = language || context.language;
   const response = await fetch(
     `/grep/kl06/v201906/kjerneelementer-lk20/${code}`,
     context,
@@ -185,17 +190,12 @@ export async function fetchCoreElement(
   const json: CoreElement = await resolveJson(response);
   return {
     id: json.kode,
-    title: `${filterTextsForLanguage(
-      json.tittel.tekst,
-      language || context.language,
-    )} (${json.kode})`,
+    title: `${filterTextsForLanguage(json.tittel.tekst, lang)} (${json.kode})`,
     description: htmlToText(
-      filterTextsForLanguage(
-        json.beskrivelse.tekst,
-        language || context.language,
-      ),
+      filterTextsForLanguage(json.beskrivelse.tekst, lang),
     ),
-    curriculum: mapReference(json['tilhoerer-laereplan']),
+    language: lang,
+    curriculumCode: json['tilhoerer-laereplan'].kode,
   };
 }
 
@@ -208,6 +208,115 @@ export async function fetchCoreElements(
     codes
       .filter(code => code.startsWith('KE'))
       .map(code => fetchCoreElement(code, language, context)),
+  );
+}
+
+export async function fetchGrepElement(
+  code: string,
+  language: string,
+  url: string,
+  context: Context,
+): Promise<GQLReference> {
+  const lang = language || context.language;
+  const response = await fetch(`${url}${code}`, context);
+  const json: GrepElement = await resolveJson(response);
+
+  const title = filterTextsForLanguage(json.tittel.tekst, lang);
+
+  return {
+    code: json.kode,
+    id: json.kode,
+    title,
+  };
+}
+
+async function fetchCoreElementReference(
+  code: string,
+  language: string,
+  context: Context,
+): Promise<GQLReference> {
+  return fetchGrepElement(
+    code,
+    language,
+    '/grep/kl06/v201906/kjerneelementer-lk20/',
+    context,
+  );
+}
+
+export async function fetchCoreElementReferences(
+  codes: GQLElementCode[],
+  language: string,
+  context: Context,
+): Promise<GQLElement[]> {
+  return Promise.all(
+    codes.map(async code => {
+      return {
+        reference: await fetchCoreElementReference(
+          code.referenceCode,
+          language,
+          context,
+        ),
+        explanation: code.explanation,
+      };
+    }),
+  );
+}
+
+async function fetchCrossSubjectTopic(
+  code: string,
+  language: string,
+  context: Context,
+): Promise<GQLReference> {
+  return fetchGrepElement(
+    code,
+    language,
+    '/grep/kl06/v201906/tverrfaglige-temaer-lk20/',
+    context,
+  );
+}
+
+export async function fetchCrossSubjectTopics(
+  codes: GQLElementCode[],
+  language: string,
+  context: Context,
+): Promise<GQLElement[]> {
+  return Promise.all(
+    codes.map(async code => {
+      return {
+        reference: await fetchCrossSubjectTopic(
+          code.referenceCode,
+          language,
+          context,
+        ),
+        explanation: code.explanation,
+      };
+    }),
+  );
+}
+
+export async function fetchCompetenceSet(
+  code: string,
+  language: string,
+  context: Context,
+): Promise<GQLReference> {
+  return fetchGrepElement(
+    code,
+    language,
+    '/grep/kl06/v201906/kompetansemaalsett-lk20/',
+    context,
+  );
+}
+
+export async function fetchLK20Curriculum(
+  code: string,
+  language: string,
+  context: Context,
+): Promise<GQLReference> {
+  return fetchGrepElement(
+    code,
+    language,
+    '/grep/kl06/v201906/laereplaner-lk20/',
+    context,
   );
 }
 
@@ -233,7 +342,7 @@ export async function fetchLK06CompetenceGoals(
   return competenceGoals;
 }
 
-export async function fetchCurriculum(
+export async function fetchLK06Curriculum(
   curriculumId: string,
   context: Context,
 ): Promise<GQLReference> {

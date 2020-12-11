@@ -16,7 +16,8 @@ import {
   fetchSubjects,
   fetchFrontpage,
   fetchFilmFrontpage,
-  fetchCurriculum,
+  fetchLK06Curriculum,
+  fetchLK20Curriculum,
 } from './api';
 import { FrontpageResponse } from './api/frontpageApi';
 
@@ -35,14 +36,35 @@ export function learningpathsLoader(context: Context): DataLoader<string, any> {
   });
 }
 
-export function curriculumLoader(
+interface LK20Curriculum {
+  code: string;
+  language: string;
+}
+
+export function lk20CurriculumLoader(
+  context: Context,
+): DataLoader<LK20Curriculum, GQLReference> {
+  return new DataLoader(async ids => {
+    const uniqueCurriculumIds = Array.from(new Set(ids));
+    const responses = await Promise.all(
+      uniqueCurriculumIds.map(async ({ code, language }) => {
+        return fetchLK20Curriculum(code, language, context);
+      }),
+    );
+    return uniqueCurriculumIds.map(({ code, language }) => {
+      return responses.find(response => response.code === code);
+    });
+  });
+}
+
+export function lk06CurriculumLoader(
   context: Context,
 ): DataLoader<string, GQLReference> {
   return new DataLoader(async curriculumIds => {
     const uniqueCurriculumIds = Array.from(new Set(curriculumIds));
     const responses = await Promise.all(
       uniqueCurriculumIds.map(async id => {
-        return fetchCurriculum(id, context);
+        return fetchLK06Curriculum(id, context);
       }),
     );
     return uniqueCurriculumIds.map(id => {

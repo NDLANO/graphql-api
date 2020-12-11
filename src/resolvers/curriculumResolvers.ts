@@ -6,7 +6,13 @@
  *
  */
 
-import { fetchCompetenceGoals, fetchCoreElements } from '../api';
+import {
+  fetchCompetenceGoals,
+  fetchCompetenceSet,
+  fetchCoreElements,
+  fetchCoreElementReferences,
+  fetchCrossSubjectTopics,
+} from '../api';
 
 export const Query = {
   async competenceGoals(
@@ -39,11 +45,71 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLReference> {
       if (competenceGoal.curriculumId) {
-        return context.loaders.curriculumLoader.load(
+        return context.loaders.lk06CurriculumLoader.load(
           competenceGoal.curriculumId,
         );
       }
-      return competenceGoal.curriculum;
+      return context.loaders.lk20CurriculumLoader.load({
+        code: competenceGoal.curriculumCode,
+        language: competenceGoal.language,
+      });
+    },
+    async competenceGoalSet(
+      competenceGoal: GQLCompetenceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLReference> {
+      if (competenceGoal.competenceGoalSetCode) {
+        return fetchCompetenceSet(
+          competenceGoal.competenceGoalSetCode,
+          competenceGoal.language,
+          context,
+        );
+      }
+      return undefined;
+    },
+    async crossSubjectTopics(
+      competenceGoal: GQLCompetenceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLElement[]> {
+      if (competenceGoal.crossSubjectTopicsCodes) {
+        return fetchCrossSubjectTopics(
+          competenceGoal.crossSubjectTopicsCodes,
+          competenceGoal.language,
+          context,
+        );
+      }
+      return undefined;
+    },
+    async coreElements(
+      competenceGoal: GQLCompetenceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLElement[]> {
+      if (competenceGoal.coreElementsCodes) {
+        return fetchCoreElementReferences(
+          competenceGoal.coreElementsCodes,
+          competenceGoal.language,
+          context,
+        );
+      }
+      return undefined;
+    },
+  },
+  CoreElement: {
+    async curriculum(
+      coreElement: GQLCoreElement,
+      _: any,
+      context: Context,
+    ): Promise<GQLReference> {
+      if (coreElement.curriculumCode) {
+        return context.loaders.lk20CurriculumLoader.load({
+          code: coreElement.curriculumCode,
+          language: coreElement.language,
+        });
+      }
+      return undefined;
     },
   },
 };
