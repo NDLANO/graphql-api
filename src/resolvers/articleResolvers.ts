@@ -29,14 +29,20 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLCompetenceGoal[]> {
       const nodeId = article.oldNdlaUrl?.split('/').pop();
-      return fetchCompetenceGoals(article.grepCodes, nodeId, context);
+      const language =
+        article.supportedLanguages.find(lang => lang === context.language) ||
+        article.supportedLanguages[0];
+      return fetchCompetenceGoals(article.grepCodes, nodeId, language, context);
     },
     async coreElements(
       article: GQLArticle,
       _: any,
       context: Context,
     ): Promise<GQLCoreElement[]> {
-      return fetchCoreElements(article.grepCodes, context);
+      const language =
+        article.supportedLanguages.find(lang => lang === context.language) ||
+        article.supportedLanguages[0];
+      return fetchCoreElements(article.grepCodes, language, context);
     },
   },
 };

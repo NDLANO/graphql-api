@@ -21,7 +21,8 @@ import {
   learningpathsLoader,
   subjectsLoader,
   frontpageLoader,
-  curriculumLoader,
+  lk06CurriculumLoader,
+  lk20CurriculumLoader,
 } from './loaders';
 import { resolvers } from './resolvers';
 
@@ -33,7 +34,7 @@ function getAcceptLanguage(request: Request): string {
   const language = request.headers['accept-language'];
 
   if (isString(language)) {
-    return language;
+    return language.split('-')[0];
   }
   return 'nb';
 }
@@ -59,7 +60,8 @@ async function getContext({ req }: { req: Request }): Promise<Context> {
       resourceTypesLoader: resourceTypesLoader(defaultContext),
       subjectsLoader: subjectsLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
-      curriculumLoader: curriculumLoader(defaultContext),
+      lk06CurriculumLoader: lk06CurriculumLoader(defaultContext),
+      lk20CurriculumLoader: lk20CurriculumLoader(defaultContext),
     },
   };
 }

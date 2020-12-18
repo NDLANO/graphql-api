@@ -24,7 +24,11 @@ declare global {
       subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
       resourceTypesLoader: DataLoader<any, any>;
       frontpageLoader: DataLoader<string, FrontpageResponse>;
-      curriculumLoader: DataLoader<string, GQLReference>;
+      lk06CurriculumLoader: DataLoader<string, GQLReference>;
+      lk20CurriculumLoader: DataLoader<
+        { code: string; language: string },
+        GQLReference
+      >;
     };
   }
 
