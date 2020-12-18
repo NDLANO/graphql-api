@@ -18,7 +18,7 @@ export async function searchConcepts(
     query: searchquery,
     language,
     fallback: true,
-    'exact-match': true,
+    'exact-match': false, // Temp
     sort: '-title',
   };
   const response = await fetch(

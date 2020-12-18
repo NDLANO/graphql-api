@@ -9,6 +9,7 @@
 import {
   search,
   groupSearch,
+  conceptSearch,
   frontpageSearch,
   searchWithoutPagination,
 } from '../api';
@@ -27,6 +28,13 @@ export const Query = {
     context: Context,
   ): Promise<GQLSearch> {
     return groupSearch(searchQuery, context);
+  },
+  async conceptSearch(
+    _: any,
+    searchQuery: QueryToSearchArgs,
+    context: Context,
+  ): Promise<[GQLConcept]> {
+    return conceptSearch(searchQuery, context);
   },
   async frontpageSearch(
     _: any,

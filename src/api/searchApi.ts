@@ -131,6 +131,17 @@ export async function groupSearch(
   }));
 }
 
+export async function conceptSearch(
+  searchQuery: QueryToSearchArgs,
+  context: Context,
+): Promise<[GQLConcept]> {
+  return searchConcepts(
+    searchQuery.query,
+    searchQuery.language,
+    context,
+  );
+}
+
 export async function frontpageSearch(
   searchQuery: QueryToSearchArgs,
   context: Context,

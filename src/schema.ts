@@ -591,6 +591,7 @@ export const typeDefs = gql`
       page: String
       pageSize: String
     ): [GroupSearch]
+    conceptSearch(query: String): [Concept]
     frontpageSearch(query: String): FrontpageSearch
     searchWithoutPagination(
       query: String

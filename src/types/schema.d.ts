@@ -35,6 +35,7 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
+    conceptSearch?: Array<GQLConcept | null>;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearch;
   }
@@ -696,6 +697,7 @@ declare global {
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
+    conceptSearch?: QueryToConceptSearchResolver<TParent>;
     frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
     searchWithoutPagination?: QueryToSearchWithoutPaginationResolver<TParent>;
   }
@@ -839,6 +841,13 @@ declare global {
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToConceptSearchArgs {
+    query?: string;
+  }
+  export interface QueryToConceptSearchResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToConceptSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToFrontpageSearchArgs {
