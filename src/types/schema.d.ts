@@ -216,9 +216,9 @@ declare global {
     curriculum?: GQLReference;
     competenceGoalSetCode?: string;
     competenceGoalSet?: GQLReference;
-    crossSubjectTopicsCodes?: Array<GQLElementCode | null>;
+    crossSubjectTopicsCodes?: Array<GQLElement | null>;
     crossSubjectTopics?: Array<GQLElement | null>;
-    coreElementsCodes?: Array<GQLElementCode | null>;
+    coreElementsCodes?: Array<GQLElement | null>;
     coreElements?: Array<GQLElement | null>;
   }
   
@@ -226,11 +226,6 @@ declare global {
     id: string;
     title: string;
     code?: string;
-  }
-  
-  export interface GQLElementCode {
-    referenceCode: string;
-    explanation: Array<string | null>;
   }
   
   export interface GQLElement {
@@ -635,7 +630,6 @@ declare global {
     ConceptLicense?: GQLConceptLicenseTypeResolver;
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
     Reference?: GQLReferenceTypeResolver;
-    ElementCode?: GQLElementCodeTypeResolver;
     Element?: GQLElementTypeResolver;
     CoreElement?: GQLCoreElementTypeResolver;
     Filter?: GQLFilterTypeResolver;
@@ -1492,19 +1486,6 @@ declare global {
   }
   
   export interface ReferenceToCodeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLElementCodeTypeResolver<TParent = any> {
-    referenceCode?: ElementCodeToReferenceCodeResolver<TParent>;
-    explanation?: ElementCodeToExplanationResolver<TParent>;
-  }
-  
-  export interface ElementCodeToReferenceCodeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ElementCodeToExplanationResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

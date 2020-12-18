@@ -90,6 +90,21 @@ interface CoreElement extends GrepElement {
   'tilhoerer-laereplan': Reference;
 }
 
+function mapReference(reference: Reference) {
+  return {
+    id: reference.kode,
+    code: reference.kode,
+    title: reference.tittel,
+  };
+}
+
+function mapElements(elements: Element[]) {
+  return elements.map(element => ({
+    reference: mapReference(element.referanse),
+    explanation: element.forklaring,
+  }));
+}
+
 function htmlToText(html: string) {
   return he.decode(html).replace(/<[^>]*>?/gm, '');
 }
@@ -148,20 +163,10 @@ export async function fetchLK20CompetenceGoal(
     language: lang,
     curriculumCode: json['tilhoerer-laereplan'].kode,
     competenceGoalSetCode: json['tilhoerer-kompetansemaalsett'].kode,
-    crossSubjectTopicsCodes: json['tilknyttede-tverrfaglige-temaer'].map(
-      element => {
-        return {
-          referenceCode: element.referanse.kode,
-          explanation: element.forklaring,
-        };
-      },
+    crossSubjectTopicsCodes: mapElements(
+      json['tilknyttede-tverrfaglige-temaer'],
     ),
-    coreElementsCodes: json['tilknyttede-kjerneelementer'].map(element => {
-      return {
-        referenceCode: element.referanse.kode,
-        explanation: element.forklaring,
-      };
-    }),
+    coreElementsCodes: mapElements(json['tilknyttede-kjerneelementer']),
   };
 }
 
@@ -244,7 +249,7 @@ async function fetchCoreElementReference(
 }
 
 export async function fetchCoreElementReferences(
-  codes: GQLElementCode[],
+  codes: GQLElement[],
   language: string,
   context: Context,
 ): Promise<GQLElement[]> {
@@ -252,7 +257,7 @@ export async function fetchCoreElementReferences(
     codes.map(async code => {
       return {
         reference: await fetchCoreElementReference(
-          code.referenceCode,
+          code.reference.code,
           language,
           context,
         ),
@@ -276,7 +281,7 @@ async function fetchCrossSubjectTopic(
 }
 
 export async function fetchCrossSubjectTopics(
-  codes: GQLElementCode[],
+  codes: GQLElement[],
   language: string,
   context: Context,
 ): Promise<GQLElement[]> {
@@ -284,7 +289,7 @@ export async function fetchCrossSubjectTopics(
     codes.map(async code => {
       return {
         reference: await fetchCrossSubjectTopic(
-          code.referenceCode,
+          code.reference.code,
           language,
           context,
         ),

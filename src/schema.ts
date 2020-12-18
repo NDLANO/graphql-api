@@ -268,9 +268,9 @@ export const typeDefs = gql`
     curriculum: Reference
     competenceGoalSetCode: String
     competenceGoalSet: Reference
-    crossSubjectTopicsCodes: [ElementCode]
+    crossSubjectTopicsCodes: [Element]
     crossSubjectTopics: [Element]
-    coreElementsCodes: [ElementCode]
+    coreElementsCodes: [Element]
     coreElements: [Element]
   }
 
@@ -281,11 +281,6 @@ export const typeDefs = gql`
     language: String
     curriculumCode: String
     curriculum: Reference
-  }
-
-  type ElementCode {
-    referenceCode: String!
-    explanation: [String]!
   }
 
   type Element {
