@@ -115,10 +115,10 @@ export async function groupSearch(
         path: path || contentTypeResult.url,
         name: contentTypeResult.title?.title,
         ingress: contentTypeResult.metaDescription?.metaDescription,
-        contexts: contentTypeResult.contexts?.map(context => ({
-          breadcrumbs: context.breadcrumbs,
-          path: context.path,
-          resourceTypes: context.resourceTypes,
+        contexts: contentTypeResult.contexts?.map(c => ({
+          breadcrumbs: c.breadcrumbs,
+          path: c.path,
+          resourceTypes: c.resourceTypes,
         })),
         ...(contentTypeResult.metaImage && {
           metaImage: {
@@ -135,11 +135,7 @@ export async function conceptSearch(
   searchQuery: QueryToSearchArgs,
   context: Context,
 ): Promise<[GQLConcept]> {
-  return searchConcepts(
-    searchQuery.query,
-    searchQuery.language,
-    context,
-  );
+  return searchConcepts(searchQuery.query, searchQuery.language, context);
 }
 
 export async function frontpageSearch(
