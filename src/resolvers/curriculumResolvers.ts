@@ -6,23 +6,33 @@
  *
  */
 
-import { fetchCompetenceGoals, fetchCoreElements } from '../api';
+import {
+  fetchCompetenceGoals,
+  fetchCompetenceSet,
+  fetchCoreElements,
+  fetchCoreElementReferences,
+  fetchCrossSubjectTopics,
+} from '../api';
 
 export const Query = {
   async competenceGoals(
     _: any,
-    { codes, nodeId }: { codes: string[]; nodeId: string },
+    {
+      codes,
+      nodeId,
+      language,
+    }: { codes: string[]; nodeId?: string; language?: string },
     context: Context,
   ): Promise<GQLCompetenceGoal[]> {
-    return fetchCompetenceGoals(codes, nodeId, context);
+    return fetchCompetenceGoals(codes, nodeId, language, context);
   },
   async coreElements(
     _: any,
-    { codes }: { codes: string[] },
+    { codes, language }: { codes: string[]; language?: string },
     context: Context,
   ): Promise<GQLCoreElement[]> {
     if (codes?.length) {
-      return fetchCoreElements(codes, context);
+      return fetchCoreElements(codes, language, context);
     }
   },
 };
@@ -35,11 +45,71 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLReference> {
       if (competenceGoal.curriculumId) {
-        return context.loaders.curriculumLoader.load(
+        return context.loaders.lk06CurriculumLoader.load(
           competenceGoal.curriculumId,
         );
       }
-      return competenceGoal.curriculum;
+      return context.loaders.lk20CurriculumLoader.load({
+        code: competenceGoal.curriculumCode,
+        language: competenceGoal.language,
+      });
+    },
+    async competenceGoalSet(
+      competenceGoal: GQLCompetenceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLReference> {
+      if (competenceGoal.competenceGoalSetCode) {
+        return fetchCompetenceSet(
+          competenceGoal.competenceGoalSetCode,
+          competenceGoal.language,
+          context,
+        );
+      }
+      return undefined;
+    },
+    async crossSubjectTopics(
+      competenceGoal: GQLCompetenceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLElement[]> {
+      if (competenceGoal.crossSubjectTopicsCodes) {
+        return fetchCrossSubjectTopics(
+          competenceGoal.crossSubjectTopicsCodes,
+          competenceGoal.language,
+          context,
+        );
+      }
+      return undefined;
+    },
+    async coreElements(
+      competenceGoal: GQLCompetenceGoal,
+      _: any,
+      context: Context,
+    ): Promise<GQLElement[]> {
+      if (competenceGoal.coreElementsCodes) {
+        return fetchCoreElementReferences(
+          competenceGoal.coreElementsCodes,
+          competenceGoal.language,
+          context,
+        );
+      }
+      return undefined;
+    },
+  },
+  CoreElement: {
+    async curriculum(
+      coreElement: GQLCoreElement,
+      _: any,
+      context: Context,
+    ): Promise<GQLReference> {
+      if (coreElement.curriculumCode) {
+        return context.loaders.lk20CurriculumLoader.load({
+          code: coreElement.curriculumCode,
+          language: coreElement.language,
+        });
+      }
+      return undefined;
     },
   },
 };

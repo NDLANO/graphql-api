@@ -5,24 +5,24 @@ import {
 } from '../articleHelpers';
 
 const testNdlaFrontendUrl =
-  'https://ndla-frontend.test.api.ndla.no/nb/subjects/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
+  'https://ndla-frontend.test.api.ndla.no/nb/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
 const stagingNdlaFrontendUrl =
-  'https://ndla-frontend.staging.api.ndla.no/nb/subjects/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
+  'https://ndla-frontend.staging.api.ndla.no/nb/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
 
 const stagingNdlanEnvUrl =
-  'https://staging.ndla.no/nb/subjects/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
+  'https://staging.ndla.no/nb/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
 const testNdlanEnvUrl =
-  'https://test.ndla.no/nb/subjects/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
+  'https://test.ndla.no/nb/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
 
 const prodUrl =
-  'https://ndla.no/nb/subjects/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
+  'https://ndla.no/nb/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
 
 const testWWWUrl =
-  'https://www.test.api.ndla.no/nb/subjects/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
+  'https://www.test.api.ndla.no/nb/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
 const stagingWWWUrl =
-  'https://www.staging.api.ndla.no/nb/subjects/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
+  'https://www.staging.api.ndla.no/nb/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
 const prodWWWUrl =
-  'https://www.ndla.no/nb/subjects/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
+  'https://www.ndla.no/nb/subject:bfe6d0b2-fa5d-4962-84d7-796dedb099ff/topic:1:185608/resource:1:123925';
 
 test('NDLA Urls should be true in isNDLAEmbedUrl function', async () => {
   expect(isNDLAEmbedUrl(testNdlaFrontendUrl)).toBe(true);
