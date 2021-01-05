@@ -101,10 +101,9 @@ export const resolvers = {
             context,
           ).then(article => {
             return Object.assign({}, article, {
-              oembed: fetchOembed(
-                `${ndlaUrl}/subjects${resource.path}`,
-                context,
-              ).then(oembed => oembed.html.split('"')[3]),
+              oembed: fetchOembed(`${ndlaUrl}${resource.path}`, context).then(
+                oembed => oembed.html.split('"')[3],
+              ),
             });
           }),
         );

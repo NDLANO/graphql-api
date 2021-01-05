@@ -8,9 +8,13 @@
 
 export {
   fetchCompetenceGoals,
+  fetchCompetenceSet,
   fetchCoreElement,
   fetchCoreElements,
-  fetchCurriculum,
+  fetchCoreElementReferences,
+  fetchCrossSubjectTopics,
+  fetchLK06Curriculum,
+  fetchLK20Curriculum,
 } from './curriculumApi';
 export {
   fetchFrontpage,

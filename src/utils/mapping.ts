@@ -20,4 +20,5 @@ export const isoLanguageMapping: {
   en: 'eng',
   no: 'nob',
   nn: 'nno',
+  sma: 'sma',
 };
