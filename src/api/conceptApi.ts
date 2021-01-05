@@ -11,12 +11,14 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function searchConcepts(
   searchquery: string,
+  subjects: string,
   language: string,
   context: Context,
 ): Promise<[GQLConcept]> {
   const query = {
     query: searchquery,
     language,
+    subjects,
     fallback: true,
     'exact-match': false, // Temp
     sort: '-title',

@@ -72,6 +72,7 @@ export async function search(
   const searchResults = await resolveJson(response);
   const concepts = await searchConcepts(
     searchQuery.query,
+    searchQuery.subjects,
     searchQuery.language,
     context,
   );
@@ -137,6 +138,7 @@ export async function conceptSearch(
 ): Promise<[GQLConcept]> {
   return searchConcepts(
     searchQuery.query,
+    searchQuery.subjects,
     searchQuery.language,
     context,
   );

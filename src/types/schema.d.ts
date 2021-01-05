@@ -845,6 +845,7 @@ declare global {
   
   export interface QueryToConceptSearchArgs {
     query?: string;
+    subjects?: string;
   }
   export interface QueryToConceptSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToConceptSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
