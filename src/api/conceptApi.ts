@@ -20,7 +20,7 @@ export async function searchConcepts(
     language,
     subjects,
     fallback: true,
-    'exact-match': false, // Temp
+    'exact-match': true,
     sort: '-title',
   };
   const response = await fetch(

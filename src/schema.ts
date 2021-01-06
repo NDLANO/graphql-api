@@ -601,8 +601,9 @@ export const typeDefs = gql`
       contextTypes: String
       page: String
       pageSize: String
+      language: String
     ): [GroupSearch]
-    conceptSearch(query: String, subjects: String): [Concept]
+    conceptSearch(query: String, subjects: String, language: String): [Concept]
     frontpageSearch(query: String): FrontpageSearch
     searchWithoutPagination(
       query: String

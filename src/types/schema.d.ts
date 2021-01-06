@@ -849,6 +849,7 @@ declare global {
     contextTypes?: string;
     page?: string;
     pageSize?: string;
+    language?: string;
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -857,6 +858,7 @@ declare global {
   export interface QueryToConceptSearchArgs {
     query?: string;
     subjects?: string;
+    language?: string;
   }
   export interface QueryToConceptSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToConceptSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
