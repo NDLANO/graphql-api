@@ -148,9 +148,9 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
             .split('/')
             .filter(pathElement => pathElement.includes('topic:'));
           return Promise.all(
-            topicsToFetch.map(async id => {
-              return fetchTopic({ id: `urn:${id}` }, context);
-            }),
+            topicsToFetch.map(async id =>
+              fetchTopic({ id: `urn:${id}` }, context),
+            ),
           );
         }),
       );
