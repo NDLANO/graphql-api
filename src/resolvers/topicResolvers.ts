@@ -26,6 +26,7 @@ interface TopicResponse {
   name: string;
   contentUri?: string;
   path?: string;
+  paths?: string[];
 }
 
 export const Query = {
@@ -135,6 +136,24 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
         context,
       );
       return filterMissingArticles(subtopics, context);
+    },
+    async pathTopics(
+      topic: TopicResponse,
+      args: TopicToSubtopicsArgs,
+      context: Context,
+    ): Promise<GQLTopic[][]> {
+      return Promise.all(
+        topic.paths?.map(async path => {
+          const topicsToFetch = path
+            .split('/')
+            .filter(pathElement => pathElement.includes('topic:'));
+          return Promise.all(
+            topicsToFetch.map(async id => {
+              return fetchTopic({ id: `urn:${id}` }, context);
+            }),
+          );
+        }),
+      );
     },
   },
 };
