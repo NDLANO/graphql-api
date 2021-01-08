@@ -22,6 +22,14 @@ interface ContentTypeJSON {
   title: {
     title: string;
   };
+  metaDescription: {
+    metaDescription: string;
+  };
+  metaImage: {
+    url: string;
+    alt: string;
+  };
+  contexts: GQLSearchContext;
 }
 
 interface SearchResultContexts {
@@ -52,6 +60,7 @@ export async function search(
   const searchResults = await resolveJson(response);
   const concepts = await searchConcepts(
     searchQuery.query,
+    searchQuery.subjects,
     searchQuery.language,
     context,
   );
@@ -70,7 +79,9 @@ export async function groupSearch(
 ): Promise<GQLGroupSearch> {
   const query = {
     ...searchQuery,
+    'page-size': searchQuery.pageSize,
     'resource-types': searchQuery.resourceTypes,
+    'context-types': searchQuery.contextTypes,
   };
   const response = await fetch(
     `/search-api/v1/search/group/?${queryString.stringify(query)}`,
@@ -90,13 +101,31 @@ export async function groupSearch(
           : contentTypeResult.paths?.[0];
       return {
         ...contentTypeResult,
-        path: path ? path : contentTypeResult.url,
-        name: contentTypeResult.title
-          ? contentTypeResult.title.title
-          : contentTypeResult.title,
+        path: path || contentTypeResult.url,
+        name: contentTypeResult.title?.title,
+        ingress: contentTypeResult.metaDescription?.metaDescription,
+        contexts: contentTypeResult.contexts,
+        ...(contentTypeResult.metaImage && {
+          metaImage: {
+            url: contentTypeResult.metaImage?.url,
+            alt: contentTypeResult.metaImage?.alt,
+          },
+        }),
       };
     }),
   }));
+}
+
+export async function conceptSearch(
+  searchQuery: QueryToSearchArgs,
+  context: Context,
+): Promise<[GQLConcept]> {
+  return searchConcepts(
+    searchQuery.query,
+    searchQuery.subjects,
+    searchQuery.language,
+    context,
+  );
 }
 
 export async function frontpageSearch(

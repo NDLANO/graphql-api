@@ -35,6 +35,7 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
+    conceptSearch?: Array<GQLConcept | null>;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearch;
   }
@@ -530,6 +531,7 @@ declare global {
     language?: string;
     resourceType?: string;
     resources?: Array<GQLGroupSearchResult | null>;
+    suggestions?: Array<GQLSuggestionResult | null>;
     totalCount?: number;
   }
   
@@ -537,6 +539,9 @@ declare global {
     id: number;
     path: string;
     name: string;
+    ingress?: string;
+    contexts?: Array<GQLSearchContext | null>;
+    metaImage?: GQLMetaImage;
   }
   
   export interface GQLFrontpageSearch {
@@ -700,6 +705,7 @@ declare global {
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
+    conceptSearch?: QueryToConceptSearchResolver<TParent>;
     frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
     searchWithoutPagination?: QueryToSearchWithoutPaginationResolver<TParent>;
   }
@@ -841,9 +847,22 @@ declare global {
     query?: string;
     subjects?: string;
     resourceTypes?: string;
+    contextTypes?: string;
+    page?: string;
+    pageSize?: string;
+    language?: string;
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToConceptSearchArgs {
+    query?: string;
+    subjects?: string;
+    language?: string;
+  }
+  export interface QueryToConceptSearchResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToConceptSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToFrontpageSearchArgs {
@@ -2498,6 +2517,7 @@ declare global {
     language?: GroupSearchToLanguageResolver<TParent>;
     resourceType?: GroupSearchToResourceTypeResolver<TParent>;
     resources?: GroupSearchToResourcesResolver<TParent>;
+    suggestions?: GroupSearchToSuggestionsResolver<TParent>;
     totalCount?: GroupSearchToTotalCountResolver<TParent>;
   }
   
@@ -2513,6 +2533,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GroupSearchToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GroupSearchToTotalCountResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
@@ -2521,6 +2545,9 @@ declare global {
     id?: GroupSearchResultToIdResolver<TParent>;
     path?: GroupSearchResultToPathResolver<TParent>;
     name?: GroupSearchResultToNameResolver<TParent>;
+    ingress?: GroupSearchResultToIngressResolver<TParent>;
+    contexts?: GroupSearchResultToContextsResolver<TParent>;
+    metaImage?: GroupSearchResultToMetaImageResolver<TParent>;
   }
   
   export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
@@ -2532,6 +2559,18 @@ declare global {
   }
   
   export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToIngressResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToContextsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToMetaImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

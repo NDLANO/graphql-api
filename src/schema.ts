@@ -528,12 +528,16 @@ export const typeDefs = gql`
     id: Int!
     path: String!
     name: String!
+    ingress: String
+    contexts: [SearchContext]
+    metaImage: MetaImage
   }
 
   type GroupSearch {
     language: String
     resourceType: String
     resources: [GroupSearchResult]
+    suggestions: [SuggestionResult]
     totalCount: Int
   }
 
@@ -595,7 +599,12 @@ export const typeDefs = gql`
       query: String
       subjects: String
       resourceTypes: String
+      contextTypes: String
+      page: String
+      pageSize: String
+      language: String
     ): [GroupSearch]
+    conceptSearch(query: String, subjects: String, language: String): [Concept]
     frontpageSearch(query: String): FrontpageSearch
     searchWithoutPagination(
       query: String
