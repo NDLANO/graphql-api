@@ -331,6 +331,7 @@ declare global {
     isPrimary?: boolean;
     parent?: string;
     subtopics?: Array<GQLTopic | null>;
+    pathTopics?: Array<Array<GQLTopic | null> | null>;
     coreResources?: Array<GQLResource | null>;
     supplementaryResources?: Array<GQLResource | null>;
   }
@@ -1835,6 +1836,7 @@ declare global {
     isPrimary?: TopicToIsPrimaryResolver<TParent>;
     parent?: TopicToParentResolver<TParent>;
     subtopics?: TopicToSubtopicsResolver<TParent>;
+    pathTopics?: TopicToPathTopicsResolver<TParent>;
     coreResources?: TopicToCoreResourcesResolver<TParent>;
     supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
   }
@@ -1892,6 +1894,10 @@ declare global {
   }
   export interface TopicToSubtopicsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: TopicToSubtopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToPathTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToCoreResourcesArgs {

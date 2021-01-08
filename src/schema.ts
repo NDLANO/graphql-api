@@ -142,6 +142,7 @@ export const typeDefs = gql`
     isPrimary: Boolean
     parent: String
     subtopics(filterIds: String): [Topic]
+    pathTopics: [[Topic]]
     coreResources(filterIds: String, subjectId: String): [Resource]
     supplementaryResources(filterIds: String, subjectId: String): [Resource]
   }
