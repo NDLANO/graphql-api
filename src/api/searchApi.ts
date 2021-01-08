@@ -16,18 +16,6 @@ interface GroupSearchJSON {
   resourceType: string;
 }
 
-interface ContentContext {
-  breadcrumbs: string[];
-  path: string;
-  resourceTypes: [
-    {
-      id: string;
-      name: string;
-      language: string;
-    },
-  ];
-}
-
 interface ContentTypeJSON {
   paths: [string];
   url: string;
@@ -41,7 +29,7 @@ interface ContentTypeJSON {
     url: string;
     alt: string;
   };
-  contexts: ContentContext[];
+  contexts: GQLSearchContext;
 }
 
 interface SearchResultContexts {
@@ -116,11 +104,7 @@ export async function groupSearch(
         path: path || contentTypeResult.url,
         name: contentTypeResult.title?.title,
         ingress: contentTypeResult.metaDescription?.metaDescription,
-        contexts: contentTypeResult.contexts?.map(c => ({
-          breadcrumbs: c.breadcrumbs,
-          path: c.path,
-          resourceTypes: c.resourceTypes,
-        })),
+        contexts: contentTypeResult.contexts,
         ...(contentTypeResult.metaImage && {
           metaImage: {
             url: contentTypeResult.metaImage?.url,
