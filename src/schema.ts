@@ -529,6 +529,7 @@ export const typeDefs = gql`
     path: String!
     name: String!
     ingress: String
+    traits: [String]
     contexts: [SearchContext]
     metaImage: MetaImage
   }
