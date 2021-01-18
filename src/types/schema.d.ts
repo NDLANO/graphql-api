@@ -540,6 +540,7 @@ declare global {
     path: string;
     name: string;
     ingress?: string;
+    traits?: Array<string | null>;
     contexts?: Array<GQLSearchContext | null>;
     metaImage?: GQLMetaImage;
   }
@@ -2546,6 +2547,7 @@ declare global {
     path?: GroupSearchResultToPathResolver<TParent>;
     name?: GroupSearchResultToNameResolver<TParent>;
     ingress?: GroupSearchResultToIngressResolver<TParent>;
+    traits?: GroupSearchResultToTraitsResolver<TParent>;
     contexts?: GroupSearchResultToContextsResolver<TParent>;
     metaImage?: GroupSearchResultToMetaImageResolver<TParent>;
   }
@@ -2563,6 +2565,10 @@ declare global {
   }
   
   export interface GroupSearchResultToIngressResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToTraitsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
