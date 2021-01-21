@@ -221,7 +221,7 @@ export const typeDefs = gql`
   type ConceptLicense {
     title: String!
     src: String
-    copyright: Copyright!
+    copyright: Copyright
   }
 
   type ArticleMetaData {
