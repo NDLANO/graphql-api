@@ -203,7 +203,7 @@ declare global {
   export interface GQLConceptLicense {
     title: string;
     src?: string;
-    copyright: GQLCopyright;
+    copyright?: GQLCopyright;
   }
   
   export interface GQLCompetenceGoal {
