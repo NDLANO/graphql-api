@@ -145,11 +145,10 @@ export async function fetchTopicResources(
   const subjectParam = subjectId ? `&subject=${subjectId}` : '';
 
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/resources?relevance=${relevance}&language=${context.language}${filterParam}${subjectParam}`,
+    `/taxonomy/v1/topics/${topicId}/resources?language=${context.language}${filterParam}${subjectParam}`,
     context,
   );
   const resources: GQLTaxonomyEntity[] = await resolveJson(response);
-
   resources.forEach(resource => {
     if (subjectId) {
       const primaryPath = findPrimaryPath(resource.paths, subjectId);
@@ -157,6 +156,21 @@ export async function fetchTopicResources(
       resource.path = path;
     }
   });
+
+  const suplResources = resources.filter(resource =>
+    resource.filters?.find(
+      filter => filter.relevanceId === 'urn:relevance:supplementary',
+    ),
+  );
+  const coreResources = resources.filter(
+    resource => !suplResources.includes(resource),
+  );
+  if (relevance === 'urn:relevance:core') {
+    return coreResources;
+  } else if (relevance === 'urn:relevance:supplementary') {
+    return suplResources;
+  }
+
   return resources;
 }
 
