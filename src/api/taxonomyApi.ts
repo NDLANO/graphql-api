@@ -164,11 +164,14 @@ export async function fetchTopicResources(
   const topicSubject = `urn:${topic.path
     .split('/')
     .find(token => token.includes('subject'))}`;
-  const suplResources = resources.filter(resource =>
-    resource.filters
-      ?.filter(filter => filter.subjectId === topicSubject)
-      ?.find(filter => filter.relevanceId === 'urn:relevance:supplementary'),
-  );
+  const suplResources = resources.filter(resource => {
+    const subjectFilters = resource.filters?.filter(
+      filter => filter.subjectId === topicSubject,
+    );
+    return subjectFilters?.find(
+      filter => filter.relevanceId === 'urn:relevance:supplementary',
+    );
+  });
   const coreResources = resources.filter(
     resource => !suplResources.includes(resource),
   );
