@@ -8,8 +8,12 @@
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
+interface Topic {
+  id: string;
+  path: string;
+}
 interface FetchTopicResourcesParams {
-  topicId: string;
+  topic: Topic;
   relevance: string;
   filters?: string;
   subjectId?: string;
@@ -139,13 +143,12 @@ export async function fetchTopicResources(
   params: FetchTopicResourcesParams,
   context: Context,
 ): Promise<GQLResource[]> {
-  const { filters, subjectId, relevance, topicId } = params;
-
+  const { filters, subjectId, relevance, topic } = params;
   const filterParam = filters && filters.length > 0 ? `&filter=${filters}` : '';
   const subjectParam = subjectId ? `&subject=${subjectId}` : '';
 
   const response = await fetch(
-    `/taxonomy/v1/topics/${topicId}/resources?language=${context.language}${filterParam}${subjectParam}`,
+    `/taxonomy/v1/topics/${topic.id}/resources?language=${context.language}${filterParam}${subjectParam}`,
     context,
   );
   const resources: GQLTaxonomyEntity[] = await resolveJson(response);
@@ -157,11 +160,18 @@ export async function fetchTopicResources(
     }
   });
 
-  const suplResources = resources.filter(resource =>
-    resource.filters?.find(
+  // Only check filters from subject containing topic. Should be fixed in tax.
+  const topicSubject = `urn:${topic.path
+    .split('/')
+    .find(token => token.includes('subject'))}`;
+  const suplResources = resources.filter(resource => {
+    const subjectFilters = resource.filters?.filter(
+      filter => filter.subjectId === topicSubject,
+    );
+    return subjectFilters?.find(
       filter => filter.relevanceId === 'urn:relevance:supplementary',
-    ),
-  );
+    );
+  });
   const coreResources = resources.filter(
     resource => !suplResources.includes(resource),
   );
