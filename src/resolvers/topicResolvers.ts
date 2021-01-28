@@ -25,7 +25,7 @@ interface TopicResponse {
   id: string;
   name: string;
   contentUri?: string;
-  path?: string;
+  path: string;
   paths?: string[];
 }
 
@@ -101,7 +101,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     ): Promise<GQLResource[]> {
       const topicResources = await fetchTopicResources(
         {
-          topicId: topic.id,
+          topic,
           subjectId: args.subjectId,
           relevance: 'urn:relevance:core',
           filters: args.filterIds,
@@ -117,7 +117,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     ): Promise<GQLResource[]> {
       const topicResources = await fetchTopicResources(
         {
-          topicId: topic.id,
+          topic,
           subjectId: args.subjectId,
           relevance: 'urn:relevance:supplementary',
           filters: args.filterIds,
