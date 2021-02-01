@@ -938,6 +938,7 @@ declare global {
   export interface ResourceToArticleArgs {
     filterIds?: string;
     subjectId?: string;
+    removeRelatedContent?: string;
   }
   export interface ResourceToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: ResourceToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

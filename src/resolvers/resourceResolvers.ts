@@ -86,7 +86,11 @@ export const resolvers = {
     },
     async article(
       resource: GQLResource,
-      args: { filterIds?: string; subjectId?: string },
+      args: {
+        filterIds?: string;
+        subjectId?: string;
+        removeRelatedContent?: string;
+      },
       context: Context,
     ): Promise<GQLArticle> {
       if (resource.contentUri?.startsWith('urn:article')) {
@@ -97,6 +101,7 @@ export const resolvers = {
               articleId,
               filterIds: args.filterIds,
               subjectId: args.subjectId,
+              removeRelatedContent: args.removeRelatedContent,
             },
             context,
           ).then(article => {
