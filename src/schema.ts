@@ -122,7 +122,11 @@ export const typeDefs = gql`
     paths: [String]
     meta: Meta
     metadata: TaxonomyMetadata
-    article(filterIds: String, subjectId: String): Article
+    article(
+      filterIds: String
+      subjectId: String
+      removeRelatedContent: String
+    ): Article
     learningpath: Learningpath
     filters: [Filter]
     resourceTypes: [ResourceType]
