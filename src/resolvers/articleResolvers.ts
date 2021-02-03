@@ -53,7 +53,6 @@ export const resolvers = {
     async crossSubjectTopics(
       article: GQLArticle,
       args: { subjectId: string; filterIds: string },
-      _: any,
       context: Context,
     ): Promise<GQLTopic[]> {
       const crossSubjectCodes = article.grepCodes.filter(code =>
