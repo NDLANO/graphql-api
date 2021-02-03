@@ -53,6 +53,7 @@ declare global {
     filters?: Array<GQLFilter | null>;
     resourceTypes?: Array<GQLResourceType | null>;
     parentTopics?: Array<GQLTopic | null>;
+    breadcrumbs?: Array<Array<string | null> | null>;
   }
   
   export interface GQLTaxonomyEntity {
@@ -905,6 +906,7 @@ declare global {
     filters?: ResourceToFiltersResolver<TParent>;
     resourceTypes?: ResourceToResourceTypesResolver<TParent>;
     parentTopics?: ResourceToParentTopicsResolver<TParent>;
+    breadcrumbs?: ResourceToBreadcrumbsResolver<TParent>;
   }
   
   export interface ResourceToIdResolver<TParent = any, TResult = any> {
@@ -957,6 +959,10 @@ declare global {
   }
   
   export interface ResourceToParentTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToBreadcrumbsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

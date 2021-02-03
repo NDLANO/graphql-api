@@ -76,6 +76,14 @@ export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
   return resolveJson(response);
 }
 
+export async function fetchSubject(id: string, context: Context): Promise<GQLSubject> {
+  const response = await fetch(
+    `/taxonomy/v1/subjects/${id}?language=${context.language}`,
+    context
+  );
+  return resolveJson(response);
+}
+
 export async function fetchSubjectTopics(
   subjectId: string,
   filterIds: string,

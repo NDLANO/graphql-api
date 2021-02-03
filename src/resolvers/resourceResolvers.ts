@@ -12,6 +12,8 @@ import {
   fetchArticle,
   fetchLearningpath,
   fetchOembed,
+  fetchSubject,
+  fetchTopic,
 } from '../api';
 import {
   getArticleIdFromUrn,
@@ -123,5 +125,26 @@ export const resolvers = {
         { status: 404 },
       );
     },
+    async breadcrumbs(
+      resource: GQLResource,
+      _: any,
+      context: Context,
+    ): Promise<string[][]> {
+      console.log(resource.paths)
+      return Promise.all(
+        resource.paths?.map(async path => {
+          return Promise.all(
+            path.split('/').slice(1, -1).map(async id => {
+              if (id.includes('subject:')) {
+                return (await fetchSubject(`urn:${id}`, context)).name
+              }
+              else if (id.includes('topic:')) {
+                return (await fetchTopic({ id: `urn:${id}` }, context)).name
+              }
+            })
+          )
+        })
+      )
+    }
   },
 };

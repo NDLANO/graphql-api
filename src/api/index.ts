@@ -33,6 +33,7 @@ export {
   fetchResourceTypes,
   fetchSubjectTopics,
   fetchSubjects,
+  fetchSubject,
   fetchTopic,
   fetchTopicFilters,
   fetchTopicResources,
