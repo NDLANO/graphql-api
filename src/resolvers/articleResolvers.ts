@@ -6,7 +6,13 @@
  *
  */
 
-import { fetchArticle, fetchCompetenceGoals, fetchCoreElements } from '../api';
+import {
+  fetchArticle,
+  fetchCompetenceGoals,
+  fetchCoreElements,
+  fetchCrossSubjectTopicsByCode,
+  fetchSubjectTopics,
+} from '../api';
 
 export const Query = {
   async article(
@@ -43,6 +49,35 @@ export const resolvers = {
         article.supportedLanguages.find(lang => lang === context.language) ||
         article.supportedLanguages[0];
       return fetchCoreElements(article.grepCodes, language, context);
+    },
+    async crossSubjectTopics(
+      article: GQLArticle,
+      args: { subjectId: string; filterIds: string },
+      _: any,
+      context: Context,
+    ): Promise<GQLTopic[]> {
+      const crossSubjectCodes = article.grepCodes.filter(code =>
+        code.startsWith('TT'),
+      );
+      const language =
+        article.supportedLanguages.find(lang => lang === context.language) ||
+        article.supportedLanguages[0];
+      const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(
+        crossSubjectCodes,
+        language,
+        context,
+      );
+      const topics = await fetchSubjectTopics(
+        args.subjectId,
+        args.filterIds,
+        context,
+      );
+      return crossSubjectTopicInfo.map(
+        compGoal =>
+          topics.find(
+            (topic: { name: string }) => topic.name === compGoal.title,
+          ) || { name: compGoal.title, id: '' },
+      );
     },
   },
 };

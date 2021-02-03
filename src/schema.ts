@@ -259,6 +259,7 @@ export const typeDefs = gql`
     grepCodes: [String]
     competenceGoals: [CompetenceGoal]
     coreElements: [CoreElement]
+    crossSubjectTopics(subjectId: String, filterIds: String): [Topic]
     oembed: String
   }
 

@@ -117,6 +117,7 @@ declare global {
     grepCodes?: Array<string | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
     coreElements?: Array<GQLCoreElement | null>;
+    crossSubjectTopics?: Array<GQLTopic | null>;
     oembed?: string;
   }
   
@@ -243,6 +244,24 @@ declare global {
     curriculum?: GQLReference;
   }
   
+  export interface GQLTopic extends GQLTaxonomyEntity {
+    id: string;
+    name: string;
+    contentUri?: string;
+    meta?: GQLMeta;
+    metadata?: GQLTaxonomyMetadata;
+    article?: GQLArticle;
+    filters?: Array<GQLFilter | null>;
+    path?: string;
+    paths?: Array<string | null>;
+    isPrimary?: boolean;
+    parent?: string;
+    subtopics?: Array<GQLTopic | null>;
+    pathTopics?: Array<Array<GQLTopic | null> | null>;
+    coreResources?: Array<GQLResource | null>;
+    supplementaryResources?: Array<GQLResource | null>;
+  }
+  
   export interface GQLFilter {
     id: string;
     name: string;
@@ -317,24 +336,6 @@ declare global {
     id: string;
     name: string;
     resources?: Array<GQLResource | null>;
-  }
-  
-  export interface GQLTopic extends GQLTaxonomyEntity {
-    id: string;
-    name: string;
-    contentUri?: string;
-    meta?: GQLMeta;
-    metadata?: GQLTaxonomyMetadata;
-    article?: GQLArticle;
-    filters?: Array<GQLFilter | null>;
-    path?: string;
-    paths?: Array<string | null>;
-    isPrimary?: boolean;
-    parent?: string;
-    subtopics?: Array<GQLTopic | null>;
-    pathTopics?: Array<Array<GQLTopic | null> | null>;
-    coreResources?: Array<GQLResource | null>;
-    supplementaryResources?: Array<GQLResource | null>;
   }
   
   export interface GQLSubject {
@@ -639,6 +640,7 @@ declare global {
     Reference?: GQLReferenceTypeResolver;
     Element?: GQLElementTypeResolver;
     CoreElement?: GQLCoreElementTypeResolver;
+    Topic?: GQLTopicTypeResolver;
     Filter?: GQLFilterTypeResolver;
     Learningpath?: GQLLearningpathTypeResolver;
     LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
@@ -647,7 +649,6 @@ declare global {
     LearningpathStepOembed?: GQLLearningpathStepOembedTypeResolver;
     LearningpathCoverphoto?: GQLLearningpathCoverphotoTypeResolver;
     ResourceType?: GQLResourceTypeTypeResolver;
-    Topic?: GQLTopicTypeResolver;
     Subject?: GQLSubjectTypeResolver;
     SubjectFilter?: GQLSubjectFilterTypeResolver;
     SubjectPage?: GQLSubjectPageTypeResolver;
@@ -1044,6 +1045,7 @@ declare global {
     grepCodes?: ArticleToGrepCodesResolver<TParent>;
     competenceGoals?: ArticleToCompetenceGoalsResolver<TParent>;
     coreElements?: ArticleToCoreElementsResolver<TParent>;
+    crossSubjectTopics?: ArticleToCrossSubjectTopicsResolver<TParent>;
     oembed?: ArticleToOembedResolver<TParent>;
   }
   
@@ -1129,6 +1131,14 @@ declare global {
   
   export interface ArticleToCoreElementsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToCrossSubjectTopicsArgs {
+    subjectId?: string;
+    filterIds?: string;
+  }
+  export interface ArticleToCrossSubjectTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: ArticleToCrossSubjectTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToOembedResolver<TParent = any, TResult = any> {
@@ -1558,6 +1568,99 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLTopicTypeResolver<TParent = any> {
+    id?: TopicToIdResolver<TParent>;
+    name?: TopicToNameResolver<TParent>;
+    contentUri?: TopicToContentUriResolver<TParent>;
+    meta?: TopicToMetaResolver<TParent>;
+    metadata?: TopicToMetadataResolver<TParent>;
+    article?: TopicToArticleResolver<TParent>;
+    filters?: TopicToFiltersResolver<TParent>;
+    path?: TopicToPathResolver<TParent>;
+    paths?: TopicToPathsResolver<TParent>;
+    isPrimary?: TopicToIsPrimaryResolver<TParent>;
+    parent?: TopicToParentResolver<TParent>;
+    subtopics?: TopicToSubtopicsResolver<TParent>;
+    pathTopics?: TopicToPathTopicsResolver<TParent>;
+    coreResources?: TopicToCoreResourcesResolver<TParent>;
+    supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
+  }
+  
+  export interface TopicToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToContentUriResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToMetadataResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToArticleArgs {
+    filterIds?: string;
+    subjectId?: string;
+  }
+  export interface TopicToArticleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToPathsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToIsPrimaryResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToParentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToSubtopicsArgs {
+    filterIds?: string;
+  }
+  export interface TopicToSubtopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: TopicToSubtopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToPathTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToCoreResourcesArgs {
+    filterIds?: string;
+    subjectId?: string;
+  }
+  export interface TopicToCoreResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: TopicToCoreResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToSupplementaryResourcesArgs {
+    filterIds?: string;
+    subjectId?: string;
+  }
+  export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLFilterTypeResolver<TParent = any> {
     id?: FilterToIdResolver<TParent>;
     name?: FilterToNameResolver<TParent>;
@@ -1843,99 +1946,6 @@ declare global {
   }
   export interface ResourceTypeToResourcesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: ResourceTypeToResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLTopicTypeResolver<TParent = any> {
-    id?: TopicToIdResolver<TParent>;
-    name?: TopicToNameResolver<TParent>;
-    contentUri?: TopicToContentUriResolver<TParent>;
-    meta?: TopicToMetaResolver<TParent>;
-    metadata?: TopicToMetadataResolver<TParent>;
-    article?: TopicToArticleResolver<TParent>;
-    filters?: TopicToFiltersResolver<TParent>;
-    path?: TopicToPathResolver<TParent>;
-    paths?: TopicToPathsResolver<TParent>;
-    isPrimary?: TopicToIsPrimaryResolver<TParent>;
-    parent?: TopicToParentResolver<TParent>;
-    subtopics?: TopicToSubtopicsResolver<TParent>;
-    pathTopics?: TopicToPathTopicsResolver<TParent>;
-    coreResources?: TopicToCoreResourcesResolver<TParent>;
-    supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
-  }
-  
-  export interface TopicToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToContentUriResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToMetaResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToMetadataResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToArticleArgs {
-    filterIds?: string;
-    subjectId?: string;
-  }
-  export interface TopicToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToPathsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToIsPrimaryResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToParentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToSubtopicsArgs {
-    filterIds?: string;
-  }
-  export interface TopicToSubtopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToSubtopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToPathTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToCoreResourcesArgs {
-    filterIds?: string;
-    subjectId?: string;
-  }
-  export interface TopicToCoreResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToCoreResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToSupplementaryResourcesArgs {
-    filterIds?: string;
-    subjectId?: string;
-  }
-  export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectTypeResolver<TParent = any> {
