@@ -71,6 +71,7 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLLearningpath> {
+      console.log(resource)
       if (resource.contentUri?.startsWith('urn:learningpath')) {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
         return fetchLearningpath(learningpathId, context);
@@ -130,7 +131,6 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<string[][]> {
-      console.log(resource.paths)
       return Promise.all(
         resource.paths?.map(async path => {
           return Promise.all(
