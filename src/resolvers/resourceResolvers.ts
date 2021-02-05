@@ -71,7 +71,6 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLLearningpath> {
-      console.log(resource);
       if (resource.contentUri?.startsWith('urn:learningpath')) {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
         return fetchLearningpath(learningpathId, context);
