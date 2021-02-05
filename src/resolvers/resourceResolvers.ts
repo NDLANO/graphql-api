@@ -71,7 +71,7 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLLearningpath> {
-      console.log(resource)
+      console.log(resource);
       if (resource.contentUri?.startsWith('urn:learningpath')) {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
         return fetchLearningpath(learningpathId, context);
@@ -134,17 +134,19 @@ export const resolvers = {
       return Promise.all(
         resource.paths?.map(async path => {
           return Promise.all(
-            path.split('/').slice(1, -1).map(async id => {
-              if (id.includes('subject:')) {
-                return (await fetchSubject(`urn:${id}`, context)).name
-              }
-              else if (id.includes('topic:')) {
-                return (await fetchTopic({ id: `urn:${id}` }, context)).name
-              }
-            })
-          )
-        })
-      )
-    }
+            path
+              .split('/')
+              .slice(1, -1)
+              .map(async id => {
+                if (id.includes('subject:')) {
+                  return (await fetchSubject(`urn:${id}`, context)).name;
+                } else if (id.includes('topic:')) {
+                  return (await fetchTopic({ id: `urn:${id}` }, context)).name;
+                }
+              }),
+          );
+        }),
+      );
+    },
   },
 };
