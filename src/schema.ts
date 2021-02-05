@@ -131,6 +131,7 @@ export const typeDefs = gql`
     filters: [Filter]
     resourceTypes: [ResourceType]
     parentTopics: [Topic]
+    breadcrumbs: [[String]]
   }
 
   type Topic implements TaxonomyEntity {
