@@ -118,6 +118,7 @@ declare global {
     grepCodes?: Array<string | null>;
     competenceGoals?: Array<GQLCompetenceGoal | null>;
     coreElements?: Array<GQLCoreElement | null>;
+    crossSubjectTopics?: Array<GQLCrossSubjectElement | null>;
     oembed?: string;
   }
   
@@ -242,6 +243,12 @@ declare global {
     language?: string;
     curriculumCode?: string;
     curriculum?: GQLReference;
+  }
+  
+  export interface GQLCrossSubjectElement {
+    title: string;
+    code?: string;
+    path?: string;
   }
   
   export interface GQLFilter {
@@ -640,6 +647,7 @@ declare global {
     Reference?: GQLReferenceTypeResolver;
     Element?: GQLElementTypeResolver;
     CoreElement?: GQLCoreElementTypeResolver;
+    CrossSubjectElement?: GQLCrossSubjectElementTypeResolver;
     Filter?: GQLFilterTypeResolver;
     Learningpath?: GQLLearningpathTypeResolver;
     LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
@@ -1050,6 +1058,7 @@ declare global {
     grepCodes?: ArticleToGrepCodesResolver<TParent>;
     competenceGoals?: ArticleToCompetenceGoalsResolver<TParent>;
     coreElements?: ArticleToCoreElementsResolver<TParent>;
+    crossSubjectTopics?: ArticleToCrossSubjectTopicsResolver<TParent>;
     oembed?: ArticleToOembedResolver<TParent>;
   }
   
@@ -1135,6 +1144,14 @@ declare global {
   
   export interface ArticleToCoreElementsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToCrossSubjectTopicsArgs {
+    subjectId?: string;
+    filterIds?: string;
+  }
+  export interface ArticleToCrossSubjectTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: ArticleToCrossSubjectTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ArticleToOembedResolver<TParent = any, TResult = any> {
@@ -1561,6 +1578,24 @@ declare global {
   }
   
   export interface CoreElementToCurriculumResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCrossSubjectElementTypeResolver<TParent = any> {
+    title?: CrossSubjectElementToTitleResolver<TParent>;
+    code?: CrossSubjectElementToCodeResolver<TParent>;
+    path?: CrossSubjectElementToPathResolver<TParent>;
+  }
+  
+  export interface CrossSubjectElementToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CrossSubjectElementToCodeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CrossSubjectElementToPathResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

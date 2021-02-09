@@ -12,6 +12,7 @@ export {
   fetchCoreElement,
   fetchCoreElements,
   fetchCoreElementReferences,
+  fetchCrossSubjectTopicsByCode,
   fetchCrossSubjectTopics,
   fetchLK06Curriculum,
   fetchLK20Curriculum,

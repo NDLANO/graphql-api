@@ -90,6 +90,13 @@ interface CoreElement extends GrepElement {
   'tilhoerer-laereplan': Reference;
 }
 
+interface CrossSubjectTopic {
+  id: string;
+  kode: string;
+  tittel: Text[];
+  'lenke-til-beskrivelse': string;
+}
+
 function mapReference(reference: Reference) {
   return {
     id: reference.kode,
@@ -277,6 +284,30 @@ async function fetchCrossSubjectTopic(
     language,
     '/grep/kl06/v201906/tverrfaglige-temaer-lk20/',
     context,
+  );
+}
+
+export async function fetchCrossSubjectTopicsByCode(
+  codes: string[],
+  language: string,
+  context: Context,
+): Promise<GQLReference[]> {
+  return Promise.all(
+    codes.map(async code => {
+      const response = await fetch(
+        `/grep/kl06/v201906/tverrfaglige-temaer-lk20/${code}`,
+        context,
+      );
+      const json: CrossSubjectTopic = await resolveJson(response);
+
+      const title = filterTextsForLanguage(json.tittel, language);
+
+      return {
+        code: json.kode,
+        id: json.kode,
+        title,
+      };
+    }),
   );
 }
 
