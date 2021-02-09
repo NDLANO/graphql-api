@@ -54,7 +54,7 @@ export const resolvers = {
       article: GQLArticle,
       args: { subjectId: string; filterIds: string },
       context: Context,
-    ): Promise<GQLTopic[]> {
+    ): Promise<GQLCrossSubjectElement[]> {
       const crossSubjectCodes = article.grepCodes.filter(code =>
         code.startsWith('TT'),
       );
@@ -72,10 +72,10 @@ export const resolvers = {
         context,
       );
       return crossSubjectTopicInfo.map(
-        compGoal =>
-          topics.find(
-            (topic: { name: string }) => topic.name === compGoal.title,
-          ) || { name: compGoal.title, id: '' },
+        crossSubjectTopic => ({
+          ...crossSubjectTopic,
+          path: topics.find((topic: { name: string }) => topic.name === crossSubjectTopic.title)?.path,
+        })
       );
     },
   },
