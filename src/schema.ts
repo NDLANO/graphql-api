@@ -259,7 +259,10 @@ export const typeDefs = gql`
     grepCodes: [String]
     competenceGoals: [CompetenceGoal]
     coreElements: [CoreElement]
-    crossSubjectTopics(subjectId: String, filterIds: String): [CrossSubjectElement]
+    crossSubjectTopics(
+      subjectId: String
+      filterIds: String
+    ): [CrossSubjectElement]
     oembed: String
   }
 
@@ -288,7 +291,7 @@ export const typeDefs = gql`
     curriculumCode: String
     curriculum: Reference
   }
-  
+
   type CrossSubjectElement {
     title: String!
     code: String

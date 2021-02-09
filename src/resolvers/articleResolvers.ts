@@ -71,12 +71,12 @@ export const resolvers = {
         args.filterIds,
         context,
       );
-      return crossSubjectTopicInfo.map(
-        crossSubjectTopic => ({
-          ...crossSubjectTopic,
-          path: topics.find((topic: { name: string }) => topic.name === crossSubjectTopic.title)?.path,
-        })
-      );
+      return crossSubjectTopicInfo.map(crossSubjectTopic => ({
+        ...crossSubjectTopic,
+        path: topics.find(
+          (topic: { name: string }) => topic.name === crossSubjectTopic.title,
+        )?.path,
+      }));
     },
   },
 };
