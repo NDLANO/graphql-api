@@ -14,6 +14,7 @@ import logger from '../utils/logger';
 export default function createFetch(options: {
   cache: IKeyValueCache;
   disableCache: boolean;
+  timeout: number;
 }) {
   if (!options || !options.cache) throw Error('cache is a required option');
 
