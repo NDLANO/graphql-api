@@ -7,6 +7,7 @@
  */
 
 import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
+import { AbortSignal } from 'abort-controller';
 import { IKeyValueCache } from '../cache';
 import { performance } from 'perf_hooks';
 import logger from '../utils/logger';
@@ -14,7 +15,7 @@ import logger from '../utils/logger';
 export default function createFetch(options: {
   cache: IKeyValueCache;
   disableCache: boolean;
-  timeout: number;
+  signal: AbortSignal;
 }) {
   if (!options || !options.cache) throw Error('cache is a required option');
 

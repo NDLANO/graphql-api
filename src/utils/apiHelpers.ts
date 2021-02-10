@@ -7,6 +7,7 @@
  */
 
 import { Response } from 'node-fetch';
+import AbortController from 'abort-controller';
 import { apiUrl } from '../config';
 import createFetch from './fetch';
 import { createCache } from '../cache';
@@ -27,6 +28,11 @@ function apiResourceUrl(path: string): string {
 
 const cache = createCache();
 
+const controller = new AbortController();
+const timeout = setTimeout(() => {
+	controller.abort();
+}, 1000);
+
 async function fetchHelper(
   path: string,
   context: Context,
@@ -35,7 +41,7 @@ async function fetchHelper(
   const fetchFn = createFetch({
     cache,
     disableCache: !context.shouldUseCache,
-    timeout: 1000,
+    signal: controller.signal,
   });
 
   const authHeaders = context.token
@@ -48,6 +54,7 @@ async function fetchHelper(
 
   return fetchFn(apiResourceUrl(path), {
     headers,
+    signal: controller.signal,
     ...options,
   });
 }
@@ -56,7 +63,9 @@ export const fetch = fetchHelper;
 
 export async function resolveJson(response: Response): Promise<any> {
   const { status, ok, url, statusText } = response;
-
+  
+  clearTimeout(timeout);
+  
   if (status === 204) {
     // nothing to resolve
     return;
