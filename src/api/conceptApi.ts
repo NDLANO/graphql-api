@@ -35,3 +35,21 @@ export async function searchConcepts(
     metaImage: res.metaImage,
   }));
 }
+
+export async function fetchConcepts(
+  conceptIds: string[],
+  context: Context,
+): Promise<GQLConcept[]> {
+  const response = await Promise.all(
+    conceptIds.map(id => fetch(`/concept-api/v1/concepts/${id}`, context)),
+  );
+  const concepts = await Promise.all(
+    response.map(concept => resolveJson(concept)),
+  );
+  return concepts.map((res: SearchResultJson) => ({
+    id: res.id,
+    title: res.title.title,
+    content: res.content.content,
+    metaImage: res.metaImage,
+  }));
+}
