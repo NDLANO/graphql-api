@@ -8,6 +8,7 @@
 
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
+import logger from '../utils/logger';
 
 export async function searchConcepts(
   searchquery: string,
@@ -44,12 +45,23 @@ export async function fetchConcepts(
     conceptIds.map(id => fetch(`/concept-api/v1/concepts/${id}`, context)),
   );
   const concepts = await Promise.all(
-    response.map(concept => resolveJson(concept)),
+    response.map(async concept => {
+      try {
+        return await resolveJson(concept);
+      } catch (e) {
+        return undefined;
+      }
+    }),
   );
-  return concepts.map((res: SearchResultJson) => ({
-    id: res.id,
-    title: res.title.title,
-    content: res.content.content,
-    metaImage: res.metaImage,
-  }));
+  return concepts.reduce((acc: GQLConcept[], res: SearchResultJson) => {
+    if (res !== undefined) {
+      acc.push({
+        id: res.id,
+        title: res.title.title,
+        content: res.content.content,
+        metaImage: res.metaImage,
+      });
+    }
+    return acc;
+  }, []);
 }
