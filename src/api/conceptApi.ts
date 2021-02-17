@@ -8,7 +8,6 @@
 
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import logger from '../utils/logger';
 
 export async function searchConcepts(
   searchquery: string,
