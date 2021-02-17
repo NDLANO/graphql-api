@@ -84,7 +84,7 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLConcept[]> {
-      return await fetchConcepts(article.conceptIds, context);
+      return fetchConcepts(article.conceptIds, context);
     },
   },
 };

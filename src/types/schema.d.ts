@@ -1166,11 +1166,8 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleToConceptsArgs {
-    conceptIds?: Array<string | null>;
-  }
   export interface ArticleToConceptsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: ArticleToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLArticleRequiredLibraryTypeResolver<TParent = any> {

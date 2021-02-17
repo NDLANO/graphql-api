@@ -266,7 +266,7 @@ export const typeDefs = gql`
     ): [CrossSubjectElement]
     oembed: String
     conceptIds: [String]
-    concepts(conceptIds: [String]): [Concept]
+    concepts: [Concept]
   }
 
   type CompetenceGoal {
