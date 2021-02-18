@@ -32,24 +32,17 @@ export const Query = {
   },
 };
 
+const buildOembedFromIframeUrl = (url: string): GQLLearningpathStepOembed => {
+  return {
+    type: 'rich',
+    version: '1.0',
+    height: 800,
+    width: 800,
+    html: `<iframe src="${url}" frameborder="0" allowFullscreen="" />`,
+  };
+};
+
 export const resolvers = {
-  Learningpath: {
-    async learningsteps(
-      learningpath: GQLLearningpath,
-      _: any,
-      context: Context,
-    ): Promise<GQLLearningpathStep[]> {
-      return Promise.all(
-        learningpath.learningsteps.map(step =>
-          fetchLearningpathStep(
-            learningpath.id.toString(),
-            step.id.toString(),
-            context,
-          ),
-        ),
-      );
-    },
-  },
   LearningpathStep: {
     async oembed(
       learningpathStep: GQLLearningpathStep,
@@ -58,6 +51,12 @@ export const resolvers = {
     ): Promise<GQLLearningpathStepOembed> {
       if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
         return null;
+      }
+      if (
+        learningpathStep.embedUrl &&
+        learningpathStep.embedUrl.embedType === 'iframe'
+      ) {
+        return buildOembedFromIframeUrl(learningpathStep.embedUrl.url);
       }
       if (
         learningpathStep.embedUrl &&

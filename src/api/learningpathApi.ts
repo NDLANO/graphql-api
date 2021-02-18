@@ -6,6 +6,7 @@
  *
  */
 
+import { reject } from 'lodash';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchLearningpaths(
@@ -44,6 +45,18 @@ export async function fetchLearningpaths(
   });
 }
 
+interface ApiLearningStep
+  extends Omit<GQLLearningpathStep, 'title' | 'description'> {
+  title: {
+    title: string;
+    language: string;
+  };
+  description: {
+    description: string;
+    language: string;
+  };
+}
+
 export async function fetchLearningpath(
   id: string,
   context: Context,
@@ -53,6 +66,14 @@ export async function fetchLearningpath(
     context,
   );
   const learningpath = await resolveJson(response);
+  const learningsteps = learningpath.learningsteps?.map(
+    (step: ApiLearningStep) => ({
+      ...step,
+      title: step.title?.title || '',
+      description: step.description?.description,
+    }),
+  );
+
   return {
     ...learningpath,
     title: learningpath.title.title,
@@ -63,6 +84,7 @@ export async function fetchLearningpath(
       alt: learningpath.introduction?.introduction || '',
     },
     tags: learningpath.tags?.tags || [],
+    learningsteps,
   };
 }
 
