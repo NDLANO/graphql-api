@@ -23,13 +23,6 @@ export const Query = {
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
   },
-  async learningpathStep(
-    _: any,
-    { pathId, stepId }: QueryToLearningpathStepArgs,
-    context: Context,
-  ): Promise<GQLLearningpath> {
-    return fetchLearningpathStep(pathId, stepId, context);
-  },
 };
 
 const buildOembedFromIframeUrl = (url: string): GQLLearningpathStepOembed => {
@@ -75,14 +68,19 @@ export const resolvers = {
       if (
         !learningpathStep.embedUrl ||
         !learningpathStep.embedUrl.url ||
-        learningpathStep.embedUrl.embedType !== 'oembed' ||
+        (learningpathStep.embedUrl.embedType !== 'oembed' &&
+          learningpathStep.embedUrl.embedType !== 'iframe') ||
         !isNDLAEmbedUrl(learningpathStep.embedUrl.url)
       ) {
         return null;
       }
-      const lastPartOfUrl = learningpathStep.embedUrl.url.split('/').pop();
-      if (lastPartOfUrl.includes('resource')) {
-        return fetchResource({ id: `urn:${lastPartOfUrl}` }, context);
+
+      const lastResourceMatch = learningpathStep.embedUrl.url
+        .match(/resource(:\d+)?(:\d+)/g)
+        ?.pop();
+
+      if (lastResourceMatch !== undefined) {
+        return fetchResource({ id: `urn:${lastResourceMatch}` }, context);
       }
       return null;
     },
