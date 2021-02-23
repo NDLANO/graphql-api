@@ -35,7 +35,7 @@ export async function fetchLearningpaths(
         metaDescription: learningpath.description?.description,
         lastUpdated: learningpath.lastUpdated,
         metaImage: {
-          url: learningpath.coverPhoto.url,
+          url: learningpath.coverPhoto?.url,
           alt: learningpath.introduction?.introduction,
         },
       };
@@ -59,7 +59,7 @@ export async function fetchLearningpath(
     description: learningpath.description?.description,
     lastUpdated: learningpath.lastUpdated,
     coverphoto: {
-      url: learningpath.coverPhoto.url,
+      url: learningpath.coverPhoto?.url,
       alt: learningpath.introduction?.introduction || '',
     },
     tags: learningpath.tags?.tags || [],
