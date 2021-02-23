@@ -40,27 +40,23 @@ export async function fetchConcepts(
   conceptIds: string[],
   context: Context,
 ): Promise<GQLConcept[]> {
-  const response = await Promise.all(
-    conceptIds.map(id => fetch(`/concept-api/v1/concepts/${id}`, context)),
-  );
-  const concepts = await Promise.all(
-    response.map(async concept => {
-      try {
-        return await resolveJson(concept);
-      } catch (e) {
-        return undefined;
-      }
-    }),
-  );
-  return concepts.reduce((acc: GQLConcept[], res: SearchResultJson) => {
-    if (res !== undefined) {
-      acc.push({
-        id: res.id,
-        title: res.title.title,
-        content: res.content.content,
-        metaImage: res.metaImage,
-      });
-    }
-    return acc;
-  }, []);
+  return (
+    await Promise.all(
+      conceptIds.map(async id => {
+        const concept = await fetch(`/concept-api/v1/concepts/${id}`, context);
+        try {
+          const res: SearchResultJson = await resolveJson(concept);
+          const result: GQLConcept = {
+            id: res.id,
+            title: res.title.title,
+            content: res.content.content,
+            metaImage: res.metaImage,
+          };
+          return result;
+        } catch (e) {
+          return undefined;
+        }
+      }),
+    )
+  ).filter(c => !!c);
 }
