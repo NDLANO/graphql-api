@@ -265,6 +265,8 @@ export const typeDefs = gql`
       filterIds: String
     ): [CrossSubjectElement]
     oembed: String
+    conceptIds: [String]
+    concepts: [Concept]
   }
 
   type CompetenceGoal {

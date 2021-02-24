@@ -52,4 +52,4 @@ export {
   searchWithoutPagination,
 } from './searchApi';
 export { fetchOembed } from './oembedApi';
-export { searchConcepts } from './conceptApi';
+export { searchConcepts, fetchConcepts } from './conceptApi';

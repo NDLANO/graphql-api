@@ -120,6 +120,8 @@ declare global {
     coreElements?: Array<GQLCoreElement | null>;
     crossSubjectTopics?: Array<GQLCrossSubjectElement | null>;
     oembed?: string;
+    conceptIds?: Array<string | null>;
+    concepts?: Array<GQLConcept | null>;
   }
   
   export interface GQLArticleRequiredLibrary {
@@ -249,6 +251,13 @@ declare global {
     title: string;
     code?: string;
     path?: string;
+  }
+  
+  export interface GQLConcept {
+    id?: number;
+    title?: string;
+    content?: string;
+    metaImage?: GQLMetaImage;
   }
   
   export interface GQLFilter {
@@ -528,13 +537,6 @@ declare global {
     concepts?: Array<GQLConcept | null>;
   }
   
-  export interface GQLConcept {
-    id?: number;
-    title?: string;
-    content?: string;
-    metaImage?: GQLMetaImage;
-  }
-  
   export interface GQLGroupSearch {
     language?: string;
     resourceType?: string;
@@ -648,6 +650,7 @@ declare global {
     Element?: GQLElementTypeResolver;
     CoreElement?: GQLCoreElementTypeResolver;
     CrossSubjectElement?: GQLCrossSubjectElementTypeResolver;
+    Concept?: GQLConceptTypeResolver;
     Filter?: GQLFilterTypeResolver;
     Learningpath?: GQLLearningpathTypeResolver;
     LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
@@ -683,7 +686,6 @@ declare global {
     SearchSuggestion?: GQLSearchSuggestionTypeResolver;
     SuggestOption?: GQLSuggestOptionTypeResolver;
     ConceptResult?: GQLConceptResultTypeResolver;
-    Concept?: GQLConceptTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
@@ -1060,6 +1062,8 @@ declare global {
     coreElements?: ArticleToCoreElementsResolver<TParent>;
     crossSubjectTopics?: ArticleToCrossSubjectTopicsResolver<TParent>;
     oembed?: ArticleToOembedResolver<TParent>;
+    conceptIds?: ArticleToConceptIdsResolver<TParent>;
+    concepts?: ArticleToConceptsResolver<TParent>;
   }
   
   export interface ArticleToIdResolver<TParent = any, TResult = any> {
@@ -1155,6 +1159,14 @@ declare global {
   }
   
   export interface ArticleToOembedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToConceptIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToConceptsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1596,6 +1608,29 @@ declare global {
   }
   
   export interface CrossSubjectElementToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptTypeResolver<TParent = any> {
+    id?: ConceptToIdResolver<TParent>;
+    title?: ConceptToTitleResolver<TParent>;
+    content?: ConceptToContentResolver<TParent>;
+    metaImage?: ConceptToMetaImageResolver<TParent>;
+  }
+  
+  export interface ConceptToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToMetaImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2531,29 +2566,6 @@ declare global {
   }
   
   export interface ConceptResultToConceptsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLConceptTypeResolver<TParent = any> {
-    id?: ConceptToIdResolver<TParent>;
-    title?: ConceptToTitleResolver<TParent>;
-    content?: ConceptToContentResolver<TParent>;
-    metaImage?: ConceptToMetaImageResolver<TParent>;
-  }
-  
-  export interface ConceptToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptToContentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptToMetaImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

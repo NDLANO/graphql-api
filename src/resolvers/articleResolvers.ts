@@ -12,6 +12,7 @@ import {
   fetchCoreElements,
   fetchCrossSubjectTopicsByCode,
   fetchSubjectTopics,
+  fetchConcepts,
 } from '../api';
 
 export const Query = {
@@ -77,6 +78,13 @@ export const resolvers = {
           (topic: { name: string }) => topic.name === crossSubjectTopic.title,
         )?.path,
       }));
+    },
+    async concepts(
+      article: GQLArticle,
+      _: any,
+      context: Context,
+    ): Promise<GQLConcept[]> {
+      return fetchConcepts(article.conceptIds, context);
     },
   },
 };
