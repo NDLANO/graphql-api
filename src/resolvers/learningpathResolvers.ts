@@ -23,33 +23,19 @@ export const Query = {
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
   },
-  async learningpathStep(
-    _: any,
-    { pathId, stepId }: QueryToLearningpathStepArgs,
-    context: Context,
-  ): Promise<GQLLearningpath> {
-    return fetchLearningpathStep(pathId, stepId, context);
-  },
+};
+
+const buildOembedFromIframeUrl = (url: string): GQLLearningpathStepOembed => {
+  return {
+    type: 'rich',
+    version: '1.0',
+    height: 800,
+    width: 800,
+    html: `<iframe src="${url}" frameborder="0" allowFullscreen="" />`,
+  };
 };
 
 export const resolvers = {
-  Learningpath: {
-    async learningsteps(
-      learningpath: GQLLearningpath,
-      _: any,
-      context: Context,
-    ): Promise<GQLLearningpathStep[]> {
-      return Promise.all(
-        learningpath.learningsteps.map(step =>
-          fetchLearningpathStep(
-            learningpath.id.toString(),
-            step.id.toString(),
-            context,
-          ),
-        ),
-      );
-    },
-  },
   LearningpathStep: {
     async oembed(
       learningpathStep: GQLLearningpathStep,
@@ -58,6 +44,12 @@ export const resolvers = {
     ): Promise<GQLLearningpathStepOembed> {
       if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
         return null;
+      }
+      if (
+        learningpathStep.embedUrl &&
+        learningpathStep.embedUrl.embedType === 'iframe'
+      ) {
+        return buildOembedFromIframeUrl(learningpathStep.embedUrl.url);
       }
       if (
         learningpathStep.embedUrl &&
@@ -76,14 +68,19 @@ export const resolvers = {
       if (
         !learningpathStep.embedUrl ||
         !learningpathStep.embedUrl.url ||
-        learningpathStep.embedUrl.embedType !== 'oembed' ||
+        (learningpathStep.embedUrl.embedType !== 'oembed' &&
+          learningpathStep.embedUrl.embedType !== 'iframe') ||
         !isNDLAEmbedUrl(learningpathStep.embedUrl.url)
       ) {
         return null;
       }
-      const lastPartOfUrl = learningpathStep.embedUrl.url.split('/').pop();
-      if (lastPartOfUrl.includes('resource')) {
-        return fetchResource({ id: `urn:${lastPartOfUrl}` }, context);
+
+      const lastResourceMatch = learningpathStep.embedUrl.url
+        .match(/resource(:\d+)?(:\d+)/g)
+        ?.pop();
+
+      if (lastResourceMatch !== undefined) {
+        return fetchResource({ id: `urn:${lastResourceMatch}` }, context);
       }
       return null;
     },

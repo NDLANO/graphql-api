@@ -5,7 +5,7 @@
  */
 
 export function isNDLAEmbedUrl(url: string) {
-  return /^https:\/(.*).ndla.no/.test(url);
+  return /^https:\/(.*).ndla.no/.test(url) || /^http:\/\/localhost/.test(url);
 }
 
 export function getArticleIdFromUrn(urn: string): string {
