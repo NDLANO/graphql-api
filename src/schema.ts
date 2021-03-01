@@ -129,6 +129,7 @@ export const typeDefs = gql`
     ): Article
     learningpath: Learningpath
     filters: [Filter]
+    relevanceId: String
     resourceTypes: [ResourceType]
     parentTopics: [Topic]
     breadcrumbs: [[String]]
@@ -138,12 +139,13 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
+    path: String
+    paths: [String]
     meta: Meta
     metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
-    path: String
-    paths: [String]
+    relevanceId: String
     isPrimary: Boolean
     parent: String
     subtopics(filterIds: String): [Topic]
