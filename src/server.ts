@@ -45,7 +45,7 @@ function getShouldUseCache(request: Request): boolean {
 }
 
 const getTaxonomyUrl = (request: Request): string => {
-  const taxonomyUrl = request.headers['Use-Taxonomy2'];
+  const taxonomyUrl = request.headers['use-taxonomy2'];
   return taxonomyUrl === 'true' ? 'taxonomy2' : 'taxonomy';
 };
 
