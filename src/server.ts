@@ -44,11 +44,17 @@ function getShouldUseCache(request: Request): boolean {
   return cacheControl !== 'no-cache';
 }
 
+const getTaxonomyUrl = (request: Request): string => {
+  const taxonomyUrl = request.headers['Use-Taxonomy2'];
+  return taxonomyUrl === 'true' ? 'taxonomy2' : 'taxonomy';
+};
+
 async function getContext({ req }: { req: Request }): Promise<Context> {
   const token = await getToken(req);
   const language = getAcceptLanguage(req);
   const shouldUseCache = getShouldUseCache(req);
-  const defaultContext = { language, token, shouldUseCache };
+  const taxonomyUrl = getTaxonomyUrl(req);
+  const defaultContext = { language, token, shouldUseCache, taxonomyUrl };
 
   return {
     ...defaultContext,

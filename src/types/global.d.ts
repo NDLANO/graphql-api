@@ -13,6 +13,7 @@ declare global {
     token?: AuthToken;
     language: string;
     shouldUseCache: boolean;
+    taxonomyUrl: string;
     loaders?: {
       articlesLoader: DataLoader<string, any>;
       learningpathsLoader: DataLoader<string, any>;
