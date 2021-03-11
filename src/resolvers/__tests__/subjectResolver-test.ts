@@ -39,6 +39,7 @@ test('Fetch subject should filter out invisible elements', async () => {
   const subs = await Query.subjects(1, 1, {
     language: 'nb',
     shouldUseCache: false,
+    taxonomyUrl: 'taxonomy',
   });
 
   expect(subs).toMatchSnapshot();
@@ -70,6 +71,7 @@ test('Fetch subject filters should filter out invisible elements', async () => {
   const subs = await Query.filters(1, 1, {
     language: 'nb',
     shouldUseCache: false,
+    taxonomyUrl: 'taxonomy',
   });
 
   expect(subs).toMatchSnapshot();
