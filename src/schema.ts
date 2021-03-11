@@ -564,6 +564,7 @@ export const typeDefs = gql`
   type FrontPageResources {
     results: [FrontpageSearchResult]
     totalCount: Int
+    suggestions: [SuggestionResult]
   }
 
   type FrontpageSearch {
