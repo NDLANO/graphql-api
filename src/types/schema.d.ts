@@ -2663,7 +2663,6 @@ declare global {
   export interface GQLFrontPageResourcesTypeResolver<TParent = any> {
     results?: FrontPageResourcesToResultsResolver<TParent>;
     totalCount?: FrontPageResourcesToTotalCountResolver<TParent>;
-    suggestions?: FrontPageResourcesToSuggestionsResolver<TParent>;
   }
   
   export interface FrontPageResourcesToResultsResolver<TParent = any, TResult = any> {
@@ -2672,10 +2671,6 @@ declare global {
   
   export interface FrontPageResourcesToTotalCountResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-
-  export interface FrontPageResourcesToSuggestionsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>
   }
   
   export interface GQLFrontpageSearchResultTypeResolver<TParent = any> {
