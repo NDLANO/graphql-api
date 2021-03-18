@@ -38,6 +38,7 @@ declare global {
     conceptSearch?: Array<GQLConcept | null>;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearch;
+    podcast?: GQLAudio;
   }
   
   export interface GQLResource extends GQLTaxonomyEntity {
@@ -577,6 +578,39 @@ declare global {
     filters?: Array<GQLSearchContextFilter | null>;
   }
   
+  export interface GQLAudio {
+    id: string;
+    revision: number;
+    title: string;
+    audioFile: GQLAudioFile;
+    copyright: GQLCopyright;
+    tags?: Array<string | null>;
+    supportedLanguages?: Array<string | null>;
+    audioType: string;
+    podcastMeta?: GQLPodcastMeta;
+  }
+  
+  export interface GQLAudioFile {
+    url: string;
+    mimeType: string;
+    fileSize: number;
+    language: string;
+  }
+  
+  export interface GQLPodcastMeta {
+    header: string;
+    introduction: string;
+    coverPhoto: GQLCoverPhoto;
+    manuscript: string;
+    language: string;
+  }
+  
+  export interface GQLCoverPhoto {
+    id: string;
+    url: string;
+    altText: string;
+  }
+  
   export interface GQLMovieMeta {
     title?: string;
     metaImage?: GQLMetaImage;
@@ -694,6 +728,10 @@ declare global {
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
+    Audio?: GQLAudioTypeResolver;
+    AudioFile?: GQLAudioFileTypeResolver;
+    PodcastMeta?: GQLPodcastMetaTypeResolver;
+    CoverPhoto?: GQLCoverPhotoTypeResolver;
     MovieMeta?: GQLMovieMetaTypeResolver;
     MoviePath?: GQLMoviePathTypeResolver;
     MovieResourceTypes?: GQLMovieResourceTypesTypeResolver;
@@ -723,6 +761,7 @@ declare global {
     conceptSearch?: QueryToConceptSearchResolver<TParent>;
     frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
     searchWithoutPagination?: QueryToSearchWithoutPaginationResolver<TParent>;
+    podcast?: QueryToPodcastResolver<TParent>;
   }
   
   export interface QueryToResourceArgs {
@@ -904,6 +943,13 @@ declare global {
   }
   export interface QueryToSearchWithoutPaginationResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSearchWithoutPaginationArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToPodcastArgs {
+    id?: string;
+  }
+  export interface QueryToPodcastResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToPodcastArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLResourceTypeResolver<TParent = any> {
@@ -2709,6 +2755,123 @@ declare global {
   }
   
   export interface FrontpageSearchResultToFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLAudioTypeResolver<TParent = any> {
+    id?: AudioToIdResolver<TParent>;
+    revision?: AudioToRevisionResolver<TParent>;
+    title?: AudioToTitleResolver<TParent>;
+    audioFile?: AudioToAudioFileResolver<TParent>;
+    copyright?: AudioToCopyrightResolver<TParent>;
+    tags?: AudioToTagsResolver<TParent>;
+    supportedLanguages?: AudioToSupportedLanguagesResolver<TParent>;
+    audioType?: AudioToAudioTypeResolver<TParent>;
+    podcastMeta?: AudioToPodcastMetaResolver<TParent>;
+  }
+  
+  export interface AudioToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToRevisionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToAudioFileResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToAudioTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToPodcastMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLAudioFileTypeResolver<TParent = any> {
+    url?: AudioFileToUrlResolver<TParent>;
+    mimeType?: AudioFileToMimeTypeResolver<TParent>;
+    fileSize?: AudioFileToFileSizeResolver<TParent>;
+    language?: AudioFileToLanguageResolver<TParent>;
+  }
+  
+  export interface AudioFileToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioFileToMimeTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioFileToFileSizeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioFileToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLPodcastMetaTypeResolver<TParent = any> {
+    header?: PodcastMetaToHeaderResolver<TParent>;
+    introduction?: PodcastMetaToIntroductionResolver<TParent>;
+    coverPhoto?: PodcastMetaToCoverPhotoResolver<TParent>;
+    manuscript?: PodcastMetaToManuscriptResolver<TParent>;
+    language?: PodcastMetaToLanguageResolver<TParent>;
+  }
+  
+  export interface PodcastMetaToHeaderResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastMetaToIntroductionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastMetaToCoverPhotoResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastMetaToManuscriptResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastMetaToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCoverPhotoTypeResolver<TParent = any> {
+    id?: CoverPhotoToIdResolver<TParent>;
+    url?: CoverPhotoToUrlResolver<TParent>;
+    altText?: CoverPhotoToAltTextResolver<TParent>;
+  }
+  
+  export interface CoverPhotoToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoverPhotoToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoverPhotoToAltTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

@@ -10,6 +10,39 @@ import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 
 export const typeDefs = gql`
+  type AudioFile {
+    url: String!
+    mimeType: String!
+    fileSize: Int!
+    language: String!
+  }
+
+  type CoverPhoto {
+    id: String!
+    url: String!
+    altText: String!
+  }
+
+  type PodcastMeta {
+    header: String!
+    introduction: String!
+    coverPhoto: CoverPhoto!
+    manuscript: String!
+    language: String!
+  }
+
+  type Audio {
+    id: String!
+    revision: Int!
+    title: String!
+    audioFile: AudioFile!
+    copyright: Copyright!
+    tags: [String]
+    supportedLanguages: [String]
+    audioType: String!
+    podcastMeta: PodcastMeta
+  }
+
   type ResourceTypeDefinition {
     id: String!
     name: String!
@@ -642,6 +675,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
     ): Search
+    podcast(id: String): Audio
   }
 `;
 
