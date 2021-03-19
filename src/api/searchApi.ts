@@ -51,6 +51,7 @@ export async function search(
     'language-filter': searchQuery.languageFilter,
     'context-filters': searchQuery.contextFilters,
     'grep-codes': searchQuery.grepCodes,
+    'aggregate-paths': searchQuery.aggregatePaths,
   };
   const response = await fetch(
     `/search-api/v1/search/?${queryString.stringify(query)}`,
@@ -82,6 +83,8 @@ export async function groupSearch(
     'page-size': searchQuery.pageSize,
     'resource-types': searchQuery.resourceTypes,
     'context-types': searchQuery.contextTypes,
+    'grep-codes': searchQuery.grepCodes,
+    'aggregate-paths': searchQuery.aggregatePaths,
   };
   const response = await fetch(
     `/search-api/v1/search/group/?${queryString.stringify(query)}`,

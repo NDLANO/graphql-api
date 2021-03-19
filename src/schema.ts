@@ -523,12 +523,25 @@ export const typeDefs = gql`
     totalCount: Int
     results: [SearchResult]
     suggestions: [SuggestionResult]
+    aggregations: [AggregationResult]
     concepts: ConceptResult
   }
 
   type SuggestionResult {
     name: String
     suggestions: [SearchSuggestion]
+  }
+
+  type AggregationResult {
+    field: String
+    sumOtherDocCount: Int
+    docCountErrorUpperBound: Int
+    values: [BucketResult]
+  }
+
+  type BucketResult {
+    value: String
+    count: Int
   }
 
   type SearchSuggestion {
@@ -558,6 +571,7 @@ export const typeDefs = gql`
     resourceType: String
     resources: [GroupSearchResult]
     suggestions: [SuggestionResult]
+    aggregations: [AggregationResult]
     totalCount: Int
   }
 
@@ -614,6 +628,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
       grepCodes: String
+      aggregatePaths: [String]
     ): Search
     resourceTypes: [ResourceTypeDefinition]
     groupSearch(
@@ -625,6 +640,8 @@ export const typeDefs = gql`
       pageSize: String
       language: String
       fallback: String
+      grepCodes: String
+      aggregatePaths: [String]
     ): [GroupSearch]
     conceptSearch(query: String, subjects: String, language: String): [Concept]
     frontpageSearch(query: String): FrontpageSearch
