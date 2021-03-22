@@ -12,18 +12,19 @@ export async function fetchPodcast(
   podcastId: string,
   context: Context,
 ): Promise<GQLAudio> {
-  const response = await fetch(`/audio-api/v1/audio/${podcastId}`, context, {
-    cache: 'no-store',
-  });
-
-  const audio = await resolveJson(response);
-  console.log(audio);
-  if (audio) {
+  const response = await fetch(`/audio-api/v1/audio/${podcastId}`, context);
+  try {
+    const audio = await resolveJson(response);
+    if (audio.err) {
+      return null;
+    }
     return {
       ...audio,
       title: audio.title?.title,
       tags: audio.tags?.tags,
     };
+  } catch (e) {
+    return null;
   }
 }
 
