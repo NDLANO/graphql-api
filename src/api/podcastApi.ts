@@ -15,21 +15,25 @@ export async function fetchPodcast(
   const response = await fetch(`/audio-api/v1/audio/${podcastId}`, context);
   try {
     const audio = await resolveJson(response);
-    if (audio.err) {
+    console.log(audio);
+    if (audio.audioType !== 'podcast') {
       return null;
     }
-    return {
-      ...audio,
-      title: audio.title?.title,
-      tags: audio.tags?.tags,
-    };
+    return audio;
   } catch (e) {
     return null;
   }
 }
 
-export async function fetchPodcastList(
+export async function fetchPodcastsPage(
   page: string,
   pageSize: string,
   context: Context,
-) {}
+): Promise<GQLAudio[]> {
+  const response = await fetch(
+    `/audio-api/v1/audio/?pageSize=${pageSize}&page=${page}`,
+    context,
+  );
+
+  return resolveJson(response);
+}

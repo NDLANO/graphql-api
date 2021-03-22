@@ -17,6 +17,16 @@ export const typeDefs = gql`
     language: String!
   }
 
+  type Title {
+    title: String!
+    language: String!
+  }
+
+  type Tags {
+    tags: [String]
+    language: String!
+  }
+
   type CoverPhoto {
     id: String!
     url: String!
@@ -34,10 +44,10 @@ export const typeDefs = gql`
   type Audio {
     id: String!
     revision: Int!
-    title: String!
+    title: Title!
     audioFile: AudioFile!
     copyright: Copyright!
-    tags: [String]
+    tags: Tags
     supportedLanguages: [String]
     audioType: String!
     podcastMeta: PodcastMeta

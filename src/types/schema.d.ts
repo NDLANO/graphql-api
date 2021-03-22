@@ -581,19 +581,29 @@ declare global {
   export interface GQLAudio {
     id: string;
     revision: number;
-    title: string;
+    title: GQLTitle;
     audioFile: GQLAudioFile;
     copyright: GQLCopyright;
-    tags?: Array<string | null>;
+    tags?: GQLTags;
     supportedLanguages?: Array<string | null>;
     audioType: string;
     podcastMeta?: GQLPodcastMeta;
+  }
+  
+  export interface GQLTitle {
+    title: string;
+    language: string;
   }
   
   export interface GQLAudioFile {
     url: string;
     mimeType: string;
     fileSize: number;
+    language: string;
+  }
+  
+  export interface GQLTags {
+    tags?: Array<string | null>;
     language: string;
   }
   
@@ -729,7 +739,9 @@ declare global {
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
     Audio?: GQLAudioTypeResolver;
+    Title?: GQLTitleTypeResolver;
     AudioFile?: GQLAudioFileTypeResolver;
+    Tags?: GQLTagsTypeResolver;
     PodcastMeta?: GQLPodcastMetaTypeResolver;
     CoverPhoto?: GQLCoverPhotoTypeResolver;
     MovieMeta?: GQLMovieMetaTypeResolver;
@@ -2806,6 +2818,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLTitleTypeResolver<TParent = any> {
+    title?: TitleToTitleResolver<TParent>;
+    language?: TitleToLanguageResolver<TParent>;
+  }
+  
+  export interface TitleToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TitleToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLAudioFileTypeResolver<TParent = any> {
     url?: AudioFileToUrlResolver<TParent>;
     mimeType?: AudioFileToMimeTypeResolver<TParent>;
@@ -2826,6 +2851,19 @@ declare global {
   }
   
   export interface AudioFileToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLTagsTypeResolver<TParent = any> {
+    tags?: TagsToTagsResolver<TParent>;
+    language?: TagsToLanguageResolver<TParent>;
+  }
+  
+  export interface TagsToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TagsToLanguageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
