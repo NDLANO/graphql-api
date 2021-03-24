@@ -468,6 +468,7 @@ declare global {
     totalCount?: number;
     results?: Array<GQLSearchResult | null>;
     suggestions?: Array<GQLSuggestionResult | null>;
+    aggregations?: Array<GQLAggregationResult | null>;
     concepts?: GQLConceptResult;
   }
   
@@ -535,6 +536,18 @@ declare global {
     score?: number;
   }
   
+  export interface GQLAggregationResult {
+    field?: string;
+    sumOtherDocCount?: number;
+    docCountErrorUpperBound?: number;
+    values?: Array<GQLBucketResult | null>;
+  }
+  
+  export interface GQLBucketResult {
+    value?: string;
+    count?: number;
+  }
+  
   export interface GQLConceptResult {
     concepts?: Array<GQLConcept | null>;
   }
@@ -544,6 +557,7 @@ declare global {
     resourceType?: string;
     resources?: Array<GQLGroupSearchResult | null>;
     suggestions?: Array<GQLSuggestionResult | null>;
+    aggregations?: Array<GQLAggregationResult | null>;
     totalCount?: number;
   }
   
@@ -688,6 +702,8 @@ declare global {
     SuggestionResult?: GQLSuggestionResultTypeResolver;
     SearchSuggestion?: GQLSearchSuggestionTypeResolver;
     SuggestOption?: GQLSuggestOptionTypeResolver;
+    AggregationResult?: GQLAggregationResultTypeResolver;
+    BucketResult?: GQLBucketResultTypeResolver;
     ConceptResult?: GQLConceptResultTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
@@ -849,6 +865,7 @@ declare global {
     languageFilter?: string;
     relevance?: string;
     grepCodes?: string;
+    aggregatePaths?: Array<string | null>;
   }
   export interface QueryToSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -867,6 +884,8 @@ declare global {
     pageSize?: string;
     language?: string;
     fallback?: string;
+    grepCodes?: string;
+    aggregatePaths?: Array<string | null>;
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -2407,6 +2426,7 @@ declare global {
     totalCount?: SearchToTotalCountResolver<TParent>;
     results?: SearchToResultsResolver<TParent>;
     suggestions?: SearchToSuggestionsResolver<TParent>;
+    aggregations?: SearchToAggregationsResolver<TParent>;
     concepts?: SearchToConceptsResolver<TParent>;
   }
   
@@ -2431,6 +2451,10 @@ declare global {
   }
   
   export interface SearchToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToAggregationsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2574,6 +2598,42 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLAggregationResultTypeResolver<TParent = any> {
+    field?: AggregationResultToFieldResolver<TParent>;
+    sumOtherDocCount?: AggregationResultToSumOtherDocCountResolver<TParent>;
+    docCountErrorUpperBound?: AggregationResultToDocCountErrorUpperBoundResolver<TParent>;
+    values?: AggregationResultToValuesResolver<TParent>;
+  }
+  
+  export interface AggregationResultToFieldResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AggregationResultToSumOtherDocCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AggregationResultToDocCountErrorUpperBoundResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AggregationResultToValuesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLBucketResultTypeResolver<TParent = any> {
+    value?: BucketResultToValueResolver<TParent>;
+    count?: BucketResultToCountResolver<TParent>;
+  }
+  
+  export interface BucketResultToValueResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BucketResultToCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLConceptResultTypeResolver<TParent = any> {
     concepts?: ConceptResultToConceptsResolver<TParent>;
   }
@@ -2587,6 +2647,7 @@ declare global {
     resourceType?: GroupSearchToResourceTypeResolver<TParent>;
     resources?: GroupSearchToResourcesResolver<TParent>;
     suggestions?: GroupSearchToSuggestionsResolver<TParent>;
+    aggregations?: GroupSearchToAggregationsResolver<TParent>;
     totalCount?: GroupSearchToTotalCountResolver<TParent>;
   }
   
@@ -2603,6 +2664,10 @@ declare global {
   }
   
   export interface GroupSearchToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchToAggregationsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
