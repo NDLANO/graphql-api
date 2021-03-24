@@ -31,7 +31,7 @@ export async function fetchPodcastsPage(
   page: string,
 ): Promise<GQLAudioSearch> {
   const response = await fetch(
-    `/audio-api/v1/audio/?pageSize=${pageSize}&page=${page}&audio-type=podcast`,
+    `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast`,
     context,
   );
 
