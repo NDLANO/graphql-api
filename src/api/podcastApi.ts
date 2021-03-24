@@ -15,7 +15,6 @@ export async function fetchPodcast(
   const response = await fetch(`/audio-api/v1/audio/${podcastId}`, context);
   try {
     const audio = await resolveJson(response);
-    console.log(audio);
     if (audio.audioType !== 'podcast') {
       return null;
     }
