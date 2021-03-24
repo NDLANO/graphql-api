@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchPodcast } from '../api/podcastApi';
+import { fetchPodcast, fetchPodcastsPage } from '../api/podcastApi';
 
 export const Query = {
   async podcast(
@@ -15,6 +15,13 @@ export const Query = {
     context: Context,
   ): Promise<GQLAudio> {
     return fetchPodcast(id, context);
+  },
+  async podcastSearch(
+    _: any,
+    { pageSize, page }: QueryToPodcastSearchArgs,
+    context: Context,
+  ): Promise<GQLAudioSearch> {
+    return fetchPodcastsPage(context, pageSize, page);
   },
 };
 

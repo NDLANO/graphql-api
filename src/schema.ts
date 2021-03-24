@@ -53,6 +53,14 @@ export const typeDefs = gql`
     podcastMeta: PodcastMeta
   }
 
+  type AudioSearch {
+    pageSize: Int
+    page: Int
+    language: String
+    totalCount: Int
+    results: [Audio]
+  }
+
   type ResourceTypeDefinition {
     id: String!
     name: String!
@@ -686,6 +694,7 @@ export const typeDefs = gql`
       relevance: String
     ): Search
     podcast(id: String): Audio
+    podcastSearch(page: String, pageSize: String): AudioSearch
   }
 `;
 

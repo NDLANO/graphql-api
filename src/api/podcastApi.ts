@@ -26,14 +26,23 @@ export async function fetchPodcast(
 }
 
 export async function fetchPodcastsPage(
-  page: string,
-  pageSize: string,
   context: Context,
-): Promise<GQLAudio[]> {
+  pageSize: string,
+  page: string,
+): Promise<GQLAudioSearch> {
   const response = await fetch(
-    `/audio-api/v1/audio/?pageSize=${pageSize}&page=${page}`,
+    `/audio-api/v1/audio/?pageSize=${pageSize}&page=${page}&audio-type=podcast`,
     context,
   );
 
-  return resolveJson(response);
+  const audioSearch: GQLAudioSearch = await resolveJson(response);
+
+  const results = await Promise.all(
+    audioSearch.results.map(audio => fetchPodcast(audio.id, context)),
+  );
+
+  return {
+    ...audioSearch,
+    results,
+  };
 }
