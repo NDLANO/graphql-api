@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchPodcast, fetchPodcastsPage } from '../api/podcastApi';
+import { fetchPodcast, fetchPodcastsPage } from '../api/audioApi';
 
 export const Query = {
   async podcast(
