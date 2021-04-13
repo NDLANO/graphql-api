@@ -19,7 +19,6 @@ export async function searchConcepts(
     query: searchquery,
     language,
     subjects,
-    fallback: true,
     'exact-match': true,
     sort: '-title',
   };
