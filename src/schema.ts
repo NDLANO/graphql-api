@@ -712,6 +712,7 @@ export const typeDefs = gql`
     ): Search
     podcast(id: String): Audio
     podcastSearch(page: String, pageSize: String): AudioSearch
+    concepts(ids: [String]): [Concept]
   }
 `;
 
