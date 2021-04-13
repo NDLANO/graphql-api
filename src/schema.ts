@@ -685,6 +685,7 @@ export const typeDefs = gql`
     groupSearch(
       query: String
       subjects: String
+      levels: String
       resourceTypes: String
       contextTypes: String
       page: String
