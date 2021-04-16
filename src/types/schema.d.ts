@@ -356,6 +356,7 @@ declare global {
     pathTopics?: Array<Array<GQLTopic | null> | null>;
     coreResources?: Array<GQLResource | null>;
     supplementaryResources?: Array<GQLResource | null>;
+    breadcrumbs?: Array<Array<string | null> | null>;
   }
   
   export interface GQLSubject {
@@ -644,14 +645,6 @@ declare global {
     results?: Array<GQLAudio | null>;
   }
   
-  export interface GQLAudioResult {
-    id: string;
-    title: GQLTitle;
-    url: string;
-    license: string;
-    supportedLanguages?: Array<string | null>;
-  }
-  
   export interface GQLMovieMeta {
     title?: string;
     metaImage?: GQLMetaImage;
@@ -778,7 +771,6 @@ declare global {
     PodcastMeta?: GQLPodcastMetaTypeResolver;
     CoverPhoto?: GQLCoverPhotoTypeResolver;
     AudioSearch?: GQLAudioSearchTypeResolver;
-    AudioResult?: GQLAudioResultTypeResolver;
     MovieMeta?: GQLMovieMetaTypeResolver;
     MoviePath?: GQLMoviePathTypeResolver;
     MovieResourceTypes?: GQLMovieResourceTypesTypeResolver;
@@ -875,8 +867,11 @@ declare global {
     (parent: TParent, args: QueryToTopicArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface QueryToTopicsArgs {
+    contentUri?: string;
+  }
   export interface QueryToTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+    (parent: TParent, args: QueryToTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToFrontpageResolver<TParent = any, TResult = any> {
@@ -2051,6 +2046,7 @@ declare global {
     pathTopics?: TopicToPathTopicsResolver<TParent>;
     coreResources?: TopicToCoreResourcesResolver<TParent>;
     supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
+    breadcrumbs?: TopicToBreadcrumbsResolver<TParent>;
   }
   
   export interface TopicToIdResolver<TParent = any, TResult = any> {
@@ -2130,6 +2126,10 @@ declare global {
   }
   export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToBreadcrumbsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectTypeResolver<TParent = any> {
@@ -3031,34 +3031,6 @@ declare global {
   }
   
   export interface AudioSearchToResultsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLAudioResultTypeResolver<TParent = any> {
-    id?: AudioResultToIdResolver<TParent>;
-    title?: AudioResultToTitleResolver<TParent>;
-    url?: AudioResultToUrlResolver<TParent>;
-    license?: AudioResultToLicenseResolver<TParent>;
-    supportedLanguages?: AudioResultToSupportedLanguagesResolver<TParent>;
-  }
-  
-  export interface AudioResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioResultToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioResultToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioResultToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
