@@ -944,6 +944,7 @@ declare global {
   export interface QueryToGroupSearchArgs {
     query?: string;
     subjects?: string;
+    levels?: string;
     resourceTypes?: string;
     contextTypes?: string;
     page?: string;
