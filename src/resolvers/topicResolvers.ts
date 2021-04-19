@@ -14,6 +14,7 @@ import {
   fetchTopicResources,
   fetchSubtopics,
   fetchOembed,
+  fetchSubject,
 } from '../api';
 import {
   filterMissingArticles,
@@ -37,8 +38,12 @@ export const Query = {
   ): Promise<GQLTopic> {
     return fetchTopic({ id, subjectId }, context);
   },
-  async topics(_: any, __: any, context: Context): Promise<GQLTopic[]> {
-    return fetchTopics(context);
+  async topics(
+    _: any,
+    { contentUri }: QueryToTopicsArgs,
+    context: Context,
+  ): Promise<GQLTopic[]> {
+    return fetchTopics({ contentUri }, context);
   },
 };
 
@@ -151,6 +156,28 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
             topicsToFetch.map(async id =>
               fetchTopic({ id: `urn:${id}` }, context),
             ),
+          );
+        }),
+      );
+    },
+    async breadcrumbs(
+      topic: TopicResponse,
+      __: any,
+      context: Context,
+    ): Promise<string[][]> {
+      return Promise.all(
+        topic.paths?.map(async path => {
+          return Promise.all(
+            path
+              .split('/')
+              .slice(1)
+              .map(async id => {
+                if (id.includes('subject:')) {
+                  return (await fetchSubject(`urn:${id}`, context)).name;
+                } else if (id.includes('topic:')) {
+                  return (await fetchTopic({ id: `urn:${id}` }, context)).name;
+                }
+              }),
           );
         }),
       );

@@ -69,6 +69,7 @@ declare global {
     metadata?: GQLTaxonomyMetadata;
     article?: GQLArticle;
     filters?: Array<GQLFilter | null>;
+    relevanceId?: string;
   }
   
   /** Use this to resolve interface type TaxonomyEntity */
@@ -356,6 +357,7 @@ declare global {
     pathTopics?: Array<Array<GQLTopic | null> | null>;
     coreResources?: Array<GQLResource | null>;
     supplementaryResources?: Array<GQLResource | null>;
+    breadcrumbs?: Array<Array<string | null> | null>;
   }
   
   export interface GQLSubject {
@@ -866,8 +868,11 @@ declare global {
     (parent: TParent, args: QueryToTopicArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface QueryToTopicsArgs {
+    contentUri?: string;
+  }
   export interface QueryToTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+    (parent: TParent, args: QueryToTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToFrontpageResolver<TParent = any, TResult = any> {
@@ -2043,6 +2048,7 @@ declare global {
     pathTopics?: TopicToPathTopicsResolver<TParent>;
     coreResources?: TopicToCoreResourcesResolver<TParent>;
     supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
+    breadcrumbs?: TopicToBreadcrumbsResolver<TParent>;
   }
   
   export interface TopicToIdResolver<TParent = any, TResult = any> {
@@ -2122,6 +2128,10 @@ declare global {
   }
   export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToBreadcrumbsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSubjectTypeResolver<TParent = any> {

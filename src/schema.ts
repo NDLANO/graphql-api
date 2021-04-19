@@ -163,6 +163,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
+    relevanceId: String
   }
 
   type Resource implements TaxonomyEntity {
@@ -203,6 +204,7 @@ export const typeDefs = gql`
     pathTopics: [[Topic]]
     coreResources(filterIds: String, subjectId: String): [Resource]
     supplementaryResources(filterIds: String, subjectId: String): [Resource]
+    breadcrumbs: [[String]]
   }
 
   type License {
@@ -652,7 +654,7 @@ export const typeDefs = gql`
     learningpathStep(pathId: String!, stepId: String!): LearningpathStep
     subjects: [Subject]
     topic(id: String!, subjectId: String): Topic
-    topics: [Topic]
+    topics(contentUri: String): [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
     competenceGoals(

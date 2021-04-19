@@ -100,9 +100,13 @@ export async function fetchSubjectTopics(
   return resolveJson(response);
 }
 
-export async function fetchTopics(context: Context): Promise<GQLTopic[]> {
+export async function fetchTopics(
+  args: { contentUri?: string },
+  context: Context,
+): Promise<GQLTopic[]> {
+  const uriParam = args.contentUri ? `&contentURI=${args.contentUri}` : '';
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/topics/?language=${context.language}`,
+    `/${context.taxonomyUrl}/v1/topics/?language=${context.language}${uriParam}`,
     context,
   );
   return resolveJson(response);
@@ -176,12 +180,17 @@ export async function fetchTopicResources(
     .split('/')
     .find(token => token.includes('subject'))}`;
   const suplResources = resources.filter(resource => {
+    // when filters are deleted from tax, remove until END
     const subjectFilters = resource.filters?.filter(
       filter => filter.subjectId === topicSubject,
     );
-    return subjectFilters?.find(
-      filter => filter.relevanceId === 'urn:relevance:supplementary',
-    );
+    if (subjectFilters?.length > 0) {
+      return subjectFilters?.find(
+        filter => filter.relevanceId === 'urn:relevance:supplementary',
+      );
+    }
+    // END
+    return resource.relevanceId === 'urn:relevance:supplementary';
   });
   const coreResources = resources.filter(
     resource => !suplResources.includes(resource),
