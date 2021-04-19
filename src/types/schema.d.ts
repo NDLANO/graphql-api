@@ -35,7 +35,7 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
-    conceptSearch?: Array<GQLConcept | null>;
+    conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearch;
     podcast?: GQLAudio;
@@ -552,6 +552,7 @@ declare global {
   }
   
   export interface GQLConceptResult {
+    totalCount?: number;
     concepts?: Array<GQLConcept | null>;
   }
   
@@ -959,6 +960,9 @@ declare global {
   export interface QueryToConceptSearchArgs {
     query?: string;
     subjects?: string;
+    page?: string;
+    pageSize?: string;
+    exactMatch?: boolean;
     language?: string;
   }
   export interface QueryToConceptSearchResolver<TParent = any, TResult = any> {
@@ -2722,7 +2726,12 @@ declare global {
   }
   
   export interface GQLConceptResultTypeResolver<TParent = any> {
+    totalCount?: ConceptResultToTotalCountResolver<TParent>;
     concepts?: ConceptResultToConceptsResolver<TParent>;
+  }
+  
+  export interface ConceptResultToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ConceptResultToConceptsResolver<TParent = any, TResult = any> {

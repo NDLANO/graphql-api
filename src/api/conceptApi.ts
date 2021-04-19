@@ -10,29 +10,36 @@ import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function searchConcepts(
-  searchquery: string,
-  subjects: string,
-  language: string,
+  params: {
+    query?: string;
+    subjects?: string;
+    page?: string;
+    pageSize?: string;
+    exactMatch?: boolean;
+    language?: string;
+  },
   context: Context,
-): Promise<[GQLConcept]> {
+): Promise<GQLConceptResult> {
   const query = {
-    query: searchquery,
-    language,
-    subjects,
-    'exact-match': true,
-    sort: '-title',
+    ...params,
+    'page-size': params.pageSize,
+    'exact-match': params.exactMatch,
+    sort: 'title',
   };
   const response = await fetch(
     `/concept-api/v1/concepts?${queryString.stringify(query)}`,
     context,
   );
   const conceptResult = await resolveJson(response);
-  return conceptResult.results?.map((res: SearchResultJson) => ({
-    id: res.id,
-    title: res.title.title,
-    content: res.content.content,
-    metaImage: res.metaImage,
-  }));
+  return {
+    totalCount: conceptResult.totalCount,
+    concepts: conceptResult.results?.map((res: SearchResultJson) => ({
+      id: res.id,
+      title: res.title.title,
+      content: res.content.content,
+      metaImage: res.metaImage,
+    })),
+  };
 }
 
 export async function fetchConcepts(

@@ -557,6 +557,7 @@ export const typeDefs = gql`
   }
 
   type ConceptResult {
+    totalCount: Int
     concepts: [Concept]
   }
 
@@ -695,7 +696,14 @@ export const typeDefs = gql`
       grepCodes: String
       aggregatePaths: [String]
     ): [GroupSearch]
-    conceptSearch(query: String, subjects: String, language: String): [Concept]
+    conceptSearch(
+      query: String
+      subjects: String
+      page: String
+      pageSize: String
+      exactMatch: Boolean
+      language: String
+    ): ConceptResult
     frontpageSearch(query: String): FrontpageSearch
     searchWithoutPagination(
       query: String
