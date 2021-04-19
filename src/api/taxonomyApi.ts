@@ -180,12 +180,17 @@ export async function fetchTopicResources(
     .split('/')
     .find(token => token.includes('subject'))}`;
   const suplResources = resources.filter(resource => {
+    // when filters is deleted from tax remove until END
     const subjectFilters = resource.filters?.filter(
       filter => filter.subjectId === topicSubject,
     );
-    return subjectFilters?.find(
-      filter => filter.relevanceId === 'urn:relevance:supplementary',
-    );
+    if (subjectFilters?.length > 0) {
+      return subjectFilters?.find(
+        filter => filter.relevanceId === 'urn:relevance:supplementary',
+      );
+    }
+    // END
+    return resource.relevanceId === 'urn:relevance:supplementary';
   });
   const coreResources = resources.filter(
     resource => !suplResources.includes(resource),

@@ -69,6 +69,7 @@ declare global {
     metadata?: GQLTaxonomyMetadata;
     article?: GQLArticle;
     filters?: Array<GQLFilter | null>;
+    relevanceId?: string;
   }
   
   /** Use this to resolve interface type TaxonomyEntity */

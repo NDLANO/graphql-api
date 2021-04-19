@@ -163,6 +163,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
+    relevanceId: String
   }
 
   type Resource implements TaxonomyEntity {

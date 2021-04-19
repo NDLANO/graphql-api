@@ -170,7 +170,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
           return Promise.all(
             path
               .split('/')
-              .slice(1, -1)
+              .slice(1)
               .map(async id => {
                 if (id.includes('subject:')) {
                   return (await fetchSubject(`urn:${id}`, context)).name;
