@@ -180,7 +180,7 @@ export async function fetchTopicResources(
     .split('/')
     .find(token => token.includes('subject'))}`;
   const suplResources = resources.filter(resource => {
-    // when filters is deleted from tax remove until END
+    // when filters are deleted from tax, remove until END
     const subjectFilters = resource.filters?.filter(
       filter => filter.subjectId === topicSubject,
     );
