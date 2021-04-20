@@ -654,6 +654,7 @@ declare global {
   
   export interface GQLMoviePath {
     path?: string;
+    paths?: Array<string | null>;
   }
   
   export interface GQLMovieResourceTypes {
@@ -3056,9 +3057,14 @@ declare global {
   
   export interface GQLMoviePathTypeResolver<TParent = any> {
     path?: MoviePathToPathResolver<TParent>;
+    paths?: MoviePathToPathsResolver<TParent>;
   }
   
   export interface MoviePathToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MoviePathToPathsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

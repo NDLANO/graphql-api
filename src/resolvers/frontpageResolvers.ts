@@ -110,7 +110,10 @@ export const resolvers = {
         id,
         context,
       );
-      return moviePath.path;
+      return (
+        moviePath.paths?.find(p => p.startsWith('/subject:20/')) ||
+        moviePath.path
+      );
     },
     async resourceTypes(
       id: string,

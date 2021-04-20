@@ -471,6 +471,7 @@ export const typeDefs = gql`
 
   type MoviePath {
     path: String
+    paths: [String]
   }
 
   type MovieResourceTypes {
