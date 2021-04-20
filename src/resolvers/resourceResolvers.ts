@@ -105,7 +105,7 @@ export const resolvers = {
               filterIds: args.filterIds,
               subjectId: args.subjectId,
               removeRelatedContent: args.removeRelatedContent,
-              isOembed: args.isOembed
+              isOembed: args.isOembed,
             },
             context,
           ).then(article => {
