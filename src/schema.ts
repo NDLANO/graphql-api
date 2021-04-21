@@ -176,7 +176,6 @@ export const typeDefs = gql`
     article(
       filterIds: String
       subjectId: String
-      removeRelatedContent: String
       isOembed: String
     ): Article
     learningpath: Learningpath
