@@ -92,6 +92,7 @@ export const resolvers = {
         filterIds?: string;
         subjectId?: string;
         removeRelatedContent?: string;
+        isOembed?: string;
       },
       context: Context,
     ): Promise<GQLArticle> {
@@ -104,6 +105,7 @@ export const resolvers = {
               filterIds: args.filterIds,
               subjectId: args.subjectId,
               removeRelatedContent: args.removeRelatedContent,
+              isOembed: args.isOembed,
             },
             context,
           ).then(article => {

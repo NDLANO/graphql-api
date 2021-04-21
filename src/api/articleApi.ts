@@ -16,6 +16,7 @@ export async function fetchArticle(
     filterIds?: string;
     subjectId?: string;
     removeRelatedContent?: string;
+    isOembed?: string;
   },
   context: Context,
 ): Promise<GQLArticle> {
@@ -25,8 +26,9 @@ export async function fetchArticle(
   const relatedParam = params.removeRelatedContent
     ? `&removeRelatedContent=${params.removeRelatedContent}`
     : '';
+  const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : '';
   const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${relatedParam}`,
+    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${relatedParam}${oembedParam}`,
     context,
   );
   return resolveJson(response);
