@@ -13,6 +13,7 @@ export async function searchConcepts(
   params: {
     query?: string;
     subjects?: string;
+    tags?: string;
     page?: string;
     pageSize?: string;
     exactMatch?: boolean;

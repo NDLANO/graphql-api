@@ -699,6 +699,7 @@ export const typeDefs = gql`
     conceptSearch(
       query: String
       subjects: String
+      tags: String
       page: String
       pageSize: String
       exactMatch: Boolean

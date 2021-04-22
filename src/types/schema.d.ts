@@ -960,6 +960,7 @@ declare global {
   export interface QueryToConceptSearchArgs {
     query?: string;
     subjects?: string;
+    tags?: string;
     page?: string;
     pageSize?: string;
     exactMatch?: boolean;
