@@ -18,11 +18,17 @@ import {
 export const Query = {
   async article(
     _: any,
-    { id, filterIds, subjectId, removeRelatedContent }: QueryToArticleArgs,
+    {
+      id,
+      filterIds,
+      subjectId,
+      removeRelatedContent,
+      isOembed,
+    }: QueryToArticleArgs,
     context: Context,
   ): Promise<GQLArticle> {
     return fetchArticle(
-      { articleId: id, filterIds, subjectId, removeRelatedContent },
+      { articleId: id, filterIds, subjectId, removeRelatedContent, isOembed },
       context,
     );
   },

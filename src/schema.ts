@@ -648,6 +648,7 @@ export const typeDefs = gql`
       filterIds: String
       subjectId: String
       removeRelatedContent: String
+      isOembed: String
     ): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
