@@ -9,6 +9,12 @@
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
+interface ConceptSearchResultJson extends SearchResultJson {
+  tags?: {
+    tags: string[],
+  }
+}
+
 export async function searchConcepts(
   params: {
     query?: string;
@@ -34,10 +40,11 @@ export async function searchConcepts(
   const conceptResult = await resolveJson(response);
   return {
     totalCount: conceptResult.totalCount,
-    concepts: conceptResult.results?.map((res: SearchResultJson) => ({
+    concepts: conceptResult.results?.map((res: ConceptSearchResultJson) => ({
       id: res.id,
       title: res.title.title,
       content: res.content.content,
+      tags: res.tags?.tags || [],
       metaImage: res.metaImage,
     })),
   };
