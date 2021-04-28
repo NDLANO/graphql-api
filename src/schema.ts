@@ -556,7 +556,7 @@ export const typeDefs = gql`
     relevance: String
   }
 
-  type ConceptPage {
+  type ListingPage {
     subjects: [Subject]
     tags: [String]
   }
@@ -702,8 +702,8 @@ export const typeDefs = gql`
       grepCodes: String
       aggregatePaths: [String]
     ): [GroupSearch]
+    listingPage: ListingPage
     concepts(ids: [String]): [Concept]
-    conceptPage: ConceptPage
     conceptSearch(
       query: String
       subjects: String

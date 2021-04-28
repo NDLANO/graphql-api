@@ -35,8 +35,8 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
+    listingPage?: GQLListingPage;
     concepts?: Array<GQLConcept | null>;
-    conceptPage?: GQLConceptPage;
     conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearch;
@@ -577,7 +577,7 @@ declare global {
     metaImage?: GQLMetaImage;
   }
   
-  export interface GQLConceptPage {
+  export interface GQLListingPage {
     subjects?: Array<GQLSubject | null>;
     tags?: Array<string | null>;
   }
@@ -769,7 +769,7 @@ declare global {
     ConceptResult?: GQLConceptResultTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
-    ConceptPage?: GQLConceptPageTypeResolver;
+    ListingPage?: GQLListingPageTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
@@ -806,8 +806,8 @@ declare global {
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
+    listingPage?: QueryToListingPageResolver<TParent>;
     concepts?: QueryToConceptsResolver<TParent>;
-    conceptPage?: QueryToConceptPageResolver<TParent>;
     conceptSearch?: QueryToConceptSearchResolver<TParent>;
     frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
     searchWithoutPagination?: QueryToSearchWithoutPaginationResolver<TParent>;
@@ -966,15 +966,15 @@ declare global {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface QueryToListingPageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface QueryToConceptsArgs {
     ids?: Array<string | null>;
   }
   export interface QueryToConceptsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface QueryToConceptPageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToConceptSearchArgs {
@@ -2828,16 +2828,16 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLConceptPageTypeResolver<TParent = any> {
-    subjects?: ConceptPageToSubjectsResolver<TParent>;
-    tags?: ConceptPageToTagsResolver<TParent>;
+  export interface GQLListingPageTypeResolver<TParent = any> {
+    subjects?: ListingPageToSubjectsResolver<TParent>;
+    tags?: ListingPageToTagsResolver<TParent>;
   }
   
-  export interface ConceptPageToSubjectsResolver<TParent = any, TResult = any> {
+  export interface ListingPageToSubjectsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ConceptPageToTagsResolver<TParent = any, TResult = any> {
+  export interface ListingPageToTagsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

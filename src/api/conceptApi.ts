@@ -75,9 +75,9 @@ export async function fetchConcepts(
   ).filter(c => !!c);
 }
 
-export async function fetchConceptPage(
+export async function fetchListingPage(
   context: Context,
-): Promise<GQLConceptPage> {
+): Promise<GQLListingPage> {
   const subjectIds: string[] = await resolveJson(
     await fetch(`/concept-api/v1/concepts/subjects/`, context),
   );
