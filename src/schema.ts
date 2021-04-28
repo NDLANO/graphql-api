@@ -556,6 +556,11 @@ export const typeDefs = gql`
     relevance: String
   }
 
+  type ConceptPage {
+    subjects: [Subject]
+    tags: [String]
+  }
+
   type ConceptResult {
     totalCount: Int
     concepts: [Concept]
@@ -697,6 +702,8 @@ export const typeDefs = gql`
       grepCodes: String
       aggregatePaths: [String]
     ): [GroupSearch]
+    concepts(ids: [String]): [Concept]
+    conceptPage: ConceptPage
     conceptSearch(
       query: String
       subjects: String
@@ -723,7 +730,6 @@ export const typeDefs = gql`
     ): Search
     podcast(id: String): Audio
     podcastSearch(page: String, pageSize: String): AudioSearch
-    concepts(ids: [String]): [Concept]
   }
 `;
 

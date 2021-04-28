@@ -35,12 +35,13 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
+    concepts?: Array<GQLConcept | null>;
+    conceptPage?: GQLConceptPage;
     conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearch;
     podcast?: GQLAudio;
     podcastSearch?: GQLAudioSearch;
-    concepts?: Array<GQLConcept | null>;
   }
   
   export interface GQLResource extends GQLTaxonomyEntity {
@@ -576,6 +577,11 @@ declare global {
     metaImage?: GQLMetaImage;
   }
   
+  export interface GQLConceptPage {
+    subjects?: Array<GQLSubject | null>;
+    tags?: Array<string | null>;
+  }
+  
   export interface GQLFrontpageSearch {
     topicResources?: GQLFrontPageResources;
     learningResources?: GQLFrontPageResources;
@@ -763,6 +769,7 @@ declare global {
     ConceptResult?: GQLConceptResultTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
+    ConceptPage?: GQLConceptPageTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
@@ -799,12 +806,13 @@ declare global {
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
+    concepts?: QueryToConceptsResolver<TParent>;
+    conceptPage?: QueryToConceptPageResolver<TParent>;
     conceptSearch?: QueryToConceptSearchResolver<TParent>;
     frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
     searchWithoutPagination?: QueryToSearchWithoutPaginationResolver<TParent>;
     podcast?: QueryToPodcastResolver<TParent>;
     podcastSearch?: QueryToPodcastSearchResolver<TParent>;
-    concepts?: QueryToConceptsResolver<TParent>;
   }
   
   export interface QueryToResourceArgs {
@@ -958,6 +966,17 @@ declare global {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface QueryToConceptsArgs {
+    ids?: Array<string | null>;
+  }
+  export interface QueryToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToConceptPageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface QueryToConceptSearchArgs {
     query?: string;
     subjects?: string;
@@ -1009,13 +1028,6 @@ declare global {
   }
   export interface QueryToPodcastSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface QueryToConceptsArgs {
-    ids?: Array<string | null>;
-  }
-  export interface QueryToConceptsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLResourceTypeResolver<TParent = any> {
@@ -2813,6 +2825,19 @@ declare global {
   }
   
   export interface GroupSearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptPageTypeResolver<TParent = any> {
+    subjects?: ConceptPageToSubjectsResolver<TParent>;
+    tags?: ConceptPageToTagsResolver<TParent>;
+  }
+  
+  export interface ConceptPageToSubjectsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptPageToTagsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

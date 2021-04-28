@@ -11,8 +11,8 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
-    tags: string[],
-  }
+    tags: string[];
+  };
 }
 
 export async function searchConcepts(
@@ -73,4 +73,24 @@ export async function fetchConcepts(
       }),
     )
   ).filter(c => !!c);
+}
+
+export async function fetchConceptPage(
+  context: Context,
+): Promise<GQLConceptPage> {
+  const subjectIds: string[] = await resolveJson(
+    await fetch(`/concept-api/v1/concepts/subjects/`, context),
+  );
+  const subjects = await Promise.all(
+    subjectIds.map(async id =>
+      resolveJson(await fetch(`/taxonomy/v1/subjects/${id}`, context)),
+    ),
+  );
+  const tags = await resolveJson(
+    await fetch(`/concept-api/v1/concepts/tags/`, context),
+  );
+  return {
+    subjects,
+    tags,
+  };
 }
