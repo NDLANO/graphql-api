@@ -579,7 +579,7 @@ export const typeDefs = gql`
     image: VisualElementImage
     oembed: VisualElementOembed
     lowerRightX: Int
-    lowerRight: Int
+    lowerRightY: Int
     upperLeftX: Int
     upperLeftY: Int
     focalX: Int

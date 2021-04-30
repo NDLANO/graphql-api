@@ -609,7 +609,7 @@ declare global {
     image?: GQLVisualElementImage;
     oembed?: GQLVisualElementOembed;
     lowerRightX?: number;
-    lowerRight?: number;
+    lowerRightY?: number;
     upperLeftX?: number;
     upperLeftY?: number;
     focalX?: number;
@@ -2968,7 +2968,7 @@ declare global {
     image?: VisualElementToImageResolver<TParent>;
     oembed?: VisualElementToOembedResolver<TParent>;
     lowerRightX?: VisualElementToLowerRightXResolver<TParent>;
-    lowerRight?: VisualElementToLowerRightResolver<TParent>;
+    lowerRightY?: VisualElementToLowerRightYResolver<TParent>;
     upperLeftX?: VisualElementToUpperLeftXResolver<TParent>;
     upperLeftY?: VisualElementToUpperLeftYResolver<TParent>;
     focalX?: VisualElementToFocalXResolver<TParent>;
@@ -3019,7 +3019,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface VisualElementToLowerRightResolver<TParent = any, TResult = any> {
+  export interface VisualElementToLowerRightYResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
