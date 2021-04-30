@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchConcepts, fetchListingPage } from '../api';
+import { fetchConcepts, fetchDetailedConcept, fetchListingPage } from '../api';
 
 export const Query = {
   async concepts(
@@ -15,6 +15,13 @@ export const Query = {
     context: Context,
   ): Promise<GQLConcept[]> {
     return fetchConcepts(ids, context);
+  },
+  async detailedConcept(
+    _: any,
+    { id }: QueryToDetailedConceptArgs,
+    context: Context,
+  ): Promise<GQLDetailedConcept> {
+    return fetchDetailedConcept(id, context);
   },
   async listingPage(_: any, context: Context): Promise<GQLListingPage> {
     return fetchListingPage(context);

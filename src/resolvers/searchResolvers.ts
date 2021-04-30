@@ -33,7 +33,7 @@ export const Query = {
     _: any,
     searchQuery: QueryToSearchArgs,
     context: Context,
-  ): Promise<[GQLConcept]> {
+  ): Promise<GQLConceptResult> {
     return conceptSearch(searchQuery, context);
   },
   async frontpageSearch(

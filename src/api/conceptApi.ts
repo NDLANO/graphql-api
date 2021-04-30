@@ -7,12 +7,22 @@
  */
 
 import queryString from 'query-string';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+import { fetch, resolveJson, loadVisualElement } from '../utils/apiHelpers';
 
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
     tags: string[];
   };
+  visualElement?: {
+    visualElement: string;
+  };
+  copyright: {
+    license: {
+      license: string;
+    };
+  };
+  articleIds?: string[];
+  subjectIds?: string[];
 }
 
 export async function searchConcepts(
@@ -73,6 +83,80 @@ export async function fetchConcepts(
       }),
     )
   ).filter(c => !!c);
+}
+
+export async function fetchDetailedConcept(
+  id: string,
+  context: Context,
+): Promise<GQLDetailedConcept> {
+  const response = await fetch(`/concept-api/v1/concepts/${id}`, context);
+  const concept: ConceptSearchResultJson = await resolveJson(response);
+  const detailedConcept: GQLDetailedConcept = {
+    title: concept.title.title,
+    content: concept.content.content,
+    subjectIds: concept.subjectIds,
+    copyright: concept.copyright,
+  };
+  let image;
+  const imageId = concept.metaImage?.url?.split('/').pop();
+  if (imageId) {
+    const imageResponse = await fetch(
+      `/image-api/v2/images/${imageId}`,
+      context,
+    );
+    image = await resolveJson(imageResponse);
+    detailedConcept.image = {
+      title: image.title.title,
+      src: image.imageUrl,
+      altText: image.alttext.alttext,
+      copyright: image.copyright,
+    };
+  }
+  if (concept.articleIds) {
+    const articlesResponse = await Promise.allSettled(
+      concept.articleIds.map(async articleId =>
+        resolveJson(
+          await fetch(`/article-api/v2/articles/${articleId}`, context),
+        ),
+      ),
+    );
+
+    const fulfilledArticles = articlesResponse.filter(
+      res => res.status === 'fulfilled',
+    ) as PromiseFulfilledResult<any>[];
+    const articles = fulfilledArticles.map(res => res.value);
+    detailedConcept.articles = articles.map(article => ({
+      id: article.id,
+      revision: article.revision,
+      title: article.title.title,
+      content: article.content.content,
+      created: article.created,
+      updated: article.updated,
+      published: article.published,
+      metaDescription: article.metaDescription.metaDescription,
+      articleType: article.articleType,
+      copyright: article.copyright,
+    }));
+  }
+  if (concept.visualElement) {
+    const parsedElement = await loadVisualElement(
+      concept.visualElement.visualElement,
+    );
+    const data = parsedElement('embed').data();
+    detailedConcept.visualElement = data;
+    if (data?.resource === 'image') {
+      detailedConcept.visualElement.image = {
+        imageUrl: image.imageUrl,
+        contentType: image.contentType,
+      };
+    } else if (data?.resource === 'h5p' || data?.resource === 'external') {
+      const visualElementOembed = await resolveJson(
+        await fetch(`'/oembed-proxy/v1/oembed/?url='${data.url}`, context),
+      );
+      detailedConcept.visualElement.oembed = visualElementOembed;
+    }
+  }
+  return detailedConcept;
 }
 
 export async function fetchListingPage(

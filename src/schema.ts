@@ -556,6 +556,36 @@ export const typeDefs = gql`
     relevance: String
   }
 
+  type VisualElementImage {
+    imageUrl: String
+    contentType: String
+  }
+
+  type VisualElementOembed {
+    title: String
+    html: String
+    fullscreen: Boolean
+  }
+
+  type VisualElement {
+    resource: String
+    resourceId: String
+    title: String
+    url: String
+    alt: String
+    account: String
+    player: String
+    videoid: String
+    image: VisualElementImage
+    oembed: VisualElementOembed
+    lowerRightX: Int
+    lowerRight: Int
+    upperLeftX: Int
+    upperLeftY: Int
+    focalX: Int
+    focalY: Int
+  }
+
   type ListingPage {
     subjects: [Subject]
     tags: [String]
@@ -572,6 +602,20 @@ export const typeDefs = gql`
     content: String
     tags: [String]
     metaImage: MetaImage
+  }
+
+  type DetailedConcept {
+    id: Int
+    title: String
+    content: String
+    tags: [String]
+    metaImage: MetaImage
+    image: ImageLicense
+    subjectIds: [String]
+    articleIds: [String]
+    articles: [Article]
+    visualElement: VisualElement
+    copyright: Copyright
   }
 
   type Search {
@@ -704,6 +748,7 @@ export const typeDefs = gql`
     ): [GroupSearch]
     listingPage: ListingPage
     concepts(ids: [String]): [Concept]
+    detailedConcept(id: String): DetailedConcept
     conceptSearch(
       query: String
       subjects: String
