@@ -151,7 +151,7 @@ export async function fetchDetailedConcept(
       };
     } else if (data?.resource === 'h5p' || data?.resource === 'external') {
       const visualElementOembed = await resolveJson(
-        await fetch(`'/oembed-proxy/v1/oembed/?url='${data.url}`, context),
+        await fetch(`/oembed-proxy/v1/oembed/?url=${data.url}`, context),
       );
       detailedConcept.visualElement.oembed = visualElementOembed;
     }
