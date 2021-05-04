@@ -121,9 +121,9 @@ export async function fetchDetailedConcept(
         context,
       ),
     );
-    detailedConcept.articles = concept.articleIds.map(id => {
+    detailedConcept.articles = concept.articleIds.map(articleId => {
       const article = articles.results.find((item: { id: number }) => {
-        return item.id.toString() === id.toString();
+        return item.id.toString() === articleId.toString();
       });
       if (article) {
         return {
