@@ -608,6 +608,7 @@ export const typeDefs = gql`
     id: Int
     title: String
     content: String
+    created: String
     tags: [String]
     metaImage: MetaImage
     image: ImageLicense

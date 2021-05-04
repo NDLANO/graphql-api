@@ -23,6 +23,7 @@ interface ConceptSearchResultJson extends SearchResultJson {
   };
   articleIds?: string[];
   subjectIds?: string[];
+  created: string;
 }
 
 export async function searchConcepts(
@@ -94,6 +95,7 @@ export async function fetchDetailedConcept(
   const detailedConcept: GQLDetailedConcept = {
     title: concept.title.title,
     content: concept.content.content,
+    created: concept.created,
     subjectIds: concept.subjectIds,
     copyright: concept.copyright,
   };

@@ -587,6 +587,7 @@ declare global {
     id?: number;
     title?: string;
     content?: string;
+    created?: string;
     tags?: Array<string | null>;
     metaImage?: GQLMetaImage;
     image?: GQLImageLicense;
@@ -2902,6 +2903,7 @@ declare global {
     id?: DetailedConceptToIdResolver<TParent>;
     title?: DetailedConceptToTitleResolver<TParent>;
     content?: DetailedConceptToContentResolver<TParent>;
+    created?: DetailedConceptToCreatedResolver<TParent>;
     tags?: DetailedConceptToTagsResolver<TParent>;
     metaImage?: DetailedConceptToMetaImageResolver<TParent>;
     image?: DetailedConceptToImageResolver<TParent>;
@@ -2921,6 +2923,10 @@ declare global {
   }
   
   export interface DetailedConceptToContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToCreatedResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
