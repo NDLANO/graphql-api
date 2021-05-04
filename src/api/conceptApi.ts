@@ -115,30 +115,27 @@ export async function fetchDetailedConcept(
     };
   }
   if (concept.articleIds) {
-    const articlesResponse = await Promise.allSettled(
-      concept.articleIds.map(async articleId =>
-        resolveJson(
-          await fetch(`/article-api/v2/articles/${articleId}`, context),
-        ),
+    const articles = await resolveJson(
+      await fetch(
+        `/article-api/v2/articles/?ids=${concept.articleIds}`,
+        context,
       ),
     );
-
-    const fulfilledArticles = articlesResponse.filter(
-      res => res.status === 'fulfilled',
-    ) as PromiseFulfilledResult<any>[];
-    const articles = fulfilledArticles.map(res => res.value);
-    detailedConcept.articles = articles.map(article => ({
-      id: article.id,
-      revision: article.revision,
-      title: article.title.title,
-      content: article.content.content,
-      created: article.created,
-      updated: article.updated,
-      published: article.published,
-      metaDescription: article.metaDescription.metaDescription,
-      articleType: article.articleType,
-      copyright: article.copyright,
-    }));
+    detailedConcept.articles = concept.articleIds.map(id => {
+      const article = articles.results.find((item: { id: number }) => {
+        return item.id.toString() === id.toString();
+      });
+      if (article) {
+        return {
+          id: article.id,
+          title: article.title.title,
+          introduction: article.introduction?.introduction,
+          metaDescription: article.metaDescription?.metaDescription,
+          lastUpdated: article.lastUpdated,
+          metaImage: article.metaImage,
+        };
+      }
+    });
   }
   if (concept.visualElement) {
     const parsedElement = await loadVisualElement(

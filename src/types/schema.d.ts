@@ -593,7 +593,7 @@ declare global {
     image?: GQLImageLicense;
     subjectIds?: Array<string | null>;
     articleIds?: Array<string | null>;
-    articles?: Array<GQLArticle | null>;
+    articles?: Array<GQLMeta | null>;
     visualElement?: GQLVisualElement;
     copyright?: GQLCopyright;
   }
