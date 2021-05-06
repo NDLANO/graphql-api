@@ -23,7 +23,11 @@ export const Query = {
   ): Promise<GQLDetailedConcept> {
     return fetchDetailedConcept(id, context);
   },
-  async listingPage(_: any, context: Context): Promise<GQLListingPage> {
+  async listingPage(
+    _: any,
+    __: any,
+    context: Context,
+  ): Promise<GQLListingPage> {
     return fetchListingPage(context);
   },
 };

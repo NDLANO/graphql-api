@@ -32,7 +32,7 @@ export async function fetchArticle(
   return resolveJson(response);
 }
 
-async function fetchArticlesPage(
+export async function fetchArticlesPage(
   articleIds: string[],
   context: Context,
   pageSize: number,

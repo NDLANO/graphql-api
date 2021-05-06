@@ -8,6 +8,8 @@
 
 import queryString from 'query-string';
 import { fetch, resolveJson, loadVisualElement } from '../utils/apiHelpers';
+import { fetchSubject } from './taxonomyApi';
+import { fetchArticlesPage } from './articleApi';
 
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
@@ -115,11 +117,11 @@ export async function fetchDetailedConcept(
     };
   }
   if (concept.articleIds) {
-    const articles = await resolveJson(
-      await fetch(
-        `/article-api/v2/articles/?ids=${concept.articleIds}`,
-        context,
-      ),
+    const articles = await fetchArticlesPage(
+      concept.articleIds,
+      context,
+      concept.articleIds.length,
+      1,
     );
     detailedConcept.articles = concept.articleIds.map(articleId => {
       const article = articles.results.find((item: { id: number }) => {
@@ -165,9 +167,7 @@ export async function fetchListingPage(
     await fetch(`/concept-api/v1/concepts/subjects/`, context),
   );
   const subjects = await Promise.all(
-    subjectIds.map(async id =>
-      resolveJson(await fetch(`/taxonomy/v1/subjects/${id}`, context)),
-    ),
+    subjectIds.map(id => fetchSubject(id, context)),
   );
   const tags = await resolveJson(
     await fetch(`/concept-api/v1/concepts/tags/`, context),
