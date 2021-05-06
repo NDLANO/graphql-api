@@ -155,6 +155,8 @@ export async function fetchDetailedConcept(
         await fetch(`/oembed-proxy/v1/oembed/?url=${data.url}`, context),
       );
       detailedConcept.visualElement.oembed = visualElementOembed;
+    } else if (data?.resource === 'brightcove') {
+      detailedConcept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
     }
   }
   return detailedConcept;
