@@ -11,6 +11,7 @@ import cheerio from 'cheerio';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { fetchArticlesPage } from './articleApi';
+import { fetchOembed } from './oembedApi';
 
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
@@ -150,9 +151,7 @@ export async function fetchDetailedConcept(
         contentType: image.contentType,
       };
     } else if (data?.resource === 'h5p' || data?.resource === 'external') {
-      const visualElementOembed = await resolveJson(
-        await fetch(`/oembed-proxy/v1/oembed/?url=${data.url}`, context),
-      );
+      const visualElementOembed = await fetchOembed(data.url, context);
       detailedConcept.visualElement.oembed = visualElementOembed;
     } else if (data?.resource === 'brightcove') {
       detailedConcept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
