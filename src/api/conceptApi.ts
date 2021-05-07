@@ -7,7 +7,8 @@
  */
 
 import queryString from 'query-string';
-import { fetch, resolveJson, loadVisualElement } from '../utils/apiHelpers';
+import cheerio from 'cheerio';
+import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { fetchArticlesPage } from './articleApi';
 
@@ -140,9 +141,7 @@ export async function fetchDetailedConcept(
     });
   }
   if (concept.visualElement) {
-    const parsedElement = await loadVisualElement(
-      concept.visualElement.visualElement,
-    );
+    const parsedElement = cheerio.load(concept.visualElement.visualElement);
     const data = parsedElement('embed').data();
     detailedConcept.visualElement = data;
     if (data?.resource === 'image') {

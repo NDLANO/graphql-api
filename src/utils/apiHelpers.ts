@@ -7,7 +7,6 @@
  */
 
 import { Response } from 'node-fetch';
-import cheerio from 'cheerio';
 import { apiUrl } from '../config';
 import createFetch from './fetch';
 import { createCache } from '../cache';
@@ -153,7 +152,3 @@ export const expandResourcesFromAllContexts = (
       })),
     ];
   }, []);
-
-export const loadVisualElement = async (visualElement: string) => {
-  return cheerio.load(visualElement);
-};
