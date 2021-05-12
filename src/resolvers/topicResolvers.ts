@@ -62,6 +62,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
               articleId,
               filterIds: args.filterIds,
               subjectId: args.subjectId,
+              path: topic.path,
             },
             context,
           ).then(article => {
