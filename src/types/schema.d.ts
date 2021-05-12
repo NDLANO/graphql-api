@@ -820,6 +820,7 @@ declare global {
     subjectId?: string;
     removeRelatedContent?: string;
     isOembed?: string;
+    path?: string;
   }
   export interface QueryToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

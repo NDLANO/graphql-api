@@ -24,11 +24,19 @@ export const Query = {
       subjectId,
       removeRelatedContent,
       isOembed,
+      path,
     }: QueryToArticleArgs,
     context: Context,
   ): Promise<GQLArticle> {
     return fetchArticle(
-      { articleId: id, filterIds, subjectId, removeRelatedContent, isOembed },
+      {
+        articleId: id,
+        filterIds,
+        subjectId,
+        removeRelatedContent,
+        isOembed,
+        path,
+      },
       context,
     );
   },
