@@ -584,6 +584,7 @@ export const typeDefs = gql`
     upperLeftY: Int
     focalX: Int
     focalY: Int
+    copyright: Copyright
   }
 
   type ListingPage {

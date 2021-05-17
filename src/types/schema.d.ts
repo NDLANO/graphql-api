@@ -615,6 +615,7 @@ declare global {
     upperLeftY?: number;
     focalX?: number;
     focalY?: number;
+    copyright?: GQLCopyright;
   }
   
   export interface GQLVisualElementImage {
@@ -2979,6 +2980,7 @@ declare global {
     upperLeftY?: VisualElementToUpperLeftYResolver<TParent>;
     focalX?: VisualElementToFocalXResolver<TParent>;
     focalY?: VisualElementToFocalYResolver<TParent>;
+    copyright?: VisualElementToCopyrightResolver<TParent>;
   }
   
   export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
@@ -3042,6 +3044,10 @@ declare global {
   }
   
   export interface VisualElementToFocalYResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToCopyrightResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

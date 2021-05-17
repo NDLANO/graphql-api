@@ -12,6 +12,7 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { fetchArticlesPage } from './articleApi';
 import { fetchOembed } from './oembedApi';
+import { localConverter } from '../config';
 
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
@@ -28,6 +29,22 @@ interface ConceptSearchResultJson extends SearchResultJson {
   articleIds?: string[];
   subjectIds?: string[];
   created: string;
+}
+
+async function getVisualElementCopyright(
+  visualElement: string,
+  resource: string,
+  context: Context,
+): Promise<GQLCopyright> {
+  const host = localConverter ? 'http://localhost:3100' : '';
+  const metaDataResponse = await fetch(
+    encodeURI(
+      `${host}/article-converter/json/${context.language}/meta-data?embed=${visualElement}`,
+    ),
+    context,
+  );
+  const metaData = await resolveJson(metaDataResponse);
+  return metaData.metaData[resource][0].copyright;
 }
 
 export async function searchConcepts(
@@ -150,11 +167,24 @@ export async function fetchDetailedConcept(
         imageUrl: image.imageUrl,
         contentType: image.contentType,
       };
-    } else if (data?.resource === 'h5p' || data?.resource === 'external') {
-      const visualElementOembed = await fetchOembed(data.url, context);
-      detailedConcept.visualElement.oembed = visualElementOembed;
     } else if (data?.resource === 'brightcove') {
       detailedConcept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
+      detailedConcept.visualElement.copyright = await getVisualElementCopyright(
+        concept.visualElement.visualElement,
+        'brightcoves',
+        context,
+      );
+    } else if (data?.resource === 'h5p') {
+      const visualElementOembed = await fetchOembed(data.url, context);
+      detailedConcept.visualElement.oembed = visualElementOembed;
+      detailedConcept.visualElement.copyright = await getVisualElementCopyright(
+        concept.visualElement.visualElement,
+        'h5ps',
+        context,
+      );
+    } else if (data?.resource === 'external') {
+      const visualElementOembed = await fetchOembed(data.url, context);
+      detailedConcept.visualElement.oembed = visualElementOembed;
     }
   }
   return detailedConcept;
