@@ -76,7 +76,7 @@ function externalsToH5pMetaData(obj: any) {
   // looking for externals array
   if (obj?.metaData?.h5ps?.length) {
     const h5pArray: any[] = [];
-    obj.metaData.h5ps.map((i: { h5p: any; url: string }) => {
+    obj.metaData.h5ps.map((i: { h5p: any; url: string; copyText: string }) => {
       if (i && i.h5p) {
         // this element have h5p object
         let copyrightElement = {
@@ -104,6 +104,7 @@ function externalsToH5pMetaData(obj: any) {
           copyright: copyrightElement,
           title: i.h5p.title || '',
           src: i.url || '',
+          copyText: i.copyText,
         });
       }
       return i;
