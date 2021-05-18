@@ -245,6 +245,7 @@ export const typeDefs = gql`
     src: String!
     altText: String!
     copyright: Copyright!
+    contentType: String
   }
 
   type AudioLicense {
@@ -557,11 +558,6 @@ export const typeDefs = gql`
     relevance: String
   }
 
-  type VisualElementImage {
-    imageUrl: String
-    contentType: String
-  }
-
   type VisualElementOembed {
     title: String
     html: String
@@ -578,7 +574,7 @@ export const typeDefs = gql`
     player: String
     videoid: String
     thumbnail: String
-    image: VisualElementImage
+    image: ImageLicense
     oembed: VisualElementOembed
     lowerRightX: Int
     lowerRightY: Int
@@ -613,7 +609,6 @@ export const typeDefs = gql`
     content: String
     created: String
     tags: [String]
-    metaImage: MetaImage
     image: ImageLicense
     subjectIds: [String]
     articleIds: [String]

@@ -164,11 +164,10 @@ export async function fetchDetailedConcept(
     const data = parsedElement('embed').data();
     detailedConcept.visualElement = data;
     if (data?.resource === 'image') {
-      const image = await fetchImage(data.resourceId, context);
-      detailedConcept.visualElement.image = {
-        imageUrl: image.src,
-        contentType: image.contentType,
-      };
+      detailedConcept.visualElement.image = await fetchImage(
+        data.resourceId,
+        context,
+      );
     } else if (data?.resource === 'brightcove') {
       detailedConcept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
       const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
