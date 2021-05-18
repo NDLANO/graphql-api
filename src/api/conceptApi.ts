@@ -31,7 +31,19 @@ interface ConceptSearchResultJson extends SearchResultJson {
   created: string;
 }
 
-async function getVisualElementLicense(
+async function fetchImage(imageId: string, context: Context) {
+  const imageResponse = await fetch(`/image-api/v2/images/${imageId}`, context);
+  const image = await resolveJson(imageResponse);
+  return {
+    title: image.title.title,
+    src: image.imageUrl,
+    altText: image.alttext.alttext,
+    contentType: image.contentType,
+    copyright: image.copyright,
+  };
+}
+
+async function fetchVisualElementLicense(
   visualElement: string,
   resource: string,
   context: Context,
@@ -120,20 +132,9 @@ export async function fetchDetailedConcept(
     subjectIds: concept.subjectIds,
     copyright: concept.copyright,
   };
-  let image;
-  const imageId = concept.metaImage?.url?.split('/').pop();
-  if (imageId) {
-    const imageResponse = await fetch(
-      `/image-api/v2/images/${imageId}`,
-      context,
-    );
-    image = await resolveJson(imageResponse);
-    detailedConcept.image = {
-      title: image.title.title,
-      src: image.imageUrl,
-      altText: image.alttext.alttext,
-      copyright: image.copyright,
-    };
+  const metaImageId = concept.metaImage?.url?.split('/').pop();
+  if (metaImageId) {
+    detailedConcept.image = await fetchImage(metaImageId, context);
   }
   if (concept.articleIds) {
     const articles = await fetchArticlesPage(
@@ -163,29 +164,30 @@ export async function fetchDetailedConcept(
     const data = parsedElement('embed').data();
     detailedConcept.visualElement = data;
     if (data?.resource === 'image') {
+      const image = await fetchImage(data.resourceId, context);
       detailedConcept.visualElement.image = {
-        imageUrl: image.imageUrl,
+        imageUrl: image.src,
         contentType: image.contentType,
       };
     } else if (data?.resource === 'brightcove') {
       detailedConcept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
-      const license: GQLBrightcoveLicense = await getVisualElementLicense(
+      const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
         concept.visualElement.visualElement,
         'brightcoves',
         context,
       );
       detailedConcept.visualElement.copyright = license.copyright;
-      detailedConcept.visualElement.image = { imageUrl: license.cover };
+      detailedConcept.visualElement.thumbnail = license.cover;
     } else if (data?.resource === 'h5p') {
       const visualElementOembed = await fetchOembed(data.url, context);
       detailedConcept.visualElement.oembed = visualElementOembed;
-      const license: GQLH5pLicense = await getVisualElementLicense(
+      const license: GQLH5pLicense = await fetchVisualElementLicense(
         concept.visualElement.visualElement,
         'h5ps',
         context,
       );
       detailedConcept.visualElement.copyright = license.copyright;
-      detailedConcept.visualElement.image = { imageUrl: license.thumbnail };
+      detailedConcept.visualElement.thumbnail = license.thumbnail;
     } else if (data?.resource === 'external') {
       const visualElementOembed = await fetchOembed(data.url, context);
       detailedConcept.visualElement.oembed = visualElementOembed;

@@ -608,6 +608,7 @@ declare global {
     account?: string;
     player?: string;
     videoid?: string;
+    thumbnail?: string;
     image?: GQLVisualElementImage;
     oembed?: GQLVisualElementOembed;
     lowerRightX?: number;
@@ -2978,6 +2979,7 @@ declare global {
     account?: VisualElementToAccountResolver<TParent>;
     player?: VisualElementToPlayerResolver<TParent>;
     videoid?: VisualElementToVideoidResolver<TParent>;
+    thumbnail?: VisualElementToThumbnailResolver<TParent>;
     image?: VisualElementToImageResolver<TParent>;
     oembed?: VisualElementToOembedResolver<TParent>;
     lowerRightX?: VisualElementToLowerRightXResolver<TParent>;
@@ -3018,6 +3020,10 @@ declare global {
   }
   
   export interface VisualElementToVideoidResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToThumbnailResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

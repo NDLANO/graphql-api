@@ -577,6 +577,7 @@ export const typeDefs = gql`
     account: String
     player: String
     videoid: String
+    thumbnail: String
     image: VisualElementImage
     oembed: VisualElementOembed
     lowerRightX: Int
