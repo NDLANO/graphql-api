@@ -248,16 +248,18 @@ export const typeDefs = gql`
     src: String!
     altText: String!
     copyright: Copyright!
+    copyText: String!
   }
 
   type AudioLicense {
     title: String!
     src: String!
     copyright: Copyright!
+    copyText: String!
   }
 
   type BrightcoveIframe {
-    src: String!
+    src: String! 
     height: Int!
     width: Int!
   }
@@ -271,18 +273,21 @@ export const typeDefs = gql`
     iframe: BrightcoveIframe
     copyright: Copyright!
     uploadDate: String
+    copyText: String 
   }
 
   type H5pLicense {
     title: String!
     src: String
     copyright: Copyright!
+    copyText: String
   }
 
-  type ConceptLicense {
+  type ConceptLicense { 
     title: String!
     src: String
     copyright: Copyright
+    copyText: String
   }
 
   type ArticleMetaData {
@@ -292,6 +297,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense]
     h5ps: [H5pLicense]
     concepts: [ConceptLicense]
+    copyText: String
   }
 
   type Article {
@@ -302,7 +308,7 @@ export const typeDefs = gql`
     content: String!
     created: String!
     updated: String!
-    published: String!
+    published: String! 
     visualElement: String
     metaImage: MetaImage
     metaDescription: String!
@@ -310,7 +316,7 @@ export const typeDefs = gql`
     oldNdlaUrl: String
     requiredLibraries: [ArticleRequiredLibrary]
     metaData: ArticleMetaData
-    supportedLanguages: [String]
+    supportedLanguages: [String] 
     copyright: Copyright!
     tags: [String]
     grepCodes: [String]

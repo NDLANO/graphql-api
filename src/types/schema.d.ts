@@ -141,6 +141,7 @@ declare global {
     brightcoves?: Array<GQLBrightcoveLicense | null>;
     h5ps?: Array<GQLH5pLicense | null>;
     concepts?: Array<GQLConceptLicense | null>;
+    copyText?: string;
   }
   
   export interface GQLFootNote {
@@ -158,6 +159,7 @@ declare global {
     src: string;
     altText: string;
     copyright: GQLCopyright;
+    copyText: string;
   }
   
   export interface GQLCopyright {
@@ -183,6 +185,7 @@ declare global {
     title: string;
     src: string;
     copyright: GQLCopyright;
+    copyText: string;
   }
   
   export interface GQLBrightcoveLicense {
@@ -194,6 +197,7 @@ declare global {
     iframe?: GQLBrightcoveIframe;
     copyright: GQLCopyright;
     uploadDate?: string;
+    copyText?: string;
   }
   
   export interface GQLBrightcoveIframe {
@@ -206,12 +210,14 @@ declare global {
     title: string;
     src?: string;
     copyright: GQLCopyright;
+    copyText?: string;
   }
   
   export interface GQLConceptLicense {
     title: string;
     src?: string;
     copyright?: GQLCopyright;
+    copyText?: string;
   }
   
   export interface GQLCompetenceGoal {
@@ -1309,6 +1315,7 @@ declare global {
     brightcoves?: ArticleMetaDataToBrightcovesResolver<TParent>;
     h5ps?: ArticleMetaDataToH5psResolver<TParent>;
     concepts?: ArticleMetaDataToConceptsResolver<TParent>;
+    copyText?: ArticleMetaDataToCopyTextResolver<TParent>;
   }
   
   export interface ArticleMetaDataToFootnotesResolver<TParent = any, TResult = any> {
@@ -1332,6 +1339,10 @@ declare global {
   }
   
   export interface ArticleMetaDataToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1378,6 +1389,7 @@ declare global {
     src?: ImageLicenseToSrcResolver<TParent>;
     altText?: ImageLicenseToAltTextResolver<TParent>;
     copyright?: ImageLicenseToCopyrightResolver<TParent>;
+    copyText?: ImageLicenseToCopyTextResolver<TParent>;
   }
   
   export interface ImageLicenseToTitleResolver<TParent = any, TResult = any> {
@@ -1393,6 +1405,10 @@ declare global {
   }
   
   export interface ImageLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageLicenseToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1459,6 +1475,7 @@ declare global {
     title?: AudioLicenseToTitleResolver<TParent>;
     src?: AudioLicenseToSrcResolver<TParent>;
     copyright?: AudioLicenseToCopyrightResolver<TParent>;
+    copyText?: AudioLicenseToCopyTextResolver<TParent>;
   }
   
   export interface AudioLicenseToTitleResolver<TParent = any, TResult = any> {
@@ -1473,6 +1490,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface AudioLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLBrightcoveLicenseTypeResolver<TParent = any> {
     title?: BrightcoveLicenseToTitleResolver<TParent>;
     description?: BrightcoveLicenseToDescriptionResolver<TParent>;
@@ -1482,6 +1503,7 @@ declare global {
     iframe?: BrightcoveLicenseToIframeResolver<TParent>;
     copyright?: BrightcoveLicenseToCopyrightResolver<TParent>;
     uploadDate?: BrightcoveLicenseToUploadDateResolver<TParent>;
+    copyText?: BrightcoveLicenseToCopyTextResolver<TParent>;
   }
   
   export interface BrightcoveLicenseToTitleResolver<TParent = any, TResult = any> {
@@ -1516,6 +1538,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface BrightcoveLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLBrightcoveIframeTypeResolver<TParent = any> {
     src?: BrightcoveIframeToSrcResolver<TParent>;
     height?: BrightcoveIframeToHeightResolver<TParent>;
@@ -1538,6 +1564,7 @@ declare global {
     title?: H5pLicenseToTitleResolver<TParent>;
     src?: H5pLicenseToSrcResolver<TParent>;
     copyright?: H5pLicenseToCopyrightResolver<TParent>;
+    copyText?: H5pLicenseToCopyTextResolver<TParent>;
   }
   
   export interface H5pLicenseToTitleResolver<TParent = any, TResult = any> {
@@ -1552,10 +1579,15 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface H5pLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLConceptLicenseTypeResolver<TParent = any> {
     title?: ConceptLicenseToTitleResolver<TParent>;
     src?: ConceptLicenseToSrcResolver<TParent>;
     copyright?: ConceptLicenseToCopyrightResolver<TParent>;
+    copyText?: ConceptLicenseToCopyTextResolver<TParent>;
   }
   
   export interface ConceptLicenseToTitleResolver<TParent = any, TResult = any> {
@@ -1567,6 +1599,10 @@ declare global {
   }
   
   export interface ConceptLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptLicenseToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
