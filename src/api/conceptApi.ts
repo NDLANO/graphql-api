@@ -31,11 +31,11 @@ interface ConceptSearchResultJson extends SearchResultJson {
   created: string;
 }
 
-async function getVisualElementCopyright(
+async function getVisualElementLicense(
   visualElement: string,
   resource: string,
   context: Context,
-): Promise<GQLCopyright> {
+): Promise<GQLBrightcoveLicense | GQLH5pLicense> {
   const host = localConverter ? 'http://localhost:3100' : '';
   const metaDataResponse = await fetch(
     encodeURI(
@@ -44,7 +44,7 @@ async function getVisualElementCopyright(
     context,
   );
   const metaData = await resolveJson(metaDataResponse);
-  return metaData.metaData[resource][0].copyright;
+  return metaData.metaData[resource][0];
 }
 
 export async function searchConcepts(
@@ -169,19 +169,23 @@ export async function fetchDetailedConcept(
       };
     } else if (data?.resource === 'brightcove') {
       detailedConcept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
-      detailedConcept.visualElement.copyright = await getVisualElementCopyright(
+      const license: GQLBrightcoveLicense = await getVisualElementLicense(
         concept.visualElement.visualElement,
         'brightcoves',
         context,
       );
+      detailedConcept.visualElement.copyright = license.copyright;
+      detailedConcept.visualElement.image = { imageUrl: license.cover };
     } else if (data?.resource === 'h5p') {
       const visualElementOembed = await fetchOembed(data.url, context);
       detailedConcept.visualElement.oembed = visualElementOembed;
-      detailedConcept.visualElement.copyright = await getVisualElementCopyright(
+      const license: GQLH5pLicense = await getVisualElementLicense(
         concept.visualElement.visualElement,
         'h5ps',
         context,
       );
+      detailedConcept.visualElement.copyright = license.copyright;
+      detailedConcept.visualElement.image = { imageUrl: license.thumbnail };
     } else if (data?.resource === 'external') {
       const visualElementOembed = await fetchOembed(data.url, context);
       detailedConcept.visualElement.oembed = visualElementOembed;

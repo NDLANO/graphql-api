@@ -273,6 +273,7 @@ export const typeDefs = gql`
   type H5pLicense {
     title: String!
     src: String
+    thumbnail: String
     copyright: Copyright!
   }
 

@@ -207,6 +207,7 @@ declare global {
   export interface GQLH5pLicense {
     title: string;
     src?: string;
+    thumbnail?: string;
     copyright: GQLCopyright;
   }
   
@@ -1614,6 +1615,7 @@ declare global {
   export interface GQLH5pLicenseTypeResolver<TParent = any> {
     title?: H5pLicenseToTitleResolver<TParent>;
     src?: H5pLicenseToSrcResolver<TParent>;
+    thumbnail?: H5pLicenseToThumbnailResolver<TParent>;
     copyright?: H5pLicenseToCopyrightResolver<TParent>;
   }
   
@@ -1622,6 +1624,10 @@ declare global {
   }
   
   export interface H5pLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pLicenseToThumbnailResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
