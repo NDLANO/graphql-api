@@ -174,12 +174,7 @@ export const typeDefs = gql`
     paths: [String]
     meta: Meta
     metadata: TaxonomyMetadata
-    article(
-      filterIds: String
-      subjectId: String
-      removeRelatedContent: String
-      isOembed: String
-    ): Article
+    article(filterIds: String, subjectId: String, isOembed: String): Article
     learningpath: Learningpath
     filters: [Filter]
     relevanceId: String
@@ -248,12 +243,14 @@ export const typeDefs = gql`
     src: String!
     altText: String!
     copyright: Copyright!
+    copyText: String
   }
 
   type AudioLicense {
     title: String!
     src: String!
     copyright: Copyright!
+    copyText: String
   }
 
   type BrightcoveIframe {
@@ -271,18 +268,21 @@ export const typeDefs = gql`
     iframe: BrightcoveIframe
     copyright: Copyright!
     uploadDate: String
+    copyText: String
   }
 
   type H5pLicense {
     title: String!
     src: String
     copyright: Copyright!
+    copyText: String
   }
 
   type ConceptLicense {
     title: String!
     src: String
     copyright: Copyright
+    copyText: String
   }
 
   type ArticleMetaData {
@@ -292,6 +292,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense]
     h5ps: [H5pLicense]
     concepts: [ConceptLicense]
+    copyText: String
   }
 
   type Article {
@@ -699,8 +700,8 @@ export const typeDefs = gql`
       id: String!
       filterIds: String
       subjectId: String
-      removeRelatedContent: String
       isOembed: String
+      path: String
     ): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage

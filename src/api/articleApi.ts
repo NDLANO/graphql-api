@@ -15,20 +15,18 @@ export async function fetchArticle(
     articleId: string;
     filterIds?: string;
     subjectId?: string;
-    removeRelatedContent?: string;
     isOembed?: string;
+    path?: string;
   },
   context: Context,
 ): Promise<GQLArticle> {
   const host = localConverter ? 'http://localhost:3100' : '';
   const filterParam = params.filterIds ? `&filters=${params.filterIds}` : '';
   const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : '';
-  const relatedParam = params.removeRelatedContent
-    ? `&removeRelatedContent=${params.removeRelatedContent}`
-    : '';
   const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : '';
+  const pathParam = params.path ? `&path=${params.path}` : '';
   const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${relatedParam}${oembedParam}`,
+    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${oembedParam}${pathParam}`,
     context,
   );
   return resolveJson(response);
