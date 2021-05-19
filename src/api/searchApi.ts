@@ -59,12 +59,7 @@ export async function search(
     { cache: 'no-store' },
   );
   const searchResults = await resolveJson(response);
-  const concepts = await searchConcepts(
-    searchQuery.query,
-    searchQuery.subjects,
-    searchQuery.language,
-    context,
-  );
+  const concepts = await searchConcepts(searchQuery, context);
   return {
     ...searchResults,
     results: searchResults.results.map((result: SearchResultJson) =>
@@ -120,15 +115,10 @@ export async function groupSearch(
 }
 
 export async function conceptSearch(
-  searchQuery: QueryToSearchArgs,
+  searchQuery: QueryToConceptSearchArgs,
   context: Context,
-): Promise<[GQLConcept]> {
-  return searchConcepts(
-    searchQuery.query,
-    searchQuery.subjects,
-    searchQuery.language,
-    context,
-  );
+): Promise<GQLConceptResult> {
+  return searchConcepts(searchQuery, context);
 }
 
 export async function frontpageSearch(

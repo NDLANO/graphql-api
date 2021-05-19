@@ -42,6 +42,10 @@ import {
   Query as PodcastQuery,
   resolvers as podcastResolvers,
 } from './podcastResolvers';
+import {
+  Query as ConceptQuery,
+  resolvers as conceptResolvers,
+} from './conceptResolvers';
 import { resolvers as filterResolvers } from './filterResolvers';
 
 export const resolvers: GQLResolver = {
@@ -55,6 +59,7 @@ export const resolvers: GQLResolver = {
     ...CurriculumQuery,
     ...LearningpathQuery,
     ...PodcastQuery,
+    ...ConceptQuery,
   },
   ...articleResolvers,
   ...subjectResolvers,
@@ -66,6 +71,7 @@ export const resolvers: GQLResolver = {
   ...curriculumResolvers,
   ...filterResolvers,
   ...podcastResolvers,
+  ...conceptResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any): GQLPossibleTaxonomyEntityTypeNames {

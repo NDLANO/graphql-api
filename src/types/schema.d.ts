@@ -35,7 +35,10 @@ declare global {
     search?: GQLSearch;
     resourceTypes?: Array<GQLResourceTypeDefinition | null>;
     groupSearch?: Array<GQLGroupSearch | null>;
-    conceptSearch?: Array<GQLConcept | null>;
+    listingPage?: GQLListingPage;
+    concepts?: Array<GQLConcept | null>;
+    detailedConcept?: GQLDetailedConcept;
+    conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearch;
     podcast?: GQLAudio;
@@ -261,6 +264,7 @@ declare global {
     id?: number;
     title?: string;
     content?: string;
+    tags?: Array<string | null>;
     metaImage?: GQLMetaImage;
   }
   
@@ -553,6 +557,7 @@ declare global {
   }
   
   export interface GQLConceptResult {
+    totalCount?: number;
     concepts?: Array<GQLConcept | null>;
   }
   
@@ -573,6 +578,56 @@ declare global {
     traits?: Array<string | null>;
     contexts?: Array<GQLSearchContext | null>;
     metaImage?: GQLMetaImage;
+  }
+  
+  export interface GQLListingPage {
+    subjects?: Array<GQLSubject | null>;
+    tags?: Array<string | null>;
+  }
+  
+  export interface GQLDetailedConcept {
+    id?: number;
+    title?: string;
+    content?: string;
+    created?: string;
+    tags?: Array<string | null>;
+    metaImage?: GQLMetaImage;
+    image?: GQLImageLicense;
+    subjectIds?: Array<string | null>;
+    articleIds?: Array<string | null>;
+    articles?: Array<GQLMeta | null>;
+    visualElement?: GQLVisualElement;
+    copyright?: GQLCopyright;
+  }
+  
+  export interface GQLVisualElement {
+    resource?: string;
+    resourceId?: string;
+    title?: string;
+    url?: string;
+    alt?: string;
+    account?: string;
+    player?: string;
+    videoid?: string;
+    image?: GQLVisualElementImage;
+    oembed?: GQLVisualElementOembed;
+    lowerRightX?: number;
+    lowerRightY?: number;
+    upperLeftX?: number;
+    upperLeftY?: number;
+    focalX?: number;
+    focalY?: number;
+  }
+  
+  export interface GQLVisualElementImage {
+    imageUrl?: string;
+    contentType?: string;
+  }
+  
+  export interface GQLVisualElementOembed {
+    title?: string;
+    html?: string;
+    fullscreen?: boolean;
   }
   
   export interface GQLFrontpageSearch {
@@ -763,6 +818,11 @@ declare global {
     ConceptResult?: GQLConceptResultTypeResolver;
     GroupSearch?: GQLGroupSearchTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
+    ListingPage?: GQLListingPageTypeResolver;
+    DetailedConcept?: GQLDetailedConceptTypeResolver;
+    VisualElement?: GQLVisualElementTypeResolver;
+    VisualElementImage?: GQLVisualElementImageTypeResolver;
+    VisualElementOembed?: GQLVisualElementOembedTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
@@ -799,6 +859,9 @@ declare global {
     search?: QueryToSearchResolver<TParent>;
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
+    listingPage?: QueryToListingPageResolver<TParent>;
+    concepts?: QueryToConceptsResolver<TParent>;
+    detailedConcept?: QueryToDetailedConceptResolver<TParent>;
     conceptSearch?: QueryToConceptSearchResolver<TParent>;
     frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
     searchWithoutPagination?: QueryToSearchWithoutPaginationResolver<TParent>;
@@ -961,9 +1024,31 @@ declare global {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface QueryToListingPageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToConceptsArgs {
+    ids?: Array<string | null>;
+  }
+  export interface QueryToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToDetailedConceptArgs {
+    id?: string;
+  }
+  export interface QueryToDetailedConceptResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToDetailedConceptArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface QueryToConceptSearchArgs {
     query?: string;
     subjects?: string;
+    tags?: string;
+    page?: string;
+    pageSize?: string;
+    exactMatch?: boolean;
     language?: string;
   }
   export interface QueryToConceptSearchResolver<TParent = any, TResult = any> {
@@ -1728,6 +1813,7 @@ declare global {
     id?: ConceptToIdResolver<TParent>;
     title?: ConceptToTitleResolver<TParent>;
     content?: ConceptToContentResolver<TParent>;
+    tags?: ConceptToTagsResolver<TParent>;
     metaImage?: ConceptToMetaImageResolver<TParent>;
   }
   
@@ -1740,6 +1826,10 @@ declare global {
   }
   
   export interface ConceptToContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToTagsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2726,7 +2816,12 @@ declare global {
   }
   
   export interface GQLConceptResultTypeResolver<TParent = any> {
+    totalCount?: ConceptResultToTotalCountResolver<TParent>;
     concepts?: ConceptResultToConceptsResolver<TParent>;
+  }
+  
+  export interface ConceptResultToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface ConceptResultToConceptsResolver<TParent = any, TResult = any> {
@@ -2801,6 +2896,196 @@ declare global {
   }
   
   export interface GroupSearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLListingPageTypeResolver<TParent = any> {
+    subjects?: ListingPageToSubjectsResolver<TParent>;
+    tags?: ListingPageToTagsResolver<TParent>;
+  }
+  
+  export interface ListingPageToSubjectsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ListingPageToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLDetailedConceptTypeResolver<TParent = any> {
+    id?: DetailedConceptToIdResolver<TParent>;
+    title?: DetailedConceptToTitleResolver<TParent>;
+    content?: DetailedConceptToContentResolver<TParent>;
+    created?: DetailedConceptToCreatedResolver<TParent>;
+    tags?: DetailedConceptToTagsResolver<TParent>;
+    metaImage?: DetailedConceptToMetaImageResolver<TParent>;
+    image?: DetailedConceptToImageResolver<TParent>;
+    subjectIds?: DetailedConceptToSubjectIdsResolver<TParent>;
+    articleIds?: DetailedConceptToArticleIdsResolver<TParent>;
+    articles?: DetailedConceptToArticlesResolver<TParent>;
+    visualElement?: DetailedConceptToVisualElementResolver<TParent>;
+    copyright?: DetailedConceptToCopyrightResolver<TParent>;
+  }
+  
+  export interface DetailedConceptToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToCreatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToSubjectIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToArticleIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToArticlesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToVisualElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLVisualElementTypeResolver<TParent = any> {
+    resource?: VisualElementToResourceResolver<TParent>;
+    resourceId?: VisualElementToResourceIdResolver<TParent>;
+    title?: VisualElementToTitleResolver<TParent>;
+    url?: VisualElementToUrlResolver<TParent>;
+    alt?: VisualElementToAltResolver<TParent>;
+    account?: VisualElementToAccountResolver<TParent>;
+    player?: VisualElementToPlayerResolver<TParent>;
+    videoid?: VisualElementToVideoidResolver<TParent>;
+    image?: VisualElementToImageResolver<TParent>;
+    oembed?: VisualElementToOembedResolver<TParent>;
+    lowerRightX?: VisualElementToLowerRightXResolver<TParent>;
+    lowerRightY?: VisualElementToLowerRightYResolver<TParent>;
+    upperLeftX?: VisualElementToUpperLeftXResolver<TParent>;
+    upperLeftY?: VisualElementToUpperLeftYResolver<TParent>;
+    focalX?: VisualElementToFocalXResolver<TParent>;
+    focalY?: VisualElementToFocalYResolver<TParent>;
+  }
+  
+  export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToResourceIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToAltResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToAccountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToPlayerResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToVideoidResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToOembedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToLowerRightXResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToLowerRightYResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToUpperLeftXResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToUpperLeftYResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToFocalXResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToFocalYResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLVisualElementImageTypeResolver<TParent = any> {
+    imageUrl?: VisualElementImageToImageUrlResolver<TParent>;
+    contentType?: VisualElementImageToContentTypeResolver<TParent>;
+  }
+  
+  export interface VisualElementImageToImageUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementImageToContentTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLVisualElementOembedTypeResolver<TParent = any> {
+    title?: VisualElementOembedToTitleResolver<TParent>;
+    html?: VisualElementOembedToHtmlResolver<TParent>;
+    fullscreen?: VisualElementOembedToFullscreenResolver<TParent>;
+  }
+  
+  export interface VisualElementOembedToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementOembedToHtmlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementOembedToFullscreenResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
