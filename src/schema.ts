@@ -243,14 +243,14 @@ export const typeDefs = gql`
     src: String!
     altText: String!
     copyright: Copyright!
-    copyText: String!
+    copyText: String
   }
 
   type AudioLicense {
     title: String!
     src: String!
     copyright: Copyright!
-    copyText: String!
+    copyText: String
   }
 
   type BrightcoveIframe {

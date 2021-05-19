@@ -159,7 +159,7 @@ declare global {
     src: string;
     altText: string;
     copyright: GQLCopyright;
-    copyText: string;
+    copyText?: string;
   }
   
   export interface GQLCopyright {
@@ -185,7 +185,7 @@ declare global {
     title: string;
     src: string;
     copyright: GQLCopyright;
-    copyText: string;
+    copyText?: string;
   }
   
   export interface GQLBrightcoveLicense {
