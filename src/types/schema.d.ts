@@ -824,7 +824,6 @@ declare global {
     id: string;
     filterIds?: string;
     subjectId?: string;
-    removeRelatedContent?: string;
     isOembed?: string;
     path?: string;
   }
@@ -1065,7 +1064,6 @@ declare global {
   export interface ResourceToArticleArgs {
     filterIds?: string;
     subjectId?: string;
-    removeRelatedContent?: string;
     isOembed?: string;
   }
   export interface ResourceToArticleResolver<TParent = any, TResult = any> {

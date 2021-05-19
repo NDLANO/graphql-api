@@ -91,7 +91,6 @@ export const resolvers = {
       args: {
         filterIds?: string;
         subjectId?: string;
-        removeRelatedContent?: string;
         isOembed?: string;
       },
       context: Context,
@@ -104,7 +103,6 @@ export const resolvers = {
               articleId,
               filterIds: args.filterIds,
               subjectId: args.subjectId,
-              removeRelatedContent: args.removeRelatedContent,
               isOembed: args.isOembed,
               path: resource.path,
             },
