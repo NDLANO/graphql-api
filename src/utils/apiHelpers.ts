@@ -76,40 +76,42 @@ function externalsToH5pMetaData(obj: any) {
   // looking for externals array
   if (obj?.metaData?.h5ps?.length) {
     const h5pArray: any[] = [];
-    obj.metaData.h5ps.map((i: { h5p: any; assets: any[]; url: string; copyText: string }) => {
-      if (i && i.h5p) {
-        // this element have h5p object
-        let copyrightElement = {
-          license: {
-            license: licenseFixer(
-              i.h5p.license || '',
-              i.h5p.licenseVersion || '4.0',
-            ),
-            url: i.h5p.source || '',
-            description: i.h5p.licenseExtras || '',
-          },
-          creators: new Array(),
-          processors: new Array(),
-          rightsholders: i.h5p.authors
-            ? i.h5p.authors.map((author: { role: any; name?: string }) => {
-                return {
-                  type: roleMapper(author.role || ''),
-                  name: author.name || '',
-                };
-              })
-            : [],
-          origin: i.h5p.source || '',
-        };
-        h5pArray.push({
-          copyright: copyrightElement,
-          title: i.h5p.title || '',
-          src: i.url || '',
-          thumbnail: i.h5p.thumbnail || i.assets?.[0]?.thumbnail,
-          copyText: i.copyText,
-        });
-      }
-      return i;
-    });
+    obj.metaData.h5ps.map(
+      (i: { h5p: any; assets: any[]; url: string; copyText: string }) => {
+        if (i && i.h5p) {
+          // this element have h5p object
+          let copyrightElement = {
+            license: {
+              license: licenseFixer(
+                i.h5p.license || '',
+                i.h5p.licenseVersion || '4.0',
+              ),
+              url: i.h5p.source || '',
+              description: i.h5p.licenseExtras || '',
+            },
+            creators: new Array(),
+            processors: new Array(),
+            rightsholders: i.h5p.authors
+              ? i.h5p.authors.map((author: { role: any; name?: string }) => {
+                  return {
+                    type: roleMapper(author.role || ''),
+                    name: author.name || '',
+                  };
+                })
+              : [],
+            origin: i.h5p.source || '',
+          };
+          h5pArray.push({
+            copyright: copyrightElement,
+            title: i.h5p.title || '',
+            src: i.url || '',
+            thumbnail: i.h5p.thumbnail || i.assets?.[0]?.thumbnail,
+            copyText: i.copyText,
+          });
+        }
+        return i;
+      },
+    );
 
     // adding h5p array
     if (h5pArray.length > 0) {
