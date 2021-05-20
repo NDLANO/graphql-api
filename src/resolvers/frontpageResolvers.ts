@@ -13,18 +13,10 @@ import {
   fetchResourcesAndTopics,
   fetchFilmFrontpage,
   fetchMovieMeta,
-  queryTopicsOnContentURI,
   queryResourcesOnContentURI,
 } from '../api';
 
 import { RCategory, FrontpageResponse } from '../api/frontpageApi';
-
-import { ndlaEnvironment } from '../config';
-
-const queryFunctionOnContentURI =
-  ndlaEnvironment === 'test'
-    ? queryTopicsOnContentURI
-    : queryResourcesOnContentURI;
 
 interface Id {
   id: string;
@@ -114,11 +106,14 @@ export const resolvers = {
       return movieMeta.metaDescription;
     },
     async path(id: string, _: any, context: Context): Promise<string> {
-      const moviePath: GQLMoviePath = await queryFunctionOnContentURI(
+      const moviePath: GQLMoviePath = await queryResourcesOnContentURI(
         id,
         context,
       );
-      return moviePath.path;
+      return (
+        moviePath.paths?.find(p => p.startsWith('/subject:20/')) ||
+        moviePath.path
+      );
     },
     async resourceTypes(
       id: string,

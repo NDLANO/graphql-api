@@ -163,6 +163,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
+    relevanceId: String
   }
 
   type Resource implements TaxonomyEntity {
@@ -173,11 +174,7 @@ export const typeDefs = gql`
     paths: [String]
     meta: Meta
     metadata: TaxonomyMetadata
-    article(
-      filterIds: String
-      subjectId: String
-      removeRelatedContent: String
-    ): Article
+    article(filterIds: String, subjectId: String, isOembed: String): Article
     learningpath: Learningpath
     filters: [Filter]
     relevanceId: String
@@ -203,6 +200,7 @@ export const typeDefs = gql`
     pathTopics: [[Topic]]
     coreResources(filterIds: String, subjectId: String): [Resource]
     supplementaryResources(filterIds: String, subjectId: String): [Resource]
+    breadcrumbs: [[String]]
   }
 
   type License {
@@ -246,12 +244,14 @@ export const typeDefs = gql`
     altText: String!
     copyright: Copyright!
     contentType: String
+    copyText: String
   }
 
   type AudioLicense {
     title: String!
     src: String!
     copyright: Copyright!
+    copyText: String
   }
 
   type BrightcoveIframe {
@@ -269,6 +269,7 @@ export const typeDefs = gql`
     iframe: BrightcoveIframe
     copyright: Copyright!
     uploadDate: String
+    copyText: String
   }
 
   type H5pLicense {
@@ -276,12 +277,14 @@ export const typeDefs = gql`
     src: String
     thumbnail: String
     copyright: Copyright!
+    copyText: String
   }
 
   type ConceptLicense {
     title: String!
     src: String
     copyright: Copyright
+    copyText: String
   }
 
   type ArticleMetaData {
@@ -291,6 +294,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense]
     h5ps: [H5pLicense]
     concepts: [ConceptLicense]
+    copyText: String
   }
 
   type Article {
@@ -471,6 +475,7 @@ export const typeDefs = gql`
 
   type MoviePath {
     path: String
+    paths: [String]
   }
 
   type MovieResourceTypes {
@@ -693,7 +698,8 @@ export const typeDefs = gql`
       id: String!
       filterIds: String
       subjectId: String
-      removeRelatedContent: String
+      isOembed: String
+      path: String
     ): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
@@ -702,7 +708,7 @@ export const typeDefs = gql`
     learningpathStep(pathId: String!, stepId: String!): LearningpathStep
     subjects: [Subject]
     topic(id: String!, subjectId: String): Topic
-    topics: [Topic]
+    topics(contentUri: String): [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
     competenceGoals(
