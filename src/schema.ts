@@ -543,6 +543,7 @@ export const typeDefs = gql`
     resourceTypes: [SearchContextResourceTypes]
     subject: String
     subjectId: String
+    relevance: String
     path: String
     id: String
     language: String
