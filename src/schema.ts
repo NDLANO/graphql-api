@@ -711,7 +711,7 @@ export const typeDefs = gql`
     learningpathStep(pathId: String!, stepId: String!): LearningpathStep
     subjects: [Subject]
     topic(id: String!, subjectId: String): Topic
-    topics(contentUri: String): [Topic]
+    topics(contentUri: String, filterVisible: Boolean): [Topic]
     frontpage: Frontpage
     filters: [SubjectFilter]
     competenceGoals(

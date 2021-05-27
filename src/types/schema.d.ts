@@ -942,6 +942,7 @@ declare global {
   
   export interface QueryToTopicsArgs {
     contentUri?: string;
+    filterVisible?: boolean;
   }
   export interface QueryToTopicsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
