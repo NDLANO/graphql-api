@@ -112,7 +112,7 @@ export const resolvers = {
       );
       return (
         moviePath?.paths?.find(p => p.startsWith('/subject:20/')) ||
-        (moviePath?.path || '')
+        moviePath?.path || ''
       );
     },
     async resourceTypes(
