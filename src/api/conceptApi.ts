@@ -208,7 +208,7 @@ export async function fetchListingPage(
   );
   const subjects = (subjectResults.filter(
     result => result.status === 'fulfilled',
-  ) as PromiseFulfilledResult<GQLSubject>[]).map(res => res.value);
+  ) as Array<PromiseFulfilledResult<GQLSubject>>).map(res => res.value);
 
   const tags = await resolveJson(
     await fetch(`/concept-api/v1/concepts/tags/`, context),
