@@ -15,6 +15,7 @@ import {
   fetchSubtopics,
   fetchOembed,
   fetchSubject,
+  fetchSubjects,
 } from '../api';
 import {
   filterMissingArticles,
@@ -47,12 +48,7 @@ export const Query = {
     if (!filterVisible) return topicList;
 
     const topicsWithPath = topicList.filter(t => t.path != null);
-    const subjectList = await Promise.all(
-      topicsWithPath.map(topic => {
-        const subjectId = topic.path.split('/')[1];
-        return fetchSubject(`urn:${subjectId}`, context);
-      }),
-    );
+    const subjectList = await fetchSubjects(context);
 
     const topicsWithVisibleSubject = topicsWithPath.filter(topic => {
       const subjectId = topic.path.split('/')[1];
