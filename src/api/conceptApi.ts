@@ -176,6 +176,7 @@ export async function fetchDetailedConcept(
         context,
       );
       detailedConcept.visualElement.copyright = license.copyright;
+      detailedConcept.visualElement.copyText = license.copyText;
       detailedConcept.visualElement.thumbnail = license.cover;
     } else if (data?.resource === 'h5p') {
       const visualElementOembed = await fetchOembed(data.url, context);
@@ -186,6 +187,7 @@ export async function fetchDetailedConcept(
         context,
       );
       detailedConcept.visualElement.copyright = license.copyright;
+      detailedConcept.visualElement.copyText = license.copyText;
       detailedConcept.visualElement.thumbnail = license.thumbnail;
     } else if (data?.resource === 'external') {
       const visualElementOembed = await fetchOembed(data.url, context);
@@ -201,9 +203,13 @@ export async function fetchListingPage(
   const subjectIds: string[] = await resolveJson(
     await fetch(`/concept-api/v1/concepts/subjects/`, context),
   );
-  const subjects = await Promise.all(
+  const subjectResults = await Promise.allSettled(
     subjectIds.map(id => fetchSubject(id, context)),
   );
+  const subjects = (subjectResults.filter(
+    result => result.status === 'fulfilled',
+  ) as PromiseFulfilledResult<GQLSubject>[]).map(res => res.value);
+  
   const tags = await resolveJson(
     await fetch(`/concept-api/v1/concepts/tags/`, context),
   );

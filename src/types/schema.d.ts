@@ -626,6 +626,7 @@ declare global {
     focalX?: number;
     focalY?: number;
     copyright?: GQLCopyright;
+    copyText?: string;
   }
   
   export interface GQLVisualElementOembed {
@@ -3031,6 +3032,7 @@ declare global {
     focalX?: VisualElementToFocalXResolver<TParent>;
     focalY?: VisualElementToFocalYResolver<TParent>;
     copyright?: VisualElementToCopyrightResolver<TParent>;
+    copyText?: VisualElementToCopyTextResolver<TParent>;
   }
   
   export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
@@ -3102,6 +3104,10 @@ declare global {
   }
   
   export interface VisualElementToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
