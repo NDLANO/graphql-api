@@ -87,7 +87,7 @@ export const resolvers = {
     },
     async title(id: string, _: any, context: Context): Promise<string> {
       const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta.title;
+      return movieMeta?.title || '';
     },
     async metaImage(
       id: string,
@@ -95,7 +95,7 @@ export const resolvers = {
       context: Context,
     ): Promise<GQLMetaImage> {
       const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta.metaImage;
+      return movieMeta?.metaImage || {};
     },
     async metaDescription(
       id: string,
@@ -103,7 +103,7 @@ export const resolvers = {
       context: Context,
     ): Promise<string> {
       const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta.metaDescription;
+      return movieMeta?.metaDescription || '';
     },
     async path(id: string, _: any, context: Context): Promise<string> {
       const moviePath: GQLMoviePath = await queryResourcesOnContentURI(
@@ -111,8 +111,8 @@ export const resolvers = {
         context,
       );
       return (
-        moviePath.paths?.find(p => p.startsWith('/subject:20/')) ||
-        moviePath.path
+        moviePath?.paths?.find(p => p.startsWith('/subject:20/')) ||
+        (moviePath?.path || '')
       );
     },
     async resourceTypes(
