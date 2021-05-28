@@ -15,6 +15,7 @@ import {
   fetchSubtopics,
   fetchOembed,
   fetchSubject,
+  fetchSubjects,
 } from '../api';
 import {
   filterMissingArticles,
@@ -40,10 +41,23 @@ export const Query = {
   },
   async topics(
     _: any,
-    { contentUri }: QueryToTopicsArgs,
+    { contentUri, filterVisible }: QueryToTopicsArgs,
     context: Context,
   ): Promise<GQLTopic[]> {
-    return fetchTopics({ contentUri }, context);
+    const topicList = await fetchTopics({ contentUri }, context);
+    if (!filterVisible) return topicList;
+
+    const topicsWithPath = topicList.filter(t => t.path != null);
+    const subjectList = await fetchSubjects(context);
+
+    const topicsWithVisibleSubject = topicsWithPath.filter(topic => {
+      const subjectId = topic.path.split('/')[1];
+      const parentSubject = subjectList.find(subject =>
+        subject.id.includes(subjectId),
+      );
+      return parentSubject.metadata.visible === true;
+    });
+    return topicsWithVisibleSubject;
   },
 };
 
