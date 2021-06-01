@@ -84,7 +84,7 @@ export async function fetchSubject(
     `/${context.taxonomyUrl}/v1/subjects/${id}?language=${context.language}`,
     context,
   );
-  return resolveJson(response);
+  return resolveJson(response, { ignore404: true, id });
 }
 
 export async function fetchSubjectTopics(

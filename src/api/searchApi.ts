@@ -196,7 +196,7 @@ export async function searchWithoutPagination(
     }
   }
   const response = await Promise.all(requests);
-  const allResultsJson = await Promise.all(response.map(resolveJson));
+  const allResultsJson = await Promise.all(response.map(r => resolveJson(r)));
   allResultsJson.push(firstPageJson);
   return {
     results: allResultsJson.flatMap(json =>

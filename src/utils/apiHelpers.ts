@@ -53,12 +53,28 @@ async function fetchHelper(
 
 export const fetch = fetchHelper;
 
-export async function resolveJson(response: Response): Promise<any> {
+export interface ResponseOptions {
+  id: string;
+  ignore404: boolean;
+}
+
+export async function resolveJson(
+  response: Response,
+  options?: ResponseOptions,
+): Promise<any> {
   const { status, ok, url, statusText } = response;
 
   if (status === 204) {
     // nothing to resolve
     return;
+  }
+
+  if (status === 404 && options?.ignore404) {
+    // Handle deleted subjects
+    return {
+      id: options.id,
+      name: options.id,
+    };
   }
 
   const json = await response.json();
