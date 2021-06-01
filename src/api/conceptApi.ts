@@ -12,6 +12,7 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { fetchArticlesPage } from './articleApi';
 import { fetchOembed } from './oembedApi';
+import { localConverter } from '../config';
 
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
@@ -28,6 +29,34 @@ interface ConceptSearchResultJson extends SearchResultJson {
   articleIds?: string[];
   subjectIds?: string[];
   created: string;
+}
+
+async function fetchImage(imageId: string, context: Context) {
+  const imageResponse = await fetch(`/image-api/v2/images/${imageId}`, context);
+  const image = await resolveJson(imageResponse);
+  return {
+    title: image.title.title,
+    src: image.imageUrl,
+    altText: image.alttext.alttext,
+    contentType: image.contentType,
+    copyright: image.copyright,
+  };
+}
+
+async function fetchVisualElementLicense(
+  visualElement: string,
+  resource: string,
+  context: Context,
+): Promise<GQLBrightcoveLicense | GQLH5pLicense> {
+  const host = localConverter ? 'http://localhost:3100' : '';
+  const metaDataResponse = await fetch(
+    encodeURI(
+      `${host}/article-converter/json/${context.language}/meta-data?embed=${visualElement}`,
+    ),
+    context,
+  );
+  const metaData = await resolveJson(metaDataResponse);
+  return metaData.metaData[resource][0];
 }
 
 export async function searchConcepts(
@@ -103,20 +132,9 @@ export async function fetchDetailedConcept(
     subjectIds: concept.subjectIds,
     copyright: concept.copyright,
   };
-  let image;
-  const imageId = concept.metaImage?.url?.split('/').pop();
-  if (imageId) {
-    const imageResponse = await fetch(
-      `/image-api/v2/images/${imageId}`,
-      context,
-    );
-    image = await resolveJson(imageResponse);
-    detailedConcept.image = {
-      title: image.title.title,
-      src: image.imageUrl,
-      altText: image.alttext.alttext,
-      copyright: image.copyright,
-    };
+  const metaImageId = concept.metaImage?.url?.split('/').pop();
+  if (metaImageId) {
+    detailedConcept.image = await fetchImage(metaImageId, context);
   }
   if (concept.articleIds) {
     const articles = await fetchArticlesPage(
@@ -146,15 +164,34 @@ export async function fetchDetailedConcept(
     const data = parsedElement('embed').data();
     detailedConcept.visualElement = data;
     if (data?.resource === 'image') {
-      detailedConcept.visualElement.image = {
-        imageUrl: image.imageUrl,
-        contentType: image.contentType,
-      };
-    } else if (data?.resource === 'h5p' || data?.resource === 'external') {
-      const visualElementOembed = await fetchOembed(data.url, context);
-      detailedConcept.visualElement.oembed = visualElementOembed;
+      detailedConcept.visualElement.image = await fetchImage(
+        data.resourceId,
+        context,
+      );
     } else if (data?.resource === 'brightcove') {
       detailedConcept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
+      const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
+        concept.visualElement.visualElement,
+        'brightcoves',
+        context,
+      );
+      detailedConcept.visualElement.copyright = license.copyright;
+      detailedConcept.visualElement.copyText = license.copyText;
+      detailedConcept.visualElement.thumbnail = license.cover;
+    } else if (data?.resource === 'h5p') {
+      const visualElementOembed = await fetchOembed(data.url, context);
+      detailedConcept.visualElement.oembed = visualElementOembed;
+      const license: GQLH5pLicense = await fetchVisualElementLicense(
+        concept.visualElement.visualElement,
+        'h5ps',
+        context,
+      );
+      detailedConcept.visualElement.copyright = license.copyright;
+      detailedConcept.visualElement.copyText = license.copyText;
+      detailedConcept.visualElement.thumbnail = license.thumbnail;
+    } else if (data?.resource === 'external') {
+      const visualElementOembed = await fetchOembed(data.url, context);
+      detailedConcept.visualElement.oembed = visualElementOembed;
     }
   }
   return detailedConcept;
@@ -166,9 +203,13 @@ export async function fetchListingPage(
   const subjectIds: string[] = await resolveJson(
     await fetch(`/concept-api/v1/concepts/subjects/`, context),
   );
-  const subjects = await Promise.all(
+  const subjectResults = await Promise.allSettled(
     subjectIds.map(id => fetchSubject(id, context)),
   );
+  const subjects = (subjectResults.filter(
+    result => result.status === 'fulfilled',
+  ) as Array<PromiseFulfilledResult<GQLSubject>>).map(res => res.value);
+
   const tags = await resolveJson(
     await fetch(`/concept-api/v1/concepts/tags/`, context),
   );

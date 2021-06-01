@@ -243,6 +243,7 @@ export const typeDefs = gql`
     src: String!
     altText: String!
     copyright: Copyright!
+    contentType: String
     copyText: String
   }
 
@@ -274,6 +275,7 @@ export const typeDefs = gql`
   type H5pLicense {
     title: String!
     src: String
+    thumbnail: String
     copyright: Copyright!
     copyText: String
   }
@@ -562,11 +564,6 @@ export const typeDefs = gql`
     relevance: String
   }
 
-  type VisualElementImage {
-    imageUrl: String
-    contentType: String
-  }
-
   type VisualElementOembed {
     title: String
     html: String
@@ -582,7 +579,8 @@ export const typeDefs = gql`
     account: String
     player: String
     videoid: String
-    image: VisualElementImage
+    thumbnail: String
+    image: ImageLicense
     oembed: VisualElementOembed
     lowerRightX: Int
     lowerRightY: Int
@@ -590,6 +588,8 @@ export const typeDefs = gql`
     upperLeftY: Int
     focalX: Int
     focalY: Int
+    copyright: Copyright
+    copyText: String
   }
 
   type ListingPage {
@@ -616,7 +616,6 @@ export const typeDefs = gql`
     content: String
     created: String
     tags: [String]
-    metaImage: MetaImage
     image: ImageLicense
     subjectIds: [String]
     articleIds: [String]

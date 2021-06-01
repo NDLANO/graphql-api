@@ -162,6 +162,7 @@ declare global {
     src: string;
     altText: string;
     copyright: GQLCopyright;
+    contentType?: string;
     copyText?: string;
   }
   
@@ -212,6 +213,7 @@ declare global {
   export interface GQLH5pLicense {
     title: string;
     src?: string;
+    thumbnail?: string;
     copyright: GQLCopyright;
     copyText?: string;
   }
@@ -598,7 +600,6 @@ declare global {
     content?: string;
     created?: string;
     tags?: Array<string | null>;
-    metaImage?: GQLMetaImage;
     image?: GQLImageLicense;
     subjectIds?: Array<string | null>;
     articleIds?: Array<string | null>;
@@ -616,7 +617,8 @@ declare global {
     account?: string;
     player?: string;
     videoid?: string;
-    image?: GQLVisualElementImage;
+    thumbnail?: string;
+    image?: GQLImageLicense;
     oembed?: GQLVisualElementOembed;
     lowerRightX?: number;
     lowerRightY?: number;
@@ -624,11 +626,8 @@ declare global {
     upperLeftY?: number;
     focalX?: number;
     focalY?: number;
-  }
-  
-  export interface GQLVisualElementImage {
-    imageUrl?: string;
-    contentType?: string;
+    copyright?: GQLCopyright;
+    copyText?: string;
   }
   
   export interface GQLVisualElementOembed {
@@ -828,7 +827,6 @@ declare global {
     ListingPage?: GQLListingPageTypeResolver;
     DetailedConcept?: GQLDetailedConceptTypeResolver;
     VisualElement?: GQLVisualElementTypeResolver;
-    VisualElementImage?: GQLVisualElementImageTypeResolver;
     VisualElementOembed?: GQLVisualElementOembedTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
@@ -1474,6 +1472,7 @@ declare global {
     src?: ImageLicenseToSrcResolver<TParent>;
     altText?: ImageLicenseToAltTextResolver<TParent>;
     copyright?: ImageLicenseToCopyrightResolver<TParent>;
+    contentType?: ImageLicenseToContentTypeResolver<TParent>;
     copyText?: ImageLicenseToCopyTextResolver<TParent>;
   }
   
@@ -1490,6 +1489,10 @@ declare global {
   }
   
   export interface ImageLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageLicenseToContentTypeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1648,6 +1651,7 @@ declare global {
   export interface GQLH5pLicenseTypeResolver<TParent = any> {
     title?: H5pLicenseToTitleResolver<TParent>;
     src?: H5pLicenseToSrcResolver<TParent>;
+    thumbnail?: H5pLicenseToThumbnailResolver<TParent>;
     copyright?: H5pLicenseToCopyrightResolver<TParent>;
     copyText?: H5pLicenseToCopyTextResolver<TParent>;
   }
@@ -1657,6 +1661,10 @@ declare global {
   }
   
   export interface H5pLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pLicenseToThumbnailResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2960,7 +2968,6 @@ declare global {
     content?: DetailedConceptToContentResolver<TParent>;
     created?: DetailedConceptToCreatedResolver<TParent>;
     tags?: DetailedConceptToTagsResolver<TParent>;
-    metaImage?: DetailedConceptToMetaImageResolver<TParent>;
     image?: DetailedConceptToImageResolver<TParent>;
     subjectIds?: DetailedConceptToSubjectIdsResolver<TParent>;
     articleIds?: DetailedConceptToArticleIdsResolver<TParent>;
@@ -2986,10 +2993,6 @@ declare global {
   }
   
   export interface DetailedConceptToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToMetaImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3026,6 +3029,7 @@ declare global {
     account?: VisualElementToAccountResolver<TParent>;
     player?: VisualElementToPlayerResolver<TParent>;
     videoid?: VisualElementToVideoidResolver<TParent>;
+    thumbnail?: VisualElementToThumbnailResolver<TParent>;
     image?: VisualElementToImageResolver<TParent>;
     oembed?: VisualElementToOembedResolver<TParent>;
     lowerRightX?: VisualElementToLowerRightXResolver<TParent>;
@@ -3034,6 +3038,8 @@ declare global {
     upperLeftY?: VisualElementToUpperLeftYResolver<TParent>;
     focalX?: VisualElementToFocalXResolver<TParent>;
     focalY?: VisualElementToFocalYResolver<TParent>;
+    copyright?: VisualElementToCopyrightResolver<TParent>;
+    copyText?: VisualElementToCopyTextResolver<TParent>;
   }
   
   export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
@@ -3065,6 +3071,10 @@ declare global {
   }
   
   export interface VisualElementToVideoidResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToThumbnailResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3100,16 +3110,11 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLVisualElementImageTypeResolver<TParent = any> {
-    imageUrl?: VisualElementImageToImageUrlResolver<TParent>;
-    contentType?: VisualElementImageToContentTypeResolver<TParent>;
-  }
-  
-  export interface VisualElementImageToImageUrlResolver<TParent = any, TResult = any> {
+  export interface VisualElementToCopyrightResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface VisualElementImageToContentTypeResolver<TParent = any, TResult = any> {
+  export interface VisualElementToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
