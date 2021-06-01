@@ -6,7 +6,7 @@
  *
  */
 
-import { fetch, resolveJson } from '../utils/apiHelpers';
+import { fetch, resolveJson, ResponseOptions } from '../utils/apiHelpers';
 
 interface Topic {
   id: string;
@@ -77,14 +77,14 @@ export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
 }
 
 export async function fetchSubject(
-  id: string,
+  params: { id: string; options?: ResponseOptions },
   context: Context,
 ): Promise<GQLSubject> {
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/subjects/${id}?language=${context.language}`,
+    `/${context.taxonomyUrl}/v1/subjects/${params.id}?language=${context.language}`,
     context,
   );
-  return resolveJson(response, { ignore404: true, id });
+  return resolveJson(response, params.options);
 }
 
 export async function fetchSubjectTopics(

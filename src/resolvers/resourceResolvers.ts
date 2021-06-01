@@ -139,7 +139,8 @@ export const resolvers = {
               .slice(1, -1)
               .map(async id => {
                 if (id.includes('subject:')) {
-                  return (await fetchSubject(`urn:${id}`, context)).name;
+                  return (await fetchSubject({ id: `urn:${id}` }, context))
+                    .name;
                 } else if (id.includes('topic:')) {
                   return (await fetchTopic({ id: `urn:${id}` }, context)).name;
                 }

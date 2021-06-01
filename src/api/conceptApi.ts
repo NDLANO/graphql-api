@@ -167,7 +167,9 @@ export async function fetchListingPage(
     await fetch(`/concept-api/v1/concepts/subjects/`, context),
   );
   const subjects = await Promise.all(
-    subjectIds.map(id => fetchSubject(id, context)),
+    subjectIds.map(id =>
+      fetchSubject({ id, options: { ignore404: true, id } }, context),
+    ),
   );
   const tags = await resolveJson(
     await fetch(`/concept-api/v1/concepts/tags/`, context),
