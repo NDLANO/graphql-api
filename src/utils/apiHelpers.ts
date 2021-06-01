@@ -70,10 +70,10 @@ export async function resolveJson(
   }
 
   if (status === 404 && options?.ignore404) {
-    // Handle deleted subjects
+    // Handle deleted subjects. Filter subjects without name in listing-frontend
     return {
       id: options.id,
-      name: options.id,
+      name: '',
     };
   }
 
