@@ -200,6 +200,7 @@ export const typeDefs = gql`
     pathTopics: [[Topic]]
     coreResources(filterIds: String, subjectId: String): [Resource]
     supplementaryResources(filterIds: String, subjectId: String): [Resource]
+    alternateTopics: [Topic]
     breadcrumbs: [[String]]
   }
 

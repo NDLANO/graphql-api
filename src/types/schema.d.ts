@@ -369,6 +369,7 @@ declare global {
     pathTopics?: Array<Array<GQLTopic | null> | null>;
     coreResources?: Array<GQLResource | null>;
     supplementaryResources?: Array<GQLResource | null>;
+    alternateTopics?: Array<GQLTopic | null>;
     breadcrumbs?: Array<Array<string | null> | null>;
   }
   
@@ -2186,6 +2187,7 @@ declare global {
     pathTopics?: TopicToPathTopicsResolver<TParent>;
     coreResources?: TopicToCoreResourcesResolver<TParent>;
     supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
+    alternateTopics?: TopicToAlternateTopicsResolver<TParent>;
     breadcrumbs?: TopicToBreadcrumbsResolver<TParent>;
   }
   
@@ -2266,6 +2268,10 @@ declare global {
   }
   export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToAlternateTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface TopicToBreadcrumbsResolver<TParent = any, TResult = any> {
