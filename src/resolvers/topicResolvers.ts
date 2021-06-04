@@ -80,8 +80,9 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
             },
             context,
           ).then(article => {
+            const path = topic.path || `/article/${articleId}`;
             return Object.assign({}, article, {
-              oembed: fetchOembed(`${ndlaUrl}${topic.path}`, context).then(
+              oembed: fetchOembed(`${ndlaUrl}${path}`, context).then(
                 oembed => oembed.html.split('"')[3],
               ),
             });
@@ -174,6 +175,29 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
           );
         }),
       );
+    },
+    async alternateTopics(
+      topic: TopicResponse,
+      __: any,
+      context: Context,
+    ): Promise<GQLTopic[]> {
+      const { contentUri, id, path } = topic;
+      if (!path) {
+        const topicList = await fetchTopics({ contentUri }, context);
+        const alternatesWithPath = topicList
+          .filter(t => t.id !== id)
+          .filter(t => t.path);
+        const subjectList = await fetchSubjects(context);
+        const topicsWithVisibleSubject = alternatesWithPath.filter(t => {
+          const subjectId = t.path.split('/')[1];
+          const parentSubject = subjectList.find(
+            subject => subject.id === `urn:${subjectId}`,
+          );
+          return parentSubject?.metadata.visible === true;
+        });
+        return topicsWithVisibleSubject;
+      }
+      return;
     },
     async breadcrumbs(
       topic: TopicResponse,

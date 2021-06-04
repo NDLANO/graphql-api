@@ -27,7 +27,7 @@ function findPrimaryPath(
   paths: string[],
   subjectId: string,
 ): string | undefined {
-  return paths.find(path => path.split('/')[1] === removeUrn(subjectId));
+  return paths?.find(path => path.split('/')[1] === removeUrn(subjectId));
 }
 
 export async function fetchResource(
@@ -175,21 +175,7 @@ export async function fetchTopicResources(
     }
   });
 
-  // Only check filters from subject containing topic. Should be fixed in tax.
-  const topicSubject = `urn:${topic.path
-    .split('/')
-    .find(token => token.includes('subject'))}`;
   const suplResources = resources.filter(resource => {
-    // when filters are deleted from tax, remove until END
-    const subjectFilters = resource.filters?.filter(
-      filter => filter.subjectId === topicSubject,
-    );
-    if (subjectFilters?.length > 0) {
-      return subjectFilters?.find(
-        filter => filter.relevanceId === 'urn:relevance:supplementary',
-      );
-    }
-    // END
     return resource.relevanceId === 'urn:relevance:supplementary';
   });
   const coreResources = resources.filter(
