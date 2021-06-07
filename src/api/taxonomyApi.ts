@@ -40,12 +40,21 @@ export async function fetchResource(
   );
   const resource: GQLTaxonomyEntity = await resolveJson(response);
 
+  const subjectList = await fetchSubjects(context);
+  const paths = resource.paths?.filter(p => {
+    const sId = p.split('/')[1];
+    const parentSubject = subjectList.find(
+      subject => subject.id === `urn:${sId}`,
+    );
+    return parentSubject?.metadata.visible === true;
+  });
+  let path = paths[0];
+
   if (subjectId) {
-    const primaryPath = findPrimaryPath(resource.paths, subjectId);
-    const path = primaryPath ? primaryPath : resource.path;
-    return { ...resource, path };
+    const primaryPath = findPrimaryPath(paths, subjectId);
+    path = primaryPath ? primaryPath : path;
   }
-  return resource;
+  return { ...resource, path, paths };
 }
 
 export async function fetchFilters(
