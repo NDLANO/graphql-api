@@ -40,10 +40,10 @@ export async function fetchResource(
   );
   const resource: GQLTaxonomyEntity = await resolveJson(response);
 
-  const subjectList = await fetchSubjects(context);
+  const data = await context.loaders.subjectsLoader.load('all');
   const paths = resource.paths?.filter(p => {
     const sId = p.split('/')[1];
-    const parentSubject = subjectList.find(
+    const parentSubject = data.subjects.find(
       subject => subject.id === `urn:${sId}`,
     );
     return parentSubject?.metadata.visible === true;

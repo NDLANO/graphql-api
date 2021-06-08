@@ -15,18 +15,18 @@ declare global {
     shouldUseCache: boolean;
     taxonomyUrl: string;
     loaders?: {
-      articlesLoader: DataLoader<string, any>;
-      learningpathsLoader: DataLoader<string, any>;
-      filterLoader: DataLoader<string, GQLSubjectFilter[]>;
-      subjectTopicsLoader: DataLoader<
+      articlesLoader?: DataLoader<string, any>;
+      learningpathsLoader?: DataLoader<string, any>;
+      filterLoader?: DataLoader<string, GQLSubjectFilter[]>;
+      subjectTopicsLoader?: DataLoader<
         { subjectId: string; filterIds: string },
         any
       >;
-      subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
-      resourceTypesLoader: DataLoader<any, any>;
-      frontpageLoader: DataLoader<string, FrontpageResponse>;
-      lk06CurriculumLoader: DataLoader<string, GQLReference>;
-      lk20CurriculumLoader: DataLoader<
+      subjectsLoader?: DataLoader<string, { subjects: GQLSubject[] }>;
+      resourceTypesLoader?: DataLoader<any, any>;
+      frontpageLoader?: DataLoader<string, FrontpageResponse>;
+      lk06CurriculumLoader?: DataLoader<string, GQLReference>;
+      lk20CurriculumLoader?: DataLoader<
         { code: string; language: string },
         GQLReference
       >;

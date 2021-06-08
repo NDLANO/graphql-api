@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchSubjects, fetchSubjectPage, fetchFilters } from '../api';
+import { fetchSubjectPage, fetchFilters } from '../api';
 
 import { RSubjectCategory } from '../api/frontpageApi';
 import { filterMissingArticles } from '../utils/articleHelpers';
@@ -17,14 +17,14 @@ export const Query = {
     { id }: QueryToSubjectArgs,
     context: Context,
   ): Promise<GQLSubject> {
-    const list = await fetchSubjects(context);
-    return list
+    const data = await context.loaders.subjectsLoader.load('all');
+    return data.subjects
       .filter(s => (s.metadata ? s.metadata.visible : true))
       .find(subject => subject.id === id);
   },
   async subjects(_: any, __: any, context: Context): Promise<GQLSubject[]> {
-    const subjects = await fetchSubjects(context);
-    return subjects.filter(s => (s.metadata ? s.metadata.visible : true));
+    const data = await context.loaders.subjectsLoader.load('all');
+    return data.subjects.filter(s => (s.metadata ? s.metadata.visible : true));
   },
   async filters(
     _: any,
