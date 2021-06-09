@@ -47,8 +47,8 @@ export const Query = {
     if (!filterVisible) return topicList;
 
     const topicsWithPath = topicList.filter(t => t.path != null);
+    // TODO: Replace parent-filtering with changes in taxonomy
     const data = await context.loaders.subjectsLoader.load('all');
-
     const topicsWithVisibleSubject = topicsWithPath.filter(topic => {
       const subjectId = topic.path.split('/')[1];
       const parentSubject = data.subjects.find(subject =>
@@ -186,6 +186,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
         const alternatesWithPath = topicList
           .filter(t => t.id !== id)
           .filter(t => t.path);
+        // TODO: Replace parent-filtering with changes in taxonomy
         const data = await context.loaders.subjectsLoader.load('all');
         const topicsWithVisibleSubject = alternatesWithPath.filter(t => {
           const subjectId = t.path.split('/')[1];
