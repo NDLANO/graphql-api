@@ -15,7 +15,6 @@ import {
   fetchSubtopics,
   fetchOembed,
   fetchSubject,
-  fetchSubjects,
 } from '../api';
 import {
   filterMissingArticles,
@@ -48,11 +47,11 @@ export const Query = {
     if (!filterVisible) return topicList;
 
     const topicsWithPath = topicList.filter(t => t.path != null);
-    const subjectList = await fetchSubjects(context);
-
+    // TODO: Replace parent-filtering with changes in taxonomy
+    const data = await context.loaders.subjectsLoader.load('all');
     const topicsWithVisibleSubject = topicsWithPath.filter(topic => {
       const subjectId = topic.path.split('/')[1];
-      const parentSubject = subjectList.find(subject =>
+      const parentSubject = data.subjects.find(subject =>
         subject.id.includes(subjectId),
       );
       return parentSubject.metadata.visible === true;
@@ -187,10 +186,11 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
         const alternatesWithPath = topicList
           .filter(t => t.id !== id)
           .filter(t => t.path);
-        const subjectList = await fetchSubjects(context);
+        // TODO: Replace parent-filtering with changes in taxonomy
+        const data = await context.loaders.subjectsLoader.load('all');
         const topicsWithVisibleSubject = alternatesWithPath.filter(t => {
           const subjectId = t.path.split('/')[1];
-          const parentSubject = subjectList.find(
+          const parentSubject = data.subjects.find(
             subject => subject.id === `urn:${subjectId}`,
           );
           return parentSubject?.metadata.visible === true;

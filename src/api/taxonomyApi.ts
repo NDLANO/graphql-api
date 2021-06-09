@@ -40,12 +40,22 @@ export async function fetchResource(
   );
   const resource: GQLTaxonomyEntity = await resolveJson(response);
 
+  // TODO: Replace parent-filtering with changes in taxonomy
+  const data = await context.loaders.subjectsLoader.load('all');
+  const paths = resource.paths?.filter(p => {
+    const sId = p.split('/')[1];
+    const parentSubject = data.subjects.find(
+      subject => subject.id === `urn:${sId}`,
+    );
+    return parentSubject?.metadata.visible === true;
+  });
+  let path = paths[0];
+
   if (subjectId) {
-    const primaryPath = findPrimaryPath(resource.paths, subjectId);
-    const path = primaryPath ? primaryPath : resource.path;
-    return { ...resource, path };
+    const primaryPath = findPrimaryPath(paths, subjectId);
+    path = primaryPath ? primaryPath : path;
   }
-  return resource;
+  return { ...resource, path, paths };
 }
 
 export async function fetchFilters(
@@ -161,9 +171,10 @@ export async function fetchTopicResources(
   const { filters, subjectId, relevance, topic } = params;
   const filterParam = filters && filters.length > 0 ? `&filter=${filters}` : '';
   const subjectParam = subjectId ? `&subject=${subjectId}` : '';
+  const relevanceParam = relevance ? `&relevance=${relevance}` : '';
 
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/topics/${topic.id}/resources?language=${context.language}${filterParam}${subjectParam}`,
+    `/${context.taxonomyUrl}/v1/topics/${topic.id}/resources?language=${context.language}${filterParam}${subjectParam}${relevanceParam}`,
     context,
   );
   const resources: GQLTaxonomyEntity[] = await resolveJson(response);
@@ -174,19 +185,6 @@ export async function fetchTopicResources(
       resource.path = path;
     }
   });
-
-  const suplResources = resources.filter(resource => {
-    return resource.relevanceId === 'urn:relevance:supplementary';
-  });
-  const coreResources = resources.filter(
-    resource => !suplResources.includes(resource),
-  );
-  if (relevance === 'urn:relevance:core') {
-    return coreResources;
-  } else if (relevance === 'urn:relevance:supplementary') {
-    return suplResources;
-  }
-
   return resources;
 }
 
