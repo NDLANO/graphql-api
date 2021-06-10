@@ -10,6 +10,8 @@ import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 
 export const typeDefs = gql`
+  scalar JSON
+
   type AudioFile {
     url: String!
     mimeType: String!
@@ -151,6 +153,7 @@ export const typeDefs = gql`
   type TaxonomyMetadata {
     grepCodes: [String]
     visible: Boolean
+    customFields: JSON
   }
 
   interface TaxonomyEntity {
@@ -164,6 +167,7 @@ export const typeDefs = gql`
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
     relevanceId: String
+    rank: Int
   }
 
   type Resource implements TaxonomyEntity {
@@ -177,6 +181,7 @@ export const typeDefs = gql`
     article(filterIds: String, subjectId: String, isOembed: String): Article
     learningpath: Learningpath
     filters: [Filter]
+    rank: Int
     relevanceId: String
     resourceTypes: [ResourceType]
     parentTopics: [Topic]
@@ -193,6 +198,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata
     article(filterIds: String, subjectId: String): Article
     filters: [Filter]
+    rank: Int
     relevanceId: String
     isPrimary: Boolean
     parent: String
