@@ -106,7 +106,7 @@ declare global {
     customFields?: GQLJSON;
   }
   
-  export type GQLJSON = any;
+  export type GQLJSON = JSON;
   
   export interface GQLArticle {
     id: number;

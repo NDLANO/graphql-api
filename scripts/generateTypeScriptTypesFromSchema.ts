@@ -14,6 +14,9 @@ const typeDefinitionFileName = join(
 async function generate(): Promise<void> {
   try {
     await generateTypeScriptTypes(schema, typeDefinitionFileName, {
+      customScalarType: {
+        'JSON': 'JSON'
+      },
       global: true,
       asyncResult: true,
     });
