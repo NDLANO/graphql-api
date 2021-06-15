@@ -101,7 +101,10 @@ export async function fetchConcepts(
   return (
     await Promise.all(
       conceptIds.map(async id => {
-        const concept = await fetch(`/concept-api/v1/concepts/${id}`, context);
+        const concept = await fetch(
+          `/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`,
+          context,
+        );
         try {
           const res: SearchResultJson = await resolveJson(concept);
           const result: GQLConcept = {
@@ -123,7 +126,10 @@ export async function fetchDetailedConcept(
   id: string,
   context: Context,
 ): Promise<GQLDetailedConcept> {
-  const response = await fetch(`/concept-api/v1/concepts/${id}`, context);
+  const response = await fetch(
+    `/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`,
+    context,
+  );
   const concept: ConceptSearchResultJson = await resolveJson(response);
   const detailedConcept: GQLDetailedConcept = {
     title: concept.title.title,
