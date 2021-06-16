@@ -1064,7 +1064,7 @@ declare global {
     pageSize?: string;
     exactMatch?: boolean;
     language?: string;
-    fallback?: string;
+    fallback?: boolean;
   }
   export interface QueryToConceptSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToConceptSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

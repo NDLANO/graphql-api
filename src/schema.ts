@@ -771,7 +771,7 @@ export const typeDefs = gql`
       pageSize: String
       exactMatch: Boolean
       language: String
-      fallback: String
+      fallback: Boolean
     ): ConceptResult
     frontpageSearch(query: String): FrontpageSearch
     searchWithoutPagination(

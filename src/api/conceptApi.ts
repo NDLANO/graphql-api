@@ -68,7 +68,7 @@ export async function searchConcepts(
     pageSize?: string;
     exactMatch?: boolean;
     language?: string;
-    fallback?: string;
+    fallback?: boolean;
   },
   context: Context,
 ): Promise<GQLConceptResult> {
