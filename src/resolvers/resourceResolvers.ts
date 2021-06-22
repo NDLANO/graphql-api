@@ -6,6 +6,7 @@
  *
  */
 
+import cheerio from 'cheerio';
 import {
   fetchResource,
   fetchResourceTypes,
@@ -110,7 +111,10 @@ export const resolvers = {
           ).then(article => {
             return Object.assign({}, article, {
               oembed: fetchOembed(`${ndlaUrl}${resource.path}`, context).then(
-                oembed => oembed.html.split('"')[3],
+                oembed => {
+                  const parsed = cheerio.load(oembed.html);
+                  return parsed('iframe').attr('src');
+                },
               ),
             });
           }),
