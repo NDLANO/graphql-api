@@ -59,7 +59,11 @@ export async function search(
     { cache: 'no-store' },
   );
   const searchResults = await resolveJson(response);
-  const concepts = await searchConcepts(searchQuery, context);
+  const conceptQuery = {
+    ...searchQuery,
+    fallback: searchQuery.fallback === 'true',
+  };
+  const concepts = await searchConcepts(conceptQuery, context);
   return {
     ...searchResults,
     results: searchResults.results.map((result: SearchResultJson) =>
@@ -112,13 +116,6 @@ export async function groupSearch(
       };
     }),
   }));
-}
-
-export async function conceptSearch(
-  searchQuery: QueryToConceptSearchArgs,
-  context: Context,
-): Promise<GQLConceptResult> {
-  return searchConcepts(searchQuery, context);
 }
 
 export async function frontpageSearch(

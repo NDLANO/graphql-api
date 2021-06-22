@@ -6,7 +6,12 @@
  *
  */
 
-import { fetchConcepts, fetchDetailedConcept, fetchListingPage } from '../api';
+import {
+  searchConcepts,
+  fetchConcepts,
+  fetchDetailedConcept,
+  fetchListingPage,
+} from '../api';
 
 export const Query = {
   async concepts(
@@ -29,6 +34,13 @@ export const Query = {
     context: Context,
   ): Promise<GQLListingPage> {
     return fetchListingPage(context);
+  },
+  async conceptSearch(
+    _: any,
+    searchQuery: QueryToConceptSearchArgs,
+    context: Context,
+  ): Promise<GQLConceptResult> {
+    return searchConcepts(searchQuery, context);
   },
 };
 

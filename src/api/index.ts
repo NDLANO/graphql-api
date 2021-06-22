@@ -47,7 +47,6 @@ export {
 export {
   search,
   groupSearch,
-  conceptSearch,
   frontpageSearch,
   searchWithoutPagination,
 } from './searchApi';
