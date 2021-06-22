@@ -218,7 +218,7 @@ export async function fetchListingPage(
   ) as Array<PromiseFulfilledResult<GQLSubject>>).map(res => res.value);
 
   const tags = await resolveJson(
-    await fetch(`/concept-api/v1/concepts/tags/`, context),
+    await fetch(`/concept-api/v1/concepts/tags/?language=${context.language}`, context),
   );
   return {
     subjects,
