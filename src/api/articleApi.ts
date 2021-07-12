@@ -30,17 +30,14 @@ export async function fetchArticle(
     `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${oembedParam}${pathParam}`,
     context,
   );
-  
+
   const concept = await resolveJson(response);
   if (concept.visualElement) {
     const parsedElement = cheerio.load(concept.visualElement.visualElement);
     const data = parsedElement('embed').data();
     concept.visualElement = data;
     if (data?.resource === 'image') {
-      concept.visualElement.image = await fetchImage(
-        data.resourceId,
-        context,
-      );
+      concept.visualElement.image = await fetchImage(data.resourceId, context);
     } else if (data?.resource === 'brightcove') {
       concept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
       const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
@@ -68,9 +65,8 @@ export async function fetchArticle(
     }
   }
 
-  return new Promise((resolve,reject) => {
-    console.log(concept.visualElement);
-    resolve(concept)
+  return new Promise((resolve, reject) => {
+    resolve(concept);
   });
 }
 
@@ -150,7 +146,6 @@ export async function fetchMovieMeta(
   return null;
 }
 
-
 async function fetchImage(imageId: string, context: Context) {
   const imageResponse = await fetch(`/image-api/v2/images/${imageId}`, context);
   const image = await resolveJson(imageResponse);
@@ -178,7 +173,6 @@ async function fetchVisualElementLicense(
   const metaData = await resolveJson(metaDataResponse);
   return metaData.metaData[resource][0];
 }
-
 
 export async function fetchOembed(
   url: string,
