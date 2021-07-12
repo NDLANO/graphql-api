@@ -313,7 +313,7 @@ export const typeDefs = gql`
     created: String!
     updated: String!
     published: String!
-    visualElement: String
+    visualElement: VisualElement
     metaImage: MetaImage
     metaDescription: String!
     articleType: String!
@@ -333,6 +333,10 @@ export const typeDefs = gql`
     oembed: String
     conceptIds: [String]
     concepts: [Concept]
+  }
+
+  type embedVisualelement {
+    visualElement: VisualElement
   }
 
   type CompetenceGoal {
