@@ -117,7 +117,7 @@ declare global {
     created: string;
     updated: string;
     published: string;
-    visualElement?: string;
+    visualElement?: GQLVisualElement;
     metaImage?: GQLMetaImage;
     metaDescription: string;
     articleType: string;
@@ -136,30 +136,26 @@ declare global {
     concepts?: Array<GQLConcept | null>;
   }
   
-  export interface GQLArticleRequiredLibrary {
-    name: string;
-    url: string;
-    mediaType: string;
-  }
-  
-  export interface GQLArticleMetaData {
-    footnotes?: Array<GQLFootNote | null>;
-    images?: Array<GQLImageLicense | null>;
-    audios?: Array<GQLAudioLicense | null>;
-    brightcoves?: Array<GQLBrightcoveLicense | null>;
-    h5ps?: Array<GQLH5pLicense | null>;
-    concepts?: Array<GQLConceptLicense | null>;
-    copyText?: string;
-  }
-  
-  export interface GQLFootNote {
-    ref: number;
-    title: string;
-    year: string;
-    authors: Array<string | null>;
-    edition?: string;
-    publisher?: string;
+  export interface GQLVisualElement {
+    resource?: string;
+    resourceId?: string;
+    title?: string;
     url?: string;
+    alt?: string;
+    account?: string;
+    player?: string;
+    videoid?: string;
+    thumbnail?: string;
+    image?: GQLImageLicense;
+    oembed?: GQLVisualElementOembed;
+    lowerRightX?: number;
+    lowerRightY?: number;
+    upperLeftX?: number;
+    upperLeftY?: number;
+    focalX?: number;
+    focalY?: number;
+    copyright?: GQLCopyright;
+    copyText?: string;
   }
   
   export interface GQLImageLicense {
@@ -188,6 +184,38 @@ declare global {
   export interface GQLContributor {
     type: string;
     name: string;
+  }
+  
+  export interface GQLVisualElementOembed {
+    title?: string;
+    html?: string;
+    fullscreen?: boolean;
+  }
+  
+  export interface GQLArticleRequiredLibrary {
+    name: string;
+    url: string;
+    mediaType: string;
+  }
+  
+  export interface GQLArticleMetaData {
+    footnotes?: Array<GQLFootNote | null>;
+    images?: Array<GQLImageLicense | null>;
+    audios?: Array<GQLAudioLicense | null>;
+    brightcoves?: Array<GQLBrightcoveLicense | null>;
+    h5ps?: Array<GQLH5pLicense | null>;
+    concepts?: Array<GQLConceptLicense | null>;
+    copyText?: string;
+  }
+  
+  export interface GQLFootNote {
+    ref: number;
+    title: string;
+    year: string;
+    authors: Array<string | null>;
+    edition?: string;
+    publisher?: string;
+    url?: string;
   }
   
   export interface GQLAudioLicense {
@@ -388,7 +416,7 @@ declare global {
     filters?: Array<GQLSubjectFilter | null>;
     frontpageFilters?: Array<GQLSubjectFilter | null>;
     subjectpage?: GQLSubjectPage;
-    topics?: Array<GQLTopic | null>;
+    topics?: Array<GQLTopic>;
   }
   
   export interface GQLSubjectFilter {
@@ -615,34 +643,6 @@ declare global {
     copyright?: GQLCopyright;
   }
   
-  export interface GQLVisualElement {
-    resource?: string;
-    resourceId?: string;
-    title?: string;
-    url?: string;
-    alt?: string;
-    account?: string;
-    player?: string;
-    videoid?: string;
-    thumbnail?: string;
-    image?: GQLImageLicense;
-    oembed?: GQLVisualElementOembed;
-    lowerRightX?: number;
-    lowerRightY?: number;
-    upperLeftX?: number;
-    upperLeftY?: number;
-    focalX?: number;
-    focalY?: number;
-    copyright?: GQLCopyright;
-    copyText?: string;
-  }
-  
-  export interface GQLVisualElementOembed {
-    title?: string;
-    html?: string;
-    fullscreen?: boolean;
-  }
-  
   export interface GQLFrontpageSearch {
     topicResources?: GQLFrontPageResources;
     learningResources?: GQLFrontPageResources;
@@ -714,6 +714,10 @@ declare global {
     results?: Array<GQLAudio | null>;
   }
   
+  export interface GQLembedVisualelement {
+    visualElement?: GQLVisualElement;
+  }
+  
   export interface GQLMovieMeta {
     title?: string;
     metaImage?: GQLMetaImage;
@@ -775,13 +779,15 @@ declare global {
     TaxonomyMetadata?: GQLTaxonomyMetadataTypeResolver;
     JSON?: GraphQLScalarType;
     Article?: GQLArticleTypeResolver;
-    ArticleRequiredLibrary?: GQLArticleRequiredLibraryTypeResolver;
-    ArticleMetaData?: GQLArticleMetaDataTypeResolver;
-    FootNote?: GQLFootNoteTypeResolver;
+    VisualElement?: GQLVisualElementTypeResolver;
     ImageLicense?: GQLImageLicenseTypeResolver;
     Copyright?: GQLCopyrightTypeResolver;
     License?: GQLLicenseTypeResolver;
     Contributor?: GQLContributorTypeResolver;
+    VisualElementOembed?: GQLVisualElementOembedTypeResolver;
+    ArticleRequiredLibrary?: GQLArticleRequiredLibraryTypeResolver;
+    ArticleMetaData?: GQLArticleMetaDataTypeResolver;
+    FootNote?: GQLFootNoteTypeResolver;
     AudioLicense?: GQLAudioLicenseTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
@@ -834,8 +840,6 @@ declare global {
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
     ListingPage?: GQLListingPageTypeResolver;
     DetailedConcept?: GQLDetailedConceptTypeResolver;
-    VisualElement?: GQLVisualElementTypeResolver;
-    VisualElementOembed?: GQLVisualElementOembedTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
@@ -846,6 +850,7 @@ declare global {
     PodcastMeta?: GQLPodcastMetaTypeResolver;
     CoverPhoto?: GQLCoverPhotoTypeResolver;
     AudioSearch?: GQLAudioSearchTypeResolver;
+    embedVisualelement?: GQLembedVisualelementTypeResolver;
     MovieMeta?: GQLMovieMetaTypeResolver;
     MoviePath?: GQLMoviePathTypeResolver;
     MovieResourceTypes?: GQLMovieResourceTypesTypeResolver;
@@ -1392,97 +1397,101 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLArticleRequiredLibraryTypeResolver<TParent = any> {
-    name?: ArticleRequiredLibraryToNameResolver<TParent>;
-    url?: ArticleRequiredLibraryToUrlResolver<TParent>;
-    mediaType?: ArticleRequiredLibraryToMediaTypeResolver<TParent>;
+  export interface GQLVisualElementTypeResolver<TParent = any> {
+    resource?: VisualElementToResourceResolver<TParent>;
+    resourceId?: VisualElementToResourceIdResolver<TParent>;
+    title?: VisualElementToTitleResolver<TParent>;
+    url?: VisualElementToUrlResolver<TParent>;
+    alt?: VisualElementToAltResolver<TParent>;
+    account?: VisualElementToAccountResolver<TParent>;
+    player?: VisualElementToPlayerResolver<TParent>;
+    videoid?: VisualElementToVideoidResolver<TParent>;
+    thumbnail?: VisualElementToThumbnailResolver<TParent>;
+    image?: VisualElementToImageResolver<TParent>;
+    oembed?: VisualElementToOembedResolver<TParent>;
+    lowerRightX?: VisualElementToLowerRightXResolver<TParent>;
+    lowerRightY?: VisualElementToLowerRightYResolver<TParent>;
+    upperLeftX?: VisualElementToUpperLeftXResolver<TParent>;
+    upperLeftY?: VisualElementToUpperLeftYResolver<TParent>;
+    focalX?: VisualElementToFocalXResolver<TParent>;
+    focalY?: VisualElementToFocalYResolver<TParent>;
+    copyright?: VisualElementToCopyrightResolver<TParent>;
+    copyText?: VisualElementToCopyTextResolver<TParent>;
   }
   
-  export interface ArticleRequiredLibraryToNameResolver<TParent = any, TResult = any> {
+  export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleRequiredLibraryToUrlResolver<TParent = any, TResult = any> {
+  export interface VisualElementToResourceIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleRequiredLibraryToMediaTypeResolver<TParent = any, TResult = any> {
+  export interface VisualElementToTitleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLArticleMetaDataTypeResolver<TParent = any> {
-    footnotes?: ArticleMetaDataToFootnotesResolver<TParent>;
-    images?: ArticleMetaDataToImagesResolver<TParent>;
-    audios?: ArticleMetaDataToAudiosResolver<TParent>;
-    brightcoves?: ArticleMetaDataToBrightcovesResolver<TParent>;
-    h5ps?: ArticleMetaDataToH5psResolver<TParent>;
-    concepts?: ArticleMetaDataToConceptsResolver<TParent>;
-    copyText?: ArticleMetaDataToCopyTextResolver<TParent>;
-  }
-  
-  export interface ArticleMetaDataToFootnotesResolver<TParent = any, TResult = any> {
+  export interface VisualElementToUrlResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleMetaDataToImagesResolver<TParent = any, TResult = any> {
+  export interface VisualElementToAltResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleMetaDataToAudiosResolver<TParent = any, TResult = any> {
+  export interface VisualElementToAccountResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleMetaDataToBrightcovesResolver<TParent = any, TResult = any> {
+  export interface VisualElementToPlayerResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleMetaDataToH5psResolver<TParent = any, TResult = any> {
+  export interface VisualElementToVideoidResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleMetaDataToConceptsResolver<TParent = any, TResult = any> {
+  export interface VisualElementToThumbnailResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleMetaDataToCopyTextResolver<TParent = any, TResult = any> {
+  export interface VisualElementToImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLFootNoteTypeResolver<TParent = any> {
-    ref?: FootNoteToRefResolver<TParent>;
-    title?: FootNoteToTitleResolver<TParent>;
-    year?: FootNoteToYearResolver<TParent>;
-    authors?: FootNoteToAuthorsResolver<TParent>;
-    edition?: FootNoteToEditionResolver<TParent>;
-    publisher?: FootNoteToPublisherResolver<TParent>;
-    url?: FootNoteToUrlResolver<TParent>;
-  }
-  
-  export interface FootNoteToRefResolver<TParent = any, TResult = any> {
+  export interface VisualElementToOembedResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FootNoteToTitleResolver<TParent = any, TResult = any> {
+  export interface VisualElementToLowerRightXResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FootNoteToYearResolver<TParent = any, TResult = any> {
+  export interface VisualElementToLowerRightYResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FootNoteToAuthorsResolver<TParent = any, TResult = any> {
+  export interface VisualElementToUpperLeftXResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FootNoteToEditionResolver<TParent = any, TResult = any> {
+  export interface VisualElementToUpperLeftYResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FootNoteToPublisherResolver<TParent = any, TResult = any> {
+  export interface VisualElementToFocalXResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FootNoteToUrlResolver<TParent = any, TResult = any> {
+  export interface VisualElementToFocalYResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1575,6 +1584,118 @@ declare global {
   }
   
   export interface ContributorToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLVisualElementOembedTypeResolver<TParent = any> {
+    title?: VisualElementOembedToTitleResolver<TParent>;
+    html?: VisualElementOembedToHtmlResolver<TParent>;
+    fullscreen?: VisualElementOembedToFullscreenResolver<TParent>;
+  }
+  
+  export interface VisualElementOembedToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementOembedToHtmlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementOembedToFullscreenResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLArticleRequiredLibraryTypeResolver<TParent = any> {
+    name?: ArticleRequiredLibraryToNameResolver<TParent>;
+    url?: ArticleRequiredLibraryToUrlResolver<TParent>;
+    mediaType?: ArticleRequiredLibraryToMediaTypeResolver<TParent>;
+  }
+  
+  export interface ArticleRequiredLibraryToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleRequiredLibraryToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleRequiredLibraryToMediaTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLArticleMetaDataTypeResolver<TParent = any> {
+    footnotes?: ArticleMetaDataToFootnotesResolver<TParent>;
+    images?: ArticleMetaDataToImagesResolver<TParent>;
+    audios?: ArticleMetaDataToAudiosResolver<TParent>;
+    brightcoves?: ArticleMetaDataToBrightcovesResolver<TParent>;
+    h5ps?: ArticleMetaDataToH5psResolver<TParent>;
+    concepts?: ArticleMetaDataToConceptsResolver<TParent>;
+    copyText?: ArticleMetaDataToCopyTextResolver<TParent>;
+  }
+  
+  export interface ArticleMetaDataToFootnotesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToImagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToAudiosResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToBrightcovesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToH5psResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFootNoteTypeResolver<TParent = any> {
+    ref?: FootNoteToRefResolver<TParent>;
+    title?: FootNoteToTitleResolver<TParent>;
+    year?: FootNoteToYearResolver<TParent>;
+    authors?: FootNoteToAuthorsResolver<TParent>;
+    edition?: FootNoteToEditionResolver<TParent>;
+    publisher?: FootNoteToPublisherResolver<TParent>;
+    url?: FootNoteToUrlResolver<TParent>;
+  }
+  
+  export interface FootNoteToRefResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToYearResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToAuthorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToEditionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToPublisherResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToUrlResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3049,122 +3170,6 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLVisualElementTypeResolver<TParent = any> {
-    resource?: VisualElementToResourceResolver<TParent>;
-    resourceId?: VisualElementToResourceIdResolver<TParent>;
-    title?: VisualElementToTitleResolver<TParent>;
-    url?: VisualElementToUrlResolver<TParent>;
-    alt?: VisualElementToAltResolver<TParent>;
-    account?: VisualElementToAccountResolver<TParent>;
-    player?: VisualElementToPlayerResolver<TParent>;
-    videoid?: VisualElementToVideoidResolver<TParent>;
-    thumbnail?: VisualElementToThumbnailResolver<TParent>;
-    image?: VisualElementToImageResolver<TParent>;
-    oembed?: VisualElementToOembedResolver<TParent>;
-    lowerRightX?: VisualElementToLowerRightXResolver<TParent>;
-    lowerRightY?: VisualElementToLowerRightYResolver<TParent>;
-    upperLeftX?: VisualElementToUpperLeftXResolver<TParent>;
-    upperLeftY?: VisualElementToUpperLeftYResolver<TParent>;
-    focalX?: VisualElementToFocalXResolver<TParent>;
-    focalY?: VisualElementToFocalYResolver<TParent>;
-    copyright?: VisualElementToCopyrightResolver<TParent>;
-    copyText?: VisualElementToCopyTextResolver<TParent>;
-  }
-  
-  export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToResourceIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToAltResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToAccountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToPlayerResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToVideoidResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToThumbnailResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToOembedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToLowerRightXResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToLowerRightYResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToUpperLeftXResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToUpperLeftYResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToFocalXResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToFocalYResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLVisualElementOembedTypeResolver<TParent = any> {
-    title?: VisualElementOembedToTitleResolver<TParent>;
-    html?: VisualElementOembedToHtmlResolver<TParent>;
-    fullscreen?: VisualElementOembedToFullscreenResolver<TParent>;
-  }
-  
-  export interface VisualElementOembedToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementOembedToHtmlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementOembedToFullscreenResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface GQLFrontpageSearchTypeResolver<TParent = any> {
     topicResources?: FrontpageSearchToTopicResourcesResolver<TParent>;
     learningResources?: FrontpageSearchToLearningResourcesResolver<TParent>;
@@ -3397,6 +3402,14 @@ declare global {
   }
   
   export interface AudioSearchToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLembedVisualelementTypeResolver<TParent = any> {
+    visualElement?: embedVisualelementToVisualElementResolver<TParent>;
+  }
+  
+  export interface embedVisualelementToVisualElementResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

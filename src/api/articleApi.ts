@@ -9,6 +9,7 @@
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
 import { getArticleIdFromUrn } from '../utils/articleHelpers';
+import cheerio from 'cheerio';
 
 export async function fetchArticle(
   params: {
@@ -29,7 +30,48 @@ export async function fetchArticle(
     `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${oembedParam}${pathParam}`,
     context,
   );
-  return resolveJson(response);
+  
+  const concept = await resolveJson(response);
+  if (concept.visualElement) {
+    const parsedElement = cheerio.load(concept.visualElement.visualElement);
+    const data = parsedElement('embed').data();
+    concept.visualElement = data;
+    if (data?.resource === 'image') {
+      concept.visualElement.image = await fetchImage(
+        data.resourceId,
+        context,
+      );
+    } else if (data?.resource === 'brightcove') {
+      concept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
+      const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
+        concept.visualElement.visualElement,
+        'brightcoves',
+        context,
+      );
+      concept.visualElement.copyright = license.copyright;
+      concept.visualElement.copyText = license.copyText;
+      concept.visualElement.thumbnail = license.cover;
+    } else if (data?.resource === 'h5p') {
+      const visualElementOembed = await fetchOembed(data.url, context);
+      concept.visualElement.oembed = visualElementOembed;
+      const license: GQLH5pLicense = await fetchVisualElementLicense(
+        concept.visualElement.visualElement,
+        'h5ps',
+        context,
+      );
+      concept.visualElement.copyright = license.copyright;
+      concept.visualElement.copyText = license.copyText;
+      concept.visualElement.thumbnail = license.thumbnail;
+    } else if (data?.resource === 'external') {
+      const visualElementOembed = await fetchOembed(data.url, context);
+      concept.visualElement.oembed = visualElementOembed;
+    }
+  }
+
+  return new Promise((resolve,reject) => {
+    console.log(concept.visualElement);
+    resolve(concept)
+  });
 }
 
 export async function fetchArticlesPage(
@@ -106,4 +148,42 @@ export async function fetchMovieMeta(
     };
   }
   return null;
+}
+
+
+async function fetchImage(imageId: string, context: Context) {
+  const imageResponse = await fetch(`/image-api/v2/images/${imageId}`, context);
+  const image = await resolveJson(imageResponse);
+  return {
+    title: image.title.title,
+    src: image.imageUrl,
+    altText: image.alttext.alttext,
+    contentType: image.contentType,
+    copyright: image.copyright,
+  };
+}
+
+async function fetchVisualElementLicense(
+  visualElement: string,
+  resource: string,
+  context: Context,
+): Promise<GQLBrightcoveLicense | GQLH5pLicense> {
+  const host = localConverter ? 'http://localhost:3100' : '';
+  const metaDataResponse = await fetch(
+    encodeURI(
+      `${host}/article-converter/json/${context.language}/meta-data?embed=${visualElement}`,
+    ),
+    context,
+  );
+  const metaData = await resolveJson(metaDataResponse);
+  return metaData.metaData[resource][0];
+}
+
+
+export async function fetchOembed(
+  url: string,
+  context: Context,
+): Promise<GQLLearningpathStepOembed> {
+  const response = await fetch(`/oembed-proxy/v1/oembed?url=${url}`, context);
+  return resolveJson(response);
 }

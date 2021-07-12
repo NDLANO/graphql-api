@@ -62,7 +62,6 @@ export async function resolveJson(response: Response): Promise<any> {
   }
 
   const json = await response.json();
-
   if (ok) {
     return externalsToH5pMetaData(json);
   }
