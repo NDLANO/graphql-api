@@ -32,50 +32,52 @@ export async function fetchArticle(
   );
 
   const article = await resolveJson(response);
-  let transposedArticle: GQLArticle = {
-    ...article
-  }
-  if (transposedArticle.visualElement) {
+  let transposedarticle: GQLArticle = {
+    ...article,
+  };
+  if (transposedarticle.visualElement) {
     const parsedElement = cheerio.load(article.visualElement.visualElement);
     const data = parsedElement('embed').data();
-    transposedArticle.visualElement = {
+    transposedarticle.visualElement = {
       ...data,
-      embed : article.visualElement.visualElement,
+      embed: article.visualElement.visualElement,
       language: article.visualElement.language,
-    } 
+    };
 
     if (data?.resource === 'image') {
-      transposedArticle.visualElement.image = await fetchImage(data.resourceId, context);
+      transposedarticle.visualElement.image = await fetchImage(
+        data.resourceId,
+        context,
+      );
     } else if (data?.resource === 'brightcove') {
-      transposedArticle.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
+      transposedarticle.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
       const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
         article.visualElement.visualElement,
         'brightcoves',
         context,
       );
-      transposedArticle.visualElement.copyright = license.copyright;
-      transposedArticle.visualElement.copyText = license.copyText;
-      transposedArticle.visualElement.thumbnail = license.cover;
+      transposedarticle.visualElement.copyright = license.copyright;
+      transposedarticle.visualElement.copyText = license.copyText;
+      transposedarticle.visualElement.thumbnail = license.cover;
     } else if (data?.resource === 'h5p') {
       const visualElementOembed = await fetchOembed(data.url, context);
-      transposedArticle.visualElement.oembed = visualElementOembed;
+      transposedarticle.visualElement.oembed = visualElementOembed;
       const license: GQLH5pLicense = await fetchVisualElementLicense(
         article.visualElement.visualElement,
         'h5ps',
         context,
       );
-      transposedArticle.visualElement.copyright = license.copyright;
-      transposedArticle.visualElement.copyText = license.copyText;
-      transposedArticle.visualElement.thumbnail = license.thumbnail;
+      transposedarticle.visualElement.copyright = license.copyright;
+      transposedarticle.visualElement.copyText = license.copyText;
+      transposedarticle.visualElement.thumbnail = license.thumbnail;
     } else if (data?.resource === 'external') {
       const visualElementOembed = await fetchOembed(data.url, context);
-      transposedArticle.visualElement.oembed = visualElementOembed;
+      transposedarticle.visualElement.oembed = visualElementOembed;
     }
   }
-  
 
-  return new Promise((resolve, _reject) => {
-    resolve(transposedArticle);
+  return new Promise((resolve, reject) => {
+    resolve(transposedarticle);
   });
 }
 
