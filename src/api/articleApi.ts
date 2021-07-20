@@ -10,6 +10,11 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
 import { getArticleIdFromUrn } from '../utils/articleHelpers';
 import cheerio from 'cheerio';
+import {
+  fetchImage,
+  fetchOembed,
+  fetchVisualElementLicense,
+} from '../utils/visualelementHelpers';
 
 export async function fetchArticle(
   params: {
@@ -155,40 +160,4 @@ export async function fetchMovieMeta(
     };
   }
   return null;
-}
-
-async function fetchImage(imageId: string, context: Context) {
-  const imageResponse = await fetch(`/image-api/v2/images/${imageId}`, context);
-  const image = await resolveJson(imageResponse);
-  return {
-    title: image.title.title,
-    src: image.imageUrl,
-    altText: image.alttext.alttext,
-    contentType: image.contentType,
-    copyright: image.copyright,
-  };
-}
-
-async function fetchVisualElementLicense(
-  visualElement: string,
-  resource: string,
-  context: Context,
-): Promise<GQLBrightcoveLicense | GQLH5pLicense> {
-  const host = localConverter ? 'http://localhost:3100' : '';
-  const metaDataResponse = await fetch(
-    encodeURI(
-      `${host}/article-converter/json/${context.language}/meta-data?embed=${visualElement}`,
-    ),
-    context,
-  );
-  const metaData = await resolveJson(metaDataResponse);
-  return metaData.metaData[resource][0];
-}
-
-export async function fetchOembed(
-  url: string,
-  context: Context,
-): Promise<GQLLearningpathStepOembed> {
-  const response = await fetch(`/oembed-proxy/v1/oembed?url=${url}`, context);
-  return resolveJson(response);
 }

@@ -13,6 +13,10 @@ import { fetchSubject } from './taxonomyApi';
 import { fetchArticlesPage } from './articleApi';
 import { fetchOembed } from './oembedApi';
 import { localConverter } from '../config';
+import {
+  fetchImage,
+  fetchVisualElementLicense,
+} from '../utils/visualelementHelpers';
 
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
@@ -29,34 +33,6 @@ interface ConceptSearchResultJson extends SearchResultJson {
   articleIds?: string[];
   subjectIds?: string[];
   created: string;
-}
-
-async function fetchImage(imageId: string, context: Context) {
-  const imageResponse = await fetch(`/image-api/v2/images/${imageId}`, context);
-  const image = await resolveJson(imageResponse);
-  return {
-    title: image.title.title,
-    src: image.imageUrl,
-    altText: image.alttext.alttext,
-    contentType: image.contentType,
-    copyright: image.copyright,
-  };
-}
-
-async function fetchVisualElementLicense(
-  visualElement: string,
-  resource: string,
-  context: Context,
-): Promise<GQLBrightcoveLicense | GQLH5pLicense> {
-  const host = localConverter ? 'http://localhost:3100' : '';
-  const metaDataResponse = await fetch(
-    encodeURI(
-      `${host}/article-converter/json/${context.language}/meta-data?embed=${visualElement}`,
-    ),
-    context,
-  );
-  const metaData = await resolveJson(metaDataResponse);
-  return metaData.metaData[resource][0];
 }
 
 export async function searchConcepts(
