@@ -23,20 +23,20 @@ declare global {
     filmfrontpage?: GQLFilmFrontpage;
     learningpath?: GQLLearningpath;
     learningpathStep?: GQLLearningpathStep;
-    subjects?: Array<GQLSubject | null>;
+    subjects?: Array<GQLSubject>;
     topic?: GQLTopic;
-    topics?: Array<GQLTopic | null>;
+    topics?: Array<GQLTopic>;
     frontpage?: GQLFrontpage;
-    filters?: Array<GQLSubjectFilter | null>;
-    competenceGoals?: Array<GQLCompetenceGoal | null>;
+    filters?: Array<GQLSubjectFilter>;
+    competenceGoals?: Array<GQLCompetenceGoal>;
     competenceGoal?: GQLCompetenceGoal;
-    coreElements?: Array<GQLCoreElement | null>;
+    coreElements?: Array<GQLCoreElement>;
     coreElement?: GQLCoreElement;
     search?: GQLSearch;
-    resourceTypes?: Array<GQLResourceTypeDefinition | null>;
-    groupSearch?: Array<GQLGroupSearch | null>;
+    resourceTypes?: Array<GQLResourceTypeDefinition>;
+    groupSearch?: Array<GQLGroupSearch>;
     listingPage?: GQLListingPage;
-    concepts?: Array<GQLConcept | null>;
+    concepts?: Array<GQLConcept>;
     detailedConcept?: GQLDetailedConcept;
     conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
@@ -50,17 +50,17 @@ declare global {
     name: string;
     contentUri?: string;
     path?: string;
-    paths?: Array<string | null>;
+    paths?: Array<string>;
     meta?: GQLMeta;
     metadata?: GQLTaxonomyMetadata;
     article?: GQLArticle;
     learningpath?: GQLLearningpath;
-    filters?: Array<GQLFilter | null>;
+    filters?: Array<GQLFilter>;
     rank?: number;
     relevanceId?: string;
-    resourceTypes?: Array<GQLResourceType | null>;
-    parentTopics?: Array<GQLTopic | null>;
-    breadcrumbs?: Array<Array<string | null> | null>;
+    resourceTypes?: Array<GQLResourceType>;
+    parentTopics?: Array<GQLTopic>;
+    breadcrumbs?: Array<Array<string>>;
   }
   
   export interface GQLTaxonomyEntity {
@@ -68,11 +68,11 @@ declare global {
     name: string;
     contentUri?: string;
     path?: string;
-    paths?: Array<string | null>;
+    paths?: Array<string>;
     meta?: GQLMeta;
     metadata?: GQLTaxonomyMetadata;
     article?: GQLArticle;
-    filters?: Array<GQLFilter | null>;
+    filters?: Array<GQLFilter>;
     relevanceId?: string;
     rank?: number;
   }
@@ -101,7 +101,7 @@ declare global {
   }
   
   export interface GQLTaxonomyMetadata {
-    grepCodes?: Array<string | null>;
+    grepCodes?: Array<string>;
     visible?: boolean;
     customFields?: GQLJSON;
   }
@@ -122,18 +122,18 @@ declare global {
     metaDescription: string;
     articleType: string;
     oldNdlaUrl?: string;
-    requiredLibraries?: Array<GQLArticleRequiredLibrary | null>;
+    requiredLibraries?: Array<GQLArticleRequiredLibrary>;
     metaData?: GQLArticleMetaData;
-    supportedLanguages?: Array<string | null>;
+    supportedLanguages?: Array<string>;
     copyright: GQLCopyright;
-    tags?: Array<string | null>;
-    grepCodes?: Array<string | null>;
-    competenceGoals?: Array<GQLCompetenceGoal | null>;
-    coreElements?: Array<GQLCoreElement | null>;
-    crossSubjectTopics?: Array<GQLCrossSubjectElement | null>;
+    tags?: Array<string>;
+    grepCodes?: Array<string>;
+    competenceGoals?: Array<GQLCompetenceGoal>;
+    coreElements?: Array<GQLCoreElement>;
+    crossSubjectTopics?: Array<GQLCrossSubjectElement>;
     oembed?: string;
-    conceptIds?: Array<string | null>;
-    concepts?: Array<GQLConcept | null>;
+    conceptIds?: Array<string>;
+    concepts?: Array<GQLConcept>;
   }
   
   export interface GQLVisualElement {
@@ -156,6 +156,8 @@ declare global {
     focalY?: number;
     copyright?: GQLCopyright;
     copyText?: string;
+    embed?: string;
+    language?: string;
   }
   
   export interface GQLImageLicense {
@@ -169,9 +171,9 @@ declare global {
   
   export interface GQLCopyright {
     license?: GQLLicense;
-    creators?: Array<GQLContributor | null>;
-    processors?: Array<GQLContributor | null>;
-    rightsholders?: Array<GQLContributor | null>;
+    creators?: Array<GQLContributor>;
+    processors?: Array<GQLContributor>;
+    rightsholders?: Array<GQLContributor>;
     origin?: string;
   }
   
@@ -199,12 +201,12 @@ declare global {
   }
   
   export interface GQLArticleMetaData {
-    footnotes?: Array<GQLFootNote | null>;
-    images?: Array<GQLImageLicense | null>;
-    audios?: Array<GQLAudioLicense | null>;
-    brightcoves?: Array<GQLBrightcoveLicense | null>;
-    h5ps?: Array<GQLH5pLicense | null>;
-    concepts?: Array<GQLConceptLicense | null>;
+    footnotes?: Array<GQLFootNote>;
+    images?: Array<GQLImageLicense>;
+    audios?: Array<GQLAudioLicense>;
+    brightcoves?: Array<GQLBrightcoveLicense>;
+    h5ps?: Array<GQLH5pLicense>;
+    concepts?: Array<GQLConceptLicense>;
     copyText?: string;
   }
   
@@ -212,7 +214,7 @@ declare global {
     ref: number;
     title: string;
     year: string;
-    authors: Array<string | null>;
+    authors: Array<string>;
     edition?: string;
     publisher?: string;
     url?: string;
@@ -269,10 +271,10 @@ declare global {
     curriculum?: GQLReference;
     competenceGoalSetCode?: string;
     competenceGoalSet?: GQLReference;
-    crossSubjectTopicsCodes?: Array<GQLElement | null>;
-    crossSubjectTopics?: Array<GQLElement | null>;
-    coreElementsCodes?: Array<GQLElement | null>;
-    coreElements?: Array<GQLElement | null>;
+    crossSubjectTopicsCodes?: Array<GQLElement>;
+    crossSubjectTopics?: Array<GQLElement>;
+    coreElementsCodes?: Array<GQLElement>;
+    coreElements?: Array<GQLElement>;
   }
   
   export interface GQLReference {
@@ -305,7 +307,7 @@ declare global {
     id?: number;
     title?: string;
     content?: string;
-    tags?: Array<string | null>;
+    tags?: Array<string>;
     metaImage?: GQLMetaImage;
   }
   
@@ -327,10 +329,10 @@ declare global {
     canEdit?: boolean;
     verificationStatus?: string;
     lastUpdated?: string;
-    tags?: Array<string | null>;
-    supportedLanguages?: Array<string | null>;
+    tags?: Array<string>;
+    supportedLanguages?: Array<string>;
     isBasedOn?: number;
-    learningsteps?: Array<GQLLearningpathStep | null>;
+    learningsteps?: Array<GQLLearningpathStep>;
     metaUrl?: string;
     revision?: number;
     learningstepUrl?: string;
@@ -340,7 +342,7 @@ declare global {
   
   export interface GQLLearningpathCopyright {
     license?: GQLLicense;
-    contributors?: Array<GQLContributor | null>;
+    contributors?: Array<GQLContributor>;
   }
   
   export interface GQLLearningpathStep {
@@ -353,7 +355,7 @@ declare global {
     metaUrl?: string;
     revision?: number;
     status?: string;
-    supportedLanguages?: Array<string | null>;
+    supportedLanguages?: Array<string>;
     type?: string;
     article?: GQLArticle;
     resource?: GQLResource;
@@ -382,7 +384,7 @@ declare global {
   export interface GQLResourceType {
     id: string;
     name: string;
-    resources?: Array<GQLResource | null>;
+    resources?: Array<GQLResource>;
   }
   
   export interface GQLTopic extends GQLTaxonomyEntity {
@@ -390,21 +392,21 @@ declare global {
     name: string;
     contentUri?: string;
     path?: string;
-    paths?: Array<string | null>;
+    paths?: Array<string>;
     meta?: GQLMeta;
     metadata?: GQLTaxonomyMetadata;
     article?: GQLArticle;
-    filters?: Array<GQLFilter | null>;
+    filters?: Array<GQLFilter>;
     rank?: number;
     relevanceId?: string;
     isPrimary?: boolean;
     parent?: string;
-    subtopics?: Array<GQLTopic | null>;
-    pathTopics?: Array<Array<GQLTopic | null> | null>;
-    coreResources?: Array<GQLResource | null>;
-    supplementaryResources?: Array<GQLResource | null>;
-    alternateTopics?: Array<GQLTopic | null>;
-    breadcrumbs?: Array<Array<string | null> | null>;
+    subtopics?: Array<GQLTopic>;
+    pathTopics?: Array<Array<GQLTopic>>;
+    coreResources?: Array<GQLResource>;
+    supplementaryResources?: Array<GQLResource>;
+    alternateTopics?: Array<GQLTopic>;
+    breadcrumbs?: Array<Array<string>>;
   }
   
   export interface GQLSubject {
@@ -413,8 +415,8 @@ declare global {
     name: string;
     path: string;
     metadata?: GQLTaxonomyMetadata;
-    filters?: Array<GQLSubjectFilter | null>;
-    frontpageFilters?: Array<GQLSubjectFilter | null>;
+    filters?: Array<GQLSubjectFilter>;
+    frontpageFilters?: Array<GQLSubjectFilter>;
     subjectpage?: GQLSubjectPage;
     topics?: Array<GQLTopic>;
   }
@@ -430,15 +432,15 @@ declare global {
   
   export interface GQLSubjectPage {
     topical?: GQLTaxonomyEntity;
-    mostRead?: Array<GQLTaxonomyEntity | null>;
+    mostRead?: Array<GQLTaxonomyEntity>;
     banner?: GQLSubjectPageBanner;
     id: number;
     name?: string;
     facebook?: string;
-    editorsChoices?: Array<GQLTaxonomyEntity | null>;
-    latestContent?: Array<GQLTaxonomyEntity | null>;
+    editorsChoices?: Array<GQLTaxonomyEntity>;
+    latestContent?: Array<GQLTaxonomyEntity>;
     about?: GQLSubjectPageAbout;
-    goTo?: Array<GQLResourceTypeDefinition | null>;
+    goTo?: Array<GQLResourceTypeDefinition>;
     metaDescription?: string;
     layout?: string;
     twitter?: string;
@@ -466,14 +468,14 @@ declare global {
   export interface GQLResourceTypeDefinition {
     id: string;
     name: string;
-    subtypes?: Array<GQLResourceTypeDefinition | null>;
+    subtypes?: Array<GQLResourceTypeDefinition>;
   }
   
   export interface GQLFilmFrontpage {
     name?: string;
-    about?: Array<GQLFilmPageAbout | null>;
-    movieThemes?: Array<GQLMovieTheme | null>;
-    slideShow?: Array<GQLMovie | null>;
+    about?: Array<GQLFilmPageAbout>;
+    movieThemes?: Array<GQLMovieTheme>;
+    slideShow?: Array<GQLMovie>;
   }
   
   export interface GQLFilmPageAbout {
@@ -484,8 +486,8 @@ declare global {
   }
   
   export interface GQLMovieTheme {
-    name?: Array<GQLName | null>;
-    movies?: Array<GQLMovie | null>;
+    name?: Array<GQLName>;
+    movies?: Array<GQLMovie>;
   }
   
   export interface GQLName {
@@ -498,13 +500,13 @@ declare global {
     title?: string;
     metaImage?: GQLMetaImage;
     metaDescription?: string;
-    resourceTypes?: Array<GQLResourceType | null>;
+    resourceTypes?: Array<GQLResourceType>;
     path?: string;
   }
   
   export interface GQLFrontpage {
-    topical?: Array<GQLResource | null>;
-    categories?: Array<GQLCategory | null>;
+    topical?: Array<GQLResource>;
+    categories?: Array<GQLCategory>;
   }
   
   export interface GQLCategory {
@@ -517,22 +519,22 @@ declare global {
     page?: number;
     language?: string;
     totalCount?: number;
-    results?: Array<GQLSearchResult | null>;
-    suggestions?: Array<GQLSuggestionResult | null>;
-    aggregations?: Array<GQLAggregationResult | null>;
+    results?: Array<GQLSearchResult>;
+    suggestions?: Array<GQLSuggestionResult>;
+    aggregations?: Array<GQLAggregationResult>;
     concepts?: GQLConceptResult;
   }
   
   export interface GQLSearchResult {
     id: number;
     title?: string;
-    supportedLanguages?: Array<string | null>;
+    supportedLanguages?: Array<string>;
     url?: string;
     metaDescription?: string;
     metaImage?: GQLMetaImage;
     contentType?: string;
-    traits?: Array<string | null>;
-    contexts?: Array<GQLSearchContext | null>;
+    traits?: Array<string>;
+    contexts?: Array<GQLSearchContext>;
   }
   
   /** Use this to resolve interface type SearchResult */
@@ -547,16 +549,16 @@ declare global {
   }
   
   export interface GQLSearchContext {
-    breadcrumbs?: Array<string | null>;
+    breadcrumbs?: Array<string>;
     learningResourceType?: string;
-    resourceTypes?: Array<GQLSearchContextResourceTypes | null>;
+    resourceTypes?: Array<GQLSearchContextResourceTypes>;
     subject?: string;
     subjectId?: string;
     relevance?: string;
     path?: string;
     id?: string;
     language?: string;
-    filters?: Array<GQLSearchContextFilter | null>;
+    filters?: Array<GQLSearchContextFilter>;
   }
   
   export interface GQLSearchContextResourceTypes {
@@ -573,14 +575,14 @@ declare global {
   
   export interface GQLSuggestionResult {
     name?: string;
-    suggestions?: Array<GQLSearchSuggestion | null>;
+    suggestions?: Array<GQLSearchSuggestion>;
   }
   
   export interface GQLSearchSuggestion {
     text?: string;
     offset?: number;
     length?: number;
-    options?: Array<GQLSuggestOption | null>;
+    options?: Array<GQLSuggestOption>;
   }
   
   export interface GQLSuggestOption {
@@ -592,7 +594,7 @@ declare global {
     field?: string;
     sumOtherDocCount?: number;
     docCountErrorUpperBound?: number;
-    values?: Array<GQLBucketResult | null>;
+    values?: Array<GQLBucketResult>;
   }
   
   export interface GQLBucketResult {
@@ -602,15 +604,15 @@ declare global {
   
   export interface GQLConceptResult {
     totalCount?: number;
-    concepts?: Array<GQLConcept | null>;
+    concepts?: Array<GQLConcept>;
   }
   
   export interface GQLGroupSearch {
     language?: string;
     resourceType?: string;
-    resources?: Array<GQLGroupSearchResult | null>;
-    suggestions?: Array<GQLSuggestionResult | null>;
-    aggregations?: Array<GQLAggregationResult | null>;
+    resources?: Array<GQLGroupSearchResult>;
+    suggestions?: Array<GQLSuggestionResult>;
+    aggregations?: Array<GQLAggregationResult>;
     totalCount?: number;
   }
   
@@ -619,14 +621,14 @@ declare global {
     path: string;
     name: string;
     ingress?: string;
-    traits?: Array<string | null>;
-    contexts?: Array<GQLSearchContext | null>;
+    traits?: Array<string>;
+    contexts?: Array<GQLSearchContext>;
     metaImage?: GQLMetaImage;
   }
   
   export interface GQLListingPage {
-    subjects?: Array<GQLSubject | null>;
-    tags?: Array<string | null>;
+    subjects?: Array<GQLSubject>;
+    tags?: Array<string>;
   }
   
   export interface GQLDetailedConcept {
@@ -634,11 +636,11 @@ declare global {
     title?: string;
     content?: string;
     created?: string;
-    tags?: Array<string | null>;
+    tags?: Array<string>;
     image?: GQLImageLicense;
-    subjectIds?: Array<string | null>;
-    articleIds?: Array<string | null>;
-    articles?: Array<GQLMeta | null>;
+    subjectIds?: Array<string>;
+    articleIds?: Array<string>;
+    articles?: Array<GQLMeta>;
     visualElement?: GQLVisualElement;
     copyright?: GQLCopyright;
   }
@@ -649,18 +651,18 @@ declare global {
   }
   
   export interface GQLFrontPageResources {
-    results?: Array<GQLFrontpageSearchResult | null>;
+    results?: Array<GQLFrontpageSearchResult>;
     totalCount?: number;
-    suggestions?: Array<GQLSuggestionResult | null>;
+    suggestions?: Array<GQLSuggestionResult>;
   }
   
   export interface GQLFrontpageSearchResult {
     id: string;
     name?: string;
-    resourceTypes?: Array<GQLSearchContextResourceTypes | null>;
+    resourceTypes?: Array<GQLSearchContextResourceTypes>;
     subject?: string;
     path?: string;
-    filters?: Array<GQLSearchContextFilter | null>;
+    filters?: Array<GQLSearchContextFilter>;
   }
   
   export interface GQLAudio {
@@ -670,7 +672,7 @@ declare global {
     audioFile: GQLAudioFile;
     copyright: GQLCopyright;
     tags?: GQLTags;
-    supportedLanguages?: Array<string | null>;
+    supportedLanguages?: Array<string>;
     audioType: string;
     podcastMeta?: GQLPodcastMeta;
   }
@@ -688,7 +690,7 @@ declare global {
   }
   
   export interface GQLTags {
-    tags?: Array<string | null>;
+    tags?: Array<string>;
     language: string;
   }
   
@@ -711,7 +713,7 @@ declare global {
     page?: number;
     language?: string;
     totalCount?: number;
-    results?: Array<GQLAudio | null>;
+    results?: Array<GQLAudio>;
   }
   
   export interface GQLembedVisualelement {
@@ -726,35 +728,35 @@ declare global {
   
   export interface GQLMoviePath {
     path?: string;
-    paths?: Array<string | null>;
+    paths?: Array<string>;
   }
   
   export interface GQLMovieResourceTypes {
-    resourceTypes?: Array<GQLResourceType | null>;
+    resourceTypes?: Array<GQLResourceType>;
   }
   
   export interface GQLArticleSearchResult extends GQLSearchResult {
     id: number;
     title?: string;
-    supportedLanguages?: Array<string | null>;
+    supportedLanguages?: Array<string>;
     url?: string;
     metaDescription?: string;
     metaImage?: GQLMetaImage;
     contentType?: string;
-    traits?: Array<string | null>;
-    contexts?: Array<GQLSearchContext | null>;
+    traits?: Array<string>;
+    contexts?: Array<GQLSearchContext>;
   }
   
   export interface GQLLearningpathSearchResult extends GQLSearchResult {
     id: number;
     title?: string;
-    supportedLanguages?: Array<string | null>;
+    supportedLanguages?: Array<string>;
     url?: string;
     metaDescription?: string;
     metaImage?: GQLMetaImage;
     contentType?: string;
-    traits?: Array<string | null>;
-    contexts?: Array<GQLSearchContext | null>;
+    traits?: Array<string>;
+    contexts?: Array<GQLSearchContext>;
   }
   
   /*********************************
@@ -968,7 +970,7 @@ declare global {
   }
   
   export interface QueryToCompetenceGoalsArgs {
-    codes?: Array<string | null>;
+    codes?: Array<string>;
     nodeId?: string;
     language?: string;
   }
@@ -985,7 +987,7 @@ declare global {
   }
   
   export interface QueryToCoreElementsArgs {
-    codes?: Array<string | null>;
+    codes?: Array<string>;
     language?: string;
   }
   export interface QueryToCoreElementsResolver<TParent = any, TResult = any> {
@@ -1016,7 +1018,7 @@ declare global {
     languageFilter?: string;
     relevance?: string;
     grepCodes?: string;
-    aggregatePaths?: Array<string | null>;
+    aggregatePaths?: Array<string>;
   }
   export interface QueryToSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -1037,7 +1039,7 @@ declare global {
     language?: string;
     fallback?: string;
     grepCodes?: string;
-    aggregatePaths?: Array<string | null>;
+    aggregatePaths?: Array<string>;
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -1048,7 +1050,7 @@ declare global {
   }
   
   export interface QueryToConceptsArgs {
-    ids?: Array<string | null>;
+    ids?: Array<string>;
   }
   export interface QueryToConceptsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -1417,6 +1419,8 @@ declare global {
     focalY?: VisualElementToFocalYResolver<TParent>;
     copyright?: VisualElementToCopyrightResolver<TParent>;
     copyText?: VisualElementToCopyTextResolver<TParent>;
+    embed?: VisualElementToEmbedResolver<TParent>;
+    language?: VisualElementToLanguageResolver<TParent>;
   }
   
   export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
@@ -1492,6 +1496,14 @@ declare global {
   }
   
   export interface VisualElementToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToEmbedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToLanguageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

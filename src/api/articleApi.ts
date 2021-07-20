@@ -31,42 +31,51 @@ export async function fetchArticle(
     context,
   );
 
-  const concept = await resolveJson(response);
-  if (concept.visualElement) {
-    const parsedElement = cheerio.load(concept.visualElement.visualElement);
+  const article = await resolveJson(response);
+  let transposedArticle: GQLArticle = {
+    ...article
+  }
+  if (transposedArticle.visualElement) {
+    const parsedElement = cheerio.load(article.visualElement.visualElement);
     const data = parsedElement('embed').data();
-    concept.visualElement = data;
+    transposedArticle.visualElement = {
+      ...data,
+      embed : article.visualElement.visualElement,
+      language: article.visualElement.language,
+    } 
+
     if (data?.resource === 'image') {
-      concept.visualElement.image = await fetchImage(data.resourceId, context);
+      transposedArticle.visualElement.image = await fetchImage(data.resourceId, context);
     } else if (data?.resource === 'brightcove') {
-      concept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
+      transposedArticle.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
       const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
-        concept.visualElement.visualElement,
+        article.visualElement.visualElement,
         'brightcoves',
         context,
       );
-      concept.visualElement.copyright = license.copyright;
-      concept.visualElement.copyText = license.copyText;
-      concept.visualElement.thumbnail = license.cover;
+      transposedArticle.visualElement.copyright = license.copyright;
+      transposedArticle.visualElement.copyText = license.copyText;
+      transposedArticle.visualElement.thumbnail = license.cover;
     } else if (data?.resource === 'h5p') {
       const visualElementOembed = await fetchOembed(data.url, context);
-      concept.visualElement.oembed = visualElementOembed;
+      transposedArticle.visualElement.oembed = visualElementOembed;
       const license: GQLH5pLicense = await fetchVisualElementLicense(
-        concept.visualElement.visualElement,
+        article.visualElement.visualElement,
         'h5ps',
         context,
       );
-      concept.visualElement.copyright = license.copyright;
-      concept.visualElement.copyText = license.copyText;
-      concept.visualElement.thumbnail = license.thumbnail;
+      transposedArticle.visualElement.copyright = license.copyright;
+      transposedArticle.visualElement.copyText = license.copyText;
+      transposedArticle.visualElement.thumbnail = license.thumbnail;
     } else if (data?.resource === 'external') {
       const visualElementOembed = await fetchOembed(data.url, context);
-      concept.visualElement.oembed = visualElementOembed;
+      transposedArticle.visualElement.oembed = visualElementOembed;
     }
   }
+  
 
-  return new Promise((resolve, reject) => {
-    resolve(concept);
+  return new Promise((resolve, _reject) => {
+    resolve(transposedArticle);
   });
 }
 
