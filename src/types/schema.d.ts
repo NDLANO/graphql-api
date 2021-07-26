@@ -970,7 +970,7 @@ declare global {
   }
   
   export interface QueryToCompetenceGoalsArgs {
-    codes?: Array<string>;
+    codes?: Array<string | null>;
     nodeId?: string;
     language?: string;
   }
@@ -987,7 +987,7 @@ declare global {
   }
   
   export interface QueryToCoreElementsArgs {
-    codes?: Array<string>;
+    codes?: Array<string | null>;
     language?: string;
   }
   export interface QueryToCoreElementsResolver<TParent = any, TResult = any> {
@@ -1018,7 +1018,7 @@ declare global {
     languageFilter?: string;
     relevance?: string;
     grepCodes?: string;
-    aggregatePaths?: Array<string>;
+    aggregatePaths?: Array<string | null>;
   }
   export interface QueryToSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -1039,7 +1039,7 @@ declare global {
     language?: string;
     fallback?: string;
     grepCodes?: string;
-    aggregatePaths?: Array<string>;
+    aggregatePaths?: Array<string | null>;
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

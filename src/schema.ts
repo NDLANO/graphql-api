@@ -727,12 +727,12 @@ export const typeDefs = gql`
     frontpage: Frontpage
     filters: [SubjectFilter!]
     competenceGoals(
-      codes: [String!]
+      codes: [String]
       nodeId: String
       language: String
     ): [CompetenceGoal!]
     competenceGoal(code: String!, language: String): CompetenceGoal
-    coreElements(codes: [String!], language: String): [CoreElement!]
+    coreElements(codes: [String], language: String): [CoreElement!]
     coreElement(code: String!, language: String): CoreElement
     search(
       query: String
@@ -750,7 +750,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
       grepCodes: String
-      aggregatePaths: [String!]
+      aggregatePaths: [String]
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
@@ -764,7 +764,7 @@ export const typeDefs = gql`
       language: String
       fallback: String
       grepCodes: String
-      aggregatePaths: [String!]
+      aggregatePaths: [String]
     ): [GroupSearch!]
     listingPage: ListingPage
     concepts(ids: [String!]): [Concept!]
