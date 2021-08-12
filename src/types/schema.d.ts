@@ -142,7 +142,7 @@ declare global {
     copyright?: GQLCopyright;
     language?: string;
     embed?: string;
-    title: string;
+    title?: string;
     brightcove?: GQLBrightcoveElement;
     h5p?: GQLH5pElement;
     oembed?: GQLVisualElementOembed;
@@ -189,7 +189,6 @@ declare global {
   }
   
   export interface GQLH5pElement {
-    path?: string;
     src?: string;
     thumbnail?: string;
     copyText?: string;
@@ -203,7 +202,6 @@ declare global {
   
   export interface GQLImageElement {
     resourceid?: string;
-    fullbredde?: string;
     alt?: string;
     caption?: string;
     lowerRightX?: number;
@@ -1618,14 +1616,9 @@ declare global {
   }
   
   export interface GQLH5pElementTypeResolver<TParent = any> {
-    path?: H5pElementToPathResolver<TParent>;
     src?: H5pElementToSrcResolver<TParent>;
     thumbnail?: H5pElementToThumbnailResolver<TParent>;
     copyText?: H5pElementToCopyTextResolver<TParent>;
-  }
-  
-  export interface H5pElementToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface H5pElementToSrcResolver<TParent = any, TResult = any> {
@@ -1660,7 +1653,6 @@ declare global {
   
   export interface GQLImageElementTypeResolver<TParent = any> {
     resourceid?: ImageElementToResourceidResolver<TParent>;
-    fullbredde?: ImageElementToFullbreddeResolver<TParent>;
     alt?: ImageElementToAltResolver<TParent>;
     caption?: ImageElementToCaptionResolver<TParent>;
     lowerRightX?: ImageElementToLowerRightXResolver<TParent>;
@@ -1676,10 +1668,6 @@ declare global {
   }
   
   export interface ImageElementToResourceidResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToFullbreddeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

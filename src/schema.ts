@@ -596,7 +596,6 @@ export const typeDefs = gql`
 
   type ImageElement {
     resourceid: String
-    fullbredde: String
     alt: String
     caption: String
     lowerRightX: Int
@@ -626,7 +625,6 @@ export const typeDefs = gql`
   }
 
   type H5pElement {
-    path: String
     src: String
     thumbnail: String
     copyText: String
