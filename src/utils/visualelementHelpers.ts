@@ -90,6 +90,7 @@ export async function parseVisualElement(
       visualElement.image = {
         ...image,
         ...license,
+        caption: data.caption,
       };
       visualElement.url = data.url;
     }
