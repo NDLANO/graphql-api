@@ -9,12 +9,7 @@
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { localConverter } from '../config';
 import { getArticleIdFromUrn } from '../utils/articleHelpers';
-import cheerio from 'cheerio';
-import {
-  fetchImage,
-  fetchOembed,
-  fetchVisualElementLicense,
-} from '../utils/visualelementHelpers';
+import { parseVisualElement } from '../utils/visualelementHelpers';
 
 export async function fetchArticle(
   params: {
@@ -37,52 +32,23 @@ export async function fetchArticle(
   );
 
   const article = await resolveJson(response);
-  let transposedarticle: GQLArticle = {
+  let transposedArticle: GQLArticle = {
     ...article,
   };
-  if (transposedarticle.visualElement) {
-    const parsedElement = cheerio.load(article.visualElement.visualElement);
-    const data = parsedElement('embed').data();
-    transposedarticle.visualElement = {
-      ...data,
+
+  if (transposedArticle.visualElement) {
+    transposedArticle.visualElement = {
+      ...(await parseVisualElement(
+        article.visualElement.visualElement,
+        context,
+      )),
       embed: article.visualElement.visualElement,
       language: article.visualElement.language,
     };
-
-    if (data?.resource === 'image') {
-      transposedarticle.visualElement.image = await fetchImage(
-        data.resourceId,
-        context,
-      );
-    } else if (data?.resource === 'brightcove') {
-      transposedarticle.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
-      const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
-        article.visualElement.visualElement,
-        'brightcoves',
-        context,
-      );
-      transposedarticle.visualElement.copyright = license.copyright;
-      transposedarticle.visualElement.copyText = license.copyText;
-      transposedarticle.visualElement.thumbnail = license.cover;
-    } else if (data?.resource === 'h5p') {
-      const visualElementOembed = await fetchOembed(data.url, context);
-      transposedarticle.visualElement.oembed = visualElementOembed;
-      const license: GQLH5pLicense = await fetchVisualElementLicense(
-        article.visualElement.visualElement,
-        'h5ps',
-        context,
-      );
-      transposedarticle.visualElement.copyright = license.copyright;
-      transposedarticle.visualElement.copyText = license.copyText;
-      transposedarticle.visualElement.thumbnail = license.thumbnail;
-    } else if (data?.resource === 'external') {
-      const visualElementOembed = await fetchOembed(data.url, context);
-      transposedarticle.visualElement.oembed = visualElementOembed;
-    }
   }
 
   return new Promise((resolve, reject) => {
-    resolve(transposedarticle);
+    resolve(transposedArticle);
   });
 }
 

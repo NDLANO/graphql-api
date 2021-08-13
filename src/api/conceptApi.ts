@@ -7,16 +7,10 @@
  */
 
 import queryString from 'query-string';
-import cheerio from 'cheerio';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { fetchArticlesPage } from './articleApi';
-import { fetchOembed } from './oembedApi';
-import { localConverter } from '../config';
-import {
-  fetchImage,
-  fetchVisualElementLicense,
-} from '../utils/visualelementHelpers';
+import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
 
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
@@ -143,39 +137,10 @@ export async function fetchDetailedConcept(
     });
   }
   if (concept.visualElement) {
-    const parsedElement = cheerio.load(concept.visualElement.visualElement);
-    const data = parsedElement('embed').data();
-    detailedConcept.visualElement = data;
-    if (data?.resource === 'image') {
-      detailedConcept.visualElement.image = await fetchImage(
-        data.resourceId,
-        context,
-      );
-    } else if (data?.resource === 'brightcove') {
-      detailedConcept.visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
-      const license: GQLBrightcoveLicense = await fetchVisualElementLicense(
-        concept.visualElement.visualElement,
-        'brightcoves',
-        context,
-      );
-      detailedConcept.visualElement.copyright = license.copyright;
-      detailedConcept.visualElement.copyText = license.copyText;
-      detailedConcept.visualElement.thumbnail = license.cover;
-    } else if (data?.resource === 'h5p') {
-      const visualElementOembed = await fetchOembed(data.url, context);
-      detailedConcept.visualElement.oembed = visualElementOembed;
-      const license: GQLH5pLicense = await fetchVisualElementLicense(
-        concept.visualElement.visualElement,
-        'h5ps',
-        context,
-      );
-      detailedConcept.visualElement.copyright = license.copyright;
-      detailedConcept.visualElement.copyText = license.copyText;
-      detailedConcept.visualElement.thumbnail = license.thumbnail;
-    } else if (data?.resource === 'external') {
-      const visualElementOembed = await fetchOembed(data.url, context);
-      detailedConcept.visualElement.oembed = visualElementOembed;
-    }
+    detailedConcept.visualElement = await parseVisualElement(
+      concept.visualElement.visualElement,
+      context,
+    );
   }
   return detailedConcept;
 }

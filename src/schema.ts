@@ -583,26 +583,51 @@ export const typeDefs = gql`
 
   type VisualElement {
     resource: String
-    resourceId: String
-    title: String
     url: String
-    alt: String
-    account: String
-    player: String
-    videoid: String
-    thumbnail: String
-    image: ImageLicense
+    copyright: Copyright
+    language: String
+    embed: String
+    title: String
+    brightcove: BrightcoveElement
+    h5p: H5pElement
     oembed: VisualElementOembed
+    image: ImageElement
+  }
+
+  type ImageElement {
+    resourceid: String
+    alt: String
+    caption: String
     lowerRightX: Int
     lowerRightY: Int
     upperLeftX: Int
     upperLeftY: Int
     focalX: Int
     focalY: Int
-    copyright: Copyright
+    src: String!
+    altText: String!
+    contentType: String
     copyText: String
-    embed: String
-    language: String
+  }
+
+  type BrightcoveElement {
+    videoid: String
+    player: String
+    account: String
+    caption: String
+    description: String
+    cover: String
+    src: String
+    download: String
+    iframe: BrightcoveIframe
+    uploadDate: String
+    copyText: String
+  }
+
+  type H5pElement {
+    src: String
+    thumbnail: String
+    copyText: String
   }
 
   type ListingPage {
