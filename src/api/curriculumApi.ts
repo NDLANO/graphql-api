@@ -154,13 +154,29 @@ export async function fetchCompetenceGoals(
   language: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  return [
-    ...(codes ? await fetchLK20CompetenceGoals(codes, language, context) : []),
-    ...(nodeId ? await fetchLK06CompetenceGoals(nodeId, context) : []),
-  ];
+  return Promise.all([
+    codes
+      ? fetchLK20CompetenceGoals(codes, language, context)
+      : Promise.resolve<GQLCompetenceGoal[]>([]),
+    nodeId
+      ? fetchLK06CompetenceGoals(nodeId, context)
+      : Promise.resolve<GQLCompetenceGoal[]>([]),
+  ])
+    .then(([lk20, lk06]) => {
+      return [...lk20, ...lk06];
+    })
+    .catch(reason => {
+      // This catch block makes fetching competence goals never fail but rather log the error and return an empty array.
+      // tslint:disable-next-line:no-console
+      console.error(
+        `Something went wrong when fetching competence goals, with params codes: '${codes}', nodeId: '${nodeId}', language: '${language}':\n`,
+        reason,
+      );
+      return Promise.resolve([]);
+    });
 }
 
-export async function fetchLK20CompetenceGoal(
+async function fetchLK20CompetenceGoal(
   code: string,
   language: string,
   context: Context,
@@ -365,7 +381,7 @@ export async function fetchLK20Curriculum(
   );
 }
 
-export async function fetchLK06CompetenceGoals(
+async function fetchLK06CompetenceGoals(
   nodeId: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
