@@ -75,27 +75,30 @@ async function getContext({ req }: { req: Request }): Promise<Context> {
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 200, text: 'Health check ok' });
 });
+async function startApolloServer() {
+  const server = new ApolloServer({
+    typeDefs,
+    // @ts-ignore
+    resolvers,
+    debug: false, // log errors in formatError
+    introspection: true,
+    formatError(err: any) {
+      logger.error(err);
+      return {
+        message: err.message,
+        locations: err.locations,
+        path: err.path,
+        status: err.originalError && err.originalError.status,
+        json: err.originalError && err.originalError.json,
+      };
+    },
+    context: getContext,
+  });
+  await server.start();
+  server.applyMiddleware({ app, path: '/graphql-api/graphql' });
+}
 
-const server = new ApolloServer({
-  typeDefs,
-  // @ts-ignore
-  resolvers,
-  debug: false, // log errors in formatError
-  introspection: true,
-  formatError(err: any) {
-    logger.error(err);
-    return {
-      message: err.message,
-      locations: err.locations,
-      path: err.path,
-      status: err.originalError && err.originalError.status,
-      json: err.originalError && err.originalError.json,
-    };
-  },
-  context: getContext,
-});
-
-server.applyMiddleware({ app, path: '/graphql-api/graphql' });
+startApolloServer();
 
 app.listen(GRAPHQL_PORT, () =>
   // tslint:disable-next-line
