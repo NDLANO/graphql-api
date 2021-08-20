@@ -6,6 +6,7 @@
  *
  */
 import he from 'he';
+import { Response } from 'node-fetch';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import {
   isoLanguageMapping,
@@ -97,6 +98,14 @@ interface CrossSubjectTopic {
   'lenke-til-beskrivelse': string;
 }
 
+async function curriculumFetch(
+  path: string,
+  context: Context,
+  options?: RequestOptions,
+): Promise<Response> {
+  return fetch(path, context, { timeout: 10000, ...options });
+}
+
 function mapReference(reference: Reference) {
   return {
     id: reference.kode,
@@ -157,7 +166,7 @@ export async function fetchLK20CompetenceGoal(
   context: Context,
 ): Promise<GQLCompetenceGoal> {
   const lang = language || context.language;
-  const response = await fetch(
+  const response = await curriculumFetch(
     `/grep/kl06/v201906/kompetansemaal-lk20/${code}`,
     context,
   );
@@ -195,7 +204,7 @@ export async function fetchCoreElement(
   context: Context,
 ): Promise<GQLCoreElement> {
   const lang = language || context.language;
-  const response = await fetch(
+  const response = await curriculumFetch(
     `/grep/kl06/v201906/kjerneelementer-lk20/${code}`,
     context,
   );
@@ -230,7 +239,7 @@ export async function fetchGrepElement(
   context: Context,
 ): Promise<GQLReference> {
   const lang = language || context.language;
-  const response = await fetch(`${url}${code}`, context);
+  const response = await curriculumFetch(`${url}${code}`, context);
   const json: GrepElement = await resolveJson(response);
 
   const title = filterTextsForLanguage(json.tittel.tekst, lang);
@@ -294,7 +303,7 @@ export async function fetchCrossSubjectTopicsByCode(
 ): Promise<GQLReference[]> {
   return Promise.all(
     codes.map(async code => {
-      const response = await fetch(
+      const response = await curriculumFetch(
         `/grep/kl06/v201906/tverrfaglige-temaer-lk20/${code}`,
         context,
       );
@@ -360,7 +369,7 @@ export async function fetchLK06CompetenceGoals(
   nodeId: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  const response = await fetch(
+  const response = await curriculumFetch(
     `http://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
     context,
   );
@@ -382,7 +391,7 @@ export async function fetchLK06Curriculum(
   curriculumId: string,
   context: Context,
 ): Promise<GQLReference> {
-  const response = await fetch(
+  const response = await curriculumFetch(
     `https://mycurriculum.ndla.no/v1/users/ndla/curriculums/${curriculumId}`,
     context,
   );
