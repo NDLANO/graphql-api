@@ -103,7 +103,7 @@ async function curriculumFetch(
   context: Context,
   options?: RequestOptions,
 ): Promise<Response> {
-  return fetch(path, context, { timeout: 10000, ...options });
+  return fetch(path, context, { timeout: 3000, ...options });
 }
 
 function mapReference(reference: Reference) {
