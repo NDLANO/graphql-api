@@ -36,6 +36,7 @@
     "graphql": "^15.5.1",
     "graphql-scalars": "^1.10.0",
     "@graphql-tools/schema": "^8.1.2",
+    "@graphql-tools/mock": "^8.2.2",
     "he": "^1.2.0",
     "lodash": "^4.17.21",
     "lru-cache": "^4.1.3",

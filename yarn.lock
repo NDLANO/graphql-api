@@ -62,7 +62,7 @@
     "@graphql-tools/utils" "^8.1.1"
     tslib "~2.3.0"
 
-"@graphql-tools/mock@^8.1.2":
+"@graphql-tools/mock@^8.1.2", "@graphql-tools/mock@^8.2.2":
   version "8.2.2"
   resolved "https://registry.yarnpkg.com/@graphql-tools/mock/-/mock-8.2.2.tgz#ff6b520a7234f23bff302406286d2e68b8177792"
   integrity sha512-3cUJi14UHW1/8mebbXlAqfZl78IxeKzF2QlcJV5PSRQe27Dp/UnkHyid1UH/iwBdA98J7l0uw8NU1MRRVjhjIA==

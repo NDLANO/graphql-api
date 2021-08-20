@@ -7,24 +7,26 @@
  */
 
 import { typeDefs } from '../schema';
-import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { addMocksToSchema } from '@graphql-tools/mock';
+
 import { graphql } from 'graphql';
 
 test('can run query on schema', async () => {
   const schema = makeExecutableSchema({
     typeDefs,
-    resolverValidationOptions: { requireResolversForResolveType: false },
+    resolverValidationOptions: { requireResolversForResolveType: 'ignore' },
   });
-  addMockFunctionsToSchema({
-    schema,
-  });
+
+  const schemaWithMocks = addMocksToSchema({ schema });
+
   const query = `
     query resource {
       resource(id: "6") { id, name }
     }
   `;
 
-  const result = await graphql(schema, query);
+  const result = await graphql(schemaWithMocks, query);
 
   expect(result).toMatchSnapshot();
 });
