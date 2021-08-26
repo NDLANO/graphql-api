@@ -6,7 +6,6 @@
  *
  */
 import he from 'he';
-import { reject } from 'lodash';
 import { Response } from 'node-fetch';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import {
@@ -104,8 +103,7 @@ async function curriculumFetch(
   context: Context,
   options?: RequestOptions,
 ): Promise<Response> {
-  throw Error('GREP is disabled');
-  // return fetch(path, context, { timeout: 1, ...options });
+  return fetch(path, context, { timeout: 3000, ...options });
 }
 
 function mapReference(reference: Reference) {
@@ -156,13 +154,29 @@ export async function fetchCompetenceGoals(
   language: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  return [
-    ...(codes ? await fetchLK20CompetenceGoals(codes, language, context) : []),
-    ...(nodeId ? await fetchLK06CompetenceGoals(nodeId, context) : []),
-  ];
+  return Promise.all([
+    codes
+      ? fetchLK20CompetenceGoals(codes, language, context)
+      : Promise.resolve<GQLCompetenceGoal[]>([]),
+    nodeId
+      ? fetchLK06CompetenceGoals(nodeId, context)
+      : Promise.resolve<GQLCompetenceGoal[]>([]),
+  ])
+    .then(([lk20, lk06]) => {
+      return [...lk20, ...lk06];
+    })
+    .catch(reason => {
+      // This catch block makes fetching competence goals never fail but rather log the error and return an empty array.
+      // tslint:disable-next-line:no-console
+      console.error(
+        `Something went wrong when fetching competence goals, with params codes: '${codes}', nodeId: '${nodeId}', language: '${language}':\n`,
+        reason,
+      );
+      return Promise.resolve([]);
+    });
 }
 
-export async function fetchLK20CompetenceGoal(
+async function fetchLK20CompetenceGoal(
   code: string,
   language: string,
   context: Context,
@@ -367,11 +381,11 @@ export async function fetchLK20Curriculum(
   );
 }
 
-export async function fetchLK06CompetenceGoals(
+async function fetchLK06CompetenceGoals(
   nodeId: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  const response = await fetch(
+  const response = await curriculumFetch(
     `http://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
     context,
   );
@@ -393,7 +407,7 @@ export async function fetchLK06Curriculum(
   curriculumId: string,
   context: Context,
 ): Promise<GQLReference> {
-  const response = await fetch(
+  const response = await curriculumFetch(
     `https://mycurriculum.ndla.no/v1/users/ndla/curriculums/${curriculumId}`,
     context,
   );

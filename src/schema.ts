@@ -7,7 +7,7 @@
  */
 
 import { gql } from 'apollo-server-express';
-import { makeExecutableSchema } from 'graphql-tools';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 export const typeDefs = gql`
   scalar JSON
@@ -826,7 +826,7 @@ export const typeDefs = gql`
 
 const schema = makeExecutableSchema({
   typeDefs,
-  resolverValidationOptions: { requireResolversForResolveType: false },
+  resolverValidationOptions: { requireResolversForResolveType: 'ignore' },
 });
 
 export default schema;
