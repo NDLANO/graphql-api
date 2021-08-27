@@ -93,10 +93,12 @@ export async function parseVisualElement(
         caption: data.caption,
       };
       visualElement.url = data.url;
+    } else {
+      visualElement.url = data.url;
     }
 
-    visualElement.copyright = license.copyright;
-    visualElement.title = license.title;
+    visualElement.copyright = license?.copyright;
+    visualElement.title = license?.title;
   } else {
     const visualElementOembed = await fetchOembed(data.url, context);
     visualElement.url = data.url;
