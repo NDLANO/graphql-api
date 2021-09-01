@@ -54,6 +54,7 @@ export { fetchOembed } from './oembedApi';
 export {
   searchConcepts,
   fetchConcepts,
+  fetchDetailedConcepts,
   fetchDetailedConcept,
   fetchListingPage,
 } from './conceptApi';

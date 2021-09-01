@@ -12,7 +12,7 @@ import {
   fetchCoreElements,
   fetchCrossSubjectTopicsByCode,
   fetchSubjectTopics,
-  fetchConcepts,
+  fetchDetailedConcepts,
 } from '../api';
 
 export const Query = {
@@ -89,8 +89,8 @@ export const resolvers = {
       article: GQLArticle,
       _: any,
       context: Context,
-    ): Promise<GQLConcept[]> {
-      return fetchConcepts(article.conceptIds, context);
+    ): Promise<GQLDetailedConcept[]> {
+      return fetchDetailedConcepts(article.conceptIds, context);
     },
   },
 };

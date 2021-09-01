@@ -332,7 +332,7 @@ export const typeDefs = gql`
     ): [CrossSubjectElement!]
     oembed: String
     conceptIds: [String!]
-    concepts: [Concept!]
+    concepts: [DetailedConcept!]
   }
 
   type embedVisualelement {
