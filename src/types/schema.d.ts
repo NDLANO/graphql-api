@@ -680,7 +680,7 @@ declare global {
     subjectIds?: Array<string>;
     subjectNames?: Array<string>;
     articleIds?: Array<string>;
-    articles?: Array<GQLMeta | null>;
+    articles?: Array<GQLMeta>;
     visualElement?: GQLVisualElement;
     copyright?: GQLCopyright;
   }

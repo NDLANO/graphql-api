@@ -53,11 +53,13 @@ export const resolvers = {
       context: Context,
     ): Promise<string[]> {
       const data = await context.loaders.subjectsLoader.load('all');
-      return Promise.all(
-        detailedConcept.subjectIds?.map(id => {
-          return data.subjects.find(subject => subject.id === id).name;
-        }),
-      );
+      if (detailedConcept.subjectIds?.length > 0) {
+        return Promise.all(
+          detailedConcept.subjectIds?.map(id => {
+            return data.subjects.find(subject => subject.id === id).name;
+          }),
+        );
+      }
     },
     async articles(
       detailedConcept: GQLDetailedConcept,
