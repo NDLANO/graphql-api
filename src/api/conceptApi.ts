@@ -93,6 +93,23 @@ export async function fetchConcepts(
   ).filter(c => !!c);
 }
 
+export async function fetchDetailedConcepts(
+  conceptIds: string[],
+  context: Context,
+): Promise<GQLDetailedConcept[]> {
+  return (
+    await Promise.all(
+      conceptIds.map(async id => {
+        try {
+          return fetchDetailedConcept(id, context);
+        } catch (e) {
+          return undefined;
+        }
+      }),
+    )
+  ).filter(c => !!c);
+}
+
 export async function fetchDetailedConcept(
   id: string,
   context: Context,

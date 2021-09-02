@@ -15,6 +15,745 @@ declare global {
    *          TYPE DEFS          *
    *                             *
    *******************************/
+  export type GQLJSON = JSON;
+  
+  export interface GQLAudioFile {
+    url: string;
+    mimeType: string;
+    fileSize: number;
+    language: string;
+  }
+  
+  export interface GQLTitle {
+    title: string;
+    language: string;
+  }
+  
+  export interface GQLTags {
+    tags?: Array<string>;
+    language: string;
+  }
+  
+  export interface GQLCoverPhoto {
+    id: string;
+    url: string;
+    altText: string;
+  }
+  
+  export interface GQLPodcastMeta {
+    header: string;
+    introduction: string;
+    coverPhoto: GQLCoverPhoto;
+    manuscript: string;
+    language: string;
+  }
+  
+  export interface GQLAudio {
+    id: string;
+    revision: number;
+    title: GQLTitle;
+    audioFile: GQLAudioFile;
+    copyright: GQLCopyright;
+    tags?: GQLTags;
+    supportedLanguages?: Array<string>;
+    audioType: string;
+    podcastMeta?: GQLPodcastMeta;
+  }
+  
+  export interface GQLAudioSearch {
+    pageSize?: number;
+    page?: number;
+    language?: string;
+    totalCount?: number;
+    results?: Array<GQLAudio>;
+  }
+  
+  export interface GQLResourceTypeDefinition {
+    id: string;
+    name: string;
+    subtypes?: Array<GQLResourceTypeDefinition>;
+  }
+  
+  export interface GQLResourceType {
+    id: string;
+    name: string;
+    resources?: Array<GQLResource>;
+  }
+  
+  export interface GQLMetaImage {
+    url?: string;
+    alt?: string;
+  }
+  
+  export interface GQLMeta {
+    id: number;
+    title: string;
+    introduction?: string;
+    metaDescription?: string;
+    metaImage?: GQLMetaImage;
+    lastUpdated?: string;
+  }
+  
+  export interface GQLLearningpathStepEmbedUrl {
+    url?: string;
+    embedType?: string;
+  }
+  
+  export interface GQLLearningpathStepOembed {
+    type: string;
+    version: string;
+    height: number;
+    html: string;
+    width: number;
+  }
+  
+  export interface GQLLearningpathStep {
+    id: number;
+    title: string;
+    seqNo: number;
+    description?: string;
+    embedUrl?: GQLLearningpathStepEmbedUrl;
+    license?: GQLLicense;
+    metaUrl?: string;
+    revision?: number;
+    status?: string;
+    supportedLanguages?: Array<string>;
+    type?: string;
+    article?: GQLArticle;
+    resource?: GQLResource;
+    showTitle?: boolean;
+    oembed?: GQLLearningpathStepOembed;
+  }
+  
+  export interface GQLLearningpathCoverphoto {
+    url?: string;
+    metaUrl?: string;
+  }
+  
+  export interface GQLLearningpathCopyright {
+    license?: GQLLicense;
+    contributors?: Array<GQLContributor>;
+  }
+  
+  export interface GQLLearningpath {
+    id: number;
+    title: string;
+    description?: string;
+    copyright?: GQLLearningpathCopyright;
+    duration?: number;
+    canEdit?: boolean;
+    verificationStatus?: string;
+    lastUpdated?: string;
+    tags?: Array<string>;
+    supportedLanguages?: Array<string>;
+    isBasedOn?: number;
+    learningsteps?: Array<GQLLearningpathStep>;
+    metaUrl?: string;
+    revision?: number;
+    learningstepUrl?: string;
+    status?: string;
+    coverphoto?: GQLLearningpathCoverphoto;
+  }
+  
+  export interface GQLTaxonomyMetadata {
+    grepCodes?: Array<string>;
+    visible?: boolean;
+    customFields?: GQLJSON;
+  }
+  
+  export interface GQLTaxonomyEntity {
+    id: string;
+    name: string;
+    contentUri?: string;
+    path?: string;
+    paths?: Array<string>;
+    meta?: GQLMeta;
+    metadata?: GQLTaxonomyMetadata;
+    article?: GQLArticle;
+    filters?: Array<GQLFilter>;
+    relevanceId?: string;
+    rank?: number;
+  }
+  
+  /** Use this to resolve interface type TaxonomyEntity */
+  export type GQLPossibleTaxonomyEntityTypeNames = 'Resource' | 'Topic';
+  
+  export interface GQLTaxonomyEntityNameMap {
+    TaxonomyEntity: GQLTaxonomyEntity;
+    Resource: GQLResource;
+    Topic: GQLTopic;
+  }
+  
+  export interface GQLResource extends GQLTaxonomyEntity {
+    id: string;
+    name: string;
+    contentUri?: string;
+    path?: string;
+    paths?: Array<string>;
+    meta?: GQLMeta;
+    metadata?: GQLTaxonomyMetadata;
+    article?: GQLArticle;
+    learningpath?: GQLLearningpath;
+    filters?: Array<GQLFilter>;
+    rank?: number;
+    relevanceId?: string;
+    resourceTypes?: Array<GQLResourceType>;
+    parentTopics?: Array<GQLTopic>;
+    breadcrumbs?: Array<Array<string>>;
+  }
+  
+  export interface GQLTopic extends GQLTaxonomyEntity {
+    id: string;
+    name: string;
+    contentUri?: string;
+    path?: string;
+    paths?: Array<string>;
+    meta?: GQLMeta;
+    metadata?: GQLTaxonomyMetadata;
+    article?: GQLArticle;
+    filters?: Array<GQLFilter>;
+    rank?: number;
+    relevanceId?: string;
+    isPrimary?: boolean;
+    parent?: string;
+    subtopics?: Array<GQLTopic>;
+    pathTopics?: Array<Array<GQLTopic>>;
+    coreResources?: Array<GQLResource>;
+    supplementaryResources?: Array<GQLResource>;
+    alternateTopics?: Array<GQLTopic>;
+    breadcrumbs?: Array<Array<string>>;
+  }
+  
+  export interface GQLLicense {
+    license: string;
+    url?: string;
+    description?: string;
+  }
+  
+  export interface GQLContributor {
+    type: string;
+    name: string;
+  }
+  
+  export interface GQLCopyright {
+    license?: GQLLicense;
+    creators?: Array<GQLContributor>;
+    processors?: Array<GQLContributor>;
+    rightsholders?: Array<GQLContributor>;
+    origin?: string;
+  }
+  
+  export interface GQLArticleRequiredLibrary {
+    name: string;
+    url: string;
+    mediaType: string;
+  }
+  
+  export interface GQLFootNote {
+    ref: number;
+    title: string;
+    year: string;
+    authors: Array<string>;
+    edition?: string;
+    publisher?: string;
+    url?: string;
+  }
+  
+  export interface GQLImageLicense {
+    title: string;
+    src: string;
+    altText: string;
+    copyright: GQLCopyright;
+    contentType?: string;
+    copyText?: string;
+  }
+  
+  export interface GQLAudioLicense {
+    title: string;
+    src: string;
+    copyright: GQLCopyright;
+    copyText?: string;
+  }
+  
+  export interface GQLBrightcoveIframe {
+    src: string;
+    height: number;
+    width: number;
+  }
+  
+  export interface GQLBrightcoveLicense {
+    title: string;
+    description?: string;
+    cover?: string;
+    src?: string;
+    download?: string;
+    iframe?: GQLBrightcoveIframe;
+    copyright: GQLCopyright;
+    uploadDate?: string;
+    copyText?: string;
+  }
+  
+  export interface GQLH5pLicense {
+    title: string;
+    src?: string;
+    thumbnail?: string;
+    copyright: GQLCopyright;
+    copyText?: string;
+  }
+  
+  export interface GQLConceptLicense {
+    title: string;
+    src?: string;
+    copyright?: GQLCopyright;
+    copyText?: string;
+  }
+  
+  export interface GQLArticleMetaData {
+    footnotes?: Array<GQLFootNote>;
+    images?: Array<GQLImageLicense>;
+    audios?: Array<GQLAudioLicense>;
+    brightcoves?: Array<GQLBrightcoveLicense>;
+    h5ps?: Array<GQLH5pLicense>;
+    concepts?: Array<GQLConceptLicense>;
+    copyText?: string;
+  }
+  
+  export interface GQLArticle {
+    id: number;
+    revision: number;
+    title: string;
+    introduction?: string;
+    content: string;
+    created: string;
+    updated: string;
+    published: string;
+    visualElement?: GQLVisualElement;
+    metaImage?: GQLMetaImage;
+    metaDescription: string;
+    articleType: string;
+    oldNdlaUrl?: string;
+    requiredLibraries?: Array<GQLArticleRequiredLibrary>;
+    metaData?: GQLArticleMetaData;
+    supportedLanguages?: Array<string>;
+    copyright: GQLCopyright;
+    tags?: Array<string>;
+    grepCodes?: Array<string>;
+    competenceGoals?: Array<GQLCompetenceGoal>;
+    coreElements?: Array<GQLCoreElement>;
+    crossSubjectTopics?: Array<GQLCrossSubjectElement>;
+    oembed?: string;
+    conceptIds?: Array<string>;
+    concepts?: Array<GQLDetailedConcept>;
+  }
+  
+  export interface GQLembedVisualelement {
+    visualElement?: GQLVisualElement;
+  }
+  
+  export interface GQLCompetenceGoal {
+    id: string;
+    code?: string;
+    title: string;
+    type: string;
+    language?: string;
+    curriculumId?: string;
+    curriculumCode?: string;
+    curriculum?: GQLReference;
+    competenceGoalSetCode?: string;
+    competenceGoalSet?: GQLReference;
+    crossSubjectTopicsCodes?: Array<GQLElement>;
+    crossSubjectTopics?: Array<GQLElement>;
+    coreElementsCodes?: Array<GQLElement>;
+    coreElements?: Array<GQLElement>;
+  }
+  
+  export interface GQLCoreElement {
+    id: string;
+    title: string;
+    description?: string;
+    language?: string;
+    curriculumCode?: string;
+    curriculum?: GQLReference;
+  }
+  
+  export interface GQLCrossSubjectElement {
+    title: string;
+    code?: string;
+    path?: string;
+  }
+  
+  export interface GQLElement {
+    reference: GQLReference;
+    explanation: Array<string | null>;
+  }
+  
+  export interface GQLReference {
+    id: string;
+    title: string;
+    code?: string;
+  }
+  
+  export interface GQLFilter {
+    id: string;
+    name: string;
+    connectionId?: string;
+    relevanceId?: string;
+    subjectId?: string;
+    metadata?: GQLTaxonomyMetadata;
+  }
+  
+  export interface GQLSubjectFilter {
+    id: string;
+    name: string;
+    subjectId: string;
+    contentUri?: string;
+    subjectpage?: GQLSubjectPage;
+    metadata?: GQLTaxonomyMetadata;
+  }
+  
+  export interface GQLCategory {
+    name?: string;
+    subjects?: Array<GQLSubject | null>;
+  }
+  
+  export interface GQLFrontpage {
+    topical?: Array<GQLResource>;
+    categories?: Array<GQLCategory>;
+  }
+  
+  export interface GQLSubjectPageVisualElement {
+    type?: string;
+    url?: string;
+    alt?: string;
+  }
+  
+  export interface GQLSubjectPageAbout {
+    title?: string;
+    description?: string;
+    visualElement?: GQLSubjectPageVisualElement;
+  }
+  
+  export interface GQLSubjectPageBanner {
+    desktopUrl?: string;
+    desktopId?: string;
+    mobileUrl?: string;
+    mobileId?: string;
+  }
+  
+  export interface GQLSubjectPage {
+    topical?: GQLTaxonomyEntity;
+    mostRead?: Array<GQLTaxonomyEntity>;
+    banner?: GQLSubjectPageBanner;
+    id: number;
+    name?: string;
+    facebook?: string;
+    editorsChoices?: Array<GQLTaxonomyEntity>;
+    latestContent?: Array<GQLTaxonomyEntity>;
+    about?: GQLSubjectPageAbout;
+    goTo?: Array<GQLResourceTypeDefinition>;
+    metaDescription?: string;
+    layout?: string;
+    twitter?: string;
+  }
+  
+  export interface GQLFilmPageAbout {
+    title?: string;
+    description?: string;
+    visualElement?: GQLSubjectPageVisualElement;
+    language?: string;
+  }
+  
+  export interface GQLFilmFrontpage {
+    name?: string;
+    about?: Array<GQLFilmPageAbout>;
+    movieThemes?: Array<GQLMovieTheme>;
+    slideShow?: Array<GQLMovie>;
+  }
+  
+  export interface GQLMovieTheme {
+    name?: Array<GQLName>;
+    movies?: Array<GQLMovie>;
+  }
+  
+  export interface GQLName {
+    name?: string;
+    language?: string;
+  }
+  
+  export interface GQLMovie {
+    id: string;
+    title?: string;
+    metaImage?: GQLMetaImage;
+    metaDescription?: string;
+    resourceTypes?: Array<GQLResourceType>;
+    path?: string;
+  }
+  
+  export interface GQLMovieMeta {
+    title?: string;
+    metaImage?: GQLMetaImage;
+    metaDescription?: string;
+  }
+  
+  export interface GQLMoviePath {
+    path?: string;
+    paths?: Array<string>;
+  }
+  
+  export interface GQLMovieResourceTypes {
+    resourceTypes?: Array<GQLResourceType>;
+  }
+  
+  export interface GQLSubject {
+    id: string;
+    contentUri?: string;
+    name: string;
+    path: string;
+    metadata?: GQLTaxonomyMetadata;
+    filters?: Array<GQLSubjectFilter>;
+    frontpageFilters?: Array<GQLSubjectFilter>;
+    subjectpage?: GQLSubjectPage;
+    topics?: Array<GQLTopic>;
+  }
+  
+  export interface GQLSearchResult {
+    id: number;
+    title?: string;
+    supportedLanguages?: Array<string>;
+    url?: string;
+    metaDescription?: string;
+    metaImage?: GQLMetaImage;
+    contentType?: string;
+    traits?: Array<string>;
+    contexts?: Array<GQLSearchContext>;
+  }
+  
+  /** Use this to resolve interface type SearchResult */
+  export type GQLPossibleSearchResultTypeNames =
+  'ArticleSearchResult' |
+  'LearningpathSearchResult';
+  
+  export interface GQLSearchResultNameMap {
+    SearchResult: GQLSearchResult;
+    ArticleSearchResult: GQLArticleSearchResult;
+    LearningpathSearchResult: GQLLearningpathSearchResult;
+  }
+  
+  export interface GQLArticleSearchResult extends GQLSearchResult {
+    id: number;
+    title?: string;
+    supportedLanguages?: Array<string>;
+    url?: string;
+    metaDescription?: string;
+    metaImage?: GQLMetaImage;
+    contentType?: string;
+    traits?: Array<string>;
+    contexts?: Array<GQLSearchContext>;
+  }
+  
+  export interface GQLLearningpathSearchResult extends GQLSearchResult {
+    id: number;
+    title?: string;
+    supportedLanguages?: Array<string>;
+    url?: string;
+    metaDescription?: string;
+    metaImage?: GQLMetaImage;
+    contentType?: string;
+    traits?: Array<string>;
+    contexts?: Array<GQLSearchContext>;
+  }
+  
+  export interface GQLFrontpageSearchResult {
+    id: string;
+    name?: string;
+    resourceTypes?: Array<GQLSearchContextResourceTypes>;
+    subject?: string;
+    path?: string;
+    filters?: Array<GQLSearchContextFilter>;
+  }
+  
+  export interface GQLSearchContext {
+    breadcrumbs?: Array<string>;
+    learningResourceType?: string;
+    resourceTypes?: Array<GQLSearchContextResourceTypes>;
+    subject?: string;
+    subjectId?: string;
+    relevance?: string;
+    path?: string;
+    id?: string;
+    language?: string;
+    filters?: Array<GQLSearchContextFilter>;
+  }
+  
+  export interface GQLSearchContextResourceTypes {
+    id?: string;
+    name?: string;
+    language?: string;
+  }
+  
+  export interface GQLSearchContextFilter {
+    id?: string;
+    name?: string;
+    relevance?: string;
+  }
+  
+  export interface GQLVisualElementOembed {
+    title?: string;
+    html?: string;
+    fullscreen?: boolean;
+  }
+  
+  export interface GQLVisualElement {
+    resource?: string;
+    url?: string;
+    copyright?: GQLCopyright;
+    language?: string;
+    embed?: string;
+    title?: string;
+    brightcove?: GQLBrightcoveElement;
+    h5p?: GQLH5pElement;
+    oembed?: GQLVisualElementOembed;
+    image?: GQLImageElement;
+  }
+  
+  export interface GQLImageElement {
+    resourceid?: string;
+    alt?: string;
+    caption?: string;
+    lowerRightX?: number;
+    lowerRightY?: number;
+    upperLeftX?: number;
+    upperLeftY?: number;
+    focalX?: number;
+    focalY?: number;
+    src: string;
+    altText: string;
+    contentType?: string;
+    copyText?: string;
+  }
+  
+  export interface GQLBrightcoveElement {
+    videoid?: string;
+    player?: string;
+    account?: string;
+    caption?: string;
+    description?: string;
+    cover?: string;
+    src?: string;
+    download?: string;
+    iframe?: GQLBrightcoveIframe;
+    uploadDate?: string;
+    copyText?: string;
+  }
+  
+  export interface GQLH5pElement {
+    src?: string;
+    thumbnail?: string;
+    copyText?: string;
+  }
+  
+  export interface GQLListingPage {
+    subjects?: Array<GQLSubject>;
+    tags?: Array<string>;
+  }
+  
+  export interface GQLConceptResult {
+    totalCount?: number;
+    concepts?: Array<GQLConcept>;
+  }
+  
+  export interface GQLConcept {
+    id?: number;
+    title?: string;
+    content?: string;
+    tags?: Array<string>;
+    metaImage?: GQLMetaImage;
+  }
+  
+  export interface GQLDetailedConcept {
+    id?: number;
+    title?: string;
+    content?: string;
+    created?: string;
+    tags?: Array<string>;
+    image?: GQLImageLicense;
+    subjectIds?: Array<string>;
+    articleIds?: Array<string>;
+    articles?: Array<GQLMeta>;
+    visualElement?: GQLVisualElement;
+    copyright?: GQLCopyright;
+  }
+  
+  export interface GQLSearch {
+    pageSize?: number;
+    page?: number;
+    language?: string;
+    totalCount?: number;
+    results?: Array<GQLSearchResult>;
+    suggestions?: Array<GQLSuggestionResult>;
+    aggregations?: Array<GQLAggregationResult>;
+    concepts?: GQLConceptResult;
+  }
+  
+  export interface GQLSuggestionResult {
+    name?: string;
+    suggestions?: Array<GQLSearchSuggestion>;
+  }
+  
+  export interface GQLAggregationResult {
+    field?: string;
+    sumOtherDocCount?: number;
+    docCountErrorUpperBound?: number;
+    values?: Array<GQLBucketResult>;
+  }
+  
+  export interface GQLBucketResult {
+    value?: string;
+    count?: number;
+  }
+  
+  export interface GQLSearchSuggestion {
+    text?: string;
+    offset?: number;
+    length?: number;
+    options?: Array<GQLSuggestOption>;
+  }
+  
+  export interface GQLSuggestOption {
+    text?: string;
+    score?: number;
+  }
+  
+  export interface GQLGroupSearchResult {
+    id: number;
+    path: string;
+    name: string;
+    ingress?: string;
+    traits?: Array<string>;
+    contexts?: Array<GQLSearchContext>;
+    metaImage?: GQLMetaImage;
+  }
+  
+  export interface GQLGroupSearch {
+    language?: string;
+    resourceType?: string;
+    resources?: Array<GQLGroupSearchResult>;
+    suggestions?: Array<GQLSuggestionResult>;
+    aggregations?: Array<GQLAggregationResult>;
+    totalCount?: number;
+  }
+  
+  export interface GQLFrontPageResources {
+    results?: Array<GQLFrontpageSearchResult>;
+    totalCount?: number;
+    suggestions?: Array<GQLSuggestionResult>;
+  }
+  
+  export interface GQLFrontpageSearch {
+    topicResources?: GQLFrontPageResources;
+    learningResources?: GQLFrontPageResources;
+  }
+  
   export interface GQLQuery {
     resource?: GQLResource;
     article?: GQLArticle;
@@ -45,745 +784,6 @@ declare global {
     podcastSearch?: GQLAudioSearch;
   }
   
-  export interface GQLResource extends GQLTaxonomyEntity {
-    id: string;
-    name: string;
-    contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
-    meta?: GQLMeta;
-    metadata?: GQLTaxonomyMetadata;
-    article?: GQLArticle;
-    learningpath?: GQLLearningpath;
-    filters?: Array<GQLFilter>;
-    rank?: number;
-    relevanceId?: string;
-    resourceTypes?: Array<GQLResourceType>;
-    parentTopics?: Array<GQLTopic>;
-    breadcrumbs?: Array<Array<string>>;
-  }
-  
-  export interface GQLTaxonomyEntity {
-    id: string;
-    name: string;
-    contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
-    meta?: GQLMeta;
-    metadata?: GQLTaxonomyMetadata;
-    article?: GQLArticle;
-    filters?: Array<GQLFilter>;
-    relevanceId?: string;
-    rank?: number;
-  }
-  
-  /** Use this to resolve interface type TaxonomyEntity */
-  export type GQLPossibleTaxonomyEntityTypeNames = 'Resource' | 'Topic';
-  
-  export interface GQLTaxonomyEntityNameMap {
-    TaxonomyEntity: GQLTaxonomyEntity;
-    Resource: GQLResource;
-    Topic: GQLTopic;
-  }
-  
-  export interface GQLMeta {
-    id: number;
-    title: string;
-    introduction?: string;
-    metaDescription?: string;
-    metaImage?: GQLMetaImage;
-    lastUpdated?: string;
-  }
-  
-  export interface GQLMetaImage {
-    url?: string;
-    alt?: string;
-  }
-  
-  export interface GQLTaxonomyMetadata {
-    grepCodes?: Array<string>;
-    visible?: boolean;
-    customFields?: GQLJSON;
-  }
-  
-  export type GQLJSON = JSON;
-  
-  export interface GQLArticle {
-    id: number;
-    revision: number;
-    title: string;
-    introduction?: string;
-    content: string;
-    created: string;
-    updated: string;
-    published: string;
-    visualElement?: GQLVisualElement;
-    metaImage?: GQLMetaImage;
-    metaDescription: string;
-    articleType: string;
-    oldNdlaUrl?: string;
-    requiredLibraries?: Array<GQLArticleRequiredLibrary>;
-    metaData?: GQLArticleMetaData;
-    supportedLanguages?: Array<string>;
-    copyright: GQLCopyright;
-    tags?: Array<string>;
-    grepCodes?: Array<string>;
-    competenceGoals?: Array<GQLCompetenceGoal>;
-    coreElements?: Array<GQLCoreElement>;
-    crossSubjectTopics?: Array<GQLCrossSubjectElement>;
-    oembed?: string;
-    conceptIds?: Array<string>;
-    concepts?: Array<GQLConcept>;
-  }
-  
-  export interface GQLVisualElement {
-    resource?: string;
-    url?: string;
-    copyright?: GQLCopyright;
-    language?: string;
-    embed?: string;
-    title?: string;
-    brightcove?: GQLBrightcoveElement;
-    h5p?: GQLH5pElement;
-    oembed?: GQLVisualElementOembed;
-    image?: GQLImageElement;
-  }
-  
-  export interface GQLCopyright {
-    license?: GQLLicense;
-    creators?: Array<GQLContributor>;
-    processors?: Array<GQLContributor>;
-    rightsholders?: Array<GQLContributor>;
-    origin?: string;
-  }
-  
-  export interface GQLLicense {
-    license: string;
-    url?: string;
-    description?: string;
-  }
-  
-  export interface GQLContributor {
-    type: string;
-    name: string;
-  }
-  
-  export interface GQLBrightcoveElement {
-    videoid?: string;
-    player?: string;
-    account?: string;
-    caption?: string;
-    description?: string;
-    cover?: string;
-    src?: string;
-    download?: string;
-    iframe?: GQLBrightcoveIframe;
-    uploadDate?: string;
-    copyText?: string;
-  }
-  
-  export interface GQLBrightcoveIframe {
-    src: string;
-    height: number;
-    width: number;
-  }
-  
-  export interface GQLH5pElement {
-    src?: string;
-    thumbnail?: string;
-    copyText?: string;
-  }
-  
-  export interface GQLVisualElementOembed {
-    title?: string;
-    html?: string;
-    fullscreen?: boolean;
-  }
-  
-  export interface GQLImageElement {
-    resourceid?: string;
-    alt?: string;
-    caption?: string;
-    lowerRightX?: number;
-    lowerRightY?: number;
-    upperLeftX?: number;
-    upperLeftY?: number;
-    focalX?: number;
-    focalY?: number;
-    src: string;
-    altText: string;
-    contentType?: string;
-    copyText?: string;
-  }
-  
-  export interface GQLArticleRequiredLibrary {
-    name: string;
-    url: string;
-    mediaType: string;
-  }
-  
-  export interface GQLArticleMetaData {
-    footnotes?: Array<GQLFootNote>;
-    images?: Array<GQLImageLicense>;
-    audios?: Array<GQLAudioLicense>;
-    brightcoves?: Array<GQLBrightcoveLicense>;
-    h5ps?: Array<GQLH5pLicense>;
-    concepts?: Array<GQLConceptLicense>;
-    copyText?: string;
-  }
-  
-  export interface GQLFootNote {
-    ref: number;
-    title: string;
-    year: string;
-    authors: Array<string>;
-    edition?: string;
-    publisher?: string;
-    url?: string;
-  }
-  
-  export interface GQLImageLicense {
-    title: string;
-    src: string;
-    altText: string;
-    copyright: GQLCopyright;
-    contentType?: string;
-    copyText?: string;
-  }
-  
-  export interface GQLAudioLicense {
-    title: string;
-    src: string;
-    copyright: GQLCopyright;
-    copyText?: string;
-  }
-  
-  export interface GQLBrightcoveLicense {
-    title: string;
-    description?: string;
-    cover?: string;
-    src?: string;
-    download?: string;
-    iframe?: GQLBrightcoveIframe;
-    copyright: GQLCopyright;
-    uploadDate?: string;
-    copyText?: string;
-  }
-  
-  export interface GQLH5pLicense {
-    title: string;
-    src?: string;
-    thumbnail?: string;
-    copyright: GQLCopyright;
-    copyText?: string;
-  }
-  
-  export interface GQLConceptLicense {
-    title: string;
-    src?: string;
-    copyright?: GQLCopyright;
-    copyText?: string;
-  }
-  
-  export interface GQLCompetenceGoal {
-    id: string;
-    code?: string;
-    title: string;
-    type: string;
-    language?: string;
-    curriculumId?: string;
-    curriculumCode?: string;
-    curriculum?: GQLReference;
-    competenceGoalSetCode?: string;
-    competenceGoalSet?: GQLReference;
-    crossSubjectTopicsCodes?: Array<GQLElement>;
-    crossSubjectTopics?: Array<GQLElement>;
-    coreElementsCodes?: Array<GQLElement>;
-    coreElements?: Array<GQLElement>;
-  }
-  
-  export interface GQLReference {
-    id: string;
-    title: string;
-    code?: string;
-  }
-  
-  export interface GQLElement {
-    reference: GQLReference;
-    explanation: Array<string | null>;
-  }
-  
-  export interface GQLCoreElement {
-    id: string;
-    title: string;
-    description?: string;
-    language?: string;
-    curriculumCode?: string;
-    curriculum?: GQLReference;
-  }
-  
-  export interface GQLCrossSubjectElement {
-    title: string;
-    code?: string;
-    path?: string;
-  }
-  
-  export interface GQLConcept {
-    id?: number;
-    title?: string;
-    content?: string;
-    tags?: Array<string>;
-    metaImage?: GQLMetaImage;
-  }
-  
-  export interface GQLFilter {
-    id: string;
-    name: string;
-    connectionId?: string;
-    relevanceId?: string;
-    subjectId?: string;
-    metadata?: GQLTaxonomyMetadata;
-  }
-  
-  export interface GQLLearningpath {
-    id: number;
-    title: string;
-    description?: string;
-    copyright?: GQLLearningpathCopyright;
-    duration?: number;
-    canEdit?: boolean;
-    verificationStatus?: string;
-    lastUpdated?: string;
-    tags?: Array<string>;
-    supportedLanguages?: Array<string>;
-    isBasedOn?: number;
-    learningsteps?: Array<GQLLearningpathStep>;
-    metaUrl?: string;
-    revision?: number;
-    learningstepUrl?: string;
-    status?: string;
-    coverphoto?: GQLLearningpathCoverphoto;
-  }
-  
-  export interface GQLLearningpathCopyright {
-    license?: GQLLicense;
-    contributors?: Array<GQLContributor>;
-  }
-  
-  export interface GQLLearningpathStep {
-    id: number;
-    title: string;
-    seqNo: number;
-    description?: string;
-    embedUrl?: GQLLearningpathStepEmbedUrl;
-    license?: GQLLicense;
-    metaUrl?: string;
-    revision?: number;
-    status?: string;
-    supportedLanguages?: Array<string>;
-    type?: string;
-    article?: GQLArticle;
-    resource?: GQLResource;
-    showTitle?: boolean;
-    oembed?: GQLLearningpathStepOembed;
-  }
-  
-  export interface GQLLearningpathStepEmbedUrl {
-    url?: string;
-    embedType?: string;
-  }
-  
-  export interface GQLLearningpathStepOembed {
-    type: string;
-    version: string;
-    height: number;
-    html: string;
-    width: number;
-  }
-  
-  export interface GQLLearningpathCoverphoto {
-    url?: string;
-    metaUrl?: string;
-  }
-  
-  export interface GQLResourceType {
-    id: string;
-    name: string;
-    resources?: Array<GQLResource>;
-  }
-  
-  export interface GQLTopic extends GQLTaxonomyEntity {
-    id: string;
-    name: string;
-    contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
-    meta?: GQLMeta;
-    metadata?: GQLTaxonomyMetadata;
-    article?: GQLArticle;
-    filters?: Array<GQLFilter>;
-    rank?: number;
-    relevanceId?: string;
-    isPrimary?: boolean;
-    parent?: string;
-    subtopics?: Array<GQLTopic>;
-    pathTopics?: Array<Array<GQLTopic>>;
-    coreResources?: Array<GQLResource>;
-    supplementaryResources?: Array<GQLResource>;
-    alternateTopics?: Array<GQLTopic>;
-    breadcrumbs?: Array<Array<string>>;
-  }
-  
-  export interface GQLSubject {
-    id: string;
-    contentUri?: string;
-    name: string;
-    path: string;
-    metadata?: GQLTaxonomyMetadata;
-    filters?: Array<GQLSubjectFilter>;
-    frontpageFilters?: Array<GQLSubjectFilter>;
-    subjectpage?: GQLSubjectPage;
-    topics?: Array<GQLTopic>;
-  }
-  
-  export interface GQLSubjectFilter {
-    id: string;
-    name: string;
-    subjectId: string;
-    contentUri?: string;
-    subjectpage?: GQLSubjectPage;
-    metadata?: GQLTaxonomyMetadata;
-  }
-  
-  export interface GQLSubjectPage {
-    topical?: GQLTaxonomyEntity;
-    mostRead?: Array<GQLTaxonomyEntity>;
-    banner?: GQLSubjectPageBanner;
-    id: number;
-    name?: string;
-    facebook?: string;
-    editorsChoices?: Array<GQLTaxonomyEntity>;
-    latestContent?: Array<GQLTaxonomyEntity>;
-    about?: GQLSubjectPageAbout;
-    goTo?: Array<GQLResourceTypeDefinition>;
-    metaDescription?: string;
-    layout?: string;
-    twitter?: string;
-  }
-  
-  export interface GQLSubjectPageBanner {
-    desktopUrl?: string;
-    desktopId?: string;
-    mobileUrl?: string;
-    mobileId?: string;
-  }
-  
-  export interface GQLSubjectPageAbout {
-    title?: string;
-    description?: string;
-    visualElement?: GQLSubjectPageVisualElement;
-  }
-  
-  export interface GQLSubjectPageVisualElement {
-    type?: string;
-    url?: string;
-    alt?: string;
-  }
-  
-  export interface GQLResourceTypeDefinition {
-    id: string;
-    name: string;
-    subtypes?: Array<GQLResourceTypeDefinition>;
-  }
-  
-  export interface GQLFilmFrontpage {
-    name?: string;
-    about?: Array<GQLFilmPageAbout>;
-    movieThemes?: Array<GQLMovieTheme>;
-    slideShow?: Array<GQLMovie>;
-  }
-  
-  export interface GQLFilmPageAbout {
-    title?: string;
-    description?: string;
-    visualElement?: GQLSubjectPageVisualElement;
-    language?: string;
-  }
-  
-  export interface GQLMovieTheme {
-    name?: Array<GQLName>;
-    movies?: Array<GQLMovie>;
-  }
-  
-  export interface GQLName {
-    name?: string;
-    language?: string;
-  }
-  
-  export interface GQLMovie {
-    id: string;
-    title?: string;
-    metaImage?: GQLMetaImage;
-    metaDescription?: string;
-    resourceTypes?: Array<GQLResourceType>;
-    path?: string;
-  }
-  
-  export interface GQLFrontpage {
-    topical?: Array<GQLResource>;
-    categories?: Array<GQLCategory>;
-  }
-  
-  export interface GQLCategory {
-    name?: string;
-    subjects?: Array<GQLSubject | null>;
-  }
-  
-  export interface GQLSearch {
-    pageSize?: number;
-    page?: number;
-    language?: string;
-    totalCount?: number;
-    results?: Array<GQLSearchResult>;
-    suggestions?: Array<GQLSuggestionResult>;
-    aggregations?: Array<GQLAggregationResult>;
-    concepts?: GQLConceptResult;
-  }
-  
-  export interface GQLSearchResult {
-    id: number;
-    title?: string;
-    supportedLanguages?: Array<string>;
-    url?: string;
-    metaDescription?: string;
-    metaImage?: GQLMetaImage;
-    contentType?: string;
-    traits?: Array<string>;
-    contexts?: Array<GQLSearchContext>;
-  }
-  
-  /** Use this to resolve interface type SearchResult */
-  export type GQLPossibleSearchResultTypeNames =
-  'ArticleSearchResult' |
-  'LearningpathSearchResult';
-  
-  export interface GQLSearchResultNameMap {
-    SearchResult: GQLSearchResult;
-    ArticleSearchResult: GQLArticleSearchResult;
-    LearningpathSearchResult: GQLLearningpathSearchResult;
-  }
-  
-  export interface GQLSearchContext {
-    breadcrumbs?: Array<string>;
-    learningResourceType?: string;
-    resourceTypes?: Array<GQLSearchContextResourceTypes>;
-    subject?: string;
-    subjectId?: string;
-    relevance?: string;
-    path?: string;
-    id?: string;
-    language?: string;
-    filters?: Array<GQLSearchContextFilter>;
-  }
-  
-  export interface GQLSearchContextResourceTypes {
-    id?: string;
-    name?: string;
-    language?: string;
-  }
-  
-  export interface GQLSearchContextFilter {
-    id?: string;
-    name?: string;
-    relevance?: string;
-  }
-  
-  export interface GQLSuggestionResult {
-    name?: string;
-    suggestions?: Array<GQLSearchSuggestion>;
-  }
-  
-  export interface GQLSearchSuggestion {
-    text?: string;
-    offset?: number;
-    length?: number;
-    options?: Array<GQLSuggestOption>;
-  }
-  
-  export interface GQLSuggestOption {
-    text?: string;
-    score?: number;
-  }
-  
-  export interface GQLAggregationResult {
-    field?: string;
-    sumOtherDocCount?: number;
-    docCountErrorUpperBound?: number;
-    values?: Array<GQLBucketResult>;
-  }
-  
-  export interface GQLBucketResult {
-    value?: string;
-    count?: number;
-  }
-  
-  export interface GQLConceptResult {
-    totalCount?: number;
-    concepts?: Array<GQLConcept>;
-  }
-  
-  export interface GQLGroupSearch {
-    language?: string;
-    resourceType?: string;
-    resources?: Array<GQLGroupSearchResult>;
-    suggestions?: Array<GQLSuggestionResult>;
-    aggregations?: Array<GQLAggregationResult>;
-    totalCount?: number;
-  }
-  
-  export interface GQLGroupSearchResult {
-    id: number;
-    path: string;
-    name: string;
-    ingress?: string;
-    traits?: Array<string>;
-    contexts?: Array<GQLSearchContext>;
-    metaImage?: GQLMetaImage;
-  }
-  
-  export interface GQLListingPage {
-    subjects?: Array<GQLSubject>;
-    tags?: Array<string>;
-  }
-  
-  export interface GQLDetailedConcept {
-    id?: number;
-    title?: string;
-    content?: string;
-    created?: string;
-    tags?: Array<string>;
-    image?: GQLImageLicense;
-    subjectIds?: Array<string>;
-    articleIds?: Array<string>;
-    articles?: Array<GQLMeta>;
-    visualElement?: GQLVisualElement;
-    copyright?: GQLCopyright;
-  }
-  
-  export interface GQLFrontpageSearch {
-    topicResources?: GQLFrontPageResources;
-    learningResources?: GQLFrontPageResources;
-  }
-  
-  export interface GQLFrontPageResources {
-    results?: Array<GQLFrontpageSearchResult>;
-    totalCount?: number;
-    suggestions?: Array<GQLSuggestionResult>;
-  }
-  
-  export interface GQLFrontpageSearchResult {
-    id: string;
-    name?: string;
-    resourceTypes?: Array<GQLSearchContextResourceTypes>;
-    subject?: string;
-    path?: string;
-    filters?: Array<GQLSearchContextFilter>;
-  }
-  
-  export interface GQLAudio {
-    id: string;
-    revision: number;
-    title: GQLTitle;
-    audioFile: GQLAudioFile;
-    copyright: GQLCopyright;
-    tags?: GQLTags;
-    supportedLanguages?: Array<string>;
-    audioType: string;
-    podcastMeta?: GQLPodcastMeta;
-  }
-  
-  export interface GQLTitle {
-    title: string;
-    language: string;
-  }
-  
-  export interface GQLAudioFile {
-    url: string;
-    mimeType: string;
-    fileSize: number;
-    language: string;
-  }
-  
-  export interface GQLTags {
-    tags?: Array<string>;
-    language: string;
-  }
-  
-  export interface GQLPodcastMeta {
-    header: string;
-    introduction: string;
-    coverPhoto: GQLCoverPhoto;
-    manuscript: string;
-    language: string;
-  }
-  
-  export interface GQLCoverPhoto {
-    id: string;
-    url: string;
-    altText: string;
-  }
-  
-  export interface GQLAudioSearch {
-    pageSize?: number;
-    page?: number;
-    language?: string;
-    totalCount?: number;
-    results?: Array<GQLAudio>;
-  }
-  
-  export interface GQLembedVisualelement {
-    visualElement?: GQLVisualElement;
-  }
-  
-  export interface GQLMovieMeta {
-    title?: string;
-    metaImage?: GQLMetaImage;
-    metaDescription?: string;
-  }
-  
-  export interface GQLMoviePath {
-    path?: string;
-    paths?: Array<string>;
-  }
-  
-  export interface GQLMovieResourceTypes {
-    resourceTypes?: Array<GQLResourceType>;
-  }
-  
-  export interface GQLArticleSearchResult extends GQLSearchResult {
-    id: number;
-    title?: string;
-    supportedLanguages?: Array<string>;
-    url?: string;
-    metaDescription?: string;
-    metaImage?: GQLMetaImage;
-    contentType?: string;
-    traits?: Array<string>;
-    contexts?: Array<GQLSearchContext>;
-  }
-  
-  export interface GQLLearningpathSearchResult extends GQLSearchResult {
-    id: number;
-    title?: string;
-    supportedLanguages?: Array<string>;
-    url?: string;
-    metaDescription?: string;
-    metaImage?: GQLMetaImage;
-    contentType?: string;
-    traits?: Array<string>;
-    contexts?: Array<GQLSearchContext>;
-  }
-  
   /*********************************
    *                               *
    *         TYPE RESOLVERS        *
@@ -795,98 +795,2630 @@ declare global {
    * However, you can still use other generated interfaces to make your resolver type-safed
    */
   export interface GQLResolver {
-    Query?: GQLQueryTypeResolver;
-    Resource?: GQLResourceTypeResolver;
+    JSON?: GraphQLScalarType;
+    AudioFile?: GQLAudioFileTypeResolver;
+    Title?: GQLTitleTypeResolver;
+    Tags?: GQLTagsTypeResolver;
+    CoverPhoto?: GQLCoverPhotoTypeResolver;
+    PodcastMeta?: GQLPodcastMetaTypeResolver;
+    Audio?: GQLAudioTypeResolver;
+    AudioSearch?: GQLAudioSearchTypeResolver;
+    ResourceTypeDefinition?: GQLResourceTypeDefinitionTypeResolver;
+    ResourceType?: GQLResourceTypeTypeResolver;
+    MetaImage?: GQLMetaImageTypeResolver;
+    Meta?: GQLMetaTypeResolver;
+    LearningpathStepEmbedUrl?: GQLLearningpathStepEmbedUrlTypeResolver;
+    LearningpathStepOembed?: GQLLearningpathStepOembedTypeResolver;
+    LearningpathStep?: GQLLearningpathStepTypeResolver;
+    LearningpathCoverphoto?: GQLLearningpathCoverphotoTypeResolver;
+    LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
+    Learningpath?: GQLLearningpathTypeResolver;
+    TaxonomyMetadata?: GQLTaxonomyMetadataTypeResolver;
     TaxonomyEntity?: {
       __resolveType: GQLTaxonomyEntityTypeResolver
     };
     
-    Meta?: GQLMetaTypeResolver;
-    MetaImage?: GQLMetaImageTypeResolver;
-    TaxonomyMetadata?: GQLTaxonomyMetadataTypeResolver;
-    JSON?: GraphQLScalarType;
-    Article?: GQLArticleTypeResolver;
-    VisualElement?: GQLVisualElementTypeResolver;
-    Copyright?: GQLCopyrightTypeResolver;
+    Resource?: GQLResourceTypeResolver;
+    Topic?: GQLTopicTypeResolver;
     License?: GQLLicenseTypeResolver;
     Contributor?: GQLContributorTypeResolver;
-    BrightcoveElement?: GQLBrightcoveElementTypeResolver;
-    BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
-    H5pElement?: GQLH5pElementTypeResolver;
-    VisualElementOembed?: GQLVisualElementOembedTypeResolver;
-    ImageElement?: GQLImageElementTypeResolver;
+    Copyright?: GQLCopyrightTypeResolver;
     ArticleRequiredLibrary?: GQLArticleRequiredLibraryTypeResolver;
-    ArticleMetaData?: GQLArticleMetaDataTypeResolver;
     FootNote?: GQLFootNoteTypeResolver;
     ImageLicense?: GQLImageLicenseTypeResolver;
     AudioLicense?: GQLAudioLicenseTypeResolver;
+    BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     H5pLicense?: GQLH5pLicenseTypeResolver;
     ConceptLicense?: GQLConceptLicenseTypeResolver;
+    ArticleMetaData?: GQLArticleMetaDataTypeResolver;
+    Article?: GQLArticleTypeResolver;
+    embedVisualelement?: GQLembedVisualelementTypeResolver;
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
-    Reference?: GQLReferenceTypeResolver;
-    Element?: GQLElementTypeResolver;
     CoreElement?: GQLCoreElementTypeResolver;
     CrossSubjectElement?: GQLCrossSubjectElementTypeResolver;
-    Concept?: GQLConceptTypeResolver;
+    Element?: GQLElementTypeResolver;
+    Reference?: GQLReferenceTypeResolver;
     Filter?: GQLFilterTypeResolver;
-    Learningpath?: GQLLearningpathTypeResolver;
-    LearningpathCopyright?: GQLLearningpathCopyrightTypeResolver;
-    LearningpathStep?: GQLLearningpathStepTypeResolver;
-    LearningpathStepEmbedUrl?: GQLLearningpathStepEmbedUrlTypeResolver;
-    LearningpathStepOembed?: GQLLearningpathStepOembedTypeResolver;
-    LearningpathCoverphoto?: GQLLearningpathCoverphotoTypeResolver;
-    ResourceType?: GQLResourceTypeTypeResolver;
-    Topic?: GQLTopicTypeResolver;
-    Subject?: GQLSubjectTypeResolver;
     SubjectFilter?: GQLSubjectFilterTypeResolver;
-    SubjectPage?: GQLSubjectPageTypeResolver;
-    SubjectPageBanner?: GQLSubjectPageBannerTypeResolver;
-    SubjectPageAbout?: GQLSubjectPageAboutTypeResolver;
+    Category?: GQLCategoryTypeResolver;
+    Frontpage?: GQLFrontpageTypeResolver;
     SubjectPageVisualElement?: GQLSubjectPageVisualElementTypeResolver;
-    ResourceTypeDefinition?: GQLResourceTypeDefinitionTypeResolver;
-    FilmFrontpage?: GQLFilmFrontpageTypeResolver;
+    SubjectPageAbout?: GQLSubjectPageAboutTypeResolver;
+    SubjectPageBanner?: GQLSubjectPageBannerTypeResolver;
+    SubjectPage?: GQLSubjectPageTypeResolver;
     FilmPageAbout?: GQLFilmPageAboutTypeResolver;
+    FilmFrontpage?: GQLFilmFrontpageTypeResolver;
     MovieTheme?: GQLMovieThemeTypeResolver;
     Name?: GQLNameTypeResolver;
     Movie?: GQLMovieTypeResolver;
-    Frontpage?: GQLFrontpageTypeResolver;
-    Category?: GQLCategoryTypeResolver;
-    Search?: GQLSearchTypeResolver;
+    MovieMeta?: GQLMovieMetaTypeResolver;
+    MoviePath?: GQLMoviePathTypeResolver;
+    MovieResourceTypes?: GQLMovieResourceTypesTypeResolver;
+    Subject?: GQLSubjectTypeResolver;
     SearchResult?: {
       __resolveType: GQLSearchResultTypeResolver
     };
     
+    ArticleSearchResult?: GQLArticleSearchResultTypeResolver;
+    LearningpathSearchResult?: GQLLearningpathSearchResultTypeResolver;
+    FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
     SearchContext?: GQLSearchContextTypeResolver;
     SearchContextResourceTypes?: GQLSearchContextResourceTypesTypeResolver;
     SearchContextFilter?: GQLSearchContextFilterTypeResolver;
+    VisualElementOembed?: GQLVisualElementOembedTypeResolver;
+    VisualElement?: GQLVisualElementTypeResolver;
+    ImageElement?: GQLImageElementTypeResolver;
+    BrightcoveElement?: GQLBrightcoveElementTypeResolver;
+    H5pElement?: GQLH5pElementTypeResolver;
+    ListingPage?: GQLListingPageTypeResolver;
+    ConceptResult?: GQLConceptResultTypeResolver;
+    Concept?: GQLConceptTypeResolver;
+    DetailedConcept?: GQLDetailedConceptTypeResolver;
+    Search?: GQLSearchTypeResolver;
     SuggestionResult?: GQLSuggestionResultTypeResolver;
-    SearchSuggestion?: GQLSearchSuggestionTypeResolver;
-    SuggestOption?: GQLSuggestOptionTypeResolver;
     AggregationResult?: GQLAggregationResultTypeResolver;
     BucketResult?: GQLBucketResultTypeResolver;
-    ConceptResult?: GQLConceptResultTypeResolver;
-    GroupSearch?: GQLGroupSearchTypeResolver;
+    SearchSuggestion?: GQLSearchSuggestionTypeResolver;
+    SuggestOption?: GQLSuggestOptionTypeResolver;
     GroupSearchResult?: GQLGroupSearchResultTypeResolver;
-    ListingPage?: GQLListingPageTypeResolver;
-    DetailedConcept?: GQLDetailedConceptTypeResolver;
-    FrontpageSearch?: GQLFrontpageSearchTypeResolver;
+    GroupSearch?: GQLGroupSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
-    FrontpageSearchResult?: GQLFrontpageSearchResultTypeResolver;
-    Audio?: GQLAudioTypeResolver;
-    Title?: GQLTitleTypeResolver;
-    AudioFile?: GQLAudioFileTypeResolver;
-    Tags?: GQLTagsTypeResolver;
-    PodcastMeta?: GQLPodcastMetaTypeResolver;
-    CoverPhoto?: GQLCoverPhotoTypeResolver;
-    AudioSearch?: GQLAudioSearchTypeResolver;
-    embedVisualelement?: GQLembedVisualelementTypeResolver;
-    MovieMeta?: GQLMovieMetaTypeResolver;
-    MoviePath?: GQLMoviePathTypeResolver;
-    MovieResourceTypes?: GQLMovieResourceTypesTypeResolver;
-    ArticleSearchResult?: GQLArticleSearchResultTypeResolver;
-    LearningpathSearchResult?: GQLLearningpathSearchResultTypeResolver;
+    FrontpageSearch?: GQLFrontpageSearchTypeResolver;
+    Query?: GQLQueryTypeResolver;
   }
+  export interface GQLAudioFileTypeResolver<TParent = any> {
+    url?: AudioFileToUrlResolver<TParent>;
+    mimeType?: AudioFileToMimeTypeResolver<TParent>;
+    fileSize?: AudioFileToFileSizeResolver<TParent>;
+    language?: AudioFileToLanguageResolver<TParent>;
+  }
+  
+  export interface AudioFileToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioFileToMimeTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioFileToFileSizeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioFileToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLTitleTypeResolver<TParent = any> {
+    title?: TitleToTitleResolver<TParent>;
+    language?: TitleToLanguageResolver<TParent>;
+  }
+  
+  export interface TitleToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TitleToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLTagsTypeResolver<TParent = any> {
+    tags?: TagsToTagsResolver<TParent>;
+    language?: TagsToLanguageResolver<TParent>;
+  }
+  
+  export interface TagsToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TagsToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCoverPhotoTypeResolver<TParent = any> {
+    id?: CoverPhotoToIdResolver<TParent>;
+    url?: CoverPhotoToUrlResolver<TParent>;
+    altText?: CoverPhotoToAltTextResolver<TParent>;
+  }
+  
+  export interface CoverPhotoToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoverPhotoToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoverPhotoToAltTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLPodcastMetaTypeResolver<TParent = any> {
+    header?: PodcastMetaToHeaderResolver<TParent>;
+    introduction?: PodcastMetaToIntroductionResolver<TParent>;
+    coverPhoto?: PodcastMetaToCoverPhotoResolver<TParent>;
+    manuscript?: PodcastMetaToManuscriptResolver<TParent>;
+    language?: PodcastMetaToLanguageResolver<TParent>;
+  }
+  
+  export interface PodcastMetaToHeaderResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastMetaToIntroductionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastMetaToCoverPhotoResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastMetaToManuscriptResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastMetaToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLAudioTypeResolver<TParent = any> {
+    id?: AudioToIdResolver<TParent>;
+    revision?: AudioToRevisionResolver<TParent>;
+    title?: AudioToTitleResolver<TParent>;
+    audioFile?: AudioToAudioFileResolver<TParent>;
+    copyright?: AudioToCopyrightResolver<TParent>;
+    tags?: AudioToTagsResolver<TParent>;
+    supportedLanguages?: AudioToSupportedLanguagesResolver<TParent>;
+    audioType?: AudioToAudioTypeResolver<TParent>;
+    podcastMeta?: AudioToPodcastMetaResolver<TParent>;
+  }
+  
+  export interface AudioToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToRevisionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToAudioFileResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToAudioTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioToPodcastMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLAudioSearchTypeResolver<TParent = any> {
+    pageSize?: AudioSearchToPageSizeResolver<TParent>;
+    page?: AudioSearchToPageResolver<TParent>;
+    language?: AudioSearchToLanguageResolver<TParent>;
+    totalCount?: AudioSearchToTotalCountResolver<TParent>;
+    results?: AudioSearchToResultsResolver<TParent>;
+  }
+  
+  export interface AudioSearchToPageSizeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioSearchToPageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioSearchToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioSearchToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioSearchToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLResourceTypeDefinitionTypeResolver<TParent = any> {
+    id?: ResourceTypeDefinitionToIdResolver<TParent>;
+    name?: ResourceTypeDefinitionToNameResolver<TParent>;
+    subtypes?: ResourceTypeDefinitionToSubtypesResolver<TParent>;
+  }
+  
+  export interface ResourceTypeDefinitionToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceTypeDefinitionToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceTypeDefinitionToSubtypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLResourceTypeTypeResolver<TParent = any> {
+    id?: ResourceTypeToIdResolver<TParent>;
+    name?: ResourceTypeToNameResolver<TParent>;
+    resources?: ResourceTypeToResourcesResolver<TParent>;
+  }
+  
+  export interface ResourceTypeToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceTypeToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceTypeToResourcesArgs {
+    topicId: string;
+  }
+  export interface ResourceTypeToResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: ResourceTypeToResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMetaImageTypeResolver<TParent = any> {
+    url?: MetaImageToUrlResolver<TParent>;
+    alt?: MetaImageToAltResolver<TParent>;
+  }
+  
+  export interface MetaImageToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MetaImageToAltResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMetaTypeResolver<TParent = any> {
+    id?: MetaToIdResolver<TParent>;
+    title?: MetaToTitleResolver<TParent>;
+    introduction?: MetaToIntroductionResolver<TParent>;
+    metaDescription?: MetaToMetaDescriptionResolver<TParent>;
+    metaImage?: MetaToMetaImageResolver<TParent>;
+    lastUpdated?: MetaToLastUpdatedResolver<TParent>;
+  }
+  
+  export interface MetaToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MetaToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MetaToIntroductionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MetaToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MetaToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MetaToLastUpdatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathStepEmbedUrlTypeResolver<TParent = any> {
+    url?: LearningpathStepEmbedUrlToUrlResolver<TParent>;
+    embedType?: LearningpathStepEmbedUrlToEmbedTypeResolver<TParent>;
+  }
+  
+  export interface LearningpathStepEmbedUrlToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepEmbedUrlToEmbedTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathStepOembedTypeResolver<TParent = any> {
+    type?: LearningpathStepOembedToTypeResolver<TParent>;
+    version?: LearningpathStepOembedToVersionResolver<TParent>;
+    height?: LearningpathStepOembedToHeightResolver<TParent>;
+    html?: LearningpathStepOembedToHtmlResolver<TParent>;
+    width?: LearningpathStepOembedToWidthResolver<TParent>;
+  }
+  
+  export interface LearningpathStepOembedToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepOembedToVersionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepOembedToHeightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepOembedToHtmlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepOembedToWidthResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathStepTypeResolver<TParent = any> {
+    id?: LearningpathStepToIdResolver<TParent>;
+    title?: LearningpathStepToTitleResolver<TParent>;
+    seqNo?: LearningpathStepToSeqNoResolver<TParent>;
+    description?: LearningpathStepToDescriptionResolver<TParent>;
+    embedUrl?: LearningpathStepToEmbedUrlResolver<TParent>;
+    license?: LearningpathStepToLicenseResolver<TParent>;
+    metaUrl?: LearningpathStepToMetaUrlResolver<TParent>;
+    revision?: LearningpathStepToRevisionResolver<TParent>;
+    status?: LearningpathStepToStatusResolver<TParent>;
+    supportedLanguages?: LearningpathStepToSupportedLanguagesResolver<TParent>;
+    type?: LearningpathStepToTypeResolver<TParent>;
+    article?: LearningpathStepToArticleResolver<TParent>;
+    resource?: LearningpathStepToResourceResolver<TParent>;
+    showTitle?: LearningpathStepToShowTitleResolver<TParent>;
+    oembed?: LearningpathStepToOembedResolver<TParent>;
+  }
+  
+  export interface LearningpathStepToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToSeqNoResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToEmbedUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToLicenseResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToMetaUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToRevisionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToStatusResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToArticleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToResourceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToShowTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathStepToOembedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathCoverphotoTypeResolver<TParent = any> {
+    url?: LearningpathCoverphotoToUrlResolver<TParent>;
+    metaUrl?: LearningpathCoverphotoToMetaUrlResolver<TParent>;
+  }
+  
+  export interface LearningpathCoverphotoToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathCoverphotoToMetaUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathCopyrightTypeResolver<TParent = any> {
+    license?: LearningpathCopyrightToLicenseResolver<TParent>;
+    contributors?: LearningpathCopyrightToContributorsResolver<TParent>;
+  }
+  
+  export interface LearningpathCopyrightToLicenseResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathCopyrightToContributorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathTypeResolver<TParent = any> {
+    id?: LearningpathToIdResolver<TParent>;
+    title?: LearningpathToTitleResolver<TParent>;
+    description?: LearningpathToDescriptionResolver<TParent>;
+    copyright?: LearningpathToCopyrightResolver<TParent>;
+    duration?: LearningpathToDurationResolver<TParent>;
+    canEdit?: LearningpathToCanEditResolver<TParent>;
+    verificationStatus?: LearningpathToVerificationStatusResolver<TParent>;
+    lastUpdated?: LearningpathToLastUpdatedResolver<TParent>;
+    tags?: LearningpathToTagsResolver<TParent>;
+    supportedLanguages?: LearningpathToSupportedLanguagesResolver<TParent>;
+    isBasedOn?: LearningpathToIsBasedOnResolver<TParent>;
+    learningsteps?: LearningpathToLearningstepsResolver<TParent>;
+    metaUrl?: LearningpathToMetaUrlResolver<TParent>;
+    revision?: LearningpathToRevisionResolver<TParent>;
+    learningstepUrl?: LearningpathToLearningstepUrlResolver<TParent>;
+    status?: LearningpathToStatusResolver<TParent>;
+    coverphoto?: LearningpathToCoverphotoResolver<TParent>;
+  }
+  
+  export interface LearningpathToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToDurationResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToCanEditResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToVerificationStatusResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToLastUpdatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToIsBasedOnResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToLearningstepsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToMetaUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToRevisionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToLearningstepUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToStatusResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathToCoverphotoResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLTaxonomyMetadataTypeResolver<TParent = any> {
+    grepCodes?: TaxonomyMetadataToGrepCodesResolver<TParent>;
+    visible?: TaxonomyMetadataToVisibleResolver<TParent>;
+    customFields?: TaxonomyMetadataToCustomFieldsResolver<TParent>;
+  }
+  
+  export interface TaxonomyMetadataToGrepCodesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TaxonomyMetadataToVisibleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TaxonomyMetadataToCustomFieldsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLTaxonomyEntityTypeResolver<TParent = any> {
+    (parent: TParent, context: any, info: GraphQLResolveInfo): 'Resource' | 'Topic' | Promise<'Resource' | 'Topic'>;
+  }
+  export interface GQLResourceTypeResolver<TParent = any> {
+    id?: ResourceToIdResolver<TParent>;
+    name?: ResourceToNameResolver<TParent>;
+    contentUri?: ResourceToContentUriResolver<TParent>;
+    path?: ResourceToPathResolver<TParent>;
+    paths?: ResourceToPathsResolver<TParent>;
+    meta?: ResourceToMetaResolver<TParent>;
+    metadata?: ResourceToMetadataResolver<TParent>;
+    article?: ResourceToArticleResolver<TParent>;
+    learningpath?: ResourceToLearningpathResolver<TParent>;
+    filters?: ResourceToFiltersResolver<TParent>;
+    rank?: ResourceToRankResolver<TParent>;
+    relevanceId?: ResourceToRelevanceIdResolver<TParent>;
+    resourceTypes?: ResourceToResourceTypesResolver<TParent>;
+    parentTopics?: ResourceToParentTopicsResolver<TParent>;
+    breadcrumbs?: ResourceToBreadcrumbsResolver<TParent>;
+  }
+  
+  export interface ResourceToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToContentUriResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToPathsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToMetadataResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToArticleArgs {
+    filterIds?: string;
+    subjectId?: string;
+    isOembed?: string;
+  }
+  export interface ResourceToArticleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: ResourceToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToLearningpathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToRankResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToRelevanceIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToParentTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ResourceToBreadcrumbsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLTopicTypeResolver<TParent = any> {
+    id?: TopicToIdResolver<TParent>;
+    name?: TopicToNameResolver<TParent>;
+    contentUri?: TopicToContentUriResolver<TParent>;
+    path?: TopicToPathResolver<TParent>;
+    paths?: TopicToPathsResolver<TParent>;
+    meta?: TopicToMetaResolver<TParent>;
+    metadata?: TopicToMetadataResolver<TParent>;
+    article?: TopicToArticleResolver<TParent>;
+    filters?: TopicToFiltersResolver<TParent>;
+    rank?: TopicToRankResolver<TParent>;
+    relevanceId?: TopicToRelevanceIdResolver<TParent>;
+    isPrimary?: TopicToIsPrimaryResolver<TParent>;
+    parent?: TopicToParentResolver<TParent>;
+    subtopics?: TopicToSubtopicsResolver<TParent>;
+    pathTopics?: TopicToPathTopicsResolver<TParent>;
+    coreResources?: TopicToCoreResourcesResolver<TParent>;
+    supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
+    alternateTopics?: TopicToAlternateTopicsResolver<TParent>;
+    breadcrumbs?: TopicToBreadcrumbsResolver<TParent>;
+  }
+  
+  export interface TopicToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToContentUriResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToPathsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToMetadataResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToArticleArgs {
+    filterIds?: string;
+    subjectId?: string;
+  }
+  export interface TopicToArticleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToRankResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToRelevanceIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToIsPrimaryResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToParentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToSubtopicsArgs {
+    filterIds?: string;
+  }
+  export interface TopicToSubtopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: TopicToSubtopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToPathTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToCoreResourcesArgs {
+    filterIds?: string;
+    subjectId?: string;
+  }
+  export interface TopicToCoreResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: TopicToCoreResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToSupplementaryResourcesArgs {
+    filterIds?: string;
+    subjectId?: string;
+  }
+  export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToAlternateTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToBreadcrumbsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLicenseTypeResolver<TParent = any> {
+    license?: LicenseToLicenseResolver<TParent>;
+    url?: LicenseToUrlResolver<TParent>;
+    description?: LicenseToDescriptionResolver<TParent>;
+  }
+  
+  export interface LicenseToLicenseResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LicenseToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LicenseToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLContributorTypeResolver<TParent = any> {
+    type?: ContributorToTypeResolver<TParent>;
+    name?: ContributorToNameResolver<TParent>;
+  }
+  
+  export interface ContributorToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ContributorToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCopyrightTypeResolver<TParent = any> {
+    license?: CopyrightToLicenseResolver<TParent>;
+    creators?: CopyrightToCreatorsResolver<TParent>;
+    processors?: CopyrightToProcessorsResolver<TParent>;
+    rightsholders?: CopyrightToRightsholdersResolver<TParent>;
+    origin?: CopyrightToOriginResolver<TParent>;
+  }
+  
+  export interface CopyrightToLicenseResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CopyrightToCreatorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CopyrightToProcessorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CopyrightToRightsholdersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CopyrightToOriginResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLArticleRequiredLibraryTypeResolver<TParent = any> {
+    name?: ArticleRequiredLibraryToNameResolver<TParent>;
+    url?: ArticleRequiredLibraryToUrlResolver<TParent>;
+    mediaType?: ArticleRequiredLibraryToMediaTypeResolver<TParent>;
+  }
+  
+  export interface ArticleRequiredLibraryToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleRequiredLibraryToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleRequiredLibraryToMediaTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFootNoteTypeResolver<TParent = any> {
+    ref?: FootNoteToRefResolver<TParent>;
+    title?: FootNoteToTitleResolver<TParent>;
+    year?: FootNoteToYearResolver<TParent>;
+    authors?: FootNoteToAuthorsResolver<TParent>;
+    edition?: FootNoteToEditionResolver<TParent>;
+    publisher?: FootNoteToPublisherResolver<TParent>;
+    url?: FootNoteToUrlResolver<TParent>;
+  }
+  
+  export interface FootNoteToRefResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToYearResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToAuthorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToEditionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToPublisherResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FootNoteToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLImageLicenseTypeResolver<TParent = any> {
+    title?: ImageLicenseToTitleResolver<TParent>;
+    src?: ImageLicenseToSrcResolver<TParent>;
+    altText?: ImageLicenseToAltTextResolver<TParent>;
+    copyright?: ImageLicenseToCopyrightResolver<TParent>;
+    contentType?: ImageLicenseToContentTypeResolver<TParent>;
+    copyText?: ImageLicenseToCopyTextResolver<TParent>;
+  }
+  
+  export interface ImageLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageLicenseToAltTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageLicenseToContentTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLAudioLicenseTypeResolver<TParent = any> {
+    title?: AudioLicenseToTitleResolver<TParent>;
+    src?: AudioLicenseToSrcResolver<TParent>;
+    copyright?: AudioLicenseToCopyrightResolver<TParent>;
+    copyText?: AudioLicenseToCopyTextResolver<TParent>;
+  }
+  
+  export interface AudioLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLBrightcoveIframeTypeResolver<TParent = any> {
+    src?: BrightcoveIframeToSrcResolver<TParent>;
+    height?: BrightcoveIframeToHeightResolver<TParent>;
+    width?: BrightcoveIframeToWidthResolver<TParent>;
+  }
+  
+  export interface BrightcoveIframeToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveIframeToHeightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveIframeToWidthResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLBrightcoveLicenseTypeResolver<TParent = any> {
+    title?: BrightcoveLicenseToTitleResolver<TParent>;
+    description?: BrightcoveLicenseToDescriptionResolver<TParent>;
+    cover?: BrightcoveLicenseToCoverResolver<TParent>;
+    src?: BrightcoveLicenseToSrcResolver<TParent>;
+    download?: BrightcoveLicenseToDownloadResolver<TParent>;
+    iframe?: BrightcoveLicenseToIframeResolver<TParent>;
+    copyright?: BrightcoveLicenseToCopyrightResolver<TParent>;
+    uploadDate?: BrightcoveLicenseToUploadDateResolver<TParent>;
+    copyText?: BrightcoveLicenseToCopyTextResolver<TParent>;
+  }
+  
+  export interface BrightcoveLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToCoverResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToDownloadResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToIframeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToUploadDateResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLH5pLicenseTypeResolver<TParent = any> {
+    title?: H5pLicenseToTitleResolver<TParent>;
+    src?: H5pLicenseToSrcResolver<TParent>;
+    thumbnail?: H5pLicenseToThumbnailResolver<TParent>;
+    copyright?: H5pLicenseToCopyrightResolver<TParent>;
+    copyText?: H5pLicenseToCopyTextResolver<TParent>;
+  }
+  
+  export interface H5pLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pLicenseToThumbnailResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptLicenseTypeResolver<TParent = any> {
+    title?: ConceptLicenseToTitleResolver<TParent>;
+    src?: ConceptLicenseToSrcResolver<TParent>;
+    copyright?: ConceptLicenseToCopyrightResolver<TParent>;
+    copyText?: ConceptLicenseToCopyTextResolver<TParent>;
+  }
+  
+  export interface ConceptLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLArticleMetaDataTypeResolver<TParent = any> {
+    footnotes?: ArticleMetaDataToFootnotesResolver<TParent>;
+    images?: ArticleMetaDataToImagesResolver<TParent>;
+    audios?: ArticleMetaDataToAudiosResolver<TParent>;
+    brightcoves?: ArticleMetaDataToBrightcovesResolver<TParent>;
+    h5ps?: ArticleMetaDataToH5psResolver<TParent>;
+    concepts?: ArticleMetaDataToConceptsResolver<TParent>;
+    copyText?: ArticleMetaDataToCopyTextResolver<TParent>;
+  }
+  
+  export interface ArticleMetaDataToFootnotesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToImagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToAudiosResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToBrightcovesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToH5psResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLArticleTypeResolver<TParent = any> {
+    id?: ArticleToIdResolver<TParent>;
+    revision?: ArticleToRevisionResolver<TParent>;
+    title?: ArticleToTitleResolver<TParent>;
+    introduction?: ArticleToIntroductionResolver<TParent>;
+    content?: ArticleToContentResolver<TParent>;
+    created?: ArticleToCreatedResolver<TParent>;
+    updated?: ArticleToUpdatedResolver<TParent>;
+    published?: ArticleToPublishedResolver<TParent>;
+    visualElement?: ArticleToVisualElementResolver<TParent>;
+    metaImage?: ArticleToMetaImageResolver<TParent>;
+    metaDescription?: ArticleToMetaDescriptionResolver<TParent>;
+    articleType?: ArticleToArticleTypeResolver<TParent>;
+    oldNdlaUrl?: ArticleToOldNdlaUrlResolver<TParent>;
+    requiredLibraries?: ArticleToRequiredLibrariesResolver<TParent>;
+    metaData?: ArticleToMetaDataResolver<TParent>;
+    supportedLanguages?: ArticleToSupportedLanguagesResolver<TParent>;
+    copyright?: ArticleToCopyrightResolver<TParent>;
+    tags?: ArticleToTagsResolver<TParent>;
+    grepCodes?: ArticleToGrepCodesResolver<TParent>;
+    competenceGoals?: ArticleToCompetenceGoalsResolver<TParent>;
+    coreElements?: ArticleToCoreElementsResolver<TParent>;
+    crossSubjectTopics?: ArticleToCrossSubjectTopicsResolver<TParent>;
+    oembed?: ArticleToOembedResolver<TParent>;
+    conceptIds?: ArticleToConceptIdsResolver<TParent>;
+    concepts?: ArticleToConceptsResolver<TParent>;
+  }
+  
+  export interface ArticleToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToRevisionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToIntroductionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToCreatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToUpdatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToPublishedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToVisualElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToArticleTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToOldNdlaUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToRequiredLibrariesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToMetaDataResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToGrepCodesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToCompetenceGoalsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToCoreElementsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToCrossSubjectTopicsArgs {
+    subjectId?: string;
+    filterIds?: string;
+  }
+  export interface ArticleToCrossSubjectTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: ArticleToCrossSubjectTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToOembedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToConceptIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLembedVisualelementTypeResolver<TParent = any> {
+    visualElement?: embedVisualelementToVisualElementResolver<TParent>;
+  }
+  
+  export interface embedVisualelementToVisualElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCompetenceGoalTypeResolver<TParent = any> {
+    id?: CompetenceGoalToIdResolver<TParent>;
+    code?: CompetenceGoalToCodeResolver<TParent>;
+    title?: CompetenceGoalToTitleResolver<TParent>;
+    type?: CompetenceGoalToTypeResolver<TParent>;
+    language?: CompetenceGoalToLanguageResolver<TParent>;
+    curriculumId?: CompetenceGoalToCurriculumIdResolver<TParent>;
+    curriculumCode?: CompetenceGoalToCurriculumCodeResolver<TParent>;
+    curriculum?: CompetenceGoalToCurriculumResolver<TParent>;
+    competenceGoalSetCode?: CompetenceGoalToCompetenceGoalSetCodeResolver<TParent>;
+    competenceGoalSet?: CompetenceGoalToCompetenceGoalSetResolver<TParent>;
+    crossSubjectTopicsCodes?: CompetenceGoalToCrossSubjectTopicsCodesResolver<TParent>;
+    crossSubjectTopics?: CompetenceGoalToCrossSubjectTopicsResolver<TParent>;
+    coreElementsCodes?: CompetenceGoalToCoreElementsCodesResolver<TParent>;
+    coreElements?: CompetenceGoalToCoreElementsResolver<TParent>;
+  }
+  
+  export interface CompetenceGoalToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCodeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCurriculumIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCurriculumCodeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCurriculumResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCompetenceGoalSetCodeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCompetenceGoalSetResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCrossSubjectTopicsCodesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCrossSubjectTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCoreElementsCodesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCoreElementsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCoreElementTypeResolver<TParent = any> {
+    id?: CoreElementToIdResolver<TParent>;
+    title?: CoreElementToTitleResolver<TParent>;
+    description?: CoreElementToDescriptionResolver<TParent>;
+    language?: CoreElementToLanguageResolver<TParent>;
+    curriculumCode?: CoreElementToCurriculumCodeResolver<TParent>;
+    curriculum?: CoreElementToCurriculumResolver<TParent>;
+  }
+  
+  export interface CoreElementToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToCurriculumCodeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CoreElementToCurriculumResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCrossSubjectElementTypeResolver<TParent = any> {
+    title?: CrossSubjectElementToTitleResolver<TParent>;
+    code?: CrossSubjectElementToCodeResolver<TParent>;
+    path?: CrossSubjectElementToPathResolver<TParent>;
+  }
+  
+  export interface CrossSubjectElementToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CrossSubjectElementToCodeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CrossSubjectElementToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLElementTypeResolver<TParent = any> {
+    reference?: ElementToReferenceResolver<TParent>;
+    explanation?: ElementToExplanationResolver<TParent>;
+  }
+  
+  export interface ElementToReferenceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ElementToExplanationResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLReferenceTypeResolver<TParent = any> {
+    id?: ReferenceToIdResolver<TParent>;
+    title?: ReferenceToTitleResolver<TParent>;
+    code?: ReferenceToCodeResolver<TParent>;
+  }
+  
+  export interface ReferenceToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ReferenceToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ReferenceToCodeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFilterTypeResolver<TParent = any> {
+    id?: FilterToIdResolver<TParent>;
+    name?: FilterToNameResolver<TParent>;
+    connectionId?: FilterToConnectionIdResolver<TParent>;
+    relevanceId?: FilterToRelevanceIdResolver<TParent>;
+    subjectId?: FilterToSubjectIdResolver<TParent>;
+    metadata?: FilterToMetadataResolver<TParent>;
+  }
+  
+  export interface FilterToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilterToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilterToConnectionIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilterToRelevanceIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilterToSubjectIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilterToMetadataResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSubjectFilterTypeResolver<TParent = any> {
+    id?: SubjectFilterToIdResolver<TParent>;
+    name?: SubjectFilterToNameResolver<TParent>;
+    subjectId?: SubjectFilterToSubjectIdResolver<TParent>;
+    contentUri?: SubjectFilterToContentUriResolver<TParent>;
+    subjectpage?: SubjectFilterToSubjectpageResolver<TParent>;
+    metadata?: SubjectFilterToMetadataResolver<TParent>;
+  }
+  
+  export interface SubjectFilterToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectFilterToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectFilterToSubjectIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectFilterToContentUriResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectFilterToSubjectpageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectFilterToMetadataResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLCategoryTypeResolver<TParent = any> {
+    name?: CategoryToNameResolver<TParent>;
+    subjects?: CategoryToSubjectsResolver<TParent>;
+  }
+  
+  export interface CategoryToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CategoryToSubjectsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFrontpageTypeResolver<TParent = any> {
+    topical?: FrontpageToTopicalResolver<TParent>;
+    categories?: FrontpageToCategoriesResolver<TParent>;
+  }
+  
+  export interface FrontpageToTopicalResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageToCategoriesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSubjectPageVisualElementTypeResolver<TParent = any> {
+    type?: SubjectPageVisualElementToTypeResolver<TParent>;
+    url?: SubjectPageVisualElementToUrlResolver<TParent>;
+    alt?: SubjectPageVisualElementToAltResolver<TParent>;
+  }
+  
+  export interface SubjectPageVisualElementToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageVisualElementToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageVisualElementToAltResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSubjectPageAboutTypeResolver<TParent = any> {
+    title?: SubjectPageAboutToTitleResolver<TParent>;
+    description?: SubjectPageAboutToDescriptionResolver<TParent>;
+    visualElement?: SubjectPageAboutToVisualElementResolver<TParent>;
+  }
+  
+  export interface SubjectPageAboutToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageAboutToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageAboutToVisualElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSubjectPageBannerTypeResolver<TParent = any> {
+    desktopUrl?: SubjectPageBannerToDesktopUrlResolver<TParent>;
+    desktopId?: SubjectPageBannerToDesktopIdResolver<TParent>;
+    mobileUrl?: SubjectPageBannerToMobileUrlResolver<TParent>;
+    mobileId?: SubjectPageBannerToMobileIdResolver<TParent>;
+  }
+  
+  export interface SubjectPageBannerToDesktopUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageBannerToDesktopIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageBannerToMobileUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageBannerToMobileIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSubjectPageTypeResolver<TParent = any> {
+    topical?: SubjectPageToTopicalResolver<TParent>;
+    mostRead?: SubjectPageToMostReadResolver<TParent>;
+    banner?: SubjectPageToBannerResolver<TParent>;
+    id?: SubjectPageToIdResolver<TParent>;
+    name?: SubjectPageToNameResolver<TParent>;
+    facebook?: SubjectPageToFacebookResolver<TParent>;
+    editorsChoices?: SubjectPageToEditorsChoicesResolver<TParent>;
+    latestContent?: SubjectPageToLatestContentResolver<TParent>;
+    about?: SubjectPageToAboutResolver<TParent>;
+    goTo?: SubjectPageToGoToResolver<TParent>;
+    metaDescription?: SubjectPageToMetaDescriptionResolver<TParent>;
+    layout?: SubjectPageToLayoutResolver<TParent>;
+    twitter?: SubjectPageToTwitterResolver<TParent>;
+  }
+  
+  export interface SubjectPageToTopicalArgs {
+    subjectId?: string;
+  }
+  export interface SubjectPageToTopicalResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: SubjectPageToTopicalArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToMostReadArgs {
+    subjectId?: string;
+  }
+  export interface SubjectPageToMostReadResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: SubjectPageToMostReadArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToBannerResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToFacebookResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToEditorsChoicesArgs {
+    subjectId?: string;
+  }
+  export interface SubjectPageToEditorsChoicesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: SubjectPageToEditorsChoicesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToLatestContentArgs {
+    subjectId?: string;
+  }
+  export interface SubjectPageToLatestContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: SubjectPageToLatestContentArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToAboutResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToGoToResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToLayoutResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToTwitterResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFilmPageAboutTypeResolver<TParent = any> {
+    title?: FilmPageAboutToTitleResolver<TParent>;
+    description?: FilmPageAboutToDescriptionResolver<TParent>;
+    visualElement?: FilmPageAboutToVisualElementResolver<TParent>;
+    language?: FilmPageAboutToLanguageResolver<TParent>;
+  }
+  
+  export interface FilmPageAboutToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilmPageAboutToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilmPageAboutToVisualElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilmPageAboutToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFilmFrontpageTypeResolver<TParent = any> {
+    name?: FilmFrontpageToNameResolver<TParent>;
+    about?: FilmFrontpageToAboutResolver<TParent>;
+    movieThemes?: FilmFrontpageToMovieThemesResolver<TParent>;
+    slideShow?: FilmFrontpageToSlideShowResolver<TParent>;
+  }
+  
+  export interface FilmFrontpageToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilmFrontpageToAboutResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilmFrontpageToMovieThemesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FilmFrontpageToSlideShowResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMovieThemeTypeResolver<TParent = any> {
+    name?: MovieThemeToNameResolver<TParent>;
+    movies?: MovieThemeToMoviesResolver<TParent>;
+  }
+  
+  export interface MovieThemeToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieThemeToMoviesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLNameTypeResolver<TParent = any> {
+    name?: NameToNameResolver<TParent>;
+    language?: NameToLanguageResolver<TParent>;
+  }
+  
+  export interface NameToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface NameToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMovieTypeResolver<TParent = any> {
+    id?: MovieToIdResolver<TParent>;
+    title?: MovieToTitleResolver<TParent>;
+    metaImage?: MovieToMetaImageResolver<TParent>;
+    metaDescription?: MovieToMetaDescriptionResolver<TParent>;
+    resourceTypes?: MovieToResourceTypesResolver<TParent>;
+    path?: MovieToPathResolver<TParent>;
+  }
+  
+  export interface MovieToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMovieMetaTypeResolver<TParent = any> {
+    title?: MovieMetaToTitleResolver<TParent>;
+    metaImage?: MovieMetaToMetaImageResolver<TParent>;
+    metaDescription?: MovieMetaToMetaDescriptionResolver<TParent>;
+  }
+  
+  export interface MovieMetaToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieMetaToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MovieMetaToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMoviePathTypeResolver<TParent = any> {
+    path?: MoviePathToPathResolver<TParent>;
+    paths?: MoviePathToPathsResolver<TParent>;
+  }
+  
+  export interface MoviePathToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MoviePathToPathsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLMovieResourceTypesTypeResolver<TParent = any> {
+    resourceTypes?: MovieResourceTypesToResourceTypesResolver<TParent>;
+  }
+  
+  export interface MovieResourceTypesToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSubjectTypeResolver<TParent = any> {
+    id?: SubjectToIdResolver<TParent>;
+    contentUri?: SubjectToContentUriResolver<TParent>;
+    name?: SubjectToNameResolver<TParent>;
+    path?: SubjectToPathResolver<TParent>;
+    metadata?: SubjectToMetadataResolver<TParent>;
+    filters?: SubjectToFiltersResolver<TParent>;
+    frontpageFilters?: SubjectToFrontpageFiltersResolver<TParent>;
+    subjectpage?: SubjectToSubjectpageResolver<TParent>;
+    topics?: SubjectToTopicsResolver<TParent>;
+  }
+  
+  export interface SubjectToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToContentUriResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToMetadataResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToFrontpageFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToSubjectpageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToTopicsArgs {
+    all?: boolean;
+    filterIds?: string;
+  }
+  export interface SubjectToTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: SubjectToTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSearchResultTypeResolver<TParent = any> {
+    (parent: TParent, context: any, info: GraphQLResolveInfo): 'ArticleSearchResult' | 'LearningpathSearchResult' | Promise<'ArticleSearchResult' | 'LearningpathSearchResult'>;
+  }
+  export interface GQLArticleSearchResultTypeResolver<TParent = any> {
+    id?: ArticleSearchResultToIdResolver<TParent>;
+    title?: ArticleSearchResultToTitleResolver<TParent>;
+    supportedLanguages?: ArticleSearchResultToSupportedLanguagesResolver<TParent>;
+    url?: ArticleSearchResultToUrlResolver<TParent>;
+    metaDescription?: ArticleSearchResultToMetaDescriptionResolver<TParent>;
+    metaImage?: ArticleSearchResultToMetaImageResolver<TParent>;
+    contentType?: ArticleSearchResultToContentTypeResolver<TParent>;
+    traits?: ArticleSearchResultToTraitsResolver<TParent>;
+    contexts?: ArticleSearchResultToContextsResolver<TParent>;
+  }
+  
+  export interface ArticleSearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToContentTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToTraitsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleSearchResultToContextsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathSearchResultTypeResolver<TParent = any> {
+    id?: LearningpathSearchResultToIdResolver<TParent>;
+    title?: LearningpathSearchResultToTitleResolver<TParent>;
+    supportedLanguages?: LearningpathSearchResultToSupportedLanguagesResolver<TParent>;
+    url?: LearningpathSearchResultToUrlResolver<TParent>;
+    metaDescription?: LearningpathSearchResultToMetaDescriptionResolver<TParent>;
+    metaImage?: LearningpathSearchResultToMetaImageResolver<TParent>;
+    contentType?: LearningpathSearchResultToContentTypeResolver<TParent>;
+    traits?: LearningpathSearchResultToTraitsResolver<TParent>;
+    contexts?: LearningpathSearchResultToContextsResolver<TParent>;
+  }
+  
+  export interface LearningpathSearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToContentTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToTraitsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathSearchResultToContextsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFrontpageSearchResultTypeResolver<TParent = any> {
+    id?: FrontpageSearchResultToIdResolver<TParent>;
+    name?: FrontpageSearchResultToNameResolver<TParent>;
+    resourceTypes?: FrontpageSearchResultToResourceTypesResolver<TParent>;
+    subject?: FrontpageSearchResultToSubjectResolver<TParent>;
+    path?: FrontpageSearchResultToPathResolver<TParent>;
+    filters?: FrontpageSearchResultToFiltersResolver<TParent>;
+  }
+  
+  export interface FrontpageSearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToSubjectResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchResultToFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSearchContextTypeResolver<TParent = any> {
+    breadcrumbs?: SearchContextToBreadcrumbsResolver<TParent>;
+    learningResourceType?: SearchContextToLearningResourceTypeResolver<TParent>;
+    resourceTypes?: SearchContextToResourceTypesResolver<TParent>;
+    subject?: SearchContextToSubjectResolver<TParent>;
+    subjectId?: SearchContextToSubjectIdResolver<TParent>;
+    relevance?: SearchContextToRelevanceResolver<TParent>;
+    path?: SearchContextToPathResolver<TParent>;
+    id?: SearchContextToIdResolver<TParent>;
+    language?: SearchContextToLanguageResolver<TParent>;
+    filters?: SearchContextToFiltersResolver<TParent>;
+  }
+  
+  export interface SearchContextToBreadcrumbsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToLearningResourceTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToSubjectResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToSubjectIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToRelevanceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextToFiltersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSearchContextResourceTypesTypeResolver<TParent = any> {
+    id?: SearchContextResourceTypesToIdResolver<TParent>;
+    name?: SearchContextResourceTypesToNameResolver<TParent>;
+    language?: SearchContextResourceTypesToLanguageResolver<TParent>;
+  }
+  
+  export interface SearchContextResourceTypesToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextResourceTypesToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextResourceTypesToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSearchContextFilterTypeResolver<TParent = any> {
+    id?: SearchContextFilterToIdResolver<TParent>;
+    name?: SearchContextFilterToNameResolver<TParent>;
+    relevance?: SearchContextFilterToRelevanceResolver<TParent>;
+  }
+  
+  export interface SearchContextFilterToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextFilterToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchContextFilterToRelevanceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLVisualElementOembedTypeResolver<TParent = any> {
+    title?: VisualElementOembedToTitleResolver<TParent>;
+    html?: VisualElementOembedToHtmlResolver<TParent>;
+    fullscreen?: VisualElementOembedToFullscreenResolver<TParent>;
+  }
+  
+  export interface VisualElementOembedToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementOembedToHtmlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementOembedToFullscreenResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLVisualElementTypeResolver<TParent = any> {
+    resource?: VisualElementToResourceResolver<TParent>;
+    url?: VisualElementToUrlResolver<TParent>;
+    copyright?: VisualElementToCopyrightResolver<TParent>;
+    language?: VisualElementToLanguageResolver<TParent>;
+    embed?: VisualElementToEmbedResolver<TParent>;
+    title?: VisualElementToTitleResolver<TParent>;
+    brightcove?: VisualElementToBrightcoveResolver<TParent>;
+    h5p?: VisualElementToH5pResolver<TParent>;
+    oembed?: VisualElementToOembedResolver<TParent>;
+    image?: VisualElementToImageResolver<TParent>;
+  }
+  
+  export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToEmbedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToBrightcoveResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToH5pResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToOembedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface VisualElementToImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLImageElementTypeResolver<TParent = any> {
+    resourceid?: ImageElementToResourceidResolver<TParent>;
+    alt?: ImageElementToAltResolver<TParent>;
+    caption?: ImageElementToCaptionResolver<TParent>;
+    lowerRightX?: ImageElementToLowerRightXResolver<TParent>;
+    lowerRightY?: ImageElementToLowerRightYResolver<TParent>;
+    upperLeftX?: ImageElementToUpperLeftXResolver<TParent>;
+    upperLeftY?: ImageElementToUpperLeftYResolver<TParent>;
+    focalX?: ImageElementToFocalXResolver<TParent>;
+    focalY?: ImageElementToFocalYResolver<TParent>;
+    src?: ImageElementToSrcResolver<TParent>;
+    altText?: ImageElementToAltTextResolver<TParent>;
+    contentType?: ImageElementToContentTypeResolver<TParent>;
+    copyText?: ImageElementToCopyTextResolver<TParent>;
+  }
+  
+  export interface ImageElementToResourceidResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToAltResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToCaptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToLowerRightXResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToLowerRightYResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToUpperLeftXResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToUpperLeftYResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToFocalXResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToFocalYResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToAltTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToContentTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageElementToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLBrightcoveElementTypeResolver<TParent = any> {
+    videoid?: BrightcoveElementToVideoidResolver<TParent>;
+    player?: BrightcoveElementToPlayerResolver<TParent>;
+    account?: BrightcoveElementToAccountResolver<TParent>;
+    caption?: BrightcoveElementToCaptionResolver<TParent>;
+    description?: BrightcoveElementToDescriptionResolver<TParent>;
+    cover?: BrightcoveElementToCoverResolver<TParent>;
+    src?: BrightcoveElementToSrcResolver<TParent>;
+    download?: BrightcoveElementToDownloadResolver<TParent>;
+    iframe?: BrightcoveElementToIframeResolver<TParent>;
+    uploadDate?: BrightcoveElementToUploadDateResolver<TParent>;
+    copyText?: BrightcoveElementToCopyTextResolver<TParent>;
+  }
+  
+  export interface BrightcoveElementToVideoidResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToPlayerResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToAccountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToCaptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToCoverResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToDownloadResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToIframeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToUploadDateResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BrightcoveElementToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLH5pElementTypeResolver<TParent = any> {
+    src?: H5pElementToSrcResolver<TParent>;
+    thumbnail?: H5pElementToThumbnailResolver<TParent>;
+    copyText?: H5pElementToCopyTextResolver<TParent>;
+  }
+  
+  export interface H5pElementToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pElementToThumbnailResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface H5pElementToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLListingPageTypeResolver<TParent = any> {
+    subjects?: ListingPageToSubjectsResolver<TParent>;
+    tags?: ListingPageToTagsResolver<TParent>;
+  }
+  
+  export interface ListingPageToSubjectsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ListingPageToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptResultTypeResolver<TParent = any> {
+    totalCount?: ConceptResultToTotalCountResolver<TParent>;
+    concepts?: ConceptResultToConceptsResolver<TParent>;
+  }
+  
+  export interface ConceptResultToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptResultToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptTypeResolver<TParent = any> {
+    id?: ConceptToIdResolver<TParent>;
+    title?: ConceptToTitleResolver<TParent>;
+    content?: ConceptToContentResolver<TParent>;
+    tags?: ConceptToTagsResolver<TParent>;
+    metaImage?: ConceptToMetaImageResolver<TParent>;
+  }
+  
+  export interface ConceptToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLDetailedConceptTypeResolver<TParent = any> {
+    id?: DetailedConceptToIdResolver<TParent>;
+    title?: DetailedConceptToTitleResolver<TParent>;
+    content?: DetailedConceptToContentResolver<TParent>;
+    created?: DetailedConceptToCreatedResolver<TParent>;
+    tags?: DetailedConceptToTagsResolver<TParent>;
+    image?: DetailedConceptToImageResolver<TParent>;
+    subjectIds?: DetailedConceptToSubjectIdsResolver<TParent>;
+    articleIds?: DetailedConceptToArticleIdsResolver<TParent>;
+    articles?: DetailedConceptToArticlesResolver<TParent>;
+    visualElement?: DetailedConceptToVisualElementResolver<TParent>;
+    copyright?: DetailedConceptToCopyrightResolver<TParent>;
+  }
+  
+  export interface DetailedConceptToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToCreatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToSubjectIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToArticleIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToArticlesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToVisualElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSearchTypeResolver<TParent = any> {
+    pageSize?: SearchToPageSizeResolver<TParent>;
+    page?: SearchToPageResolver<TParent>;
+    language?: SearchToLanguageResolver<TParent>;
+    totalCount?: SearchToTotalCountResolver<TParent>;
+    results?: SearchToResultsResolver<TParent>;
+    suggestions?: SearchToSuggestionsResolver<TParent>;
+    aggregations?: SearchToAggregationsResolver<TParent>;
+    concepts?: SearchToConceptsResolver<TParent>;
+  }
+  
+  export interface SearchToPageSizeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToPageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToAggregationsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSuggestionResultTypeResolver<TParent = any> {
+    name?: SuggestionResultToNameResolver<TParent>;
+    suggestions?: SuggestionResultToSuggestionsResolver<TParent>;
+  }
+  
+  export interface SuggestionResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SuggestionResultToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLAggregationResultTypeResolver<TParent = any> {
+    field?: AggregationResultToFieldResolver<TParent>;
+    sumOtherDocCount?: AggregationResultToSumOtherDocCountResolver<TParent>;
+    docCountErrorUpperBound?: AggregationResultToDocCountErrorUpperBoundResolver<TParent>;
+    values?: AggregationResultToValuesResolver<TParent>;
+  }
+  
+  export interface AggregationResultToFieldResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AggregationResultToSumOtherDocCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AggregationResultToDocCountErrorUpperBoundResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AggregationResultToValuesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLBucketResultTypeResolver<TParent = any> {
+    value?: BucketResultToValueResolver<TParent>;
+    count?: BucketResultToCountResolver<TParent>;
+  }
+  
+  export interface BucketResultToValueResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BucketResultToCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSearchSuggestionTypeResolver<TParent = any> {
+    text?: SearchSuggestionToTextResolver<TParent>;
+    offset?: SearchSuggestionToOffsetResolver<TParent>;
+    length?: SearchSuggestionToLengthResolver<TParent>;
+    options?: SearchSuggestionToOptionsResolver<TParent>;
+  }
+  
+  export interface SearchSuggestionToTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchSuggestionToOffsetResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchSuggestionToLengthResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SearchSuggestionToOptionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLSuggestOptionTypeResolver<TParent = any> {
+    text?: SuggestOptionToTextResolver<TParent>;
+    score?: SuggestOptionToScoreResolver<TParent>;
+  }
+  
+  export interface SuggestOptionToTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SuggestOptionToScoreResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLGroupSearchResultTypeResolver<TParent = any> {
+    id?: GroupSearchResultToIdResolver<TParent>;
+    path?: GroupSearchResultToPathResolver<TParent>;
+    name?: GroupSearchResultToNameResolver<TParent>;
+    ingress?: GroupSearchResultToIngressResolver<TParent>;
+    traits?: GroupSearchResultToTraitsResolver<TParent>;
+    contexts?: GroupSearchResultToContextsResolver<TParent>;
+    metaImage?: GroupSearchResultToMetaImageResolver<TParent>;
+  }
+  
+  export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToPathResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToIngressResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToTraitsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToContextsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchResultToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLGroupSearchTypeResolver<TParent = any> {
+    language?: GroupSearchToLanguageResolver<TParent>;
+    resourceType?: GroupSearchToResourceTypeResolver<TParent>;
+    resources?: GroupSearchToResourcesResolver<TParent>;
+    suggestions?: GroupSearchToSuggestionsResolver<TParent>;
+    aggregations?: GroupSearchToAggregationsResolver<TParent>;
+    totalCount?: GroupSearchToTotalCountResolver<TParent>;
+  }
+  
+  export interface GroupSearchToLanguageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchToResourceTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchToResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchToAggregationsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFrontPageResourcesTypeResolver<TParent = any> {
+    results?: FrontPageResourcesToResultsResolver<TParent>;
+    totalCount?: FrontPageResourcesToTotalCountResolver<TParent>;
+    suggestions?: FrontPageResourcesToSuggestionsResolver<TParent>;
+  }
+  
+  export interface FrontPageResourcesToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontPageResourcesToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontPageResourcesToSuggestionsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFrontpageSearchTypeResolver<TParent = any> {
+    topicResources?: FrontpageSearchToTopicResourcesResolver<TParent>;
+    learningResources?: FrontpageSearchToLearningResourcesResolver<TParent>;
+  }
+  
+  export interface FrontpageSearchToTopicResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FrontpageSearchToLearningResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLQueryTypeResolver<TParent = any> {
     resource?: QueryToResourceResolver<TParent>;
     article?: QueryToArticleResolver<TParent>;
@@ -1143,2538 +3675,6 @@ declare global {
   }
   export interface QueryToPodcastSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLResourceTypeResolver<TParent = any> {
-    id?: ResourceToIdResolver<TParent>;
-    name?: ResourceToNameResolver<TParent>;
-    contentUri?: ResourceToContentUriResolver<TParent>;
-    path?: ResourceToPathResolver<TParent>;
-    paths?: ResourceToPathsResolver<TParent>;
-    meta?: ResourceToMetaResolver<TParent>;
-    metadata?: ResourceToMetadataResolver<TParent>;
-    article?: ResourceToArticleResolver<TParent>;
-    learningpath?: ResourceToLearningpathResolver<TParent>;
-    filters?: ResourceToFiltersResolver<TParent>;
-    rank?: ResourceToRankResolver<TParent>;
-    relevanceId?: ResourceToRelevanceIdResolver<TParent>;
-    resourceTypes?: ResourceToResourceTypesResolver<TParent>;
-    parentTopics?: ResourceToParentTopicsResolver<TParent>;
-    breadcrumbs?: ResourceToBreadcrumbsResolver<TParent>;
-  }
-  
-  export interface ResourceToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToContentUriResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToPathsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToMetaResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToMetadataResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToArticleArgs {
-    filterIds?: string;
-    subjectId?: string;
-    isOembed?: string;
-  }
-  export interface ResourceToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: ResourceToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToLearningpathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToRankResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToRelevanceIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToParentTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceToBreadcrumbsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLTaxonomyEntityTypeResolver<TParent = any> {
-    (parent: TParent, context: any, info: GraphQLResolveInfo): 'Resource' | 'Topic';
-  }
-  export interface GQLMetaTypeResolver<TParent = any> {
-    id?: MetaToIdResolver<TParent>;
-    title?: MetaToTitleResolver<TParent>;
-    introduction?: MetaToIntroductionResolver<TParent>;
-    metaDescription?: MetaToMetaDescriptionResolver<TParent>;
-    metaImage?: MetaToMetaImageResolver<TParent>;
-    lastUpdated?: MetaToLastUpdatedResolver<TParent>;
-  }
-  
-  export interface MetaToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MetaToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MetaToIntroductionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MetaToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MetaToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MetaToLastUpdatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLMetaImageTypeResolver<TParent = any> {
-    url?: MetaImageToUrlResolver<TParent>;
-    alt?: MetaImageToAltResolver<TParent>;
-  }
-  
-  export interface MetaImageToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MetaImageToAltResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLTaxonomyMetadataTypeResolver<TParent = any> {
-    grepCodes?: TaxonomyMetadataToGrepCodesResolver<TParent>;
-    visible?: TaxonomyMetadataToVisibleResolver<TParent>;
-    customFields?: TaxonomyMetadataToCustomFieldsResolver<TParent>;
-  }
-  
-  export interface TaxonomyMetadataToGrepCodesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TaxonomyMetadataToVisibleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TaxonomyMetadataToCustomFieldsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLArticleTypeResolver<TParent = any> {
-    id?: ArticleToIdResolver<TParent>;
-    revision?: ArticleToRevisionResolver<TParent>;
-    title?: ArticleToTitleResolver<TParent>;
-    introduction?: ArticleToIntroductionResolver<TParent>;
-    content?: ArticleToContentResolver<TParent>;
-    created?: ArticleToCreatedResolver<TParent>;
-    updated?: ArticleToUpdatedResolver<TParent>;
-    published?: ArticleToPublishedResolver<TParent>;
-    visualElement?: ArticleToVisualElementResolver<TParent>;
-    metaImage?: ArticleToMetaImageResolver<TParent>;
-    metaDescription?: ArticleToMetaDescriptionResolver<TParent>;
-    articleType?: ArticleToArticleTypeResolver<TParent>;
-    oldNdlaUrl?: ArticleToOldNdlaUrlResolver<TParent>;
-    requiredLibraries?: ArticleToRequiredLibrariesResolver<TParent>;
-    metaData?: ArticleToMetaDataResolver<TParent>;
-    supportedLanguages?: ArticleToSupportedLanguagesResolver<TParent>;
-    copyright?: ArticleToCopyrightResolver<TParent>;
-    tags?: ArticleToTagsResolver<TParent>;
-    grepCodes?: ArticleToGrepCodesResolver<TParent>;
-    competenceGoals?: ArticleToCompetenceGoalsResolver<TParent>;
-    coreElements?: ArticleToCoreElementsResolver<TParent>;
-    crossSubjectTopics?: ArticleToCrossSubjectTopicsResolver<TParent>;
-    oembed?: ArticleToOembedResolver<TParent>;
-    conceptIds?: ArticleToConceptIdsResolver<TParent>;
-    concepts?: ArticleToConceptsResolver<TParent>;
-  }
-  
-  export interface ArticleToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToRevisionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToIntroductionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToContentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToCreatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToUpdatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToPublishedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToVisualElementResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToArticleTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToOldNdlaUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToRequiredLibrariesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToMetaDataResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToGrepCodesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToCompetenceGoalsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToCoreElementsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToCrossSubjectTopicsArgs {
-    subjectId?: string;
-    filterIds?: string;
-  }
-  export interface ArticleToCrossSubjectTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: ArticleToCrossSubjectTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToOembedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToConceptIdsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleToConceptsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLVisualElementTypeResolver<TParent = any> {
-    resource?: VisualElementToResourceResolver<TParent>;
-    url?: VisualElementToUrlResolver<TParent>;
-    copyright?: VisualElementToCopyrightResolver<TParent>;
-    language?: VisualElementToLanguageResolver<TParent>;
-    embed?: VisualElementToEmbedResolver<TParent>;
-    title?: VisualElementToTitleResolver<TParent>;
-    brightcove?: VisualElementToBrightcoveResolver<TParent>;
-    h5p?: VisualElementToH5pResolver<TParent>;
-    oembed?: VisualElementToOembedResolver<TParent>;
-    image?: VisualElementToImageResolver<TParent>;
-  }
-  
-  export interface VisualElementToResourceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToEmbedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToBrightcoveResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToH5pResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToOembedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementToImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLCopyrightTypeResolver<TParent = any> {
-    license?: CopyrightToLicenseResolver<TParent>;
-    creators?: CopyrightToCreatorsResolver<TParent>;
-    processors?: CopyrightToProcessorsResolver<TParent>;
-    rightsholders?: CopyrightToRightsholdersResolver<TParent>;
-    origin?: CopyrightToOriginResolver<TParent>;
-  }
-  
-  export interface CopyrightToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CopyrightToCreatorsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CopyrightToProcessorsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CopyrightToRightsholdersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CopyrightToOriginResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLicenseTypeResolver<TParent = any> {
-    license?: LicenseToLicenseResolver<TParent>;
-    url?: LicenseToUrlResolver<TParent>;
-    description?: LicenseToDescriptionResolver<TParent>;
-  }
-  
-  export interface LicenseToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LicenseToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LicenseToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLContributorTypeResolver<TParent = any> {
-    type?: ContributorToTypeResolver<TParent>;
-    name?: ContributorToNameResolver<TParent>;
-  }
-  
-  export interface ContributorToTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ContributorToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLBrightcoveElementTypeResolver<TParent = any> {
-    videoid?: BrightcoveElementToVideoidResolver<TParent>;
-    player?: BrightcoveElementToPlayerResolver<TParent>;
-    account?: BrightcoveElementToAccountResolver<TParent>;
-    caption?: BrightcoveElementToCaptionResolver<TParent>;
-    description?: BrightcoveElementToDescriptionResolver<TParent>;
-    cover?: BrightcoveElementToCoverResolver<TParent>;
-    src?: BrightcoveElementToSrcResolver<TParent>;
-    download?: BrightcoveElementToDownloadResolver<TParent>;
-    iframe?: BrightcoveElementToIframeResolver<TParent>;
-    uploadDate?: BrightcoveElementToUploadDateResolver<TParent>;
-    copyText?: BrightcoveElementToCopyTextResolver<TParent>;
-  }
-  
-  export interface BrightcoveElementToVideoidResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToPlayerResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToAccountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToCaptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToCoverResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToDownloadResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToIframeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToUploadDateResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveElementToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLBrightcoveIframeTypeResolver<TParent = any> {
-    src?: BrightcoveIframeToSrcResolver<TParent>;
-    height?: BrightcoveIframeToHeightResolver<TParent>;
-    width?: BrightcoveIframeToWidthResolver<TParent>;
-  }
-  
-  export interface BrightcoveIframeToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveIframeToHeightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveIframeToWidthResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLH5pElementTypeResolver<TParent = any> {
-    src?: H5pElementToSrcResolver<TParent>;
-    thumbnail?: H5pElementToThumbnailResolver<TParent>;
-    copyText?: H5pElementToCopyTextResolver<TParent>;
-  }
-  
-  export interface H5pElementToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pElementToThumbnailResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pElementToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLVisualElementOembedTypeResolver<TParent = any> {
-    title?: VisualElementOembedToTitleResolver<TParent>;
-    html?: VisualElementOembedToHtmlResolver<TParent>;
-    fullscreen?: VisualElementOembedToFullscreenResolver<TParent>;
-  }
-  
-  export interface VisualElementOembedToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementOembedToHtmlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface VisualElementOembedToFullscreenResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLImageElementTypeResolver<TParent = any> {
-    resourceid?: ImageElementToResourceidResolver<TParent>;
-    alt?: ImageElementToAltResolver<TParent>;
-    caption?: ImageElementToCaptionResolver<TParent>;
-    lowerRightX?: ImageElementToLowerRightXResolver<TParent>;
-    lowerRightY?: ImageElementToLowerRightYResolver<TParent>;
-    upperLeftX?: ImageElementToUpperLeftXResolver<TParent>;
-    upperLeftY?: ImageElementToUpperLeftYResolver<TParent>;
-    focalX?: ImageElementToFocalXResolver<TParent>;
-    focalY?: ImageElementToFocalYResolver<TParent>;
-    src?: ImageElementToSrcResolver<TParent>;
-    altText?: ImageElementToAltTextResolver<TParent>;
-    contentType?: ImageElementToContentTypeResolver<TParent>;
-    copyText?: ImageElementToCopyTextResolver<TParent>;
-  }
-  
-  export interface ImageElementToResourceidResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToAltResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToCaptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToLowerRightXResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToLowerRightYResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToUpperLeftXResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToUpperLeftYResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToFocalXResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToFocalYResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToAltTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToContentTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageElementToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLArticleRequiredLibraryTypeResolver<TParent = any> {
-    name?: ArticleRequiredLibraryToNameResolver<TParent>;
-    url?: ArticleRequiredLibraryToUrlResolver<TParent>;
-    mediaType?: ArticleRequiredLibraryToMediaTypeResolver<TParent>;
-  }
-  
-  export interface ArticleRequiredLibraryToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleRequiredLibraryToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleRequiredLibraryToMediaTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLArticleMetaDataTypeResolver<TParent = any> {
-    footnotes?: ArticleMetaDataToFootnotesResolver<TParent>;
-    images?: ArticleMetaDataToImagesResolver<TParent>;
-    audios?: ArticleMetaDataToAudiosResolver<TParent>;
-    brightcoves?: ArticleMetaDataToBrightcovesResolver<TParent>;
-    h5ps?: ArticleMetaDataToH5psResolver<TParent>;
-    concepts?: ArticleMetaDataToConceptsResolver<TParent>;
-    copyText?: ArticleMetaDataToCopyTextResolver<TParent>;
-  }
-  
-  export interface ArticleMetaDataToFootnotesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleMetaDataToImagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleMetaDataToAudiosResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleMetaDataToBrightcovesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleMetaDataToH5psResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleMetaDataToConceptsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleMetaDataToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLFootNoteTypeResolver<TParent = any> {
-    ref?: FootNoteToRefResolver<TParent>;
-    title?: FootNoteToTitleResolver<TParent>;
-    year?: FootNoteToYearResolver<TParent>;
-    authors?: FootNoteToAuthorsResolver<TParent>;
-    edition?: FootNoteToEditionResolver<TParent>;
-    publisher?: FootNoteToPublisherResolver<TParent>;
-    url?: FootNoteToUrlResolver<TParent>;
-  }
-  
-  export interface FootNoteToRefResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FootNoteToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FootNoteToYearResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FootNoteToAuthorsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FootNoteToEditionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FootNoteToPublisherResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FootNoteToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLImageLicenseTypeResolver<TParent = any> {
-    title?: ImageLicenseToTitleResolver<TParent>;
-    src?: ImageLicenseToSrcResolver<TParent>;
-    altText?: ImageLicenseToAltTextResolver<TParent>;
-    copyright?: ImageLicenseToCopyrightResolver<TParent>;
-    contentType?: ImageLicenseToContentTypeResolver<TParent>;
-    copyText?: ImageLicenseToCopyTextResolver<TParent>;
-  }
-  
-  export interface ImageLicenseToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageLicenseToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageLicenseToAltTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageLicenseToContentTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ImageLicenseToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLAudioLicenseTypeResolver<TParent = any> {
-    title?: AudioLicenseToTitleResolver<TParent>;
-    src?: AudioLicenseToSrcResolver<TParent>;
-    copyright?: AudioLicenseToCopyrightResolver<TParent>;
-    copyText?: AudioLicenseToCopyTextResolver<TParent>;
-  }
-  
-  export interface AudioLicenseToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioLicenseToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioLicenseToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLBrightcoveLicenseTypeResolver<TParent = any> {
-    title?: BrightcoveLicenseToTitleResolver<TParent>;
-    description?: BrightcoveLicenseToDescriptionResolver<TParent>;
-    cover?: BrightcoveLicenseToCoverResolver<TParent>;
-    src?: BrightcoveLicenseToSrcResolver<TParent>;
-    download?: BrightcoveLicenseToDownloadResolver<TParent>;
-    iframe?: BrightcoveLicenseToIframeResolver<TParent>;
-    copyright?: BrightcoveLicenseToCopyrightResolver<TParent>;
-    uploadDate?: BrightcoveLicenseToUploadDateResolver<TParent>;
-    copyText?: BrightcoveLicenseToCopyTextResolver<TParent>;
-  }
-  
-  export interface BrightcoveLicenseToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveLicenseToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveLicenseToCoverResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveLicenseToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveLicenseToDownloadResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveLicenseToIframeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveLicenseToUploadDateResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BrightcoveLicenseToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLH5pLicenseTypeResolver<TParent = any> {
-    title?: H5pLicenseToTitleResolver<TParent>;
-    src?: H5pLicenseToSrcResolver<TParent>;
-    thumbnail?: H5pLicenseToThumbnailResolver<TParent>;
-    copyright?: H5pLicenseToCopyrightResolver<TParent>;
-    copyText?: H5pLicenseToCopyTextResolver<TParent>;
-  }
-  
-  export interface H5pLicenseToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pLicenseToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pLicenseToThumbnailResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pLicenseToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLConceptLicenseTypeResolver<TParent = any> {
-    title?: ConceptLicenseToTitleResolver<TParent>;
-    src?: ConceptLicenseToSrcResolver<TParent>;
-    copyright?: ConceptLicenseToCopyrightResolver<TParent>;
-    copyText?: ConceptLicenseToCopyTextResolver<TParent>;
-  }
-  
-  export interface ConceptLicenseToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptLicenseToSrcResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptLicenseToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLCompetenceGoalTypeResolver<TParent = any> {
-    id?: CompetenceGoalToIdResolver<TParent>;
-    code?: CompetenceGoalToCodeResolver<TParent>;
-    title?: CompetenceGoalToTitleResolver<TParent>;
-    type?: CompetenceGoalToTypeResolver<TParent>;
-    language?: CompetenceGoalToLanguageResolver<TParent>;
-    curriculumId?: CompetenceGoalToCurriculumIdResolver<TParent>;
-    curriculumCode?: CompetenceGoalToCurriculumCodeResolver<TParent>;
-    curriculum?: CompetenceGoalToCurriculumResolver<TParent>;
-    competenceGoalSetCode?: CompetenceGoalToCompetenceGoalSetCodeResolver<TParent>;
-    competenceGoalSet?: CompetenceGoalToCompetenceGoalSetResolver<TParent>;
-    crossSubjectTopicsCodes?: CompetenceGoalToCrossSubjectTopicsCodesResolver<TParent>;
-    crossSubjectTopics?: CompetenceGoalToCrossSubjectTopicsResolver<TParent>;
-    coreElementsCodes?: CompetenceGoalToCoreElementsCodesResolver<TParent>;
-    coreElements?: CompetenceGoalToCoreElementsResolver<TParent>;
-  }
-  
-  export interface CompetenceGoalToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCodeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCurriculumIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCurriculumCodeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCurriculumResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCompetenceGoalSetCodeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCompetenceGoalSetResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCrossSubjectTopicsCodesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCrossSubjectTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCoreElementsCodesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CompetenceGoalToCoreElementsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLReferenceTypeResolver<TParent = any> {
-    id?: ReferenceToIdResolver<TParent>;
-    title?: ReferenceToTitleResolver<TParent>;
-    code?: ReferenceToCodeResolver<TParent>;
-  }
-  
-  export interface ReferenceToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ReferenceToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ReferenceToCodeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLElementTypeResolver<TParent = any> {
-    reference?: ElementToReferenceResolver<TParent>;
-    explanation?: ElementToExplanationResolver<TParent>;
-  }
-  
-  export interface ElementToReferenceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ElementToExplanationResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLCoreElementTypeResolver<TParent = any> {
-    id?: CoreElementToIdResolver<TParent>;
-    title?: CoreElementToTitleResolver<TParent>;
-    description?: CoreElementToDescriptionResolver<TParent>;
-    language?: CoreElementToLanguageResolver<TParent>;
-    curriculumCode?: CoreElementToCurriculumCodeResolver<TParent>;
-    curriculum?: CoreElementToCurriculumResolver<TParent>;
-  }
-  
-  export interface CoreElementToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoreElementToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoreElementToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoreElementToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoreElementToCurriculumCodeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoreElementToCurriculumResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLCrossSubjectElementTypeResolver<TParent = any> {
-    title?: CrossSubjectElementToTitleResolver<TParent>;
-    code?: CrossSubjectElementToCodeResolver<TParent>;
-    path?: CrossSubjectElementToPathResolver<TParent>;
-  }
-  
-  export interface CrossSubjectElementToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CrossSubjectElementToCodeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CrossSubjectElementToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLConceptTypeResolver<TParent = any> {
-    id?: ConceptToIdResolver<TParent>;
-    title?: ConceptToTitleResolver<TParent>;
-    content?: ConceptToContentResolver<TParent>;
-    tags?: ConceptToTagsResolver<TParent>;
-    metaImage?: ConceptToMetaImageResolver<TParent>;
-  }
-  
-  export interface ConceptToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptToContentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLFilterTypeResolver<TParent = any> {
-    id?: FilterToIdResolver<TParent>;
-    name?: FilterToNameResolver<TParent>;
-    connectionId?: FilterToConnectionIdResolver<TParent>;
-    relevanceId?: FilterToRelevanceIdResolver<TParent>;
-    subjectId?: FilterToSubjectIdResolver<TParent>;
-    metadata?: FilterToMetadataResolver<TParent>;
-  }
-  
-  export interface FilterToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilterToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilterToConnectionIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilterToRelevanceIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilterToSubjectIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilterToMetadataResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathTypeResolver<TParent = any> {
-    id?: LearningpathToIdResolver<TParent>;
-    title?: LearningpathToTitleResolver<TParent>;
-    description?: LearningpathToDescriptionResolver<TParent>;
-    copyright?: LearningpathToCopyrightResolver<TParent>;
-    duration?: LearningpathToDurationResolver<TParent>;
-    canEdit?: LearningpathToCanEditResolver<TParent>;
-    verificationStatus?: LearningpathToVerificationStatusResolver<TParent>;
-    lastUpdated?: LearningpathToLastUpdatedResolver<TParent>;
-    tags?: LearningpathToTagsResolver<TParent>;
-    supportedLanguages?: LearningpathToSupportedLanguagesResolver<TParent>;
-    isBasedOn?: LearningpathToIsBasedOnResolver<TParent>;
-    learningsteps?: LearningpathToLearningstepsResolver<TParent>;
-    metaUrl?: LearningpathToMetaUrlResolver<TParent>;
-    revision?: LearningpathToRevisionResolver<TParent>;
-    learningstepUrl?: LearningpathToLearningstepUrlResolver<TParent>;
-    status?: LearningpathToStatusResolver<TParent>;
-    coverphoto?: LearningpathToCoverphotoResolver<TParent>;
-  }
-  
-  export interface LearningpathToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToDurationResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToCanEditResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToVerificationStatusResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToLastUpdatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToIsBasedOnResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToLearningstepsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToMetaUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToRevisionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToLearningstepUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToStatusResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathToCoverphotoResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathCopyrightTypeResolver<TParent = any> {
-    license?: LearningpathCopyrightToLicenseResolver<TParent>;
-    contributors?: LearningpathCopyrightToContributorsResolver<TParent>;
-  }
-  
-  export interface LearningpathCopyrightToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathCopyrightToContributorsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathStepTypeResolver<TParent = any> {
-    id?: LearningpathStepToIdResolver<TParent>;
-    title?: LearningpathStepToTitleResolver<TParent>;
-    seqNo?: LearningpathStepToSeqNoResolver<TParent>;
-    description?: LearningpathStepToDescriptionResolver<TParent>;
-    embedUrl?: LearningpathStepToEmbedUrlResolver<TParent>;
-    license?: LearningpathStepToLicenseResolver<TParent>;
-    metaUrl?: LearningpathStepToMetaUrlResolver<TParent>;
-    revision?: LearningpathStepToRevisionResolver<TParent>;
-    status?: LearningpathStepToStatusResolver<TParent>;
-    supportedLanguages?: LearningpathStepToSupportedLanguagesResolver<TParent>;
-    type?: LearningpathStepToTypeResolver<TParent>;
-    article?: LearningpathStepToArticleResolver<TParent>;
-    resource?: LearningpathStepToResourceResolver<TParent>;
-    showTitle?: LearningpathStepToShowTitleResolver<TParent>;
-    oembed?: LearningpathStepToOembedResolver<TParent>;
-  }
-  
-  export interface LearningpathStepToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToSeqNoResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToEmbedUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToMetaUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToRevisionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToStatusResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToResourceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToShowTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepToOembedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathStepEmbedUrlTypeResolver<TParent = any> {
-    url?: LearningpathStepEmbedUrlToUrlResolver<TParent>;
-    embedType?: LearningpathStepEmbedUrlToEmbedTypeResolver<TParent>;
-  }
-  
-  export interface LearningpathStepEmbedUrlToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepEmbedUrlToEmbedTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathStepOembedTypeResolver<TParent = any> {
-    type?: LearningpathStepOembedToTypeResolver<TParent>;
-    version?: LearningpathStepOembedToVersionResolver<TParent>;
-    height?: LearningpathStepOembedToHeightResolver<TParent>;
-    html?: LearningpathStepOembedToHtmlResolver<TParent>;
-    width?: LearningpathStepOembedToWidthResolver<TParent>;
-  }
-  
-  export interface LearningpathStepOembedToTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepOembedToVersionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepOembedToHeightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepOembedToHtmlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathStepOembedToWidthResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathCoverphotoTypeResolver<TParent = any> {
-    url?: LearningpathCoverphotoToUrlResolver<TParent>;
-    metaUrl?: LearningpathCoverphotoToMetaUrlResolver<TParent>;
-  }
-  
-  export interface LearningpathCoverphotoToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathCoverphotoToMetaUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLResourceTypeTypeResolver<TParent = any> {
-    id?: ResourceTypeToIdResolver<TParent>;
-    name?: ResourceTypeToNameResolver<TParent>;
-    resources?: ResourceTypeToResourcesResolver<TParent>;
-  }
-  
-  export interface ResourceTypeToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceTypeToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceTypeToResourcesArgs {
-    topicId: string;
-  }
-  export interface ResourceTypeToResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: ResourceTypeToResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLTopicTypeResolver<TParent = any> {
-    id?: TopicToIdResolver<TParent>;
-    name?: TopicToNameResolver<TParent>;
-    contentUri?: TopicToContentUriResolver<TParent>;
-    path?: TopicToPathResolver<TParent>;
-    paths?: TopicToPathsResolver<TParent>;
-    meta?: TopicToMetaResolver<TParent>;
-    metadata?: TopicToMetadataResolver<TParent>;
-    article?: TopicToArticleResolver<TParent>;
-    filters?: TopicToFiltersResolver<TParent>;
-    rank?: TopicToRankResolver<TParent>;
-    relevanceId?: TopicToRelevanceIdResolver<TParent>;
-    isPrimary?: TopicToIsPrimaryResolver<TParent>;
-    parent?: TopicToParentResolver<TParent>;
-    subtopics?: TopicToSubtopicsResolver<TParent>;
-    pathTopics?: TopicToPathTopicsResolver<TParent>;
-    coreResources?: TopicToCoreResourcesResolver<TParent>;
-    supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
-    alternateTopics?: TopicToAlternateTopicsResolver<TParent>;
-    breadcrumbs?: TopicToBreadcrumbsResolver<TParent>;
-  }
-  
-  export interface TopicToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToContentUriResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToPathsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToMetaResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToMetadataResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToArticleArgs {
-    filterIds?: string;
-    subjectId?: string;
-  }
-  export interface TopicToArticleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToRankResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToRelevanceIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToIsPrimaryResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToParentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToSubtopicsArgs {
-    filterIds?: string;
-  }
-  export interface TopicToSubtopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToSubtopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToPathTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToCoreResourcesArgs {
-    filterIds?: string;
-    subjectId?: string;
-  }
-  export interface TopicToCoreResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToCoreResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToSupplementaryResourcesArgs {
-    filterIds?: string;
-    subjectId?: string;
-  }
-  export interface TopicToSupplementaryResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: TopicToSupplementaryResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToAlternateTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TopicToBreadcrumbsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSubjectTypeResolver<TParent = any> {
-    id?: SubjectToIdResolver<TParent>;
-    contentUri?: SubjectToContentUriResolver<TParent>;
-    name?: SubjectToNameResolver<TParent>;
-    path?: SubjectToPathResolver<TParent>;
-    metadata?: SubjectToMetadataResolver<TParent>;
-    filters?: SubjectToFiltersResolver<TParent>;
-    frontpageFilters?: SubjectToFrontpageFiltersResolver<TParent>;
-    subjectpage?: SubjectToSubjectpageResolver<TParent>;
-    topics?: SubjectToTopicsResolver<TParent>;
-  }
-  
-  export interface SubjectToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectToContentUriResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectToMetadataResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectToFrontpageFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectToSubjectpageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectToTopicsArgs {
-    all?: boolean;
-    filterIds?: string;
-  }
-  export interface SubjectToTopicsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectToTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSubjectFilterTypeResolver<TParent = any> {
-    id?: SubjectFilterToIdResolver<TParent>;
-    name?: SubjectFilterToNameResolver<TParent>;
-    subjectId?: SubjectFilterToSubjectIdResolver<TParent>;
-    contentUri?: SubjectFilterToContentUriResolver<TParent>;
-    subjectpage?: SubjectFilterToSubjectpageResolver<TParent>;
-    metadata?: SubjectFilterToMetadataResolver<TParent>;
-  }
-  
-  export interface SubjectFilterToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectFilterToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectFilterToSubjectIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectFilterToContentUriResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectFilterToSubjectpageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectFilterToMetadataResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSubjectPageTypeResolver<TParent = any> {
-    topical?: SubjectPageToTopicalResolver<TParent>;
-    mostRead?: SubjectPageToMostReadResolver<TParent>;
-    banner?: SubjectPageToBannerResolver<TParent>;
-    id?: SubjectPageToIdResolver<TParent>;
-    name?: SubjectPageToNameResolver<TParent>;
-    facebook?: SubjectPageToFacebookResolver<TParent>;
-    editorsChoices?: SubjectPageToEditorsChoicesResolver<TParent>;
-    latestContent?: SubjectPageToLatestContentResolver<TParent>;
-    about?: SubjectPageToAboutResolver<TParent>;
-    goTo?: SubjectPageToGoToResolver<TParent>;
-    metaDescription?: SubjectPageToMetaDescriptionResolver<TParent>;
-    layout?: SubjectPageToLayoutResolver<TParent>;
-    twitter?: SubjectPageToTwitterResolver<TParent>;
-  }
-  
-  export interface SubjectPageToTopicalArgs {
-    subjectId?: string;
-  }
-  export interface SubjectPageToTopicalResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectPageToTopicalArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToMostReadArgs {
-    subjectId?: string;
-  }
-  export interface SubjectPageToMostReadResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectPageToMostReadArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToBannerResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToFacebookResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToEditorsChoicesArgs {
-    subjectId?: string;
-  }
-  export interface SubjectPageToEditorsChoicesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectPageToEditorsChoicesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToLatestContentArgs {
-    subjectId?: string;
-  }
-  export interface SubjectPageToLatestContentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: SubjectPageToLatestContentArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToAboutResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToGoToResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToLayoutResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageToTwitterResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSubjectPageBannerTypeResolver<TParent = any> {
-    desktopUrl?: SubjectPageBannerToDesktopUrlResolver<TParent>;
-    desktopId?: SubjectPageBannerToDesktopIdResolver<TParent>;
-    mobileUrl?: SubjectPageBannerToMobileUrlResolver<TParent>;
-    mobileId?: SubjectPageBannerToMobileIdResolver<TParent>;
-  }
-  
-  export interface SubjectPageBannerToDesktopUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageBannerToDesktopIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageBannerToMobileUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageBannerToMobileIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSubjectPageAboutTypeResolver<TParent = any> {
-    title?: SubjectPageAboutToTitleResolver<TParent>;
-    description?: SubjectPageAboutToDescriptionResolver<TParent>;
-    visualElement?: SubjectPageAboutToVisualElementResolver<TParent>;
-  }
-  
-  export interface SubjectPageAboutToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageAboutToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageAboutToVisualElementResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSubjectPageVisualElementTypeResolver<TParent = any> {
-    type?: SubjectPageVisualElementToTypeResolver<TParent>;
-    url?: SubjectPageVisualElementToUrlResolver<TParent>;
-    alt?: SubjectPageVisualElementToAltResolver<TParent>;
-  }
-  
-  export interface SubjectPageVisualElementToTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageVisualElementToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SubjectPageVisualElementToAltResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLResourceTypeDefinitionTypeResolver<TParent = any> {
-    id?: ResourceTypeDefinitionToIdResolver<TParent>;
-    name?: ResourceTypeDefinitionToNameResolver<TParent>;
-    subtypes?: ResourceTypeDefinitionToSubtypesResolver<TParent>;
-  }
-  
-  export interface ResourceTypeDefinitionToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceTypeDefinitionToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ResourceTypeDefinitionToSubtypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLFilmFrontpageTypeResolver<TParent = any> {
-    name?: FilmFrontpageToNameResolver<TParent>;
-    about?: FilmFrontpageToAboutResolver<TParent>;
-    movieThemes?: FilmFrontpageToMovieThemesResolver<TParent>;
-    slideShow?: FilmFrontpageToSlideShowResolver<TParent>;
-  }
-  
-  export interface FilmFrontpageToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilmFrontpageToAboutResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilmFrontpageToMovieThemesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilmFrontpageToSlideShowResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLFilmPageAboutTypeResolver<TParent = any> {
-    title?: FilmPageAboutToTitleResolver<TParent>;
-    description?: FilmPageAboutToDescriptionResolver<TParent>;
-    visualElement?: FilmPageAboutToVisualElementResolver<TParent>;
-    language?: FilmPageAboutToLanguageResolver<TParent>;
-  }
-  
-  export interface FilmPageAboutToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilmPageAboutToDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilmPageAboutToVisualElementResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FilmPageAboutToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLMovieThemeTypeResolver<TParent = any> {
-    name?: MovieThemeToNameResolver<TParent>;
-    movies?: MovieThemeToMoviesResolver<TParent>;
-  }
-  
-  export interface MovieThemeToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieThemeToMoviesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLNameTypeResolver<TParent = any> {
-    name?: NameToNameResolver<TParent>;
-    language?: NameToLanguageResolver<TParent>;
-  }
-  
-  export interface NameToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface NameToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLMovieTypeResolver<TParent = any> {
-    id?: MovieToIdResolver<TParent>;
-    title?: MovieToTitleResolver<TParent>;
-    metaImage?: MovieToMetaImageResolver<TParent>;
-    metaDescription?: MovieToMetaDescriptionResolver<TParent>;
-    resourceTypes?: MovieToResourceTypesResolver<TParent>;
-    path?: MovieToPathResolver<TParent>;
-  }
-  
-  export interface MovieToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLFrontpageTypeResolver<TParent = any> {
-    topical?: FrontpageToTopicalResolver<TParent>;
-    categories?: FrontpageToCategoriesResolver<TParent>;
-  }
-  
-  export interface FrontpageToTopicalResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontpageToCategoriesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLCategoryTypeResolver<TParent = any> {
-    name?: CategoryToNameResolver<TParent>;
-    subjects?: CategoryToSubjectsResolver<TParent>;
-  }
-  
-  export interface CategoryToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CategoryToSubjectsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSearchTypeResolver<TParent = any> {
-    pageSize?: SearchToPageSizeResolver<TParent>;
-    page?: SearchToPageResolver<TParent>;
-    language?: SearchToLanguageResolver<TParent>;
-    totalCount?: SearchToTotalCountResolver<TParent>;
-    results?: SearchToResultsResolver<TParent>;
-    suggestions?: SearchToSuggestionsResolver<TParent>;
-    aggregations?: SearchToAggregationsResolver<TParent>;
-    concepts?: SearchToConceptsResolver<TParent>;
-  }
-  
-  export interface SearchToPageSizeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchToPageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchToTotalCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchToResultsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchToSuggestionsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchToAggregationsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchToConceptsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSearchResultTypeResolver<TParent = any> {
-    (parent: TParent, context: any, info: GraphQLResolveInfo): 'ArticleSearchResult' | 'LearningpathSearchResult';
-  }
-  export interface GQLSearchContextTypeResolver<TParent = any> {
-    breadcrumbs?: SearchContextToBreadcrumbsResolver<TParent>;
-    learningResourceType?: SearchContextToLearningResourceTypeResolver<TParent>;
-    resourceTypes?: SearchContextToResourceTypesResolver<TParent>;
-    subject?: SearchContextToSubjectResolver<TParent>;
-    subjectId?: SearchContextToSubjectIdResolver<TParent>;
-    relevance?: SearchContextToRelevanceResolver<TParent>;
-    path?: SearchContextToPathResolver<TParent>;
-    id?: SearchContextToIdResolver<TParent>;
-    language?: SearchContextToLanguageResolver<TParent>;
-    filters?: SearchContextToFiltersResolver<TParent>;
-  }
-  
-  export interface SearchContextToBreadcrumbsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToLearningResourceTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToSubjectResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToSubjectIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToRelevanceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSearchContextResourceTypesTypeResolver<TParent = any> {
-    id?: SearchContextResourceTypesToIdResolver<TParent>;
-    name?: SearchContextResourceTypesToNameResolver<TParent>;
-    language?: SearchContextResourceTypesToLanguageResolver<TParent>;
-  }
-  
-  export interface SearchContextResourceTypesToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextResourceTypesToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextResourceTypesToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSearchContextFilterTypeResolver<TParent = any> {
-    id?: SearchContextFilterToIdResolver<TParent>;
-    name?: SearchContextFilterToNameResolver<TParent>;
-    relevance?: SearchContextFilterToRelevanceResolver<TParent>;
-  }
-  
-  export interface SearchContextFilterToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextFilterToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchContextFilterToRelevanceResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSuggestionResultTypeResolver<TParent = any> {
-    name?: SuggestionResultToNameResolver<TParent>;
-    suggestions?: SuggestionResultToSuggestionsResolver<TParent>;
-  }
-  
-  export interface SuggestionResultToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SuggestionResultToSuggestionsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSearchSuggestionTypeResolver<TParent = any> {
-    text?: SearchSuggestionToTextResolver<TParent>;
-    offset?: SearchSuggestionToOffsetResolver<TParent>;
-    length?: SearchSuggestionToLengthResolver<TParent>;
-    options?: SearchSuggestionToOptionsResolver<TParent>;
-  }
-  
-  export interface SearchSuggestionToTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchSuggestionToOffsetResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchSuggestionToLengthResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SearchSuggestionToOptionsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLSuggestOptionTypeResolver<TParent = any> {
-    text?: SuggestOptionToTextResolver<TParent>;
-    score?: SuggestOptionToScoreResolver<TParent>;
-  }
-  
-  export interface SuggestOptionToTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface SuggestOptionToScoreResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLAggregationResultTypeResolver<TParent = any> {
-    field?: AggregationResultToFieldResolver<TParent>;
-    sumOtherDocCount?: AggregationResultToSumOtherDocCountResolver<TParent>;
-    docCountErrorUpperBound?: AggregationResultToDocCountErrorUpperBoundResolver<TParent>;
-    values?: AggregationResultToValuesResolver<TParent>;
-  }
-  
-  export interface AggregationResultToFieldResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AggregationResultToSumOtherDocCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AggregationResultToDocCountErrorUpperBoundResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AggregationResultToValuesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLBucketResultTypeResolver<TParent = any> {
-    value?: BucketResultToValueResolver<TParent>;
-    count?: BucketResultToCountResolver<TParent>;
-  }
-  
-  export interface BucketResultToValueResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface BucketResultToCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLConceptResultTypeResolver<TParent = any> {
-    totalCount?: ConceptResultToTotalCountResolver<TParent>;
-    concepts?: ConceptResultToConceptsResolver<TParent>;
-  }
-  
-  export interface ConceptResultToTotalCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptResultToConceptsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLGroupSearchTypeResolver<TParent = any> {
-    language?: GroupSearchToLanguageResolver<TParent>;
-    resourceType?: GroupSearchToResourceTypeResolver<TParent>;
-    resources?: GroupSearchToResourcesResolver<TParent>;
-    suggestions?: GroupSearchToSuggestionsResolver<TParent>;
-    aggregations?: GroupSearchToAggregationsResolver<TParent>;
-    totalCount?: GroupSearchToTotalCountResolver<TParent>;
-  }
-  
-  export interface GroupSearchToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchToResourceTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchToResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchToSuggestionsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchToAggregationsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchToTotalCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLGroupSearchResultTypeResolver<TParent = any> {
-    id?: GroupSearchResultToIdResolver<TParent>;
-    path?: GroupSearchResultToPathResolver<TParent>;
-    name?: GroupSearchResultToNameResolver<TParent>;
-    ingress?: GroupSearchResultToIngressResolver<TParent>;
-    traits?: GroupSearchResultToTraitsResolver<TParent>;
-    contexts?: GroupSearchResultToContextsResolver<TParent>;
-    metaImage?: GroupSearchResultToMetaImageResolver<TParent>;
-  }
-  
-  export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToIngressResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToTraitsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToContextsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GroupSearchResultToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLListingPageTypeResolver<TParent = any> {
-    subjects?: ListingPageToSubjectsResolver<TParent>;
-    tags?: ListingPageToTagsResolver<TParent>;
-  }
-  
-  export interface ListingPageToSubjectsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ListingPageToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLDetailedConceptTypeResolver<TParent = any> {
-    id?: DetailedConceptToIdResolver<TParent>;
-    title?: DetailedConceptToTitleResolver<TParent>;
-    content?: DetailedConceptToContentResolver<TParent>;
-    created?: DetailedConceptToCreatedResolver<TParent>;
-    tags?: DetailedConceptToTagsResolver<TParent>;
-    image?: DetailedConceptToImageResolver<TParent>;
-    subjectIds?: DetailedConceptToSubjectIdsResolver<TParent>;
-    articleIds?: DetailedConceptToArticleIdsResolver<TParent>;
-    articles?: DetailedConceptToArticlesResolver<TParent>;
-    visualElement?: DetailedConceptToVisualElementResolver<TParent>;
-    copyright?: DetailedConceptToCopyrightResolver<TParent>;
-  }
-  
-  export interface DetailedConceptToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToContentResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToCreatedResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToSubjectIdsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToArticleIdsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToArticlesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToVisualElementResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface DetailedConceptToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLFrontpageSearchTypeResolver<TParent = any> {
-    topicResources?: FrontpageSearchToTopicResourcesResolver<TParent>;
-    learningResources?: FrontpageSearchToLearningResourcesResolver<TParent>;
-  }
-  
-  export interface FrontpageSearchToTopicResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontpageSearchToLearningResourcesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLFrontPageResourcesTypeResolver<TParent = any> {
-    results?: FrontPageResourcesToResultsResolver<TParent>;
-    totalCount?: FrontPageResourcesToTotalCountResolver<TParent>;
-    suggestions?: FrontPageResourcesToSuggestionsResolver<TParent>;
-  }
-  
-  export interface FrontPageResourcesToResultsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontPageResourcesToTotalCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontPageResourcesToSuggestionsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLFrontpageSearchResultTypeResolver<TParent = any> {
-    id?: FrontpageSearchResultToIdResolver<TParent>;
-    name?: FrontpageSearchResultToNameResolver<TParent>;
-    resourceTypes?: FrontpageSearchResultToResourceTypesResolver<TParent>;
-    subject?: FrontpageSearchResultToSubjectResolver<TParent>;
-    path?: FrontpageSearchResultToPathResolver<TParent>;
-    filters?: FrontpageSearchResultToFiltersResolver<TParent>;
-  }
-  
-  export interface FrontpageSearchResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontpageSearchResultToNameResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontpageSearchResultToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontpageSearchResultToSubjectResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontpageSearchResultToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FrontpageSearchResultToFiltersResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLAudioTypeResolver<TParent = any> {
-    id?: AudioToIdResolver<TParent>;
-    revision?: AudioToRevisionResolver<TParent>;
-    title?: AudioToTitleResolver<TParent>;
-    audioFile?: AudioToAudioFileResolver<TParent>;
-    copyright?: AudioToCopyrightResolver<TParent>;
-    tags?: AudioToTagsResolver<TParent>;
-    supportedLanguages?: AudioToSupportedLanguagesResolver<TParent>;
-    audioType?: AudioToAudioTypeResolver<TParent>;
-    podcastMeta?: AudioToPodcastMetaResolver<TParent>;
-  }
-  
-  export interface AudioToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioToRevisionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioToAudioFileResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioToAudioTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioToPodcastMetaResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLTitleTypeResolver<TParent = any> {
-    title?: TitleToTitleResolver<TParent>;
-    language?: TitleToLanguageResolver<TParent>;
-  }
-  
-  export interface TitleToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TitleToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLAudioFileTypeResolver<TParent = any> {
-    url?: AudioFileToUrlResolver<TParent>;
-    mimeType?: AudioFileToMimeTypeResolver<TParent>;
-    fileSize?: AudioFileToFileSizeResolver<TParent>;
-    language?: AudioFileToLanguageResolver<TParent>;
-  }
-  
-  export interface AudioFileToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioFileToMimeTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioFileToFileSizeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioFileToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLTagsTypeResolver<TParent = any> {
-    tags?: TagsToTagsResolver<TParent>;
-    language?: TagsToLanguageResolver<TParent>;
-  }
-  
-  export interface TagsToTagsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface TagsToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLPodcastMetaTypeResolver<TParent = any> {
-    header?: PodcastMetaToHeaderResolver<TParent>;
-    introduction?: PodcastMetaToIntroductionResolver<TParent>;
-    coverPhoto?: PodcastMetaToCoverPhotoResolver<TParent>;
-    manuscript?: PodcastMetaToManuscriptResolver<TParent>;
-    language?: PodcastMetaToLanguageResolver<TParent>;
-  }
-  
-  export interface PodcastMetaToHeaderResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface PodcastMetaToIntroductionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface PodcastMetaToCoverPhotoResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface PodcastMetaToManuscriptResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface PodcastMetaToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLCoverPhotoTypeResolver<TParent = any> {
-    id?: CoverPhotoToIdResolver<TParent>;
-    url?: CoverPhotoToUrlResolver<TParent>;
-    altText?: CoverPhotoToAltTextResolver<TParent>;
-  }
-  
-  export interface CoverPhotoToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoverPhotoToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface CoverPhotoToAltTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLAudioSearchTypeResolver<TParent = any> {
-    pageSize?: AudioSearchToPageSizeResolver<TParent>;
-    page?: AudioSearchToPageResolver<TParent>;
-    language?: AudioSearchToLanguageResolver<TParent>;
-    totalCount?: AudioSearchToTotalCountResolver<TParent>;
-    results?: AudioSearchToResultsResolver<TParent>;
-  }
-  
-  export interface AudioSearchToPageSizeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioSearchToPageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioSearchToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioSearchToTotalCountResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioSearchToResultsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLembedVisualelementTypeResolver<TParent = any> {
-    visualElement?: embedVisualelementToVisualElementResolver<TParent>;
-  }
-  
-  export interface embedVisualelementToVisualElementResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLMovieMetaTypeResolver<TParent = any> {
-    title?: MovieMetaToTitleResolver<TParent>;
-    metaImage?: MovieMetaToMetaImageResolver<TParent>;
-    metaDescription?: MovieMetaToMetaDescriptionResolver<TParent>;
-  }
-  
-  export interface MovieMetaToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieMetaToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MovieMetaToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLMoviePathTypeResolver<TParent = any> {
-    path?: MoviePathToPathResolver<TParent>;
-    paths?: MoviePathToPathsResolver<TParent>;
-  }
-  
-  export interface MoviePathToPathResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface MoviePathToPathsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLMovieResourceTypesTypeResolver<TParent = any> {
-    resourceTypes?: MovieResourceTypesToResourceTypesResolver<TParent>;
-  }
-  
-  export interface MovieResourceTypesToResourceTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLArticleSearchResultTypeResolver<TParent = any> {
-    id?: ArticleSearchResultToIdResolver<TParent>;
-    title?: ArticleSearchResultToTitleResolver<TParent>;
-    supportedLanguages?: ArticleSearchResultToSupportedLanguagesResolver<TParent>;
-    url?: ArticleSearchResultToUrlResolver<TParent>;
-    metaDescription?: ArticleSearchResultToMetaDescriptionResolver<TParent>;
-    metaImage?: ArticleSearchResultToMetaImageResolver<TParent>;
-    contentType?: ArticleSearchResultToContentTypeResolver<TParent>;
-    traits?: ArticleSearchResultToTraitsResolver<TParent>;
-    contexts?: ArticleSearchResultToContextsResolver<TParent>;
-  }
-  
-  export interface ArticleSearchResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleSearchResultToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleSearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleSearchResultToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleSearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleSearchResultToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleSearchResultToContentTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleSearchResultToTraitsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ArticleSearchResultToContextsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface GQLLearningpathSearchResultTypeResolver<TParent = any> {
-    id?: LearningpathSearchResultToIdResolver<TParent>;
-    title?: LearningpathSearchResultToTitleResolver<TParent>;
-    supportedLanguages?: LearningpathSearchResultToSupportedLanguagesResolver<TParent>;
-    url?: LearningpathSearchResultToUrlResolver<TParent>;
-    metaDescription?: LearningpathSearchResultToMetaDescriptionResolver<TParent>;
-    metaImage?: LearningpathSearchResultToMetaImageResolver<TParent>;
-    contentType?: LearningpathSearchResultToContentTypeResolver<TParent>;
-    traits?: LearningpathSearchResultToTraitsResolver<TParent>;
-    contexts?: LearningpathSearchResultToContextsResolver<TParent>;
-  }
-  
-  export interface LearningpathSearchResultToIdResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToTitleResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToSupportedLanguagesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToUrlResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToMetaDescriptionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToContentTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToTraitsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToContextsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
 }
