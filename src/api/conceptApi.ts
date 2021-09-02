@@ -9,7 +9,6 @@
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
-import { fetchArticlesPage } from './articleApi';
 import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
 
 interface ConceptSearchResultJson extends SearchResultJson {
@@ -119,35 +118,13 @@ export async function fetchDetailedConcept(
       title: concept.title.title,
       content: concept.content.content,
       created: concept.created,
+      articleIds: concept.articleIds,
       subjectIds: concept.subjectIds,
       copyright: concept.copyright,
     };
     const metaImageId = concept.metaImage?.url?.split('/').pop();
     if (metaImageId) {
       detailedConcept.image = await fetchImage(metaImageId, context);
-    }
-    if (concept.articleIds) {
-      const articles = await fetchArticlesPage(
-        concept.articleIds,
-        context,
-        concept.articleIds.length,
-        1,
-      );
-      detailedConcept.articles = concept.articleIds.map(articleId => {
-        const article = articles.results.find((item: { id: number }) => {
-          return item.id.toString() === articleId.toString();
-        });
-        if (article) {
-          return {
-            id: article.id,
-            title: article.title.title,
-            introduction: article.introduction?.introduction,
-            metaDescription: article.metaDescription?.metaDescription,
-            lastUpdated: article.lastUpdated,
-            metaImage: article.metaImage,
-          };
-        }
-      });
     }
     if (concept.visualElement) {
       detailedConcept.visualElement = await parseVisualElement(

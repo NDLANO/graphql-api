@@ -11,6 +11,7 @@ import {
   fetchConcepts,
   fetchDetailedConcept,
   fetchListingPage,
+  fetchArticles,
 } from '../api';
 
 export const Query = {
@@ -44,4 +45,32 @@ export const Query = {
   },
 };
 
-export const resolvers = {};
+export const resolvers = {
+  DetailedConcept: {
+    async subjectNames(
+      detailedConcept: GQLDetailedConcept,
+      _: any,
+      context: Context,
+    ): Promise<string[]> {
+      const data = await context.loaders.subjectsLoader.load('all');
+      return Promise.all(
+        detailedConcept.subjectIds?.map(id => {
+          return data.subjects.find(subject => subject.id === id).name;
+        }),
+      );
+    },
+    async articles(
+      detailedConcept: GQLDetailedConcept,
+      _: any,
+      context: Context,
+    ): Promise<GQLMeta[]> {
+      if (detailedConcept.articleIds?.length > 0) {
+        const articles = await fetchArticles(
+          detailedConcept.articleIds,
+          context,
+        );
+        return articles;
+      }
+    },
+  },
+};
