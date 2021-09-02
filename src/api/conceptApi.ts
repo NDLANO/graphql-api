@@ -99,7 +99,7 @@ export async function fetchDetailedConcepts(
 ): Promise<GQLDetailedConcept[]> {
   return (
     await Promise.all(
-      conceptIds.map(async id =>  fetchDetailedConcept(id, context)),
+      conceptIds.map(async id => fetchDetailedConcept(id, context)),
     )
   ).filter(c => !!c);
 }
