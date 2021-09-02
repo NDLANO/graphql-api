@@ -99,13 +99,7 @@ export async function fetchDetailedConcepts(
 ): Promise<GQLDetailedConcept[]> {
   return (
     await Promise.all(
-      conceptIds.map(async id => {
-        try {
-          return fetchDetailedConcept(id, context);
-        } catch (e) {
-          return undefined;
-        }
-      }),
+      conceptIds.map(async id =>  fetchDetailedConcept(id, context)),
     )
   ).filter(c => !!c);
 }
@@ -118,48 +112,53 @@ export async function fetchDetailedConcept(
     `/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`,
     context,
   );
-  const concept: ConceptSearchResultJson = await resolveJson(response);
-  const detailedConcept: GQLDetailedConcept = {
-    title: concept.title.title,
-    content: concept.content.content,
-    created: concept.created,
-    subjectIds: concept.subjectIds,
-    copyright: concept.copyright,
-  };
-  const metaImageId = concept.metaImage?.url?.split('/').pop();
-  if (metaImageId) {
-    detailedConcept.image = await fetchImage(metaImageId, context);
-  }
-  if (concept.articleIds) {
-    const articles = await fetchArticlesPage(
-      concept.articleIds,
-      context,
-      concept.articleIds.length,
-      1,
-    );
-    detailedConcept.articles = concept.articleIds.map(articleId => {
-      const article = articles.results.find((item: { id: number }) => {
-        return item.id.toString() === articleId.toString();
+  try {
+    const concept: ConceptSearchResultJson = await resolveJson(response);
+    const detailedConcept: GQLDetailedConcept = {
+      id: concept.id,
+      title: concept.title.title,
+      content: concept.content.content,
+      created: concept.created,
+      subjectIds: concept.subjectIds,
+      copyright: concept.copyright,
+    };
+    const metaImageId = concept.metaImage?.url?.split('/').pop();
+    if (metaImageId) {
+      detailedConcept.image = await fetchImage(metaImageId, context);
+    }
+    if (concept.articleIds) {
+      const articles = await fetchArticlesPage(
+        concept.articleIds,
+        context,
+        concept.articleIds.length,
+        1,
+      );
+      detailedConcept.articles = concept.articleIds.map(articleId => {
+        const article = articles.results.find((item: { id: number }) => {
+          return item.id.toString() === articleId.toString();
+        });
+        if (article) {
+          return {
+            id: article.id,
+            title: article.title.title,
+            introduction: article.introduction?.introduction,
+            metaDescription: article.metaDescription?.metaDescription,
+            lastUpdated: article.lastUpdated,
+            metaImage: article.metaImage,
+          };
+        }
       });
-      if (article) {
-        return {
-          id: article.id,
-          title: article.title.title,
-          introduction: article.introduction?.introduction,
-          metaDescription: article.metaDescription?.metaDescription,
-          lastUpdated: article.lastUpdated,
-          metaImage: article.metaImage,
-        };
-      }
-    });
+    }
+    if (concept.visualElement) {
+      detailedConcept.visualElement = await parseVisualElement(
+        concept.visualElement.visualElement,
+        context,
+      );
+    }
+    return detailedConcept;
+  } catch (e) {
+    return undefined;
   }
-  if (concept.visualElement) {
-    detailedConcept.visualElement = await parseVisualElement(
-      concept.visualElement.visualElement,
-      context,
-    );
-  }
-  return detailedConcept;
 }
 
 export async function fetchListingPage(
