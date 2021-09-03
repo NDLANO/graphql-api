@@ -37,19 +37,21 @@ export async function fetchArticle(
   };
 
   if (transposedArticle.visualElement) {
-    transposedArticle.visualElement = {
-      ...(await parseVisualElement(
-        article.visualElement.visualElement,
-        context,
-      )),
-      embed: article.visualElement.visualElement,
-      language: article.visualElement.language,
-    };
+    try {
+      transposedArticle.visualElement = {
+        ...(await parseVisualElement(
+          article.visualElement.visualElement,
+          context,
+        )),
+        embed: article.visualElement.visualElement,
+        language: article.visualElement.language,
+      };
+    } catch (e) {
+      transposedArticle.visualElement = undefined;
+    }
   }
 
-  return new Promise((resolve, reject) => {
-    resolve(transposedArticle);
-  });
+  return transposedArticle;
 }
 
 export async function fetchArticlesPage(
