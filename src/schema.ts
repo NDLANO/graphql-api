@@ -656,6 +656,7 @@ export const typeDefs = gql`
     tags: [String!]
     image: ImageLicense
     subjectIds: [String!]
+    subjectNames: [String!]
     articleIds: [String!]
     articles: [Meta!]
     visualElement: VisualElement
