@@ -13,6 +13,7 @@ import {
   fetchCoreElementReferences,
   fetchCrossSubjectTopics,
 } from '../api';
+import { fetchLK06CompetenceGoalSet } from '../api/curriculumApi';
 
 export const Query = {
   async competenceGoals(
@@ -59,6 +60,13 @@ export const resolvers = {
       _: any,
       context: Context,
     ): Promise<GQLReference> {
+      if (competenceGoal.competenceAimSetId) {
+        return fetchLK06CompetenceGoalSet(
+          competenceGoal.competenceAimSetId,
+          context,
+        );
+      }
+
       if (competenceGoal.competenceGoalSetCode) {
         return fetchCompetenceSet(
           competenceGoal.competenceGoalSetCode,

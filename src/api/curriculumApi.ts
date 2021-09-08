@@ -49,6 +49,12 @@ interface Reference {
   tittel: string;
 }
 
+interface CompetenceAimSet extends CompetenceAim {
+  competenceAims: CompetenceAim;
+  psis: string[];
+  upstreamId: string;
+}
+
 interface Name {
   scopes: string[];
   name: string;
@@ -64,6 +70,7 @@ interface CompetenceAim {
 interface CurriculumRelation {
   curriculumId: string;
   competenceAim: CompetenceAim;
+  competenceAimSetId: string;
 }
 
 interface Resource {
@@ -398,9 +405,27 @@ async function fetchLK06CompetenceGoals(
     )} (${relation.competenceAim.id})`,
     type: 'LK06',
     curriculumId: relation.curriculumId,
+    competenceAimSetId: relation.competenceAimSetId,
     parentLinks: relation.competenceAim.links.parents,
   }));
   return competenceGoals;
+}
+
+export async function fetchLK06CompetenceGoalSet(
+  competenceAimSetId: string,
+  context: Context,
+): Promise<GQLReference> {
+  const response = await curriculumFetch(
+    `https://mycurriculum.ndla.no/v1/users/ndla/competence-aim-sets/${competenceAimSetId}`,
+    context,
+  );
+  const json: { competenceAimSet: CompetenceAimSet } = await resolveJson(
+    response,
+  );
+  return {
+    id: json.competenceAimSet.id,
+    title: json.competenceAimSet.names.find(element => element.name).name,
+  };
 }
 
 export async function fetchLK06Curriculum(
