@@ -6,10 +6,14 @@
  *
  */
 
+import { localConverter, ndlaUrl } from '../config';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { localConverter } from '../config';
-import { getArticleIdFromUrn } from '../utils/articleHelpers';
+import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
 import { parseVisualElement } from '../utils/visualelementHelpers';
+import {
+  queryResourcesOnContentURI,
+  queryTopicsOnContentURI,
+} from './taxonomyApi';
 
 export async function fetchArticle(
   params: {
@@ -32,8 +36,61 @@ export async function fetchArticle(
   );
 
   const article = await resolveJson(response);
+  const nullableRelatedContent = await Promise.all(
+    article?.relatedContent?.map(async (rc: any) => {
+      if (typeof rc === 'number') {
+        return Promise.resolve(fetchArticle({ articleId: `${rc}` }, context))
+          .then(async related => {
+            let topicOrResource;
+            if (related.articleType === 'topic-article') {
+              topicOrResource = await queryTopicsOnContentURI(
+                `urn:article:${related.id}`,
+                context,
+              );
+            } else {
+              topicOrResource = await queryResourcesOnContentURI(
+                `urn:article:${related.id}`,
+                context,
+              );
+            }
+            return topicOrResource || related;
+          })
+          .then((topicOrResource: any) => {
+            let path = `/article/${topicOrResource.id}`;
+            let title = '';
+            if (topicOrResource.hasOwnProperty('paths')) {
+              path = topicOrResource.path;
+              if (params.subjectId) {
+                const primaryPath = findPrimaryPath(
+                  topicOrResource.paths,
+                  params.subjectId,
+                );
+                path = primaryPath || path;
+              }
+              title = topicOrResource.name;
+            } else {
+              title = topicOrResource.title;
+            }
+            return {
+              title,
+              url: `${ndlaUrl}${path}`,
+            };
+          })
+          .catch(err => {
+            return undefined;
+          });
+      } else {
+        return {
+          title: rc.title,
+          url: rc.url,
+        };
+      }
+    }),
+  );
+  const relatedContent = nullableRelatedContent.filter((rc: any) => !!rc);
   let transposedArticle: GQLArticle = {
     ...article,
+    relatedContent,
   };
 
   if (transposedArticle.visualElement) {

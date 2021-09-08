@@ -16,6 +16,17 @@ export function getLearningpathIdFromUrn(urn: string): string {
   return urn.replace('urn:learningpath:', '');
 }
 
+export function stripUrn(str: string): string {
+  return str.replace('urn:', '');
+}
+
+export function findPrimaryPath(
+  paths: string[],
+  subjectId: string,
+): string | undefined {
+  return paths.find(path => path.split('/')[1] === stripUrn(subjectId));
+}
+
 export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
   context: Context,
