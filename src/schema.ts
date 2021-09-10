@@ -304,6 +304,11 @@ export const typeDefs = gql`
     copyText: String
   }
 
+  type RelatedContent {
+    title: String!
+    url: String!
+  }
+
   type Article {
     id: Int!
     revision: Int!
@@ -333,6 +338,7 @@ export const typeDefs = gql`
     oembed: String
     conceptIds: [String!]
     concepts: [DetailedConcept!]
+    relatedContent: [RelatedContent!]
   }
 
   type embedVisualelement {

@@ -7,6 +7,7 @@
  */
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
+import { findPrimaryPath } from '../utils/articleHelpers';
 
 interface Topic {
   id: string;
@@ -17,17 +18,6 @@ interface FetchTopicResourcesParams {
   relevance: string;
   filters?: string;
   subjectId?: string;
-}
-
-function removeUrn(str: string): string {
-  return str.replace('urn:', '');
-}
-
-function findPrimaryPath(
-  paths: string[],
-  subjectId: string,
-): string | undefined {
-  return paths?.find(path => path.split('/')[1] === removeUrn(subjectId));
 }
 
 export async function fetchResource(

@@ -2,6 +2,7 @@ import {
   isNDLAEmbedUrl,
   getArticleIdFromUrn,
   getLearningpathIdFromUrn,
+  findPrimaryPath,
 } from '../articleHelpers';
 
 const testNdlaFrontendUrl =
@@ -55,4 +56,16 @@ test('getArticleIdFromUrn urn:article:1 is 1', async () => {
 
 test('getLearningpathIdFromUrn urn:learningpath:1 is 1', async () => {
   expect(getLearningpathIdFromUrn('urn:learningpath:1')).toBe('1');
+});
+
+test('findPrimaryPath returns correct path for subject, or undefined', () => {
+  const path1 = '/subject:1/topic:1/resource:1';
+  const path2 = '/subject:2/topic:2/resource:2';
+  const path3 = '/subject:3/topic:3/resource:3';
+  const paths = [path1, path2, path3];
+  expect(findPrimaryPath(paths, 'urn:subject:1')).toBe(path1);
+  expect(findPrimaryPath(paths, 'urn:subject:2')).toBe(path2);
+  expect(findPrimaryPath(paths, 'urn:subject:3')).toBe(path3);
+  expect(findPrimaryPath(paths, 'urn:subject:4')).toBe(undefined);
+  expect(findPrimaryPath([], 'urn:subject:1')).toBe(undefined);
 });

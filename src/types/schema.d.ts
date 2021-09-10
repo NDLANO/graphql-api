@@ -318,6 +318,11 @@ declare global {
     copyText?: string;
   }
   
+  export interface GQLRelatedContent {
+    title: string;
+    url: string;
+  }
+  
   export interface GQLArticle {
     id: number;
     revision: number;
@@ -344,6 +349,7 @@ declare global {
     oembed?: string;
     conceptIds?: Array<string>;
     concepts?: Array<GQLDetailedConcept>;
+    relatedContent?: Array<GQLRelatedContent>;
   }
   
   export interface GQLembedVisualelement {
@@ -833,6 +839,7 @@ declare global {
     H5pLicense?: GQLH5pLicenseTypeResolver;
     ConceptLicense?: GQLConceptLicenseTypeResolver;
     ArticleMetaData?: GQLArticleMetaDataTypeResolver;
+    RelatedContent?: GQLRelatedContentTypeResolver;
     Article?: GQLArticleTypeResolver;
     embedVisualelement?: GQLembedVisualelementTypeResolver;
     CompetenceGoal?: GQLCompetenceGoalTypeResolver;
@@ -1920,6 +1927,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLRelatedContentTypeResolver<TParent = any> {
+    title?: RelatedContentToTitleResolver<TParent>;
+    url?: RelatedContentToUrlResolver<TParent>;
+  }
+  
+  export interface RelatedContentToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface RelatedContentToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLArticleTypeResolver<TParent = any> {
     id?: ArticleToIdResolver<TParent>;
     revision?: ArticleToRevisionResolver<TParent>;
@@ -1946,6 +1966,7 @@ declare global {
     oembed?: ArticleToOembedResolver<TParent>;
     conceptIds?: ArticleToConceptIdsResolver<TParent>;
     concepts?: ArticleToConceptsResolver<TParent>;
+    relatedContent?: ArticleToRelatedContentResolver<TParent>;
   }
   
   export interface ArticleToIdResolver<TParent = any, TResult = any> {
@@ -2049,6 +2070,10 @@ declare global {
   }
   
   export interface ArticleToConceptsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToRelatedContentResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
