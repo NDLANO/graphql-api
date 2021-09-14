@@ -371,6 +371,7 @@ declare global {
     crossSubjectTopics?: Array<GQLElement>;
     coreElementsCodes?: Array<GQLElement>;
     coreElements?: Array<GQLElement>;
+    competenceAimSetId?: string;
   }
   
   export interface GQLCoreElement {
@@ -2100,6 +2101,7 @@ declare global {
     crossSubjectTopics?: CompetenceGoalToCrossSubjectTopicsResolver<TParent>;
     coreElementsCodes?: CompetenceGoalToCoreElementsCodesResolver<TParent>;
     coreElements?: CompetenceGoalToCoreElementsResolver<TParent>;
+    competenceAimSetId?: CompetenceGoalToCompetenceAimSetIdResolver<TParent>;
   }
   
   export interface CompetenceGoalToIdResolver<TParent = any, TResult = any> {
@@ -2155,6 +2157,10 @@ declare global {
   }
   
   export interface CompetenceGoalToCoreElementsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface CompetenceGoalToCompetenceAimSetIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

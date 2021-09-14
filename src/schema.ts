@@ -360,6 +360,7 @@ export const typeDefs = gql`
     crossSubjectTopics: [Element!]
     coreElementsCodes: [Element!]
     coreElements: [Element!]
+    competenceAimSetId: String
   }
 
   type CoreElement {
