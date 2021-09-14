@@ -33,10 +33,10 @@ interface TopicResponse {
 export const Query = {
   async topic(
     _: any,
-    { id, subjectId }: QueryToTopicArgs,
+    { id }: QueryToTopicArgs,
     context: Context,
   ): Promise<GQLTopic> {
-    return fetchTopic({ id, subjectId }, context);
+    return fetchTopic({ id }, context);
   },
   async topics(
     _: any,

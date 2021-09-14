@@ -3483,6 +3483,7 @@ declare global {
   export interface QueryToResourceArgs {
     id: string;
     subjectId?: string;
+    topicId?: string;
   }
   export interface QueryToResourceResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToResourceArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
