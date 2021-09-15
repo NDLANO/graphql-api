@@ -25,10 +25,10 @@ import { ndlaUrl } from '../config';
 export const Query = {
   async resource(
     _: any,
-    { id, subjectId }: QueryToResourceArgs,
+    { id, subjectId, topicId }: QueryToResourceArgs,
     context: Context,
   ): Promise<GQLResource> {
-    return fetchResource({ id, subjectId }, context);
+    return fetchResource({ id, subjectId, topicId }, context);
   },
   async resourceTypes(
     _: any,
