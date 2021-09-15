@@ -23,11 +23,11 @@ export function stripUrn(str: string): string {
 export function findPrimaryPath(
   paths: string[],
   subjectId: string,
-  topicId?: string,
+  topicId = '',
 ): string | undefined {
   return paths
     .filter(path => path.startsWith(`/${stripUrn(subjectId)}/`))
-    .find(path => path.includes(`/${stripUrn(topicId || '')}`));
+    .find(path => path.includes(`/${stripUrn(topicId)}`));
 }
 
 export async function filterMissingArticles(
