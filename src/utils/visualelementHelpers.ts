@@ -89,6 +89,7 @@ export async function parseVisualElement(
       >(visualElementEmbed, 'images', context);
       visualElement.image = {
         ...image,
+        ...data,
         ...license,
         caption: data.caption,
       };

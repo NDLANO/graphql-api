@@ -605,12 +605,12 @@ export const typeDefs = gql`
     resourceid: String
     alt: String
     caption: String
-    lowerRightX: Int
-    lowerRightY: Int
-    upperLeftX: Int
-    upperLeftY: Int
-    focalX: Int
-    focalY: Int
+    lowerRightX: Float
+    lowerRightY: Float
+    upperLeftX: Float
+    upperLeftY: Float
+    focalX: Float
+    focalY: Float
     src: String!
     altText: String!
     contentType: String
