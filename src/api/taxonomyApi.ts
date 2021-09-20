@@ -7,7 +7,7 @@
  */
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { findPrimaryPath } from '../utils/articleHelpers';
+import { findPrimaryPath, getArticleIdFromUrn } from '../utils/articleHelpers';
 
 interface Topic {
   id: string;
@@ -45,7 +45,15 @@ export async function fetchResource(
     const primaryPath = findPrimaryPath(paths, subjectId, topicId);
     path = primaryPath ? primaryPath : path;
   }
-  return { ...resource, path, paths };
+
+  let availability = 'everyone';
+  if (resource.contentUri?.startsWith('urn:article')) {
+    const article = await context.loaders.articlesLoader.load(
+      getArticleIdFromUrn(resource.contentUri),
+    );
+    availability = article.availability;
+  }
+  return { ...resource, path, paths, availability };
 }
 
 export async function fetchFilters(
@@ -117,7 +125,14 @@ export async function fetchTopic(params: { id: string }, context: Context) {
     `/${context.taxonomyUrl}/v1/topics/${params.id}?language=${context.language}`,
     context,
   );
-  return await resolveJson(response);
+  const topic: GQLTopic = await resolveJson(response);
+  const article = await context.loaders.articlesLoader.load(
+    getArticleIdFromUrn(topic.contentUri),
+  );
+  return {
+    ...topic,
+    availability: article?.availability,
+  };
 }
 
 export async function fetchSubtopics(
