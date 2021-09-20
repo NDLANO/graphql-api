@@ -92,6 +92,7 @@ declare global {
     metaDescription?: string;
     metaImage?: GQLMetaImage;
     lastUpdated?: string;
+    availability?: string;
   }
   
   export interface GQLLearningpathStepEmbedUrl {
@@ -173,6 +174,7 @@ declare global {
     filters?: Array<GQLFilter>;
     relevanceId?: string;
     rank?: number;
+    availability?: string;
   }
   
   /** Use this to resolve interface type TaxonomyEntity */
@@ -196,6 +198,7 @@ declare global {
     learningpath?: GQLLearningpath;
     filters?: Array<GQLFilter>;
     rank?: number;
+    availability?: string;
     relevanceId?: string;
     resourceTypes?: Array<GQLResourceType>;
     parentTopics?: Array<GQLTopic>;
@@ -213,6 +216,7 @@ declare global {
     article?: GQLArticle;
     filters?: Array<GQLFilter>;
     rank?: number;
+    availability?: string;
     relevanceId?: string;
     isPrimary?: boolean;
     parent?: string;
@@ -350,6 +354,7 @@ declare global {
     conceptIds?: Array<string>;
     concepts?: Array<GQLDetailedConcept>;
     relatedContent?: Array<GQLRelatedContent>;
+    availability?: string;
   }
   
   export interface GQLembedVisualelement {
@@ -1126,6 +1131,7 @@ declare global {
     metaDescription?: MetaToMetaDescriptionResolver<TParent>;
     metaImage?: MetaToMetaImageResolver<TParent>;
     lastUpdated?: MetaToLastUpdatedResolver<TParent>;
+    availability?: MetaToAvailabilityResolver<TParent>;
   }
   
   export interface MetaToIdResolver<TParent = any, TResult = any> {
@@ -1149,6 +1155,10 @@ declare global {
   }
   
   export interface MetaToLastUpdatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MetaToAvailabilityResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1418,6 +1428,7 @@ declare global {
     learningpath?: ResourceToLearningpathResolver<TParent>;
     filters?: ResourceToFiltersResolver<TParent>;
     rank?: ResourceToRankResolver<TParent>;
+    availability?: ResourceToAvailabilityResolver<TParent>;
     relevanceId?: ResourceToRelevanceIdResolver<TParent>;
     resourceTypes?: ResourceToResourceTypesResolver<TParent>;
     parentTopics?: ResourceToParentTopicsResolver<TParent>;
@@ -1473,6 +1484,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface ResourceToAvailabilityResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface ResourceToRelevanceIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
@@ -1500,6 +1515,7 @@ declare global {
     article?: TopicToArticleResolver<TParent>;
     filters?: TopicToFiltersResolver<TParent>;
     rank?: TopicToRankResolver<TParent>;
+    availability?: TopicToAvailabilityResolver<TParent>;
     relevanceId?: TopicToRelevanceIdResolver<TParent>;
     isPrimary?: TopicToIsPrimaryResolver<TParent>;
     parent?: TopicToParentResolver<TParent>;
@@ -1552,6 +1568,10 @@ declare global {
   }
   
   export interface TopicToRankResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToAvailabilityResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1968,6 +1988,7 @@ declare global {
     conceptIds?: ArticleToConceptIdsResolver<TParent>;
     concepts?: ArticleToConceptsResolver<TParent>;
     relatedContent?: ArticleToRelatedContentResolver<TParent>;
+    availability?: ArticleToAvailabilityResolver<TParent>;
   }
   
   export interface ArticleToIdResolver<TParent = any, TResult = any> {
@@ -2075,6 +2096,10 @@ declare global {
   }
   
   export interface ArticleToRelatedContentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToAvailabilityResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

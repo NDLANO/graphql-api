@@ -15,7 +15,7 @@ declare global {
     shouldUseCache: boolean;
     taxonomyUrl: string;
     loaders?: {
-      articlesLoader?: DataLoader<string, any>;
+      articlesLoader?: DataLoader<string, GQLMeta>;
       learningpathsLoader?: DataLoader<string, any>;
       filterLoader?: DataLoader<string, GQLSubjectFilter[]>;
       subjectTopicsLoader?: DataLoader<

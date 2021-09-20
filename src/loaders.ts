@@ -21,7 +21,7 @@ import {
 } from './api';
 import { FrontpageResponse } from './api/frontpageApi';
 
-export function articlesLoader(context: Context): DataLoader<string, any> {
+export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
   return new DataLoader(
     async articleIds => {
       return fetchArticles(articleIds, context);

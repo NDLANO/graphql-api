@@ -87,6 +87,7 @@ export const typeDefs = gql`
     metaDescription: String
     metaImage: MetaImage
     lastUpdated: String
+    availability: String
   }
 
   type LearningpathStepEmbedUrl {
@@ -168,6 +169,7 @@ export const typeDefs = gql`
     filters: [Filter!]
     relevanceId: String
     rank: Int
+    availability: String
   }
 
   type Resource implements TaxonomyEntity {
@@ -182,6 +184,7 @@ export const typeDefs = gql`
     learningpath: Learningpath
     filters: [Filter!]
     rank: Int
+    availability: String
     relevanceId: String
     resourceTypes: [ResourceType!]
     parentTopics: [Topic!]
@@ -199,6 +202,7 @@ export const typeDefs = gql`
     article(filterIds: String, subjectId: String): Article
     filters: [Filter!]
     rank: Int
+    availability: String
     relevanceId: String
     isPrimary: Boolean
     parent: String
@@ -339,6 +343,7 @@ export const typeDefs = gql`
     conceptIds: [String!]
     concepts: [DetailedConcept!]
     relatedContent: [RelatedContent!]
+    availability: String
   }
 
   type embedVisualelement {
