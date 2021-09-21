@@ -56,13 +56,23 @@ export async function filterMissingArticles(
     ),
   );
   const nonNullArticles = articles.filter(article => !!article);
-  return [
-    ...learningpathResources,
-    ...articleResources.filter(taxonomyEntity =>
-      nonNullArticles.find(
-        article =>
-          getArticleIdFromUrn(taxonomyEntity.contentUri) === `${article.id}`,
-      ),
+
+  const activeResources = articleResources.filter(taxonomyEntity =>
+    nonNullArticles.find(
+      article =>
+        getArticleIdFromUrn(taxonomyEntity.contentUri) === `${article.id}`,
     ),
-  ];
+  );
+
+  const withAvailability = activeResources.map(taxonomyEntity => {
+    const article = nonNullArticles.find(
+      a => getArticleIdFromUrn(taxonomyEntity.contentUri) === `${a.id}`,
+    );
+    return {
+      ...taxonomyEntity,
+      availability: article.availability,
+    };
+  });
+
+  return [...learningpathResources, ...withAvailability];
 }

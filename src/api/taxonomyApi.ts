@@ -7,7 +7,7 @@
  */
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { findPrimaryPath } from '../utils/articleHelpers';
+import { findPrimaryPath, getArticleIdFromUrn } from '../utils/articleHelpers';
 
 interface Topic {
   id: string;
@@ -28,8 +28,7 @@ export async function fetchResource(
     `/${context.taxonomyUrl}/v1/resources/${id}/full?language=${context.language}`,
     context,
   );
-  const resource: GQLTaxonomyEntity = await resolveJson(response);
-
+  const resource: GQLResource = await resolveJson(response);
   // TODO: Replace parent-filtering with changes in taxonomy
   const data = await context.loaders.subjectsLoader.load('all');
   const paths = resource.paths?.filter(p => {
@@ -45,7 +44,22 @@ export async function fetchResource(
     const primaryPath = findPrimaryPath(paths, subjectId, topicId);
     path = primaryPath ? primaryPath : path;
   }
-  return { ...resource, path, paths };
+
+  let availability = 'everyone';
+  if (resource.contentUri?.startsWith('urn:article')) {
+    const article = await context.loaders.articlesLoader.load(
+      getArticleIdFromUrn(resource.contentUri),
+    );
+    availability = article.availability;
+  }
+
+  let relevanceId;
+  if (topicId) {
+    const parent = resource.parentTopics.find(topic => topic.id === topicId);
+    relevanceId = parent?.relevanceId || 'urn:relevance:core';
+  }
+
+  return { ...resource, path, paths, availability, relevanceId };
 }
 
 export async function fetchFilters(
@@ -117,7 +131,14 @@ export async function fetchTopic(params: { id: string }, context: Context) {
     `/${context.taxonomyUrl}/v1/topics/${params.id}?language=${context.language}`,
     context,
   );
-  return await resolveJson(response);
+  const topic: GQLTopic = await resolveJson(response);
+  const article = await context.loaders.articlesLoader.load(
+    getArticleIdFromUrn(topic.contentUri),
+  );
+  return {
+    ...topic,
+    availability: article?.availability,
+  };
 }
 
 export async function fetchSubtopics(
