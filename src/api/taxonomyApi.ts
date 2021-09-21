@@ -53,7 +53,7 @@ export async function fetchResource(
     availability = article.availability;
   }
 
-  let relevanceId = undefined;
+  let relevanceId;
   if (topicId) {
     const parent = resource.parentTopics.find(topic => topic.id === topicId);
     relevanceId = parent?.relevanceId || 'urn:relevance:core';
