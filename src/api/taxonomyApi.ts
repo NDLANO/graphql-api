@@ -28,8 +28,7 @@ export async function fetchResource(
     `/${context.taxonomyUrl}/v1/resources/${id}/full?language=${context.language}`,
     context,
   );
-  const resource: GQLTaxonomyEntity = await resolveJson(response);
-
+  const resource: GQLResource = await resolveJson(response);
   // TODO: Replace parent-filtering with changes in taxonomy
   const data = await context.loaders.subjectsLoader.load('all');
   const paths = resource.paths?.filter(p => {
@@ -53,7 +52,14 @@ export async function fetchResource(
     );
     availability = article.availability;
   }
-  return { ...resource, path, paths, availability };
+
+  let relevanceId = undefined;
+  if (topicId) {
+    const parent = resource.parentTopics.find(topic => topic.id === topicId);
+    relevanceId = parent?.relevanceId || 'urn:relevance:core';
+  }
+
+  return { ...resource, path, paths, availability, relevanceId };
 }
 
 export async function fetchFilters(
