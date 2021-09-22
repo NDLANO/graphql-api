@@ -21,6 +21,7 @@ export async function fetchArticle(
     filterIds?: string;
     subjectId?: string;
     isOembed?: string;
+    showVisualElement?: string;
     path?: string;
   },
   context: Context,
@@ -29,9 +30,12 @@ export async function fetchArticle(
   const filterParam = params.filterIds ? `&filters=${params.filterIds}` : '';
   const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : '';
   const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : '';
+  const visualElementParam = params.showVisualElement
+    ? `&showVisualElement=${params.showVisualElement}`
+    : '';
   const pathParam = params.path ? `&path=${params.path}` : '';
   const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${oembedParam}${pathParam}`,
+    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${oembedParam}${pathParam}${visualElementParam}`,
     context,
   );
 

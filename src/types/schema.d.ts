@@ -1558,6 +1558,7 @@ declare global {
   export interface TopicToArticleArgs {
     filterIds?: string;
     subjectId?: string;
+    showVisualElement?: string;
   }
   export interface TopicToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: TopicToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -3526,6 +3527,7 @@ declare global {
     subjectId?: string;
     isOembed?: string;
     path?: string;
+    showVisualElement?: string;
   }
   export interface QueryToArticleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToArticleArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

@@ -75,6 +75,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
               articleId,
               filterIds: args.filterIds,
               subjectId: args.subjectId,
+              showVisualElement: args.showVisualElement,
               path: topic.path,
             },
             context,
