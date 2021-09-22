@@ -199,7 +199,11 @@ export const typeDefs = gql`
     paths: [String!]
     meta: Meta
     metadata: TaxonomyMetadata
-    article(filterIds: String, subjectId: String): Article
+    article(
+      filterIds: String
+      subjectId: String
+      showVisualElement: String
+    ): Article
     filters: [Filter!]
     rank: Int
     availability: String
@@ -753,6 +757,7 @@ export const typeDefs = gql`
       subjectId: String
       isOembed: String
       path: String
+      showVisualElement: String
     ): Article
     subject(id: String!): Subject
     subjectpage(id: String!): SubjectPage
