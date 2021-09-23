@@ -521,6 +521,7 @@ declare global {
     frontpageFilters?: Array<GQLSubjectFilter>;
     subjectpage?: GQLSubjectPage;
     topics?: Array<GQLTopic>;
+    allTopics?: Array<GQLTopic>;
   }
   
   export interface GQLSearchResult {
@@ -744,8 +745,8 @@ declare global {
   
   export interface GQLGroupSearch {
     language?: string;
-    resourceType?: string;
-    resources?: Array<GQLGroupSearchResult>;
+    resourceType: string;
+    resources: Array<GQLGroupSearchResult>;
     suggestions?: Array<GQLSuggestionResult>;
     aggregations?: Array<GQLAggregationResult>;
     totalCount?: number;
@@ -2631,6 +2632,7 @@ declare global {
     frontpageFilters?: SubjectToFrontpageFiltersResolver<TParent>;
     subjectpage?: SubjectToSubjectpageResolver<TParent>;
     topics?: SubjectToTopicsResolver<TParent>;
+    allTopics?: SubjectToAllTopicsResolver<TParent>;
   }
   
   export interface SubjectToIdResolver<TParent = any, TResult = any> {
@@ -2671,6 +2673,10 @@ declare global {
   }
   export interface SubjectToTopicsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: SubjectToTopicsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToAllTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface GQLSearchResultTypeResolver<TParent = any> {

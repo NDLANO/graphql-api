@@ -510,6 +510,7 @@ export const typeDefs = gql`
     frontpageFilters: [SubjectFilter!]
     subjectpage: SubjectPage
     topics(all: Boolean, filterIds: String): [Topic!]
+    allTopics: [Topic!]
   }
 
   interface SearchResult {
@@ -722,8 +723,8 @@ export const typeDefs = gql`
 
   type GroupSearch {
     language: String
-    resourceType: String
-    resources: [GroupSearchResult!]
+    resourceType: String!
+    resources: [GroupSearchResult!]!
     suggestions: [SuggestionResult!]
     aggregations: [AggregationResult!]
     totalCount: Int
