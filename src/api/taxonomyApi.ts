@@ -53,13 +53,15 @@ export async function fetchResource(
     availability = article.availability;
   }
 
+  let rank;
   let relevanceId;
   if (topicId) {
     const parent = resource.parentTopics.find(topic => topic.id === topicId);
+    rank = parent?.rank;
     relevanceId = parent?.relevanceId || 'urn:relevance:core';
   }
 
-  return { ...resource, path, paths, availability, relevanceId };
+  return { ...resource, path, paths, availability, rank, relevanceId };
 }
 
 export async function fetchFilters(
