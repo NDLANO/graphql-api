@@ -736,7 +736,7 @@ export const typeDefs = gql`
     resources: [GroupSearchResult!]!
     suggestions: [SuggestionResult!]
     aggregations: [AggregationResult!]
-    totalCount: Int
+    totalCount: Int!
   }
 
   type FrontPageResources {
