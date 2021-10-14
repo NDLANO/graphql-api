@@ -684,8 +684,8 @@ declare global {
   }
   
   export interface GQLDetailedConcept {
-    id?: number;
-    title?: string;
+    id: number;
+    title: string;
     content?: string;
     created?: string;
     tags?: Array<string>;
@@ -754,7 +754,7 @@ declare global {
     resources: Array<GQLGroupSearchResult>;
     suggestions?: Array<GQLSuggestionResult>;
     aggregations?: Array<GQLAggregationResult>;
-    totalCount?: number;
+    totalCount: number;
   }
   
   export interface GQLFrontPageResources {
