@@ -666,8 +666,8 @@ export const typeDefs = gql`
   }
 
   type DetailedConcept {
-    id: Int
-    title: String
+    id: Int!
+    title: String!
     content: String
     created: String
     tags: [String!]
