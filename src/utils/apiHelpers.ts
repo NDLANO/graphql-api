@@ -37,13 +37,22 @@ async function fetchHelper(
     disableCache: !context.shouldUseCache,
   });
 
-  const authHeaders = context.token
+  const accessTokenAuth = context.token
     ? { Authorization: `Bearer ${context.token.access_token}` }
-    : {};
+    : null;
+
+  const feideAuthorization = context.feideAuthorization
+    ? { feideAuthorization: context.feideAuthorization }
+    : null;
+
   const cacheHeaders = !context.shouldUseCache
     ? { 'Cache-Control': 'no-cache' }
     : {};
-  const headers = { ...cacheHeaders, ...authHeaders };
+
+  const headers = {
+    ...(feideAuthorization || accessTokenAuth),
+    ...cacheHeaders,
+  };
 
   return fetchFn(apiResourceUrl(path), {
     headers,
