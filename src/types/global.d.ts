@@ -11,7 +11,7 @@ declare global {
 
   interface Context {
     token?: AuthToken;
-    feideAuthorization: string;
+    feideAuthorization: string | null;
     language: string;
     shouldUseCache: boolean;
     taxonomyUrl: string;
