@@ -39,6 +39,16 @@ function getAcceptLanguage(request: Request): string {
   return 'nb';
 }
 
+function getFeideAuthorization(request: Request): string | null {
+  // tslint:disable-next-line:no-string-literal
+  const authorization = request.headers['feideauthorization'];
+
+  if (isString(authorization)) {
+    return authorization;
+  }
+  return null;
+}
+
 function getShouldUseCache(request: Request): boolean {
   const cacheControl = request.headers['cache-control'];
   return cacheControl !== 'no-cache';
@@ -51,10 +61,18 @@ const getTaxonomyUrl = (request: Request): string => {
 
 async function getContext({ req }: { req: Request }): Promise<Context> {
   const token = await getToken(req);
+  const feideAuthorization = getFeideAuthorization(req);
+
   const language = getAcceptLanguage(req);
   const shouldUseCache = getShouldUseCache(req);
   const taxonomyUrl = getTaxonomyUrl(req);
-  const defaultContext = { language, token, shouldUseCache, taxonomyUrl };
+  const defaultContext = {
+    language,
+    token,
+    feideAuthorization,
+    shouldUseCache,
+    taxonomyUrl,
+  };
 
   return {
     ...defaultContext,
