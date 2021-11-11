@@ -50,7 +50,8 @@ async function fetchHelper(
     : {};
 
   const headers = {
-    ...(feideAuthorization || accessTokenAuth),
+    ...feideAuthorization,
+    ...accessTokenAuth,
     ...cacheHeaders,
   };
 
