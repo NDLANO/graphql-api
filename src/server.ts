@@ -7,6 +7,7 @@
  */
 
 import express, { Request, Response } from 'express';
+import compression from 'compression';
 import { ApolloServer } from 'apollo-server-express';
 import { isString } from 'lodash';
 import { port } from './config';
@@ -29,6 +30,9 @@ import { resolvers } from './resolvers';
 const GRAPHQL_PORT = port;
 
 const app = express();
+
+// compress all responses
+app.use(compression());
 
 function getAcceptLanguage(request: Request): string {
   const language = request.headers['accept-language'];
