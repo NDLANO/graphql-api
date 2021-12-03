@@ -56,7 +56,7 @@ async function fetchHelper(
     ...cacheHeaders,
   };
 
-  return fetchFn(apiResourceUrl(path), {
+  return fetchFn(apiResourceUrl(path), context, {
     headers,
     ...options,
   });
