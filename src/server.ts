@@ -55,8 +55,13 @@ function getFeideAuthorization(request: Request): string | null {
 
 function getShouldUseCache(request: Request): boolean {
   const cacheControl = request.headers['cache-control']?.toLowerCase();
+  const feideAuthHeader = getFeideAuthorization(request);
   const disableCacheHeaders = ['no-cache', 'no-store'];
-  return !disableCacheHeaders.includes(cacheControl);
+
+  const cacheControlDisable = disableCacheHeaders.includes(cacheControl);
+  const feideHeaderPresent = !!feideAuthHeader;
+
+  return !cacheControlDisable && !feideHeaderPresent;
 }
 
 const getTaxonomyUrl = (request: Request): string => {
