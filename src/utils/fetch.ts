@@ -7,17 +7,18 @@
  */
 
 import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
-import { IKeyValueCache } from '../cache';
+import { IKeyValueCache, setHeaderIfShouldNotCache } from '../cache';
 import { performance } from 'perf_hooks';
 import logger from '../utils/logger';
 
 export default function createFetch(options: {
   cache: IKeyValueCache;
   disableCache: boolean;
+  context: Context;
 }) {
   if (!options || !options.cache) throw Error('cache is a required option');
 
-  const { cache } = options;
+  const { cache, context } = options;
 
   async function pureFetch(
     url: string | Request,
@@ -44,7 +45,6 @@ export default function createFetch(options: {
     const parsed = JSON.parse(data);
 
     return new Response(parsed.body, {
-      // @ts-ignore
       url,
       headers: parsed.headers,
       status: 200,
@@ -56,16 +56,21 @@ export default function createFetch(options: {
 
     if (response.status === 200) {
       const body = await response.text();
-      await cache.set(
-        url,
-        JSON.stringify({
-          body,
-          headers: response.headers,
-        }),
-        1000 * 60 * 5, // 5 min
-      );
+
+      const shouldCache = setHeaderIfShouldNotCache(response, context);
+
+      if (shouldCache) {
+        await cache.set(
+          url,
+          JSON.stringify({
+            body,
+            headers: response.headers,
+          }),
+          1000 * 60 * 5, // 5 min
+        );
+      }
+
       return new Response(body, {
-        // @ts-ignore
         url,
         headers: response.headers,
         status: 200,

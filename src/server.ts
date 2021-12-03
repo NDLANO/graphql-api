@@ -54,8 +54,9 @@ function getFeideAuthorization(request: Request): string | null {
 }
 
 function getShouldUseCache(request: Request): boolean {
-  const cacheControl = request.headers['cache-control'];
-  return cacheControl !== 'no-cache';
+  const cacheControl = request.headers['cache-control']?.toLowerCase();
+  const disableCacheHeaders = ['no-cache', 'no-store'];
+  return !disableCacheHeaders.includes(cacheControl);
 }
 
 const getTaxonomyUrl = (request: Request): string => {
@@ -63,7 +64,13 @@ const getTaxonomyUrl = (request: Request): string => {
   return taxonomyUrl === 'true' ? 'taxonomy2' : 'taxonomy';
 };
 
-async function getContext({ req }: { req: Request }): Promise<Context> {
+async function getContext({
+  req,
+  res,
+}: {
+  req: Request;
+  res: Response;
+}): Promise<Context> {
   const token = await getToken(req);
   const feideAuthorization = getFeideAuthorization(req);
 
@@ -76,6 +83,8 @@ async function getContext({ req }: { req: Request }): Promise<Context> {
     feideAuthorization,
     shouldUseCache,
     taxonomyUrl,
+    req,
+    res,
   };
 
   return {

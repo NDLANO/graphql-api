@@ -35,6 +35,7 @@ async function fetchHelper(
   const fetchFn = createFetch({
     cache,
     disableCache: !context.shouldUseCache,
+    context,
   });
 
   const accessTokenAuth = context.token

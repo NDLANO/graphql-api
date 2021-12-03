@@ -1,5 +1,6 @@
 import DataLoader from 'dataloader';
-import { RequestInit, RequestCache } from 'node-fetch';
+import { RequestInit, RequestCache, Headers } from 'node-fetch';
+import express, { Request, Response } from 'express';
 import { FrontpageResponse } from '../api/frontpageApi';
 
 declare global {
@@ -10,6 +11,8 @@ declare global {
   }
 
   interface Context {
+    req: Request;
+    res: Response;
     token?: AuthToken;
     feideAuthorization?: string;
     language: string;

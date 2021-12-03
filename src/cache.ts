@@ -6,6 +6,7 @@
  *
  */
 import createLRUCache from 'lru-cache';
+import { Response } from 'node-fetch';
 
 export interface IKeyValueCache {
   get(key: string): Promise<string | undefined>;
@@ -35,4 +36,33 @@ export const createCache = (
       }
     },
   };
+};
+
+const cacheControlValues = ['no-store', 'private', 'no-cache']; // In order of strictness
+const getCacheStrictness = (
+  cacheControlValue: string | number | string[],
+): number => {
+  return cacheControlValues.findIndex(header => cacheControlValue === header);
+};
+
+/** Returns `true` if the response can be cached, and `false` if the result shouldn't be cached. */
+export const setHeaderIfShouldNotCache = (
+  response: Response,
+  context: Context,
+): boolean => {
+  const { res } = context;
+
+  const cacheControlResponse = response.headers
+    .get('cache-control')
+    ?.toLowerCase();
+
+  const presetHeader = res.getHeader('cache-control');
+  const presetStrictness = getCacheStrictness(presetHeader);
+  const newStrictness = getCacheStrictness(cacheControlResponse);
+
+  if (presetStrictness < newStrictness) {
+    res.setHeader('cache-control', cacheControlResponse);
+  }
+
+  return newStrictness === -1;
 };
