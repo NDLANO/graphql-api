@@ -1,6 +1,6 @@
 import DataLoader from 'dataloader';
-import { RequestInit, RequestCache, Headers } from 'node-fetch';
-import express, { Request, Response } from 'express';
+import { RequestInit, RequestCache } from 'node-fetch';
+import { Request, Response } from 'express';
 import { FrontpageResponse } from '../api/frontpageApi';
 
 declare global {
