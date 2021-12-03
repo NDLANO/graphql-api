@@ -8,10 +8,15 @@
 
 const nock = require('nock');
 import DataLoader from 'dataloader';
+import { Request, Response } from 'express';
 import { Query } from '../subjectResolvers';
 
-const mockRequest: any = {};
-const mockResponse: any = {};
+const mockRequest = {} as Request;
+const mockResponse = {
+  getHeader: (name: string, value: string): string | null => {
+    return null;
+  },
+} as Response;
 
 test('Fetch subject should filter out invisible elements', async () => {
   const subjects = [
