@@ -8,7 +8,15 @@
 
 const nock = require('nock');
 import DataLoader from 'dataloader';
+import { Request, Response } from 'express';
 import { Query } from '../subjectResolvers';
+
+const mockRequest = {} as Request;
+const mockResponse = {
+  getHeader: (name: string, value: string): string | null => {
+    return null;
+  },
+} as Response;
 
 test('Fetch subject should filter out invisible elements', async () => {
   const subjects = [
@@ -43,6 +51,8 @@ test('Fetch subject should filter out invisible elements', async () => {
   const subjectsLoader = new DataLoader(loadAll);
 
   const subs = await Query.subjects(1, 1, {
+    req: mockRequest,
+    res: mockResponse,
     language: 'nb',
     shouldUseCache: false,
     taxonomyUrl: 'taxonomy',
@@ -76,6 +86,8 @@ test('Fetch subject filters should filter out invisible elements', async () => {
     ]);
 
   const subs = await Query.filters(1, 1, {
+    req: mockRequest,
+    res: mockResponse,
     language: 'nb',
     shouldUseCache: false,
     taxonomyUrl: 'taxonomy',

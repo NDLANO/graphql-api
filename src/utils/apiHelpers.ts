@@ -35,6 +35,7 @@ async function fetchHelper(
   const fetchFn = createFetch({
     cache,
     disableCache: !context.shouldUseCache,
+    context,
   });
 
   const accessTokenAuth = context.token
@@ -55,7 +56,7 @@ async function fetchHelper(
     ...cacheHeaders,
   };
 
-  return fetchFn(apiResourceUrl(path), {
+  return fetchFn(apiResourceUrl(path), context, {
     headers,
     ...options,
   });

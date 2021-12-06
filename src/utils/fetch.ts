@@ -7,13 +7,14 @@
  */
 
 import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
-import { IKeyValueCache } from '../cache';
+import { IKeyValueCache, setHeaderIfShouldNotCache } from '../cache';
 import { performance } from 'perf_hooks';
 import logger from '../utils/logger';
 
 export default function createFetch(options: {
   cache: IKeyValueCache;
   disableCache: boolean;
+  context: Context;
 }) {
   if (!options || !options.cache) throw Error('cache is a required option');
 
@@ -21,12 +22,13 @@ export default function createFetch(options: {
 
   async function pureFetch(
     url: string | Request,
+    ctx: Context,
     init?: RequestInit,
-  ): Promise<Response> {
+  ): Promise<{ response: Response; shouldCache: boolean }> {
     const startTime = performance.now();
     const slowLogTimeout = 500;
 
-    const res = await nodeFetch(url, init);
+    const response = await nodeFetch(url, init);
     const elapsedTime = performance.now() - startTime;
     if (elapsedTime > slowLogTimeout) {
       logger.warn(
@@ -35,7 +37,9 @@ export default function createFetch(options: {
         )}ms which is slower than slow log timeout of ${slowLogTimeout}ms`,
       );
     }
-    return res;
+
+    const shouldCache = setHeaderIfShouldNotCache(response, ctx);
+    return { response, shouldCache };
   }
 
   function cachedResponse(url: string, data: string): Response {
@@ -44,28 +48,34 @@ export default function createFetch(options: {
     const parsed = JSON.parse(data);
 
     return new Response(parsed.body, {
-      // @ts-ignore
       url,
       headers: parsed.headers,
       status: 200,
     });
   }
 
-  async function cachingFetch(url: string, reqOptions: RequestOptions) {
-    const response = await pureFetch(url, reqOptions);
+  async function cachingFetch(
+    url: string,
+    ctx: Context,
+    reqOptions: RequestOptions,
+  ) {
+    const { response, shouldCache } = await pureFetch(url, ctx, reqOptions);
 
     if (response.status === 200) {
       const body = await response.text();
-      await cache.set(
-        url,
-        JSON.stringify({
-          body,
-          headers: response.headers,
-        }),
-        1000 * 60 * 5, // 5 min
-      );
+
+      if (shouldCache) {
+        await cache.set(
+          url,
+          JSON.stringify({
+            body,
+            headers: response.headers,
+          }),
+          1000 * 60 * 5, // 5 min
+        );
+      }
+
       return new Response(body, {
-        // @ts-ignore
         url,
         headers: response.headers,
         status: 200,
@@ -76,6 +86,7 @@ export default function createFetch(options: {
 
   return async function cachedFetch(
     url: string,
+    ctx: Context,
     reqOptions: RequestOptions = {},
   ): Promise<Response> {
     const isCachable =
@@ -84,13 +95,13 @@ export default function createFetch(options: {
       reqOptions.cache !== 'reload';
 
     if (!isCachable || options.disableCache === true) {
-      return pureFetch(url, reqOptions);
+      return pureFetch(url, ctx, reqOptions).then(r => r.response);
     }
 
     const data = await cache.get(url);
     const cached = await cachedResponse(url, data);
     if (cached) return cached;
 
-    return cachingFetch(url, reqOptions);
+    return cachingFetch(url, ctx, reqOptions);
   };
 }
