@@ -393,7 +393,7 @@ async function fetchLK06CompetenceGoals(
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
   const response = await curriculumFetch(
-    `http://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
+    `https://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
     context,
   );
   const json: Resource = await resolveJson(response);
