@@ -50,7 +50,7 @@ export async function fetchResource(
     const article = await context.loaders.articlesLoader.load(
       getArticleIdFromUrn(resource.contentUri),
     );
-    availability = article.availability;
+    if (article) availability = article.availability;
   }
 
   let rank;
