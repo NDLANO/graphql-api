@@ -107,7 +107,7 @@ export async function fetchSubjectTopics(
   subjectId: string,
   filterIds: string,
   context: Context,
-) {
+): Promise<GQLTopic[]> {
   const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
     `/${context.taxonomyUrl}/v1/subjects/${subjectId}/topics/?recursive=true&language=${context.language}${filterParam}`,
