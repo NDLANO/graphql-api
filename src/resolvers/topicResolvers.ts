@@ -15,6 +15,7 @@ import {
   fetchSubtopics,
   fetchOembed,
   fetchSubject,
+  fetchSubjectTopics,
 } from '../api';
 import {
   filterMissingArticles,
@@ -33,9 +34,13 @@ interface TopicResponse {
 export const Query = {
   async topic(
     _: any,
-    { id }: QueryToTopicArgs,
+    { id, subjectId }: QueryToTopicArgs,
     context: Context,
   ): Promise<GQLTopic> {
+    if (subjectId) {
+      const topics = await fetchSubjectTopics(subjectId, '', context);
+      return topics.find(topic => topic.id === id);
+    }
     return fetchTopic({ id }, context);
   },
   async topics(
