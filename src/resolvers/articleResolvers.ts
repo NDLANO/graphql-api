@@ -18,13 +18,12 @@ import {
 export const Query = {
   async article(
     _: any,
-    { id, filterIds, subjectId, isOembed, path }: QueryToArticleArgs,
+    { id, subjectId, isOembed, path }: QueryToArticleArgs,
     context: Context,
   ): Promise<GQLArticle> {
     return fetchArticle(
       {
         articleId: id,
-        filterIds,
         subjectId,
         isOembed,
         path,
@@ -59,7 +58,7 @@ export const resolvers = {
     },
     async crossSubjectTopics(
       article: GQLArticle,
-      args: { subjectId: string; filterIds: string },
+      args: { subjectId: string },
       context: Context,
     ): Promise<GQLCrossSubjectElement[]> {
       const crossSubjectCodes = article.grepCodes.filter(code =>
@@ -73,11 +72,7 @@ export const resolvers = {
         language,
         context,
       );
-      const topics = await fetchSubjectTopics(
-        args.subjectId,
-        args.filterIds,
-        context,
-      );
+      const topics = await fetchSubjectTopics(args.subjectId, context);
       return crossSubjectTopicInfo.map(crossSubjectTopic => ({
         ...crossSubjectTopic,
         path: topics.find(

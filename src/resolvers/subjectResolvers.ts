@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchSubjectPage, fetchFilters } from '../api';
+import { fetchSubjectPage } from '../api';
 
 import { RSubjectCategory } from '../api/frontpageApi';
 import { filterMissingArticles } from '../utils/articleHelpers';
@@ -26,28 +26,17 @@ export const Query = {
     const data = await context.loaders.subjectsLoader.load('all');
     return data.subjects.filter(s => (s.metadata ? s.metadata.visible : true));
   },
-  async filters(
-    _: any,
-    __: any,
-    context: Context,
-  ): Promise<GQLSubjectFilter[]> {
-    const filters = await fetchFilters(context);
-    return filters.filter(filter =>
-      filter.metadata ? filter.metadata.visible : true,
-    );
-  },
 };
 
 export const resolvers = {
   Subject: {
     async topics(
       subject: GQLSubject,
-      args: { all: boolean; filterIds: string },
+      args: { all: boolean },
       context: Context,
     ): Promise<GQLTopic[]> {
       const topics = await context.loaders.subjectTopicsLoader.load({
         subjectId: subject.id,
-        filterIds: args.filterIds,
       });
       if (args.all) {
         return filterMissingArticles(topics, context);
@@ -55,40 +44,6 @@ export const resolvers = {
       return filterMissingArticles(
         topics.filter((topic: GQLTopic) => topic.parent === subject.id),
         context,
-      );
-    },
-    async filters(
-      subject: GQLSubject,
-      __: any,
-      context: Context,
-    ): Promise<GQLSubjectFilter[]> {
-      return context.loaders.filterLoader.load(subject.id);
-    },
-    async frontpageFilters(
-      subject: GQLSubject,
-      __: any,
-      context: Context,
-    ): Promise<GQLFilter[]> {
-      const frontpage = await context.loaders.frontpageLoader.load('frontpage');
-
-      const allCategorySubjects = frontpage.categories.reduce(
-        (acc, category) => [...acc, ...category.subjects],
-        [],
-      ) as RSubjectCategory[];
-
-      const categorySubject = allCategorySubjects.find(
-        cs => cs.id === subject.id,
-      );
-
-      const frontpageFilterIds = categorySubject?.filters || [];
-
-      const allSubjectFilters = await context.loaders.filterLoader.load(
-        subject.id,
-      );
-
-      // Only return filters specified in frontpage
-      return allSubjectFilters.filter(filter =>
-        frontpageFilterIds.includes(filter.id),
       );
     },
     async subjectpage(
