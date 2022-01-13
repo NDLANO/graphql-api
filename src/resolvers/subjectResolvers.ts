@@ -113,8 +113,8 @@ export const resolvers = {
       context: Context,
     ): Promise<string[]> {
       if (subject.metadata?.grepCodes) {
-        const code = subject.metadata?.grepCodes.find(c => c.startsWith('KV'));
-        return fetchLK20CompetenceGoalSet(code, context);
+        const code = subject.metadata?.grepCodes?.find(c => c.startsWith('KV'));
+        return code ? fetchLK20CompetenceGoalSet(code, context) : [];
       }
     },
   },
