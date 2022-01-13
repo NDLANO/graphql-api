@@ -520,7 +520,7 @@ export const typeDefs = gql`
     subjectpage: SubjectPage
     topics(all: Boolean, filterIds: String): [Topic!]
     allTopics: [Topic!]
-    competenceGoals: [CompetenceGoal!]
+    grepCodes: [String!]
   }
 
   interface SearchResult {

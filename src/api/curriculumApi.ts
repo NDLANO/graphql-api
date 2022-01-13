@@ -234,17 +234,13 @@ export async function fetchLK20CompetenceGoals(
 export async function fetchLK20CompetenceGoalSet(
   code: string,
   context: Context,
-): Promise<GQLCompetenceGoal[]> {
+): Promise<string[]> {
   const response = await curriculumFetch(
     `/grep/kl06/v201906/kompetansemaalsett-lk20/${code}`,
     context,
   );
   const json: CompetenceGoalSet = await resolveJson(response);
-  return Promise.all(
-    json.kompetansemaal.map(km =>
-      fetchLK20CompetenceGoal(km.kode, context.language, context),
-    ),
-  );
+  return Promise.all(json.kompetansemaal.map(km => km.kode));
 }
 
 export async function fetchCoreElement(

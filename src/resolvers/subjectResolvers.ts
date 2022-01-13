@@ -107,11 +107,11 @@ export const resolvers = {
         );
       }
     },
-    async competenceGoals(
+    async grepCodes(
       subject: GQLSubject,
       __: any,
       context: Context,
-    ): Promise<GQLCompetenceGoal[]> {
+    ): Promise<string[]> {
       if (subject.metadata?.grepCodes) {
         const code = subject.metadata?.grepCodes.find(c => c.startsWith('KV'));
         return fetchLK20CompetenceGoalSet(code, context);
