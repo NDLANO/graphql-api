@@ -38,6 +38,16 @@ interface CompetenceGoal extends GrepElement {
   'tilknyttede-kjerneelementer': Element[];
 }
 
+interface CompetenceGoalSet extends GrepElement {
+  id: string;
+  kode: string;
+  tittel: {
+    tekst: Text[];
+  };
+  'tilhoerer-laereplan': Reference;
+  kompetansemaal: Reference[];
+}
+
 interface Element {
   referanse: Reference;
   forklaring: string[];
@@ -218,6 +228,22 @@ export async function fetchLK20CompetenceGoals(
     codes
       .filter(code => code.startsWith('KM'))
       .map(code => fetchLK20CompetenceGoal(code, language, context)),
+  );
+}
+
+export async function fetchLK20CompetenceGoalSet(
+  code: string,
+  context: Context,
+): Promise<GQLCompetenceGoal[]> {
+  const response = await curriculumFetch(
+    `/grep/kl06/v201906/kompetansemaalsett-lk20/${code}`,
+    context,
+  );
+  const json: CompetenceGoalSet = await resolveJson(response);
+  return Promise.all(
+    json.kompetansemaal.map(km =>
+      fetchLK20CompetenceGoal(km.kode, context.language, context),
+    ),
   );
 }
 

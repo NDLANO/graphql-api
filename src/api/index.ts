@@ -16,6 +16,7 @@ export {
   fetchCrossSubjectTopics,
   fetchLK06Curriculum,
   fetchLK20Curriculum,
+  fetchLK20CompetenceGoalSet,
 } from './curriculumApi';
 export {
   fetchFrontpage,

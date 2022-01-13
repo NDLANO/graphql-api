@@ -527,6 +527,7 @@ declare global {
     subjectpage?: GQLSubjectPage;
     topics?: Array<GQLTopic>;
     allTopics?: Array<GQLTopic>;
+    competenceGoals?: Array<GQLCompetenceGoal>;
   }
   
   export interface GQLSearchResult {
@@ -2659,6 +2660,7 @@ declare global {
     subjectpage?: SubjectToSubjectpageResolver<TParent>;
     topics?: SubjectToTopicsResolver<TParent>;
     allTopics?: SubjectToAllTopicsResolver<TParent>;
+    competenceGoals?: SubjectToCompetenceGoalsResolver<TParent>;
   }
   
   export interface SubjectToIdResolver<TParent = any, TResult = any> {
@@ -2702,6 +2704,10 @@ declare global {
   }
   
   export interface SubjectToAllTopicsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToCompetenceGoalsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

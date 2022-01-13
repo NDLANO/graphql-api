@@ -6,7 +6,11 @@
  *
  */
 
-import { fetchSubjectPage, fetchFilters } from '../api';
+import {
+  fetchLK20CompetenceGoalSet,
+  fetchSubjectPage,
+  fetchFilters,
+} from '../api';
 
 import { RSubjectCategory } from '../api/frontpageApi';
 import { filterMissingArticles } from '../utils/articleHelpers';
@@ -101,6 +105,16 @@ export const resolvers = {
           subject.contentUri.replace('urn:frontpage:', ''),
           context,
         );
+      }
+    },
+    async competenceGoals(
+      subject: GQLSubject,
+      __: any,
+      context: Context,
+    ): Promise<GQLCompetenceGoal[]> {
+      if (subject.metadata?.grepCodes) {
+        const code = subject.metadata?.grepCodes.find(c => c.startsWith('KV'));
+        return fetchLK20CompetenceGoalSet(code, context);
       }
     },
   },
