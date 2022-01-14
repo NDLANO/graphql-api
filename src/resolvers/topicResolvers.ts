@@ -10,7 +10,6 @@ import {
   fetchArticle,
   fetchTopics,
   fetchTopic,
-  fetchTopicFilters,
   fetchTopicResources,
   fetchSubtopics,
   fetchOembed,
@@ -38,7 +37,7 @@ export const Query = {
     context: Context,
   ): Promise<GQLTopic> {
     if (subjectId) {
-      const topics = await fetchSubjectTopics(subjectId, '', context);
+      const topics = await fetchSubjectTopics(subjectId, context);
       return topics.find(topic => topic.id === id);
     }
     return fetchTopic({ id }, context);
@@ -78,7 +77,6 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
           fetchArticle(
             {
               articleId,
-              filterIds: args.filterIds,
               subjectId: args.subjectId,
               showVisualElement: args.showVisualElement,
               path: topic.path,
@@ -97,16 +95,6 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
       throw Object.assign(
         new Error('Missing article contentUri for topic with id: ' + topic.id),
         { status: 404 },
-      );
-    },
-    async filters(
-      topic: TopicResponse,
-      _: any,
-      context: Context,
-    ): Promise<GQLFilter[]> {
-      const filters = await fetchTopicFilters(topic.id, context);
-      return filters.filter(filter =>
-        filter.metadata ? filter.metadata.visible : true,
       );
     },
     async meta(
@@ -130,7 +118,6 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
           topic,
           subjectId: args.subjectId,
           relevance: 'urn:relevance:core',
-          filters: args.filterIds,
         },
         context,
       );
@@ -146,7 +133,6 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
           topic,
           subjectId: args.subjectId,
           relevance: 'urn:relevance:supplementary',
-          filters: args.filterIds,
         },
         context,
       );
@@ -154,18 +140,15 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     },
     async subtopics(
       topic: TopicResponse,
-      args: TopicToSubtopicsArgs,
+      _: any,
       context: Context,
     ): Promise<GQLTopic[]> {
-      const subtopics = await fetchSubtopics(
-        { id: topic.id, filterIds: args.filterIds },
-        context,
-      );
+      const subtopics = await fetchSubtopics({ id: topic.id }, context);
       return filterMissingArticles(subtopics, context);
     },
     async pathTopics(
       topic: TopicResponse,
-      args: TopicToSubtopicsArgs,
+      _: any,
       context: Context,
     ): Promise<GQLTopic[][]> {
       return Promise.all(

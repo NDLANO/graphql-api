@@ -29,14 +29,12 @@ export {
   fetchLearningpathStep,
 } from './learningpathApi';
 export {
-  fetchFilters,
   fetchResource,
   fetchResourceTypes,
   fetchSubjectTopics,
   fetchSubjects,
   fetchSubject,
   fetchTopic,
-  fetchTopicFilters,
   fetchTopicResources,
   fetchTopics,
   fetchResourcesAndTopics,

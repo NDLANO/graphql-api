@@ -47,7 +47,6 @@ import {
   Query as ConceptQuery,
   resolvers as conceptResolvers,
 } from './conceptResolvers';
-import { resolvers as filterResolvers } from './filterResolvers';
 
 export const resolvers: GQLResolver = {
   Query: {
@@ -70,13 +69,15 @@ export const resolvers: GQLResolver = {
   ...searchResolvers,
   ...learningpathResolvers,
   ...curriculumResolvers,
-  ...filterResolvers,
   ...podcastResolvers,
   ...conceptResolvers,
   JSON: GraphQLJSON,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any): GQLPossibleTaxonomyEntityTypeNames {
+      if (entity.id.startsWith('urn:subject')) {
+        return 'Subject';
+      }
       if (entity.id.startsWith('urn:topic')) {
         return 'Topic';
       }

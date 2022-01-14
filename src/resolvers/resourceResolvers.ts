@@ -90,7 +90,6 @@ export const resolvers = {
     async article(
       resource: GQLResource,
       args: {
-        filterIds?: string;
         subjectId?: string;
         isOembed?: string;
       },
@@ -102,7 +101,6 @@ export const resolvers = {
           fetchArticle(
             {
               articleId,
-              filterIds: args.filterIds,
               subjectId: args.subjectId,
               isOembed: args.isOembed,
               path: resource.path,
