@@ -163,16 +163,17 @@ export const typeDefs = gql`
     contentUri: String
     path: String
     paths: [String!]
-    meta: Meta
     metadata: TaxonomyMetadata
-    article(filterIds: String, subjectId: String): Article
-    filters: [Filter!]
     relevanceId: String
     rank: Int
+  }
+
+  interface WithArticle {
+    meta: Meta
     availability: String
   }
 
-  type Resource implements TaxonomyEntity {
+  type Resource implements TaxonomyEntity & WithArticle {
     id: String!
     name: String!
     contentUri: String
@@ -180,18 +181,17 @@ export const typeDefs = gql`
     paths: [String!]
     meta: Meta
     metadata: TaxonomyMetadata
-    article(filterIds: String, subjectId: String, isOembed: String): Article
     learningpath: Learningpath
-    filters: [Filter!]
-    rank: Int
-    availability: String
     relevanceId: String
+    rank: Int
+    article(subjectId: String, isOembed: String): Article
+    availability: String
     resourceTypes: [ResourceType!]
     parentTopics: [Topic!]
     breadcrumbs: [[String!]!]
   }
 
-  type Topic implements TaxonomyEntity {
+  type Topic implements TaxonomyEntity & WithArticle {
     id: String!
     name: String!
     contentUri: String
@@ -199,21 +199,16 @@ export const typeDefs = gql`
     paths: [String!]
     meta: Meta
     metadata: TaxonomyMetadata
-    article(
-      filterIds: String
-      subjectId: String
-      showVisualElement: String
-    ): Article
-    filters: [Filter!]
-    rank: Int
-    availability: String
     relevanceId: String
+    rank: Int
+    article(subjectId: String, showVisualElement: String): Article
+    availability: String
     isPrimary: Boolean
     parent: String
-    subtopics(filterIds: String): [Topic!]
+    subtopics: [Topic!]
     pathTopics: [[Topic!]!]
-    coreResources(filterIds: String, subjectId: String): [Resource!]
-    supplementaryResources(filterIds: String, subjectId: String): [Resource!]
+    coreResources(subjectId: String): [Resource!]
+    supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
     breadcrumbs: [[String!]!]
   }
@@ -339,10 +334,7 @@ export const typeDefs = gql`
     grepCodes: [String!]
     competenceGoals: [CompetenceGoal!]
     coreElements: [CoreElement!]
-    crossSubjectTopics(
-      subjectId: String
-      filterIds: String
-    ): [CrossSubjectElement!]
+    crossSubjectTopics(subjectId: String): [CrossSubjectElement!]
     oembed: String
     conceptIds: [String!]
     concepts: [DetailedConcept!]
@@ -396,24 +388,6 @@ export const typeDefs = gql`
     id: String!
     title: String!
     code: String
-  }
-
-  type Filter {
-    id: String!
-    name: String!
-    connectionId: String
-    relevanceId: String
-    subjectId: String
-    metadata: TaxonomyMetadata
-  }
-
-  type SubjectFilter {
-    id: String!
-    name: String!
-    subjectId: String!
-    contentUri: String
-    subjectpage: SubjectPage
-    metadata: TaxonomyMetadata
   }
 
   type Category {
@@ -509,16 +483,17 @@ export const typeDefs = gql`
     resourceTypes: [ResourceType!]
   }
 
-  type Subject {
+  type Subject implements TaxonomyEntity {
     id: String!
     contentUri: String
     name: String!
-    path: String!
+    path: String
+    paths: [String!]
     metadata: TaxonomyMetadata
-    filters: [SubjectFilter!]
-    frontpageFilters: [SubjectFilter!]
+    relevanceId: String
+    rank: Int
     subjectpage: SubjectPage
-    topics(all: Boolean, filterIds: String): [Topic!]
+    topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]
   }
@@ -755,7 +730,6 @@ export const typeDefs = gql`
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
       id: String!
-      filterIds: String
       subjectId: String
       isOembed: String
       path: String
@@ -770,7 +744,6 @@ export const typeDefs = gql`
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: Frontpage
-    filters: [SubjectFilter!]
     competenceGoals(
       codes: [String]
       nodeId: String

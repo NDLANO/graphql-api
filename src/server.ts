@@ -15,7 +15,6 @@ import logger from './utils/logger';
 import { typeDefs } from './schema';
 import { getToken } from './auth';
 import {
-  filterLoader,
   articlesLoader,
   subjectTopicsLoader,
   resourceTypesLoader,
@@ -96,7 +95,6 @@ async function getContext({
     ...defaultContext,
     loaders: {
       articlesLoader: articlesLoader(defaultContext),
-      filterLoader: filterLoader(defaultContext),
       subjectTopicsLoader: subjectTopicsLoader(defaultContext),
       learningpathsLoader: learningpathsLoader(defaultContext),
       resourceTypesLoader: resourceTypesLoader(defaultContext),

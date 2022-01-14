@@ -61,37 +61,3 @@ test('Fetch subject should filter out invisible elements', async () => {
 
   expect(subs).toMatchSnapshot();
 });
-
-test('Fetch subject filters should filter out invisible elements', async () => {
-  nock('https://api.test.ndla.no')
-    .persist()
-    .get('/taxonomy/v1/filters/?language=nb')
-    .reply(200, [
-      {
-        id: 'urn:filter:1',
-        name: 'Filter 1',
-        metadata: {
-          grepCodes: [],
-          visible: true,
-        },
-      },
-      {
-        id: 'urn:filter:2',
-        name: 'Filter 2',
-        metadata: {
-          grepCodes: [],
-          visible: false,
-        },
-      },
-    ]);
-
-  const subs = await Query.filters(1, 1, {
-    req: mockRequest,
-    res: mockResponse,
-    language: 'nb',
-    shouldUseCache: false,
-    taxonomyUrl: 'taxonomy',
-  });
-
-  expect(subs).toMatchSnapshot();
-});

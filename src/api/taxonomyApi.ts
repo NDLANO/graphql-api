@@ -64,16 +64,6 @@ export async function fetchResource(
   return { ...resource, path, paths, availability, rank, relevanceId };
 }
 
-export async function fetchFilters(
-  context: Context,
-): Promise<GQLSubjectFilter[]> {
-  const response = await fetch(
-    `/${context.taxonomyUrl}/v1/filters/?language=${context.language}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
 export async function fetchResourceTypes(
   context: Context,
 ): Promise<GQLResourceTypeDefinition[]> {
@@ -105,12 +95,10 @@ export async function fetchSubject(
 
 export async function fetchSubjectTopics(
   subjectId: string,
-  filterIds: string,
   context: Context,
 ): Promise<GQLTopic[]> {
-  const filterParam = filterIds ? `&filter=${filterIds}` : '';
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/subjects/${subjectId}/topics/?recursive=true&language=${context.language}${filterParam}`,
+    `/${context.taxonomyUrl}/v1/subjects/${subjectId}/topics/?recursive=true&language=${context.language}`,
     context,
   );
   return resolveJson(response);
@@ -144,24 +132,12 @@ export async function fetchTopic(params: { id: string }, context: Context) {
 }
 
 export async function fetchSubtopics(
-  params: { id: string; filterIds?: string },
+  params: { id: string },
   context: Context,
 ): Promise<GQLTopic[]> {
-  const { id, filterIds } = params;
-  const filterParam = filterIds ? `&filter=${filterIds}` : '';
+  const { id } = params;
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/topics/${id}/topics?language=${context.language}${filterParam}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchTopicFilters(
-  topicId: string,
-  context: Context,
-): Promise<GQLFilter[]> {
-  const response = await fetch(
-    `/${context.taxonomyUrl}/v1/topics/${topicId}/filters`,
+    `/${context.taxonomyUrl}/v1/topics/${id}/topics?language=${context.language}`,
     context,
   );
   return resolveJson(response);
@@ -171,13 +147,12 @@ export async function fetchTopicResources(
   params: FetchTopicResourcesParams,
   context: Context,
 ): Promise<GQLResource[]> {
-  const { filters, subjectId, relevance, topic } = params;
-  const filterParam = filters && filters.length > 0 ? `&filter=${filters}` : '';
+  const { subjectId, relevance, topic } = params;
   const subjectParam = subjectId ? `&subject=${subjectId}` : '';
   const relevanceParam = relevance ? `&relevance=${relevance}` : '';
 
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/topics/${topic.id}/resources?language=${context.language}${filterParam}${subjectParam}${relevanceParam}`,
+    `/${context.taxonomyUrl}/v1/topics/${topic.id}/resources?language=${context.language}${subjectParam}${relevanceParam}`,
     context,
   );
   const resources: GQLTaxonomyEntity[] = await resolveJson(response);

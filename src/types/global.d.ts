@@ -21,11 +21,7 @@ declare global {
     loaders?: {
       articlesLoader?: DataLoader<string, GQLMeta>;
       learningpathsLoader?: DataLoader<string, any>;
-      filterLoader?: DataLoader<string, GQLSubjectFilter[]>;
-      subjectTopicsLoader?: DataLoader<
-        { subjectId: string; filterIds: string },
-        any
-      >;
+      subjectTopicsLoader?: DataLoader<{ subjectId: string }, any>;
       subjectsLoader?: DataLoader<string, { subjects: GQLSubject[] }>;
       resourceTypesLoader?: DataLoader<any, any>;
       frontpageLoader?: DataLoader<string, FrontpageResponse>;

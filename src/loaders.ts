@@ -10,7 +10,6 @@ import DataLoader from 'dataloader';
 import {
   fetchArticles,
   fetchSubjectTopics,
-  fetchFilters,
   fetchLearningpaths,
   fetchResourceTypes,
   fetchSubjects,
@@ -73,19 +72,6 @@ export function lk06CurriculumLoader(
   });
 }
 
-export function filterLoader(
-  context: Context,
-): DataLoader<string, GQLSubjectFilter[]> {
-  return new DataLoader(async subjectIds => {
-    const filterList = await fetchFilters(context);
-    return subjectIds.map(subjectId =>
-      filterList
-        .filter(filter => filter.subjectId === subjectId)
-        .filter(filter => (filter.metadata ? filter.metadata.visible : true)),
-    );
-  });
-}
-
 export function frontpageLoader(
   context: Context,
 ): DataLoader<string, FrontpageResponse> {
@@ -115,14 +101,13 @@ export function subjectsLoader(
 
 interface IInput {
   subjectId: string;
-  filterIds: string;
 }
 
 export function subjectTopicsLoader(context: Context): DataLoader<IInput, any> {
   return new DataLoader(
     async ids => {
-      return ids.map(async ({ subjectId, filterIds }) =>
-        fetchSubjectTopics(subjectId, filterIds, context),
+      return ids.map(async ({ subjectId }) =>
+        fetchSubjectTopics(subjectId, context),
       );
     },
     {

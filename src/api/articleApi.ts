@@ -18,7 +18,6 @@ import {
 export async function fetchArticle(
   params: {
     articleId: string;
-    filterIds?: string;
     subjectId?: string;
     isOembed?: string;
     showVisualElement?: string;
@@ -27,7 +26,6 @@ export async function fetchArticle(
   context: Context,
 ): Promise<GQLArticle> {
   const host = localConverter ? 'http://localhost:3100' : '';
-  const filterParam = params.filterIds ? `&filters=${params.filterIds}` : '';
   const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : '';
   const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : '';
   const visualElementParam = params.showVisualElement
@@ -35,7 +33,7 @@ export async function fetchArticle(
     : '';
   const pathParam = params.path ? `&path=${params.path}` : '';
   const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${filterParam}${subjectParam}${oembedParam}${pathParam}${visualElementParam}`,
+    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${subjectParam}${oembedParam}${pathParam}${visualElementParam}`,
     context,
   );
 
