@@ -495,6 +495,7 @@ export const typeDefs = gql`
     subjectpage: SubjectPage
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
+    grepCodes: [String!]
   }
 
   interface SearchResult {
