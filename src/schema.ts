@@ -36,9 +36,12 @@ export const typeDefs = gql`
   }
 
   type PodcastMeta {
-    header: String!
     introduction: String!
     coverPhoto: CoverPhoto!
+    language: String!
+  }
+
+  type Manuscript {
     manuscript: String!
     language: String!
   }
@@ -53,6 +56,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]
     audioType: String!
     podcastMeta: PodcastMeta
+    manuscript: Manuscript
   }
 
   type AudioSearch {
