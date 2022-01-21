@@ -168,17 +168,19 @@ export async function fetchListingPage(
   };
 }
 
-const isStringArray = (
-  tags: string[] | { tags: string[] }[],
-): tags is string[] => {
-  return !tags.some(tag => typeof tag !== 'string');
+interface TagType {
+  tags: string[];
+}
+
+const isStringArray = (tags: string[] | TagType[]): tags is string[] => {
+  return !tags.some((tag: string | TagType) => typeof tag !== 'string');
 };
 
-const getTags = (tags: string[] | { tags: string[] }[]) => {
+const getTags = (tags: string[] | TagType[]) => {
   if (isStringArray(tags)) {
     return tags;
   } else if (tags.length > 0) {
-    return uniq(tags.flatMap(tags => tags.tags));
+    return uniq(tags.flatMap(t => t.tags));
   }
   return [];
 };
