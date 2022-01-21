@@ -788,7 +788,7 @@ export const typeDefs = gql`
       grepCodes: String
       aggregatePaths: [String]
     ): [GroupSearch!]
-    listingPage: ListingPage
+    listingPage(subjects: String): ListingPage
     concepts(ids: [String!]): [Concept!]
     detailedConcept(id: String): DetailedConcept
     conceptSearch(
