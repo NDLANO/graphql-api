@@ -159,8 +159,12 @@ export async function fetchListingPage(
   });
   const tags = await resolveJson(
     await fetch(`/concept-api/v1/concepts/tags/?${params}`, context),
-  ).catch(_ => {
-    return [{ tags: [] }];
+  ).catch(error => {
+    if (error.status !== 404) {
+      throw error;
+    } else {
+      return [{ tags: [] }];
+    }
   });
   return {
     subjects,
