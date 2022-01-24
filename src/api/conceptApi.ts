@@ -7,6 +7,7 @@
  */
 
 import queryString from 'query-string';
+import { uniq } from 'lodash';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
@@ -140,6 +141,7 @@ export async function fetchDetailedConcept(
 
 export async function fetchListingPage(
   context: Context,
+  querySubjects?: string,
 ): Promise<GQLListingPage> {
   const subjectIds: string[] = await resolveJson(
     await fetch(`/concept-api/v1/concepts/subjects/`, context),
@@ -151,14 +153,38 @@ export async function fetchListingPage(
     result => result.status === 'fulfilled',
   ) as Array<PromiseFulfilledResult<GQLSubject>>).map(res => res.value);
 
+  const params = queryString.stringify({
+    language: context.language,
+    subjects: querySubjects,
+  });
   const tags = await resolveJson(
-    await fetch(
-      `/concept-api/v1/concepts/tags/?language=${context.language}`,
-      context,
-    ),
-  );
+    await fetch(`/concept-api/v1/concepts/tags/?${params}`, context),
+  ).catch(error => {
+    if (error.status !== 404) {
+      throw error;
+    } else {
+      return [{ tags: [] }];
+    }
+  });
   return {
     subjects,
-    tags,
+    tags: getTags(tags),
   };
 }
+
+interface TagType {
+  tags: string[];
+}
+
+const isStringArray = (tags: string[] | TagType[]): tags is string[] => {
+  return !tags.some((tag: string | TagType) => typeof tag !== 'string');
+};
+
+const getTags = (tags: string[] | TagType[]) => {
+  if (isStringArray(tags)) {
+    return tags;
+  } else if (tags.length > 0) {
+    return uniq(tags.flatMap(t => t.tags));
+  }
+  return [];
+};

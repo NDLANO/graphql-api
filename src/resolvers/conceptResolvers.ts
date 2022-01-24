@@ -31,10 +31,10 @@ export const Query = {
   },
   async listingPage(
     _: any,
-    __: any,
+    args: QueryToListingPageArgs,
     context: Context,
   ): Promise<GQLListingPage> {
-    return fetchListingPage(context);
+    return fetchListingPage(context, args.subjects);
   },
   async conceptSearch(
     _: any,
