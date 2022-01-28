@@ -40,7 +40,6 @@ export const Query = {
     { pageSize, page }: QueryToPodcastSeriesSearchArgs,
     context: Context,
   ): Promise<GQLPodcastSeriesSearch> {
-    console.log(pageSize, page);
     return fetchPodcastSeriesPage(context, pageSize, page);
   },
 };

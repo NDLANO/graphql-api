@@ -67,14 +67,6 @@ export const typeDefs = gql`
     updated: String!
   }
 
-  type AudioSearch {
-    pageSize: Int
-    page: Int
-    language: String
-    totalCount: Int
-    results: [Audio!]
-  }
-
   type PodcastSeries {
     id: Int!
     title: Title!
@@ -84,12 +76,43 @@ export const typeDefs = gql`
     coverPhoto: CoverPhoto!
   }
 
+  type AudioSummary {
+    id: Int!
+    title: Title!
+    audioType: String!
+    url: String!
+    license: String!
+    tags: Tags
+    supportedLanguages: [String!]
+    manuscript: Manuscript
+    podcastMeta: PodcastMeta
+    series: PodcastSeries
+    lastUpdated: String!
+  }
+
+  type AudioSearch {
+    pageSize: Int
+    page: Int
+    language: String
+    totalCount: Int
+    results: [Audio!]
+  }
+
+  type PodcastSeriesSummary {
+    id: Int!
+    title: Title!
+    description: Description!
+    supportedLanguages: [String!]
+    episodes: [AudioSummary!]
+    coverPhoto: CoverPhoto!
+  }
+
   type PodcastSeriesSearch {
     pageSize: Int!
     page: Int
     language: String!
     totalCount: Int!
-    results: [PodcastSeries!]
+    results: [PodcastSeriesSummary!]
   }
 
   type ResourceTypeDefinition {
