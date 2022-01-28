@@ -24,6 +24,11 @@ export const typeDefs = gql`
     language: String!
   }
 
+  type Description {
+    description: String!
+    language: String!
+  }
+
   type Tags {
     tags: [String!]
     language: String!
@@ -47,7 +52,7 @@ export const typeDefs = gql`
   }
 
   type Audio {
-    id: String!
+    id: Int!
     revision: Int!
     title: Title!
     audioFile: AudioFile!
@@ -56,7 +61,10 @@ export const typeDefs = gql`
     supportedLanguages: [String!]
     audioType: String!
     podcastMeta: PodcastMeta
+    series: PodcastSeries
     manuscript: Manuscript
+    created: String!
+    updated: String!
   }
 
   type AudioSearch {
@@ -65,6 +73,23 @@ export const typeDefs = gql`
     language: String
     totalCount: Int
     results: [Audio!]
+  }
+
+  type PodcastSeries {
+    id: Int!
+    title: Title!
+    description: Description!
+    supportedLanguages: [String!]
+    episodes: [Audio!]
+    coverPhoto: CoverPhoto!
+  }
+
+  type PodcastSeriesSearch {
+    pageSize: Int!
+    page: Int
+    language: String!
+    totalCount: Int!
+    results: [PodcastSeries!]
   }
 
   type ResourceTypeDefinition {
@@ -816,8 +841,10 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
     ): Search
-    podcast(id: String): Audio
-    podcastSearch(page: String, pageSize: String): AudioSearch
+    podcast(id: Int): Audio
+    podcastSearch(page: Int, pageSize: Int): AudioSearch
+    podcastSeries(id: Int): PodcastSeries
+    podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
   }
 `;
 

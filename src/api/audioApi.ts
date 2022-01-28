@@ -9,8 +9,8 @@
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchPodcast(
-  podcastId: string,
   context: Context,
+  podcastId: number,
 ): Promise<GQLAudio> {
   const response = await fetch(`/audio-api/v1/audio/${podcastId}`, context);
   try {
@@ -26,8 +26,8 @@ export async function fetchPodcast(
 
 export async function fetchPodcastsPage(
   context: Context,
-  pageSize: string,
-  page: string,
+  pageSize: number,
+  page: number,
 ): Promise<GQLAudioSearch> {
   const response = await fetch(
     `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast`,
@@ -35,13 +35,43 @@ export async function fetchPodcastsPage(
   );
 
   const audioSearch: GQLAudioSearch = await resolveJson(response);
-
   const results = await Promise.all(
-    audioSearch.results.map(audio => fetchPodcast(audio.id, context)),
+    audioSearch.results.map(audio => fetchPodcast(context, audio.id)),
   );
 
   return {
     ...audioSearch,
     results,
   };
+}
+
+export async function fetchPodcastSeries(
+  context: Context,
+  podcastId: number,
+): Promise<GQLPodcastSeries> {
+  const response = await fetch(`/audio-api/v1/series/${podcastId}`, context);
+  const series: GQLPodcastSeries = await resolveJson(response);
+
+  const episodes = await Promise.all(
+    series.episodes.map(audio => fetchPodcast(context, audio.id)),
+  );
+
+  return { ...series, episodes };
+}
+
+export async function fetchPodcastSeriesPage(
+  context: Context,
+  pageSize: number,
+  page: number,
+): Promise<GQLPodcastSeriesSearch> {
+  const response = await fetch(
+    `/audio-api/v1/series/?page-size=${pageSize}&page=${page}`,
+    context,
+  );
+
+  const podcastSeriesSearch: GQLPodcastSeriesSearch = await resolveJson(
+    response,
+  );
+
+  return podcastSeriesSearch;
 }
