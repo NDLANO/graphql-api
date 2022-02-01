@@ -30,7 +30,7 @@ declare global {
   }
   
   export interface GQLTags {
-    tags?: Array<string>;
+    tags: Array<string>;
     language: string;
   }
   
@@ -57,19 +57,19 @@ declare global {
     title: GQLTitle;
     audioFile: GQLAudioFile;
     copyright: GQLCopyright;
-    tags?: GQLTags;
-    supportedLanguages?: Array<string>;
+    tags: GQLTags;
+    supportedLanguages: Array<string>;
     audioType: string;
     podcastMeta?: GQLPodcastMeta;
     manuscript?: GQLManuscript;
   }
   
   export interface GQLAudioSearch {
-    pageSize?: number;
+    pageSize: number;
     page?: number;
-    language?: string;
-    totalCount?: number;
-    results?: Array<GQLAudio>;
+    language: string;
+    totalCount: number;
+    results: Array<GQLAudio>;
   }
   
   export interface GQLResourceTypeDefinition {
@@ -256,10 +256,10 @@ declare global {
   }
   
   export interface GQLCopyright {
-    license?: GQLLicense;
-    creators?: Array<GQLContributor>;
-    processors?: Array<GQLContributor>;
-    rightsholders?: Array<GQLContributor>;
+    license: GQLLicense;
+    creators: Array<GQLContributor>;
+    processors: Array<GQLContributor>;
+    rightsholders: Array<GQLContributor>;
     origin?: string;
   }
   
