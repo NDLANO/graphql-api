@@ -578,14 +578,13 @@ declare global {
   
   export interface GQLSearchResult {
     id: number;
-    title?: string;
-    supportedLanguages?: Array<string>;
-    url?: string;
-    metaDescription?: string;
+    title: string;
+    supportedLanguages: Array<string>;
+    url: string;
+    metaDescription: string;
     metaImage?: GQLMetaImage;
-    contentType?: string;
-    traits?: Array<string>;
-    contexts?: Array<GQLSearchContext>;
+    traits: Array<string>;
+    contexts: Array<GQLSearchContext>;
   }
   
   /** Use this to resolve interface type SearchResult */
@@ -601,60 +600,58 @@ declare global {
   
   export interface GQLArticleSearchResult extends GQLSearchResult {
     id: number;
-    title?: string;
-    supportedLanguages?: Array<string>;
-    url?: string;
-    metaDescription?: string;
+    title: string;
+    supportedLanguages: Array<string>;
+    url: string;
+    metaDescription: string;
     metaImage?: GQLMetaImage;
-    contentType?: string;
-    traits?: Array<string>;
-    contexts?: Array<GQLSearchContext>;
+    traits: Array<string>;
+    contexts: Array<GQLSearchContext>;
   }
   
   export interface GQLLearningpathSearchResult extends GQLSearchResult {
     id: number;
-    title?: string;
-    supportedLanguages?: Array<string>;
-    url?: string;
-    metaDescription?: string;
+    title: string;
+    supportedLanguages: Array<string>;
+    url: string;
+    metaDescription: string;
     metaImage?: GQLMetaImage;
-    contentType?: string;
-    traits?: Array<string>;
-    contexts?: Array<GQLSearchContext>;
+    traits: Array<string>;
+    contexts: Array<GQLSearchContext>;
   }
   
   export interface GQLFrontpageSearchResult {
     id: string;
-    name?: string;
-    resourceTypes?: Array<GQLSearchContextResourceTypes>;
-    subject?: string;
-    path?: string;
-    filters?: Array<GQLSearchContextFilter>;
+    name: string;
+    resourceTypes: Array<GQLSearchContextResourceTypes>;
+    subject: string;
+    path: string;
+    filters: Array<GQLSearchContextFilter>;
   }
   
   export interface GQLSearchContext {
-    breadcrumbs?: Array<string>;
-    learningResourceType?: string;
-    resourceTypes?: Array<GQLSearchContextResourceTypes>;
-    subject?: string;
-    subjectId?: string;
-    relevance?: string;
-    path?: string;
-    id?: string;
-    language?: string;
-    filters?: Array<GQLSearchContextFilter>;
+    breadcrumbs: Array<string>;
+    learningResourceType: string;
+    resourceTypes: Array<GQLSearchContextResourceTypes>;
+    subject: string;
+    subjectId: string;
+    relevance: string;
+    path: string;
+    id: string;
+    language: string;
+    filters: Array<GQLSearchContextFilter>;
   }
   
   export interface GQLSearchContextResourceTypes {
-    id?: string;
-    name?: string;
-    language?: string;
+    id: string;
+    name: string;
+    language: string;
   }
   
   export interface GQLSearchContextFilter {
-    id?: string;
-    name?: string;
-    relevance?: string;
+    id: string;
+    name: string;
+    relevance: string;
   }
   
   export interface GQLVisualElementOembed {
@@ -718,16 +715,19 @@ declare global {
   }
   
   export interface GQLConceptResult {
-    totalCount?: number;
-    concepts?: Array<GQLConcept>;
+    totalCount: number;
+    page?: number;
+    pageSize: number;
+    language: string;
+    concepts: Array<GQLConcept>;
   }
   
   export interface GQLConcept {
-    id?: number;
-    title?: string;
-    content?: string;
-    tags?: Array<string>;
-    metaImage?: GQLMetaImage;
+    id: number;
+    title: string;
+    content: string;
+    tags: Array<string>;
+    metaImage: GQLMetaImage;
   }
   
   export interface GQLDetailedConcept {
@@ -746,73 +746,80 @@ declare global {
   }
   
   export interface GQLSearch {
-    pageSize?: number;
+    pageSize: number;
     page?: number;
-    language?: string;
-    totalCount?: number;
-    results?: Array<GQLSearchResult>;
-    suggestions?: Array<GQLSuggestionResult>;
-    aggregations?: Array<GQLAggregationResult>;
+    language: string;
+    totalCount: number;
+    results: Array<GQLSearchResult>;
+    suggestions: Array<GQLSuggestionResult>;
+    aggregations: Array<GQLAggregationResult>;
     concepts?: GQLConceptResult;
   }
   
+  export interface GQLSearchWithoutPagination {
+    results: Array<GQLSearchResult>;
+  }
+  
   export interface GQLSuggestionResult {
-    name?: string;
-    suggestions?: Array<GQLSearchSuggestion>;
+    name: string;
+    suggestions: Array<GQLSearchSuggestion>;
   }
   
   export interface GQLAggregationResult {
-    field?: string;
-    sumOtherDocCount?: number;
-    docCountErrorUpperBound?: number;
-    values?: Array<GQLBucketResult>;
+    field: string;
+    sumOtherDocCount: number;
+    docCountErrorUpperBound: number;
+    values: Array<GQLBucketResult>;
   }
   
   export interface GQLBucketResult {
-    value?: string;
-    count?: number;
+    value: string;
+    count: number;
   }
   
   export interface GQLSearchSuggestion {
-    text?: string;
-    offset?: number;
-    length?: number;
-    options?: Array<GQLSuggestOption>;
+    text: string;
+    offset: number;
+    length: number;
+    options: Array<GQLSuggestOption>;
   }
   
   export interface GQLSuggestOption {
-    text?: string;
-    score?: number;
+    text: string;
+    score: number;
   }
   
   export interface GQLGroupSearchResult {
     id: number;
     path: string;
     name: string;
-    ingress?: string;
-    traits?: Array<string>;
-    contexts?: Array<GQLSearchContext>;
+    ingress: string;
+    traits: Array<string>;
+    contexts: Array<GQLSearchContext>;
     metaImage?: GQLMetaImage;
+    url: string;
   }
   
   export interface GQLGroupSearch {
-    language?: string;
+    language: string;
     resourceType: string;
     resources: Array<GQLGroupSearchResult>;
-    suggestions?: Array<GQLSuggestionResult>;
-    aggregations?: Array<GQLAggregationResult>;
+    suggestions: Array<GQLSuggestionResult>;
+    aggregations: Array<GQLAggregationResult>;
     totalCount: number;
+    page?: number;
+    pageSize: number;
   }
   
   export interface GQLFrontPageResources {
-    results?: Array<GQLFrontpageSearchResult>;
-    totalCount?: number;
-    suggestions?: Array<GQLSuggestionResult>;
+    results: Array<GQLFrontpageSearchResult>;
+    totalCount: number;
+    suggestions: Array<GQLSuggestionResult>;
   }
   
   export interface GQLFrontpageSearch {
-    topicResources?: GQLFrontPageResources;
-    learningResources?: GQLFrontPageResources;
+    topicResources: GQLFrontPageResources;
+    learningResources: GQLFrontPageResources;
   }
   
   export interface GQLQuery {
@@ -839,11 +846,11 @@ declare global {
     detailedConcept?: GQLDetailedConcept;
     conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
-    searchWithoutPagination?: GQLSearch;
+    searchWithoutPagination?: GQLSearchWithoutPagination;
     podcast?: GQLAudio;
-    podcastSearch: GQLAudioSearch;
+    podcastSearch?: GQLAudioSearch;
     podcastSeries?: GQLPodcastSeries;
-    podcastSeriesSearch: GQLPodcastSeriesSearch;
+    podcastSeriesSearch?: GQLPodcastSeriesSearch;
   }
   
   /*********************************
@@ -947,6 +954,7 @@ declare global {
     Concept?: GQLConceptTypeResolver;
     DetailedConcept?: GQLDetailedConceptTypeResolver;
     Search?: GQLSearchTypeResolver;
+    SearchWithoutPagination?: GQLSearchWithoutPaginationTypeResolver;
     SuggestionResult?: GQLSuggestionResultTypeResolver;
     AggregationResult?: GQLAggregationResultTypeResolver;
     BucketResult?: GQLBucketResultTypeResolver;
@@ -2882,7 +2890,6 @@ declare global {
     url?: ArticleSearchResultToUrlResolver<TParent>;
     metaDescription?: ArticleSearchResultToMetaDescriptionResolver<TParent>;
     metaImage?: ArticleSearchResultToMetaImageResolver<TParent>;
-    contentType?: ArticleSearchResultToContentTypeResolver<TParent>;
     traits?: ArticleSearchResultToTraitsResolver<TParent>;
     contexts?: ArticleSearchResultToContextsResolver<TParent>;
   }
@@ -2911,10 +2918,6 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ArticleSearchResultToContentTypeResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface ArticleSearchResultToTraitsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
@@ -2930,7 +2933,6 @@ declare global {
     url?: LearningpathSearchResultToUrlResolver<TParent>;
     metaDescription?: LearningpathSearchResultToMetaDescriptionResolver<TParent>;
     metaImage?: LearningpathSearchResultToMetaImageResolver<TParent>;
-    contentType?: LearningpathSearchResultToContentTypeResolver<TParent>;
     traits?: LearningpathSearchResultToTraitsResolver<TParent>;
     contexts?: LearningpathSearchResultToContextsResolver<TParent>;
   }
@@ -2956,10 +2958,6 @@ declare global {
   }
   
   export interface LearningpathSearchResultToMetaImageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface LearningpathSearchResultToContentTypeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3323,10 +3321,25 @@ declare global {
   
   export interface GQLConceptResultTypeResolver<TParent = any> {
     totalCount?: ConceptResultToTotalCountResolver<TParent>;
+    page?: ConceptResultToPageResolver<TParent>;
+    pageSize?: ConceptResultToPageSizeResolver<TParent>;
+    language?: ConceptResultToLanguageResolver<TParent>;
     concepts?: ConceptResultToConceptsResolver<TParent>;
   }
   
   export interface ConceptResultToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptResultToPageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptResultToPageSizeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptResultToLanguageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3468,6 +3481,14 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLSearchWithoutPaginationTypeResolver<TParent = any> {
+    results?: SearchWithoutPaginationToResultsResolver<TParent>;
+  }
+  
+  export interface SearchWithoutPaginationToResultsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLSuggestionResultTypeResolver<TParent = any> {
     name?: SuggestionResultToNameResolver<TParent>;
     suggestions?: SuggestionResultToSuggestionsResolver<TParent>;
@@ -3561,6 +3582,7 @@ declare global {
     traits?: GroupSearchResultToTraitsResolver<TParent>;
     contexts?: GroupSearchResultToContextsResolver<TParent>;
     metaImage?: GroupSearchResultToMetaImageResolver<TParent>;
+    url?: GroupSearchResultToUrlResolver<TParent>;
   }
   
   export interface GroupSearchResultToIdResolver<TParent = any, TResult = any> {
@@ -3591,6 +3613,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GroupSearchResultToUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLGroupSearchTypeResolver<TParent = any> {
     language?: GroupSearchToLanguageResolver<TParent>;
     resourceType?: GroupSearchToResourceTypeResolver<TParent>;
@@ -3598,6 +3624,8 @@ declare global {
     suggestions?: GroupSearchToSuggestionsResolver<TParent>;
     aggregations?: GroupSearchToAggregationsResolver<TParent>;
     totalCount?: GroupSearchToTotalCountResolver<TParent>;
+    page?: GroupSearchToPageResolver<TParent>;
+    pageSize?: GroupSearchToPageSizeResolver<TParent>;
   }
   
   export interface GroupSearchToLanguageResolver<TParent = any, TResult = any> {
@@ -3621,6 +3649,14 @@ declare global {
   }
   
   export interface GroupSearchToTotalCountResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchToPageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GroupSearchToPageSizeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3812,7 +3848,7 @@ declare global {
     languageFilter?: string;
     relevance?: string;
     grepCodes?: string;
-    aggregatePaths?: Array<string | null>;
+    aggregatePaths?: Array<string>;
   }
   export interface QueryToSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -3833,7 +3869,7 @@ declare global {
     language?: string;
     fallback?: string;
     grepCodes?: string;
-    aggregatePaths?: Array<string | null>;
+    aggregatePaths?: Array<string>;
   }
   export interface QueryToGroupSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGroupSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -3847,7 +3883,7 @@ declare global {
   }
   
   export interface QueryToConceptsArgs {
-    ids?: Array<string>;
+    ids: Array<string>;
   }
   export interface QueryToConceptsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

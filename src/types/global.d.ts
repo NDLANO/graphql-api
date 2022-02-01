@@ -55,5 +55,8 @@ declare global {
       subject: string;
       resourceTypes: Array<{ name: string }>;
     }>;
+    tags?: {
+      tags: string[];
+    };
   }
 }
