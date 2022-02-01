@@ -147,8 +147,8 @@ declare global {
   }
   
   export interface GQLLearningpathStepEmbedUrl {
-    url?: string;
-    embedType?: string;
+    url: string;
+    embedType: string;
   }
   
   export interface GQLLearningpathStepOembed {
@@ -166,44 +166,44 @@ declare global {
     description?: string;
     embedUrl?: GQLLearningpathStepEmbedUrl;
     license?: GQLLicense;
-    metaUrl?: string;
-    revision?: number;
-    status?: string;
-    supportedLanguages?: Array<string>;
-    type?: string;
+    metaUrl: string;
+    revision: number;
+    status: string;
+    supportedLanguages: Array<string>;
+    type: string;
     article?: GQLArticle;
     resource?: GQLResource;
-    showTitle?: boolean;
+    showTitle: boolean;
     oembed?: GQLLearningpathStepOembed;
   }
   
   export interface GQLLearningpathCoverphoto {
-    url?: string;
-    metaUrl?: string;
+    url: string;
+    metaUrl: string;
   }
   
   export interface GQLLearningpathCopyright {
-    license?: GQLLicense;
-    contributors?: Array<GQLContributor>;
+    license: GQLLicense;
+    contributors: Array<GQLContributor>;
   }
   
   export interface GQLLearningpath {
     id: number;
     title: string;
-    description?: string;
-    copyright?: GQLLearningpathCopyright;
+    description: string;
+    copyright: GQLLearningpathCopyright;
     duration?: number;
-    canEdit?: boolean;
-    verificationStatus?: string;
-    lastUpdated?: string;
-    tags?: Array<string>;
-    supportedLanguages?: Array<string>;
+    canEdit: boolean;
+    verificationStatus: string;
+    lastUpdated: string;
+    tags: Array<string>;
+    supportedLanguages: Array<string>;
     isBasedOn?: number;
-    learningsteps?: Array<GQLLearningpathStep>;
-    metaUrl?: string;
-    revision?: number;
-    learningstepUrl?: string;
-    status?: string;
+    learningsteps: Array<GQLLearningpathStep>;
+    metaUrl: string;
+    revision: number;
+    learningstepUrl: string;
+    status: string;
     coverphoto?: GQLLearningpathCoverphoto;
   }
   

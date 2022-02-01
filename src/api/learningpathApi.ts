@@ -77,7 +77,7 @@ export async function fetchLearningpath(
   return {
     ...learningpath,
     title: learningpath.title.title,
-    description: learningpath.description?.description,
+    description: learningpath.description.description,
     lastUpdated: learningpath.lastUpdated,
     coverphoto: {
       url: learningpath.coverPhoto?.url,
