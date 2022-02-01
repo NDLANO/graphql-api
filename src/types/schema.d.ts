@@ -794,7 +794,7 @@ declare global {
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearch;
     podcast?: GQLAudio;
-    podcastSearch?: GQLAudioSearch;
+    podcastSearch: GQLAudioSearch;
   }
   
   /*********************************
@@ -3669,7 +3669,7 @@ declare global {
   }
   
   export interface QueryToPodcastArgs {
-    id?: string;
+    id: string;
   }
   export interface QueryToPodcastResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

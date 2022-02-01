@@ -816,8 +816,8 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
     ): Search
-    podcast(id: String): Audio
-    podcastSearch(page: String, pageSize: String): AudioSearch
+    podcast(id: String!): Audio
+    podcastSearch(page: String, pageSize: String): AudioSearch!
   }
 `;
 
