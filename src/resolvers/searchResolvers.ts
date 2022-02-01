@@ -25,7 +25,7 @@ export const Query = {
     _: any,
     searchQuery: QueryToSearchArgs,
     context: Context,
-  ): Promise<GQLSearch> {
+  ): Promise<GQLGroupSearch> {
     return groupSearch(searchQuery, context);
   },
   async frontpageSearch(
@@ -39,7 +39,7 @@ export const Query = {
     _: any,
     searchQuery: QueryToSearchWithoutPaginationArgs,
     context: Context,
-  ): Promise<GQLSearch> {
+  ): Promise<GQLSearchWithoutPagination> {
     return searchWithoutPagination(searchQuery, context);
   },
 };

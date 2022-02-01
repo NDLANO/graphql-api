@@ -552,72 +552,69 @@ export const typeDefs = gql`
 
   interface SearchResult {
     id: Int!
-    title: String
-    supportedLanguages: [String!]
-    url: String
-    metaDescription: String
+    title: String!
+    supportedLanguages: [String!]!
+    url: String!
+    metaDescription: String!
     metaImage: MetaImage
-    contentType: String
-    traits: [String!]
-    contexts: [SearchContext!]
+    traits: [String!]!
+    contexts: [SearchContext!]!
   }
 
   type ArticleSearchResult implements SearchResult {
     id: Int!
-    title: String
-    supportedLanguages: [String!]
-    url: String
-    metaDescription: String
+    title: String!
+    supportedLanguages: [String!]!
+    url: String!
+    metaDescription: String!
     metaImage: MetaImage
-    contentType: String
-    traits: [String!]
-    contexts: [SearchContext!]
+    traits: [String!]!
+    contexts: [SearchContext!]!
   }
 
   type LearningpathSearchResult implements SearchResult {
     id: Int!
-    title: String
-    supportedLanguages: [String!]
-    url: String
-    metaDescription: String
+    title: String!
+    supportedLanguages: [String!]!
+    url: String!
+    metaDescription: String!
     metaImage: MetaImage
-    contentType: String
-    traits: [String!]
-    contexts: [SearchContext!]
+    traits: [String!]!
+    contexts: [SearchContext!]!
   }
 
   type FrontpageSearchResult {
     id: String!
-    name: String
-    resourceTypes: [SearchContextResourceTypes!]
-    subject: String
-    path: String
-    filters: [SearchContextFilter!]
+    name: String!
+    resourceTypes: [SearchContextResourceTypes!]!
+    subject: String!
+    path: String!
+    filters: [SearchContextFilter!]!
   }
 
   type SearchContext {
-    breadcrumbs: [String!]
-    learningResourceType: String
-    resourceTypes: [SearchContextResourceTypes!]
-    subject: String
-    subjectId: String
-    relevance: String
-    path: String
-    id: String
-    language: String
-    filters: [SearchContextFilter!]
+    breadcrumbs: [String!]!
+    learningResourceType: String!
+    resourceTypes: [SearchContextResourceTypes!]!
+    subject: String!
+    subjectId: String!
+    relevance: String!
+    path: String!
+    id: String!
+    language: String!
+    filters: [SearchContextFilter!]!
   }
 
   type SearchContextResourceTypes {
-    id: String
-    name: String
-    language: String
+    id: String!
+    name: String!
+    language: String!
   }
 
   type SearchContextFilter {
-    id: String
-    name: String
-    relevance: String
+    id: String!
+    name: String!
+    relevance: String!
   }
 
   type VisualElementOembed {
@@ -681,16 +678,19 @@ export const typeDefs = gql`
   }
 
   type ConceptResult {
-    totalCount: Int
-    concepts: [Concept!]
+    totalCount: Int!
+    page: Int
+    pageSize: Int!
+    language: String!
+    concepts: [Concept!]!
   }
 
   type Concept {
-    id: Int
-    title: String
-    content: String
-    tags: [String!]
-    metaImage: MetaImage
+    id: Int!
+    title: String!
+    content: String!
+    tags: [String!]!
+    metaImage: MetaImage!
   }
 
   type DetailedConcept {
@@ -709,73 +709,80 @@ export const typeDefs = gql`
   }
 
   type Search {
-    pageSize: Int
+    pageSize: Int!
     page: Int
-    language: String
-    totalCount: Int
-    results: [SearchResult!]
-    suggestions: [SuggestionResult!]
-    aggregations: [AggregationResult!]
+    language: String!
+    totalCount: Int!
+    results: [SearchResult!]!
+    suggestions: [SuggestionResult!]!
+    aggregations: [AggregationResult!]!
     concepts: ConceptResult
   }
 
+  type SearchWithoutPagination {
+    results: [SearchResult!]!
+  }
+
   type SuggestionResult {
-    name: String
-    suggestions: [SearchSuggestion!]
+    name: String!
+    suggestions: [SearchSuggestion!]!
   }
 
   type AggregationResult {
-    field: String
-    sumOtherDocCount: Int
-    docCountErrorUpperBound: Int
-    values: [BucketResult!]
+    field: String!
+    sumOtherDocCount: Int!
+    docCountErrorUpperBound: Int!
+    values: [BucketResult!]!
   }
 
   type BucketResult {
-    value: String
-    count: Int
+    value: String!
+    count: Int!
   }
 
   type SearchSuggestion {
-    text: String
-    offset: Int
-    length: Int
-    options: [SuggestOption!]
+    text: String!
+    offset: Int!
+    length: Int!
+    options: [SuggestOption!]!
   }
 
   type SuggestOption {
-    text: String
-    score: Float
+    text: String!
+    score: Float!
   }
 
   type GroupSearchResult {
     id: Int!
     path: String!
     name: String!
-    ingress: String
-    traits: [String!]
-    contexts: [SearchContext!]
+    ingress: String!
+    traits: [String!]!
+    contexts: [SearchContext!]!
     metaImage: MetaImage
+    url: String!
   }
 
   type GroupSearch {
-    language: String
+    language: String!
     resourceType: String!
     resources: [GroupSearchResult!]!
-    suggestions: [SuggestionResult!]
-    aggregations: [AggregationResult!]
+    suggestions: [SuggestionResult!]!
+    aggregations: [AggregationResult!]!
     totalCount: Int!
+    page: Int
+    pageSize: Int!
   }
 
   type FrontPageResources {
-    results: [FrontpageSearchResult!]
-    totalCount: Int
-    suggestions: [SuggestionResult!]
+    results: [FrontpageSearchResult!]!
+    totalCount: Int!
+    suggestions: [SuggestionResult!]!
   }
 
   type FrontpageSearch {
-    topicResources: FrontPageResources
-    learningResources: FrontPageResources
+    topicResources: FrontPageResources!
+    learningResources: FrontPageResources!
   }
 
   type Query {
@@ -820,7 +827,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
       grepCodes: String
-      aggregatePaths: [String]
+      aggregatePaths: [String!]
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
@@ -834,10 +841,10 @@ export const typeDefs = gql`
       language: String
       fallback: String
       grepCodes: String
-      aggregatePaths: [String]
+      aggregatePaths: [String!]
     ): [GroupSearch!]
     listingPage(subjects: String): ListingPage
-    concepts(ids: [String!]): [Concept!]
+    concepts(ids: [String!]!): [Concept!]
     detailedConcept(id: String): DetailedConcept
     conceptSearch(
       query: String
@@ -863,7 +870,7 @@ export const typeDefs = gql`
       subjects: String
       languageFilter: String
       relevance: String
-    ): Search
+    ): SearchWithoutPagination
     podcast(id: Int): Audio
     podcastSearch(page: Int, pageSize: Int): AudioSearch
     podcastSeries(id: Int): PodcastSeries

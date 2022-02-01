@@ -104,8 +104,8 @@ export async function groupSearch(
       return {
         ...contentTypeResult,
         path: path || contentTypeResult.url,
-        name: contentTypeResult.title?.title,
-        ingress: contentTypeResult.metaDescription?.metaDescription,
+        name: contentTypeResult.title.title,
+        ingress: contentTypeResult.metaDescription.metaDescription,
         contexts: contentTypeResult.contexts,
         ...(contentTypeResult.metaImage && {
           metaImage: {
@@ -179,7 +179,7 @@ const queryOnGivenPage = (
 export async function searchWithoutPagination(
   searchQuery: QueryToSearchWithoutPaginationArgs,
   context: Context,
-): Promise<GQLSearch> {
+): Promise<GQLSearchWithoutPagination> {
   const firstQuery = await queryOnGivenPage(searchQuery, '1', context);
   const firstPageJson = await resolveJson(firstQuery);
   const numberOfPages = Math.ceil(

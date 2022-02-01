@@ -55,7 +55,10 @@ export async function searchConcepts(
   const conceptResult = await resolveJson(response);
   return {
     totalCount: conceptResult.totalCount,
-    concepts: conceptResult.results?.map((res: ConceptSearchResultJson) => ({
+    page: conceptResult.page,
+    pageSize: conceptResult.pageSize,
+    language: conceptResult.language,
+    concepts: conceptResult.results.map((res: ConceptSearchResultJson) => ({
       id: res.id,
       title: res.title.title,
       content: res.content.content,
@@ -83,6 +86,7 @@ export async function fetchConcepts(
             title: res.title.title,
             content: res.content.content,
             metaImage: res.metaImage,
+            tags: res.tags?.tags ?? [],
           };
           return result;
         } catch (e) {
