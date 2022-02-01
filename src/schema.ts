@@ -30,7 +30,7 @@ export const typeDefs = gql`
   }
 
   type Tags {
-    tags: [String!]
+    tags: [String!]!
     language: String!
   }
 
@@ -57,8 +57,8 @@ export const typeDefs = gql`
     title: Title!
     audioFile: AudioFile!
     copyright: Copyright!
-    tags: Tags
-    supportedLanguages: [String!]
+    tags: Tags!
+    supportedLanguages: [String!]!
     audioType: String!
     podcastMeta: PodcastMeta
     series: PodcastSeries
@@ -71,7 +71,7 @@ export const typeDefs = gql`
     id: Int!
     title: Title!
     description: Description!
-    supportedLanguages: [String!]
+    supportedLanguages: [String!]!
     episodes: [Audio!]
     coverPhoto: CoverPhoto!
   }
@@ -82,8 +82,7 @@ export const typeDefs = gql`
     audioType: String!
     url: String!
     license: String!
-    tags: Tags
-    supportedLanguages: [String!]
+    supportedLanguages: [String!]!
     manuscript: Manuscript
     podcastMeta: PodcastMeta
     series: PodcastSeries
@@ -91,11 +90,11 @@ export const typeDefs = gql`
   }
 
   type AudioSearch {
-    pageSize: Int
+    pageSize: Int!
     page: Int
-    language: String
-    totalCount: Int
-    results: [Audio!]
+    language: String!
+    totalCount: Int!
+    results: [Audio!]!
   }
 
   type PodcastSeriesSummary {
@@ -112,7 +111,7 @@ export const typeDefs = gql`
     page: Int
     language: String!
     totalCount: Int!
-    results: [PodcastSeriesSummary!]
+    results: [PodcastSeriesSummary!]!
   }
 
   type ResourceTypeDefinition {
@@ -277,10 +276,10 @@ export const typeDefs = gql`
   }
 
   type Copyright {
-    license: License
-    creators: [Contributor!]
-    processors: [Contributor!]
-    rightsholders: [Contributor!]
+    license: License!
+    creators: [Contributor!]!
+    processors: [Contributor!]!
+    rightsholders: [Contributor!]!
     origin: String
   }
 
@@ -864,10 +863,10 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
     ): Search
-    podcast(id: Int): Audio
-    podcastSearch(page: Int, pageSize: Int): AudioSearch
-    podcastSeries(id: Int): PodcastSeries
-    podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
+    podcast(id: Int!): Audio
+    podcastSearch(page: Int, pageSize: Int): AudioSearch!
+    podcastSeries(id: Int!): PodcastSeries
+    podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch!
   }
 `;
 

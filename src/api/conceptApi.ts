@@ -12,6 +12,10 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
 
+interface Author {
+  type: string;
+  name: string;
+}
 interface ConceptSearchResultJson extends SearchResultJson {
   tags?: {
     tags: string[];
@@ -23,6 +27,9 @@ interface ConceptSearchResultJson extends SearchResultJson {
     license: {
       license: string;
     };
+    processors: Author[];
+    rightsholders: Author[];
+    creators: Author[];
   };
   articleIds?: string[];
   subjectIds?: string[];
