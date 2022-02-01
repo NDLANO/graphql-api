@@ -843,7 +843,7 @@ declare global {
     podcast?: GQLAudio;
     podcastSearch: GQLAudioSearch;
     podcastSeries?: GQLPodcastSeries;
-    podcastSeriesSearch?: GQLPodcastSeriesSearch;
+    podcastSeriesSearch: GQLPodcastSeriesSearch;
   }
   
   /*********************************
@@ -3915,7 +3915,7 @@ declare global {
   }
   
   export interface QueryToPodcastSeriesArgs {
-    id?: number;
+    id: number;
   }
   export interface QueryToPodcastSeriesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSeriesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

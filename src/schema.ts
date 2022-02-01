@@ -865,8 +865,8 @@ export const typeDefs = gql`
     ): Search
     podcast(id: Int!): Audio
     podcastSearch(page: Int, pageSize: Int): AudioSearch!
-    podcastSeries(id: Int): PodcastSeries
-    podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
+    podcastSeries(id: Int!): PodcastSeries
+    podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch!
   }
 `;
 
