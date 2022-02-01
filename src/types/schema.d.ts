@@ -35,7 +35,7 @@ declare global {
   }
   
   export interface GQLTags {
-    tags?: Array<string>;
+    tags: Array<string>;
     language: string;
   }
   
@@ -62,8 +62,8 @@ declare global {
     title: GQLTitle;
     audioFile: GQLAudioFile;
     copyright: GQLCopyright;
-    tags?: GQLTags;
-    supportedLanguages?: Array<string>;
+    tags: GQLTags;
+    supportedLanguages: Array<string>;
     audioType: string;
     podcastMeta?: GQLPodcastMeta;
     series?: GQLPodcastSeries;
@@ -76,7 +76,7 @@ declare global {
     id: number;
     title: GQLTitle;
     description: GQLDescription;
-    supportedLanguages?: Array<string>;
+    supportedLanguages: Array<string>;
     episodes?: Array<GQLAudio>;
     coverPhoto: GQLCoverPhoto;
   }
@@ -87,8 +87,7 @@ declare global {
     audioType: string;
     url: string;
     license: string;
-    tags?: GQLTags;
-    supportedLanguages?: Array<string>;
+    supportedLanguages: Array<string>;
     manuscript?: GQLManuscript;
     podcastMeta?: GQLPodcastMeta;
     series?: GQLPodcastSeries;
@@ -96,11 +95,11 @@ declare global {
   }
   
   export interface GQLAudioSearch {
-    pageSize?: number;
+    pageSize: number;
     page?: number;
-    language?: string;
-    totalCount?: number;
-    results?: Array<GQLAudio>;
+    language: string;
+    totalCount: number;
+    results: Array<GQLAudio>;
   }
   
   export interface GQLPodcastSeriesSummary {
@@ -117,7 +116,7 @@ declare global {
     page?: number;
     language: string;
     totalCount: number;
-    results?: Array<GQLPodcastSeriesSummary>;
+    results: Array<GQLPodcastSeriesSummary>;
   }
   
   export interface GQLResourceTypeDefinition {
@@ -304,10 +303,10 @@ declare global {
   }
   
   export interface GQLCopyright {
-    license?: GQLLicense;
-    creators?: Array<GQLContributor>;
-    processors?: Array<GQLContributor>;
-    rightsholders?: Array<GQLContributor>;
+    license: GQLLicense;
+    creators: Array<GQLContributor>;
+    processors: Array<GQLContributor>;
+    rightsholders: Array<GQLContributor>;
     origin?: string;
   }
   
@@ -1185,7 +1184,6 @@ declare global {
     audioType?: AudioSummaryToAudioTypeResolver<TParent>;
     url?: AudioSummaryToUrlResolver<TParent>;
     license?: AudioSummaryToLicenseResolver<TParent>;
-    tags?: AudioSummaryToTagsResolver<TParent>;
     supportedLanguages?: AudioSummaryToSupportedLanguagesResolver<TParent>;
     manuscript?: AudioSummaryToManuscriptResolver<TParent>;
     podcastMeta?: AudioSummaryToPodcastMetaResolver<TParent>;
@@ -1210,10 +1208,6 @@ declare global {
   }
   
   export interface AudioSummaryToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioSummaryToTagsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3942,7 +3936,7 @@ declare global {
   }
   
   export interface QueryToPodcastArgs {
-    id?: number;
+    id: number;
   }
   export interface QueryToPodcastResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -3957,7 +3951,7 @@ declare global {
   }
   
   export interface QueryToPodcastSeriesArgs {
-    id?: number;
+    id: number;
   }
   export interface QueryToPodcastSeriesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSeriesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
