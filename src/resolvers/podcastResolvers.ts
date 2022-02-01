@@ -6,7 +6,12 @@
  *
  */
 
-import { fetchPodcast, fetchPodcastsPage } from '../api/audioApi';
+import {
+  fetchPodcast,
+  fetchPodcastSeries,
+  fetchPodcastSeriesPage,
+  fetchPodcastsPage,
+} from '../api/audioApi';
 
 export const Query = {
   async podcast(
@@ -14,7 +19,7 @@ export const Query = {
     { id }: QueryToPodcastArgs,
     context: Context,
   ): Promise<GQLAudio> {
-    return fetchPodcast(id, context);
+    return fetchPodcast(context, id);
   },
   async podcastSearch(
     _: any,
@@ -22,6 +27,20 @@ export const Query = {
     context: Context,
   ): Promise<GQLAudioSearch> {
     return fetchPodcastsPage(context, pageSize, page);
+  },
+  async podcastSeries(
+    _: any,
+    { id }: QueryToPodcastSeriesArgs,
+    context: Context,
+  ): Promise<GQLPodcastSeries> {
+    return fetchPodcastSeries(context, id);
+  },
+  async podcastSeriesSearch(
+    _: any,
+    { pageSize, page }: QueryToPodcastSeriesSearchArgs,
+    context: Context,
+  ): Promise<GQLPodcastSeriesSearch> {
+    return fetchPodcastSeriesPage(context, pageSize, page);
   },
 };
 
