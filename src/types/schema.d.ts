@@ -76,7 +76,7 @@ declare global {
     id: number;
     title: GQLTitle;
     description: GQLDescription;
-    supportedLanguages?: Array<string>;
+    supportedLanguages: Array<string>;
     episodes?: Array<GQLAudio>;
     coverPhoto: GQLCoverPhoto;
   }
@@ -87,8 +87,7 @@ declare global {
     audioType: string;
     url: string;
     license: string;
-    tags?: GQLTags;
-    supportedLanguages?: Array<string>;
+    supportedLanguages: Array<string>;
     manuscript?: GQLManuscript;
     podcastMeta?: GQLPodcastMeta;
     series?: GQLPodcastSeries;
@@ -117,7 +116,7 @@ declare global {
     page?: number;
     language: string;
     totalCount: number;
-    results?: Array<GQLPodcastSeriesSummary>;
+    results: Array<GQLPodcastSeriesSummary>;
   }
   
   export interface GQLResourceTypeDefinition {
@@ -1177,7 +1176,6 @@ declare global {
     audioType?: AudioSummaryToAudioTypeResolver<TParent>;
     url?: AudioSummaryToUrlResolver<TParent>;
     license?: AudioSummaryToLicenseResolver<TParent>;
-    tags?: AudioSummaryToTagsResolver<TParent>;
     supportedLanguages?: AudioSummaryToSupportedLanguagesResolver<TParent>;
     manuscript?: AudioSummaryToManuscriptResolver<TParent>;
     podcastMeta?: AudioSummaryToPodcastMetaResolver<TParent>;
@@ -1202,10 +1200,6 @@ declare global {
   }
   
   export interface AudioSummaryToLicenseResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioSummaryToTagsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
