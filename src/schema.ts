@@ -25,7 +25,7 @@ export const typeDefs = gql`
   }
 
   type Tags {
-    tags: [String!]
+    tags: [String!]!
     language: String!
   }
 
@@ -52,19 +52,19 @@ export const typeDefs = gql`
     title: Title!
     audioFile: AudioFile!
     copyright: Copyright!
-    tags: Tags
-    supportedLanguages: [String!]
+    tags: Tags!
+    supportedLanguages: [String!]!
     audioType: String!
     podcastMeta: PodcastMeta
     manuscript: Manuscript
   }
 
   type AudioSearch {
-    pageSize: Int
+    pageSize: Int!
     page: Int
-    language: String
-    totalCount: Int
-    results: [Audio!]
+    language: String!
+    totalCount: Int!
+    results: [Audio!]!
   }
 
   type ResourceTypeDefinition {
@@ -229,10 +229,10 @@ export const typeDefs = gql`
   }
 
   type Copyright {
-    license: License
-    creators: [Contributor!]
-    processors: [Contributor!]
-    rightsholders: [Contributor!]
+    license: License!
+    creators: [Contributor!]!
+    processors: [Contributor!]!
+    rightsholders: [Contributor!]!
     origin: String
   }
 
