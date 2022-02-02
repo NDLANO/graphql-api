@@ -727,7 +727,10 @@ declare global {
     title: string;
     content: string;
     tags: Array<string>;
+    subjectIds?: Array<string>;
+    subjectNames?: Array<string>;
     metaImage: GQLMetaImage;
+    visualElement?: GQLVisualElement;
   }
   
   export interface GQLDetailedConcept {
@@ -3352,7 +3355,10 @@ declare global {
     title?: ConceptToTitleResolver<TParent>;
     content?: ConceptToContentResolver<TParent>;
     tags?: ConceptToTagsResolver<TParent>;
+    subjectIds?: ConceptToSubjectIdsResolver<TParent>;
+    subjectNames?: ConceptToSubjectNamesResolver<TParent>;
     metaImage?: ConceptToMetaImageResolver<TParent>;
+    visualElement?: ConceptToVisualElementResolver<TParent>;
   }
   
   export interface ConceptToIdResolver<TParent = any, TResult = any> {
@@ -3371,7 +3377,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface ConceptToSubjectIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToSubjectNamesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface ConceptToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToVisualElementResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
