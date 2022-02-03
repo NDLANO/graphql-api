@@ -56,7 +56,7 @@ declare global {
     language: string;
   }
   
-  export interface GQLAudio {
+  export interface GQLAudioBase {
     id: number;
     revision: number;
     title: GQLTitle;
@@ -66,13 +66,79 @@ declare global {
     supportedLanguages: Array<string>;
     audioType: string;
     podcastMeta?: GQLPodcastMeta;
-    series?: GQLPodcastSeries;
     manuscript?: GQLManuscript;
     created: string;
     updated: string;
   }
   
-  export interface GQLPodcastSeries {
+  /** Use this to resolve interface type AudioBase */
+  export type GQLPossibleAudioBaseTypeNames = 'Audio' | 'AudioWithSeries';
+  
+  export interface GQLAudioBaseNameMap {
+    AudioBase: GQLAudioBase;
+    Audio: GQLAudio;
+    AudioWithSeries: GQLAudioWithSeries;
+  }
+  
+  export interface GQLAudio extends GQLAudioBase {
+    id: number;
+    revision: number;
+    title: GQLTitle;
+    audioFile: GQLAudioFile;
+    copyright: GQLCopyright;
+    tags: GQLTags;
+    supportedLanguages: Array<string>;
+    audioType: string;
+    podcastMeta?: GQLPodcastMeta;
+    manuscript?: GQLManuscript;
+    created: string;
+    updated: string;
+  }
+  
+  export interface GQLAudioWithSeries extends GQLAudioBase {
+    id: number;
+    revision: number;
+    title: GQLTitle;
+    audioFile: GQLAudioFile;
+    copyright: GQLCopyright;
+    tags: GQLTags;
+    supportedLanguages: Array<string>;
+    audioType: string;
+    podcastMeta?: GQLPodcastMeta;
+    manuscript?: GQLManuscript;
+    created: string;
+    updated: string;
+    series?: GQLPodcastSeries;
+  }
+  
+  export interface GQLPodcastSeriesBase {
+    id: number;
+    title: GQLTitle;
+    description: GQLDescription;
+    supportedLanguages: Array<string>;
+    coverPhoto: GQLCoverPhoto;
+  }
+  
+  /** Use this to resolve interface type PodcastSeriesBase */
+  export type GQLPossiblePodcastSeriesBaseTypeNames =
+  'PodcastSeries' |
+  'PodcastSeriesWithEpisodes';
+  
+  export interface GQLPodcastSeriesBaseNameMap {
+    PodcastSeriesBase: GQLPodcastSeriesBase;
+    PodcastSeries: GQLPodcastSeries;
+    PodcastSeriesWithEpisodes: GQLPodcastSeriesWithEpisodes;
+  }
+  
+  export interface GQLPodcastSeries extends GQLPodcastSeriesBase {
+    id: number;
+    title: GQLTitle;
+    description: GQLDescription;
+    supportedLanguages: Array<string>;
+    coverPhoto: GQLCoverPhoto;
+  }
+  
+  export interface GQLPodcastSeriesWithEpisodes extends GQLPodcastSeriesBase {
     id: number;
     title: GQLTitle;
     description: GQLDescription;
@@ -90,7 +156,6 @@ declare global {
     supportedLanguages: Array<string>;
     manuscript?: GQLManuscript;
     podcastMeta?: GQLPodcastMeta;
-    series?: GQLPodcastSeries;
     lastUpdated: string;
   }
   
@@ -99,7 +164,7 @@ declare global {
     page?: number;
     language: string;
     totalCount: number;
-    results: Array<GQLAudio>;
+    results: Array<GQLAudioWithSeries>;
   }
   
   export interface GQLPodcastSeriesSummary {
@@ -847,9 +912,9 @@ declare global {
     conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearchWithoutPagination;
-    podcast?: GQLAudio;
+    podcast?: GQLAudioWithSeries;
     podcastSearch?: GQLAudioSearch;
-    podcastSeries?: GQLPodcastSeries;
+    podcastSeries?: GQLPodcastSeriesWithEpisodes;
     podcastSeriesSearch?: GQLPodcastSeriesSearch;
   }
   
@@ -872,8 +937,18 @@ declare global {
     CoverPhoto?: GQLCoverPhotoTypeResolver;
     PodcastMeta?: GQLPodcastMetaTypeResolver;
     Manuscript?: GQLManuscriptTypeResolver;
+    AudioBase?: {
+      __resolveType: GQLAudioBaseTypeResolver
+    };
+    
     Audio?: GQLAudioTypeResolver;
+    AudioWithSeries?: GQLAudioWithSeriesTypeResolver;
+    PodcastSeriesBase?: {
+      __resolveType: GQLPodcastSeriesBaseTypeResolver
+    };
+    
     PodcastSeries?: GQLPodcastSeriesTypeResolver;
+    PodcastSeriesWithEpisodes?: GQLPodcastSeriesWithEpisodesTypeResolver;
     AudioSummary?: GQLAudioSummaryTypeResolver;
     AudioSearch?: GQLAudioSearchTypeResolver;
     PodcastSeriesSummary?: GQLPodcastSeriesSummaryTypeResolver;
@@ -1077,6 +1152,9 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLAudioBaseTypeResolver<TParent = any> {
+    (parent: TParent, context: any, info: GraphQLResolveInfo): 'Audio' | 'AudioWithSeries' | Promise<'Audio' | 'AudioWithSeries'>;
+  }
   export interface GQLAudioTypeResolver<TParent = any> {
     id?: AudioToIdResolver<TParent>;
     revision?: AudioToRevisionResolver<TParent>;
@@ -1087,7 +1165,6 @@ declare global {
     supportedLanguages?: AudioToSupportedLanguagesResolver<TParent>;
     audioType?: AudioToAudioTypeResolver<TParent>;
     podcastMeta?: AudioToPodcastMetaResolver<TParent>;
-    series?: AudioToSeriesResolver<TParent>;
     manuscript?: AudioToManuscriptResolver<TParent>;
     created?: AudioToCreatedResolver<TParent>;
     updated?: AudioToUpdatedResolver<TParent>;
@@ -1129,10 +1206,6 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface AudioToSeriesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface AudioToManuscriptResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
@@ -1145,12 +1218,82 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLAudioWithSeriesTypeResolver<TParent = any> {
+    id?: AudioWithSeriesToIdResolver<TParent>;
+    revision?: AudioWithSeriesToRevisionResolver<TParent>;
+    title?: AudioWithSeriesToTitleResolver<TParent>;
+    audioFile?: AudioWithSeriesToAudioFileResolver<TParent>;
+    copyright?: AudioWithSeriesToCopyrightResolver<TParent>;
+    tags?: AudioWithSeriesToTagsResolver<TParent>;
+    supportedLanguages?: AudioWithSeriesToSupportedLanguagesResolver<TParent>;
+    audioType?: AudioWithSeriesToAudioTypeResolver<TParent>;
+    podcastMeta?: AudioWithSeriesToPodcastMetaResolver<TParent>;
+    manuscript?: AudioWithSeriesToManuscriptResolver<TParent>;
+    created?: AudioWithSeriesToCreatedResolver<TParent>;
+    updated?: AudioWithSeriesToUpdatedResolver<TParent>;
+    series?: AudioWithSeriesToSeriesResolver<TParent>;
+  }
+  
+  export interface AudioWithSeriesToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToRevisionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToAudioFileResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToAudioTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToPodcastMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToManuscriptResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToCreatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToUpdatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface AudioWithSeriesToSeriesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLPodcastSeriesBaseTypeResolver<TParent = any> {
+    (parent: TParent, context: any, info: GraphQLResolveInfo): 'PodcastSeries' | 'PodcastSeriesWithEpisodes' | Promise<'PodcastSeries' | 'PodcastSeriesWithEpisodes'>;
+  }
   export interface GQLPodcastSeriesTypeResolver<TParent = any> {
     id?: PodcastSeriesToIdResolver<TParent>;
     title?: PodcastSeriesToTitleResolver<TParent>;
     description?: PodcastSeriesToDescriptionResolver<TParent>;
     supportedLanguages?: PodcastSeriesToSupportedLanguagesResolver<TParent>;
-    episodes?: PodcastSeriesToEpisodesResolver<TParent>;
     coverPhoto?: PodcastSeriesToCoverPhotoResolver<TParent>;
   }
   
@@ -1170,11 +1313,40 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface PodcastSeriesToEpisodesResolver<TParent = any, TResult = any> {
+  export interface PodcastSeriesToCoverPhotoResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface PodcastSeriesToCoverPhotoResolver<TParent = any, TResult = any> {
+  export interface GQLPodcastSeriesWithEpisodesTypeResolver<TParent = any> {
+    id?: PodcastSeriesWithEpisodesToIdResolver<TParent>;
+    title?: PodcastSeriesWithEpisodesToTitleResolver<TParent>;
+    description?: PodcastSeriesWithEpisodesToDescriptionResolver<TParent>;
+    supportedLanguages?: PodcastSeriesWithEpisodesToSupportedLanguagesResolver<TParent>;
+    episodes?: PodcastSeriesWithEpisodesToEpisodesResolver<TParent>;
+    coverPhoto?: PodcastSeriesWithEpisodesToCoverPhotoResolver<TParent>;
+  }
+  
+  export interface PodcastSeriesWithEpisodesToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastSeriesWithEpisodesToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastSeriesWithEpisodesToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastSeriesWithEpisodesToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastSeriesWithEpisodesToEpisodesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastSeriesWithEpisodesToCoverPhotoResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -1187,7 +1359,6 @@ declare global {
     supportedLanguages?: AudioSummaryToSupportedLanguagesResolver<TParent>;
     manuscript?: AudioSummaryToManuscriptResolver<TParent>;
     podcastMeta?: AudioSummaryToPodcastMetaResolver<TParent>;
-    series?: AudioSummaryToSeriesResolver<TParent>;
     lastUpdated?: AudioSummaryToLastUpdatedResolver<TParent>;
   }
   
@@ -1220,10 +1391,6 @@ declare global {
   }
   
   export interface AudioSummaryToPodcastMetaResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AudioSummaryToSeriesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

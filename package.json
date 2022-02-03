@@ -45,6 +45,7 @@
     "query-string": "^6.2.0"
   },
   "devDependencies": {
+    "@ndla/types-audio-api": "0.0.10",
     "@types/bunyan": "^1.8.5",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",
