@@ -43,7 +43,7 @@ export async function searchConcepts(
     tags?: string;
     page?: string;
     pageSize?: string;
-    exactMatch?: boolean;
+    exactTitleMatch?: boolean;
     language?: string;
     fallback?: boolean;
   },
@@ -52,7 +52,7 @@ export async function searchConcepts(
   const query = {
     ...params,
     'page-size': params.pageSize,
-    'exact-match': params.exactMatch,
+    'exact-title-match': params.exactTitleMatch,
     sort: 'title',
   };
   const response = await fetch(

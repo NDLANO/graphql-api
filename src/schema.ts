@@ -851,7 +851,7 @@ export const typeDefs = gql`
       tags: String
       page: String
       pageSize: String
-      exactMatch: Boolean
+      exactTitleMatch: Boolean
       language: String
       fallback: Boolean
     ): ConceptResult

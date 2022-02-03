@@ -3902,7 +3902,7 @@ declare global {
     tags?: string;
     page?: string;
     pageSize?: string;
-    exactMatch?: boolean;
+    exactTitleMatch?: boolean;
     language?: string;
     fallback?: boolean;
   }
