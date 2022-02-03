@@ -31,7 +31,7 @@ interface ConceptSearchResultJson extends SearchResultJson {
     rightsholders: Author[];
     creators: Author[];
   };
-  articleIds?: string[];
+  articleIds?: number[];
   subjectIds?: string[];
   created: string;
 }
@@ -131,8 +131,9 @@ export async function fetchDetailedConcept(
       content: concept.content.content,
       created: concept.created,
       articleIds: concept.articleIds,
-      subjectIds: concept.subjectIds,
+      subjectIds: concept.subjectIds ?? [],
       copyright: concept.copyright,
+      tags: concept.tags?.tags ?? [],
     };
     const metaImageId = concept.metaImage?.url?.split('/').pop();
     if (metaImageId) {

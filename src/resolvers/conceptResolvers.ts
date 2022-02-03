@@ -57,9 +57,9 @@ export const resolvers = {
         return Promise.all(
           detailedConcept.subjectIds?.map(id => {
             return data.subjects.find(subject => subject.id === id).name;
-          }),
+          }) ?? [],
         );
-      }
+      } else return [];
     },
     async articles(
       detailedConcept: GQLDetailedConcept,
@@ -71,8 +71,9 @@ export const resolvers = {
           detailedConcept.articleIds,
           context,
         );
-        return articles;
+        return articles ?? [];
       }
+      return [];
     },
   },
 };

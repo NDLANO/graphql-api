@@ -710,8 +710,8 @@ declare global {
   }
   
   export interface GQLListingPage {
-    subjects?: Array<GQLSubject>;
-    tags?: Array<string>;
+    subjects: Array<GQLSubject>;
+    tags: Array<string>;
   }
   
   export interface GQLConceptResult {
@@ -733,13 +733,13 @@ declare global {
   export interface GQLDetailedConcept {
     id: number;
     title: string;
-    content?: string;
-    created?: string;
-    tags?: Array<string>;
+    content: string;
+    created: string;
+    tags: Array<string>;
     image?: GQLImageLicense;
-    subjectIds?: Array<string>;
+    subjectIds: Array<string>;
     subjectNames?: Array<string>;
-    articleIds?: Array<string>;
+    articleIds: Array<number>;
     articles?: Array<GQLMeta>;
     visualElement?: GQLVisualElement;
     copyright?: GQLCopyright;
@@ -847,7 +847,7 @@ declare global {
     conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearchWithoutPagination;
-    podcast?: GQLAudio;
+    podcast: GQLAudio;
     podcastSearch?: GQLAudioSearch;
     podcastSeries?: GQLPodcastSeries;
     podcastSeriesSearch?: GQLPodcastSeriesSearch;
@@ -3890,7 +3890,7 @@ declare global {
   }
   
   export interface QueryToDetailedConceptArgs {
-    id?: string;
+    id: string;
   }
   export interface QueryToDetailedConceptResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToDetailedConceptArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

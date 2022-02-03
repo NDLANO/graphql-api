@@ -672,8 +672,8 @@ export const typeDefs = gql`
   }
 
   type ListingPage {
-    subjects: [Subject!]
-    tags: [String!]
+    subjects: [Subject!]!
+    tags: [String!]!
   }
 
   type ConceptResult {
@@ -695,13 +695,13 @@ export const typeDefs = gql`
   type DetailedConcept {
     id: Int!
     title: String!
-    content: String
-    created: String
-    tags: [String!]
+    content: String!
+    created: String!
+    tags: [String!]!
     image: ImageLicense
-    subjectIds: [String!]
+    subjectIds: [String!]!
     subjectNames: [String!]
-    articleIds: [String!]
+    articleIds: [String!]!
     articles: [Meta!]
     visualElement: VisualElement
     copyright: Copyright
@@ -844,7 +844,7 @@ export const typeDefs = gql`
     ): [GroupSearch!]
     listingPage(subjects: String): ListingPage
     concepts(ids: [String!]!): [Concept!]
-    detailedConcept(id: String): DetailedConcept
+    detailedConcept(id: String!): DetailedConcept
     conceptSearch(
       query: String
       subjects: String
