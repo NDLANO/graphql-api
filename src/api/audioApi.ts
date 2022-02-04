@@ -37,9 +37,7 @@ export async function fetchPodcastsPage(
     `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast`,
     context,
   );
-
-  const audioSearch: IAudioSummarySearchResult = await resolveJson(response);
-  return audioSearch;
+  return await resolveJson(response);
 }
 
 export async function fetchPodcastSeries(
@@ -47,8 +45,7 @@ export async function fetchPodcastSeries(
   podcastId: number,
 ): Promise<IAudioMetaInformation> {
   const response = await fetch(`/audio-api/v1/series/${podcastId}`, context);
-  const series: IAudioMetaInformation = await resolveJson(response);
-  return series;
+  return await resolveJson(response);
 }
 
 export async function fetchPodcastSeriesPage(
@@ -60,10 +57,5 @@ export async function fetchPodcastSeriesPage(
     `/audio-api/v1/series/?page-size=${pageSize}&page=${page}`,
     context,
   );
-
-  const podcastSeriesSearch: IAudioSummarySearchResult = await resolveJson(
-    response,
-  );
-
-  return podcastSeriesSearch;
+  return await resolveJson(response);
 }
