@@ -49,16 +49,4 @@ export const Query = {
   },
 };
 
-export const resolvers = {
-  AudioSearch: {
-    async results(
-      searchResult: IAudioSummarySearchResult,
-      _: any,
-      context: Context,
-    ) {
-      return await Promise.all(
-        searchResult.results.map(audio => fetchPodcast(context, audio.id)),
-      );
-    },
-  },
-};
+export const resolvers = {};
