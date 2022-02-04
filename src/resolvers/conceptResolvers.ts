@@ -46,6 +46,22 @@ export const Query = {
 };
 
 export const resolvers = {
+  Concept: {
+    async subjectNames(
+      concept: GQLConcept,
+      _: any,
+      context: Context,
+    ): Promise<string[]> {
+      const data = await context.loaders.subjectsLoader.load('all');
+      if (concept.subjectIds?.length > 0) {
+        return Promise.all(
+          concept.subjectIds?.map(id => {
+            return data.subjects.find(subject => subject.id === id).name;
+          }),
+        );
+      }
+    },
+  },
   DetailedConcept: {
     async subjectNames(
       detailedConcept: GQLDetailedConcept,

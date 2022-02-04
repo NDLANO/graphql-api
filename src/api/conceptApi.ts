@@ -65,13 +65,25 @@ export async function searchConcepts(
     page: conceptResult.page,
     pageSize: conceptResult.pageSize,
     language: conceptResult.language,
-    concepts: conceptResult.results.map((res: ConceptSearchResultJson) => ({
-      id: res.id,
-      title: res.title.title,
-      content: res.content.content,
-      tags: res.tags?.tags || [],
-      metaImage: res.metaImage,
-    })),
+    concepts: conceptResult.results?.map(
+      async (res: ConceptSearchResultJson) => {
+        const result: GQLConcept = {
+          id: res.id,
+          title: res.title.title,
+          content: res.content.content,
+          tags: res.tags?.tags || [],
+          subjectIds: res.subjectIds || [],
+          metaImage: res.metaImage,
+        };
+        if (res.visualElement) {
+          result.visualElement = await parseVisualElement(
+            res.visualElement.visualElement,
+            context,
+          );
+        }
+        return result;
+      },
+    ),
   };
 }
 
@@ -87,14 +99,21 @@ export async function fetchConcepts(
           context,
         );
         try {
-          const res: SearchResultJson = await resolveJson(concept);
+          const res: ConceptSearchResultJson = await resolveJson(concept);
           const result: GQLConcept = {
             id: res.id,
             title: res.title.title,
             content: res.content.content,
+            tags: res.tags?.tags || [],
+            subjectIds: res.subjectIds || [],
             metaImage: res.metaImage,
-            tags: res.tags?.tags ?? [],
           };
+          if (res.visualElement) {
+            result.visualElement = await parseVisualElement(
+              res.visualElement.visualElement,
+              context,
+            );
+          }
           return result;
         } catch (e) {
           return undefined;
