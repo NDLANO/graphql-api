@@ -689,7 +689,10 @@ export const typeDefs = gql`
     title: String!
     content: String!
     tags: [String!]!
+    subjectIds: [String!]
+    subjectNames: [String!]
     metaImage: MetaImage!
+    visualElement: VisualElement
   }
 
   type DetailedConcept {
