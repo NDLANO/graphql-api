@@ -48,6 +48,16 @@ export const resolvers = {
     },
   },
   Resource: {
+    async availability(resource: GQLResource, _: any, context: Context) {
+      const defaultAvailability = 'everyone';
+      if (resource.contentUri?.startsWith('urn:article')) {
+        const article = await context.loaders.articlesLoader.load(
+          getArticleIdFromUrn(resource.contentUri),
+        );
+        return article?.availability ?? defaultAvailability;
+      }
+      return defaultAvailability;
+    },
     async meta(
       resource: GQLResource,
       _: any,

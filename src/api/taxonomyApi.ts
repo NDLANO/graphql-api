@@ -45,14 +45,6 @@ export async function fetchResource(
     path = primaryPath ? primaryPath : path;
   }
 
-  let availability = 'everyone';
-  if (resource.contentUri?.startsWith('urn:article')) {
-    const article = await context.loaders.articlesLoader.load(
-      getArticleIdFromUrn(resource.contentUri),
-    );
-    if (article) availability = article.availability;
-  }
-
   let rank;
   let relevanceId;
   if (topicId) {
@@ -61,7 +53,7 @@ export async function fetchResource(
     relevanceId = parent?.relevanceId || 'urn:relevance:core';
   }
 
-  return { ...resource, path, paths, availability, rank, relevanceId };
+  return { ...resource, path, paths, rank, relevanceId };
 }
 
 export async function fetchResourceTypes(
