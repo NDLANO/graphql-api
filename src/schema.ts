@@ -142,8 +142,8 @@ export const typeDefs = gql`
   }
 
   type LearningpathStepEmbedUrl {
-    url: String
-    embedType: String
+    url: String!
+    embedType: String!
   }
 
   type LearningpathStepOembed {
@@ -161,44 +161,44 @@ export const typeDefs = gql`
     description: String
     embedUrl: LearningpathStepEmbedUrl
     license: License
-    metaUrl: String
-    revision: Int
-    status: String
-    supportedLanguages: [String!]
-    type: String
+    metaUrl: String!
+    revision: Int!
+    status: String!
+    supportedLanguages: [String!]!
+    type: String!
     article: Article
     resource: Resource
-    showTitle: Boolean
+    showTitle: Boolean!
     oembed: LearningpathStepOembed
   }
 
   type LearningpathCoverphoto {
     url: String
-    metaUrl: String
+    metaUrl: String!
   }
 
   type LearningpathCopyright {
-    license: License
-    contributors: [Contributor!]
+    license: License!
+    contributors: [Contributor!]!
   }
 
   type Learningpath {
     id: Int!
     title: String!
-    description: String
-    copyright: LearningpathCopyright
+    description: String!
+    copyright: LearningpathCopyright!
     duration: Int
-    canEdit: Boolean
-    verificationStatus: String
-    lastUpdated: String
-    tags: [String!]
-    supportedLanguages: [String!]
+    canEdit: Boolean!
+    verificationStatus: String!
+    lastUpdated: String!
+    tags: [String!]!
+    supportedLanguages: [String!]!
     isBasedOn: Int
-    learningsteps: [LearningpathStep!]
-    metaUrl: String
-    revision: Int
-    learningstepUrl: String
-    status: String
+    learningsteps: [LearningpathStep!]!
+    metaUrl: String!
+    revision: Int!
+    learningstepUrl: String!
+    status: String!
     coverphoto: LearningpathCoverphoto
   }
 
@@ -800,7 +800,6 @@ export const typeDefs = gql`
     subjectpage(id: String!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
-    learningpathStep(pathId: String!, stepId: String!): LearningpathStep
     subjects: [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
