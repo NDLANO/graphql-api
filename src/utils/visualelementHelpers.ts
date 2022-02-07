@@ -6,6 +6,7 @@
  *
  */
 import cheerio from 'cheerio';
+import { fetchOembed } from '../api/oembedApi';
 import { localConverter } from '../config';
 import { fetch, resolveJson } from './apiHelpers';
 
@@ -37,14 +38,6 @@ export async function fetchVisualElementLicense<T>(
   return metaData.metaData[resource]?.[0] ?? '';
 }
 
-export async function fetchOembed(
-  url: string,
-  context: Context,
-): Promise<GQLLearningpathStepOembed> {
-  const response = await fetch(`/oembed-proxy/v1/oembed?url=${url}`, context);
-  return resolveJson(response);
-}
-
 export async function parseVisualElement(
   visualElementEmbed: string,
   context: Context,
@@ -72,6 +65,7 @@ export async function parseVisualElement(
       };
     } else if (data?.resource === 'h5p') {
       const visualElementOembed = await fetchOembed(data.url, context);
+      if (!visualElementOembed) return null;
       license = await fetchVisualElementLicense<GQLH5pLicense>(
         visualElementEmbed,
         'h5ps',
@@ -102,6 +96,7 @@ export async function parseVisualElement(
     visualElement.title = license?.title;
   } else {
     const visualElementOembed = await fetchOembed(data.url, context);
+    if (!visualElementOembed) return null;
     visualElement.url = data.url;
     visualElement.oembed = visualElementOembed;
   }
