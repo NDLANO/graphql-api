@@ -178,7 +178,7 @@ declare global {
   }
   
   export interface GQLLearningpathCoverphoto {
-    url: string;
+    url?: string;
     metaUrl: string;
   }
   
@@ -829,7 +829,6 @@ declare global {
     subjectpage?: GQLSubjectPage;
     filmfrontpage?: GQLFilmFrontpage;
     learningpath?: GQLLearningpath;
-    learningpathStep?: GQLLearningpathStep;
     subjects?: Array<GQLSubject>;
     topic?: GQLTopic;
     topics?: Array<GQLTopic>;
@@ -3698,7 +3697,6 @@ declare global {
     subjectpage?: QueryToSubjectpageResolver<TParent>;
     filmfrontpage?: QueryToFilmfrontpageResolver<TParent>;
     learningpath?: QueryToLearningpathResolver<TParent>;
-    learningpathStep?: QueryToLearningpathStepResolver<TParent>;
     subjects?: QueryToSubjectsResolver<TParent>;
     topic?: QueryToTopicResolver<TParent>;
     topics?: QueryToTopicsResolver<TParent>;
@@ -3765,14 +3763,6 @@ declare global {
   }
   export interface QueryToLearningpathResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToLearningpathArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface QueryToLearningpathStepArgs {
-    pathId: string;
-    stepId: string;
-  }
-  export interface QueryToLearningpathStepResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToLearningpathStepArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToSubjectsResolver<TParent = any, TResult = any> {

@@ -173,7 +173,7 @@ export const typeDefs = gql`
   }
 
   type LearningpathCoverphoto {
-    url: String!
+    url: String
     metaUrl: String!
   }
 
@@ -797,7 +797,6 @@ export const typeDefs = gql`
     subjectpage(id: String!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
-    learningpathStep(pathId: String!, stepId: String!): LearningpathStep
     subjects: [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]

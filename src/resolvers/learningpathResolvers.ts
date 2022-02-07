@@ -8,7 +8,6 @@
 
 import {
   fetchLearningpath,
-  fetchLearningpathStep,
   fetchResource,
   fetchArticle,
   fetchOembed,

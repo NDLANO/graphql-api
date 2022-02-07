@@ -6,7 +6,6 @@
  *
  */
 
-import { reject } from 'lodash';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchLearningpaths(
@@ -69,7 +68,7 @@ export async function fetchLearningpath(
   const learningsteps = learningpath.learningsteps?.map(
     (step: ApiLearningStep) => ({
       ...step,
-      title: step.title?.title || '',
+      title: step.title.title,
       description: step.description?.description,
     }),
   );
@@ -85,22 +84,5 @@ export async function fetchLearningpath(
     },
     tags: learningpath.tags?.tags || [],
     learningsteps,
-  };
-}
-
-export async function fetchLearningpathStep(
-  pathId: string,
-  stepId: string,
-  context: Context,
-): Promise<GQLLearningpathStep> {
-  const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${pathId}/learningsteps/${stepId}?language=${context.language}&fallback=true`,
-    context,
-  );
-  const learningpathStep = await resolveJson(response);
-  return {
-    ...learningpathStep,
-    title: learningpathStep.title?.title || '',
-    description: learningpathStep.description?.description,
   };
 }

@@ -24,11 +24,7 @@ export {
   fetchFilmFrontpage,
 } from './frontpageApi';
 export { fetchArticle, fetchArticles, fetchMovieMeta } from './articleApi';
-export {
-  fetchLearningpaths,
-  fetchLearningpath,
-  fetchLearningpathStep,
-} from './learningpathApi';
+export { fetchLearningpaths, fetchLearningpath } from './learningpathApi';
 export {
   fetchResource,
   fetchResourceTypes,
