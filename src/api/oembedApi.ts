@@ -12,6 +12,11 @@ export async function fetchOembed(
   url: string,
   context: Context,
 ): Promise<GQLLearningpathStepOembed> {
-  const response = await fetch(`/oembed-proxy/v1/oembed?url=${url}`, context);
-  return resolveJson(response);
+  return await fetch(`/oembed-proxy/v1/oembed?url=${url}`, context)
+    .then(r => resolveJson(r))
+    .catch(e => {
+      if (e.status === 404) {
+        return null;
+      } else throw e;
+    });
 }
