@@ -14,5 +14,9 @@ export async function fetchOembed(
 ): Promise<GQLLearningpathStepOembed> {
   return await fetch(`/oembed-proxy/v1/oembed?url=${url}`, context)
     .then(r => resolveJson(r))
-    .catch(e => null);
+    .catch(e => {
+      if (e.status === 404) {
+        return null;
+      } else throw e;
+    });
 }
