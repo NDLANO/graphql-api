@@ -122,13 +122,7 @@ export async function fetchTopic(params: { id: string }, context: Context) {
     context,
   );
   const topic: GQLTopic = await resolveJson(response);
-  const article = await context.loaders.articlesLoader.load(
-    getArticleIdFromUrn(topic.contentUri),
-  );
-  return {
-    ...topic,
-    availability: article?.availability,
-  };
+  return topic;
 }
 
 export async function fetchSubtopics(

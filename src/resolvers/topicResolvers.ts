@@ -66,6 +66,16 @@ export const Query = {
 
 export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
   Topic: {
+    async availability(
+      topic: TopicResponse,
+      _: TopicToArticleArgs,
+      context: Context,
+    ) {
+      const article = await context.loaders.articlesLoader.load(
+        getArticleIdFromUrn(topic.contentUri),
+      );
+      return article.availability;
+    },
     async article(
       topic: TopicResponse,
       args: TopicToArticleArgs,
