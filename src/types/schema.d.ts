@@ -479,8 +479,8 @@ declare global {
   }
   
   export interface GQLSubjectPageVisualElement {
-    type?: string;
-    url?: string;
+    type: string;
+    url: string;
     alt?: string;
   }
   
@@ -514,40 +514,40 @@ declare global {
   }
   
   export interface GQLFilmPageAbout {
-    title?: string;
-    description?: string;
-    visualElement?: GQLSubjectPageVisualElement;
-    language?: string;
+    title: string;
+    description: string;
+    visualElement: GQLSubjectPageVisualElement;
+    language: string;
   }
   
   export interface GQLFilmFrontpage {
-    name?: string;
-    about?: Array<GQLFilmPageAbout>;
-    movieThemes?: Array<GQLMovieTheme>;
-    slideShow?: Array<GQLMovie>;
+    name: string;
+    about: Array<GQLFilmPageAbout>;
+    movieThemes: Array<GQLMovieTheme>;
+    slideShow: Array<GQLMovie>;
   }
   
   export interface GQLMovieTheme {
-    name?: Array<GQLName>;
-    movies?: Array<GQLMovie>;
+    name: Array<GQLName>;
+    movies: Array<GQLMovie>;
   }
   
   export interface GQLName {
-    name?: string;
-    language?: string;
+    name: string;
+    language: string;
   }
   
   export interface GQLMovie {
     id: string;
-    title?: string;
+    title: string;
     metaImage?: GQLMetaImage;
-    metaDescription?: string;
-    resourceTypes?: Array<GQLResourceType>;
-    path?: string;
+    metaDescription: string;
+    resourceTypes: Array<GQLResourceType>;
+    path: string;
   }
   
   export interface GQLMovieMeta {
-    title?: string;
+    title: string;
     metaImage?: GQLMetaImage;
     metaDescription?: string;
   }

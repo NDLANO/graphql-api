@@ -93,9 +93,9 @@ export const resolvers = {
       id: string,
       _: any,
       context: Context,
-    ): Promise<GQLMetaImage> {
+    ): Promise<GQLMetaImage | undefined> {
       const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta?.metaImage || {};
+      return movieMeta?.metaImage;
     },
     async metaDescription(
       id: string,
