@@ -452,8 +452,8 @@ export const typeDefs = gql`
   }
 
   type SubjectPageVisualElement {
-    type: String
-    url: String
+    type: String!
+    url: String!
     alt: String
   }
 
@@ -487,40 +487,40 @@ export const typeDefs = gql`
   }
 
   type FilmPageAbout {
-    title: String
-    description: String
-    visualElement: SubjectPageVisualElement
-    language: String
+    title: String!
+    description: String!
+    visualElement: SubjectPageVisualElement!
+    language: String!
   }
 
   type FilmFrontpage {
-    name: String
-    about: [FilmPageAbout!]
-    movieThemes: [MovieTheme!]
-    slideShow: [Movie!]
+    name: String!
+    about: [FilmPageAbout!]!
+    movieThemes: [MovieTheme!]!
+    slideShow: [Movie!]!
   }
 
   type MovieTheme {
-    name: [Name!]
-    movies: [Movie!]
+    name: [Name!]!
+    movies: [Movie!]!
   }
 
   type Name {
-    name: String
-    language: String
+    name: String!
+    language: String!
   }
 
   type Movie {
     id: String!
-    title: String
+    title: String!
     metaImage: MetaImage
-    metaDescription: String
-    resourceTypes: [ResourceType!]
-    path: String
+    metaDescription: String!
+    resourceTypes: [ResourceType!]!
+    path: String!
   }
 
   type MovieMeta {
-    title: String
+    title: String!
     metaImage: MetaImage
     metaDescription: String
   }
