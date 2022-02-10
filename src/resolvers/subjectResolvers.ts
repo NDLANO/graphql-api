@@ -53,7 +53,7 @@ export const resolvers = {
     ): Promise<GQLSubjectPage> {
       if (subject.contentUri?.startsWith('urn:frontpage')) {
         return fetchSubjectPage(
-          subject.contentUri.replace('urn:frontpage:', ''),
+          Number(subject.contentUri.replace('urn:frontpage:', '')),
           context,
         );
       }

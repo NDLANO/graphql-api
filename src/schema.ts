@@ -442,13 +442,13 @@ export const typeDefs = gql`
   }
 
   type Category {
-    name: String
-    subjects: [Subject]
+    name: String!
+    subjects: [Subject!]!
   }
 
   type Frontpage {
-    topical: [Resource!]
-    categories: [Category!]
+    topical: [Resource!]!
+    categories: [Category!]!
   }
 
   type SubjectPageVisualElement {
@@ -458,32 +458,33 @@ export const typeDefs = gql`
   }
 
   type SubjectPageAbout {
-    title: String
-    description: String
-    visualElement: SubjectPageVisualElement
+    title: String!
+    description: String!
+    visualElement: SubjectPageVisualElement!
   }
 
   type SubjectPageBanner {
-    desktopUrl: String
-    desktopId: String
+    desktopUrl: String!
+    desktopId: String!
     mobileUrl: String
     mobileId: String
   }
 
   type SubjectPage {
     topical(subjectId: String): TaxonomyEntity
-    mostRead(subjectId: String): [TaxonomyEntity!]
-    banner: SubjectPageBanner
+    mostRead(subjectId: String): [TaxonomyEntity!]!
+    banner: SubjectPageBanner!
     id: Int!
-    name: String
+    name: String!
     facebook: String
-    editorsChoices(subjectId: String): [TaxonomyEntity!]
+    editorsChoices(subjectId: String): [TaxonomyEntity!]!
     latestContent(subjectId: String): [TaxonomyEntity!]
     about: SubjectPageAbout
-    goTo: [ResourceTypeDefinition!]
+    goTo: [ResourceTypeDefinition!]!
     metaDescription: String
-    layout: String
+    layout: String!
     twitter: String
+    supportedLanguages: [String!]!
   }
 
   type FilmPageAbout {
@@ -797,7 +798,7 @@ export const typeDefs = gql`
       showVisualElement: String
     ): Article
     subject(id: String!): Subject
-    subjectpage(id: String!): SubjectPage
+    subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
     subjects: [Subject!]

@@ -19,7 +19,7 @@ import {
 import { RCategory, FrontpageResponse } from '../api/frontpageApi';
 
 interface Id {
-  id: string;
+  id: number;
 }
 
 export const Query = {

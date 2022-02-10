@@ -33,7 +33,7 @@ export async function fetchFrontpage(
 }
 
 export async function fetchSubjectPage(
-  subjectPageId: string,
+  subjectPageId: number,
   context: Context,
 ): Promise<GQLSubjectPage> {
   const response = await fetch(
