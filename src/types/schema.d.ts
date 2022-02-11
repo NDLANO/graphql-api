@@ -469,13 +469,13 @@ declare global {
   }
   
   export interface GQLCategory {
-    name?: string;
-    subjects?: Array<GQLSubject | null>;
+    name: string;
+    subjects: Array<GQLSubject>;
   }
   
   export interface GQLFrontpage {
-    topical?: Array<GQLResource>;
-    categories?: Array<GQLCategory>;
+    topical: Array<GQLResource>;
+    categories: Array<GQLCategory>;
   }
   
   export interface GQLSubjectPageVisualElement {
@@ -485,32 +485,33 @@ declare global {
   }
   
   export interface GQLSubjectPageAbout {
-    title?: string;
-    description?: string;
-    visualElement?: GQLSubjectPageVisualElement;
+    title: string;
+    description: string;
+    visualElement: GQLSubjectPageVisualElement;
   }
   
   export interface GQLSubjectPageBanner {
-    desktopUrl?: string;
-    desktopId?: string;
+    desktopUrl: string;
+    desktopId: string;
     mobileUrl?: string;
     mobileId?: string;
   }
   
   export interface GQLSubjectPage {
     topical?: GQLTaxonomyEntity;
-    mostRead?: Array<GQLTaxonomyEntity>;
-    banner?: GQLSubjectPageBanner;
+    mostRead: Array<GQLTaxonomyEntity>;
+    banner: GQLSubjectPageBanner;
     id: number;
-    name?: string;
+    name: string;
     facebook?: string;
-    editorsChoices?: Array<GQLTaxonomyEntity>;
+    editorsChoices: Array<GQLTaxonomyEntity>;
     latestContent?: Array<GQLTaxonomyEntity>;
     about?: GQLSubjectPageAbout;
-    goTo?: Array<GQLResourceTypeDefinition>;
+    goTo: Array<GQLResourceTypeDefinition>;
     metaDescription?: string;
-    layout?: string;
+    layout: string;
     twitter?: string;
+    supportedLanguages: Array<string>;
   }
   
   export interface GQLFilmPageAbout {
@@ -2606,6 +2607,7 @@ declare global {
     metaDescription?: SubjectPageToMetaDescriptionResolver<TParent>;
     layout?: SubjectPageToLayoutResolver<TParent>;
     twitter?: SubjectPageToTwitterResolver<TParent>;
+    supportedLanguages?: SubjectPageToSupportedLanguagesResolver<TParent>;
   }
   
   export interface SubjectPageToTopicalArgs {
@@ -2669,6 +2671,10 @@ declare global {
   }
   
   export interface SubjectPageToTwitterResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToSupportedLanguagesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3766,7 +3772,7 @@ declare global {
   }
   
   export interface QueryToSubjectpageArgs {
-    id: string;
+    id: number;
   }
   export interface QueryToSubjectpageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSubjectpageArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
