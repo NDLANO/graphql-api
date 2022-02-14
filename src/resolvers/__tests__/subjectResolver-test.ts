@@ -7,9 +7,12 @@
  */
 
 const nock = require('nock');
-import DataLoader from 'dataloader';
 import { Request, Response } from 'express';
 import { Query } from '../subjectResolvers';
+import {
+  mockLoaders,
+  mockSubjectsLoader,
+} from '../../utils/__tests__/mockLoaders';
 
 const mockRequest = {} as Request;
 const mockResponse = {
@@ -44,19 +47,16 @@ test('Fetch subject should filter out invisible elements', async () => {
     .get('/taxonomy/v1/subjects/?language=nb')
     .reply(200, subjects);
 
-  const loadAll = async () => {
-    return [{ subjects }];
-  };
-
-  const subjectsLoader = new DataLoader(loadAll);
-
   const subs = await Query.subjects(1, 1, {
     req: mockRequest,
     res: mockResponse,
     language: 'nb',
     shouldUseCache: false,
     taxonomyUrl: 'taxonomy',
-    loaders: { subjectsLoader },
+    loaders: {
+      ...mockLoaders,
+      subjectsLoader: mockSubjectsLoader(subjects),
+    },
   });
 
   expect(subs).toMatchSnapshot();

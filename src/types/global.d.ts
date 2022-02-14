@@ -1,13 +1,27 @@
 import DataLoader from 'dataloader';
 import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
-import { FrontpageResponse } from '../api/frontpageApi';
+import { IFrontPageData } from '@ndla/types-frontpage-api';
 
 declare global {
   interface AuthToken {
     access_token: string;
     expires_in?: number;
     token_type?: string;
+  }
+
+  interface Loaders {
+    articlesLoader: DataLoader<string, GQLMeta>;
+    learningpathsLoader: DataLoader<string, any>;
+    subjectTopicsLoader: DataLoader<{ subjectId: string }, any>;
+    subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
+    resourceTypesLoader: DataLoader<any, any>;
+    frontpageLoader: DataLoader<string, IFrontPageData>;
+    lk06CurriculumLoader: DataLoader<string, GQLReference>;
+    lk20CurriculumLoader: DataLoader<
+      { code: string; language: string },
+      GQLReference
+    >;
   }
 
   interface Context {
@@ -18,19 +32,10 @@ declare global {
     language: string;
     shouldUseCache: boolean;
     taxonomyUrl: string;
-    loaders?: {
-      articlesLoader?: DataLoader<string, GQLMeta>;
-      learningpathsLoader?: DataLoader<string, any>;
-      subjectTopicsLoader?: DataLoader<{ subjectId: string }, any>;
-      subjectsLoader?: DataLoader<string, { subjects: GQLSubject[] }>;
-      resourceTypesLoader?: DataLoader<any, any>;
-      frontpageLoader?: DataLoader<string, FrontpageResponse>;
-      lk06CurriculumLoader?: DataLoader<string, GQLReference>;
-      lk20CurriculumLoader?: DataLoader<
-        { code: string; language: string },
-        GQLReference
-      >;
-    };
+  }
+
+  interface ContextWithLoaders extends Context {
+    loaders: Loaders;
   }
 
   interface RequestOptions extends RequestInit {

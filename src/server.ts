@@ -42,14 +42,14 @@ function getAcceptLanguage(request: Request): string {
   return 'nb';
 }
 
-function getFeideAuthorization(request: Request): string | null {
+function getFeideAuthorization(request: Request): string | undefined {
   // tslint:disable-next-line:no-string-literal
   const authorization = request.headers['feideauthorization'];
 
   if (isString(authorization)) {
     return authorization;
   }
-  return null;
+  return undefined;
 }
 
 function getShouldUseCache(request: Request): boolean {
@@ -74,7 +74,7 @@ async function getContext({
 }: {
   req: Request;
   res: Response;
-}): Promise<Context> {
+}): Promise<ContextWithLoaders> {
   const token = await getToken(req);
   const feideAuthorization = getFeideAuthorization(req);
 

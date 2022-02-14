@@ -22,7 +22,7 @@ interface FetchTopicResourcesParams {
 
 export async function fetchResource(
   { id, subjectId, topicId }: QueryToResourceArgs,
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLResource> {
   const response = await fetch(
     `/${context.taxonomyUrl}/v1/resources/${id}/full?language=${context.language}`,
@@ -153,8 +153,8 @@ export async function fetchTopicResources(
 }
 
 export async function fetchResourcesAndTopics(
-  params: { ids: [string]; subjectId?: string },
-  context: Context,
+  params: { ids: string[]; subjectId?: string },
+  context: ContextWithLoaders,
 ): Promise<GQLTaxonomyEntity[]> {
   const { ids, ...args } = params;
   return Promise.all(

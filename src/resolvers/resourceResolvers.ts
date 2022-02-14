@@ -26,14 +26,14 @@ export const Query = {
   async resource(
     _: any,
     { id, subjectId, topicId }: QueryToResourceArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLResource> {
     return fetchResource({ id, subjectId, topicId }, context);
   },
   async resourceTypes(
     _: any,
     __: any,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLResourceType[]> {
     return fetchResourceTypes(context);
   },
@@ -48,7 +48,11 @@ export const resolvers = {
     },
   },
   Resource: {
-    async availability(resource: GQLResource, _: any, context: Context) {
+    async availability(
+      resource: GQLResource,
+      _: any,
+      context: ContextWithLoaders,
+    ) {
       const defaultAvailability = 'everyone';
       if (resource.contentUri?.startsWith('urn:article')) {
         const article = await context.loaders.articlesLoader.load(
@@ -61,7 +65,7 @@ export const resolvers = {
     async meta(
       resource: GQLResource,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLMeta> {
       if (resource.contentUri?.startsWith('urn:learningpath')) {
         return context.loaders.learningpathsLoader.load(
@@ -80,7 +84,7 @@ export const resolvers = {
     async learningpath(
       resource: GQLResource,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLLearningpath> {
       if (resource.contentUri?.startsWith('urn:learningpath')) {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
@@ -103,7 +107,7 @@ export const resolvers = {
         subjectId?: string;
         isOembed?: string;
       },
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLArticle> {
       if (resource.contentUri?.startsWith('urn:article')) {
         const articleId = getArticleIdFromUrn(resource.contentUri);
@@ -141,7 +145,7 @@ export const resolvers = {
     async breadcrumbs(
       resource: GQLResource,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<string[][]> {
       return Promise.all(
         resource.paths?.map(async path => {

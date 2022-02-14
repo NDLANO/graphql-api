@@ -32,7 +32,7 @@ export function findPrimaryPath(
 
 export async function filterMissingArticles(
   entities: GQLTaxonomyEntity[],
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLTaxonomyEntity[]> {
   const visibleEntities = entities.filter(taxonomyEntity =>
     taxonomyEntity.metadata ? taxonomyEntity.metadata.visible : true,
