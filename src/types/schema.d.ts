@@ -164,7 +164,7 @@ declare global {
     page?: number;
     language: string;
     totalCount: number;
-    results: Array<GQLAudioWithSeries>;
+    results: Array<GQLAudioSummary>;
   }
   
   export interface GQLPodcastSeriesSummary {

@@ -139,7 +139,7 @@ export const typeDefs = gql`
     page: Int
     language: String!
     totalCount: Int!
-    results: [AudioWithSeries!]!
+    results: [AudioSummary!]!
   }
 
   type PodcastSeriesSummary {
