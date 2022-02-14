@@ -6,23 +6,27 @@
  *
  */
 
+import { ISubjectPageData } from '@ndla/types-frontpage-api';
 import { fetchLK20CompetenceGoalSet, fetchSubjectPage } from '../api';
 
-import { RSubjectCategory } from '../api/frontpageApi';
 import { filterMissingArticles } from '../utils/articleHelpers';
 
 export const Query = {
   async subject(
     _: any,
     { id }: QueryToSubjectArgs,
-    context: Context,
-  ): Promise<GQLSubject> {
+    context: ContextWithLoaders,
+  ): Promise<GQLSubject | undefined> {
     const data = await context.loaders.subjectsLoader.load('all');
     return data.subjects
       .filter(s => (s.metadata ? s.metadata.visible : true))
       .find(subject => subject.id === id);
   },
-  async subjects(_: any, __: any, context: Context): Promise<GQLSubject[]> {
+  async subjects(
+    _: any,
+    __: any,
+    context: ContextWithLoaders,
+  ): Promise<GQLSubject[]> {
     const data = await context.loaders.subjectsLoader.load('all');
     return data.subjects.filter(s => (s.metadata ? s.metadata.visible : true));
   },
@@ -33,7 +37,7 @@ export const resolvers = {
     async topics(
       subject: GQLSubject,
       args: { all: boolean },
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
       const topics = await context.loaders.subjectTopicsLoader.load({
         subjectId: subject.id,
@@ -49,8 +53,8 @@ export const resolvers = {
     async subjectpage(
       subject: GQLSubject,
       __: any,
-      context: Context,
-    ): Promise<GQLSubjectPage> {
+      context: ContextWithLoaders,
+    ): Promise<ISubjectPageData | undefined> {
       if (subject.contentUri?.startsWith('urn:frontpage')) {
         return fetchSubjectPage(
           Number(subject.contentUri.replace('urn:frontpage:', '')),
@@ -61,12 +65,13 @@ export const resolvers = {
     async grepCodes(
       subject: GQLSubject,
       __: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<string[]> {
       if (subject.metadata?.grepCodes) {
         const code = subject.metadata?.grepCodes?.find(c => c.startsWith('KV'));
         return code ? fetchLK20CompetenceGoalSet(code, context) : [];
       }
+      return [];
     },
   },
 };

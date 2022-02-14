@@ -19,7 +19,7 @@ export const Query = {
   async article(
     _: any,
     { id, subjectId, isOembed, path }: QueryToArticleArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLArticle> {
     return fetchArticle(
       {
@@ -38,7 +38,7 @@ export const resolvers = {
     async competenceGoals(
       article: GQLArticle,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLCompetenceGoal[]> {
       const nodeId = article.oldNdlaUrl?.split('/').pop();
       const language =
@@ -49,7 +49,7 @@ export const resolvers = {
     async coreElements(
       article: GQLArticle,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLCoreElement[]> {
       const language =
         article.supportedLanguages.find(lang => lang === context.language) ||
@@ -59,7 +59,7 @@ export const resolvers = {
     async crossSubjectTopics(
       article: GQLArticle,
       args: { subjectId: string },
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLCrossSubjectElement[]> {
       const crossSubjectCodes = article.grepCodes.filter(code =>
         code.startsWith('TT'),
@@ -83,7 +83,7 @@ export const resolvers = {
     async concepts(
       article: GQLArticle,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLDetailedConcept[]> {
       return fetchDetailedConcepts(article.conceptIds, context);
     },

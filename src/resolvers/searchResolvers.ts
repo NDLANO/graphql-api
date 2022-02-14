@@ -17,28 +17,28 @@ export const Query = {
   async search(
     _: any,
     searchQuery: QueryToSearchArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLSearch> {
     return search(searchQuery, context);
   },
   async groupSearch(
     _: any,
     searchQuery: QueryToSearchArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLGroupSearch> {
     return groupSearch(searchQuery, context);
   },
   async frontpageSearch(
     _: any,
     searchQuery: QueryToSearchArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLFrontpageSearch> {
     return frontpageSearch(searchQuery, context);
   },
   async searchWithoutPagination(
     _: any,
     searchQuery: QueryToSearchWithoutPaginationArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLSearchWithoutPagination> {
     return searchWithoutPagination(searchQuery, context);
   },

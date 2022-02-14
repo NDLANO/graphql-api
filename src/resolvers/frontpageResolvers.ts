@@ -7,6 +7,12 @@
  */
 
 import {
+  IFrontPageData,
+  ISubjectPageData,
+  IFilmFrontPageData,
+  ISubjectCollection,
+} from '@ndla/types-frontpage-api';
+import {
   fetchResource,
   fetchSubjectPage,
   fetchTopic,
@@ -16,8 +22,6 @@ import {
   queryResourcesOnContentURI,
 } from '../api';
 
-import { RCategory, FrontpageResponse } from '../api/frontpageApi';
-
 interface Id {
   id: number;
 }
@@ -26,24 +30,24 @@ export const Query = {
   async frontpage(
     _: any,
     __: any,
-    context: Context,
-  ): Promise<FrontpageResponse> {
+    context: ContextWithLoaders,
+  ): Promise<IFrontPageData> {
     return context.loaders.frontpageLoader.load('frontpage');
   },
 
   async subjectpage(
     _: any,
     { id }: Id,
-    context: Context,
-  ): Promise<GQLSubjectPage> {
+    context: ContextWithLoaders,
+  ): Promise<ISubjectPageData> {
     return fetchSubjectPage(id, context);
   },
 
   async filmfrontpage(
     _: any,
     __: any,
-    context: Context,
-  ): Promise<GQLFilmFrontpage> {
+    context: ContextWithLoaders,
+  ): Promise<IFilmFrontPageData> {
     return fetchFilmFrontpage(context);
   },
 };
@@ -51,9 +55,9 @@ export const Query = {
 export const resolvers = {
   Frontpage: {
     async topical(
-      frontpage: { topical: [string] },
+      frontpage: IFrontPageData,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       return Promise.all(
         frontpage.topical.map(id => {
@@ -68,9 +72,9 @@ export const resolvers = {
   },
   Category: {
     async subjects(
-      category: RCategory,
+      category: ISubjectCollection,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLSubject[]> {
       const data = await context.loaders.subjectsLoader.load('all');
       return data.subjects.filter(subject =>
@@ -85,14 +89,18 @@ export const resolvers = {
     async id(id: string) {
       return id;
     },
-    async title(id: string, _: any, context: Context): Promise<string> {
+    async title(
+      id: string,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<string> {
       const movieMeta = await fetchMovieMeta(id, context);
       return movieMeta?.title || '';
     },
     async metaImage(
       id: string,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLMetaImage | undefined> {
       const movieMeta = await fetchMovieMeta(id, context);
       return movieMeta?.metaImage;
@@ -100,12 +108,16 @@ export const resolvers = {
     async metaDescription(
       id: string,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<string> {
       const movieMeta = await fetchMovieMeta(id, context);
       return movieMeta?.metaDescription || '';
     },
-    async path(id: string, _: any, context: Context): Promise<string> {
+    async path(
+      id: string,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<string> {
       const moviePath: GQLMoviePath = await queryResourcesOnContentURI(
         id,
         context,
@@ -119,21 +131,21 @@ export const resolvers = {
     async resourceTypes(
       id: string,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLResourceType[]> {
       const movieResourceTypes: GQLMovieResourceTypes = await queryResourcesOnContentURI(
         id,
         context,
       );
-      return movieResourceTypes ? movieResourceTypes.resourceTypes : [];
+      return movieResourceTypes.resourceTypes ?? [];
     },
   },
 
   SubjectPage: {
     async mostRead(
-      subjectPage: { mostRead: [string] },
+      subjectPage: ISubjectPageData,
       args: { subjectId?: string },
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLTaxonomyEntity[]> {
       return fetchResourcesAndTopics(
         { ids: subjectPage.mostRead, ...args },
@@ -141,9 +153,9 @@ export const resolvers = {
       );
     },
     async editorsChoices(
-      subjectPage: { editorsChoices: [string] },
+      subjectPage: ISubjectPageData,
       args: { subjectId?: string },
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLTaxonomyEntity[]> {
       return fetchResourcesAndTopics(
         { ids: subjectPage.editorsChoices, ...args },
@@ -151,20 +163,21 @@ export const resolvers = {
       );
     },
     async latestContent(
-      subjectPage: { latestContent: [string] },
+      subjectPage: ISubjectPageData,
       args: { subjectId?: string },
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLTaxonomyEntity[]> {
+      if (!subjectPage.latestContent) return [];
       return fetchResourcesAndTopics(
         { ids: subjectPage.latestContent, ...args },
         context,
       );
     },
     async topical(
-      subjectPage: { topical?: string },
+      subjectPage: ISubjectPageData,
       args: { subjectId?: string },
-      context: Context,
-    ): Promise<GQLTaxonomyEntity> {
+      context: ContextWithLoaders,
+    ): Promise<GQLTaxonomyEntity | null> {
       if (!subjectPage.topical) {
         return null;
       }
@@ -176,9 +189,9 @@ export const resolvers = {
       return items[0];
     },
     async goTo(
-      subjectPage: { goTo: string[] },
+      subjectPage: ISubjectPageData,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLResourceTypeDefinition[]> {
       return Promise.all(
         subjectPage.goTo.map(id =>

@@ -45,6 +45,8 @@
     "query-string": "^6.2.0"
   },
   "devDependencies": {
+    "@ndla/types-frontpage-api": "^0.0.3",
+    "@ndla/types-article-api": "^0.0.4",
     "@types/bunyan": "^1.8.5",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",

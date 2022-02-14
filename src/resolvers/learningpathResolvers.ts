@@ -6,19 +6,14 @@
  *
  */
 
-import {
-  fetchLearningpath,
-  fetchResource,
-  fetchArticle,
-  fetchOembed,
-} from '../api';
+import { fetchLearningpath, fetchResource, fetchOembed } from '../api';
 import { isNDLAEmbedUrl } from '../utils/articleHelpers';
 
 export const Query = {
   async learningpath(
     _: any,
     { pathId }: QueryToLearningpathArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
   },
@@ -39,7 +34,7 @@ export const resolvers = {
     async oembed(
       learningpathStep: GQLLearningpathStep,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLLearningpathStepOembed> {
       if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
         return null;
@@ -62,7 +57,7 @@ export const resolvers = {
     async resource(
       learningpathStep: GQLLearningpathStep,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLResource> {
       if (
         !learningpathStep.embedUrl ||

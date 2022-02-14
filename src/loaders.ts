@@ -6,6 +6,7 @@
  *
  */
 
+import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-frontpage-api';
 import DataLoader from 'dataloader';
 import {
   fetchArticles,
@@ -18,7 +19,6 @@ import {
   fetchLK06Curriculum,
   fetchLK20Curriculum,
 } from './api';
-import { FrontpageResponse } from './api/frontpageApi';
 
 export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
   return new DataLoader(
@@ -74,7 +74,7 @@ export function lk06CurriculumLoader(
 
 export function frontpageLoader(
   context: Context,
-): DataLoader<string, FrontpageResponse> {
+): DataLoader<string, IFrontPageData> {
   return new DataLoader(async () => {
     const frontpage = await fetchFrontpage(context);
     return [frontpage];
@@ -83,7 +83,7 @@ export function frontpageLoader(
 
 export function filmFrontpageLoader(
   context: Context,
-): DataLoader<string, GQLFilmFrontpage> {
+): DataLoader<string, IFilmFrontPageData> {
   return new DataLoader(async () => {
     const filmFrontpage = await fetchFilmFrontpage(context);
     return [filmFrontpage];

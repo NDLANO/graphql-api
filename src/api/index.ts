@@ -22,8 +22,9 @@ export {
   fetchFrontpage,
   fetchSubjectPage,
   fetchFilmFrontpage,
+  fetchMovieMeta,
 } from './frontpageApi';
-export { fetchArticle, fetchArticles, fetchMovieMeta } from './articleApi';
+export { fetchArticle, fetchArticles } from './articleApi';
 export { fetchLearningpaths, fetchLearningpath } from './learningpathApi';
 export {
   fetchResource,

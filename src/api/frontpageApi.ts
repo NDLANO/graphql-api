@@ -6,48 +6,61 @@
  *
  */
 
+import {
+  IFrontPageData,
+  IFilmFrontPageData,
+  ISubjectPageData,
+} from '@ndla/types-frontpage-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
+import { fetchSimpleArticle } from './articleApi';
 
-export interface RSubjectCategory {
-  id: string;
-  filters: string[];
-}
-
-export interface RCategory {
-  name: string;
-  subjects: RSubjectCategory[];
-}
-export interface FrontpageResponse {
-  topical: string[];
-  categories: RCategory[];
+export interface IMovieMeta {
+  title: string;
+  metaDescription?: string;
+  metaImage?: {
+    url: string;
+    alt: string;
+    language: string;
+  };
 }
 
 export async function fetchFrontpage(
   context: Context,
-): Promise<FrontpageResponse> {
+): Promise<IFrontPageData> {
   const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
-
-  const frontpage: FrontpageResponse = await resolveJson(response);
-
-  return frontpage;
+  return await resolveJson(response);
 }
 
 export async function fetchSubjectPage(
   subjectPageId: number,
   context: Context,
-): Promise<GQLSubjectPage> {
+): Promise<ISubjectPageData> {
   const response = await fetch(
     `/frontpage-api/v1/subjectpage/${subjectPageId}?language=${context.language}&fallback=true`,
     context,
   );
-  const subjectPage: GQLSubjectPage = await resolveJson(response);
-  return subjectPage;
+  return await resolveJson(response);
 }
 
 export async function fetchFilmFrontpage(
   context: Context,
-): Promise<GQLFilmFrontpage> {
+): Promise<IFilmFrontPageData> {
   const response = await fetch(`/frontpage-api/v1/filmfrontpage`, context);
-  const filmFrontpage: GQLFilmFrontpage = await resolveJson(response);
-  return filmFrontpage;
+  return await resolveJson(response);
+}
+
+export async function fetchMovieMeta(
+  articleUrn: string,
+  context: Context,
+): Promise<IMovieMeta | null> {
+  const article = await fetchSimpleArticle(articleUrn, context);
+
+  if (article) {
+    return {
+      title: article.title.title,
+      metaDescription: article.metaDescription?.metaDescription,
+      metaImage: article.metaImage,
+    };
+  }
+  return null;
 }
