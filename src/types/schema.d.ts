@@ -132,8 +132,8 @@ declare global {
   }
   
   export interface GQLMetaImage {
-    url?: string;
-    alt?: string;
+    url: string;
+    alt: string;
   }
   
   export interface GQLMeta {
