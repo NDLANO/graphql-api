@@ -127,8 +127,8 @@ export const typeDefs = gql`
   }
 
   type MetaImage {
-    url: String
-    alt: String
+    url: String!
+    alt: String!
   }
 
   type Meta {
