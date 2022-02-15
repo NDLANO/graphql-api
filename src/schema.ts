@@ -341,10 +341,18 @@ export const typeDefs = gql`
     copyText: String
   }
 
+  type ConceptCopyright {
+    license: License
+    creators: [Contributor!]!
+    processors: [Contributor!]!
+    rightsholders: [Contributor!]!
+    origin: String
+  }
+
   type ConceptLicense {
     title: String!
     src: String
-    copyright: Copyright
+    copyright: ConceptCopyright
     copyText: String
   }
 
@@ -708,7 +716,7 @@ export const typeDefs = gql`
     articleIds: [String!]
     articles: [Meta!]
     visualElement: VisualElement
-    copyright: Copyright
+    copyright: ConceptCopyright
   }
 
   type Search {
