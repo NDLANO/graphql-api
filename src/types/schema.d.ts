@@ -368,10 +368,18 @@ declare global {
     copyText?: string;
   }
   
+  export interface GQLConceptCopyright {
+    license?: GQLLicense;
+    creators: Array<GQLContributor>;
+    processors: Array<GQLContributor>;
+    rightsholders: Array<GQLContributor>;
+    origin?: string;
+  }
+  
   export interface GQLConceptLicense {
     title: string;
     src?: string;
-    copyright?: GQLCopyright;
+    copyright?: GQLConceptCopyright;
     copyText?: string;
   }
   
@@ -746,7 +754,7 @@ declare global {
     articleIds?: Array<string>;
     articles?: Array<GQLMeta>;
     visualElement?: GQLVisualElement;
-    copyright?: GQLCopyright;
+    copyright?: GQLConceptCopyright;
   }
   
   export interface GQLSearch {
@@ -912,6 +920,7 @@ declare global {
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     H5pLicense?: GQLH5pLicenseTypeResolver;
+    ConceptCopyright?: GQLConceptCopyrightTypeResolver;
     ConceptLicense?: GQLConceptLicenseTypeResolver;
     ArticleMetaData?: GQLArticleMetaDataTypeResolver;
     RelatedContent?: GQLRelatedContentTypeResolver;
@@ -2122,6 +2131,34 @@ declare global {
   }
   
   export interface H5pLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptCopyrightTypeResolver<TParent = any> {
+    license?: ConceptCopyrightToLicenseResolver<TParent>;
+    creators?: ConceptCopyrightToCreatorsResolver<TParent>;
+    processors?: ConceptCopyrightToProcessorsResolver<TParent>;
+    rightsholders?: ConceptCopyrightToRightsholdersResolver<TParent>;
+    origin?: ConceptCopyrightToOriginResolver<TParent>;
+  }
+  
+  export interface ConceptCopyrightToLicenseResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptCopyrightToCreatorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptCopyrightToProcessorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptCopyrightToRightsholdersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptCopyrightToOriginResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

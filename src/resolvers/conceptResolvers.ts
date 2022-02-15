@@ -56,7 +56,7 @@ export const resolvers = {
       if (concept.subjectIds?.length > 0) {
         return Promise.all(
           concept.subjectIds?.map(id => {
-            return data.subjects.find(subject => subject.id === id).name;
+            return data.subjects.find(subject => subject.id === id)?.name || '';
           }),
         );
       }
@@ -72,7 +72,7 @@ export const resolvers = {
       if (detailedConcept.subjectIds?.length > 0) {
         return Promise.all(
           detailedConcept.subjectIds?.map(id => {
-            return data.subjects.find(subject => subject.id === id).name;
+            return data.subjects.find(subject => subject.id === id)?.name || '';
           }),
         );
       }

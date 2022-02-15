@@ -24,7 +24,7 @@ interface ConceptSearchResultJson extends SearchResultJson {
     visualElement: string;
   };
   copyright: {
-    license: {
+    license?: {
       license: string;
     };
     processors: Author[];
