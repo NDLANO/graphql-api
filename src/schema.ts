@@ -212,9 +212,9 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]
-    metadata: TaxonomyMetadata
+    path: String!
+    paths: [String!]!
+    metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
   }
@@ -228,10 +228,10 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]
+    path: String!
+    paths: [String!]!
     meta: Meta
-    metadata: TaxonomyMetadata
+    metadata: TaxonomyMetadata!
     learningpath: Learningpath
     relevanceId: String
     rank: Int
@@ -246,10 +246,10 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]
+    path: String!
+    paths: [String!]!
     meta: Meta
-    metadata: TaxonomyMetadata
+    metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
     article(subjectId: String, showVisualElement: String): Article
@@ -547,15 +547,15 @@ export const typeDefs = gql`
     id: String!
     contentUri: String
     name: String!
-    path: String
-    paths: [String!]
-    metadata: TaxonomyMetadata
-    relevanceId: String
+    path: String!
+    paths: [String!]!
+    metadata: TaxonomyMetadata!
+    relevanceId: String!
     rank: Int
     subjectpage: SubjectPage
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
-    grepCodes: [String!]
+    grepCodes: [String!]!
   }
 
   interface SearchResult {

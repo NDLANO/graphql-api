@@ -217,9 +217,9 @@ declare global {
     id: string;
     name: string;
     contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
-    metadata?: GQLTaxonomyMetadata;
+    path: string;
+    paths: Array<string>;
+    metadata: GQLTaxonomyMetadata;
     relevanceId?: string;
     rank?: number;
   }
@@ -255,10 +255,10 @@ declare global {
     id: string;
     name: string;
     contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
+    path: string;
+    paths: Array<string>;
     meta?: GQLMeta;
-    metadata?: GQLTaxonomyMetadata;
+    metadata: GQLTaxonomyMetadata;
     learningpath?: GQLLearningpath;
     relevanceId?: string;
     rank?: number;
@@ -273,10 +273,10 @@ declare global {
     id: string;
     name: string;
     contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
+    path: string;
+    paths: Array<string>;
     meta?: GQLMeta;
-    metadata?: GQLTaxonomyMetadata;
+    metadata: GQLTaxonomyMetadata;
     relevanceId?: string;
     rank?: number;
     article?: GQLArticle;
@@ -574,15 +574,15 @@ declare global {
     id: string;
     contentUri?: string;
     name: string;
-    path?: string;
-    paths?: Array<string>;
-    metadata?: GQLTaxonomyMetadata;
-    relevanceId?: string;
+    path: string;
+    paths: Array<string>;
+    metadata: GQLTaxonomyMetadata;
+    relevanceId: string;
     rank?: number;
     subjectpage?: GQLSubjectPage;
     topics?: Array<GQLTopic>;
     allTopics?: Array<GQLTopic>;
-    grepCodes?: Array<string>;
+    grepCodes: Array<string>;
   }
   
   export interface GQLSearchResult {
