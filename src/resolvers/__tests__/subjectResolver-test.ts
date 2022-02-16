@@ -28,18 +28,24 @@ test('Fetch subject should filter out invisible elements', async () => {
       contentUri: 'urn:frontpage:1',
       name: 'Samfunnsfag YF Vg2',
       path: '/subject:3',
+      paths: ['/subject:3'],
+      relevanceId: 'urn:relevance:supplementary',
       metadata: {
         visible: true,
       },
+      grepCodes: ['KM122'],
     },
     {
       id: 'urn:subject:6',
       contentUri: 'urn:frontpage:4',
       name: 'Brønnteknikk Vg2',
       path: '/subject:6',
+      paths: ['/subject:6'],
+      relevanceId: 'urn:relevance:core',
       metadata: {
         visible: false,
       },
+      grepCodes: ['KM122'],
     },
   ];
   nock('https://api.test.ndla.no')
