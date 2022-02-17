@@ -12,7 +12,7 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 export async function fetchLearningpaths(
   learningpathIds: string[],
   context: Context,
-): Promise<(GQLMeta | null)[]> {
+): Promise<Array<GQLMeta | null>> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/?language=${
       context.language
