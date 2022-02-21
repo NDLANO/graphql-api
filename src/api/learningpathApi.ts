@@ -6,24 +6,25 @@
  *
  */
 
+import { ILearningPathV2, ISearchResultV2 } from '@ndla/types-learningpath-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchLearningpaths(
   learningpathIds: string[],
   context: Context,
-): Promise<GQLMeta[]> {
+): Promise<Array<GQLMeta | null>> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/?language=${
       context.language
     }&fallback=true&ids=${learningpathIds.join(',')}`,
     context,
   );
-  const json = await resolveJson(response);
+  const json: ISearchResultV2 = await resolveJson(response);
 
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
   return learningpathIds.map(id => {
-    const learningpath = json.results.find((item: { id: number }) => {
+    const learningpath = json.results.find(item => {
       return item.id.toString() === id;
     });
 
@@ -31,29 +32,19 @@ export async function fetchLearningpaths(
       return {
         id: learningpath.id,
         title: learningpath.title.title,
-        introduction: learningpath.introduction?.introduction,
-        metaDescription: learningpath.description?.description,
+        introduction: learningpath.introduction.introduction,
+        metaDescription: learningpath.description.description,
         lastUpdated: learningpath.lastUpdated,
-        metaImage: {
-          url: learningpath.coverPhoto?.url,
-          alt: learningpath.introduction?.introduction,
-        },
+        metaImage: learningpath.coverPhotoUrl
+          ? {
+              url: learningpath.coverPhotoUrl,
+              alt: learningpath.introduction.introduction,
+            }
+          : undefined,
       };
     }
     return null;
   });
-}
-
-interface ApiLearningStep
-  extends Omit<GQLLearningpathStep, 'title' | 'description'> {
-  title: {
-    title: string;
-    language: string;
-  };
-  description: {
-    description: string;
-    language: string;
-  };
 }
 
 export async function fetchLearningpath(
@@ -64,25 +55,20 @@ export async function fetchLearningpath(
     `/learningpath-api/v2/learningpaths/${id}?language=${context.language}&fallback=true`,
     context,
   );
-  const learningpath = await resolveJson(response);
-  const learningsteps = learningpath.learningsteps?.map(
-    (step: ApiLearningStep) => ({
-      ...step,
-      title: step.title.title,
-      description: step.description?.description,
-    }),
-  );
+  const learningpath: ILearningPathV2 = await resolveJson(response);
+  const learningsteps = learningpath.learningsteps.map(step => ({
+    ...step,
+    title: step.title.title,
+    description: step.description?.description,
+  }));
 
   return {
     ...learningpath,
     title: learningpath.title.title,
     description: learningpath.description.description,
     lastUpdated: learningpath.lastUpdated,
-    coverphoto: {
-      url: learningpath.coverPhoto?.url,
-      alt: learningpath.introduction?.introduction || '',
-    },
-    tags: learningpath.tags?.tags || [],
+    coverphoto: learningpath.coverPhoto,
+    tags: learningpath.tags.tags || [],
     learningsteps,
   };
 }

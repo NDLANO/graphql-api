@@ -35,7 +35,7 @@ export const resolvers = {
       learningpathStep: GQLLearningpathStep,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLLearningpathStepOembed> {
+    ): Promise<GQLLearningpathStepOembed | null> {
       if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
         return null;
       }
@@ -58,7 +58,7 @@ export const resolvers = {
       learningpathStep: GQLLearningpathStep,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLResource> {
+    ): Promise<GQLResource | null> {
       if (
         !learningpathStep.embedUrl ||
         !learningpathStep.embedUrl.url ||

@@ -178,7 +178,7 @@ declare global {
   }
   
   export interface GQLLearningpathCoverphoto {
-    url?: string;
+    url: string;
     metaUrl: string;
   }
   

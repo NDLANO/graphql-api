@@ -29,7 +29,9 @@ export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<string, any> {
+export function learningpathsLoader(
+  context: Context,
+): DataLoader<string, GQLMeta | null> {
   return new DataLoader(async learningpathIds => {
     return fetchLearningpaths(learningpathIds, context);
   });
