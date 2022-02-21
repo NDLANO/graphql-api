@@ -29,7 +29,6 @@
   "dependencies": {
     "@graphql-tools/mock": "^8.2.2",
     "@graphql-tools/schema": "^8.1.2",
-    "@ndla/types-learningpath-api": "^0.0.2",
     "apollo-server-express": "^3.1.2",
     "bunyan": "^1.8.12",
     "cheerio": "^1.0.0-rc.6",
@@ -48,6 +47,7 @@
   "devDependencies": {
     "@ndla/types-article-api": "^0.0.4",
     "@ndla/types-frontpage-api": "^0.0.3",
+    "@ndla/types-learningpath-api": "^0.0.2",
     "@types/bunyan": "^1.8.5",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",
