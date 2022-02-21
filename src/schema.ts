@@ -173,7 +173,7 @@ export const typeDefs = gql`
   }
 
   type LearningpathCoverphoto {
-    url: String
+    url: String!
     metaUrl: String!
   }
 
