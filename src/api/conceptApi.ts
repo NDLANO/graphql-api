@@ -74,6 +74,7 @@ export async function searchConcepts(
           tags: res.tags?.tags || [],
           subjectIds: res.subjectIds || [],
           metaImage: res.metaImage,
+          copyright: res.copyright,
         };
         if (res.visualElement) {
           result.visualElement = await parseVisualElement(
@@ -107,6 +108,7 @@ export async function fetchConcepts(
             tags: res.tags?.tags || [],
             subjectIds: res.subjectIds || [],
             metaImage: res.metaImage,
+            copyright: res.copyright,
           };
           if (res.visualElement) {
             result.visualElement = await parseVisualElement(
