@@ -702,6 +702,7 @@ export const typeDefs = gql`
     subjectNames: [String!]
     metaImage: MetaImage!
     visualElement: VisualElement
+    copyright: ConceptCopyright
   }
 
   type DetailedConcept {

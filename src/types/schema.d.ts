@@ -740,6 +740,7 @@ declare global {
     subjectNames?: Array<string>;
     metaImage: GQLMetaImage;
     visualElement?: GQLVisualElement;
+    copyright?: GQLConceptCopyright;
   }
   
   export interface GQLDetailedConcept {
@@ -3401,6 +3402,7 @@ declare global {
     subjectNames?: ConceptToSubjectNamesResolver<TParent>;
     metaImage?: ConceptToMetaImageResolver<TParent>;
     visualElement?: ConceptToVisualElementResolver<TParent>;
+    copyright?: ConceptToCopyrightResolver<TParent>;
   }
   
   export interface ConceptToIdResolver<TParent = any, TResult = any> {
@@ -3432,6 +3434,10 @@ declare global {
   }
   
   export interface ConceptToVisualElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToCopyrightResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
