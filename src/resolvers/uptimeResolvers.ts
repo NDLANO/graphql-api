@@ -6,7 +6,7 @@ export const Query = {
     __: any,
     context: ContextWithLoaders,
   ): Promise<GQLUptimeAlert[]> {
-    return fetchUptimeIssues();
+    return fetchUptimeIssues(context);
   },
 };
 

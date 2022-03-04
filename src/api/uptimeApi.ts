@@ -6,16 +6,23 @@
  *
  */
 
-import { Octokit } from '@octokit/rest';
+import he from 'he';
+import { fetch, resolveJson } from '../utils/apiHelpers';
 import { uptimeOwner, uptimeRepo } from '../config';
 
-export async function fetchUptimeIssues(): Promise<GQLUptimeAlert[]> {
-  const octokit = new Octokit();
-  const { data } = await octokit.rest.issues.listForRepo({
-    owner: uptimeOwner,
-    repo: uptimeRepo,
-    state: 'all',
-    labels: 'maintenance',
+const baseUrl = 'https://api.github.com';
+
+export async function fetchUptimeIssues(
+  context: ContextWithLoaders,
+): Promise<GQLUptimeAlert[]> {
+  const path = `${baseUrl}/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenace`;
+  const response = await fetch(path, context, { timeout: 3000 });
+  const issues: GQLUptimeAlert[] = await resolveJson(response);
+
+  return issues.map(issue => {
+    return {
+      title: issue.title,
+      body: he.decode(issue.body).replace(/<[^>]*>?/gm, ''),
+    };
   });
-  return data;
 }
