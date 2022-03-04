@@ -8,14 +8,17 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const getEnvironmentVariabel = (
+export function getEnvironmentVariabel(key: string, fallback: string): string;
+export function getEnvironmentVariabel(key: string, fallback: boolean): boolean;
+export function getEnvironmentVariabel(key: string, fallback?: string): string | undefined;
+export function getEnvironmentVariabel(
   key: string,
-  fallback: string | boolean = undefined,
-) => {
-  const variabel = process.env[key];
-
+  fallback?: string | boolean,
+): string | boolean | undefined {
+  const env = 'env';
+  const variabel = process[env][key]; // Hack to prevent DefinePlugin replacing process.env
   return variabel || fallback;
-};
+}
 
 export const ndlaEnvironment = getEnvironmentVariabel(
   'NDLA_ENVIRONMENT',
@@ -55,3 +58,5 @@ export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);
 export const ndlaUrl = getEnvironmentVariabel('NDLA_URL', ndlaFrontendUrl());
+export const uptimeOwner = getEnvironmentVariabel('UPTIME_OWNER', 'ghveem');
+export const uptimeRepo = getEnvironmentVariabel('UPTIME_REPO', 'oppetid');

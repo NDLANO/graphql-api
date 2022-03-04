@@ -54,3 +54,4 @@ export {
   fetchDetailedConcept,
   fetchListingPage,
 } from './conceptApi';
+export { fetchUptimeIssues } from './uptimeApi';

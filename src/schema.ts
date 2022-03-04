@@ -797,6 +797,11 @@ export const typeDefs = gql`
     learningResources: FrontPageResources!
   }
 
+  type UptimeAlert {
+    title: String
+    body: String
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -886,6 +891,7 @@ export const typeDefs = gql`
     podcastSearch(page: Int, pageSize: Int): AudioSearch
     podcastSeries(id: Int!): PodcastSeries
     podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
+    alerts: [UptimeAlert]
   }
 `;
 
