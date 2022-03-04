@@ -6,16 +6,16 @@
  *
  */
 
-import { Octokit } from "@octokit/rest";
+import { Octokit } from '@octokit/rest';
 import { uptimeOwner, uptimeRepo } from '../config';
 
 export async function fetchUptimeIssues(): Promise<GQLUptimeAlert[]> {
-    const octokit = new Octokit();
-    const { data } = await octokit.rest.issues.listForRepo({
-        owner: uptimeOwner,
-        repo: uptimeRepo,
-        state: 'all',
-        labels: 'maintenance'
-    });
-    return data;
+  const octokit = new Octokit();
+  const { data } = await octokit.rest.issues.listForRepo({
+    owner: uptimeOwner,
+    repo: uptimeRepo,
+    state: 'all',
+    labels: 'maintenance',
+  });
+  return data;
 }

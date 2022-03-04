@@ -10,7 +10,10 @@ dotenv.config();
 
 export function getEnvironmentVariabel(key: string, fallback: string): string;
 export function getEnvironmentVariabel(key: string, fallback: boolean): boolean;
-export function getEnvironmentVariabel(key: string, fallback?: string): string | undefined;
+export function getEnvironmentVariabel(
+  key: string,
+  fallback?: string,
+): string | undefined;
 export function getEnvironmentVariabel(
   key: string,
   fallback?: string | boolean,
