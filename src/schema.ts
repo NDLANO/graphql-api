@@ -823,7 +823,7 @@ export const typeDefs = gql`
     subjects(
       metadataFilterKey: String
       metadataFilterValue: String
-      isVisible: Boolean
+      filterVisible: Boolean
     ): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]

@@ -95,19 +95,13 @@ export function filmFrontpageLoader(
 
 export function subjectLoader(
   context: Context,
-): DataLoader<
-  {
-    id?: string;
-    visible?: boolean;
-  },
-  Subject
-> {
+): DataLoader<{ id?: string }, Subject> {
   return new DataLoader(
     async inputs => {
       return Promise.all(
         inputs.map(input => {
           if (input.id) {
-            return fetchSubjectTyped(context, input.id, input.visible);
+            return fetchSubjectTyped(context, input.id);
           }
         }),
       );
@@ -119,14 +113,18 @@ export function subjectLoader(
 export function subjectsLoader(
   context: Context,
 ): DataLoader<
-  { metadataFilter?: { key: string; value?: string }; isVisible: boolean },
+  { metadataFilter?: { key: string; value?: string }; filterVisible: boolean },
   { subjects: GQLSubject[] }
 > {
   return new DataLoader(
     async inputs => {
       return Promise.all(
         inputs.map(async input => {
-          const subjects = await fetchSubjects(context, input.metadataFilter);
+          const subjects = await fetchSubjects(
+            context,
+            input.metadataFilter,
+            input.filterVisible ? true : undefined,
+          );
           return { subjects };
         }),
       );

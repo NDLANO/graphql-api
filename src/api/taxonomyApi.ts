@@ -53,7 +53,9 @@ export async function fetchResource(
   );
   const resource: GQLResource = await resolveJson(response);
   // TODO: Replace parent-filtering with changes in taxonomy
-  const data = await context.loaders.subjectsLoader.load({ isVisible: true });
+  const data = await context.loaders.subjectsLoader.load({
+    filterVisible: true,
+  });
   const paths = resource.paths?.filter(p => {
     const sId = p.split('/')[1];
     const parentSubject = data.subjects.find(
@@ -126,12 +128,8 @@ export async function fetchSubject(
 export async function fetchSubjectTyped(
   context: Context,
   id: string,
-  isVisible?: boolean,
 ): Promise<Subject> {
-  const query = qs.stringify({
-    language: context.language,
-    isVisible,
-  });
+  const query = qs.stringify({ language: context.language });
   const response = await fetch(
     `/${context.taxonomyUrl}/v1/subjects/${id}?${query}`,
     context,
