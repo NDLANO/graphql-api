@@ -756,6 +756,7 @@ declare global {
     articles?: Array<GQLMeta>;
     visualElement?: GQLVisualElement;
     copyright?: GQLConceptCopyright;
+    source?: string;
   }
   
   export interface GQLSearch {
@@ -3461,6 +3462,7 @@ declare global {
     articles?: DetailedConceptToArticlesResolver<TParent>;
     visualElement?: DetailedConceptToVisualElementResolver<TParent>;
     copyright?: DetailedConceptToCopyrightResolver<TParent>;
+    source?: DetailedConceptToSourceResolver<TParent>;
   }
   
   export interface DetailedConceptToIdResolver<TParent = any, TResult = any> {
@@ -3508,6 +3510,10 @@ declare global {
   }
   
   export interface DetailedConceptToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToSourceResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
