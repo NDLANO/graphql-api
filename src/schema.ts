@@ -718,6 +718,7 @@ export const typeDefs = gql`
     articles: [Meta!]
     visualElement: VisualElement
     copyright: ConceptCopyright
+    source: String
   }
 
   type Search {
