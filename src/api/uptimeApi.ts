@@ -15,7 +15,7 @@ const baseUrl = 'https://api.github.com';
 export async function fetchUptimeIssues(
   context: ContextWithLoaders,
 ): Promise<GQLUptimeAlert[]> {
-  const path = `${baseUrl}/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenace`;
+  const path = `${baseUrl}/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenance`;
   const response = await fetch(path, context, { timeout: 3000 });
   const issues: GQLUptimeAlert[] = await resolveJson(response);
 
