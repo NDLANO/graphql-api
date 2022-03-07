@@ -113,16 +113,8 @@ export async function fetchSubjects(
 export async function fetchSubject(
   context: Context,
   id: string,
-  metadataFilter?: {
-    key: string;
-    value?: string;
-  },
 ): Promise<GQLSubject> {
-  const query = qs.stringify({
-    language: context.language,
-    key: metadataFilter?.key,
-    value: metadataFilter?.value,
-  });
+  const query = qs.stringify({ language: context.language });
 
   const response = await fetch(
     `/${context.taxonomyUrl}/v1/subjects/${id}?${query}`,
