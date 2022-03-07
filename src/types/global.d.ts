@@ -2,6 +2,7 @@ import DataLoader from 'dataloader';
 import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
 import { IFrontPageData } from '@ndla/types-frontpage-api';
+import { Subject } from '../api/taxonomyApi';
 
 declare global {
   interface AuthToken {
@@ -14,7 +15,17 @@ declare global {
     articlesLoader: DataLoader<string, GQLMeta>;
     learningpathsLoader: DataLoader<string, any>;
     subjectTopicsLoader: DataLoader<{ subjectId: string }, any>;
-    subjectsLoader: DataLoader<string, { subjects: GQLSubject[] }>;
+    subjectsLoader: DataLoader<
+      { metadataFilter?: { key: string; value?: string }; visible: boolean },
+      { subjects: GQLSubject[] }
+    >;
+    subjectLoader: DataLoader<
+      {
+        id?: string;
+        visible?: boolean;
+      },
+      Subject
+    >;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPageData>;
     lk06CurriculumLoader: DataLoader<string, GQLReference>;

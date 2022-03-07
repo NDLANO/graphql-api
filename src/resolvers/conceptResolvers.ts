@@ -49,10 +49,10 @@ export const resolvers = {
   Concept: {
     async subjectNames(
       concept: GQLConcept,
-      _: any,
+      params: any,
       context: ContextWithLoaders,
     ): Promise<string[]> {
-      const data = await context.loaders.subjectsLoader.load('all');
+      const data = await context.loaders.subjectsLoader.load(params);
       if (concept.subjectIds?.length > 0) {
         return Promise.all(
           concept.subjectIds?.map(id => {
@@ -65,10 +65,10 @@ export const resolvers = {
   DetailedConcept: {
     async subjectNames(
       detailedConcept: GQLDetailedConcept,
-      _: any,
+      params: any,
       context: ContextWithLoaders,
     ): Promise<string[]> {
-      const data = await context.loaders.subjectsLoader.load('all');
+      const data = await context.loaders.subjectsLoader.load(params);
       if (detailedConcept.subjectIds?.length > 0) {
         return Promise.all(
           detailedConcept.subjectIds?.map(id => {

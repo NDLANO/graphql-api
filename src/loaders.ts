@@ -19,6 +19,7 @@ import {
   fetchLK06Curriculum,
   fetchLK20Curriculum,
 } from './api';
+import { fetchSubjectTyped, Subject } from './api/taxonomyApi';
 
 export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
   return new DataLoader(
@@ -92,13 +93,46 @@ export function filmFrontpageLoader(
   });
 }
 
+export function subjectLoader(
+  context: Context,
+): DataLoader<
+  {
+    id?: string;
+    visible?: boolean;
+  },
+  Subject
+> {
+  return new DataLoader(
+    async inputs => {
+      return Promise.all(
+        inputs.map(input => {
+          if (input.id) {
+            return fetchSubjectTyped(context, input.id, input.visible);
+          }
+        }),
+      );
+    },
+    { cacheKeyFn: key => JSON.stringify(key) },
+  );
+}
+
 export function subjectsLoader(
   context: Context,
-): DataLoader<string, { subjects: GQLSubject[] }> {
-  return new DataLoader(async () => {
-    const subjects = await fetchSubjects(context);
-    return [{ subjects }];
-  });
+): DataLoader<
+  { metadataFilter?: { key: string; value?: string }; visible: boolean },
+  { subjects: GQLSubject[] }
+> {
+  return new DataLoader(
+    async inputs => {
+      return Promise.all(
+        inputs.map(async input => {
+          const subjects = await fetchSubjects(context, input.metadataFilter);
+          return { subjects };
+        }),
+      );
+    },
+    { cacheKeyFn: key => key },
+  );
 }
 
 interface IInput {

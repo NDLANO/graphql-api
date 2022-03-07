@@ -8,6 +8,7 @@
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { findPrimaryPath, getArticleIdFromUrn } from '../utils/articleHelpers';
+import qs from 'query-string';
 
 interface Topic {
   id: string;
@@ -18,6 +19,28 @@ interface FetchTopicResourcesParams {
   relevance: string;
   filters?: string;
   subjectId?: string;
+}
+interface TaxonomyTranslation {
+  name: string;
+  language: string;
+}
+
+interface TaxonomyMetadata {
+  customFields: Record<string, string>;
+  grepCodes: string[];
+  visible: boolean;
+}
+
+export interface Subject {
+  contentUri: string | null;
+  id: string;
+  metadata: TaxonomyMetadata;
+  name: string;
+  path: string;
+  paths: string[];
+  relevanceId: string | null;
+  supportedLanguages: string[];
+  translations: TaxonomyTranslation[];
 }
 
 export async function fetchResource(
@@ -30,7 +53,7 @@ export async function fetchResource(
   );
   const resource: GQLResource = await resolveJson(response);
   // TODO: Replace parent-filtering with changes in taxonomy
-  const data = await context.loaders.subjectsLoader.load('all');
+  const data = await context.loaders.subjectsLoader.load({ visible: true });
   const paths = resource.paths?.filter(p => {
     const sId = p.split('/')[1];
     const parentSubject = data.subjects.find(
@@ -66,20 +89,75 @@ export async function fetchResourceTypes(
   return resolveJson(response);
 }
 
-export async function fetchSubjects(context: Context): Promise<GQLSubject[]> {
+export async function fetchSubjects(
+  context: Context,
+  metadataFilter?: {
+    key: string;
+    value?: string;
+  },
+  isVisible?: boolean,
+): Promise<GQLSubject[]> {
+  const query = qs.stringify({
+    language: context.language,
+    key: metadataFilter?.key,
+    value: metadataFilter?.value,
+    isVisible,
+  });
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/subjects/?language=${context.language}`,
+    `/${context.taxonomyUrl}/v1/subjects/?${query}`,
     context,
   );
   return resolveJson(response);
 }
 
 export async function fetchSubject(
-  id: string,
   context: Context,
+  id: string,
+  metadataFilter?: {
+    key: string;
+    value?: string;
+  },
 ): Promise<GQLSubject> {
+  const query = qs.stringify({
+    language: context.language,
+    key: metadataFilter?.key,
+    value: metadataFilter?.value,
+  });
+
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/subjects/${id}?language=${context.language}`,
+    `/${context.taxonomyUrl}/v1/subjects/${id}?${query}`,
+    context,
+  );
+  return resolveJson(response);
+}
+
+export async function fetchSubjectTyped(
+  context: Context,
+  id: string,
+  isVisible?: boolean,
+): Promise<Subject> {
+  const query = qs.stringify({
+    language: context.language,
+    isVisible,
+  });
+  const response = await fetch(
+    `/${context.taxonomyUrl}/v1/subjects/${id}?${query}`,
+    context,
+  );
+  return resolveJson(response);
+}
+
+export async function fetchSubjectsTyped(
+  context: Context,
+  isVisible?: boolean,
+): Promise<Subject> {
+  const query = qs.stringify({
+    language: context.language,
+    isVisible,
+  });
+
+  const response = await fetch(
+    `/${context.taxonomyUrl}/v1/subjects/?${query}`,
     context,
   );
   return resolveJson(response);

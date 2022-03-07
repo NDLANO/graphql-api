@@ -1,5 +1,6 @@
 import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-frontpage-api';
 import DataLoader from 'dataloader';
+import { Subject } from '../../api/taxonomyApi';
 
 const mockFn = async <T>(mockData: T) => mockData;
 
@@ -34,8 +35,23 @@ export const mockFilmFrontpageLoader = (
 };
 
 export const mockSubjectsLoader = (mockData: GQLSubject[] = []) => {
-  return new DataLoader<string, { subjects: GQLSubject[] }>(async () => {
+  return new DataLoader<
+    { metadataFilter?: { key: string; value?: string }; visible: boolean },
+    { subjects: GQLSubject[] }
+  >(async () => {
     return [{ subjects: await mockFn(mockData) }];
+  });
+};
+
+export const mockSubjectLoader = (mockData: Subject[] | null = null) => {
+  return new DataLoader<
+    {
+      id?: string;
+      visible?: boolean;
+    },
+    Subject
+  >(async () => {
+    return await mockFn(mockData);
   });
 };
 
@@ -73,6 +89,7 @@ export const mockLoaders = {
   frontpageLoader: mockFrontpageLoader(),
   filmFrontpageLoader: mockFilmFrontpageLoader(),
   subjectsLoader: mockSubjectTopicsLoader(),
+  subjectLoader: mockSubjectLoader(),
   subjectTopicsLoader: mockSubjectTopicsLoader(),
   resourceTypesLoader: mockResourceTypesLoader(),
 };

@@ -217,6 +217,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
+    supportedLanguages: [String!]!
   }
 
   interface WithArticle {
@@ -240,6 +241,7 @@ export const typeDefs = gql`
     resourceTypes: [ResourceType!]
     parentTopics: [Topic!]
     breadcrumbs: [[String!]!]
+    supportedLanguages: [String!]!
   }
 
   type Topic implements TaxonomyEntity & WithArticle {
@@ -262,6 +264,7 @@ export const typeDefs = gql`
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
     breadcrumbs: [[String!]!]
+    supportedLanguages: [String!]!
   }
 
   type License {
@@ -556,6 +559,7 @@ export const typeDefs = gql`
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]!
+    supportedLanguages: [String!]!
   }
 
   interface SearchResult {
@@ -816,7 +820,7 @@ export const typeDefs = gql`
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
-    subjects: [Subject!]
+    subjects(metadataFilterKey: String, metadataFilterValue: String): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: Frontpage

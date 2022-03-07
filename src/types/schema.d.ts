@@ -222,6 +222,7 @@ declare global {
     metadata: GQLTaxonomyMetadata;
     relevanceId?: string;
     rank?: number;
+    supportedLanguages: Array<string>;
   }
   
   /** Use this to resolve interface type TaxonomyEntity */
@@ -267,6 +268,7 @@ declare global {
     resourceTypes?: Array<GQLResourceType>;
     parentTopics?: Array<GQLTopic>;
     breadcrumbs?: Array<Array<string>>;
+    supportedLanguages: Array<string>;
   }
   
   export interface GQLTopic extends GQLTaxonomyEntity, GQLWithArticle {
@@ -289,6 +291,7 @@ declare global {
     supplementaryResources?: Array<GQLResource>;
     alternateTopics?: Array<GQLTopic>;
     breadcrumbs?: Array<Array<string>>;
+    supportedLanguages: Array<string>;
   }
   
   export interface GQLLicense {
@@ -583,6 +586,7 @@ declare global {
     topics?: Array<GQLTopic>;
     allTopics?: Array<GQLTopic>;
     grepCodes: Array<string>;
+    supportedLanguages: Array<string>;
   }
   
   export interface GQLSearchResult {
@@ -1704,6 +1708,7 @@ declare global {
     resourceTypes?: ResourceToResourceTypesResolver<TParent>;
     parentTopics?: ResourceToParentTopicsResolver<TParent>;
     breadcrumbs?: ResourceToBreadcrumbsResolver<TParent>;
+    supportedLanguages?: ResourceToSupportedLanguagesResolver<TParent>;
   }
   
   export interface ResourceToIdResolver<TParent = any, TResult = any> {
@@ -1770,6 +1775,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface ResourceToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLTopicTypeResolver<TParent = any> {
     id?: TopicToIdResolver<TParent>;
     name?: TopicToNameResolver<TParent>;
@@ -1790,6 +1799,7 @@ declare global {
     supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
     alternateTopics?: TopicToAlternateTopicsResolver<TParent>;
     breadcrumbs?: TopicToBreadcrumbsResolver<TParent>;
+    supportedLanguages?: TopicToSupportedLanguagesResolver<TParent>;
   }
   
   export interface TopicToIdResolver<TParent = any, TResult = any> {
@@ -1875,6 +1885,10 @@ declare global {
   }
   
   export interface TopicToBreadcrumbsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToSupportedLanguagesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2881,6 +2895,7 @@ declare global {
     topics?: SubjectToTopicsResolver<TParent>;
     allTopics?: SubjectToAllTopicsResolver<TParent>;
     grepCodes?: SubjectToGrepCodesResolver<TParent>;
+    supportedLanguages?: SubjectToSupportedLanguagesResolver<TParent>;
   }
   
   export interface SubjectToIdResolver<TParent = any, TResult = any> {
@@ -2931,6 +2946,10 @@ declare global {
   }
   
   export interface SubjectToGrepCodesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToSupportedLanguagesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3859,8 +3878,12 @@ declare global {
     (parent: TParent, args: QueryToLearningpathArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface QueryToSubjectsArgs {
+    metadataFilterKey?: string;
+    metadataFilterValue?: string;
+  }
   export interface QueryToSubjectsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+    (parent: TParent, args: QueryToSubjectsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToTopicArgs {

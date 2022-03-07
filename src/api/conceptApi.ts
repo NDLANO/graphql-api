@@ -181,7 +181,7 @@ export async function fetchListingPage(
     await fetch(`/concept-api/v1/concepts/subjects/`, context),
   );
   const subjectResults = await Promise.allSettled(
-    subjectIds.map(id => fetchSubject(id, context)),
+    subjectIds.map(id => fetchSubject(context, id)),
   );
   const subjects = (subjectResults.filter(
     result => result.status === 'fulfilled',
