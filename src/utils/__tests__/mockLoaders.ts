@@ -36,7 +36,7 @@ export const mockFilmFrontpageLoader = (
 
 export const mockSubjectsLoader = (mockData: GQLSubject[] = []) => {
   return new DataLoader<
-    { metadataFilter?: { key: string; value?: string }; visible: boolean },
+    { metadataFilter?: { key: string; value?: string }; isVisible: boolean },
     { subjects: GQLSubject[] }
   >(async () => {
     return [{ subjects: await mockFn(mockData) }];

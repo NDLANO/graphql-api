@@ -53,7 +53,7 @@ export async function fetchResource(
   );
   const resource: GQLResource = await resolveJson(response);
   // TODO: Replace parent-filtering with changes in taxonomy
-  const data = await context.loaders.subjectsLoader.load({ visible: true });
+  const data = await context.loaders.subjectsLoader.load({ isVisible: true });
   const paths = resource.paths?.filter(p => {
     const sId = p.split('/')[1];
     const parentSubject = data.subjects.find(

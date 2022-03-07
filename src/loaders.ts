@@ -119,7 +119,7 @@ export function subjectLoader(
 export function subjectsLoader(
   context: Context,
 ): DataLoader<
-  { metadataFilter?: { key: string; value?: string }; visible: boolean },
+  { metadataFilter?: { key: string; value?: string }; isVisible: boolean },
   { subjects: GQLSubject[] }
 > {
   return new DataLoader(

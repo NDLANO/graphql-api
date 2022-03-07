@@ -16,13 +16,13 @@ declare global {
     learningpathsLoader: DataLoader<string, any>;
     subjectTopicsLoader: DataLoader<{ subjectId: string }, any>;
     subjectsLoader: DataLoader<
-      { metadataFilter?: { key: string; value?: string }; visible: boolean },
+      { metadataFilter?: { key: string; value?: string }; isVisible: boolean },
       { subjects: GQLSubject[] }
     >;
     subjectLoader: DataLoader<
       {
         id?: string;
-        visible?: boolean;
+        isVisible?: boolean;
       },
       Subject
     >;

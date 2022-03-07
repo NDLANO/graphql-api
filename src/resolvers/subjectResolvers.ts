@@ -20,7 +20,7 @@ export const Query = {
   ): Promise<Subject> {
     return await context.loaders.subjectLoader.load({
       id,
-      visible: true,
+      isVisible: true,
     });
   },
   async subjects(
@@ -41,7 +41,7 @@ export const Query = {
 
     const loaderParams = {
       ...metaDataFilter,
-      visible: true,
+      isVisible: true,
     };
 
     return context.loaders.subjectsLoader
