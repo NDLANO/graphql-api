@@ -47,6 +47,10 @@ import {
   Query as ConceptQuery,
   resolvers as conceptResolvers,
 } from './conceptResolvers';
+import {
+  Query as UptimeQuery,
+  resolvers as uptimeResolvers,
+} from './uptimeResolvers';
 
 export const resolvers: GQLResolver = {
   Query: {
@@ -60,6 +64,7 @@ export const resolvers: GQLResolver = {
     ...LearningpathQuery,
     ...PodcastQuery,
     ...ConceptQuery,
+    ...UptimeQuery,
   },
   ...articleResolvers,
   ...subjectResolvers,
@@ -71,6 +76,7 @@ export const resolvers: GQLResolver = {
   ...curriculumResolvers,
   ...podcastResolvers,
   ...conceptResolvers,
+  ...uptimeResolvers,
   JSON: GraphQLJSON,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface

@@ -835,6 +835,11 @@ declare global {
     learningResources: GQLFrontPageResources;
   }
   
+  export interface GQLUptimeAlert {
+    title?: string;
+    body?: string;
+  }
+  
   export interface GQLQuery {
     resource?: GQLResource;
     article?: GQLArticle;
@@ -863,6 +868,7 @@ declare global {
     podcastSearch?: GQLAudioSearch;
     podcastSeries?: GQLPodcastSeries;
     podcastSeriesSearch?: GQLPodcastSeriesSearch;
+    alerts?: Array<GQLUptimeAlert | null>;
   }
   
   /*********************************
@@ -977,6 +983,7 @@ declare global {
     GroupSearch?: GQLGroupSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
+    UptimeAlert?: GQLUptimeAlertTypeResolver;
     Query?: GQLQueryTypeResolver;
   }
   export interface GQLAudioFileTypeResolver<TParent = any> {
@@ -3757,6 +3764,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLUptimeAlertTypeResolver<TParent = any> {
+    title?: UptimeAlertToTitleResolver<TParent>;
+    body?: UptimeAlertToBodyResolver<TParent>;
+  }
+  
+  export interface UptimeAlertToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface UptimeAlertToBodyResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLQueryTypeResolver<TParent = any> {
     resource?: QueryToResourceResolver<TParent>;
     article?: QueryToArticleResolver<TParent>;
@@ -3785,6 +3805,7 @@ declare global {
     podcastSearch?: QueryToPodcastSearchResolver<TParent>;
     podcastSeries?: QueryToPodcastSeriesResolver<TParent>;
     podcastSeriesSearch?: QueryToPodcastSeriesSearchResolver<TParent>;
+    alerts?: QueryToAlertsResolver<TParent>;
   }
   
   export interface QueryToResourceArgs {
@@ -4020,6 +4041,10 @@ declare global {
   }
   export interface QueryToPodcastSeriesSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSeriesSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToAlertsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
 }
