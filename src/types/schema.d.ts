@@ -3881,6 +3881,7 @@ declare global {
   export interface QueryToSubjectsArgs {
     metadataFilterKey?: string;
     metadataFilterValue?: string;
+    isVisible?: boolean;
   }
   export interface QueryToSubjectsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSubjectsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

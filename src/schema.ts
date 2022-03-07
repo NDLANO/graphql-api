@@ -820,7 +820,11 @@ export const typeDefs = gql`
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
-    subjects(metadataFilterKey: String, metadataFilterValue: String): [Subject!]
+    subjects(
+      metadataFilterKey: String
+      metadataFilterValue: String
+      isVisible: Boolean
+    ): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: Frontpage

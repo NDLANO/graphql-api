@@ -11,6 +11,8 @@ import { fetchLK20CompetenceGoalSet, fetchSubjectPage } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
 import { Subject } from '../api/taxonomyApi';
+import { types } from 'util';
+import isDataView = module;
 
 export const Query = {
   async subject(
@@ -26,7 +28,11 @@ export const Query = {
   async subjects(
     _: any,
     input:
-      | { metadataFilterKey?: string; metadataFilterValue?: string }
+      | {
+          metadataFilterKey?: string;
+          metadataFilterValue?: string;
+          isVisible?: boolean;
+        }
       | undefined,
     context: ContextWithLoaders,
   ): Promise<GQLSubject[]> {
@@ -41,7 +47,7 @@ export const Query = {
 
     const loaderParams = {
       ...metaDataFilter,
-      isVisible: true,
+      isVisible: input.isVisible ?? true,
     };
 
     return context.loaders.subjectsLoader
