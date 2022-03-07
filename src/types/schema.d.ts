@@ -836,7 +836,7 @@ declare global {
   }
   
   export interface GQLUptimeAlert {
-    title?: string;
+    title: string;
     body?: string;
   }
   

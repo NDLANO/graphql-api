@@ -798,7 +798,7 @@ export const typeDefs = gql`
   }
 
   type UptimeAlert {
-    title: String
+    title: String!
     body: String
   }
 
