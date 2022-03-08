@@ -69,7 +69,6 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLVisualElement> {
       const visualElement = concept.visualElement?.visualElement;
-      console.log(visualElement);
       if (visualElement) {
         return await parseVisualElement(visualElement, context);
       }
