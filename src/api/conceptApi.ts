@@ -8,33 +8,30 @@
 
 import queryString from 'query-string';
 import { uniq } from 'lodash';
+import { IConceptSearchResult, IConcept } from '@ndla/types-concept-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
-import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
 
-interface Author {
-  type: string;
-  name: string;
+export interface ConceptResult {
+  totalCount: number;
+  page?: number;
+  pageSize: number;
+  language: string;
+  concepts: Concept[];
 }
-interface ConceptSearchResultJson extends SearchResultJson {
-  tags?: {
-    tags: string[];
-  };
-  visualElement?: {
-    visualElement: string;
-  };
-  copyright: {
-    license?: {
-      license: string;
-    };
-    processors: Author[];
-    rightsholders: Author[];
-    creators: Author[];
-  };
+
+export interface Concept {
+  id: number;
+  title: string;
+  content?: string;
+  created?: string;
+  tags: string[];
+  articleIds?: number[];
+  subjectIds: string[];
+  copyright?: IConcept['copyright'];
   source?: string;
-  articleIds?: string[];
-  subjectIds?: string[];
-  created: string;
+  metaImage?: IConcept['metaImage'];
+  visualElement?: IConcept['visualElement'];
 }
 
 export async function searchConcepts(
@@ -49,7 +46,7 @@ export async function searchConcepts(
     fallback?: boolean;
   },
   context: Context,
-): Promise<GQLConceptResult> {
+): Promise<ConceptResult> {
   const query = {
     ...params,
     'page-size': params.pageSize,
@@ -60,39 +57,29 @@ export async function searchConcepts(
     `/concept-api/v1/concepts?${queryString.stringify(query)}`,
     context,
   );
-  const conceptResult = await resolveJson(response);
+  const conceptResult: IConceptSearchResult = await resolveJson(response);
   return {
     totalCount: conceptResult.totalCount,
     page: conceptResult.page,
     pageSize: conceptResult.pageSize,
     language: conceptResult.language,
-    concepts: conceptResult.results?.map(
-      async (res: ConceptSearchResultJson) => {
-        const result: GQLConcept = {
-          id: res.id,
-          title: res.title.title,
-          content: res.content.content,
-          tags: res.tags?.tags || [],
-          subjectIds: res.subjectIds || [],
-          metaImage: res.metaImage,
-          copyright: res.copyright,
-        };
-        if (res.visualElement) {
-          result.visualElement = await parseVisualElement(
-            res.visualElement.visualElement,
-            context,
-          );
-        }
-        return result;
-      },
-    ),
+    concepts: conceptResult.results.map(res => ({
+      id: res.id,
+      title: res.title.title,
+      content: res.content.content,
+      tags: res.tags?.tags || [],
+      subjectIds: res.subjectIds || [],
+      metaImage: res.metaImage,
+      copyright: res.copyright,
+      visualElement: res.visualElement,
+    })),
   };
 }
 
 export async function fetchConcepts(
   conceptIds: string[],
   context: Context,
-): Promise<GQLConcept[]> {
+): Promise<Concept[]> {
   return (
     await Promise.all(
       conceptIds.map(async id => {
@@ -101,22 +88,20 @@ export async function fetchConcepts(
           context,
         );
         try {
-          const res: ConceptSearchResultJson = await resolveJson(concept);
-          const result: GQLConcept = {
+          const res: IConcept = await resolveJson(concept);
+          const result: Concept = {
             id: res.id,
             title: res.title.title,
             content: res.content.content,
+            created: res.created,
             tags: res.tags?.tags || [],
+            articleIds: res.articleIds,
             subjectIds: res.subjectIds || [],
             metaImage: res.metaImage,
             copyright: res.copyright,
+            source: res.source,
+            visualElement: res.visualElement,
           };
-          if (res.visualElement) {
-            result.visualElement = await parseVisualElement(
-              res.visualElement.visualElement,
-              context,
-            );
-          }
           return result;
         } catch (e) {
           return undefined;
@@ -129,7 +114,7 @@ export async function fetchConcepts(
 export async function fetchDetailedConcepts(
   conceptIds: string[],
   context: Context,
-): Promise<GQLDetailedConcept[]> {
+): Promise<Concept[]> {
   return (
     await Promise.all(
       conceptIds.map(async id => fetchDetailedConcept(id, context)),
@@ -140,33 +125,26 @@ export async function fetchDetailedConcepts(
 export async function fetchDetailedConcept(
   id: string,
   context: Context,
-): Promise<GQLDetailedConcept> {
+): Promise<Concept | undefined> {
   const response = await fetch(
     `/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`,
     context,
   );
   try {
-    const concept: ConceptSearchResultJson = await resolveJson(response);
-    const detailedConcept: GQLDetailedConcept = {
+    const concept: IConcept = await resolveJson(response);
+    const detailedConcept: Concept = {
       id: concept.id,
       title: concept.title.title,
       content: concept.content.content,
       created: concept.created,
+      tags: concept.tags?.tags ?? [],
       articleIds: concept.articleIds,
       subjectIds: concept.subjectIds,
       copyright: concept.copyright,
       source: concept.source,
+      metaImage: concept.metaImage,
+      visualElement: concept.visualElement,
     };
-    const metaImageId = concept.metaImage?.url?.split('/').pop();
-    if (metaImageId) {
-      detailedConcept.image = await fetchImage(metaImageId, context);
-    }
-    if (concept.visualElement) {
-      detailedConcept.visualElement = await parseVisualElement(
-        concept.visualElement.visualElement,
-        context,
-      );
-    }
     return detailedConcept;
   } catch (e) {
     return undefined;

@@ -396,7 +396,7 @@ export const typeDefs = gql`
     crossSubjectTopics(subjectId: String): [CrossSubjectElement!]
     oembed: String
     conceptIds: [String!]
-    concepts: [DetailedConcept!]
+    concepts: [Concept!]
     relatedContent: [RelatedContent!]
     availability: String
   }
@@ -697,25 +697,14 @@ export const typeDefs = gql`
     id: Int!
     title: String!
     content: String!
-    tags: [String!]!
-    subjectIds: [String!]
-    subjectNames: [String!]
-    metaImage: MetaImage!
-    visualElement: VisualElement
-    copyright: ConceptCopyright
-  }
-
-  type DetailedConcept {
-    id: Int!
-    title: String!
-    content: String
     created: String
-    tags: [String!]
+    tags: [String!]!
     image: ImageLicense
     subjectIds: [String!]
     subjectNames: [String!]
-    articleIds: [String!]
+    articleIds: [Int!]
     articles: [Meta!]
+    metaImage: MetaImage!
     visualElement: VisualElement
     copyright: ConceptCopyright
     source: String
@@ -861,14 +850,14 @@ export const typeDefs = gql`
       aggregatePaths: [String!]
     ): [GroupSearch!]
     listingPage(subjects: String): ListingPage
-    concepts(ids: [String!]!): [Concept!]
-    detailedConcept(id: String): DetailedConcept
+    concepts(ids: [Int!]!): [Concept!]
+    detailedConcept(id: Int!): Concept
     conceptSearch(
       query: String
       subjects: String
       tags: String
-      page: String
-      pageSize: String
+      page: Int
+      pageSize: Int
       exactMatch: Boolean
       language: String
       fallback: Boolean

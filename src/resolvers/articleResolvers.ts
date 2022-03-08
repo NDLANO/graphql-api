@@ -14,6 +14,7 @@ import {
   fetchSubjectTopics,
   fetchDetailedConcepts,
 } from '../api';
+import { Concept } from '../api/conceptApi';
 
 export const Query = {
   async article(
@@ -84,7 +85,7 @@ export const resolvers = {
       article: GQLArticle,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLDetailedConcept[]> {
+    ): Promise<Concept[]> {
       return fetchDetailedConcepts(article.conceptIds, context);
     },
   },

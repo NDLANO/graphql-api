@@ -13,20 +13,22 @@ import {
   fetchListingPage,
   fetchArticles,
 } from '../api';
+import { Concept, ConceptResult } from '../api/conceptApi';
+import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
 
 export const Query = {
   async concepts(
     _: any,
     { ids }: QueryToConceptsArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLConcept[]> {
+  ): Promise<Concept[]> {
     return fetchConcepts(ids, context);
   },
   async detailedConcept(
     _: any,
     { id }: QueryToDetailedConceptArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLDetailedConcept> {
+  ): Promise<Concept> {
     return fetchDetailedConcept(id, context);
   },
   async listingPage(
@@ -40,7 +42,7 @@ export const Query = {
     _: any,
     searchQuery: QueryToConceptSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLConceptResult> {
+  ): Promise<ConceptResult> {
     return searchConcepts(searchQuery, context);
   },
 };
@@ -61,30 +63,33 @@ export const resolvers = {
         );
       }
     },
-  },
-  DetailedConcept: {
-    async subjectNames(
-      detailedConcept: GQLDetailedConcept,
+    async visualElement(
+      concept: Concept,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<string[]> {
-      const data = await context.loaders.subjectsLoader.load('all');
-      if (detailedConcept.subjectIds?.length > 0) {
-        return Promise.all(
-          detailedConcept.subjectIds?.map(id => {
-            return data.subjects.find(subject => subject.id === id)?.name || '';
-          }),
-        );
+    ): Promise<GQLVisualElement> {
+      const visualElement = concept.visualElement?.visualElement;
+      console.log(visualElement);
+      if (visualElement) {
+        return await parseVisualElement(visualElement, context);
       }
+      return undefined;
+    },
+    async image(concept: Concept, _: any, context: ContextWithLoaders) {
+      const metaImageId = concept.metaImage?.url?.split('/').pop();
+      if (metaImageId) {
+        return await fetchImage(metaImageId, context);
+      }
+      return undefined;
     },
     async articles(
-      detailedConcept: GQLDetailedConcept,
+      concept: Concept,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLMeta[]> {
-      if (detailedConcept.articleIds?.length > 0) {
+      if (concept.articleIds?.length > 0) {
         const articles = await fetchArticles(
-          detailedConcept.articleIds,
+          concept.articleIds.map(id => `${id}`),
           context,
         );
         return articles;
