@@ -15,7 +15,8 @@ async function generate(): Promise<void> {
   try {
     await generateTypeScriptTypes(schema, typeDefinitionFileName, {
       customScalarType: {
-        'JSON': 'JSON'
+        JSON: 'JSON',
+        StringRecord: 'Record<string, string>',
       },
       global: true,
       asyncResult: true,

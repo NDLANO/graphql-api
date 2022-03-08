@@ -17,6 +17,8 @@ declare global {
    *******************************/
   export type GQLJSON = JSON;
   
+  export type GQLStringRecord = Record<string, string>;
+  
   export interface GQLAudioFile {
     url: string;
     mimeType: string;
@@ -208,9 +210,9 @@ declare global {
   }
   
   export interface GQLTaxonomyMetadata {
-    grepCodes?: Array<string>;
-    visible?: boolean;
-    customFields?: GQLJSON;
+    grepCodes: Array<string>;
+    visible: boolean;
+    customFields: GQLStringRecord;
   }
   
   export interface GQLTaxonomyEntity {
@@ -888,6 +890,7 @@ declare global {
    */
   export interface GQLResolver {
     JSON?: GraphQLScalarType;
+    StringRecord?: GraphQLScalarType;
     AudioFile?: GQLAudioFileTypeResolver;
     Title?: GQLTitleTypeResolver;
     Description?: GQLDescriptionTypeResolver;

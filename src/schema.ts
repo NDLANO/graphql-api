@@ -11,6 +11,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 
 export const typeDefs = gql`
   scalar JSON
+  scalar StringRecord
 
   type AudioFile {
     url: String!
@@ -203,9 +204,9 @@ export const typeDefs = gql`
   }
 
   type TaxonomyMetadata {
-    grepCodes: [String!]
-    visible: Boolean
-    customFields: JSON
+    grepCodes: [String!]!
+    visible: Boolean!
+    customFields: StringRecord!
   }
 
   interface TaxonomyEntity {
