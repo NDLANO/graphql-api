@@ -15,8 +15,6 @@ declare global {
    *          TYPE DEFS          *
    *                             *
    *******************************/
-  export type GQLJSON = JSON;
-  
   export type GQLStringRecord = Record<string, string>;
   
   export interface GQLAudioFile {
@@ -889,7 +887,6 @@ declare global {
    * However, you can still use other generated interfaces to make your resolver type-safed
    */
   export interface GQLResolver {
-    JSON?: GraphQLScalarType;
     StringRecord?: GraphQLScalarType;
     AudioFile?: GQLAudioFileTypeResolver;
     Title?: GQLTitleTypeResolver;

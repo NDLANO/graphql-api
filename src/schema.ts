@@ -10,7 +10,6 @@ import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 export const typeDefs = gql`
-  scalar JSON
   scalar StringRecord
 
   type AudioFile {
