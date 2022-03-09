@@ -54,11 +54,11 @@ export const resolvers = {
       params: any,
       context: ContextWithLoaders,
     ): Promise<string[]> {
-      const data = await context.loaders.subjectsLoader.load(params);
       const subjectIds = concept.subjectIds;
       if (!subjectIds || subjectIds.length === 0) {
         return [];
       }
+      const data = await context.loaders.subjectsLoader.load(params);
       return subjectIds.map(
         id => data.subjects.find(subject => subject.id === id)?.name || '',
       );
