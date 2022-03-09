@@ -10,25 +10,44 @@ import { ISubjectPageData } from '@ndla/types-frontpage-api';
 import { fetchLK20CompetenceGoalSet, fetchSubjectPage } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
+import { Subject } from '../api/taxonomyApi';
 
 export const Query = {
   async subject(
     _: any,
     { id }: QueryToSubjectArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLSubject | undefined> {
-    const data = await context.loaders.subjectsLoader.load('all');
-    return data.subjects
-      .filter(s => (s.metadata ? s.metadata.visible : true))
-      .find(subject => subject.id === id);
+  ): Promise<Subject> {
+    return await context.loaders.subjectLoader.load({ id });
   },
   async subjects(
     _: any,
-    __: any,
+    input:
+      | {
+          metadataFilterKey?: string;
+          metadataFilterValue?: string;
+          filterVisible?: boolean;
+        }
+      | undefined,
     context: ContextWithLoaders,
   ): Promise<GQLSubject[]> {
-    const data = await context.loaders.subjectsLoader.load('all');
-    return data.subjects.filter(s => (s.metadata ? s.metadata.visible : true));
+    const metaDataFilter = input?.metadataFilterKey
+      ? {
+          metadataFilter: {
+            key: input.metadataFilterKey,
+            value: input.metadataFilterValue,
+          },
+        }
+      : {};
+
+    const loaderParams = {
+      ...metaDataFilter,
+      filterVisible: input.filterVisible,
+    };
+
+    return context.loaders.subjectsLoader
+      .load(loaderParams)
+      .then(s => s.subjects);
   },
 };
 

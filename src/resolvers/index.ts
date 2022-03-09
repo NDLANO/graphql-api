@@ -6,7 +6,6 @@
  *
  */
 
-import { GraphQLJSON } from 'graphql-scalars';
 import {
   Query as TopicQuery,
   resolvers as topicResolvers,
@@ -77,7 +76,6 @@ export const resolvers: GQLResolver = {
   ...podcastResolvers,
   ...conceptResolvers,
   ...uptimeResolvers,
-  JSON: GraphQLJSON,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any): GQLPossibleTaxonomyEntityTypeNames {

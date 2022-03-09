@@ -73,10 +73,10 @@ export const resolvers = {
   Category: {
     async subjects(
       category: ISubjectCollection,
-      _: any,
+      params: any,
       context: ContextWithLoaders,
     ): Promise<GQLSubject[]> {
-      const data = await context.loaders.subjectsLoader.load('all');
+      const data = await context.loaders.subjectsLoader.load(params);
       return data.subjects.filter(subject =>
         category.subjects.find(categorySubject => {
           return categorySubject.id === subject.id;
