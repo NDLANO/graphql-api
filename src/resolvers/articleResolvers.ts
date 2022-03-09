@@ -12,7 +12,7 @@ import {
   fetchCoreElements,
   fetchCrossSubjectTopicsByCode,
   fetchSubjectTopics,
-  fetchDetailedConcepts,
+  searchConcepts,
 } from '../api';
 import { Concept } from '../api/conceptApi';
 
@@ -86,7 +86,11 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<Concept[]> {
-      return fetchDetailedConcepts(article.conceptIds, context);
+      const results = await searchConcepts(
+        { ids: article.conceptIds },
+        context,
+      );
+      return results.concepts;
     },
   },
 };

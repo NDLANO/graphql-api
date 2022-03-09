@@ -918,8 +918,7 @@ declare global {
     resourceTypes?: Array<GQLResourceTypeDefinition>;
     groupSearch?: Array<GQLGroupSearch>;
     listingPage?: GQLListingPage;
-    concepts?: Array<GQLConcept>;
-    detailedConcept?: GQLConcept;
+    concept?: GQLConcept;
     conceptSearch?: GQLConceptResult;
     frontpageSearch?: GQLFrontpageSearch;
     searchWithoutPagination?: GQLSearchWithoutPagination;
@@ -3933,8 +3932,7 @@ declare global {
     resourceTypes?: QueryToResourceTypesResolver<TParent>;
     groupSearch?: QueryToGroupSearchResolver<TParent>;
     listingPage?: QueryToListingPageResolver<TParent>;
-    concepts?: QueryToConceptsResolver<TParent>;
-    detailedConcept?: QueryToDetailedConceptResolver<TParent>;
+    concept?: QueryToConceptResolver<TParent>;
     conceptSearch?: QueryToConceptSearchResolver<TParent>;
     frontpageSearch?: QueryToFrontpageSearchResolver<TParent>;
     searchWithoutPagination?: QueryToSearchWithoutPaginationResolver<TParent>;
@@ -4058,7 +4056,7 @@ declare global {
     pageSize?: number;
     contextTypes?: string;
     language?: string;
-    ids?: string;
+    ids?: Array<number>;
     resourceTypes?: string;
     contextFilters?: string;
     levels?: string;
@@ -4102,24 +4100,18 @@ declare global {
     (parent: TParent, args: QueryToListingPageArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface QueryToConceptsArgs {
-    ids: Array<number>;
-  }
-  export interface QueryToConceptsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface QueryToDetailedConceptArgs {
+  export interface QueryToConceptArgs {
     id: number;
   }
-  export interface QueryToDetailedConceptResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToDetailedConceptArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  export interface QueryToConceptResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToConceptArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToConceptSearchArgs {
     query?: string;
     subjects?: string;
     tags?: string;
+    ids?: Array<number>;
     page?: number;
     pageSize?: number;
     exactMatch?: boolean;
@@ -4141,7 +4133,7 @@ declare global {
     query?: string;
     contextTypes?: string;
     language?: string;
-    ids?: string;
+    ids?: Array<number>;
     resourceTypes?: string;
     contextFilters?: string;
     levels?: string;

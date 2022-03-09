@@ -876,7 +876,7 @@ export const typeDefs = gql`
       pageSize: Int
       contextTypes: String
       language: String
-      ids: String
+      ids: [Int!]
       resourceTypes: String
       contextFilters: String
       levels: String
@@ -903,12 +903,12 @@ export const typeDefs = gql`
       aggregatePaths: [String!]
     ): [GroupSearch!]
     listingPage(subjects: String): ListingPage
-    concepts(ids: [Int!]!): [Concept!]
-    detailedConcept(id: Int!): Concept
+    concept(id: Int!): Concept
     conceptSearch(
       query: String
       subjects: String
       tags: String
+      ids: [Int!]
       page: Int
       pageSize: Int
       exactMatch: Boolean
@@ -920,7 +920,7 @@ export const typeDefs = gql`
       query: String
       contextTypes: String
       language: String
-      ids: String
+      ids: [Int!]
       resourceTypes: String
       contextFilters: String
       levels: String

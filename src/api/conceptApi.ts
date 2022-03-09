@@ -38,6 +38,7 @@ export async function searchConcepts(
   params: {
     query?: string;
     subjects?: string;
+    ids?: number[];
     tags?: string;
     page?: number;
     pageSize?: number;
@@ -47,8 +48,15 @@ export async function searchConcepts(
   },
   context: Context,
 ): Promise<ConceptResult> {
+  const idsString = params.ids?.join(',');
   const query = {
-    ...params,
+    query: params.query,
+    subjects: params.subjects,
+    tags: params.tags,
+    page: params.page,
+    language: params.language,
+    fallback: params.fallback,
+    ids: idsString,
     'page-size': params.pageSize,
     'exact-match': params.exactMatch,
     sort: 'title',
@@ -65,6 +73,8 @@ export async function searchConcepts(
     language: conceptResult.language,
     concepts: conceptResult.results.map(res => ({
       id: res.id,
+      created: res.created,
+      articleIds: res.articleIds,
       title: res.title.title,
       content: res.content.content,
       tags: res.tags?.tags || [],
@@ -76,53 +86,7 @@ export async function searchConcepts(
   };
 }
 
-export async function fetchConcepts(
-  conceptIds: number[],
-  context: Context,
-): Promise<Concept[]> {
-  return (
-    await Promise.all(
-      conceptIds.map(async id => {
-        const concept = await fetch(
-          `/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`,
-          context,
-        );
-        try {
-          const res: IConcept = await resolveJson(concept);
-          const result: Concept = {
-            id: res.id,
-            title: res.title.title,
-            content: res.content?.content,
-            created: res.created,
-            tags: res.tags?.tags || [],
-            articleIds: res.articleIds,
-            subjectIds: res.subjectIds || [],
-            metaImage: res.metaImage,
-            copyright: res.copyright,
-            source: res.source,
-            visualElement: res.visualElement,
-          };
-          return result;
-        } catch (e) {
-          return undefined;
-        }
-      }),
-    )
-  ).filter((c): c is Concept => !!c);
-}
-
-export async function fetchDetailedConcepts(
-  conceptIds: number[],
-  context: Context,
-): Promise<Concept[]> {
-  return (
-    await Promise.all(
-      conceptIds.map(async id => fetchDetailedConcept(id, context)),
-    )
-  ).filter((c): c is Concept => !!c);
-}
-
-export async function fetchDetailedConcept(
+export async function fetchConcept(
   id: number,
   context: Context,
 ): Promise<Concept | undefined> {
@@ -132,7 +96,7 @@ export async function fetchDetailedConcept(
   );
   try {
     const concept: IConcept = await resolveJson(response);
-    const detailedConcept: Concept = {
+    return {
       id: concept.id,
       title: concept.title.title,
       content: concept.content?.content,
@@ -145,7 +109,6 @@ export async function fetchDetailedConcept(
       metaImage: concept.metaImage,
       visualElement: concept.visualElement,
     };
-    return detailedConcept;
   } catch (e) {
     return undefined;
   }

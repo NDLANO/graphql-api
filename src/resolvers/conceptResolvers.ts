@@ -8,8 +8,7 @@
 
 import {
   searchConcepts,
-  fetchConcepts,
-  fetchDetailedConcept,
+  fetchConcept,
   fetchListingPage,
   fetchArticles,
 } from '../api';
@@ -17,19 +16,12 @@ import { Concept, ConceptResult } from '../api/conceptApi';
 import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
 
 export const Query = {
-  async concepts(
+  async concept(
     _: any,
-    { ids }: QueryToConceptsArgs,
-    context: ContextWithLoaders,
-  ): Promise<Concept[]> {
-    return fetchConcepts(ids, context);
-  },
-  async detailedConcept(
-    _: any,
-    { id }: QueryToDetailedConceptArgs,
+    { id }: QueryToConceptArgs,
     context: ContextWithLoaders,
   ): Promise<Concept | undefined> {
-    return fetchDetailedConcept(id, context);
+    return fetchConcept(id, context);
   },
   async listingPage(
     _: any,
