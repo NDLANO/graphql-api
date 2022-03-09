@@ -12,7 +12,7 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 export async function fetchImage(
   imageId: string,
   context: Context,
-): Promise<IImageMetaInformationV2 | null> {
+): Promise<IImageMetaInformationV2> {
   const response = await fetch(`/image-api/v2/images/${imageId}`, context);
   try {
     const image = await resolveJson(response);
