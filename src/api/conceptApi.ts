@@ -24,9 +24,9 @@ export interface Concept {
   id: number;
   title: string;
   content?: string;
-  created?: string;
+  created: string;
   tags: string[];
-  articleIds?: number[];
+  articleIds: number[];
   subjectIds: string[];
   copyright?: IConcept['copyright'];
   source?: string;
@@ -99,7 +99,7 @@ export async function fetchConcept(
     return {
       id: concept.id,
       title: concept.title.title,
-      content: concept.content?.content,
+      content: concept.content?.content ?? '',
       created: concept.created,
       tags: concept.tags?.tags ?? [],
       articleIds: concept.articleIds,

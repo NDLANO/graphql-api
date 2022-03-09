@@ -746,12 +746,12 @@ export const typeDefs = gql`
     id: Int!
     title: String!
     content: String!
-    created: String
+    created: String!
     tags: [String!]!
     image: ImageLicense
     subjectIds: [String!]
     subjectNames: [String!]
-    articleIds: [Int!]
+    articleIds: [Int!]!
     articles: [Meta!]
     metaImage: MetaImage!
     visualElement: VisualElement

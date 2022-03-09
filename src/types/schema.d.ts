@@ -804,12 +804,12 @@ declare global {
     id: number;
     title: string;
     content: string;
-    created?: string;
+    created: string;
     tags: Array<string>;
     image?: GQLImageLicense;
     subjectIds?: Array<string>;
     subjectNames?: Array<string>;
-    articleIds?: Array<number>;
+    articleIds: Array<number>;
     articles?: Array<GQLMeta>;
     metaImage: GQLMetaImage;
     visualElement?: GQLVisualElement;
