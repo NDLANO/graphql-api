@@ -10,7 +10,7 @@ import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 export const typeDefs = gql`
-  scalar JSON
+  scalar StringRecord
 
   type AudioFile {
     url: String!
@@ -51,7 +51,7 @@ export const typeDefs = gql`
     language: String!
   }
 
-  type Audio {
+  interface AudioBase {
     id: Int!
     revision: Int!
     title: Title!
@@ -61,13 +61,59 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     audioType: String!
     podcastMeta: PodcastMeta
-    series: PodcastSeries
     manuscript: Manuscript
     created: String!
     updated: String!
   }
 
-  type PodcastSeries {
+  type Audio implements AudioBase {
+    id: Int!
+    revision: Int!
+    title: Title!
+    audioFile: AudioFile!
+    copyright: Copyright!
+    tags: Tags!
+    supportedLanguages: [String!]!
+    audioType: String!
+    podcastMeta: PodcastMeta
+    manuscript: Manuscript
+    created: String!
+    updated: String!
+  }
+
+  type AudioWithSeries implements AudioBase {
+    id: Int!
+    revision: Int!
+    title: Title!
+    audioFile: AudioFile!
+    copyright: Copyright!
+    tags: Tags!
+    supportedLanguages: [String!]!
+    audioType: String!
+    podcastMeta: PodcastMeta
+    manuscript: Manuscript
+    created: String!
+    updated: String!
+    series: PodcastSeries
+  }
+
+  interface PodcastSeriesBase {
+    id: Int!
+    title: Title!
+    description: Description!
+    supportedLanguages: [String!]!
+    coverPhoto: CoverPhoto!
+  }
+
+  type PodcastSeries implements PodcastSeriesBase {
+    id: Int!
+    title: Title!
+    description: Description!
+    supportedLanguages: [String!]!
+    coverPhoto: CoverPhoto!
+  }
+
+  type PodcastSeriesWithEpisodes implements PodcastSeriesBase {
     id: Int!
     title: Title!
     description: Description!
@@ -85,7 +131,6 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     manuscript: Manuscript
     podcastMeta: PodcastMeta
-    series: PodcastSeries
     lastUpdated: String!
   }
 
@@ -94,7 +139,7 @@ export const typeDefs = gql`
     page: Int
     language: String!
     totalCount: Int!
-    results: [Audio!]!
+    results: [AudioSummary!]!
   }
 
   type PodcastSeriesSummary {
@@ -203,9 +248,9 @@ export const typeDefs = gql`
   }
 
   type TaxonomyMetadata {
-    grepCodes: [String!]
-    visible: Boolean
-    customFields: JSON
+    grepCodes: [String!]!
+    visible: Boolean!
+    customFields: StringRecord!
   }
 
   interface TaxonomyEntity {
@@ -217,6 +262,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
+    supportedLanguages: [String!]!
   }
 
   interface WithArticle {
@@ -240,6 +286,7 @@ export const typeDefs = gql`
     resourceTypes: [ResourceType!]
     parentTopics: [Topic!]
     breadcrumbs: [[String!]!]
+    supportedLanguages: [String!]!
   }
 
   type Topic implements TaxonomyEntity & WithArticle {
@@ -262,6 +309,7 @@ export const typeDefs = gql`
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
     breadcrumbs: [[String!]!]
+    supportedLanguages: [String!]!
   }
 
   type License {
@@ -556,6 +604,7 @@ export const typeDefs = gql`
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]!
+    supportedLanguages: [String!]!
   }
 
   interface SearchResult {
@@ -805,7 +854,11 @@ export const typeDefs = gql`
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
-    subjects: [Subject!]
+    subjects(
+      metadataFilterKey: String
+      metadataFilterValue: String
+      filterVisible: Boolean
+    ): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: Frontpage
@@ -877,9 +930,9 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
     ): SearchWithoutPagination
-    podcast(id: Int!): Audio
+    podcast(id: Int!): AudioWithSeries
     podcastSearch(page: Int, pageSize: Int): AudioSearch
-    podcastSeries(id: Int!): PodcastSeries
+    podcastSeries(id: Int!): PodcastSeriesWithEpisodes
     podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
     alerts: [UptimeAlert]
   }

@@ -7,6 +7,11 @@
  */
 
 import {
+  IAudioMetaInformation,
+  IAudioSummary,
+  IAudioSummarySearchResult,
+} from '@ndla/types-audio-api';
+import {
   fetchPodcast,
   fetchPodcastSeries,
   fetchPodcastSeriesPage,
@@ -18,28 +23,28 @@ export const Query = {
     _: any,
     { id }: QueryToPodcastArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLAudio> {
+  ): Promise<IAudioMetaInformation> {
     return fetchPodcast(context, id);
   },
   async podcastSearch(
     _: any,
     { pageSize, page }: QueryToPodcastSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLAudioSearch> {
+  ): Promise<IAudioSummarySearchResult> {
     return fetchPodcastsPage(context, pageSize, page);
   },
   async podcastSeries(
     _: any,
     { id }: QueryToPodcastSeriesArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLPodcastSeries> {
+  ): Promise<IAudioMetaInformation> {
     return fetchPodcastSeries(context, id);
   },
   async podcastSeriesSearch(
     _: any,
     { pageSize, page }: QueryToPodcastSeriesSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLPodcastSeriesSearch> {
+  ): Promise<IAudioSummarySearchResult> {
     return fetchPodcastSeriesPage(context, pageSize, page);
   },
 };

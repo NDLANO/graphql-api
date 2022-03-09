@@ -51,10 +51,10 @@ export const resolvers = {
   Concept: {
     async subjectNames(
       concept: GQLConcept,
-      _: any,
+      params: any,
       context: ContextWithLoaders,
     ): Promise<string[]> {
-      const data = await context.loaders.subjectsLoader.load('all');
+      const data = await context.loaders.subjectsLoader.load(params);
       const subjectIds = concept.subjectIds;
       if (!subjectIds || subjectIds.length === 0) {
         return [];

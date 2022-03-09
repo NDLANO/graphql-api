@@ -23,6 +23,7 @@ import {
   frontpageLoader,
   lk06CurriculumLoader,
   lk20CurriculumLoader,
+  subjectLoader,
 } from './loaders';
 import { resolvers } from './resolvers';
 
@@ -99,6 +100,7 @@ async function getContext({
       learningpathsLoader: learningpathsLoader(defaultContext),
       resourceTypesLoader: resourceTypesLoader(defaultContext),
       subjectsLoader: subjectsLoader(defaultContext),
+      subjectLoader: subjectLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
       lk06CurriculumLoader: lk06CurriculumLoader(defaultContext),
       lk20CurriculumLoader: lk20CurriculumLoader(defaultContext),

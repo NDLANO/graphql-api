@@ -45,6 +45,7 @@
     "query-string": "^6.2.0"
   },
   "devDependencies": {
+    "@ndla/types-audio-api": "0.0.10",
     "@ndla/types-article-api": "^0.0.4",
     "@ndla/types-concept-api": "^0.0.8",
     "@ndla/types-frontpage-api": "^0.0.3",

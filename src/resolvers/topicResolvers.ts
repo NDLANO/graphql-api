@@ -43,7 +43,7 @@ export const Query = {
     return fetchTopic({ id }, context);
   },
   async topics(
-    _: any,
+    params: any,
     { contentUri, filterVisible }: QueryToTopicsArgs,
     context: ContextWithLoaders,
   ): Promise<GQLTopic[]> {
@@ -52,7 +52,7 @@ export const Query = {
 
     const topicsWithPath = topicList.filter(t => t.path != null);
     // TODO: Replace parent-filtering with changes in taxonomy
-    const data = await context.loaders.subjectsLoader.load('all');
+    const data = await context.loaders.subjectsLoader.load(params);
     const topicsWithVisibleSubject = topicsWithPath.filter(topic => {
       const subjectId = topic.path.split('/')[1];
       const parentSubject = data.subjects.find(subject =>
@@ -176,7 +176,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     },
     async alternateTopics(
       topic: TopicResponse,
-      __: any,
+      params: any,
       context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
       const { contentUri, id, path } = topic;
@@ -186,7 +186,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
           .filter(t => t.id !== id)
           .filter(t => t.path);
         // TODO: Replace parent-filtering with changes in taxonomy
-        const data = await context.loaders.subjectsLoader.load('all');
+        const data = await context.loaders.subjectsLoader.load(params);
         const topicsWithVisibleSubject = alternatesWithPath.filter(t => {
           const subjectId = t.path.split('/')[1];
           const parentSubject = data.subjects.find(
@@ -211,7 +211,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
               .slice(1)
               .map(async id => {
                 if (id.includes('subject:')) {
-                  return (await fetchSubject(`urn:${id}`, context)).name;
+                  return (await fetchSubject(context, `urn:${id}`)).name;
                 } else if (id.includes('topic:')) {
                   return (await fetchTopic({ id: `urn:${id}` }, context)).name;
                 }
