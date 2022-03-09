@@ -395,7 +395,7 @@ export const typeDefs = gql`
     coreElements: [CoreElement!]
     crossSubjectTopics(subjectId: String): [CrossSubjectElement!]
     oembed: String
-    conceptIds: [String!]
+    conceptIds: [Int!]
     concepts: [Concept!]
     relatedContent: [RelatedContent!]
     availability: String
@@ -819,8 +819,8 @@ export const typeDefs = gql`
     coreElement(code: String!, language: String): CoreElement
     search(
       query: String
-      page: String
-      pageSize: String
+      page: Int
+      pageSize: Int
       contextTypes: String
       language: String
       ids: String
@@ -842,8 +842,8 @@ export const typeDefs = gql`
       levels: String
       resourceTypes: String
       contextTypes: String
-      page: String
-      pageSize: String
+      page: Int
+      pageSize: Int
       language: String
       fallback: String
       grepCodes: String

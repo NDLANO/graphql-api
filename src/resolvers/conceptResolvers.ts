@@ -28,7 +28,7 @@ export const Query = {
     _: any,
     { id }: QueryToDetailedConceptArgs,
     context: ContextWithLoaders,
-  ): Promise<Concept> {
+  ): Promise<Concept | undefined> {
     return fetchDetailedConcept(id, context);
   },
   async listingPage(
@@ -55,24 +55,24 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<string[]> {
       const data = await context.loaders.subjectsLoader.load('all');
-      if (concept.subjectIds?.length > 0) {
-        return Promise.all(
-          concept.subjectIds?.map(id => {
-            return data.subjects.find(subject => subject.id === id)?.name || '';
-          }),
-        );
+      const subjectIds = concept.subjectIds;
+      if (!subjectIds || subjectIds.length === 0) {
+        return [];
       }
+      return subjectIds.map(
+        id => data.subjects.find(subject => subject.id === id)?.name || '',
+      );
     },
     async visualElement(
       concept: Concept,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLVisualElement> {
+    ): Promise<GQLVisualElement | null> {
       const visualElement = concept.visualElement?.visualElement;
       if (visualElement) {
         return await parseVisualElement(visualElement, context);
       }
-      return undefined;
+      return null;
     },
     async image(concept: Concept, _: any, context: ContextWithLoaders) {
       const metaImageId = concept.metaImage?.url?.split('/').pop();
@@ -86,13 +86,14 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLMeta[]> {
-      if (concept.articleIds?.length > 0) {
-        const articles = await fetchArticles(
-          concept.articleIds.map(id => `${id}`),
-          context,
-        );
-        return articles;
+      const articleIds = concept.articleIds;
+      if (!articleIds || articleIds.length === 0) {
+        return [];
       }
+      return await fetchArticles(
+        articleIds.map(id => `${id}`),
+        context,
+      );
     },
   },
 };

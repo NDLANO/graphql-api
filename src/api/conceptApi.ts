@@ -39,8 +39,8 @@ export async function searchConcepts(
     query?: string;
     subjects?: string;
     tags?: string;
-    page?: string;
-    pageSize?: string;
+    page?: number;
+    pageSize?: number;
     exactMatch?: boolean;
     language?: string;
     fallback?: boolean;
@@ -77,7 +77,7 @@ export async function searchConcepts(
 }
 
 export async function fetchConcepts(
-  conceptIds: string[],
+  conceptIds: number[],
   context: Context,
 ): Promise<Concept[]> {
   return (
@@ -92,7 +92,7 @@ export async function fetchConcepts(
           const result: Concept = {
             id: res.id,
             title: res.title.title,
-            content: res.content.content,
+            content: res.content?.content,
             created: res.created,
             tags: res.tags?.tags || [],
             articleIds: res.articleIds,
@@ -108,22 +108,22 @@ export async function fetchConcepts(
         }
       }),
     )
-  ).filter(c => !!c);
+  ).filter((c): c is Concept => !!c);
 }
 
 export async function fetchDetailedConcepts(
-  conceptIds: string[],
+  conceptIds: number[],
   context: Context,
 ): Promise<Concept[]> {
   return (
     await Promise.all(
       conceptIds.map(async id => fetchDetailedConcept(id, context)),
     )
-  ).filter(c => !!c);
+  ).filter((c): c is Concept => !!c);
 }
 
 export async function fetchDetailedConcept(
-  id: string,
+  id: number,
   context: Context,
 ): Promise<Concept | undefined> {
   const response = await fetch(
@@ -135,11 +135,11 @@ export async function fetchDetailedConcept(
     const detailedConcept: Concept = {
       id: concept.id,
       title: concept.title.title,
-      content: concept.content.content,
+      content: concept.content?.content,
       created: concept.created,
       tags: concept.tags?.tags ?? [],
       articleIds: concept.articleIds,
-      subjectIds: concept.subjectIds,
+      subjectIds: concept.subjectIds ?? [],
       copyright: concept.copyright,
       source: concept.source,
       metaImage: concept.metaImage,

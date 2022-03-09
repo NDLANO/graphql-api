@@ -422,7 +422,7 @@ declare global {
     coreElements?: Array<GQLCoreElement>;
     crossSubjectTopics?: Array<GQLCrossSubjectElement>;
     oembed?: string;
-    conceptIds?: Array<string>;
+    conceptIds?: Array<number>;
     concepts?: Array<GQLConcept>;
     relatedContent?: Array<GQLRelatedContent>;
     availability?: string;
@@ -3863,8 +3863,8 @@ declare global {
   
   export interface QueryToSearchArgs {
     query?: string;
-    page?: string;
-    pageSize?: string;
+    page?: number;
+    pageSize?: number;
     contextTypes?: string;
     language?: string;
     ids?: string;
@@ -3893,8 +3893,8 @@ declare global {
     levels?: string;
     resourceTypes?: string;
     contextTypes?: string;
-    page?: string;
-    pageSize?: string;
+    page?: number;
+    pageSize?: number;
     language?: string;
     fallback?: string;
     grepCodes?: string;
@@ -3912,14 +3912,14 @@ declare global {
   }
   
   export interface QueryToConceptsArgs {
-    ids: Array<string>;
+    ids: Array<number>;
   }
   export interface QueryToConceptsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToConceptsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToDetailedConceptArgs {
-    id?: string;
+    id: number;
   }
   export interface QueryToDetailedConceptResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToDetailedConceptArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -3929,8 +3929,8 @@ declare global {
     query?: string;
     subjects?: string;
     tags?: string;
-    page?: string;
-    pageSize?: string;
+    page?: number;
+    pageSize?: number;
     exactMatch?: boolean;
     language?: string;
     fallback?: boolean;
