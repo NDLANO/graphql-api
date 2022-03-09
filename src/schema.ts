@@ -51,7 +51,7 @@ export const typeDefs = gql`
     language: String!
   }
 
-  type Audio {
+  interface AudioBase {
     id: Int!
     revision: Int!
     title: Title!
@@ -61,13 +61,59 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     audioType: String!
     podcastMeta: PodcastMeta
-    series: PodcastSeries
     manuscript: Manuscript
     created: String!
     updated: String!
   }
 
-  type PodcastSeries {
+  type Audio implements AudioBase {
+    id: Int!
+    revision: Int!
+    title: Title!
+    audioFile: AudioFile!
+    copyright: Copyright!
+    tags: Tags!
+    supportedLanguages: [String!]!
+    audioType: String!
+    podcastMeta: PodcastMeta
+    manuscript: Manuscript
+    created: String!
+    updated: String!
+  }
+
+  type AudioWithSeries implements AudioBase {
+    id: Int!
+    revision: Int!
+    title: Title!
+    audioFile: AudioFile!
+    copyright: Copyright!
+    tags: Tags!
+    supportedLanguages: [String!]!
+    audioType: String!
+    podcastMeta: PodcastMeta
+    manuscript: Manuscript
+    created: String!
+    updated: String!
+    series: PodcastSeries
+  }
+
+  interface PodcastSeriesBase {
+    id: Int!
+    title: Title!
+    description: Description!
+    supportedLanguages: [String!]!
+    coverPhoto: CoverPhoto!
+  }
+
+  type PodcastSeries implements PodcastSeriesBase {
+    id: Int!
+    title: Title!
+    description: Description!
+    supportedLanguages: [String!]!
+    coverPhoto: CoverPhoto!
+  }
+
+  type PodcastSeriesWithEpisodes implements PodcastSeriesBase {
     id: Int!
     title: Title!
     description: Description!
@@ -85,7 +131,6 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     manuscript: Manuscript
     podcastMeta: PodcastMeta
-    series: PodcastSeries
     lastUpdated: String!
   }
 
@@ -94,7 +139,7 @@ export const typeDefs = gql`
     page: Int
     language: String!
     totalCount: Int!
-    results: [Audio!]!
+    results: [AudioSummary!]!
   }
 
   type PodcastSeriesSummary {
@@ -896,9 +941,9 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
     ): SearchWithoutPagination
-    podcast(id: Int!): Audio
+    podcast(id: Int!): AudioWithSeries
     podcastSearch(page: Int, pageSize: Int): AudioSearch
-    podcastSeries(id: Int!): PodcastSeries
+    podcastSeries(id: Int!): PodcastSeriesWithEpisodes
     podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
     alerts: [UptimeAlert]
   }

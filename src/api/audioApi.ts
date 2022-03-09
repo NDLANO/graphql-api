@@ -6,12 +6,16 @@
  *
  */
 
+import {
+  IAudioMetaInformation,
+  IAudioSummarySearchResult,
+} from '@ndla/types-audio-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchPodcast(
   context: Context,
   podcastId: number,
-): Promise<GQLAudio> {
+): Promise<IAudioMetaInformation> {
   const response = await fetch(`/audio-api/v1/audio/${podcastId}`, context);
   try {
     const audio = await resolveJson(response);
@@ -28,50 +32,30 @@ export async function fetchPodcastsPage(
   context: Context,
   pageSize: number,
   page: number,
-): Promise<GQLAudioSearch> {
+): Promise<IAudioSummarySearchResult> {
   const response = await fetch(
     `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast`,
     context,
   );
-
-  const audioSearch: GQLAudioSearch = await resolveJson(response);
-  const results = await Promise.all(
-    audioSearch.results.map(audio => fetchPodcast(context, audio.id)),
-  );
-
-  return {
-    ...audioSearch,
-    results,
-  };
+  return await resolveJson(response);
 }
 
 export async function fetchPodcastSeries(
   context: Context,
   podcastId: number,
-): Promise<GQLPodcastSeries> {
+): Promise<IAudioMetaInformation> {
   const response = await fetch(`/audio-api/v1/series/${podcastId}`, context);
-  const series: GQLPodcastSeries = await resolveJson(response);
-
-  const episodes = await Promise.all(
-    series.episodes.map(audio => fetchPodcast(context, audio.id)),
-  );
-
-  return { ...series, episodes };
+  return await resolveJson(response);
 }
 
 export async function fetchPodcastSeriesPage(
   context: Context,
   pageSize: number,
   page: number,
-): Promise<GQLPodcastSeriesSearch> {
+): Promise<IAudioSummarySearchResult> {
   const response = await fetch(
     `/audio-api/v1/series/?page-size=${pageSize}&page=${page}`,
     context,
   );
-
-  const podcastSeriesSearch: GQLPodcastSeriesSearch = await resolveJson(
-    response,
-  );
-
-  return podcastSeriesSearch;
+  return await resolveJson(response);
 }
