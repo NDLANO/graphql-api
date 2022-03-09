@@ -109,6 +109,11 @@
   resolved "https://registry.yarnpkg.com/@ndla/types-frontpage-api/-/types-frontpage-api-0.0.3.tgz#31e6b1dba0b8a215c06b2918f34cfb0385192b0e"
   integrity sha512-1sAwf7TyjAElbzvWjfLw1PI4pG9HQ+KArMNY8shDZnY3GiASko2GsJUxbTX/ryU85iTwkA9dPPR+Zuo6C9o9DA==
 
+"@ndla/types-image-api@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@ndla/types-image-api/-/types-image-api-0.0.4.tgz#f5efe62b8cb97e857d07e4f967d246d71d1335c1"
+  integrity sha512-VTdQww63erpGg4tIysNxv1mvbIVMC6/mG5dEqL4xKJPmjgJGuGAoO2iJuBFOCR0m6NXAG7v9bk/qn1/pwPCEsw==
+
 "@ndla/types-learningpath-api@^0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.2.tgz#6ae65f047ba8c7af32dd01ce800ec7254eee4e0e"

@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+import { IImageMetaInformationV2 } from '@ndla/types-image-api';
 import cheerio from 'cheerio';
 import { fetchOembed } from '../api/oembedApi';
 import { localConverter } from '../config';
@@ -12,7 +13,7 @@ import { fetch, resolveJson } from './apiHelpers';
 
 export async function fetchImage(imageId: string, context: Context) {
   const imageResponse = await fetch(`/image-api/v2/images/${imageId}`, context);
-  const image = await resolveJson(imageResponse);
+  const image: IImageMetaInformationV2 = await resolveJson(imageResponse);
   return {
     title: image.title.title,
     src: image.imageUrl,
