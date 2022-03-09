@@ -23,14 +23,14 @@ export const Query = {
       nodeId,
       language,
     }: { codes: string[]; nodeId?: string; language?: string },
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLCompetenceGoal[]> {
     return fetchCompetenceGoals(codes, nodeId, language, context);
   },
   async coreElements(
     _: any,
     { codes, language }: { codes: string[]; language?: string },
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLCoreElement[]> {
     if (codes?.length) {
       return fetchCoreElements(codes, language, context);
@@ -43,7 +43,7 @@ export const resolvers = {
     async curriculum(
       competenceGoal: GQLCompetenceGoal,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLReference> {
       if (competenceGoal.curriculumId) {
         return context.loaders.lk06CurriculumLoader.load(
@@ -58,7 +58,7 @@ export const resolvers = {
     async competenceGoalSet(
       competenceGoal: GQLCompetenceGoal,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLReference> {
       if (competenceGoal.competenceAimSetId) {
         return fetchLK06CompetenceGoalSet(
@@ -79,7 +79,7 @@ export const resolvers = {
     async crossSubjectTopics(
       competenceGoal: GQLCompetenceGoal,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLElement[]> {
       if (competenceGoal.crossSubjectTopicsCodes) {
         return fetchCrossSubjectTopics(
@@ -93,7 +93,7 @@ export const resolvers = {
     async coreElements(
       competenceGoal: GQLCompetenceGoal,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLElement[]> {
       if (competenceGoal.coreElementsCodes) {
         return fetchCoreElementReferences(
@@ -109,7 +109,7 @@ export const resolvers = {
     async curriculum(
       coreElement: GQLCoreElement,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLReference> {
       if (coreElement.curriculumCode) {
         return context.loaders.lk20CurriculumLoader.load({

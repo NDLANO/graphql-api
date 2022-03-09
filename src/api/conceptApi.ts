@@ -24,13 +24,14 @@ interface ConceptSearchResultJson extends SearchResultJson {
     visualElement: string;
   };
   copyright: {
-    license: {
+    license?: {
       license: string;
     };
     processors: Author[];
     rightsholders: Author[];
     creators: Author[];
   };
+  source?: string;
   articleIds?: string[];
   subjectIds?: string[];
   created: string;
@@ -65,13 +66,26 @@ export async function searchConcepts(
     page: conceptResult.page,
     pageSize: conceptResult.pageSize,
     language: conceptResult.language,
-    concepts: conceptResult.results.map((res: ConceptSearchResultJson) => ({
-      id: res.id,
-      title: res.title.title,
-      content: res.content.content,
-      tags: res.tags?.tags || [],
-      metaImage: res.metaImage,
-    })),
+    concepts: conceptResult.results?.map(
+      async (res: ConceptSearchResultJson) => {
+        const result: GQLConcept = {
+          id: res.id,
+          title: res.title.title,
+          content: res.content.content,
+          tags: res.tags?.tags || [],
+          subjectIds: res.subjectIds || [],
+          metaImage: res.metaImage,
+          copyright: res.copyright,
+        };
+        if (res.visualElement) {
+          result.visualElement = await parseVisualElement(
+            res.visualElement.visualElement,
+            context,
+          );
+        }
+        return result;
+      },
+    ),
   };
 }
 
@@ -87,14 +101,22 @@ export async function fetchConcepts(
           context,
         );
         try {
-          const res: SearchResultJson = await resolveJson(concept);
+          const res: ConceptSearchResultJson = await resolveJson(concept);
           const result: GQLConcept = {
             id: res.id,
             title: res.title.title,
             content: res.content.content,
+            tags: res.tags?.tags || [],
+            subjectIds: res.subjectIds || [],
             metaImage: res.metaImage,
-            tags: res.tags?.tags ?? [],
+            copyright: res.copyright,
           };
+          if (res.visualElement) {
+            result.visualElement = await parseVisualElement(
+              res.visualElement.visualElement,
+              context,
+            );
+          }
           return result;
         } catch (e) {
           return undefined;
@@ -133,6 +155,7 @@ export async function fetchDetailedConcept(
       articleIds: concept.articleIds,
       subjectIds: concept.subjectIds,
       copyright: concept.copyright,
+      source: concept.source,
     };
     const metaImageId = concept.metaImage?.url?.split('/').pop();
     if (metaImageId) {
@@ -158,7 +181,7 @@ export async function fetchListingPage(
     await fetch(`/concept-api/v1/concepts/subjects/`, context),
   );
   const subjectResults = await Promise.allSettled(
-    subjectIds.map(id => fetchSubject(id, context)),
+    subjectIds.map(id => fetchSubject(context, id)),
   );
   const subjects = (subjectResults.filter(
     result => result.status === 'fulfilled',

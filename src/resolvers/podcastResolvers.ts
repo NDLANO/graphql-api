@@ -22,28 +22,28 @@ export const Query = {
   async podcast(
     _: any,
     { id }: QueryToPodcastArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<IAudioMetaInformation> {
     return fetchPodcast(context, id);
   },
   async podcastSearch(
     _: any,
     { pageSize, page }: QueryToPodcastSearchArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<IAudioSummarySearchResult> {
     return fetchPodcastsPage(context, pageSize, page);
   },
   async podcastSeries(
     _: any,
     { id }: QueryToPodcastSeriesArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<IAudioMetaInformation> {
     return fetchPodcastSeries(context, id);
   },
   async podcastSeriesSearch(
     _: any,
     { pageSize, page }: QueryToPodcastSeriesSearchArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<IAudioSummarySearchResult> {
     return fetchPodcastSeriesPage(context, pageSize, page);
   },

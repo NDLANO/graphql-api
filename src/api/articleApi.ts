@@ -6,6 +6,7 @@
  *
  */
 
+import { IArticleSummaryV2, ISearchResultV2 } from '@ndla/types-article-api';
 import { localConverter, ndlaUrl } from '../config';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
@@ -166,26 +167,18 @@ export async function fetchArticles(
   });
 }
 
-export async function fetchMovieMeta(
+export async function fetchSimpleArticle(
   articleUrn: string,
   context: Context,
-): Promise<GQLMovieMeta> {
+): Promise<IArticleSummaryV2 | undefined> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
     `/article-api/v2/articles/?ids=${articleId}&language=${context.language}&license=all&fallback=true`,
     context,
   );
-  const json = await resolveJson(response);
-  const article = json.results.find((item: { id: number }) => {
+  const json: ISearchResultV2 = await resolveJson(response);
+  const article: IArticleSummaryV2 | undefined = json.results.find(item => {
     return item.id.toString() === articleId;
   });
-
-  if (article) {
-    return {
-      title: article.title.title,
-      metaDescription: article.metaDescription?.metaDescription,
-      metaImage: article.metaImage,
-    };
-  }
-  return null;
+  return article;
 }

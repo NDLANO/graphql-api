@@ -26,14 +26,14 @@ export const Query = {
   async resource(
     _: any,
     { id, subjectId, topicId }: QueryToResourceArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLResource> {
     return fetchResource({ id, subjectId, topicId }, context);
   },
   async resourceTypes(
     _: any,
     __: any,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLResourceType[]> {
     return fetchResourceTypes(context);
   },
@@ -48,10 +48,24 @@ export const resolvers = {
     },
   },
   Resource: {
+    async availability(
+      resource: GQLResource,
+      _: any,
+      context: ContextWithLoaders,
+    ) {
+      const defaultAvailability = 'everyone';
+      if (resource.contentUri?.startsWith('urn:article')) {
+        const article = await context.loaders.articlesLoader.load(
+          getArticleIdFromUrn(resource.contentUri),
+        );
+        return article?.availability ?? defaultAvailability;
+      }
+      return defaultAvailability;
+    },
     async meta(
       resource: GQLResource,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLMeta> {
       if (resource.contentUri?.startsWith('urn:learningpath')) {
         return context.loaders.learningpathsLoader.load(
@@ -70,7 +84,7 @@ export const resolvers = {
     async learningpath(
       resource: GQLResource,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLLearningpath> {
       if (resource.contentUri?.startsWith('urn:learningpath')) {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
@@ -93,7 +107,7 @@ export const resolvers = {
         subjectId?: string;
         isOembed?: string;
       },
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLArticle> {
       if (resource.contentUri?.startsWith('urn:article')) {
         const articleId = getArticleIdFromUrn(resource.contentUri);
@@ -131,7 +145,7 @@ export const resolvers = {
     async breadcrumbs(
       resource: GQLResource,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<string[][]> {
       return Promise.all(
         resource.paths?.map(async path => {
@@ -141,7 +155,7 @@ export const resolvers = {
               .slice(1, -1)
               .map(async id => {
                 if (id.includes('subject:')) {
-                  return (await fetchSubject(`urn:${id}`, context)).name;
+                  return (await fetchSubject(context, `urn:${id}`)).name;
                 } else if (id.includes('topic:')) {
                   return (await fetchTopic({ id: `urn:${id}` }, context)).name;
                 }

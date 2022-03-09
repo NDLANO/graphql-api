@@ -6,7 +6,6 @@
  *
  */
 
-import { GraphQLJSON } from 'graphql-scalars';
 import {
   Query as TopicQuery,
   resolvers as topicResolvers,
@@ -47,6 +46,10 @@ import {
   Query as ConceptQuery,
   resolvers as conceptResolvers,
 } from './conceptResolvers';
+import {
+  Query as UptimeQuery,
+  resolvers as uptimeResolvers,
+} from './uptimeResolvers';
 
 export const resolvers: GQLResolver = {
   Query: {
@@ -60,6 +63,7 @@ export const resolvers: GQLResolver = {
     ...LearningpathQuery,
     ...PodcastQuery,
     ...ConceptQuery,
+    ...UptimeQuery,
   },
   ...articleResolvers,
   ...subjectResolvers,
@@ -71,7 +75,7 @@ export const resolvers: GQLResolver = {
   ...curriculumResolvers,
   ...podcastResolvers,
   ...conceptResolvers,
-  JSON: GraphQLJSON,
+  ...uptimeResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any): GQLPossibleTaxonomyEntityTypeNames {

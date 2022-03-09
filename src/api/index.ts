@@ -22,13 +22,10 @@ export {
   fetchFrontpage,
   fetchSubjectPage,
   fetchFilmFrontpage,
+  fetchMovieMeta,
 } from './frontpageApi';
-export { fetchArticle, fetchArticles, fetchMovieMeta } from './articleApi';
-export {
-  fetchLearningpaths,
-  fetchLearningpath,
-  fetchLearningpathStep,
-} from './learningpathApi';
+export { fetchArticle, fetchArticles } from './articleApi';
+export { fetchLearningpaths, fetchLearningpath } from './learningpathApi';
 export {
   fetchResource,
   fetchResourceTypes,
@@ -57,3 +54,4 @@ export {
   fetchDetailedConcept,
   fetchListingPage,
 } from './conceptApi';
+export { fetchUptimeIssues } from './uptimeApi';

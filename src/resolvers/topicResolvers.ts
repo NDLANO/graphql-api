@@ -34,7 +34,7 @@ export const Query = {
   async topic(
     _: any,
     { id, subjectId }: QueryToTopicArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLTopic> {
     if (subjectId) {
       const topics = await fetchSubjectTopics(subjectId, context);
@@ -43,16 +43,16 @@ export const Query = {
     return fetchTopic({ id }, context);
   },
   async topics(
-    _: any,
+    params: any,
     { contentUri, filterVisible }: QueryToTopicsArgs,
-    context: Context,
+    context: ContextWithLoaders,
   ): Promise<GQLTopic[]> {
     const topicList = await fetchTopics({ contentUri }, context);
     if (!filterVisible) return topicList;
 
     const topicsWithPath = topicList.filter(t => t.path != null);
     // TODO: Replace parent-filtering with changes in taxonomy
-    const data = await context.loaders.subjectsLoader.load('all');
+    const data = await context.loaders.subjectsLoader.load(params);
     const topicsWithVisibleSubject = topicsWithPath.filter(topic => {
       const subjectId = topic.path.split('/')[1];
       const parentSubject = data.subjects.find(subject =>
@@ -66,10 +66,20 @@ export const Query = {
 
 export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
   Topic: {
+    async availability(
+      topic: TopicResponse,
+      _: TopicToArticleArgs,
+      context: ContextWithLoaders,
+    ) {
+      const article = await context.loaders.articlesLoader.load(
+        getArticleIdFromUrn(topic.contentUri),
+      );
+      return article.availability;
+    },
     async article(
       topic: TopicResponse,
       args: TopicToArticleArgs,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         const articleId = getArticleIdFromUrn(topic.contentUri);
@@ -100,7 +110,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     async meta(
       topic: TopicResponse,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLMeta> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
         return context.loaders.articlesLoader.load(
@@ -111,7 +121,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     async coreResources(
       topic: TopicResponse,
       args: TopicToCoreResourcesArgs,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchTopicResources(
         {
@@ -126,7 +136,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     async supplementaryResources(
       topic: TopicResponse,
       args: TopicToSupplementaryResourcesArgs,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchTopicResources(
         {
@@ -141,7 +151,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     async subtopics(
       topic: TopicResponse,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
       const subtopics = await fetchSubtopics({ id: topic.id }, context);
       return filterMissingArticles(subtopics, context);
@@ -149,7 +159,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     async pathTopics(
       topic: TopicResponse,
       _: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<GQLTopic[][]> {
       return Promise.all(
         topic.paths?.map(async path => {
@@ -166,8 +176,8 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     },
     async alternateTopics(
       topic: TopicResponse,
-      __: any,
-      context: Context,
+      params: any,
+      context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
       const { contentUri, id, path } = topic;
       if (!path) {
@@ -176,7 +186,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
           .filter(t => t.id !== id)
           .filter(t => t.path);
         // TODO: Replace parent-filtering with changes in taxonomy
-        const data = await context.loaders.subjectsLoader.load('all');
+        const data = await context.loaders.subjectsLoader.load(params);
         const topicsWithVisibleSubject = alternatesWithPath.filter(t => {
           const subjectId = t.path.split('/')[1];
           const parentSubject = data.subjects.find(
@@ -191,7 +201,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     async breadcrumbs(
       topic: TopicResponse,
       __: any,
-      context: Context,
+      context: ContextWithLoaders,
     ): Promise<string[][]> {
       return Promise.all(
         topic.paths?.map(async path => {
@@ -201,7 +211,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
               .slice(1)
               .map(async id => {
                 if (id.includes('subject:')) {
-                  return (await fetchSubject(`urn:${id}`, context)).name;
+                  return (await fetchSubject(context, `urn:${id}`)).name;
                 } else if (id.includes('topic:')) {
                   return (await fetchTopic({ id: `urn:${id}` }, context)).name;
                 }

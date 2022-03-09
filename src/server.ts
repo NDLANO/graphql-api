@@ -23,6 +23,7 @@ import {
   frontpageLoader,
   lk06CurriculumLoader,
   lk20CurriculumLoader,
+  subjectLoader,
 } from './loaders';
 import { resolvers } from './resolvers';
 
@@ -42,14 +43,14 @@ function getAcceptLanguage(request: Request): string {
   return 'nb';
 }
 
-function getFeideAuthorization(request: Request): string | null {
+function getFeideAuthorization(request: Request): string | undefined {
   // tslint:disable-next-line:no-string-literal
   const authorization = request.headers['feideauthorization'];
 
   if (isString(authorization)) {
     return authorization;
   }
-  return null;
+  return undefined;
 }
 
 function getShouldUseCache(request: Request): boolean {
@@ -74,7 +75,7 @@ async function getContext({
 }: {
   req: Request;
   res: Response;
-}): Promise<Context> {
+}): Promise<ContextWithLoaders> {
   const token = await getToken(req);
   const feideAuthorization = getFeideAuthorization(req);
 
@@ -99,6 +100,7 @@ async function getContext({
       learningpathsLoader: learningpathsLoader(defaultContext),
       resourceTypesLoader: resourceTypesLoader(defaultContext),
       subjectsLoader: subjectsLoader(defaultContext),
+      subjectLoader: subjectLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
       lk06CurriculumLoader: lk06CurriculumLoader(defaultContext),
       lk20CurriculumLoader: lk20CurriculumLoader(defaultContext),

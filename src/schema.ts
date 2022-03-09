@@ -10,7 +10,7 @@ import { gql } from 'apollo-server-express';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 export const typeDefs = gql`
-  scalar JSON
+  scalar StringRecord
 
   type AudioFile {
     url: String!
@@ -172,8 +172,8 @@ export const typeDefs = gql`
   }
 
   type MetaImage {
-    url: String
-    alt: String
+    url: String!
+    alt: String!
   }
 
   type Meta {
@@ -187,8 +187,8 @@ export const typeDefs = gql`
   }
 
   type LearningpathStepEmbedUrl {
-    url: String
-    embedType: String
+    url: String!
+    embedType: String!
   }
 
   type LearningpathStepOembed {
@@ -206,62 +206,63 @@ export const typeDefs = gql`
     description: String
     embedUrl: LearningpathStepEmbedUrl
     license: License
-    metaUrl: String
-    revision: Int
-    status: String
-    supportedLanguages: [String!]
-    type: String
+    metaUrl: String!
+    revision: Int!
+    status: String!
+    supportedLanguages: [String!]!
+    type: String!
     article: Article
     resource: Resource
-    showTitle: Boolean
+    showTitle: Boolean!
     oembed: LearningpathStepOembed
   }
 
   type LearningpathCoverphoto {
-    url: String
-    metaUrl: String
+    url: String!
+    metaUrl: String!
   }
 
   type LearningpathCopyright {
-    license: License
-    contributors: [Contributor!]
+    license: License!
+    contributors: [Contributor!]!
   }
 
   type Learningpath {
     id: Int!
     title: String!
-    description: String
-    copyright: LearningpathCopyright
+    description: String!
+    copyright: LearningpathCopyright!
     duration: Int
-    canEdit: Boolean
-    verificationStatus: String
-    lastUpdated: String
-    tags: [String!]
-    supportedLanguages: [String!]
+    canEdit: Boolean!
+    verificationStatus: String!
+    lastUpdated: String!
+    tags: [String!]!
+    supportedLanguages: [String!]!
     isBasedOn: Int
-    learningsteps: [LearningpathStep!]
-    metaUrl: String
-    revision: Int
-    learningstepUrl: String
-    status: String
+    learningsteps: [LearningpathStep!]!
+    metaUrl: String!
+    revision: Int!
+    learningstepUrl: String!
+    status: String!
     coverphoto: LearningpathCoverphoto
   }
 
   type TaxonomyMetadata {
-    grepCodes: [String!]
-    visible: Boolean
-    customFields: JSON
+    grepCodes: [String!]!
+    visible: Boolean!
+    customFields: StringRecord!
   }
 
   interface TaxonomyEntity {
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]
-    metadata: TaxonomyMetadata
+    path: String!
+    paths: [String!]!
+    metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
+    supportedLanguages: [String!]!
   }
 
   interface WithArticle {
@@ -273,10 +274,10 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]
+    path: String!
+    paths: [String!]!
     meta: Meta
-    metadata: TaxonomyMetadata
+    metadata: TaxonomyMetadata!
     learningpath: Learningpath
     relevanceId: String
     rank: Int
@@ -285,16 +286,17 @@ export const typeDefs = gql`
     resourceTypes: [ResourceType!]
     parentTopics: [Topic!]
     breadcrumbs: [[String!]!]
+    supportedLanguages: [String!]!
   }
 
   type Topic implements TaxonomyEntity & WithArticle {
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]
+    path: String!
+    paths: [String!]!
     meta: Meta
-    metadata: TaxonomyMetadata
+    metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
     article(subjectId: String, showVisualElement: String): Article
@@ -307,6 +309,7 @@ export const typeDefs = gql`
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
     breadcrumbs: [[String!]!]
+    supportedLanguages: [String!]!
   }
 
   type License {
@@ -386,10 +389,18 @@ export const typeDefs = gql`
     copyText: String
   }
 
+  type ConceptCopyright {
+    license: License
+    creators: [Contributor!]!
+    processors: [Contributor!]!
+    rightsholders: [Contributor!]!
+    origin: String
+  }
+
   type ConceptLicense {
     title: String!
     src: String
-    copyright: Copyright
+    copyright: ConceptCopyright
     copyText: String
   }
 
@@ -487,85 +498,86 @@ export const typeDefs = gql`
   }
 
   type Category {
-    name: String
-    subjects: [Subject]
+    name: String!
+    subjects: [Subject!]!
   }
 
   type Frontpage {
-    topical: [Resource!]
-    categories: [Category!]
+    topical: [Resource!]!
+    categories: [Category!]!
   }
 
   type SubjectPageVisualElement {
-    type: String
-    url: String
+    type: String!
+    url: String!
     alt: String
   }
 
   type SubjectPageAbout {
-    title: String
-    description: String
-    visualElement: SubjectPageVisualElement
+    title: String!
+    description: String!
+    visualElement: SubjectPageVisualElement!
   }
 
   type SubjectPageBanner {
-    desktopUrl: String
-    desktopId: String
+    desktopUrl: String!
+    desktopId: String!
     mobileUrl: String
     mobileId: String
   }
 
   type SubjectPage {
     topical(subjectId: String): TaxonomyEntity
-    mostRead(subjectId: String): [TaxonomyEntity!]
-    banner: SubjectPageBanner
+    mostRead(subjectId: String): [TaxonomyEntity!]!
+    banner: SubjectPageBanner!
     id: Int!
-    name: String
+    name: String!
     facebook: String
-    editorsChoices(subjectId: String): [TaxonomyEntity!]
+    editorsChoices(subjectId: String): [TaxonomyEntity!]!
     latestContent(subjectId: String): [TaxonomyEntity!]
     about: SubjectPageAbout
-    goTo: [ResourceTypeDefinition!]
+    goTo: [ResourceTypeDefinition!]!
     metaDescription: String
-    layout: String
+    layout: String!
     twitter: String
+    supportedLanguages: [String!]!
   }
 
   type FilmPageAbout {
-    title: String
-    description: String
-    visualElement: SubjectPageVisualElement
-    language: String
+    title: String!
+    description: String!
+    visualElement: SubjectPageVisualElement!
+    language: String!
   }
 
   type FilmFrontpage {
-    name: String
-    about: [FilmPageAbout!]
-    movieThemes: [MovieTheme!]
-    slideShow: [Movie!]
+    name: String!
+    about: [FilmPageAbout!]!
+    movieThemes: [MovieTheme!]!
+    slideShow: [Movie!]!
   }
 
   type MovieTheme {
-    name: [Name!]
-    movies: [Movie!]
+    name: [Name!]!
+    movies: [Movie!]!
   }
 
   type Name {
-    name: String
-    language: String
+    name: String!
+    language: String!
   }
 
   type Movie {
     id: String!
-    title: String
+    title: String!
     metaImage: MetaImage
-    metaDescription: String
-    resourceTypes: [ResourceType!]
-    path: String
+    metaDescription: String!
+    resourceTypes: [ResourceType!]!
+    path: String!
   }
 
   type MovieMeta {
-    title: String
+    title: String!
     metaImage: MetaImage
     metaDescription: String
   }
@@ -583,15 +595,16 @@ export const typeDefs = gql`
     id: String!
     contentUri: String
     name: String!
-    path: String
-    paths: [String!]
-    metadata: TaxonomyMetadata
-    relevanceId: String
+    path: String!
+    paths: [String!]!
+    metadata: TaxonomyMetadata!
+    relevanceId: String!
     rank: Int
     subjectpage: SubjectPage
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
-    grepCodes: [String!]
+    grepCodes: [String!]!
+    supportedLanguages: [String!]!
   }
 
   interface SearchResult {
@@ -734,7 +747,11 @@ export const typeDefs = gql`
     title: String!
     content: String!
     tags: [String!]!
+    subjectIds: [String!]
+    subjectNames: [String!]
     metaImage: MetaImage!
+    visualElement: VisualElement
+    copyright: ConceptCopyright
   }
 
   type DetailedConcept {
@@ -749,7 +766,8 @@ export const typeDefs = gql`
     articleIds: [String!]
     articles: [Meta!]
     visualElement: VisualElement
-    copyright: Copyright
+    copyright: ConceptCopyright
+    source: String
   }
 
   type Search {
@@ -829,6 +847,11 @@ export const typeDefs = gql`
     learningResources: FrontPageResources!
   }
 
+  type UptimeAlert {
+    title: String!
+    body: String
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -839,11 +862,14 @@ export const typeDefs = gql`
       showVisualElement: String
     ): Article
     subject(id: String!): Subject
-    subjectpage(id: String!): SubjectPage
+    subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
-    learningpathStep(pathId: String!, stepId: String!): LearningpathStep
-    subjects: [Subject!]
+    subjects(
+      metadataFilterKey: String
+      metadataFilterValue: String
+      filterVisible: Boolean
+    ): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: Frontpage
@@ -919,6 +945,7 @@ export const typeDefs = gql`
     podcastSearch(page: Int, pageSize: Int): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
     podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
+    alerts: [UptimeAlert]
   }
 `;
 

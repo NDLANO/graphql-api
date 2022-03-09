@@ -6,6 +6,7 @@
  *
  */
 
+import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-frontpage-api';
 import DataLoader from 'dataloader';
 import {
   fetchArticles,
@@ -18,7 +19,7 @@ import {
   fetchLK06Curriculum,
   fetchLK20Curriculum,
 } from './api';
-import { FrontpageResponse } from './api/frontpageApi';
+import { fetchSubjectTyped, Subject } from './api/taxonomyApi';
 
 export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
   return new DataLoader(
@@ -29,7 +30,9 @@ export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<string, any> {
+export function learningpathsLoader(
+  context: Context,
+): DataLoader<string, GQLMeta | null> {
   return new DataLoader(async learningpathIds => {
     return fetchLearningpaths(learningpathIds, context);
   });
@@ -74,7 +77,7 @@ export function lk06CurriculumLoader(
 
 export function frontpageLoader(
   context: Context,
-): DataLoader<string, FrontpageResponse> {
+): DataLoader<string, IFrontPageData> {
   return new DataLoader(async () => {
     const frontpage = await fetchFrontpage(context);
     return [frontpage];
@@ -83,20 +86,51 @@ export function frontpageLoader(
 
 export function filmFrontpageLoader(
   context: Context,
-): DataLoader<string, GQLFilmFrontpage> {
+): DataLoader<string, IFilmFrontPageData> {
   return new DataLoader(async () => {
     const filmFrontpage = await fetchFilmFrontpage(context);
     return [filmFrontpage];
   });
 }
 
+export function subjectLoader(
+  context: Context,
+): DataLoader<{ id?: string }, Subject> {
+  return new DataLoader(
+    async inputs => {
+      return Promise.all(
+        inputs.map(input => {
+          if (input.id) {
+            return fetchSubjectTyped(context, input.id);
+          }
+        }),
+      );
+    },
+    { cacheKeyFn: key => JSON.stringify(key) },
+  );
+}
+
 export function subjectsLoader(
   context: Context,
-): DataLoader<string, { subjects: GQLSubject[] }> {
-  return new DataLoader(async () => {
-    const subjects = await fetchSubjects(context);
-    return [{ subjects }];
-  });
+): DataLoader<
+  { metadataFilter?: { key: string; value?: string }; filterVisible: boolean },
+  { subjects: GQLSubject[] }
+> {
+  return new DataLoader(
+    async inputs => {
+      return Promise.all(
+        inputs.map(async input => {
+          const subjects = await fetchSubjects(
+            context,
+            input.metadataFilter,
+            input.filterVisible ? true : undefined,
+          );
+          return { subjects };
+        }),
+      );
+    },
+    { cacheKeyFn: key => key },
+  );
 }
 
 interface IInput {

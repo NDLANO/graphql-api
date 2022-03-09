@@ -15,7 +15,7 @@ declare global {
    *          TYPE DEFS          *
    *                             *
    *******************************/
-  export type GQLJSON = JSON;
+  export type GQLStringRecord = Record<string, string>;
   
   export interface GQLAudioFile {
     url: string;
@@ -197,8 +197,8 @@ declare global {
   }
   
   export interface GQLMetaImage {
-    url?: string;
-    alt?: string;
+    url: string;
+    alt: string;
   }
   
   export interface GQLMeta {
@@ -212,8 +212,8 @@ declare global {
   }
   
   export interface GQLLearningpathStepEmbedUrl {
-    url?: string;
-    embedType?: string;
+    url: string;
+    embedType: string;
   }
   
   export interface GQLLearningpathStepOembed {
@@ -231,62 +231,63 @@ declare global {
     description?: string;
     embedUrl?: GQLLearningpathStepEmbedUrl;
     license?: GQLLicense;
-    metaUrl?: string;
-    revision?: number;
-    status?: string;
-    supportedLanguages?: Array<string>;
-    type?: string;
+    metaUrl: string;
+    revision: number;
+    status: string;
+    supportedLanguages: Array<string>;
+    type: string;
     article?: GQLArticle;
     resource?: GQLResource;
-    showTitle?: boolean;
+    showTitle: boolean;
     oembed?: GQLLearningpathStepOembed;
   }
   
   export interface GQLLearningpathCoverphoto {
-    url?: string;
-    metaUrl?: string;
+    url: string;
+    metaUrl: string;
   }
   
   export interface GQLLearningpathCopyright {
-    license?: GQLLicense;
-    contributors?: Array<GQLContributor>;
+    license: GQLLicense;
+    contributors: Array<GQLContributor>;
   }
   
   export interface GQLLearningpath {
     id: number;
     title: string;
-    description?: string;
-    copyright?: GQLLearningpathCopyright;
+    description: string;
+    copyright: GQLLearningpathCopyright;
     duration?: number;
-    canEdit?: boolean;
-    verificationStatus?: string;
-    lastUpdated?: string;
-    tags?: Array<string>;
-    supportedLanguages?: Array<string>;
+    canEdit: boolean;
+    verificationStatus: string;
+    lastUpdated: string;
+    tags: Array<string>;
+    supportedLanguages: Array<string>;
     isBasedOn?: number;
-    learningsteps?: Array<GQLLearningpathStep>;
-    metaUrl?: string;
-    revision?: number;
-    learningstepUrl?: string;
-    status?: string;
+    learningsteps: Array<GQLLearningpathStep>;
+    metaUrl: string;
+    revision: number;
+    learningstepUrl: string;
+    status: string;
     coverphoto?: GQLLearningpathCoverphoto;
   }
   
   export interface GQLTaxonomyMetadata {
-    grepCodes?: Array<string>;
-    visible?: boolean;
-    customFields?: GQLJSON;
+    grepCodes: Array<string>;
+    visible: boolean;
+    customFields: GQLStringRecord;
   }
   
   export interface GQLTaxonomyEntity {
     id: string;
     name: string;
     contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
-    metadata?: GQLTaxonomyMetadata;
+    path: string;
+    paths: Array<string>;
+    metadata: GQLTaxonomyMetadata;
     relevanceId?: string;
     rank?: number;
+    supportedLanguages: Array<string>;
   }
   
   /** Use this to resolve interface type TaxonomyEntity */
@@ -320,10 +321,10 @@ declare global {
     id: string;
     name: string;
     contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
+    path: string;
+    paths: Array<string>;
     meta?: GQLMeta;
-    metadata?: GQLTaxonomyMetadata;
+    metadata: GQLTaxonomyMetadata;
     learningpath?: GQLLearningpath;
     relevanceId?: string;
     rank?: number;
@@ -332,16 +333,17 @@ declare global {
     resourceTypes?: Array<GQLResourceType>;
     parentTopics?: Array<GQLTopic>;
     breadcrumbs?: Array<Array<string>>;
+    supportedLanguages: Array<string>;
   }
   
   export interface GQLTopic extends GQLTaxonomyEntity, GQLWithArticle {
     id: string;
     name: string;
     contentUri?: string;
-    path?: string;
-    paths?: Array<string>;
+    path: string;
+    paths: Array<string>;
     meta?: GQLMeta;
-    metadata?: GQLTaxonomyMetadata;
+    metadata: GQLTaxonomyMetadata;
     relevanceId?: string;
     rank?: number;
     article?: GQLArticle;
@@ -354,6 +356,7 @@ declare global {
     supplementaryResources?: Array<GQLResource>;
     alternateTopics?: Array<GQLTopic>;
     breadcrumbs?: Array<Array<string>>;
+    supportedLanguages: Array<string>;
   }
   
   export interface GQLLicense {
@@ -433,10 +436,18 @@ declare global {
     copyText?: string;
   }
   
+  export interface GQLConceptCopyright {
+    license?: GQLLicense;
+    creators: Array<GQLContributor>;
+    processors: Array<GQLContributor>;
+    rightsholders: Array<GQLContributor>;
+    origin?: string;
+  }
+  
   export interface GQLConceptLicense {
     title: string;
     src?: string;
-    copyright?: GQLCopyright;
+    copyright?: GQLConceptCopyright;
     copyText?: string;
   }
   
@@ -534,85 +545,86 @@ declare global {
   }
   
   export interface GQLCategory {
-    name?: string;
-    subjects?: Array<GQLSubject | null>;
+    name: string;
+    subjects: Array<GQLSubject>;
   }
   
   export interface GQLFrontpage {
-    topical?: Array<GQLResource>;
-    categories?: Array<GQLCategory>;
+    topical: Array<GQLResource>;
+    categories: Array<GQLCategory>;
   }
   
   export interface GQLSubjectPageVisualElement {
-    type?: string;
-    url?: string;
+    type: string;
+    url: string;
     alt?: string;
   }
   
   export interface GQLSubjectPageAbout {
-    title?: string;
-    description?: string;
-    visualElement?: GQLSubjectPageVisualElement;
+    title: string;
+    description: string;
+    visualElement: GQLSubjectPageVisualElement;
   }
   
   export interface GQLSubjectPageBanner {
-    desktopUrl?: string;
-    desktopId?: string;
+    desktopUrl: string;
+    desktopId: string;
     mobileUrl?: string;
     mobileId?: string;
   }
   
   export interface GQLSubjectPage {
     topical?: GQLTaxonomyEntity;
-    mostRead?: Array<GQLTaxonomyEntity>;
-    banner?: GQLSubjectPageBanner;
+    mostRead: Array<GQLTaxonomyEntity>;
+    banner: GQLSubjectPageBanner;
     id: number;
-    name?: string;
+    name: string;
     facebook?: string;
-    editorsChoices?: Array<GQLTaxonomyEntity>;
+    editorsChoices: Array<GQLTaxonomyEntity>;
     latestContent?: Array<GQLTaxonomyEntity>;
     about?: GQLSubjectPageAbout;
-    goTo?: Array<GQLResourceTypeDefinition>;
+    goTo: Array<GQLResourceTypeDefinition>;
     metaDescription?: string;
-    layout?: string;
+    layout: string;
     twitter?: string;
+    supportedLanguages: Array<string>;
   }
   
   export interface GQLFilmPageAbout {
-    title?: string;
-    description?: string;
-    visualElement?: GQLSubjectPageVisualElement;
-    language?: string;
+    title: string;
+    description: string;
+    visualElement: GQLSubjectPageVisualElement;
+    language: string;
   }
   
   export interface GQLFilmFrontpage {
-    name?: string;
-    about?: Array<GQLFilmPageAbout>;
-    movieThemes?: Array<GQLMovieTheme>;
-    slideShow?: Array<GQLMovie>;
+    name: string;
+    about: Array<GQLFilmPageAbout>;
+    movieThemes: Array<GQLMovieTheme>;
+    slideShow: Array<GQLMovie>;
   }
   
   export interface GQLMovieTheme {
-    name?: Array<GQLName>;
-    movies?: Array<GQLMovie>;
+    name: Array<GQLName>;
+    movies: Array<GQLMovie>;
   }
   
   export interface GQLName {
-    name?: string;
-    language?: string;
+    name: string;
+    language: string;
   }
   
   export interface GQLMovie {
     id: string;
-    title?: string;
+    title: string;
     metaImage?: GQLMetaImage;
-    metaDescription?: string;
-    resourceTypes?: Array<GQLResourceType>;
-    path?: string;
+    metaDescription: string;
+    resourceTypes: Array<GQLResourceType>;
+    path: string;
   }
   
   export interface GQLMovieMeta {
-    title?: string;
+    title: string;
     metaImage?: GQLMetaImage;
     metaDescription?: string;
   }
@@ -630,15 +642,16 @@ declare global {
     id: string;
     contentUri?: string;
     name: string;
-    path?: string;
-    paths?: Array<string>;
-    metadata?: GQLTaxonomyMetadata;
-    relevanceId?: string;
+    path: string;
+    paths: Array<string>;
+    metadata: GQLTaxonomyMetadata;
+    relevanceId: string;
     rank?: number;
     subjectpage?: GQLSubjectPage;
     topics?: Array<GQLTopic>;
     allTopics?: Array<GQLTopic>;
-    grepCodes?: Array<string>;
+    grepCodes: Array<string>;
+    supportedLanguages: Array<string>;
   }
   
   export interface GQLSearchResult {
@@ -792,7 +805,11 @@ declare global {
     title: string;
     content: string;
     tags: Array<string>;
+    subjectIds?: Array<string>;
+    subjectNames?: Array<string>;
     metaImage: GQLMetaImage;
+    visualElement?: GQLVisualElement;
+    copyright?: GQLConceptCopyright;
   }
   
   export interface GQLDetailedConcept {
@@ -807,7 +824,8 @@ declare global {
     articleIds?: Array<string>;
     articles?: Array<GQLMeta>;
     visualElement?: GQLVisualElement;
-    copyright?: GQLCopyright;
+    copyright?: GQLConceptCopyright;
+    source?: string;
   }
   
   export interface GQLSearch {
@@ -887,6 +905,11 @@ declare global {
     learningResources: GQLFrontPageResources;
   }
   
+  export interface GQLUptimeAlert {
+    title: string;
+    body?: string;
+  }
+  
   export interface GQLQuery {
     resource?: GQLResource;
     article?: GQLArticle;
@@ -894,7 +917,6 @@ declare global {
     subjectpage?: GQLSubjectPage;
     filmfrontpage?: GQLFilmFrontpage;
     learningpath?: GQLLearningpath;
-    learningpathStep?: GQLLearningpathStep;
     subjects?: Array<GQLSubject>;
     topic?: GQLTopic;
     topics?: Array<GQLTopic>;
@@ -916,6 +938,7 @@ declare global {
     podcastSearch?: GQLAudioSearch;
     podcastSeries?: GQLPodcastSeriesWithEpisodes;
     podcastSeriesSearch?: GQLPodcastSeriesSearch;
+    alerts?: Array<GQLUptimeAlert | null>;
   }
   
   /*********************************
@@ -929,7 +952,7 @@ declare global {
    * However, you can still use other generated interfaces to make your resolver type-safed
    */
   export interface GQLResolver {
-    JSON?: GraphQLScalarType;
+    StringRecord?: GraphQLScalarType;
     AudioFile?: GQLAudioFileTypeResolver;
     Title?: GQLTitleTypeResolver;
     Description?: GQLDescriptionTypeResolver;
@@ -984,6 +1007,7 @@ declare global {
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     H5pLicense?: GQLH5pLicenseTypeResolver;
+    ConceptCopyright?: GQLConceptCopyrightTypeResolver;
     ConceptLicense?: GQLConceptLicenseTypeResolver;
     ArticleMetaData?: GQLArticleMetaDataTypeResolver;
     RelatedContent?: GQLRelatedContentTypeResolver;
@@ -1039,6 +1063,7 @@ declare global {
     GroupSearch?: GQLGroupSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
+    UptimeAlert?: GQLUptimeAlertTypeResolver;
     Query?: GQLQueryTypeResolver;
   }
   export interface GQLAudioFileTypeResolver<TParent = any> {
@@ -1850,6 +1875,7 @@ declare global {
     resourceTypes?: ResourceToResourceTypesResolver<TParent>;
     parentTopics?: ResourceToParentTopicsResolver<TParent>;
     breadcrumbs?: ResourceToBreadcrumbsResolver<TParent>;
+    supportedLanguages?: ResourceToSupportedLanguagesResolver<TParent>;
   }
   
   export interface ResourceToIdResolver<TParent = any, TResult = any> {
@@ -1916,6 +1942,10 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface ResourceToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLTopicTypeResolver<TParent = any> {
     id?: TopicToIdResolver<TParent>;
     name?: TopicToNameResolver<TParent>;
@@ -1936,6 +1966,7 @@ declare global {
     supplementaryResources?: TopicToSupplementaryResourcesResolver<TParent>;
     alternateTopics?: TopicToAlternateTopicsResolver<TParent>;
     breadcrumbs?: TopicToBreadcrumbsResolver<TParent>;
+    supportedLanguages?: TopicToSupportedLanguagesResolver<TParent>;
   }
   
   export interface TopicToIdResolver<TParent = any, TResult = any> {
@@ -2021,6 +2052,10 @@ declare global {
   }
   
   export interface TopicToBreadcrumbsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface TopicToSupportedLanguagesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2286,6 +2321,34 @@ declare global {
   }
   
   export interface H5pLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLConceptCopyrightTypeResolver<TParent = any> {
+    license?: ConceptCopyrightToLicenseResolver<TParent>;
+    creators?: ConceptCopyrightToCreatorsResolver<TParent>;
+    processors?: ConceptCopyrightToProcessorsResolver<TParent>;
+    rightsholders?: ConceptCopyrightToRightsholdersResolver<TParent>;
+    origin?: ConceptCopyrightToOriginResolver<TParent>;
+  }
+  
+  export interface ConceptCopyrightToLicenseResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptCopyrightToCreatorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptCopyrightToProcessorsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptCopyrightToRightsholdersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptCopyrightToOriginResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2771,6 +2834,7 @@ declare global {
     metaDescription?: SubjectPageToMetaDescriptionResolver<TParent>;
     layout?: SubjectPageToLayoutResolver<TParent>;
     twitter?: SubjectPageToTwitterResolver<TParent>;
+    supportedLanguages?: SubjectPageToSupportedLanguagesResolver<TParent>;
   }
   
   export interface SubjectPageToTopicalArgs {
@@ -2834,6 +2898,10 @@ declare global {
   }
   
   export interface SubjectPageToTwitterResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectPageToSupportedLanguagesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2994,6 +3062,7 @@ declare global {
     topics?: SubjectToTopicsResolver<TParent>;
     allTopics?: SubjectToAllTopicsResolver<TParent>;
     grepCodes?: SubjectToGrepCodesResolver<TParent>;
+    supportedLanguages?: SubjectToSupportedLanguagesResolver<TParent>;
   }
   
   export interface SubjectToIdResolver<TParent = any, TResult = any> {
@@ -3044,6 +3113,10 @@ declare global {
   }
   
   export interface SubjectToGrepCodesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SubjectToSupportedLanguagesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3519,7 +3592,11 @@ declare global {
     title?: ConceptToTitleResolver<TParent>;
     content?: ConceptToContentResolver<TParent>;
     tags?: ConceptToTagsResolver<TParent>;
+    subjectIds?: ConceptToSubjectIdsResolver<TParent>;
+    subjectNames?: ConceptToSubjectNamesResolver<TParent>;
     metaImage?: ConceptToMetaImageResolver<TParent>;
+    visualElement?: ConceptToVisualElementResolver<TParent>;
+    copyright?: ConceptToCopyrightResolver<TParent>;
   }
   
   export interface ConceptToIdResolver<TParent = any, TResult = any> {
@@ -3538,7 +3615,23 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface ConceptToSubjectIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToSubjectNamesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface ConceptToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToVisualElementResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ConceptToCopyrightResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3555,6 +3648,7 @@ declare global {
     articles?: DetailedConceptToArticlesResolver<TParent>;
     visualElement?: DetailedConceptToVisualElementResolver<TParent>;
     copyright?: DetailedConceptToCopyrightResolver<TParent>;
+    source?: DetailedConceptToSourceResolver<TParent>;
   }
   
   export interface DetailedConceptToIdResolver<TParent = any, TResult = any> {
@@ -3602,6 +3696,10 @@ declare global {
   }
   
   export interface DetailedConceptToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface DetailedConceptToSourceResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3858,6 +3956,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLUptimeAlertTypeResolver<TParent = any> {
+    title?: UptimeAlertToTitleResolver<TParent>;
+    body?: UptimeAlertToBodyResolver<TParent>;
+  }
+  
+  export interface UptimeAlertToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface UptimeAlertToBodyResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLQueryTypeResolver<TParent = any> {
     resource?: QueryToResourceResolver<TParent>;
     article?: QueryToArticleResolver<TParent>;
@@ -3865,7 +3976,6 @@ declare global {
     subjectpage?: QueryToSubjectpageResolver<TParent>;
     filmfrontpage?: QueryToFilmfrontpageResolver<TParent>;
     learningpath?: QueryToLearningpathResolver<TParent>;
-    learningpathStep?: QueryToLearningpathStepResolver<TParent>;
     subjects?: QueryToSubjectsResolver<TParent>;
     topic?: QueryToTopicResolver<TParent>;
     topics?: QueryToTopicsResolver<TParent>;
@@ -3887,6 +3997,7 @@ declare global {
     podcastSearch?: QueryToPodcastSearchResolver<TParent>;
     podcastSeries?: QueryToPodcastSeriesResolver<TParent>;
     podcastSeriesSearch?: QueryToPodcastSeriesSearchResolver<TParent>;
+    alerts?: QueryToAlertsResolver<TParent>;
   }
   
   export interface QueryToResourceArgs {
@@ -3917,7 +4028,7 @@ declare global {
   }
   
   export interface QueryToSubjectpageArgs {
-    id: string;
+    id: number;
   }
   export interface QueryToSubjectpageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToSubjectpageArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -3934,16 +4045,13 @@ declare global {
     (parent: TParent, args: QueryToLearningpathArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface QueryToLearningpathStepArgs {
-    pathId: string;
-    stepId: string;
+  export interface QueryToSubjectsArgs {
+    metadataFilterKey?: string;
+    metadataFilterValue?: string;
+    filterVisible?: boolean;
   }
-  export interface QueryToLearningpathStepResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: QueryToLearningpathStepArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface QueryToSubjectsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+    (parent: TParent, args: QueryToSubjectsArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToTopicArgs {
@@ -4130,6 +4238,10 @@ declare global {
   }
   export interface QueryToPodcastSeriesSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSeriesSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToAlertsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
 }
