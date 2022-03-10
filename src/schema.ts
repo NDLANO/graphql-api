@@ -347,16 +347,6 @@ export const typeDefs = gql`
     url: String
   }
 
-  type Title {
-    title: String!
-    language: String!
-  }
-
-  type AltText {
-    alttext: String!
-    language: String!
-  }
-
   type ImageMetaInformation {
     id: String!
     metaUrl: String!
