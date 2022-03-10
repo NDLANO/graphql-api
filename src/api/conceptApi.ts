@@ -10,7 +10,8 @@ import queryString from 'query-string';
 import { uniq } from 'lodash';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
-import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
+import { parseVisualElement } from '../utils/visualelementHelpers';
+import { convertToSimpleImage, fetchImage } from './imageApi';
 
 interface Author {
   type: string;
@@ -159,7 +160,8 @@ export async function fetchDetailedConcept(
     };
     const metaImageId = concept.metaImage?.url?.split('/').pop();
     if (metaImageId) {
-      detailedConcept.image = await fetchImage(metaImageId, context);
+      const image = await fetchImage(metaImageId, context);
+      detailedConcept.image = image ? convertToSimpleImage(image) : undefined;
     }
     if (concept.visualElement) {
       detailedConcept.visualElement = await parseVisualElement(

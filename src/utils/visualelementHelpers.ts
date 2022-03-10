@@ -7,21 +7,10 @@
  */
 import { IImageMetaInformationV2 } from '@ndla/types-image-api';
 import cheerio from 'cheerio';
+import { convertToSimpleImage, fetchImage } from '../api/imageApi';
 import { fetchOembed } from '../api/oembedApi';
 import { localConverter } from '../config';
 import { fetch, resolveJson } from './apiHelpers';
-
-export async function fetchImage(imageId: string, context: Context) {
-  const imageResponse = await fetch(`/image-api/v2/images/${imageId}`, context);
-  const image: IImageMetaInformationV2 = await resolveJson(imageResponse);
-  return {
-    title: image.title.title,
-    src: image.imageUrl,
-    altText: image.alttext.alttext,
-    contentType: image.contentType,
-    copyright: image.copyright,
-  };
-}
 
 export async function fetchVisualElementLicense<T>(
   visualElement: string,
@@ -79,11 +68,12 @@ export async function parseVisualElement(
       };
     } else if (data?.resource === 'image') {
       const image = await fetchImage(data.resourceId, context);
+      const transformedImage = image && convertToSimpleImage(image);
       license = await fetchVisualElementLicense<
         GQLBrightcoveLicense | GQLH5pLicense
       >(visualElementEmbed, 'images', context);
       visualElement.image = {
-        ...image,
+        ...transformedImage,
         ...data,
         ...license,
         caption: data.caption,

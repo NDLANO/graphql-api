@@ -351,7 +351,7 @@ export const typeDefs = gql`
     id: String!
     metaUrl: String!
     title: String!
-    alttext: String!
+    altText: String!
     imageUrl: String!
     size: Int!
     contentType: String!
@@ -953,9 +953,9 @@ export const typeDefs = gql`
       relevance: String
     ): SearchWithoutPagination
     podcast(id: Int!): AudioWithSeries
-    podcastSearch(page: Int, pageSize: Int): AudioSearch
+    podcastSearch(page: Int!, pageSize: Int!): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
-    podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
+    podcastSeriesSearch(page: Int!, pageSize: Int!): PodcastSeriesSearch
     alerts: [UptimeAlert]
   }
 `;

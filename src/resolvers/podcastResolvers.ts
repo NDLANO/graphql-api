@@ -23,7 +23,7 @@ export const Query = {
     _: any,
     { id }: QueryToPodcastArgs,
     context: ContextWithLoaders,
-  ): Promise<IAudioMetaInformation> {
+  ): Promise<IAudioMetaInformation | null> {
     return fetchPodcast(context, id);
   },
   async podcastSearch(
@@ -55,20 +55,20 @@ export const resolvers = {
       audio: IAudioMetaInformation,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLImageMetaInformation> {
-      const id = audio.podcastMeta.coverPhoto.id;
+    ): Promise<GQLImageMetaInformation | null> {
+      const id = audio.podcastMeta?.coverPhoto.id;
       if (!id) {
         return null;
       }
       const image = await fetchImage(id, context);
 
-      if (!image.id) {
+      if (!image) {
         return null;
       }
       return {
         ...image,
         title: image.title.title,
-        alttext: image.alttext.alttext,
+        altText: image.alttext.alttext,
         caption: image.caption.caption,
         tags: image.tags.tags,
       };

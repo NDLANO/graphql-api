@@ -12,12 +12,21 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 export async function fetchImage(
   imageId: string,
   context: Context,
-): Promise<IImageMetaInformationV2> {
+): Promise<IImageMetaInformationV2 | null> {
   const response = await fetch(`/image-api/v2/images/${imageId}`, context);
   try {
-    const image = await resolveJson(response);
-    return image;
+    return await resolveJson(response);
   } catch (e) {
     return null;
   }
+}
+
+export function convertToSimpleImage(image: IImageMetaInformationV2) {
+  return {
+    title: image.title.title,
+    src: image.imageUrl,
+    altText: image.alttext.alttext,
+    contentType: image.contentType,
+    copyright: image.copyright,
+  };
 }

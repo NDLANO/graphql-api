@@ -15,7 +15,7 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 export async function fetchPodcast(
   context: Context,
   podcastId: number,
-): Promise<IAudioMetaInformation> {
+): Promise<IAudioMetaInformation | null> {
   const response = await fetch(`/audio-api/v1/audio/${podcastId}`, context);
   try {
     const audio = await resolveJson(response);

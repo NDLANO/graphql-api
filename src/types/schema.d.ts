@@ -394,16 +394,11 @@ declare global {
     url?: string;
   }
   
-  export interface GQLAltText {
-    alttext: string;
-    language: string;
-  }
-  
   export interface GQLImageMetaInformation {
     id: string;
     metaUrl: string;
     title: string;
-    alttext: string;
+    altText: string;
     imageUrl: string;
     size: number;
     contentType: string;
@@ -1018,7 +1013,6 @@ declare global {
     Copyright?: GQLCopyrightTypeResolver;
     ArticleRequiredLibrary?: GQLArticleRequiredLibraryTypeResolver;
     FootNote?: GQLFootNoteTypeResolver;
-    AltText?: GQLAltTextTypeResolver;
     ImageMetaInformation?: GQLImageMetaInformationTypeResolver;
     ImageLicense?: GQLImageLicenseTypeResolver;
     AudioLicense?: GQLAudioLicenseTypeResolver;
@@ -2192,24 +2186,11 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLAltTextTypeResolver<TParent = any> {
-    alttext?: AltTextToAlttextResolver<TParent>;
-    language?: AltTextToLanguageResolver<TParent>;
-  }
-  
-  export interface AltTextToAlttextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface AltTextToLanguageResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface GQLImageMetaInformationTypeResolver<TParent = any> {
     id?: ImageMetaInformationToIdResolver<TParent>;
     metaUrl?: ImageMetaInformationToMetaUrlResolver<TParent>;
     title?: ImageMetaInformationToTitleResolver<TParent>;
-    alttext?: ImageMetaInformationToAlttextResolver<TParent>;
+    altText?: ImageMetaInformationToAltTextResolver<TParent>;
     imageUrl?: ImageMetaInformationToImageUrlResolver<TParent>;
     size?: ImageMetaInformationToSizeResolver<TParent>;
     contentType?: ImageMetaInformationToContentTypeResolver<TParent>;
@@ -2233,7 +2214,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ImageMetaInformationToAlttextResolver<TParent = any, TResult = any> {
+  export interface ImageMetaInformationToAltTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -4292,8 +4273,8 @@ declare global {
   }
   
   export interface QueryToPodcastSearchArgs {
-    page?: number;
-    pageSize?: number;
+    page: number;
+    pageSize: number;
   }
   export interface QueryToPodcastSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -4307,8 +4288,8 @@ declare global {
   }
   
   export interface QueryToPodcastSeriesSearchArgs {
-    page?: number;
-    pageSize?: number;
+    page: number;
+    pageSize: number;
   }
   export interface QueryToPodcastSeriesSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSeriesSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
