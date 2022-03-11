@@ -13,7 +13,8 @@ import {
   fetchArticles,
 } from '../api';
 import { Concept, ConceptResult } from '../api/conceptApi';
-import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
+import { convertToSimpleImage, fetchImage } from '../api/imageApi';
+import { parseVisualElement } from '../utils/visualelementHelpers';
 
 export const Query = {
   async concept(
@@ -69,7 +70,8 @@ export const resolvers = {
     async image(concept: Concept, _: any, context: ContextWithLoaders) {
       const metaImageId = concept.metaImage?.url?.split('/').pop();
       if (metaImageId) {
-        return await fetchImage(metaImageId, context);
+        const image = await fetchImage(metaImageId, context);
+        return convertToSimpleImage(image);
       }
       return undefined;
     },

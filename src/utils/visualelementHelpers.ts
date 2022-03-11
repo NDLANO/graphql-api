@@ -5,7 +5,6 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import { IImageMetaInformationV2 } from '@ndla/types-image-api';
 import cheerio from 'cheerio';
 import { convertToSimpleImage, fetchImage } from '../api/imageApi';
 import { fetchOembed } from '../api/oembedApi';
