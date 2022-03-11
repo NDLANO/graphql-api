@@ -8,51 +8,55 @@
 
 import queryString from 'query-string';
 import { uniq } from 'lodash';
+import { IConceptSearchResult, IConcept } from '@ndla/types-concept-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
-import { parseVisualElement } from '../utils/visualelementHelpers';
-import { convertToSimpleImage, fetchImage } from './imageApi';
 
-interface Author {
-  type: string;
-  name: string;
+export interface ConceptResult {
+  totalCount: number;
+  page?: number;
+  pageSize: number;
+  language: string;
+  concepts: Concept[];
 }
-interface ConceptSearchResultJson extends SearchResultJson {
-  tags?: {
-    tags: string[];
-  };
-  visualElement?: {
-    visualElement: string;
-  };
-  copyright: {
-    license?: {
-      license: string;
-    };
-    processors: Author[];
-    rightsholders: Author[];
-    creators: Author[];
-  };
-  source?: string;
-  articleIds?: string[];
-  subjectIds?: string[];
+
+export interface Concept {
+  id: number;
+  title: string;
+  content?: string;
   created: string;
+  tags: string[];
+  articleIds: number[];
+  subjectIds: string[];
+  copyright?: IConcept['copyright'];
+  source?: string;
+  metaImage?: IConcept['metaImage'];
+  visualElement?: IConcept['visualElement'];
 }
 
 export async function searchConcepts(
   params: {
     query?: string;
     subjects?: string;
+    ids?: number[];
     tags?: string;
-    page?: string;
-    pageSize?: string;
+    page?: number;
+    pageSize?: number;
     exactMatch?: boolean;
     language?: string;
     fallback?: boolean;
   },
   context: Context,
-): Promise<GQLConceptResult> {
+): Promise<ConceptResult> {
+  const idsString = params.ids?.join(',');
   const query = {
-    ...params,
+    query: params.query,
+    subjects: params.subjects,
+    tags: params.tags,
+    page: params.page,
+    language: params.language,
+    fallback: params.fallback,
+    ids: idsString,
     'page-size': params.pageSize,
     'exact-match': params.exactMatch,
     sort: 'title',
@@ -61,115 +65,50 @@ export async function searchConcepts(
     `/concept-api/v1/concepts?${queryString.stringify(query)}`,
     context,
   );
-  const conceptResult = await resolveJson(response);
+  const conceptResult: IConceptSearchResult = await resolveJson(response);
   return {
     totalCount: conceptResult.totalCount,
     page: conceptResult.page,
     pageSize: conceptResult.pageSize,
     language: conceptResult.language,
-    concepts: conceptResult.results?.map(
-      async (res: ConceptSearchResultJson) => {
-        const result: GQLConcept = {
-          id: res.id,
-          title: res.title.title,
-          content: res.content.content,
-          tags: res.tags?.tags || [],
-          subjectIds: res.subjectIds || [],
-          metaImage: res.metaImage,
-          copyright: res.copyright,
-        };
-        if (res.visualElement) {
-          result.visualElement = await parseVisualElement(
-            res.visualElement.visualElement,
-            context,
-          );
-        }
-        return result;
-      },
-    ),
+    concepts: conceptResult.results.map(res => ({
+      id: res.id,
+      created: res.created,
+      articleIds: res.articleIds,
+      title: res.title.title,
+      content: res.content.content,
+      tags: res.tags?.tags || [],
+      subjectIds: res.subjectIds || [],
+      metaImage: res.metaImage,
+      copyright: res.copyright,
+      visualElement: res.visualElement,
+    })),
   };
 }
 
-export async function fetchConcepts(
-  conceptIds: string[],
+export async function fetchConcept(
+  id: number,
   context: Context,
-): Promise<GQLConcept[]> {
-  return (
-    await Promise.all(
-      conceptIds.map(async id => {
-        const concept = await fetch(
-          `/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`,
-          context,
-        );
-        try {
-          const res: ConceptSearchResultJson = await resolveJson(concept);
-          const result: GQLConcept = {
-            id: res.id,
-            title: res.title.title,
-            content: res.content.content,
-            tags: res.tags?.tags || [],
-            subjectIds: res.subjectIds || [],
-            metaImage: res.metaImage,
-            copyright: res.copyright,
-          };
-          if (res.visualElement) {
-            result.visualElement = await parseVisualElement(
-              res.visualElement.visualElement,
-              context,
-            );
-          }
-          return result;
-        } catch (e) {
-          return undefined;
-        }
-      }),
-    )
-  ).filter(c => !!c);
-}
-
-export async function fetchDetailedConcepts(
-  conceptIds: string[],
-  context: Context,
-): Promise<GQLDetailedConcept[]> {
-  return (
-    await Promise.all(
-      conceptIds.map(async id => fetchDetailedConcept(id, context)),
-    )
-  ).filter(c => !!c);
-}
-
-export async function fetchDetailedConcept(
-  id: string,
-  context: Context,
-): Promise<GQLDetailedConcept> {
+): Promise<Concept | undefined> {
   const response = await fetch(
     `/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`,
     context,
   );
   try {
-    const concept: ConceptSearchResultJson = await resolveJson(response);
-    const detailedConcept: GQLDetailedConcept = {
+    const concept: IConcept = await resolveJson(response);
+    return {
       id: concept.id,
       title: concept.title.title,
-      content: concept.content.content,
+      content: concept.content?.content ?? '',
       created: concept.created,
+      tags: concept.tags?.tags ?? [],
       articleIds: concept.articleIds,
-      subjectIds: concept.subjectIds,
+      subjectIds: concept.subjectIds ?? [],
       copyright: concept.copyright,
       source: concept.source,
+      metaImage: concept.metaImage,
+      visualElement: concept.visualElement,
     };
-    const metaImageId = concept.metaImage?.url?.split('/').pop();
-    if (metaImageId) {
-      const image = await fetchImage(metaImageId, context);
-      detailedConcept.image = image ? convertToSimpleImage(image) : undefined;
-    }
-    if (concept.visualElement) {
-      detailedConcept.visualElement = await parseVisualElement(
-        concept.visualElement.visualElement,
-        context,
-      );
-    }
-    return detailedConcept;
   } catch (e) {
     return undefined;
   }

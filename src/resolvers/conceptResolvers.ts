@@ -8,26 +8,20 @@
 
 import {
   searchConcepts,
-  fetchConcepts,
-  fetchDetailedConcept,
+  fetchConcept,
   fetchListingPage,
   fetchArticles,
 } from '../api';
+import { Concept, ConceptResult } from '../api/conceptApi';
+import { fetchImage, parseVisualElement } from '../utils/visualelementHelpers';
 
 export const Query = {
-  async concepts(
+  async concept(
     _: any,
-    { ids }: QueryToConceptsArgs,
+    { id }: QueryToConceptArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLConcept[]> {
-    return fetchConcepts(ids, context);
-  },
-  async detailedConcept(
-    _: any,
-    { id }: QueryToDetailedConceptArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLDetailedConcept> {
-    return fetchDetailedConcept(id, context);
+  ): Promise<Concept | undefined> {
+    return fetchConcept(id, context);
   },
   async listingPage(
     _: any,
@@ -40,7 +34,7 @@ export const Query = {
     _: any,
     searchQuery: QueryToConceptSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLConceptResult> {
+  ): Promise<ConceptResult> {
     return searchConcepts(searchQuery, context);
   },
 };
@@ -52,43 +46,46 @@ export const resolvers = {
       params: any,
       context: ContextWithLoaders,
     ): Promise<string[]> {
-      const data = await context.loaders.subjectsLoader.load(params);
-      if (concept.subjectIds?.length > 0) {
-        return Promise.all(
-          concept.subjectIds?.map(id => {
-            return data.subjects.find(subject => subject.id === id)?.name || '';
-          }),
-        );
+      const subjectIds = concept.subjectIds;
+      if (!subjectIds || subjectIds.length === 0) {
+        return [];
       }
+      const data = await context.loaders.subjectsLoader.load(params);
+      return subjectIds.map(
+        id => data.subjects.find(subject => subject.id === id)?.name || '',
+      );
     },
-  },
-  DetailedConcept: {
-    async subjectNames(
-      detailedConcept: GQLDetailedConcept,
-      params: any,
+    async visualElement(
+      concept: Concept,
+      _: any,
       context: ContextWithLoaders,
-    ): Promise<string[]> {
-      const data = await context.loaders.subjectsLoader.load(params);
-      if (detailedConcept.subjectIds?.length > 0) {
-        return Promise.all(
-          detailedConcept.subjectIds?.map(id => {
-            return data.subjects.find(subject => subject.id === id)?.name || '';
-          }),
-        );
+    ): Promise<GQLVisualElement | null> {
+      const visualElement = concept.visualElement?.visualElement;
+      if (visualElement) {
+        return await parseVisualElement(visualElement, context);
       }
+      return null;
+    },
+    async image(concept: Concept, _: any, context: ContextWithLoaders) {
+      const metaImageId = concept.metaImage?.url?.split('/').pop();
+      if (metaImageId) {
+        return await fetchImage(metaImageId, context);
+      }
+      return undefined;
     },
     async articles(
-      detailedConcept: GQLDetailedConcept,
+      concept: Concept,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLMeta[]> {
-      if (detailedConcept.articleIds?.length > 0) {
-        const articles = await fetchArticles(
-          detailedConcept.articleIds,
-          context,
-        );
-        return articles;
+      const articleIds = concept.articleIds;
+      if (!articleIds || articleIds.length === 0) {
+        return [];
       }
+      return await fetchArticles(
+        articleIds.map(id => `${id}`),
+        context,
+      );
     },
   },
 };

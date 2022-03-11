@@ -456,8 +456,8 @@ export const typeDefs = gql`
     coreElements: [CoreElement!]
     crossSubjectTopics(subjectId: String): [CrossSubjectElement!]
     oembed: String
-    conceptIds: [String!]
-    concepts: [DetailedConcept!]
+    conceptIds: [Int!]
+    concepts: [Concept!]
     relatedContent: [RelatedContent!]
     availability: String
   }
@@ -757,25 +757,14 @@ export const typeDefs = gql`
     id: Int!
     title: String!
     content: String!
+    created: String!
     tags: [String!]!
-    subjectIds: [String!]
-    subjectNames: [String!]
-    metaImage: MetaImage!
-    visualElement: VisualElement
-    copyright: ConceptCopyright
-  }
-
-  type DetailedConcept {
-    id: Int!
-    title: String!
-    content: String
-    created: String
-    tags: [String!]
     image: ImageLicense
     subjectIds: [String!]
     subjectNames: [String!]
-    articleIds: [String!]
+    articleIds: [Int!]!
     articles: [Meta!]
+    metaImage: MetaImage!
     visualElement: VisualElement
     copyright: ConceptCopyright
     source: String
@@ -894,11 +883,11 @@ export const typeDefs = gql`
     coreElement(code: String!, language: String): CoreElement
     search(
       query: String
-      page: String
-      pageSize: String
+      page: Int
+      pageSize: Int
       contextTypes: String
       language: String
-      ids: String
+      ids: [Int!]
       resourceTypes: String
       contextFilters: String
       levels: String
@@ -917,22 +906,22 @@ export const typeDefs = gql`
       levels: String
       resourceTypes: String
       contextTypes: String
-      page: String
-      pageSize: String
+      page: Int
+      pageSize: Int
       language: String
       fallback: String
       grepCodes: String
       aggregatePaths: [String!]
     ): [GroupSearch!]
     listingPage(subjects: String): ListingPage
-    concepts(ids: [String!]!): [Concept!]
-    detailedConcept(id: String): DetailedConcept
+    concept(id: Int!): Concept
     conceptSearch(
       query: String
       subjects: String
       tags: String
-      page: String
-      pageSize: String
+      ids: [Int!]
+      page: Int
+      pageSize: Int
       exactMatch: Boolean
       language: String
       fallback: Boolean
@@ -942,7 +931,7 @@ export const typeDefs = gql`
       query: String
       contextTypes: String
       language: String
-      ids: String
+      ids: [Int!]
       resourceTypes: String
       contextFilters: String
       levels: String
