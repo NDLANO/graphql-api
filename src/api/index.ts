@@ -47,11 +47,5 @@ export {
   searchWithoutPagination,
 } from './searchApi';
 export { fetchOembed } from './oembedApi';
-export {
-  searchConcepts,
-  fetchConcepts,
-  fetchDetailedConcepts,
-  fetchDetailedConcept,
-  fetchListingPage,
-} from './conceptApi';
+export { searchConcepts, fetchConcept, fetchListingPage } from './conceptApi';
 export { fetchUptimeIssues } from './uptimeApi';

@@ -12,8 +12,9 @@ import {
   fetchCoreElements,
   fetchCrossSubjectTopicsByCode,
   fetchSubjectTopics,
-  fetchDetailedConcepts,
+  searchConcepts,
 } from '../api';
+import { Concept } from '../api/conceptApi';
 
 export const Query = {
   async article(
@@ -84,8 +85,12 @@ export const resolvers = {
       article: GQLArticle,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLDetailedConcept[]> {
-      return fetchDetailedConcepts(article.conceptIds, context);
+    ): Promise<Concept[]> {
+      const results = await searchConcepts(
+        { ids: article.conceptIds },
+        context,
+      );
+      return results.concepts;
     },
   },
 };
