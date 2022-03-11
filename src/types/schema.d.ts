@@ -47,7 +47,7 @@ declare global {
   
   export interface GQLPodcastMeta {
     introduction: string;
-    coverPhoto: GQLCoverPhoto;
+    image?: GQLImageMetaInformation;
     language: string;
   }
   
@@ -394,6 +394,22 @@ declare global {
     url?: string;
   }
   
+  export interface GQLImageMetaInformation {
+    id: string;
+    metaUrl: string;
+    title: string;
+    altText: string;
+    imageUrl: string;
+    size: number;
+    contentType: string;
+    copyright: GQLCopyright;
+    tags: Array<string>;
+    caption: string;
+    supportedLanguages: Array<string>;
+    created: string;
+    createdBy: string;
+  }
+  
   export interface GQLImageLicense {
     title: string;
     src: string;
@@ -425,7 +441,6 @@ declare global {
     iframe?: GQLBrightcoveIframe;
     copyright: GQLCopyright;
     uploadDate?: string;
-    copyText?: string;
   }
   
   export interface GQLH5pLicense {
@@ -433,7 +448,6 @@ declare global {
     src?: string;
     thumbnail?: string;
     copyright: GQLCopyright;
-    copyText?: string;
   }
   
   export interface GQLConceptCopyright {
@@ -448,7 +462,6 @@ declare global {
     title: string;
     src?: string;
     copyright?: GQLConceptCopyright;
-    copyText?: string;
   }
   
   export interface GQLArticleMetaData {
@@ -778,13 +791,11 @@ declare global {
     download?: string;
     iframe?: GQLBrightcoveIframe;
     uploadDate?: string;
-    copyText?: string;
   }
   
   export interface GQLH5pElement {
     src?: string;
     thumbnail?: string;
-    copyText?: string;
   }
   
   export interface GQLListingPage {
@@ -990,6 +1001,7 @@ declare global {
     Copyright?: GQLCopyrightTypeResolver;
     ArticleRequiredLibrary?: GQLArticleRequiredLibraryTypeResolver;
     FootNote?: GQLFootNoteTypeResolver;
+    ImageMetaInformation?: GQLImageMetaInformationTypeResolver;
     ImageLicense?: GQLImageLicenseTypeResolver;
     AudioLicense?: GQLAudioLicenseTypeResolver;
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
@@ -1135,7 +1147,7 @@ declare global {
   
   export interface GQLPodcastMetaTypeResolver<TParent = any> {
     introduction?: PodcastMetaToIntroductionResolver<TParent>;
-    coverPhoto?: PodcastMetaToCoverPhotoResolver<TParent>;
+    image?: PodcastMetaToImageResolver<TParent>;
     language?: PodcastMetaToLanguageResolver<TParent>;
   }
   
@@ -1143,7 +1155,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface PodcastMetaToCoverPhotoResolver<TParent = any, TResult = any> {
+  export interface PodcastMetaToImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2161,6 +2173,74 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLImageMetaInformationTypeResolver<TParent = any> {
+    id?: ImageMetaInformationToIdResolver<TParent>;
+    metaUrl?: ImageMetaInformationToMetaUrlResolver<TParent>;
+    title?: ImageMetaInformationToTitleResolver<TParent>;
+    altText?: ImageMetaInformationToAltTextResolver<TParent>;
+    imageUrl?: ImageMetaInformationToImageUrlResolver<TParent>;
+    size?: ImageMetaInformationToSizeResolver<TParent>;
+    contentType?: ImageMetaInformationToContentTypeResolver<TParent>;
+    copyright?: ImageMetaInformationToCopyrightResolver<TParent>;
+    tags?: ImageMetaInformationToTagsResolver<TParent>;
+    caption?: ImageMetaInformationToCaptionResolver<TParent>;
+    supportedLanguages?: ImageMetaInformationToSupportedLanguagesResolver<TParent>;
+    created?: ImageMetaInformationToCreatedResolver<TParent>;
+    createdBy?: ImageMetaInformationToCreatedByResolver<TParent>;
+  }
+  
+  export interface ImageMetaInformationToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToMetaUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToAltTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToImageUrlResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToSizeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToContentTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToCaptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToSupportedLanguagesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToCreatedResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ImageMetaInformationToCreatedByResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLImageLicenseTypeResolver<TParent = any> {
     title?: ImageLicenseToTitleResolver<TParent>;
     src?: ImageLicenseToSrcResolver<TParent>;
@@ -2244,7 +2324,6 @@ declare global {
     iframe?: BrightcoveLicenseToIframeResolver<TParent>;
     copyright?: BrightcoveLicenseToCopyrightResolver<TParent>;
     uploadDate?: BrightcoveLicenseToUploadDateResolver<TParent>;
-    copyText?: BrightcoveLicenseToCopyTextResolver<TParent>;
   }
   
   export interface BrightcoveLicenseToTitleResolver<TParent = any, TResult = any> {
@@ -2279,16 +2358,11 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface BrightcoveLicenseToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface GQLH5pLicenseTypeResolver<TParent = any> {
     title?: H5pLicenseToTitleResolver<TParent>;
     src?: H5pLicenseToSrcResolver<TParent>;
     thumbnail?: H5pLicenseToThumbnailResolver<TParent>;
     copyright?: H5pLicenseToCopyrightResolver<TParent>;
-    copyText?: H5pLicenseToCopyTextResolver<TParent>;
   }
   
   export interface H5pLicenseToTitleResolver<TParent = any, TResult = any> {
@@ -2304,10 +2378,6 @@ declare global {
   }
   
   export interface H5pLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pLicenseToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2343,7 +2413,6 @@ declare global {
     title?: ConceptLicenseToTitleResolver<TParent>;
     src?: ConceptLicenseToSrcResolver<TParent>;
     copyright?: ConceptLicenseToCopyrightResolver<TParent>;
-    copyText?: ConceptLicenseToCopyTextResolver<TParent>;
   }
   
   export interface ConceptLicenseToTitleResolver<TParent = any, TResult = any> {
@@ -2355,10 +2424,6 @@ declare global {
   }
   
   export interface ConceptLicenseToCopyrightResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface ConceptLicenseToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -3468,7 +3533,6 @@ declare global {
     download?: BrightcoveElementToDownloadResolver<TParent>;
     iframe?: BrightcoveElementToIframeResolver<TParent>;
     uploadDate?: BrightcoveElementToUploadDateResolver<TParent>;
-    copyText?: BrightcoveElementToCopyTextResolver<TParent>;
   }
   
   export interface BrightcoveElementToVideoidResolver<TParent = any, TResult = any> {
@@ -3511,14 +3575,9 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface BrightcoveElementToCopyTextResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
   export interface GQLH5pElementTypeResolver<TParent = any> {
     src?: H5pElementToSrcResolver<TParent>;
     thumbnail?: H5pElementToThumbnailResolver<TParent>;
-    copyText?: H5pElementToCopyTextResolver<TParent>;
   }
   
   export interface H5pElementToSrcResolver<TParent = any, TResult = any> {
@@ -3526,10 +3585,6 @@ declare global {
   }
   
   export interface H5pElementToThumbnailResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface H5pElementToCopyTextResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -4155,8 +4210,8 @@ declare global {
   }
   
   export interface QueryToPodcastSearchArgs {
-    page?: number;
-    pageSize?: number;
+    page: number;
+    pageSize: number;
   }
   export interface QueryToPodcastSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -4170,8 +4225,8 @@ declare global {
   }
   
   export interface QueryToPodcastSeriesSearchArgs {
-    page?: number;
-    pageSize?: number;
+    page: number;
+    pageSize: number;
   }
   export interface QueryToPodcastSeriesSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSeriesSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

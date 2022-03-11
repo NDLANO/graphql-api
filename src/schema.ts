@@ -42,7 +42,7 @@ export const typeDefs = gql`
 
   type PodcastMeta {
     introduction: String!
-    coverPhoto: CoverPhoto!
+    image: ImageMetaInformation
     language: String!
   }
 
@@ -347,6 +347,22 @@ export const typeDefs = gql`
     url: String
   }
 
+  type ImageMetaInformation {
+    id: String!
+    metaUrl: String!
+    title: String!
+    altText: String!
+    imageUrl: String!
+    size: Int!
+    contentType: String!
+    copyright: Copyright!
+    tags: [String!]!
+    caption: String!
+    supportedLanguages: [String!]!
+    created: String!
+    createdBy: String!
+  }
+
   type ImageLicense {
     title: String!
     src: String!
@@ -378,7 +394,6 @@ export const typeDefs = gql`
     iframe: BrightcoveIframe
     copyright: Copyright!
     uploadDate: String
-    copyText: String
   }
 
   type H5pLicense {
@@ -386,7 +401,6 @@ export const typeDefs = gql`
     src: String
     thumbnail: String
     copyright: Copyright!
-    copyText: String
   }
 
   type ConceptCopyright {
@@ -401,7 +415,6 @@ export const typeDefs = gql`
     title: String!
     src: String
     copyright: ConceptCopyright
-    copyText: String
   }
 
   type ArticleMetaData {
@@ -720,13 +733,11 @@ export const typeDefs = gql`
     download: String
     iframe: BrightcoveIframe
     uploadDate: String
-    copyText: String
   }
 
   type H5pElement {
     src: String
     thumbnail: String
-    copyText: String
   }
 
   type ListingPage {
@@ -931,9 +942,9 @@ export const typeDefs = gql`
       relevance: String
     ): SearchWithoutPagination
     podcast(id: Int!): AudioWithSeries
-    podcastSearch(page: Int, pageSize: Int): AudioSearch
+    podcastSearch(page: Int!, pageSize: Int!): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
-    podcastSeriesSearch(page: Int, pageSize: Int): PodcastSeriesSearch
+    podcastSeriesSearch(page: Int!, pageSize: Int!): PodcastSeriesSearch
     alerts: [UptimeAlert]
   }
 `;

@@ -8,7 +8,6 @@
 
 import {
   IAudioMetaInformation,
-  IAudioSummary,
   IAudioSummarySearchResult,
 } from '@ndla/types-audio-api';
 import {
@@ -17,13 +16,14 @@ import {
   fetchPodcastSeriesPage,
   fetchPodcastsPage,
 } from '../api/audioApi';
+import { fetchImage } from '../api/imageApi';
 
 export const Query = {
   async podcast(
     _: any,
     { id }: QueryToPodcastArgs,
     context: ContextWithLoaders,
-  ): Promise<IAudioMetaInformation> {
+  ): Promise<IAudioMetaInformation | null> {
     return fetchPodcast(context, id);
   },
   async podcastSearch(
@@ -49,4 +49,29 @@ export const Query = {
   },
 };
 
-export const resolvers = {};
+export const resolvers = {
+  PodcastMeta: {
+    async image(
+      audio: IAudioMetaInformation,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLImageMetaInformation | null> {
+      const id = audio.podcastMeta?.coverPhoto.id;
+      if (!id) {
+        return null;
+      }
+      const image = await fetchImage(id, context);
+
+      if (!image) {
+        return null;
+      }
+      return {
+        ...image,
+        title: image.title.title,
+        altText: image.alttext.alttext,
+        caption: image.caption.caption,
+        tags: image.tags.tags,
+      };
+    },
+  },
+};
