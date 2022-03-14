@@ -9,6 +9,7 @@
 import {
   IAudioMetaInformation,
   IAudioSummarySearchResult,
+  IPodcastMeta,
 } from '@ndla/types-audio-api';
 import {
   fetchPodcast,
@@ -52,11 +53,11 @@ export const Query = {
 export const resolvers = {
   PodcastMeta: {
     async image(
-      audio: IAudioMetaInformation,
+      podcastMeta: IPodcastMeta,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLImageMetaInformation | null> {
-      const id = audio.podcastMeta?.coverPhoto.id;
+      const id = podcastMeta?.coverPhoto.id;
       if (!id) {
         return null;
       }
@@ -65,6 +66,7 @@ export const resolvers = {
       if (!image) {
         return null;
       }
+
       return {
         ...image,
         title: image.title.title,
