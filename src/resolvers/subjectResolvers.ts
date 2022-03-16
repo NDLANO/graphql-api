@@ -69,6 +69,12 @@ export const resolvers = {
         context,
       );
     },
+    async allTopics(subject: GQLSubject, _: any, context: ContextWithLoaders) {
+      const topics = await context.loaders.subjectTopicsLoader.load({
+        subjectId: subject.id,
+      });
+      return filterMissingArticles(topics, context);
+    },
     async subjectpage(
       subject: GQLSubject,
       __: any,
