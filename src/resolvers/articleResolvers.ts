@@ -86,6 +86,9 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<Concept[]> {
+      if (article?.conceptIds?.length === 0) {
+        return [];
+      }
       const results = await searchConcepts(
         { ids: article.conceptIds },
         context,
