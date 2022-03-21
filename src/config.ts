@@ -61,5 +61,5 @@ export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);
 export const ndlaUrl = getEnvironmentVariabel('NDLA_URL', ndlaFrontendUrl());
-export const uptimeOwner = getEnvironmentVariabel('UPTIME_OWNER', 'ghveem');
+export const uptimeOwner = getEnvironmentVariabel('UPTIME_OWNER', 'NDLANO');
 export const uptimeRepo = getEnvironmentVariabel('UPTIME_REPO', 'oppetid');
