@@ -86,11 +86,14 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<Concept[]> {
-      const results = await searchConcepts(
-        { ids: article.conceptIds },
-        context,
-      );
-      return results.concepts;
+      if (article?.conceptIds && article.conceptIds.length > 0) {
+        const results = await searchConcepts(
+          { ids: article.conceptIds },
+          context,
+        );
+        return results.concepts;
+      }
+      return [];
     },
   },
 };
