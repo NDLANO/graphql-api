@@ -905,9 +905,15 @@ declare global {
     learningResources: GQLFrontPageResources;
   }
   
+  export interface GQLGithubLabel {
+    name: string;
+  }
+  
   export interface GQLUptimeAlert {
     title: string;
     body?: string;
+    number: number;
+    labels?: Array<GQLGithubLabel>;
   }
   
   export interface GQLQuery {
@@ -1062,6 +1068,7 @@ declare global {
     GroupSearch?: GQLGroupSearchTypeResolver;
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
+    GithubLabel?: GQLGithubLabelTypeResolver;
     UptimeAlert?: GQLUptimeAlertTypeResolver;
     Query?: GQLQueryTypeResolver;
   }
@@ -3955,9 +3962,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLGithubLabelTypeResolver<TParent = any> {
+    name?: GithubLabelToNameResolver<TParent>;
+  }
+  
+  export interface GithubLabelToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLUptimeAlertTypeResolver<TParent = any> {
     title?: UptimeAlertToTitleResolver<TParent>;
     body?: UptimeAlertToBodyResolver<TParent>;
+    number?: UptimeAlertToNumberResolver<TParent>;
+    labels?: UptimeAlertToLabelsResolver<TParent>;
   }
   
   export interface UptimeAlertToTitleResolver<TParent = any, TResult = any> {
@@ -3965,6 +3982,14 @@ declare global {
   }
   
   export interface UptimeAlertToBodyResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface UptimeAlertToNumberResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface UptimeAlertToLabelsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

@@ -847,9 +847,15 @@ export const typeDefs = gql`
     learningResources: FrontPageResources!
   }
 
+  type GithubLabel {
+    name: String!
+  }
+
   type UptimeAlert {
     title: String!
     body: String
+    number: Int!
+    labels: [GithubLabel!]
   }
 
   type Query {
