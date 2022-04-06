@@ -12,16 +12,28 @@ import { ndlaEnvironment, uptimeOwner, uptimeRepo } from '../config';
 
 const baseUrl = 'https://api.github.com';
 
+interface GithubLabel {
+  name: string;
+}
+interface GithubIssue {
+  number: number;
+  title: string;
+  body: string;
+  labels?: GithubLabel[];
+}
+
 export async function fetchUptimeIssues(
   context: ContextWithLoaders,
 ): Promise<GQLUptimeAlert[]> {
   const path = `${baseUrl}/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenance,${ndlaEnvironment}`;
   const response = await fetch(path, context, { timeout: 3000 });
-  const issues: GQLUptimeAlert[] = await resolveJson(response);
+  const issues: GithubIssue[] = await resolveJson(response);
 
   return issues.map(issue => {
     return {
       title: issue.title,
+      number: issue.number,
+      closable: !issue.labels?.find(label => label.name === 'permanent'),
       body: he.decode(issue.body).replace(/<[^>]*>?/gm, ''),
     };
   });

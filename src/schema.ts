@@ -850,6 +850,8 @@ export const typeDefs = gql`
   type UptimeAlert {
     title: String!
     body: String
+    number: Int!
+    closable: Boolean!
   }
 
   type Query {
