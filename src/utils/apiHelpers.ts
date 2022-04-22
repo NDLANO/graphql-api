@@ -46,12 +46,17 @@ async function fetchHelper(
     ? { feideAuthorization: context.feideAuthorization }
     : null;
 
+  const versionHash = context.versionHash
+    ? { versionhash: context.versionHash }
+    : null;
+
   const cacheHeaders = !context.shouldUseCache
     ? { 'Cache-Control': 'no-cache' }
     : {};
 
   const headers = {
     ...feideAuthorization,
+    ...versionHash,
     ...accessTokenAuth,
     ...cacheHeaders,
   };
