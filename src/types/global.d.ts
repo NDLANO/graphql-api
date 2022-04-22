@@ -42,6 +42,7 @@ declare global {
     res: Response;
     token?: AuthToken;
     feideAuthorization?: string;
+    versionHash?: string;
     language: string;
     shouldUseCache: boolean;
     taxonomyUrl: string;

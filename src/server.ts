@@ -43,25 +43,35 @@ function getAcceptLanguage(request: Request): string {
   return 'nb';
 }
 
-function getFeideAuthorization(request: Request): string | undefined {
+function getHeaderString(request: Request, name: string): string | undefined {
   // tslint:disable-next-line:no-string-literal
-  const authorization = request.headers['feideauthorization'];
+  const header = request.headers[name];
 
-  if (isString(authorization)) {
-    return authorization;
+  if (isString(header)) {
+    return header;
   }
   return undefined;
+}
+
+function getFeideAuthorization(request: Request): string | undefined {
+  return getHeaderString(request, 'feideauthorization');
+}
+
+function getVersionHash(request: Request): string | undefined {
+  return getHeaderString(request, 'versionhash');
 }
 
 function getShouldUseCache(request: Request): boolean {
   const cacheControl = request.headers['cache-control']?.toLowerCase();
   const feideAuthHeader = getFeideAuthorization(request);
+  const versionHashHeader = getVersionHash(request);
   const disableCacheHeaders = ['no-cache', 'no-store'];
 
   const cacheControlDisable = disableCacheHeaders.includes(cacheControl);
   const feideHeaderPresent = !!feideAuthHeader;
+  const versionHashPresent = !!versionHashHeader;
 
-  return !cacheControlDisable && !feideHeaderPresent;
+  return !cacheControlDisable && !feideHeaderPresent && !versionHashPresent;
 }
 
 const getTaxonomyUrl = (request: Request): string => {
@@ -78,6 +88,7 @@ async function getContext({
 }): Promise<ContextWithLoaders> {
   const token = await getToken(req);
   const feideAuthorization = getFeideAuthorization(req);
+  const versionHash = getVersionHash(req);
 
   const language = getAcceptLanguage(req);
   const shouldUseCache = getShouldUseCache(req);
@@ -86,6 +97,7 @@ async function getContext({
     language,
     token,
     feideAuthorization,
+    versionHash,
     shouldUseCache,
     taxonomyUrl,
     req,
