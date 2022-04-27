@@ -460,6 +460,7 @@ export const typeDefs = gql`
     concepts: [Concept!]
     relatedContent: [RelatedContent!]
     availability: String
+    revisionDate: String
   }
 
   type embedVisualelement {
