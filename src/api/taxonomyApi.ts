@@ -202,11 +202,10 @@ export async function fetchTopicResources(
   context: Context,
 ): Promise<GQLResource[]> {
   const { subjectId, relevance, topic } = params;
-  const subjectParam = subjectId ? `&subject=${subjectId}` : '';
   const relevanceParam = relevance ? `&relevance=${relevance}` : '';
 
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/topics/${topic.id}/resources?language=${context.language}${subjectParam}${relevanceParam}`,
+    `/${context.taxonomyUrl}/v1/topics/${topic.id}/resources?language=${context.language}${relevanceParam}`,
     context,
   );
   const resources: GQLTaxonomyEntity[] = await resolveJson(response);
