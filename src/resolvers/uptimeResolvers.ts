@@ -7,6 +7,18 @@
  */
 
 import { fetchUptimeIssues } from '../api';
+import { fetchVersion } from '../api/taxonomyApi';
+
+const localizedVersionHashTitle = (name: string, language: string) => {
+  switch (language) {
+    case 'nb':
+      return `Du ser på en forhåndsvisning av versjonen "${name}"`;
+    case 'nn':
+      return `Du ser på ei førehandsvisning av versjonen "${name}"`;
+    default:
+      return `You are viewing a preview of the version "${name}"`;
+  }
+};
 
 export const Query = {
   async alerts(
@@ -14,7 +26,21 @@ export const Query = {
     __: any,
     context: ContextWithLoaders,
   ): Promise<GQLUptimeAlert[]> {
-    return fetchUptimeIssues(context);
+    if (context.versionHash && context.versionHash !== 'default') {
+      const [versionType, uptimeIssues] = await Promise.all([
+        fetchVersion(context.versionHash, context),
+        fetchUptimeIssues(context),
+      ]);
+
+      if (versionType) {
+        const versionTypeAlert: GQLUptimeAlert = {
+          number: -1,
+          closable: false,
+          title: localizedVersionHashTitle(versionType.name, context.language),
+        };
+        return uptimeIssues.concat(versionTypeAlert);
+      }
+    } else return await fetchUptimeIssues(context);
   },
 };
 
