@@ -12,11 +12,11 @@ import { fetchVersion } from '../api/taxonomyApi';
 const localizedVersionHashTitle = (name: string, language: string) => {
   switch (language) {
     case 'nb':
-      return `Du ser på en forhåndsvisning av versjonen ${name}`;
+      return `Du ser på en forhåndsvisning av versjonen "${name}"`;
     case 'nn':
-      return `Du ser på ein forhåndsvisning av versjonen ${name}`;
+      return `Du ser på ei førehandsvisning av versjonen "${name}"`;
     default:
-      return `You are viewing a preview of the version ${name}`;
+      return `You are viewing a preview of the version "${name}"`;
   }
 };
 
