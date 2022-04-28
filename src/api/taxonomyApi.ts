@@ -265,3 +265,25 @@ export async function queryResourcesOnContentURI(
   });
   return taxonomy;
 }
+
+interface VersionType {
+  id: string;
+  versionType: 'BETA' | 'ARCHIVED' | 'PUBLISHED';
+  name: string;
+  hash: string;
+  locked: boolean;
+  published?: string;
+  archived?: string;
+}
+
+export async function fetchVersion(
+  hash: string,
+  context: Context,
+): Promise<VersionType | undefined> {
+  const response = await fetch(
+    `/${context.taxonomyUrl}/v1/versions?hash=${hash}`,
+    { ...context, versionHash: 'default' },
+  );
+  const json = await resolveJson(response);
+  return json?.[0];
+}
