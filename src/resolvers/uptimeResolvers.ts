@@ -27,16 +27,16 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLUptimeAlert[]> {
     if (context.versionHash && context.versionHash !== 'default') {
-      const [versionType, uptimeIssues] = await Promise.all([
+      const [version, uptimeIssues] = await Promise.all([
         fetchVersion(context.versionHash, context),
         fetchUptimeIssues(context),
       ]);
 
-      if (versionType) {
+      if (version?.versionType !== 'PUBLISHED') {
         const versionTypeAlert: GQLUptimeAlert = {
           number: -1,
           closable: false,
-          title: localizedVersionHashTitle(versionType.name, context.language),
+          title: localizedVersionHashTitle(version.name, context.language),
         };
         return uptimeIssues.concat(versionTypeAlert);
       }
