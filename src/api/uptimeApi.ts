@@ -8,7 +8,12 @@
 
 import he from 'he';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { ndlaEnvironment, uptimeOwner, uptimeRepo } from '../config';
+import {
+  ndlaEnvironment,
+  uptimeOwner,
+  uptimeRepo,
+  uptimeToken,
+} from '../config';
 
 const baseUrl = 'https://api.github.com';
 
@@ -26,7 +31,13 @@ export async function fetchUptimeIssues(
   context: ContextWithLoaders,
 ): Promise<GQLUptimeAlert[]> {
   const path = `${baseUrl}/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenance,${ndlaEnvironment}`;
-  const response = await fetch(path, context, { timeout: 3000 });
+  const githubAuth = uptimeToken
+    ? { Authorization: `Bearer ${uptimeToken}` }
+    : null;
+  const response = await fetch(path, context, {
+    headers: { ...githubAuth },
+    timeout: 3000,
+  });
   const issues: GithubIssue[] = await resolveJson(response);
 
   return issues.map(issue => {
