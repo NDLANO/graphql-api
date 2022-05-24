@@ -69,7 +69,7 @@ function getShouldUseCache(request: Request): boolean {
 
   const cacheControlDisable = disableCacheHeaders.includes(cacheControl);
   const feideHeaderPresent = !!feideAuthHeader;
-  const versionHashPresent = !!versionHashHeader;
+  const versionHashPresent = !!versionHashHeader && versionHashHeader !== 'default';
 
   return !cacheControlDisable && !feideHeaderPresent && !versionHashPresent;
 }
