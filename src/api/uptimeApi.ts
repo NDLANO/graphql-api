@@ -15,8 +15,6 @@ import {
   uptimeToken,
 } from '../config';
 
-const baseUrl = 'https://api.github.com';
-
 interface GithubLabel {
   name: string;
 }
@@ -30,7 +28,7 @@ interface GithubIssue {
 export async function fetchUptimeIssues(
   context: ContextWithLoaders,
 ): Promise<GQLUptimeAlert[]> {
-  const path = `${baseUrl}/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenance,${ndlaEnvironment}`;
+  const path = `/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenance,${ndlaEnvironment}`;
   const githubAuth = uptimeToken
     ? { Authorization: `Bearer ${uptimeToken}` }
     : null;
