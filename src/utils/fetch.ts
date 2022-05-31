@@ -11,6 +11,16 @@ import { IKeyValueCache, setHeaderIfShouldNotCache } from '../cache';
 import { performance } from 'perf_hooks';
 import logger from '../utils/logger';
 
+function getCacheKey(
+  url: string,
+  { versionHash }: Context,
+  { useTaxonomyCache }: RequestOptions,
+): string {
+  if (useTaxonomyCache && versionHash && versionHash !== 'default')
+    return `${url}_${versionHash}`;
+  return url;
+}
+
 export default function createFetch(options: {
   cache: IKeyValueCache;
   disableCache: boolean;
@@ -65,8 +75,9 @@ export default function createFetch(options: {
       const body = await response.text();
 
       if (shouldCache) {
+        const cacheKey = getCacheKey(url, ctx, reqOptions);
         await cache.set(
-          url,
+          cacheKey,
           JSON.stringify({
             body,
             headers: response.headers,
@@ -97,8 +108,8 @@ export default function createFetch(options: {
     if (!isCachable || options.disableCache === true) {
       return pureFetch(url, ctx, reqOptions).then(r => r.response);
     }
-
-    const data = await cache.get(url);
+    const cacheKey = getCacheKey(url, ctx, reqOptions);
+    const data = await cache.get(cacheKey);
     const cached = await cachedResponse(url, data);
     if (cached) return cached;
 
