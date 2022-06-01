@@ -97,15 +97,15 @@ export const resolvers = {
       return [];
     },
     async contexts(
-      article: GQLArticle, 
-      _: any, 
-      context: ContextWithLoaders
+      article: GQLArticle,
+      _: any,
+      context: ContextWithLoaders,
     ): Promise<GQLSearchContext[]> {
-      const results = await search({ids: [article.id]}, context);
+      const results = await search({ ids: [article.id] }, context);
       if (results?.results?.[0]) {
         return results.results[0].contexts;
       }
-      return []
+      return [];
     },
   },
 };
