@@ -461,6 +461,7 @@ export const typeDefs = gql`
     relatedContent: [RelatedContent!]
     availability: String
     revisionDate: String
+    contexts: [SearchContext!]
   }
 
   type embedVisualelement {
