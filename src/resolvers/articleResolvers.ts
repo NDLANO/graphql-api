@@ -19,7 +19,7 @@ import { Concept } from '../api/conceptApi';
 export const Query = {
   async article(
     _: any,
-    { id, subjectId, isOembed, path }: QueryToArticleArgs,
+    { id, subjectId, isOembed, path, showVisualElement }: QueryToArticleArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArticle> {
     return fetchArticle(
@@ -28,6 +28,7 @@ export const Query = {
         subjectId,
         isOembed,
         path,
+        showVisualElement,
       },
       context,
     );
