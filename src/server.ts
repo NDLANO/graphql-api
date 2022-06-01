@@ -64,15 +64,12 @@ function getVersionHash(request: Request): string | undefined {
 function getShouldUseCache(request: Request): boolean {
   const cacheControl = request.headers['cache-control']?.toLowerCase();
   const feideAuthHeader = getFeideAuthorization(request);
-  const versionHashHeader = getVersionHash(request);
   const disableCacheHeaders = ['no-cache', 'no-store'];
 
   const cacheControlDisable = disableCacheHeaders.includes(cacheControl);
   const feideHeaderPresent = !!feideAuthHeader;
-  const versionHashPresent =
-    !!versionHashHeader && versionHashHeader !== 'default';
 
-  return !cacheControlDisable && !feideHeaderPresent && !versionHashPresent;
+  return !cacheControlDisable && !feideHeaderPresent;
 }
 
 const getTaxonomyUrl = (request: Request): string => {

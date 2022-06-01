@@ -7,7 +7,8 @@
  */
 
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { findPrimaryPath, getArticleIdFromUrn } from '../utils/articleHelpers';
+import { Response } from 'node-fetch';
+import { findPrimaryPath } from '../utils/articleHelpers';
 import qs from 'query-string';
 
 interface Topic {
@@ -43,11 +44,19 @@ export interface Subject {
   translations: TaxonomyTranslation[];
 }
 
+async function taxonomyFetch(
+  path: string,
+  context: Context,
+  options?: RequestOptions,
+): Promise<Response> {
+  return fetch(path, context, { ...options, useTaxonomyCache: true });
+}
+
 export async function fetchResource(
   { id, subjectId, topicId }: QueryToResourceArgs,
   context: ContextWithLoaders,
 ): Promise<GQLResource> {
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/resources/${id}/full?language=${context.language}`,
     context,
   );
@@ -84,7 +93,7 @@ export async function fetchResource(
 export async function fetchResourceTypes(
   context: Context,
 ): Promise<GQLResourceTypeDefinition[]> {
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/resource-types?language=${context.language}`,
     context,
   );
@@ -105,7 +114,7 @@ export async function fetchSubjects(
     value: metadataFilter?.value,
     isVisible,
   });
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/subjects/?${query}`,
     context,
   );
@@ -118,7 +127,7 @@ export async function fetchSubject(
 ): Promise<GQLSubject> {
   const query = qs.stringify({ language: context.language });
 
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/subjects/${id}?${query}`,
     context,
   );
@@ -130,7 +139,7 @@ export async function fetchSubjectTyped(
   id: string,
 ): Promise<Subject> {
   const query = qs.stringify({ language: context.language });
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/subjects/${id}?${query}`,
     context,
   );
@@ -146,7 +155,7 @@ export async function fetchSubjectsTyped(
     isVisible,
   });
 
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/subjects/?${query}`,
     context,
   );
@@ -157,7 +166,7 @@ export async function fetchSubjectTopics(
   subjectId: string,
   context: Context,
 ): Promise<GQLTopic[]> {
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/subjects/${subjectId}/topics/?recursive=true&language=${context.language}`,
     context,
   );
@@ -169,7 +178,7 @@ export async function fetchTopics(
   context: Context,
 ): Promise<GQLTopic[]> {
   const uriParam = args.contentUri ? `&contentURI=${args.contentUri}` : '';
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/topics/?language=${context.language}${uriParam}`,
     context,
   );
@@ -177,7 +186,7 @@ export async function fetchTopics(
 }
 
 export async function fetchTopic(params: { id: string }, context: Context) {
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/topics/${params.id}?language=${context.language}`,
     context,
   );
@@ -190,7 +199,7 @@ export async function fetchSubtopics(
   context: Context,
 ): Promise<GQLTopic[]> {
   const { id } = params;
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/topics/${id}/topics?language=${context.language}`,
     context,
   );
@@ -204,7 +213,7 @@ export async function fetchTopicResources(
   const { subjectId, relevance, topic } = params;
   const relevanceParam = relevance ? `&relevance=${relevance}` : '';
 
-  const response = await fetch(
+  const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/topics/${topic.id}/resources?language=${context.language}${relevanceParam}`,
     context,
   );
