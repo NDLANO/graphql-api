@@ -82,7 +82,7 @@ export async function fetchResource(
   let rank;
   let relevanceId;
   if (topicId) {
-    const parent = resource.parentTopics.find(topic => topic.id === topicId);
+    const parent = resource.parents.find(topic => topic.id === topicId);
     rank = parent?.rank;
     relevanceId = parent?.relevanceId || 'urn:relevance:core';
   }

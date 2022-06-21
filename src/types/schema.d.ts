@@ -331,7 +331,7 @@ declare global {
     article?: GQLArticle;
     availability?: string;
     resourceTypes?: Array<GQLResourceType>;
-    parentTopics?: Array<GQLTopic>;
+    parents?: Array<GQLTopic>;
     breadcrumbs?: Array<Array<string>>;
     supportedLanguages: Array<string>;
   }
@@ -507,6 +507,7 @@ declare global {
     concepts?: Array<GQLConcept>;
     relatedContent?: Array<GQLRelatedContent>;
     availability?: string;
+    revisionDate?: string;
   }
   
   export interface GQLembedVisualelement {
@@ -1874,7 +1875,7 @@ declare global {
     article?: ResourceToArticleResolver<TParent>;
     availability?: ResourceToAvailabilityResolver<TParent>;
     resourceTypes?: ResourceToResourceTypesResolver<TParent>;
-    parentTopics?: ResourceToParentTopicsResolver<TParent>;
+    parents?: ResourceToParentsResolver<TParent>;
     breadcrumbs?: ResourceToBreadcrumbsResolver<TParent>;
     supportedLanguages?: ResourceToSupportedLanguagesResolver<TParent>;
   }
@@ -1935,7 +1936,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface ResourceToParentTopicsResolver<TParent = any, TResult = any> {
+  export interface ResourceToParentsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -2508,6 +2509,7 @@ declare global {
     concepts?: ArticleToConceptsResolver<TParent>;
     relatedContent?: ArticleToRelatedContentResolver<TParent>;
     availability?: ArticleToAvailabilityResolver<TParent>;
+    revisionDate?: ArticleToRevisionDateResolver<TParent>;
   }
   
   export interface ArticleToIdResolver<TParent = any, TResult = any> {
@@ -2618,6 +2620,10 @@ declare global {
   }
   
   export interface ArticleToAvailabilityResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleToRevisionDateResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   

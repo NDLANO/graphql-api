@@ -284,7 +284,7 @@ export const typeDefs = gql`
     article(subjectId: String, isOembed: String): Article
     availability: String
     resourceTypes: [ResourceType!]
-    parentTopics: [Topic!]
+    parents: [Topic!]
     breadcrumbs: [[String!]!]
     supportedLanguages: [String!]!
   }
