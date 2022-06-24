@@ -50,7 +50,7 @@
     "@ndla/types-image-api": "^0.0.4",
     "@ndla/types-concept-api": "^0.0.10",
     "@ndla/types-frontpage-api": "^0.0.3",
-    "@ndla/types-learningpath-api": "^0.0.2",
+    "@ndla/types-learningpath-api": "^0.0.7",
     "@types/bunyan": "^1.8.5",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",
