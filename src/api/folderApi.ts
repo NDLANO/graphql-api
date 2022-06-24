@@ -10,7 +10,9 @@ import qs from 'query-string';
 import { IFolder, IFolderData, IResource } from '@ndla/types-learningpath-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
-type QueryParamsType = { [key: string]: any };
+interface QueryParamsType {
+  [key: string]: any;
+}
 
 export const queryString = (params: QueryParamsType) => {
   const stringified = qs.stringify(params);
