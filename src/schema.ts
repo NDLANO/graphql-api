@@ -855,19 +855,25 @@ export const typeDefs = gql`
     closable: Boolean!
   }
 
+  type Breadcrumb {
+    id: String!
+    name: String!
+  }
+
   type Folder {
     id: String!
     name: String!
     status: String!
     isFavorite: Boolean!
-    breadcrumbs: [String!]!
-    data: [FolderData!]!
+    breadcrumbs: [Breadcrumb!]!
+    parentId: String
+    subfolders: [Folder!]!
+    resources: [FolderResource!]!
   }
 
-  union FolderData = Folder | FolderResource
-
   type FolderResource {
-    id: Int!
+    id: String!
+    resourceId: Int!
     resourceType: String!
     path: String!
     created: String!
@@ -1003,13 +1009,14 @@ export const typeDefs = gql`
     updateFolder(id: String!, name: String, status: String): Folder!
     deleteFolder(id: String!): String!
     addFolderResource(
+      resourceId: Int!
       folderId: String!
       resourceType: String!
       path: String!
       tags: [String!]
-    ): String!
+    ): FolderResource!
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
-    deleteFolderResource(id: String!): FolderResource!
+    deleteFolderResource(folderId: String!, resourceId: String!): String!
   }
 `;
 

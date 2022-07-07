@@ -913,28 +913,25 @@ declare global {
     closable: boolean;
   }
   
+  export interface GQLBreadcrumb {
+    id: string;
+    name: string;
+  }
+  
   export interface GQLFolder {
     id: string;
     name: string;
     status: string;
     isFavorite: boolean;
-    breadcrumbs: Array<string>;
-    data: Array<GQLFolderData>;
-  }
-  
-  export type GQLFolderData = GQLFolder | GQLFolderResource;
-  
-  /** Use this to resolve union type FolderData */
-  export type GQLPossibleFolderDataTypeNames = 'Folder' | 'FolderResource';
-  
-  export interface GQLFolderDataNameMap {
-    FolderData: GQLFolderData;
-    Folder: GQLFolder;
-    FolderResource: GQLFolderResource;
+    breadcrumbs: Array<GQLBreadcrumb>;
+    parentId?: string;
+    subfolders: Array<GQLFolder>;
+    resources: Array<GQLFolderResource>;
   }
   
   export interface GQLFolderResource {
-    id: number;
+    id: string;
+    resourceId: number;
     resourceType: string;
     path: string;
     created: string;
@@ -999,9 +996,9 @@ declare global {
     addFolder: GQLFolder;
     updateFolder: GQLFolder;
     deleteFolder: string;
-    addFolderResource: string;
+    addFolderResource: GQLFolderResource;
     updateFolderResource: GQLFolderResource;
-    deleteFolderResource: GQLFolderResource;
+    deleteFolderResource: string;
   }
   
   /*********************************
@@ -1127,11 +1124,8 @@ declare global {
     FrontPageResources?: GQLFrontPageResourcesTypeResolver;
     FrontpageSearch?: GQLFrontpageSearchTypeResolver;
     UptimeAlert?: GQLUptimeAlertTypeResolver;
+    Breadcrumb?: GQLBreadcrumbTypeResolver;
     Folder?: GQLFolderTypeResolver;
-    FolderData?: {
-      __resolveType: GQLFolderDataTypeResolver
-    };
-    
     FolderResource?: GQLFolderResourceTypeResolver;
     NewFolder?: GQLNewFolderTypeResolver;
     NewFolderResource?: GQLNewFolderResourceTypeResolver;
@@ -4058,13 +4052,28 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLBreadcrumbTypeResolver<TParent = any> {
+    id?: BreadcrumbToIdResolver<TParent>;
+    name?: BreadcrumbToNameResolver<TParent>;
+  }
+  
+  export interface BreadcrumbToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface BreadcrumbToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLFolderTypeResolver<TParent = any> {
     id?: FolderToIdResolver<TParent>;
     name?: FolderToNameResolver<TParent>;
     status?: FolderToStatusResolver<TParent>;
     isFavorite?: FolderToIsFavoriteResolver<TParent>;
     breadcrumbs?: FolderToBreadcrumbsResolver<TParent>;
-    data?: FolderToDataResolver<TParent>;
+    parentId?: FolderToParentIdResolver<TParent>;
+    subfolders?: FolderToSubfoldersResolver<TParent>;
+    resources?: FolderToResourcesResolver<TParent>;
   }
   
   export interface FolderToIdResolver<TParent = any, TResult = any> {
@@ -4087,15 +4096,21 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FolderToDataResolver<TParent = any, TResult = any> {
+  export interface FolderToParentIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface GQLFolderDataTypeResolver<TParent = any> {
-    (parent: TParent, context: any, info: GraphQLResolveInfo): 'Folder' | 'FolderResource' | Promise<'Folder' | 'FolderResource'>;
+  export interface FolderToSubfoldersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
+  
+  export interface FolderToResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLFolderResourceTypeResolver<TParent = any> {
     id?: FolderResourceToIdResolver<TParent>;
+    resourceId?: FolderResourceToResourceIdResolver<TParent>;
     resourceType?: FolderResourceToResourceTypeResolver<TParent>;
     path?: FolderResourceToPathResolver<TParent>;
     created?: FolderResourceToCreatedResolver<TParent>;
@@ -4103,6 +4118,10 @@ declare global {
   }
   
   export interface FolderResourceToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FolderResourceToResourceIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
@@ -4509,6 +4528,7 @@ declare global {
   }
   
   export interface MutationToAddFolderResourceArgs {
+    resourceId: number;
     folderId: string;
     resourceType: string;
     path: string;
@@ -4527,7 +4547,8 @@ declare global {
   }
   
   export interface MutationToDeleteFolderResourceArgs {
-    id: string;
+    folderId: string;
+    resourceId: string;
   }
   export interface MutationToDeleteFolderResourceResolver<TParent = any, TResult = any> {
     (parent: TParent, args: MutationToDeleteFolderResourceArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;

@@ -22,13 +22,17 @@ export const queryString = (params: QueryParamsType) => {
 export async function fetchFolders(
   { includeResources, includeSubfolders }: QueryToFoldersArgs,
   context: Context,
-): Promise<IFolderData[]> {
-  const params = queryString({ includeResources, includeSubfolders });
+): Promise<IFolder[]> {
+  const params = queryString({
+    'include-resources': includeResources,
+    'include-subfolders': includeSubfolders,
+  });
   const response = await fetch(`/learningpath-api/v1/folders${params}`, {
     ...context,
     shouldUseCache: false,
   });
-  return await resolveJson(response);
+  const resolved: IFolder[] = await resolveJson(response);
+  return resolved;
 }
 
 export async function fetchFolder(
@@ -48,11 +52,15 @@ export async function fetchAllFolderResources(
   context: Context,
 ): Promise<IResource[]> {
   const params = queryString({ size });
-  const response = await fetch(`/learningpath-api/v1/resources${params}`, {
-    ...context,
-    shouldUseCache: false,
-  });
-  return await resolveJson(response);
+  const response = await fetch(
+    `/learningpath-api/v1/folders/resources/${params}`,
+    {
+      ...context,
+      shouldUseCache: false,
+    },
+  );
+  const resolved = await resolveJson(response);
+  return resolved;
 }
 
 export async function postFolder(
@@ -63,7 +71,8 @@ export async function postFolder(
     method: 'POST',
     body: JSON.stringify({ name, parentId, status }),
   });
-  return await resolveJson(response);
+  const folder = await resolveJson(response);
+  return folder;
 }
 
 export async function patchFolder(
@@ -74,29 +83,36 @@ export async function patchFolder(
     method: 'PATCH',
     body: JSON.stringify({ name, status }),
   });
-  return await resolveJson(response);
+  const folder = await resolveJson(response);
+  return folder;
 }
 
 export async function deleteFolder(
   { id }: MutationToDeleteFolderArgs,
   context: Context,
 ): Promise<string> {
-  const response = await fetch(`/learningpath-api/v1/folders/${id}`, context, {
+  await fetch(`/learningpath-api/v1/folders/${id}`, context, {
     method: 'DELETE',
   });
   return id;
 }
 
 export async function postFolderResource(
-  { folderId, resourceType, path, tags }: MutationToAddFolderResourceArgs,
+  {
+    folderId,
+    resourceType,
+    path,
+    tags,
+    resourceId,
+  }: MutationToAddFolderResourceArgs,
   context: Context,
 ): Promise<IResource> {
   const response = await fetch(
-    `/learningpath-api/v1/folders/${folderId}`,
+    `/learningpath-api/v1/folders/${folderId}/resources/`,
     context,
     {
       method: 'POST',
-      body: JSON.stringify({ resourceType, path, tags }),
+      body: JSON.stringify({ resourceType, path, tags, resourceId }),
     },
   );
 
@@ -116,11 +132,15 @@ export async function patchFolderResource(
 }
 
 export async function deleteFolderResource(
-  { id }: MutationToDeleteFolderResourceArgs,
+  { folderId, resourceId }: MutationToDeleteFolderResourceArgs,
   context: Context,
-): Promise<IResource> {
-  const response = await fetch(`/learningpath-api/v1/folders/${id}`, context, {
-    method: 'DELETE',
-  });
-  return await resolveJson(response);
+): Promise<string> {
+  await fetch(
+    `/learningpath-api/v1/folders/${folderId}/resources/${resourceId}`,
+    context,
+    {
+      method: 'DELETE',
+    },
+  );
+  return resourceId;
 }

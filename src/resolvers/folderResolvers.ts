@@ -93,7 +93,7 @@ export const Mutations: Pick<
     _: any,
     params: MutationToDeleteFolderResourceArgs,
     context: ContextWithLoaders,
-  ): Promise<IResource> {
+  ): Promise<string> {
     return deleteFolderResource(params, context);
   },
 };

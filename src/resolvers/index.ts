@@ -50,6 +50,10 @@ import {
   Query as UptimeQuery,
   resolvers as uptimeResolvers,
 } from './uptimeResolvers';
+import {
+  Query as FolderResolvers,
+  Mutations as FolderMutations,
+} from './folderResolvers';
 
 export const resolvers: GQLResolver = {
   Query: {
@@ -64,6 +68,10 @@ export const resolvers: GQLResolver = {
     ...PodcastQuery,
     ...ConceptQuery,
     ...UptimeQuery,
+    ...FolderResolvers,
+  },
+  Mutation: {
+    ...FolderMutations,
   },
   ...articleResolvers,
   ...subjectResolvers,
