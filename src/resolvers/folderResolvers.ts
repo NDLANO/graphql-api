@@ -18,10 +18,18 @@ import {
   postFolder,
   postFolderResource,
 } from '../api/folderApi';
+import {
+  fetchFolderResourceMeta,
+  fetchFolderResourcesMetaData,
+} from '../api/folderResourceMetaApi';
 
 export const Query: Pick<
   GQLQueryTypeResolver,
-  'folders' | 'folder' | 'allFolderResources'
+  | 'folders'
+  | 'folder'
+  | 'allFolderResources'
+  | 'folderResourceMetaSearch'
+  | 'folderResourceMeta'
 > = {
   async folders(
     _: any,
@@ -43,6 +51,20 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<IResource[]> {
     return fetchAllFolderResources(params, context);
+  },
+  async folderResourceMetaSearch(
+    _: any,
+    params: QueryToFolderResourceMetaSearchArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLFolderResourceMeta[]> {
+    return fetchFolderResourcesMetaData(params, context);
+  },
+  async folderResourceMeta(
+    _: any,
+    params: QueryToFolderResourceMetaArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLFolderResourceMeta> {
+    return fetchFolderResourceMeta(params, context);
   },
 };
 export const Mutations: Pick<

@@ -938,6 +938,26 @@ declare global {
     tags: Array<string>;
   }
   
+  export interface GQLFolderResourceMetaSearchInput {
+    id: number;
+    resourceType: string;
+    path: string;
+  }
+  
+  export interface GQLFolderResourceResourceType {
+    id: string;
+    name: string;
+  }
+  
+  export interface GQLFolderResourceMeta {
+    id: number;
+    type: string;
+    resourceTypes: Array<GQLFolderResourceResourceType>;
+    metaImage?: GQLMetaImage;
+    title: string;
+    description: string;
+  }
+  
   export interface GQLNewFolder {
     name: string;
     parentId?: string;
@@ -988,6 +1008,8 @@ declare global {
     podcastSeriesSearch?: GQLPodcastSeriesSearch;
     alerts?: Array<GQLUptimeAlert | null>;
     folders: Array<GQLFolder>;
+    folderResourceMeta: GQLFolderResourceMeta;
+    folderResourceMetaSearch: Array<GQLFolderResourceMeta>;
     folder: GQLFolder;
     allFolderResources: Array<GQLFolderResource>;
   }
@@ -1127,6 +1149,8 @@ declare global {
     Breadcrumb?: GQLBreadcrumbTypeResolver;
     Folder?: GQLFolderTypeResolver;
     FolderResource?: GQLFolderResourceTypeResolver;
+    FolderResourceResourceType?: GQLFolderResourceResourceTypeTypeResolver;
+    FolderResourceMeta?: GQLFolderResourceMetaTypeResolver;
     NewFolder?: GQLNewFolderTypeResolver;
     NewFolderResource?: GQLNewFolderResourceTypeResolver;
     UpdatedFolder?: GQLUpdatedFolderTypeResolver;
@@ -4141,6 +4165,52 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLFolderResourceResourceTypeTypeResolver<TParent = any> {
+    id?: FolderResourceResourceTypeToIdResolver<TParent>;
+    name?: FolderResourceResourceTypeToNameResolver<TParent>;
+  }
+  
+  export interface FolderResourceResourceTypeToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FolderResourceResourceTypeToNameResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLFolderResourceMetaTypeResolver<TParent = any> {
+    id?: FolderResourceMetaToIdResolver<TParent>;
+    type?: FolderResourceMetaToTypeResolver<TParent>;
+    resourceTypes?: FolderResourceMetaToResourceTypesResolver<TParent>;
+    metaImage?: FolderResourceMetaToMetaImageResolver<TParent>;
+    title?: FolderResourceMetaToTitleResolver<TParent>;
+    description?: FolderResourceMetaToDescriptionResolver<TParent>;
+  }
+  
+  export interface FolderResourceMetaToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FolderResourceMetaToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FolderResourceMetaToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FolderResourceMetaToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FolderResourceMetaToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface FolderResourceMetaToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLNewFolderTypeResolver<TParent = any> {
     name?: NewFolderToNameResolver<TParent>;
     parentId?: NewFolderToParentIdResolver<TParent>;
@@ -4227,6 +4297,8 @@ declare global {
     podcastSeriesSearch?: QueryToPodcastSeriesSearchResolver<TParent>;
     alerts?: QueryToAlertsResolver<TParent>;
     folders?: QueryToFoldersResolver<TParent>;
+    folderResourceMeta?: QueryToFolderResourceMetaResolver<TParent>;
+    folderResourceMetaSearch?: QueryToFolderResourceMetaSearchResolver<TParent>;
     folder?: QueryToFolderResolver<TParent>;
     allFolderResources?: QueryToAllFolderResourcesResolver<TParent>;
   }
@@ -4475,6 +4547,20 @@ declare global {
   }
   export interface QueryToFoldersResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToFoldersArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToFolderResourceMetaArgs {
+    resource: GQLFolderResourceMetaSearchInput;
+  }
+  export interface QueryToFolderResourceMetaResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToFolderResourceMetaArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface QueryToFolderResourceMetaSearchArgs {
+    resources: Array<GQLFolderResourceMetaSearchInput>;
+  }
+  export interface QueryToFolderResourceMetaSearchResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToFolderResourceMetaSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
   export interface QueryToFolderArgs {

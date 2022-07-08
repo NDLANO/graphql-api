@@ -880,6 +880,26 @@ export const typeDefs = gql`
     tags: [String!]!
   }
 
+  input FolderResourceMetaSearchInput {
+    id: Int!
+    resourceType: String!
+    path: String!
+  }
+
+  type FolderResourceResourceType {
+    id: String!
+    name: String!
+  }
+
+  type FolderResourceMeta {
+    id: Int!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
   type NewFolder {
     name: String!
     parentId: String
@@ -996,6 +1016,12 @@ export const typeDefs = gql`
     podcastSeriesSearch(page: Int!, pageSize: Int!): PodcastSeriesSearch
     alerts: [UptimeAlert]
     folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
+    folderResourceMeta(
+      resource: FolderResourceMetaSearchInput!
+    ): FolderResourceMeta!
+    folderResourceMetaSearch(
+      resources: [FolderResourceMetaSearchInput!]!
+    ): [FolderResourceMeta!]!
     folder(
       id: Int!
       includeSubfolders: Boolean
