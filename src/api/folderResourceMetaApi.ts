@@ -37,7 +37,7 @@ const fetchAndTransformArticleMeta = async (
   if (!resources?.length) return [];
   const res = await searchWithoutPagination(
     {
-      //@ts-ignore ids are not parameterized correctly
+      // @ts-ignore ids are not parameterized correctly
       ids: resources.map(r => r.id).join(','),
       resourceTypes: resourceTypes.join(','),
     },
