@@ -855,6 +855,72 @@ export const typeDefs = gql`
     closable: Boolean!
   }
 
+  type Breadcrumb {
+    id: String!
+    name: String!
+  }
+
+  type Folder {
+    id: String!
+    name: String!
+    status: String!
+    isFavorite: Boolean!
+    breadcrumbs: [Breadcrumb!]!
+    parentId: String
+    subfolders: [Folder!]!
+    resources: [FolderResource!]!
+  }
+
+  type FolderResource {
+    id: String!
+    resourceId: Int!
+    resourceType: String!
+    path: String!
+    created: String!
+    tags: [String!]!
+  }
+
+  input FolderResourceMetaSearchInput {
+    id: Int!
+    resourceType: String!
+    path: String!
+  }
+
+  type FolderResourceResourceType {
+    id: String!
+    name: String!
+  }
+
+  type FolderResourceMeta {
+    id: Int!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type NewFolder {
+    name: String!
+    parentId: String
+    status: String
+  }
+
+  type NewFolderResource {
+    resourceType: String!
+    path: String!
+    tags: [String!]
+  }
+
+  type UpdatedFolder {
+    name: String
+    status: String
+  }
+
+  type UpdatedFolderResource {
+    tags: [String!]
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -949,6 +1015,34 @@ export const typeDefs = gql`
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
     podcastSeriesSearch(page: Int!, pageSize: Int!): PodcastSeriesSearch
     alerts: [UptimeAlert]
+    folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
+    folderResourceMeta(
+      resource: FolderResourceMetaSearchInput!
+    ): FolderResourceMeta!
+    folderResourceMetaSearch(
+      resources: [FolderResourceMetaSearchInput!]!
+    ): [FolderResourceMeta!]!
+    folder(
+      id: Int!
+      includeSubfolders: Boolean
+      includeResources: Boolean
+    ): Folder!
+    allFolderResources(size: Int): [FolderResource!]!
+  }
+
+  type Mutation {
+    addFolder(name: String!, parentId: String, status: String): Folder!
+    updateFolder(id: String!, name: String, status: String): Folder!
+    deleteFolder(id: String!): String!
+    addFolderResource(
+      resourceId: Int!
+      folderId: String!
+      resourceType: String!
+      path: String!
+      tags: [String!]
+    ): FolderResource!
+    updateFolderResource(id: String!, tags: [String!]): FolderResource!
+    deleteFolderResource(folderId: String!, resourceId: String!): String!
   }
 `;
 

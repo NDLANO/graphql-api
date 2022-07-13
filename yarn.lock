@@ -119,10 +119,10 @@
   resolved "https://registry.yarnpkg.com/@ndla/types-image-api/-/types-image-api-0.0.4.tgz#f5efe62b8cb97e857d07e4f967d246d71d1335c1"
   integrity sha512-VTdQww63erpGg4tIysNxv1mvbIVMC6/mG5dEqL4xKJPmjgJGuGAoO2iJuBFOCR0m6NXAG7v9bk/qn1/pwPCEsw==
 
-"@ndla/types-learningpath-api@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.2.tgz#6ae65f047ba8c7af32dd01ce800ec7254eee4e0e"
-  integrity sha512-pDBz2zL6e5iLUhI5muxxkHCk/ZF/Su+RHvuFkm21AlPAalKCyrssrJA9EiUwLQKanoTbOo0DinyVsaYAlrmsHA==
+"@ndla/types-learningpath-api@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.10.tgz#84b869659629dd96d03b63f97ba8ca3d9b913d69"
+  integrity sha512-w6ZVWseWDXPKVxx/0cod1vv9fM+bQcvg8dQdAQhu5w0pUhb4UGCS3zp2MHVb0q8gAZwAO4BLmRXKiSRnwYuGww==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
