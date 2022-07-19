@@ -123,10 +123,14 @@ export async function patchFolderResource(
   { id, tags }: MutationToUpdateFolderResourceArgs,
   context: Context,
 ): Promise<IResource> {
-  const response = await fetch(`/learningpath-api/v1/folders/${id}`, context, {
-    method: 'PATCH',
-    body: JSON.stringify({ tags }),
-  });
+  const response = await fetch(
+    `/learningpath-api/v1/folders/resources/${id}`,
+    context,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({ tags }),
+    },
+  );
 
   return await resolveJson(response);
 }
