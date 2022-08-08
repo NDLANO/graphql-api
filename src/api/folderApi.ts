@@ -156,7 +156,6 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
     });
     return true;
   } catch (e) {
-    console.log(e);
     return false;
   }
 }
