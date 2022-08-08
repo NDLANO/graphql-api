@@ -10,6 +10,7 @@ import { IFolderData, IResource } from '@ndla/types-learningpath-api';
 import {
   deleteFolder,
   deleteFolderResource,
+  deletePersonalData,
   fetchAllFolderResources,
   fetchFolder,
   fetchFolders,
@@ -75,6 +76,7 @@ export const Mutations: Pick<
   | 'addFolderResource'
   | 'updateFolderResource'
   | 'deleteFolderResource'
+  | 'deletePersonalData'
 > = {
   async addFolder(
     _: any,
@@ -117,5 +119,8 @@ export const Mutations: Pick<
     context: ContextWithLoaders,
   ): Promise<string> {
     return deleteFolderResource(params, context);
+  },
+  async deletePersonalData(_: any, __: unknown, context: ContextWithLoaders) {
+    return deletePersonalData(context);
   },
 };

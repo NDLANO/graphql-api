@@ -148,3 +148,15 @@ export async function deleteFolderResource(
   );
   return resourceId;
 }
+
+export async function deletePersonalData(context: Context): Promise<boolean> {
+  try {
+    await fetch('/learningpath-api/v1/users/delete-personal-data/', context, {
+      method: 'DELETE',
+    });
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
