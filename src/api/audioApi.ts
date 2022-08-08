@@ -16,7 +16,10 @@ export async function fetchPodcast(
   context: Context,
   podcastId: number,
 ): Promise<IAudioMetaInformation | null> {
-  const response = await fetch(`/audio-api/v1/audio/${podcastId}`, context);
+  const response = await fetch(
+    `/audio-api/v1/audio/${podcastId}?language=${context.language}`,
+    context,
+  );
   try {
     const audio = await resolveJson(response);
     if (audio.audioType !== 'podcast') {
@@ -34,7 +37,7 @@ export async function fetchPodcastsPage(
   page: number,
 ): Promise<IAudioSummarySearchResult> {
   const response = await fetch(
-    `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast`,
+    `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast&language=${context.language}`,
     context,
   );
   return await resolveJson(response);
@@ -44,7 +47,10 @@ export async function fetchPodcastSeries(
   context: Context,
   podcastId: number,
 ): Promise<IAudioMetaInformation> {
-  const response = await fetch(`/audio-api/v1/series/${podcastId}`, context);
+  const response = await fetch(
+    `/audio-api/v1/series/${podcastId}?language=${context.language}`,
+    context,
+  );
   return await resolveJson(response);
 }
 
@@ -54,7 +60,7 @@ export async function fetchPodcastSeriesPage(
   page: number,
 ): Promise<IAudioSummarySearchResult> {
   const response = await fetch(
-    `/audio-api/v1/series/?page-size=${pageSize}&page=${page}`,
+    `/audio-api/v1/series/?page-size=${pageSize}&page=${page}&language=${context.language}`,
     context,
   );
   return await resolveJson(response);
