@@ -1043,6 +1043,7 @@ export const typeDefs = gql`
     ): FolderResource!
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
+    deletePersonalData: Boolean!
   }
 `;
 
