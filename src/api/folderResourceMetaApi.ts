@@ -101,7 +101,6 @@ export const fetchFolderResourceMeta = async (
     );
     return res[0];
   } else {
-    console.log('we should go here');
     const res = await fetchAndTransformMultidisciplinaryTopicMeta(
       [resource],
       context,
