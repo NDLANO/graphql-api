@@ -35,7 +35,7 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
   context: ContextWithLoaders,
   type: MetaType,
 ) => {
-  if (!resources.length) return [];
+  if (!resources?.length) return [];
   const res = await searchWithoutPagination(
     {
       // @ts-ignore ids are not parameterized correctly
