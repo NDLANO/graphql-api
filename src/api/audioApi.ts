@@ -35,9 +35,10 @@ export async function fetchPodcastsPage(
   context: Context,
   pageSize: number,
   page: number,
+  fallback: boolean,
 ): Promise<IAudioSummarySearchResult> {
   const response = await fetch(
-    `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast&language=${context.language}`,
+    `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast&language=${context.language}&fallback=${fallback}`,
     context,
   );
   return await resolveJson(response);
@@ -58,9 +59,10 @@ export async function fetchPodcastSeriesPage(
   context: Context,
   pageSize: number,
   page: number,
+  fallback: boolean,
 ): Promise<IAudioSummarySearchResult> {
   const response = await fetch(
-    `/audio-api/v1/series/?page-size=${pageSize}&page=${page}&language=${context.language}`,
+    `/audio-api/v1/series/?page-size=${pageSize}&page=${page}&language=${context.language}&fallback=${fallback}`,
     context,
   );
   return await resolveJson(response);

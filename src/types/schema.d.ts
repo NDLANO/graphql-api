@@ -4518,6 +4518,7 @@ declare global {
   export interface QueryToPodcastSearchArgs {
     page: number;
     pageSize: number;
+    fallback?: boolean;
   }
   export interface QueryToPodcastSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
@@ -4533,6 +4534,7 @@ declare global {
   export interface QueryToPodcastSeriesSearchArgs {
     page: number;
     pageSize: number;
+    fallback?: boolean;
   }
   export interface QueryToPodcastSeriesSearchResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToPodcastSeriesSearchArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
