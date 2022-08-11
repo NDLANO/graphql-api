@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 /**
  * Copyright (c) 2019-present, NDLA.

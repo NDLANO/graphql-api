@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "build": "yarn build-ts",
-    "build-ts": "tsc",
+    "build-ts": "tsc && tsc-strict",
     "ncc": "ncc build src/server.ts -o build",
     "check-all": "yarn lint && yarn build-ts && yarn test",
     "lint": "yarn lint-prettier && yarn lint-ts",
@@ -45,11 +45,11 @@
     "query-string": "^6.2.0"
   },
   "devDependencies": {
-    "@ndla/types-audio-api": "0.0.10",
     "@ndla/types-article-api": "^0.0.6",
-    "@ndla/types-image-api": "^0.0.4",
+    "@ndla/types-audio-api": "0.0.10",
     "@ndla/types-concept-api": "^0.0.10",
     "@ndla/types-frontpage-api": "^0.0.3",
+    "@ndla/types-image-api": "^0.0.4",
     "@ndla/types-learningpath-api": "^0.0.10",
     "@types/bunyan": "^1.8.5",
     "@types/compression": "^1.7.2",
@@ -79,6 +79,7 @@
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.16.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "typescript-strict-plugin": "^2.0.1"
   }
 }
