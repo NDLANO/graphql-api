@@ -32,7 +32,7 @@ export const Query = {
     { pageSize, page, fallback }: QueryToPodcastSearchArgs,
     context: ContextWithLoaders,
   ): Promise<IAudioSummarySearchResult> {
-    return fetchPodcastsPage(context, pageSize, page, fallback);
+    return fetchPodcastsPage(context, pageSize, page, fallback ?? false);
   },
   async podcastSeries(
     _: any,
@@ -46,7 +46,7 @@ export const Query = {
     { pageSize, page, fallback }: QueryToPodcastSeriesSearchArgs,
     context: ContextWithLoaders,
   ): Promise<IAudioSummarySearchResult> {
-    return fetchPodcastSeriesPage(context, pageSize, page, fallback);
+    return fetchPodcastSeriesPage(context, pageSize, page, fallback ?? false);
   },
 };
 
