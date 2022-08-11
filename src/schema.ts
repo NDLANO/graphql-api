@@ -1011,9 +1011,13 @@ export const typeDefs = gql`
       relevance: String
     ): SearchWithoutPagination
     podcast(id: Int!): AudioWithSeries
-    podcastSearch(page: Int!, pageSize: Int!): AudioSearch
+    podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
-    podcastSeriesSearch(page: Int!, pageSize: Int!): PodcastSeriesSearch
+    podcastSeriesSearch(
+      page: Int!
+      pageSize: Int!
+      fallback: Boolean
+    ): PodcastSeriesSearch
     alerts: [UptimeAlert]
     folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
     folderResourceMeta(
