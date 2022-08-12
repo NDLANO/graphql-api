@@ -20,6 +20,8 @@ const articleResourceTypes = [
 
 const learningpathResourceTypes = ['urn:resourcetype:learningPath'];
 
+type MetaType = 'article' | 'learningpath' | 'multidisciplinary';
+
 const findResourceTypes = (
   result: GQLSearchResult,
   resources: GQLFolderResourceMetaSearchInput[],
@@ -29,10 +31,34 @@ const findResourceTypes = (
   return context?.resourceTypes ?? [];
 };
 
+const fetchAndTransformMultidisciplinaryTopicMeta = async (
+  resources: GQLFolderResourceMetaSearchInput[] | undefined,
+  context: ContextWithLoaders,
+  type: MetaType,
+) => {
+  if (!resources?.length) return [];
+  const res = await searchWithoutPagination(
+    {
+      // @ts-ignore ids are not parameterized correctly
+      ids: resources.map(r => r.id).join(','),
+      subjects: 'urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7',
+    },
+    context,
+  );
+  return res.results.map(r => ({
+    id: r.id,
+    title: r.title,
+    type,
+    description: r.metaDescription,
+    metaImage: r.metaImage,
+    resourceTypes: findResourceTypes(r, resources),
+  }));
+};
+
 const fetchAndTransformArticleMeta = async (
   resources: GQLFolderResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
-  type: 'article' | 'learningpath',
+  type: MetaType,
   resourceTypes: string[],
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
@@ -67,12 +93,19 @@ export const fetchFolderResourceMeta = async (
       articleResourceTypes,
     );
     return res[0];
-  } else {
+  } else if (resource.resourceType === 'learningpath') {
     const res = await fetchAndTransformArticleMeta(
       [resource],
       context,
       'learningpath',
       learningpathResourceTypes,
+    );
+    return res[0];
+  } else {
+    const res = await fetchAndTransformMultidisciplinaryTopicMeta(
+      [resource],
+      context,
+      'multidisciplinary',
     );
     return res[0];
   }
@@ -82,7 +115,10 @@ export const fetchFolderResourcesMetaData = async (
   { resources }: QueryToFolderResourceMetaSearchArgs,
   context: ContextWithLoaders,
 ): Promise<GQLFolderResourceMeta[]> => {
-  const { article, learningpath } = groupBy(resources, r => r.resourceType);
+  const { article, learningpath, multidisciplinary } = groupBy(
+    resources,
+    r => r.resourceType,
+  );
   const articleMeta = fetchAndTransformArticleMeta(
     article,
     context,
@@ -96,6 +132,16 @@ export const fetchFolderResourcesMetaData = async (
     learningpathResourceTypes,
   );
 
-  const results = await Promise.all([articleMeta, learningpathMeta]);
+  const multidisciplinaryMeta = fetchAndTransformMultidisciplinaryTopicMeta(
+    multidisciplinary,
+    context,
+    'multidisciplinary',
+  );
+
+  const results = await Promise.all([
+    articleMeta,
+    learningpathMeta,
+    multidisciplinaryMeta,
+  ]);
   return results.flat();
 };
