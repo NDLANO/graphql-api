@@ -426,6 +426,14 @@ declare global {
     copyText?: string;
   }
   
+  export interface GQLPodcastLicense {
+    title: string;
+    src: string;
+    copyright: GQLCopyright;
+    copyText?: string;
+    description?: string;
+  }
+  
   export interface GQLBrightcoveIframe {
     src: string;
     height: number;
@@ -468,6 +476,7 @@ declare global {
     footnotes?: Array<GQLFootNote>;
     images?: Array<GQLImageLicense>;
     audios?: Array<GQLAudioLicense>;
+    podcasts?: Array<GQLPodcastLicense>;
     brightcoves?: Array<GQLBrightcoveLicense>;
     h5ps?: Array<GQLH5pLicense>;
     concepts?: Array<GQLConceptLicense>;
@@ -1087,6 +1096,7 @@ declare global {
     ImageMetaInformation?: GQLImageMetaInformationTypeResolver;
     ImageLicense?: GQLImageLicenseTypeResolver;
     AudioLicense?: GQLAudioLicenseTypeResolver;
+    PodcastLicense?: GQLPodcastLicenseTypeResolver;
     BrightcoveIframe?: GQLBrightcoveIframeTypeResolver;
     BrightcoveLicense?: GQLBrightcoveLicenseTypeResolver;
     H5pLicense?: GQLH5pLicenseTypeResolver;
@@ -2390,6 +2400,34 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLPodcastLicenseTypeResolver<TParent = any> {
+    title?: PodcastLicenseToTitleResolver<TParent>;
+    src?: PodcastLicenseToSrcResolver<TParent>;
+    copyright?: PodcastLicenseToCopyrightResolver<TParent>;
+    copyText?: PodcastLicenseToCopyTextResolver<TParent>;
+    description?: PodcastLicenseToDescriptionResolver<TParent>;
+  }
+  
+  export interface PodcastLicenseToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastLicenseToSrcResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastLicenseToCopyrightResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastLicenseToCopyTextResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface PodcastLicenseToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLBrightcoveIframeTypeResolver<TParent = any> {
     src?: BrightcoveIframeToSrcResolver<TParent>;
     height?: BrightcoveIframeToHeightResolver<TParent>;
@@ -2524,6 +2562,7 @@ declare global {
     footnotes?: ArticleMetaDataToFootnotesResolver<TParent>;
     images?: ArticleMetaDataToImagesResolver<TParent>;
     audios?: ArticleMetaDataToAudiosResolver<TParent>;
+    podcasts?: ArticleMetaDataToPodcastsResolver<TParent>;
     brightcoves?: ArticleMetaDataToBrightcovesResolver<TParent>;
     h5ps?: ArticleMetaDataToH5psResolver<TParent>;
     concepts?: ArticleMetaDataToConceptsResolver<TParent>;
@@ -2539,6 +2578,10 @@ declare global {
   }
   
   export interface ArticleMetaDataToAudiosResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface ArticleMetaDataToPodcastsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
