@@ -864,7 +864,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     status: String!
-    isFavorite: Boolean!
     breadcrumbs: [Breadcrumb!]!
     parentId: String
     subfolders: [Folder!]!
