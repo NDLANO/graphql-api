@@ -922,7 +922,6 @@ declare global {
     id: string;
     name: string;
     status: string;
-    isFavorite: boolean;
     breadcrumbs: Array<GQLBreadcrumb>;
     parentId?: string;
     subfolders: Array<GQLFolder>;
@@ -4094,7 +4093,6 @@ declare global {
     id?: FolderToIdResolver<TParent>;
     name?: FolderToNameResolver<TParent>;
     status?: FolderToStatusResolver<TParent>;
-    isFavorite?: FolderToIsFavoriteResolver<TParent>;
     breadcrumbs?: FolderToBreadcrumbsResolver<TParent>;
     parentId?: FolderToParentIdResolver<TParent>;
     subfolders?: FolderToSubfoldersResolver<TParent>;
@@ -4110,10 +4108,6 @@ declare global {
   }
   
   export interface FolderToStatusResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
-  }
-  
-  export interface FolderToIsFavoriteResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
