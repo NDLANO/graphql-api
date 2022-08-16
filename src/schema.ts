@@ -379,6 +379,14 @@ export const typeDefs = gql`
     copyText: String
   }
 
+  type PodcastLicense {
+    title: String!
+    src: String!
+    copyright: Copyright!
+    copyText: String
+    description: String
+  }
+
   type BrightcoveIframe {
     src: String!
     height: Int!
@@ -421,6 +429,7 @@ export const typeDefs = gql`
     footnotes: [FootNote!]
     images: [ImageLicense!]
     audios: [AudioLicense!]
+    podcasts: [PodcastLicense!]
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
