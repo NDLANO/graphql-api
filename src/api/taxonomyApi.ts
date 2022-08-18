@@ -294,6 +294,15 @@ export async function fetchVersion(
     `/${context.taxonomyUrl}/v1/versions?hash=${hash}`,
     { ...context, versionHash: 'default' },
   );
+  if (response.status === 404) {
+    return {
+      id: '',
+      versionType: 'BETA',
+      name: 'Draft',
+      hash: 'default',
+      locked: false,
+    };
+  }
   const json = await resolveJson(response);
   return json?.[0];
 }
