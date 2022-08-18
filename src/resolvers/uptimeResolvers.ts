@@ -27,7 +27,7 @@ export const Query = {
     __: any,
     context: ContextWithLoaders,
   ): Promise<GQLUptimeAlert[]> {
-    if (context.versionHash && context.versionHash !== 'default') {
+    if (context.versionHash) {
       const [version, uptimeIssues] = await Promise.all([
         fetchVersion(context.versionHash, context),
         fetchUptimeIssues(context),
