@@ -18,6 +18,7 @@ interface GroupSearchJSON {
 }
 
 interface ContentTypeJSON {
+  id: number;
   paths: [string];
   url: string;
   title: {
@@ -31,6 +32,7 @@ interface ContentTypeJSON {
     alt: string;
   };
   contexts: GQLSearchContext;
+  learningResourceType: string;
 }
 
 interface SearchResultContexts {
@@ -102,9 +104,15 @@ export async function groupSearch(
               p => p.split('/')[1] === subjects[0].replace('urn:', ''),
             )
           : contentTypeResult.paths?.[0];
+      const isLearningpath =
+        contentTypeResult.learningResourceType === 'learningpath';
       return {
         ...contentTypeResult,
-        path: path || contentTypeResult.url,
+        path:
+          path ||
+          (isLearningpath
+            ? `/learningpaths/${contentTypeResult.id}`
+            : `/article/${contentTypeResult.id}`),
         name: contentTypeResult.title.title,
         ingress: contentTypeResult.metaDescription.metaDescription,
         contexts: contentTypeResult.contexts,
