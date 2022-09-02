@@ -7,7 +7,7 @@
  *
  */
 
-import { IArticleSummaryV2, ISearchResultV2 } from '@ndla/types-article-api';
+import { IArticleV2 } from '@ndla/types-article-api';
 import { localConverter, ndlaUrl } from '../config';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
@@ -170,15 +170,11 @@ export async function fetchArticles(
 export async function fetchSimpleArticle(
   articleUrn: string,
   context: Context,
-): Promise<IArticleSummaryV2 | undefined> {
+): Promise<IArticleV2 | undefined> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
-    `/article-api/v2/articles/ids/?ids=${articleId}&language=${context.language}&license=all&fallback=true`,
+    `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,
     context,
   );
-  const json: ISearchResultV2 = await resolveJson(response);
-  const article: IArticleSummaryV2 | undefined = json.results.find(item => {
-    return item.id.toString() === articleId;
-  });
-  return article;
+  return await resolveJson(response);
 }
