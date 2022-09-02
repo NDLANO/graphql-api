@@ -122,9 +122,9 @@ export async function fetchArticlesPage(
   page: number,
 ) {
   return fetch(
-    `/article-api/v2/articles/?ids=${articleIds.join(',')}&language=${
+    `/article-api/v2/articles/ids/?ids=${articleIds.join(',')}&language=${
       context.language
-    }&pageSize=${pageSize}&page=${page}&license=all&fallback=true`,
+    }&page-size=${pageSize}&page=${page}&license=all&fallback=true`,
     context,
   ).then(res => res.json());
 }
@@ -135,17 +135,16 @@ export async function fetchArticles(
 ): Promise<GQLMeta[]> {
   const pageSize = 100;
   const ids = articleIds.filter(id => id && id !== 'undefined');
-  const firstPage = await fetchArticlesPage(ids, context, pageSize, 1);
-  const numberOfPages = Math.ceil(firstPage.totalCount / firstPage.pageSize);
+  const numberOfPages = Math.ceil(ids.length / pageSize);
 
-  const requests = [firstPage];
-  if (numberOfPages > 1) {
-    for (let i = 2; i <= numberOfPages; i += 1) {
+  const requests = [];
+  if (numberOfPages) {
+    for (let i = 0; i <= numberOfPages; i += 1) {
       requests.push(fetchArticlesPage(ids, context, pageSize, i));
     }
   }
   const results = await Promise.all(requests);
-  const articles = results.reduce((acc, res) => [...acc, ...res.results], []);
+  const articles = results.reduce((acc, res) => [...acc, ...res], []);
 
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
@@ -174,7 +173,7 @@ export async function fetchSimpleArticle(
 ): Promise<IArticleSummaryV2 | undefined> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
-    `/article-api/v2/articles/?ids=${articleId}&language=${context.language}&license=all&fallback=true`,
+    `/article-api/v2/articles/ids/?ids=${articleId}&language=${context.language}&license=all&fallback=true`,
     context,
   );
   const json: ISearchResultV2 = await resolveJson(response);
