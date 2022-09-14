@@ -1,5 +1,4 @@
 // @ts-strict-ignore
-import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -11,6 +10,7 @@ import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { searchConcepts } from './conceptApi';
+import { expandResourcesFromAllContexts } from '../utils/apiHelpers';
 
 interface GroupSearchJSON {
   results: [ContentTypeJSON];
