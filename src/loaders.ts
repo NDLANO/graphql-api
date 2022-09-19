@@ -100,11 +100,12 @@ export function subjectLoader(
   return new DataLoader(
     async inputs => {
       return Promise.all(
-        inputs
-          .filter((input): input is { id: string } => !!input.id)
-          .map(input => {
-            return fetchSubjectTyped(context, input.id);
-          }),
+        inputs.map(input => {
+          if (!input.id) {
+            throw Error('Tried to get subject with bad or empty id');
+          }
+          return fetchSubjectTyped(context, input.id);
+        }),
       );
     },
     { cacheKeyFn: key => JSON.stringify(key) },
