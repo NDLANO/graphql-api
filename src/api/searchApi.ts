@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -219,8 +218,8 @@ const transformResult = (result: SearchResultJson) => ({
   metaImage: result.metaImage,
 });
 
-const fixContext = (contexts: SearchResultContexts[]) =>
-  contexts.map(context => ({
+const fixContext = (contexts: SearchResultContexts[] | undefined) =>
+  contexts?.map(context => ({
     ...context,
     path: context.path.includes('/resource/')
       ? `${context.path}/`
