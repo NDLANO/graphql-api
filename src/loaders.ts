@@ -100,11 +100,11 @@ export function subjectLoader(
   return new DataLoader(
     async inputs => {
       return Promise.all(
-        inputs.map(input => {
-          if (input.id) {
+        inputs
+          .filter((input): input is { id: string } => !!input.id)
+          .map(input => {
             return fetchSubjectTyped(context, input.id);
-          }
-        }),
+          }),
       );
     },
     { cacheKeyFn: key => JSON.stringify(key) },

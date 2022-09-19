@@ -7,10 +7,10 @@
  *
  */
 
-import { fetch, resolveJson } from '../utils/apiHelpers';
 import { Response } from 'node-fetch';
-import { findPrimaryPath } from '../utils/articleHelpers';
 import qs from 'query-string';
+import { fetch, resolveJson } from '../utils/apiHelpers';
+import { findPrimaryPath } from '../utils/articleHelpers';
 
 interface Topic {
   id: string;

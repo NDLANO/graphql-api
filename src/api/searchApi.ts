@@ -1,5 +1,3 @@
-// @ts-strict-ignore
-import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -11,6 +9,7 @@ import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { searchConcepts } from './conceptApi';
+import { expandResourcesFromAllContexts } from '../utils/apiHelpers';
 
 interface GroupSearchJSON {
   results: [ContentTypeJSON];
@@ -219,8 +218,8 @@ const transformResult = (result: SearchResultJson) => ({
   metaImage: result.metaImage,
 });
 
-const fixContext = (contexts: SearchResultContexts[]) =>
-  contexts.map(context => ({
+const fixContext = (contexts: SearchResultContexts[] | undefined) =>
+  contexts?.map(context => ({
     ...context,
     path: context.path.includes('/resource/')
       ? `${context.path}/`
