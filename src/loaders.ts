@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2018-present, NDLA.
  *
@@ -46,7 +45,7 @@ interface LK20Curriculum {
 
 export function lk20CurriculumLoader(
   context: Context,
-): DataLoader<LK20Curriculum, GQLReference> {
+): DataLoader<LK20Curriculum, GQLReference | undefined> {
   return new DataLoader(async ids => {
     const uniqueCurriculumIds = Array.from(new Set(ids));
     const responses = await Promise.all(
@@ -62,7 +61,7 @@ export function lk20CurriculumLoader(
 
 export function lk06CurriculumLoader(
   context: Context,
-): DataLoader<string, GQLReference> {
+): DataLoader<string, GQLReference | undefined> {
   return new DataLoader(async curriculumIds => {
     const uniqueCurriculumIds = Array.from(new Set(curriculumIds));
     const responses = await Promise.all(
@@ -100,11 +99,12 @@ export function subjectLoader(
   return new DataLoader(
     async inputs => {
       return Promise.all(
-        inputs
-          .filter((input): input is { id: string } => !!input.id)
-          .map(input => {
-            return fetchSubjectTyped(context, input.id);
-          }),
+        inputs.map(input => {
+          if (!input.id) {
+            throw Error('Tried to get subject with bad or empty id');
+          }
+          return fetchSubjectTyped(context, input.id);
+        }),
       );
     },
     { cacheKeyFn: key => JSON.stringify(key) },
@@ -155,10 +155,13 @@ export function resourceTypesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async resourceTypeIds => {
     const resourceTypes = await fetchResourceTypes(context);
 
-    const allResourceTypes = resourceTypes.reduce((acc, resourceType) => {
-      const subtypes = resourceType.subtypes || [];
-      return [...acc, resourceType, ...subtypes];
-    }, []);
+    const allResourceTypes = resourceTypes.reduce(
+      (acc: any[], resourceType) => {
+        const subtypes = resourceType.subtypes || [];
+        return [...acc, resourceType, ...subtypes];
+      },
+      [],
+    );
 
     return resourceTypeIds.map(resourceTypeId => {
       return allResourceTypes.find(
