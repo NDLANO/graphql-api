@@ -18,6 +18,8 @@ import {
   patchFolderResource,
   postFolder,
   postFolderResource,
+  sortFolders,
+  sortResources,
 } from '../api/folderApi';
 import {
   fetchFolderResourceMeta,
@@ -77,6 +79,8 @@ export const Mutations: Pick<
   | 'updateFolderResource'
   | 'deleteFolderResource'
   | 'deletePersonalData'
+  | 'sortFolders'
+  | 'sortResources'
 > = {
   async addFolder(
     _: any,
@@ -122,5 +126,19 @@ export const Mutations: Pick<
   },
   async deletePersonalData(_: any, __: unknown, context: ContextWithLoaders) {
     return deletePersonalData(context);
+  },
+  async sortFolders(
+    _: any,
+    params: MutationToSortFoldersArgs,
+    context: ContextWithLoaders,
+  ) {
+    return sortFolders(params, context);
+  },
+  async sortResources(
+    _: any,
+    params: MutationToSortResourcesArgs,
+    context: ContextWithLoaders,
+  ) {
+    return sortResources(params, context);
   },
 };

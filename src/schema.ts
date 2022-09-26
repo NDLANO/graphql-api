@@ -1056,6 +1056,8 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
+    sortFolders(parentId: String, sortedIds: [String!]!): Boolean!
+    sortResources(parentId: String!, sortedIds: [String!]!): Boolean!
   }
 `;
 
