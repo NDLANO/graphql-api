@@ -1030,7 +1030,7 @@ export const typeDefs = gql`
     folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
     folderResourceMeta(
       resource: FolderResourceMetaSearchInput!
-    ): FolderResourceMeta!
+    ): FolderResourceMeta
     folderResourceMetaSearch(
       resources: [FolderResourceMetaSearchInput!]!
     ): [FolderResourceMeta!]!
