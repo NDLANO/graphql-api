@@ -1016,7 +1016,7 @@ declare global {
     podcastSeriesSearch?: GQLPodcastSeriesSearch;
     alerts?: Array<GQLUptimeAlert | null>;
     folders: Array<GQLFolder>;
-    folderResourceMeta: GQLFolderResourceMeta;
+    folderResourceMeta?: GQLFolderResourceMeta;
     folderResourceMetaSearch: Array<GQLFolderResourceMeta>;
     folder: GQLFolder;
     allFolderResources: Array<GQLFolderResource>;
