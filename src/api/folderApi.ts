@@ -167,7 +167,7 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
 export async function sortFolders(
   { parentId, sortedIds }: MutationToSortFoldersArgs,
   context: Context,
-): Promise<boolean> {
+): Promise<GQLSortResult> {
   const query = queryString({
     'folder-id': parentId,
   });
@@ -181,12 +181,13 @@ export async function sortFolders(
     },
   );
   await resolveNothingFromStatus(response);
-  return true;
+  return { parentId, sortedIds };
 }
+
 export async function sortResources(
   { parentId, sortedIds }: MutationToSortResourcesArgs,
   context: Context,
-): Promise<boolean> {
+): Promise<GQLSortResult> {
   const response = await fetch(
     `/learningpath-api/v1/folders/sort-resources/${parentId}`,
     context,
@@ -196,5 +197,5 @@ export async function sortResources(
     },
   );
   await resolveNothingFromStatus(response);
-  return true;
+  return { parentId, sortedIds };
 }
