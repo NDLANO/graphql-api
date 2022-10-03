@@ -8,7 +8,11 @@
 
 import qs from 'query-string';
 import { IFolder, IFolderData, IResource } from '@ndla/types-learningpath-api';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+import {
+  fetch,
+  resolveJson,
+  resolveNothingFromStatus,
+} from '../utils/apiHelpers';
 
 interface QueryParamsType {
   [key: string]: any;
@@ -158,4 +162,40 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
   } catch (e) {
     return false;
   }
+}
+
+export async function sortFolders(
+  { parentId, sortedIds }: MutationToSortFoldersArgs,
+  context: Context,
+): Promise<GQLSortResult> {
+  const query = queryString({
+    'folder-id': parentId,
+  });
+
+  const response = await fetch(
+    `/learningpath-api/v1/folders/sort-subfolders${query}`,
+    context,
+    {
+      method: 'PUT',
+      body: JSON.stringify({ sortedIds }),
+    },
+  );
+  await resolveNothingFromStatus(response);
+  return { parentId, sortedIds };
+}
+
+export async function sortResources(
+  { parentId, sortedIds }: MutationToSortResourcesArgs,
+  context: Context,
+): Promise<GQLSortResult> {
+  const response = await fetch(
+    `/learningpath-api/v1/folders/sort-resources/${parentId}`,
+    context,
+    {
+      method: 'PUT',
+      body: JSON.stringify({ sortedIds }),
+    },
+  );
+  await resolveNothingFromStatus(response);
+  return { parentId, sortedIds };
 }

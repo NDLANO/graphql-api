@@ -70,6 +70,19 @@ async function fetchHelper(
 
 export const fetch = fetchHelper;
 
+export async function resolveNothingFromStatus(
+  response: Response,
+): Promise<void> {
+  const { status, ok, url, statusText } = response;
+
+  if (ok) {
+    return;
+  }
+
+  const message = `Api call to ${url} failed with status ${status} ${statusText}`;
+  throw Object.assign(new Error(message), { status });
+}
+
 export async function resolveJson(response: Response): Promise<any> {
   const { status, ok, url, statusText } = response;
 

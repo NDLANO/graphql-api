@@ -929,6 +929,11 @@ export const typeDefs = gql`
     tags: [String!]
   }
 
+  type SortResult {
+    sortedIds: [String!]!
+    parentId: String
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -1056,6 +1061,8 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
+    sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
+    sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
   }
 `;
 

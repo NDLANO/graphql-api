@@ -987,6 +987,11 @@ declare global {
     tags?: Array<string>;
   }
   
+  export interface GQLSortResult {
+    sortedIds: Array<string>;
+    parentId?: string;
+  }
+  
   export interface GQLQuery {
     resource?: GQLResource;
     article?: GQLArticle;
@@ -1030,6 +1035,8 @@ declare global {
     updateFolderResource: GQLFolderResource;
     deleteFolderResource: string;
     deletePersonalData: boolean;
+    sortFolders: GQLSortResult;
+    sortResources: GQLSortResult;
   }
   
   /*********************************
@@ -1165,6 +1172,7 @@ declare global {
     NewFolderResource?: GQLNewFolderResourceTypeResolver;
     UpdatedFolder?: GQLUpdatedFolderTypeResolver;
     UpdatedFolderResource?: GQLUpdatedFolderResourceTypeResolver;
+    SortResult?: GQLSortResultTypeResolver;
     Query?: GQLQueryTypeResolver;
     Mutation?: GQLMutationTypeResolver;
   }
@@ -4306,6 +4314,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
+  export interface GQLSortResultTypeResolver<TParent = any> {
+    sortedIds?: SortResultToSortedIdsResolver<TParent>;
+    parentId?: SortResultToParentIdResolver<TParent>;
+  }
+  
+  export interface SortResultToSortedIdsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface SortResultToParentIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
   export interface GQLQueryTypeResolver<TParent = any> {
     resource?: QueryToResourceResolver<TParent>;
     article?: QueryToArticleResolver<TParent>;
@@ -4627,6 +4648,8 @@ declare global {
     updateFolderResource?: MutationToUpdateFolderResourceResolver<TParent>;
     deleteFolderResource?: MutationToDeleteFolderResourceResolver<TParent>;
     deletePersonalData?: MutationToDeletePersonalDataResolver<TParent>;
+    sortFolders?: MutationToSortFoldersResolver<TParent>;
+    sortResources?: MutationToSortResourcesResolver<TParent>;
   }
   
   export interface MutationToAddFolderArgs {
@@ -4683,6 +4706,22 @@ declare global {
   
   export interface MutationToDeletePersonalDataResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MutationToSortFoldersArgs {
+    parentId?: string;
+    sortedIds: Array<string>;
+  }
+  export interface MutationToSortFoldersResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: MutationToSortFoldersArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface MutationToSortResourcesArgs {
+    parentId: string;
+    sortedIds: Array<string>;
+  }
+  export interface MutationToSortResourcesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: MutationToSortResourcesArgs, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
 }
