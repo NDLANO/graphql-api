@@ -39,6 +39,7 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
   if (!resources?.length) return [];
   const res = await searchWithoutPagination(
     {
+      language: context.language,
       // @ts-ignore ids are not parameterized correctly
       ids: resources.map(r => r.id).join(','),
       subjects: 'urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7',
@@ -64,9 +65,9 @@ const fetchAndTransformArticleMeta = async (
   if (!resources?.length) return [];
   const res = await searchWithoutPagination(
     {
+      language: context.language,
       // @ts-ignore ids are not parameterized correctly
       ids: resources.map(r => r.id).join(','),
-      resourceTypes: resourceTypes.join(','),
     },
     context,
   );
