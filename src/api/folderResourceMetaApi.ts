@@ -40,6 +40,7 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
   const res = await searchWithoutPagination(
     {
       language: context.language,
+      fallback: 'true',
       // @ts-ignore ids are not parameterized correctly
       ids: resources.map(r => r.id).join(','),
       subjects: 'urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7',
@@ -66,6 +67,7 @@ const fetchAndTransformArticleMeta = async (
   const res = await searchWithoutPagination(
     {
       language: context.language,
+      fallback: 'true',
       // @ts-ignore ids are not parameterized correctly
       ids: resources.map(r => r.id).join(','),
     },
