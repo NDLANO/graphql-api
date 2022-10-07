@@ -70,6 +70,7 @@ const fetchAndTransformArticleMeta = async (
       fallback: 'true',
       // @ts-ignore ids are not parameterized correctly
       ids: resources.map(r => r.id).join(','),
+      resourceTypes: resourceTypes.join(','),
     },
     context,
   );
