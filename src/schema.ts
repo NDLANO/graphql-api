@@ -899,7 +899,25 @@ export const typeDefs = gql`
     name: String!
   }
 
-  type FolderResourceMeta {
+  interface FolderResourceMeta {
+    id: Int!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type ArticleFolderResourceMeta implements FolderResourceMeta {
+    id: Int!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type LearningpathFolderResourceMeta implements FolderResourceMeta {
     id: Int!
     type: String!
     resourceTypes: [FolderResourceResourceType!]!
