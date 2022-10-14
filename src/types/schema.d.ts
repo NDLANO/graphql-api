@@ -966,6 +966,35 @@ declare global {
     description: string;
   }
   
+  /** Use this to resolve interface type FolderResourceMeta */
+  export type GQLPossibleFolderResourceMetaTypeNames =
+  'ArticleFolderResourceMeta' |
+  'LearningpathFolderResourceMeta';
+  
+  export interface GQLFolderResourceMetaNameMap {
+    FolderResourceMeta: GQLFolderResourceMeta;
+    ArticleFolderResourceMeta: GQLArticleFolderResourceMeta;
+    LearningpathFolderResourceMeta: GQLLearningpathFolderResourceMeta;
+  }
+  
+  export interface GQLArticleFolderResourceMeta extends GQLFolderResourceMeta {
+    id: number;
+    type: string;
+    resourceTypes: Array<GQLFolderResourceResourceType>;
+    metaImage?: GQLMetaImage;
+    title: string;
+    description: string;
+  }
+  
+  export interface GQLLearningpathFolderResourceMeta extends GQLFolderResourceMeta {
+    id: number;
+    type: string;
+    resourceTypes: Array<GQLFolderResourceResourceType>;
+    metaImage?: GQLMetaImage;
+    title: string;
+    description: string;
+  }
+  
   export interface GQLNewFolder {
     name: string;
     parentId?: string;
@@ -1167,7 +1196,12 @@ declare global {
     Folder?: GQLFolderTypeResolver;
     FolderResource?: GQLFolderResourceTypeResolver;
     FolderResourceResourceType?: GQLFolderResourceResourceTypeTypeResolver;
-    FolderResourceMeta?: GQLFolderResourceMetaTypeResolver;
+    FolderResourceMeta?: {
+      __resolveType: GQLFolderResourceMetaTypeResolver
+    };
+    
+    ArticleFolderResourceMeta?: GQLArticleFolderResourceMetaTypeResolver;
+    LearningpathFolderResourceMeta?: GQLLearningpathFolderResourceMetaTypeResolver;
     NewFolder?: GQLNewFolderTypeResolver;
     NewFolderResource?: GQLNewFolderResourceTypeResolver;
     UpdatedFolder?: GQLUpdatedFolderTypeResolver;
@@ -4225,35 +4259,71 @@ declare global {
   }
   
   export interface GQLFolderResourceMetaTypeResolver<TParent = any> {
-    id?: FolderResourceMetaToIdResolver<TParent>;
-    type?: FolderResourceMetaToTypeResolver<TParent>;
-    resourceTypes?: FolderResourceMetaToResourceTypesResolver<TParent>;
-    metaImage?: FolderResourceMetaToMetaImageResolver<TParent>;
-    title?: FolderResourceMetaToTitleResolver<TParent>;
-    description?: FolderResourceMetaToDescriptionResolver<TParent>;
+    (parent: TParent, context: any, info: GraphQLResolveInfo): 'ArticleFolderResourceMeta' | 'LearningpathFolderResourceMeta' | Promise<'ArticleFolderResourceMeta' | 'LearningpathFolderResourceMeta'>;
+  }
+  export interface GQLArticleFolderResourceMetaTypeResolver<TParent = any> {
+    id?: ArticleFolderResourceMetaToIdResolver<TParent>;
+    type?: ArticleFolderResourceMetaToTypeResolver<TParent>;
+    resourceTypes?: ArticleFolderResourceMetaToResourceTypesResolver<TParent>;
+    metaImage?: ArticleFolderResourceMetaToMetaImageResolver<TParent>;
+    title?: ArticleFolderResourceMetaToTitleResolver<TParent>;
+    description?: ArticleFolderResourceMetaToDescriptionResolver<TParent>;
   }
   
-  export interface FolderResourceMetaToIdResolver<TParent = any, TResult = any> {
+  export interface ArticleFolderResourceMetaToIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FolderResourceMetaToTypeResolver<TParent = any, TResult = any> {
+  export interface ArticleFolderResourceMetaToTypeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FolderResourceMetaToResourceTypesResolver<TParent = any, TResult = any> {
+  export interface ArticleFolderResourceMetaToResourceTypesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FolderResourceMetaToMetaImageResolver<TParent = any, TResult = any> {
+  export interface ArticleFolderResourceMetaToMetaImageResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FolderResourceMetaToTitleResolver<TParent = any, TResult = any> {
+  export interface ArticleFolderResourceMetaToTitleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
-  export interface FolderResourceMetaToDescriptionResolver<TParent = any, TResult = any> {
+  export interface ArticleFolderResourceMetaToDescriptionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface GQLLearningpathFolderResourceMetaTypeResolver<TParent = any> {
+    id?: LearningpathFolderResourceMetaToIdResolver<TParent>;
+    type?: LearningpathFolderResourceMetaToTypeResolver<TParent>;
+    resourceTypes?: LearningpathFolderResourceMetaToResourceTypesResolver<TParent>;
+    metaImage?: LearningpathFolderResourceMetaToMetaImageResolver<TParent>;
+    title?: LearningpathFolderResourceMetaToTitleResolver<TParent>;
+    description?: LearningpathFolderResourceMetaToDescriptionResolver<TParent>;
+  }
+  
+  export interface LearningpathFolderResourceMetaToIdResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathFolderResourceMetaToTypeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathFolderResourceMetaToResourceTypesResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathFolderResourceMetaToMetaImageResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathFolderResourceMetaToTitleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
+  }
+  
+  export interface LearningpathFolderResourceMetaToDescriptionResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult | Promise<TResult>;
   }
   
