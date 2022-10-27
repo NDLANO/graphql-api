@@ -7,9 +7,12 @@
  *
  */
 
-import express, { Request, Response } from 'express';
+import express, { json, Request, Response } from 'express';
 import compression from 'compression';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import cors from 'cors';
+
 import { isString } from 'lodash';
 import { port } from './config';
 import logger from './utils/logger';
@@ -138,10 +141,16 @@ async function startApolloServer() {
         json: err.originalError && err.originalError.json,
       };
     },
-    context: getContext,
   });
   await server.start();
-  server.applyMiddleware({ app, path: '/graphql-api/graphql' });
+  app.use(
+    '/graphql-api/graphql',
+    cors(),
+    json(),
+    expressMiddleware(server, {
+      context: getContext,
+    }),
+  );
 }
 
 startApolloServer();
