@@ -70,6 +70,19 @@ async function fetchHelper(
 
 export const fetch = fetchHelper;
 
+export async function resolveNothingFromStatus(
+  response: Response,
+): Promise<void> {
+  const { status, ok, url, statusText } = response;
+
+  if (ok) {
+    return;
+  }
+
+  const message = `Api call to ${url} failed with status ${status} ${statusText}`;
+  throw Object.assign(new Error(message), { status });
+}
+
 export async function resolveJson(response: Response): Promise<any> {
   const { status, ok, url, statusText } = response;
 
@@ -105,8 +118,8 @@ function externalsToH5pMetaData(obj: any) {
               url: i.h5p.source || '',
               description: i.h5p.licenseExtras || '',
             },
-            creators: new Array(),
-            processors: new Array(),
+            creators: [] as any[],
+            processors: [] as any[],
             rightsholders: i.h5p.authors
               ? i.h5p.authors.map((author: { role: any; name?: string }) => {
                   return {

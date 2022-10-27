@@ -899,7 +899,25 @@ export const typeDefs = gql`
     name: String!
   }
 
-  type FolderResourceMeta {
+  interface FolderResourceMeta {
+    id: Int!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type ArticleFolderResourceMeta implements FolderResourceMeta {
+    id: Int!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type LearningpathFolderResourceMeta implements FolderResourceMeta {
     id: Int!
     type: String!
     resourceTypes: [FolderResourceResourceType!]!
@@ -927,6 +945,11 @@ export const typeDefs = gql`
 
   type UpdatedFolderResource {
     tags: [String!]
+  }
+
+  type SortResult {
+    sortedIds: [String!]!
+    parentId: String
   }
 
   type Query {
@@ -1030,7 +1053,7 @@ export const typeDefs = gql`
     folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
     folderResourceMeta(
       resource: FolderResourceMetaSearchInput!
-    ): FolderResourceMeta!
+    ): FolderResourceMeta
     folderResourceMetaSearch(
       resources: [FolderResourceMetaSearchInput!]!
     ): [FolderResourceMeta!]!
@@ -1056,6 +1079,8 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
+    sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
+    sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
   }
 `;
 

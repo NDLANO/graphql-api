@@ -107,4 +107,15 @@ export const resolvers: GQLResolver = {
       return 'ArticleSearchResult';
     },
   },
+  FolderResourceMeta: {
+    // Resolves FolderResourceMeta interface
+    __resolveType(
+      folderResourceMeta: any,
+    ): GQLPossibleFolderResourceMetaTypeNames {
+      if (folderResourceMeta.type === 'learningpath') {
+        return 'LearningpathFolderResourceMeta';
+      }
+      return 'ArticleFolderResourceMeta';
+    },
+  },
 };
