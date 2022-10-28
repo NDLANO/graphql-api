@@ -27,8 +27,8 @@
     "@types/serve-static": "1.13.10"
   },
   "dependencies": {
-    "@graphql-tools/mock": "^8.7.6",
-    "@graphql-tools/schema": "^9.0.4",
+    "@graphql-tools/mock": "^8.7.7",
+    "@graphql-tools/schema": "^9.0.5",
     "@apollo/server": "^4.0.4",
     "bunyan": "^1.8.12",
     "cheerio": "^1.0.0-rc.6",
@@ -36,7 +36,7 @@
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
-    "graphql": "^15.5.1",
+    "graphql": "^16.6.0",
     "graphql-scalars": "^1.20.0",
     "graphql-tag": "^2.12.6",
     "he": "^1.2.0",
