@@ -472,7 +472,7 @@ export const typeDefs = gql`
     revisionDate: String
   }
 
-  type embedVisualelement {
+  type EmbedVisualelement {
     visualElement: VisualElement
   }
 
