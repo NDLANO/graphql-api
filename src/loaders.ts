@@ -19,7 +19,7 @@ import {
   fetchLK06Curriculum,
   fetchLK20Curriculum,
 } from './api';
-import { fetchSubjectTyped, Subject } from './api/taxonomyApi';
+import { fetchSubjectTyped, Node } from './api/taxonomyApi';
 
 export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
   return new DataLoader(
@@ -95,7 +95,7 @@ export function filmFrontpageLoader(
 
 export function subjectLoader(
   context: Context,
-): DataLoader<{ id?: string }, Subject> {
+): DataLoader<{ id?: string }, Node> {
   return new DataLoader(
     async inputs => {
       return Promise.all(

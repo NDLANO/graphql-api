@@ -2,7 +2,7 @@ import DataLoader from 'dataloader';
 import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
 import { IFrontPageData } from '@ndla/types-frontpage-api';
-import { Subject } from '../api/taxonomyApi';
+import { Node } from '../api/taxonomyApi';
 
 declare global {
   interface AuthToken {
@@ -26,7 +26,7 @@ declare global {
       {
         id?: string;
       },
-      Subject
+      Node
     >;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPageData>;

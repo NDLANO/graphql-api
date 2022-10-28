@@ -11,14 +11,14 @@ import { ISubjectPageData } from '@ndla/types-frontpage-api';
 import { fetchLK20CompetenceGoalSet, fetchSubjectPage } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
-import { Subject } from '../api/taxonomyApi';
+import { Node } from '../api/taxonomyApi';
 
 export const Query = {
   async subject(
     _: any,
     { id }: QueryToSubjectArgs,
     context: ContextWithLoaders,
-  ): Promise<Subject> {
+  ): Promise<Node> {
     return await context.loaders.subjectLoader.load({ id });
   },
   async subjects(
