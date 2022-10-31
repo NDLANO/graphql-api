@@ -1,4 +1,3 @@
-import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -10,6 +9,7 @@ import { expandResourcesFromAllContexts } from './../utils/apiHelpers';
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { searchConcepts } from './conceptApi';
+import { expandResourcesFromAllContexts } from '../utils/apiHelpers';
 
 interface GroupSearchJSON {
   results: [ContentTypeJSON];
@@ -17,6 +17,7 @@ interface GroupSearchJSON {
 }
 
 interface ContentTypeJSON {
+  id: number;
   paths: [string];
   url: string;
   title: {
@@ -30,6 +31,7 @@ interface ContentTypeJSON {
     alt: string;
   };
   contexts: GQLSearchContext;
+  learningResourceType: string;
 }
 
 interface SearchResultContexts {
@@ -101,9 +103,15 @@ export async function groupSearch(
               p => p.split('/')[1] === subjects[0].replace('urn:', ''),
             )
           : contentTypeResult.paths?.[0];
+      const isLearningpath =
+        contentTypeResult.learningResourceType === 'learningpath';
       return {
         ...contentTypeResult,
-        path: path || contentTypeResult.url,
+        path:
+          path ||
+          (isLearningpath
+            ? `/learningpaths/${contentTypeResult.id}`
+            : `/article/${contentTypeResult.id}`),
         name: contentTypeResult.title.title,
         ingress: contentTypeResult.metaDescription.metaDescription,
         contexts: contentTypeResult.contexts,
@@ -210,8 +218,8 @@ const transformResult = (result: SearchResultJson) => ({
   metaImage: result.metaImage,
 });
 
-const fixContext = (contexts: SearchResultContexts[]) =>
-  contexts.map(context => ({
+const fixContext = (contexts: SearchResultContexts[] | undefined) =>
+  contexts?.map(context => ({
     ...context,
     path: context.path.includes('/resource/')
       ? `${context.path}/`

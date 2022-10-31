@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -50,6 +51,10 @@ import {
   Query as UptimeQuery,
   resolvers as uptimeResolvers,
 } from './uptimeResolvers';
+import {
+  Query as FolderResolvers,
+  Mutations as FolderMutations,
+} from './folderResolvers';
 
 export const resolvers: GQLResolver = {
   Query: {
@@ -64,6 +69,10 @@ export const resolvers: GQLResolver = {
     ...PodcastQuery,
     ...ConceptQuery,
     ...UptimeQuery,
+    ...FolderResolvers,
+  },
+  Mutation: {
+    ...FolderMutations,
   },
   ...articleResolvers,
   ...subjectResolvers,
@@ -96,6 +105,17 @@ export const resolvers: GQLResolver = {
         return 'LearningpathSearchResult';
       }
       return 'ArticleSearchResult';
+    },
+  },
+  FolderResourceMeta: {
+    // Resolves FolderResourceMeta interface
+    __resolveType(
+      folderResourceMeta: any,
+    ): GQLPossibleFolderResourceMetaTypeNames {
+      if (folderResourceMeta.type === 'learningpath') {
+        return 'LearningpathFolderResourceMeta';
+      }
+      return 'ArticleFolderResourceMeta';
     },
   },
 };

@@ -1,5 +1,5 @@
 ### Build stage
-FROM node:14.16-alpine as builder
+FROM node:16.17-alpine as builder
 
 ENV HOME=/home/app
 ENV APP_PATH=$HOME/graphql-api
@@ -18,7 +18,7 @@ COPY src $APP_PATH/src
 RUN yarn ncc
 
 ### Run stage
-FROM node:14.16-alpine
+FROM node:16.17-alpine
 
 RUN npm install pm2 -g
 WORKDIR /home/app/graphql-api

@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 /**
  * Copyright (c) 2018-present, NDLA.
  *
@@ -7,8 +8,8 @@
  */
 
 import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
-import { IKeyValueCache, setHeaderIfShouldNotCache } from '../cache';
 import { performance } from 'perf_hooks';
+import { IKeyValueCache, setHeaderIfShouldNotCache } from '../cache';
 import logger from '../utils/logger';
 
 function getCacheKey(

@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -184,7 +185,7 @@ export async function fetchCompetenceGoals(
     })
     .catch(reason => {
       // This catch block makes fetching competence goals never fail but rather log the error and return an empty array.
-      // tslint:disable-next-line:no-console
+      // eslint-disable-next-line no-console
       console.error(
         `Something went wrong when fetching competence goals, with params codes: '${codes}', nodeId: '${nodeId}', language: '${language}':\n`,
         reason,

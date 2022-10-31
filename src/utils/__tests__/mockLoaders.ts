@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-frontpage-api';
 import DataLoader from 'dataloader';
 import { Subject } from '../../api/taxonomyApi';

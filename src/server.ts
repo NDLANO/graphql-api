@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 /**
  * Copyright (c) 2018-present, NDLA.
  *
@@ -44,7 +45,6 @@ function getAcceptLanguage(request: Request): string {
 }
 
 function getHeaderString(request: Request, name: string): string | undefined {
-  // tslint:disable-next-line:no-string-literal
   const header = request.headers[name];
 
   if (isString(header)) {
@@ -147,7 +147,7 @@ async function startApolloServer() {
 startApolloServer();
 
 app.listen(GRAPHQL_PORT, () =>
-  // tslint:disable-next-line
+  // eslint-disable-next-line no-console
   console.log(
     `GraphQL Playground is now running on http://localhost:${GRAPHQL_PORT}/graphql-api/graphql`,
   ),

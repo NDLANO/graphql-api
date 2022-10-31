@@ -6,11 +6,11 @@
  *
  */
 
-import { typeDefs } from '../schema';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { addMocksToSchema } from '@graphql-tools/mock';
-
 import { graphql } from 'graphql';
+
+import { typeDefs } from '../schema';
 
 test('can run query on schema', async () => {
   const schema = makeExecutableSchema({
