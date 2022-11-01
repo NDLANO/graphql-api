@@ -75,6 +75,7 @@ export async function parseVisualElement(
         ...transformedImage,
         ...data,
         ...license,
+        altText: data.alt,
         caption: data.caption,
       };
       visualElement.url = data.url;
