@@ -6,7 +6,7 @@
  *
  */
 
-import { gql } from 'apollo-server-express';
+import { gql } from 'graphql-tag';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 
 export const typeDefs = gql`
@@ -472,7 +472,7 @@ export const typeDefs = gql`
     revisionDate: String
   }
 
-  type embedVisualelement {
+  type EmbedVisualelement {
     visualElement: VisualElement
   }
 

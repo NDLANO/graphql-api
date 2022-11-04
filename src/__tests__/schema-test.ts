@@ -26,7 +26,7 @@ test('can run query on schema', async () => {
     }
   `;
 
-  const result = await graphql(schemaWithMocks, query);
+  const result = await graphql({ schema: schemaWithMocks, source: query });
 
   expect(result).toMatchSnapshot();
 });
