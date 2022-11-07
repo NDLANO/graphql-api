@@ -7,7 +7,12 @@
  */
 
 import qs from 'query-string';
-import { IFolder, IFolderData, IResource } from '@ndla/types-learningpath-api';
+import {
+  IFeideUser,
+  IFolder,
+  IFolderData,
+  IResource,
+} from '@ndla/types-learningpath-api';
 import {
   fetch,
   resolveJson,
@@ -162,6 +167,25 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
   } catch (e) {
     return false;
   }
+}
+
+export async function getPersonalData(context: Context): Promise<IFeideUser> {
+  const response = await fetch(`/learningpath-api/v1/users/`, {
+    ...context,
+    shouldUseCache: false,
+  });
+  return await resolveJson(response);
+}
+
+export async function patchPersonalData(
+  userData: MutationToUpdatePersonalDataArgs,
+  context: Context,
+): Promise<IFeideUser> {
+  const response = await fetch(`/learningpath-api/v1/users/`, context, {
+    method: 'PATCH',
+    body: JSON.stringify(userData),
+  });
+  return await resolveJson(response);
 }
 
 export async function sortFolders(

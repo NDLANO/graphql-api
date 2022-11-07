@@ -14,8 +14,10 @@ import {
   fetchAllFolderResources,
   fetchFolder,
   fetchFolders,
+  getPersonalData,
   patchFolder,
   patchFolderResource,
+  patchPersonalData,
   postFolder,
   postFolderResource,
   sortFolders,
@@ -126,6 +128,20 @@ export const Mutations: Pick<
   },
   async deletePersonalData(_: any, __: unknown, context: ContextWithLoaders) {
     return deletePersonalData(context);
+  },
+  async personalData(
+    _: any,
+    __: MutationToUpdatePersonalDataArgs,
+    context: ContextWithLoaders,
+  ) {
+    return getPersonalData(context);
+  },
+  async updatePersonalData(
+    _: any,
+    params: unknown,
+    context: ContextWithLoaders,
+  ) {
+    return patchPersonalData(params, context);
   },
   async sortFolders(
     _: any,
