@@ -10,6 +10,8 @@
 import { Response } from 'node-fetch';
 import qs from 'query-string';
 import {
+  GQLMoviePath,
+  GQLMovieResourceTypes,
   GQLQueryResourceArgs,
   GQLResource,
   GQLResourceType,
@@ -269,10 +271,9 @@ export async function queryTopicsOnContentURI(
   return taxonomy;
 }
 
-export async function queryResourcesOnContentURI(
-  id: string,
-  context: Context,
-): Promise<GQLResource> {
+export async function queryResourcesOnContentURI<
+  T extends GQLMoviePath | GQLMovieResourceTypes | GQLResource
+>(id: string, context: Context): Promise<T> {
   const response = await fetch(
     `/${context.taxonomyUrl}/v1/resources?contentURI=${id}`,
     context,

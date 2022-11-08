@@ -3,9 +3,9 @@ schema: './src/schema.ts'
 generates:
   src/types/schema.d.ts:
     plugins:
-      - 'typescript-operations'
-      - 'typescript-resolvers'
       - 'typescript'
+      - 'typescript-resolvers'
+      - 'typescript-operations'
 config:
   maybeValue: T
   typesPrefix: GQL

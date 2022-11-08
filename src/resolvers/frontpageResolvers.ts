@@ -30,6 +30,7 @@ import {
   GQLResourceTypeDefinition,
   GQLSubject,
   GQLTaxonomyEntity,
+  GQLTopic,
 } from '../types/schema';
 
 interface Id {
@@ -68,7 +69,7 @@ export const resolvers = {
       frontpage: IFrontPageData,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLResource[]> {
+    ): Promise<(GQLResource | GQLTopic)[]> {
       return Promise.all(
         frontpage.topical.map(id => {
           if (id.startsWith('urn:topic')) {

@@ -24,7 +24,7 @@ export interface ConceptResult {
 export interface Concept {
   id: number;
   title: string;
-  content?: string;
+  content: string;
   created: string;
   tags: string[];
   articleIds: number[];
