@@ -15,6 +15,12 @@ import {
   fetchCrossSubjectTopics,
 } from '../api';
 import { fetchLK06CompetenceGoalSet } from '../api/curriculumApi';
+import {
+  GQLCompetenceGoal,
+  GQLCoreElement,
+  GQLElement,
+  GQLReference,
+} from '../types/schema';
 
 export const Query = {
   async competenceGoals(
