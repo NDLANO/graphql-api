@@ -9,6 +9,14 @@
 
 import { Response } from 'node-fetch';
 import qs from 'query-string';
+import {
+  GQLQueryResourceArgs,
+  GQLResource,
+  GQLResourceTypeDefinition,
+  GQLSubject,
+  GQLTaxonomyEntity,
+  GQLTopic,
+} from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { findPrimaryPath } from '../utils/articleHelpers';
 
@@ -54,7 +62,7 @@ async function taxonomyFetch(
 }
 
 export async function fetchResource(
-  { id, subjectId, topicId }: QueryToResourceArgs,
+  { id, subjectId, topicId }: GQLQueryResourceArgs,
   context: ContextWithLoaders,
 ): Promise<GQLResource> {
   const response = await taxonomyFetch(
