@@ -15,26 +15,35 @@ import {
 } from '../api';
 import { Concept, ConceptResult } from '../api/conceptApi';
 import { convertToSimpleImage, fetchImage } from '../api/imageApi';
+import {
+  GQLConcept,
+  GQLListingPage,
+  GQLMeta,
+  GQLQueryConceptArgs,
+  GQLQueryConceptSearchArgs,
+  GQLQueryListingPageArgs,
+  GQLVisualElement,
+} from '../types/schema';
 import { parseVisualElement } from '../utils/visualelementHelpers';
 
 export const Query = {
   async concept(
     _: any,
-    { id }: QueryToConceptArgs,
+    { id }: GQLQueryConceptArgs,
     context: ContextWithLoaders,
   ): Promise<Concept | undefined> {
     return fetchConcept(id, context);
   },
   async listingPage(
     _: any,
-    args: QueryToListingPageArgs,
+    args: GQLQueryListingPageArgs,
     context: ContextWithLoaders,
   ): Promise<GQLListingPage> {
     return fetchListingPage(context, args.subjects);
   },
   async conceptSearch(
     _: any,
-    searchQuery: QueryToConceptSearchArgs,
+    searchQuery: GQLQueryConceptSearchArgs,
     context: ContextWithLoaders,
   ): Promise<ConceptResult> {
     return searchConcepts(searchQuery, context);
