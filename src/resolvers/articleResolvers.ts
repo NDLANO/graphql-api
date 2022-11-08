@@ -16,11 +16,18 @@ import {
   searchConcepts,
 } from '../api';
 import { Concept } from '../api/conceptApi';
+import {
+  GQLArticle,
+  GQLCompetenceGoal,
+  GQLCoreElement,
+  GQLCrossSubjectElement,
+  GQLQueryArticleArgs,
+} from '../types/schema';
 
 export const Query = {
   async article(
     _: any,
-    { id, subjectId, isOembed, path, showVisualElement }: QueryToArticleArgs,
+    { id, subjectId, isOembed, path, showVisualElement }: GQLQueryArticleArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArticle> {
     return fetchArticle(
