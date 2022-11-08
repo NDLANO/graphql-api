@@ -7,12 +7,19 @@
  */
 
 import { fetchLearningpath, fetchResource, fetchOembed } from '../api';
+import {
+  GQLLearningpath,
+  GQLLearningpathStep,
+  GQLLearningpathStepOembed,
+  GQLQueryLearningpathArgs,
+  GQLResource,
+} from '../types/schema';
 import { isNDLAEmbedUrl } from '../utils/articleHelpers';
 
 export const Query = {
   async learningpath(
     _: any,
-    { pathId }: QueryToLearningpathArgs,
+    { pathId }: GQLQueryLearningpathArgs,
     context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
