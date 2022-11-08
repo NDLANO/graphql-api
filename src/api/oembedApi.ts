@@ -6,6 +6,7 @@
  *
  */
 
+import { GQLLearningpathStepOembed } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchOembed(
