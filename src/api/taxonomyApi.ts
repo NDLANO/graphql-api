@@ -13,6 +13,7 @@ import {
   GQLQueryResourceArgs,
   GQLResource,
   GQLResourceType,
+  GQLResourceTypeDefinition,
   GQLSubject,
   GQLTaxonomyEntity,
   GQLTopic,
@@ -99,9 +100,9 @@ export async function fetchResource(
   return { ...resource, path, paths, rank, relevanceId };
 }
 
-export async function fetchResourceTypes(
-  context: Context,
-): Promise<GQLResourceType[]> {
+export async function fetchResourceTypes<
+  T extends GQLResourceType | GQLResourceTypeDefinition
+>(context: Context): Promise<T[]> {
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/resource-types?language=${context.language}`,
     context,

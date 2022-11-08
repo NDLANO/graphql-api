@@ -129,7 +129,6 @@ async function startApolloServer() {
     typeDefs,
     // @ts-ignore
     resolvers,
-    debug: false, // log errors in formatError
     introspection: true,
     allowBatchedHttpRequests: true,
     formatError(err: any) {

@@ -46,7 +46,7 @@ export const Query = {
     __: any,
     context: ContextWithLoaders,
   ): Promise<GQLResourceType[]> {
-    return fetchResourceTypes(context);
+    return fetchResourceTypes<GQLResourceType>(context);
   },
 };
 
