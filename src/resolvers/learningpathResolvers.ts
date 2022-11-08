@@ -57,7 +57,10 @@ export const resolvers = {
         learningpathStep.embedUrl.embedType === 'oembed' &&
         learningpathStep.embedUrl.url !== 'https://ndla.no'
       ) {
-        return fetchOembed(learningpathStep.embedUrl.url, context);
+        return fetchOembed<GQLLearningpathStepOembed>(
+          learningpathStep.embedUrl.url,
+          context,
+        );
       }
       return null;
     },
