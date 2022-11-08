@@ -881,7 +881,7 @@ export const typeDefs = gql`
 
   type FolderResource {
     id: String!
-    resourceId: Int!
+    resourceId: Int
     resourceType: String!
     path: String!
     created: String!

@@ -1,0 +1,12 @@
+overwrite: true
+schema: './src/schema.ts'
+generates:
+  src/types/schema.d.ts:
+    plugins:
+      - 'typescript-operations'
+      - 'typescript-resolvers'
+      - 'typescript'
+config:
+  maybeValue: T
+  typesPrefix: GQL
+  inlineFragmentTypes: combine
