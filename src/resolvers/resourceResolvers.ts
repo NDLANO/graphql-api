@@ -22,11 +22,20 @@ import {
   getLearningpathIdFromUrn,
 } from '../utils/articleHelpers';
 import { ndlaUrl } from '../config';
+import {
+  GQLArticle,
+  GQLLearningpath,
+  GQLMeta,
+  GQLQueryResourceArgs,
+  GQLResource,
+  GQLResourceType,
+  GQLResourceTypeDefinition,
+} from '../types/schema';
 
 export const Query = {
   async resource(
     _: any,
-    { id, subjectId, topicId }: QueryToResourceArgs,
+    { id, subjectId, topicId }: GQLQueryResourceArgs,
     context: ContextWithLoaders,
   ): Promise<GQLResource> {
     return fetchResource({ id, subjectId, topicId }, context);

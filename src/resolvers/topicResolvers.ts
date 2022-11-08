@@ -22,6 +22,18 @@ import {
   getArticleIdFromUrn,
 } from '../utils/articleHelpers';
 import { ndlaUrl } from '../config';
+import {
+  GQLArticle,
+  GQLMeta,
+  GQLQueryTopicArgs,
+  GQLQueryTopicsArgs,
+  GQLResource,
+  GQLTopic,
+  GQLTopicArticleArgs,
+  GQLTopicCoreResourcesArgs,
+  GQLTopicResolvers,
+  GQLTopicSupplementaryResourcesArgs,
+} from '../types/schema';
 
 interface TopicResponse {
   id: string;
@@ -34,7 +46,7 @@ interface TopicResponse {
 export const Query = {
   async topic(
     _: any,
-    { id, subjectId }: QueryToTopicArgs,
+    { id, subjectId }: GQLQueryTopicArgs,
     context: ContextWithLoaders,
   ): Promise<GQLTopic> {
     if (subjectId) {
@@ -45,7 +57,7 @@ export const Query = {
   },
   async topics(
     params: any,
-    { contentUri, filterVisible }: QueryToTopicsArgs,
+    { contentUri, filterVisible }: GQLQueryTopicsArgs,
     context: ContextWithLoaders,
   ): Promise<GQLTopic[]> {
     const topicList = await fetchTopics({ contentUri }, context);
@@ -65,11 +77,11 @@ export const Query = {
   },
 };
 
-export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
+export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
   Topic: {
     async availability(
       topic: TopicResponse,
-      _: TopicToArticleArgs,
+      _: GQLTopicArticleArgs,
       context: ContextWithLoaders,
     ) {
       const article = await context.loaders.articlesLoader.load(
@@ -79,7 +91,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     },
     async article(
       topic: TopicResponse,
-      args: TopicToArticleArgs,
+      args: GQLTopicArticleArgs,
       context: ContextWithLoaders,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
@@ -121,7 +133,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     },
     async coreResources(
       topic: TopicResponse,
-      args: TopicToCoreResourcesArgs,
+      args: GQLTopicCoreResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchTopicResources(
@@ -136,7 +148,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<TopicResponse> } = {
     },
     async supplementaryResources(
       topic: TopicResponse,
-      args: TopicToSupplementaryResourcesArgs,
+      args: GQLTopicSupplementaryResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchTopicResources(

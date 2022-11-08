@@ -12,7 +12,7 @@ import qs from 'query-string';
 import {
   GQLQueryResourceArgs,
   GQLResource,
-  GQLResourceTypeDefinition,
+  GQLResourceType,
   GQLSubject,
   GQLTaxonomyEntity,
   GQLTopic,
@@ -101,7 +101,7 @@ export async function fetchResource(
 
 export async function fetchResourceTypes(
   context: Context,
-): Promise<GQLResourceTypeDefinition[]> {
+): Promise<GQLResourceType[]> {
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/resource-types?language=${context.language}`,
     context,
