@@ -21,6 +21,16 @@ import {
   fetchMovieMeta,
   queryResourcesOnContentURI,
 } from '../api';
+import {
+  GQLMetaImage,
+  GQLMoviePath,
+  GQLMovieResourceTypes,
+  GQLResource,
+  GQLResourceType,
+  GQLResourceTypeDefinition,
+  GQLSubject,
+  GQLTaxonomyEntity,
+} from '../types/schema';
 
 interface Id {
   id: number;
