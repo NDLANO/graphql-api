@@ -33,6 +33,7 @@ import {
   GQLTopicCoreResourcesArgs,
   GQLTopicResolvers,
   GQLTopicSupplementaryResourcesArgs,
+  GQLVisualElementOembed,
 } from '../types/schema';
 
 interface TopicResponse {
@@ -108,9 +109,10 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
           ).then(article => {
             const path = topic.path || `/article/${articleId}`;
             return Object.assign({}, article, {
-              oembed: fetchOembed(`${ndlaUrl}${path}`, context).then(
-                oembed => oembed.html.split('"')[3],
-              ),
+              oembed: fetchOembed<GQLVisualElementOembed>(
+                `${ndlaUrl}${path}`,
+                context,
+              ).then(oembed => oembed.html.split('"')[3]),
             });
           }),
         );

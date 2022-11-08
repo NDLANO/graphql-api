@@ -30,6 +30,7 @@ import {
   GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
+  GQLVisualElementOembed,
 } from '../types/schema';
 
 export const Query = {
@@ -132,12 +133,13 @@ export const resolvers = {
             context,
           ).then(article => {
             return Object.assign({}, article, {
-              oembed: fetchOembed(`${ndlaUrl}${resource.path}`, context).then(
-                oembed => {
-                  const parsed = cheerio.load(oembed.html);
-                  return parsed('iframe').attr('src');
-                },
-              ),
+              oembed: fetchOembed<GQLVisualElementOembed>(
+                `${ndlaUrl}${resource.path}`,
+                context,
+              ).then(oembed => {
+                const parsed = cheerio.load(oembed.html);
+                return parsed('iframe').attr('src');
+              }),
             });
           }),
         );
