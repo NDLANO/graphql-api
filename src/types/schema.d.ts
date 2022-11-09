@@ -388,7 +388,7 @@ export type GQLFolderResource = {
   created: Scalars['String'];
   id: Scalars['String'];
   path: Scalars['String'];
-  resourceId?: Maybe<Scalars['Int']>;
+  resourceId: Scalars['Int'];
   resourceType: Scalars['String'];
   tags: Array<Scalars['String']>;
 };
@@ -2099,7 +2099,7 @@ export type GQLFolderResourceResolvers<ContextType = any, ParentType extends GQL
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  resourceId?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
+  resourceId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   resourceType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
