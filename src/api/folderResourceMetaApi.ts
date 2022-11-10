@@ -8,6 +8,14 @@
  */
 
 import { groupBy } from 'lodash';
+import {
+  GQLFolderResourceMeta,
+  GQLFolderResourceMetaSearchInput,
+  GQLFolderResourceResourceType,
+  GQLQueryFolderResourceMetaArgs,
+  GQLQueryFolderResourceMetaSearchArgs,
+  GQLSearchResult,
+} from '../types/schema';
 import { searchWithoutPagination } from './searchApi';
 
 const articleResourceTypes = [
@@ -28,7 +36,12 @@ const findResourceTypes = (
 ): GQLFolderResourceResourceType[] => {
   const resource = resources.find(r => result.id === r.id);
   const context = result.contexts.find(cx => cx.path === resource.path);
-  return context?.resourceTypes ?? [];
+  const resourceTypes = context.resourceTypes.map(t => ({
+    id: t.id,
+    name: t.name,
+    language: t.language,
+  }));
+  return resourceTypes ?? [];
 };
 
 const fetchAndTransformMultidisciplinaryTopicMeta = async (
@@ -86,7 +99,7 @@ const fetchAndTransformArticleMeta = async (
 };
 
 export const fetchFolderResourceMeta = async (
-  { resource }: QueryToFolderResourceMetaArgs,
+  { resource }: GQLQueryFolderResourceMetaArgs,
   context: ContextWithLoaders,
 ): Promise<GQLFolderResourceMeta> => {
   if (resource.resourceType === 'article') {
@@ -116,7 +129,7 @@ export const fetchFolderResourceMeta = async (
 };
 
 export const fetchFolderResourcesMetaData = async (
-  { resources }: QueryToFolderResourceMetaSearchArgs,
+  { resources }: GQLQueryFolderResourceMetaSearchArgs,
   context: ContextWithLoaders,
 ): Promise<GQLFolderResourceMeta[]> => {
   const { article, learningpath, multidisciplinary } = groupBy(

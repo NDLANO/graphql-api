@@ -7,6 +7,7 @@
  */
 
 import { ILearningPathV2, ISearchResultV2 } from '@ndla/types-learningpath-api';
+import { GQLLearningpath, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchLearningpaths(

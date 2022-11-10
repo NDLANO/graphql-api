@@ -774,7 +774,7 @@ export const typeDefs = gql`
     subjectNames: [String!]
     articleIds: [Int!]!
     articles: [Meta!]
-    metaImage: MetaImage!
+    metaImage: MetaImage
     visualElement: VisualElement
     copyright: ConceptCopyright
     source: String

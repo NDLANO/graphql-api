@@ -3,6 +3,7 @@ import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
 import { IFrontPageData } from '@ndla/types-frontpage-api';
 import { Subject } from '../api/taxonomyApi';
+import { GQLMeta, GQLReference, GQLSubject } from './schema';
 
 declare global {
   interface AuthToken {

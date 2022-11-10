@@ -10,6 +10,15 @@ import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { searchConcepts } from './conceptApi';
 import { expandResourcesFromAllContexts } from '../utils/apiHelpers';
+import {
+  GQLFrontpageSearch,
+  GQLGroupSearch,
+  GQLQuerySearchArgs,
+  GQLQuerySearchWithoutPaginationArgs,
+  GQLSearch,
+  GQLSearchContext,
+  GQLSearchWithoutPagination,
+} from '../types/schema';
 
 interface GroupSearchJSON {
   results: [ContentTypeJSON];
@@ -42,7 +51,7 @@ interface SearchResultContexts {
 }
 
 export async function search(
-  searchQuery: QueryToSearchArgs,
+  searchQuery: GQLQuerySearchArgs,
   context: Context,
 ): Promise<GQLSearch> {
   const query = {
@@ -76,7 +85,7 @@ export async function search(
 }
 
 export async function groupSearch(
-  searchQuery: QueryToSearchArgs,
+  searchQuery: GQLQuerySearchArgs,
   context: Context,
 ): Promise<GQLGroupSearch> {
   const query = {
@@ -127,7 +136,7 @@ export async function groupSearch(
 }
 
 export async function frontpageSearch(
-  searchQuery: QueryToSearchArgs,
+  searchQuery: GQLQuerySearchArgs,
   context: Context,
 ): Promise<GQLFrontpageSearch> {
   const topicQuery = {
@@ -166,7 +175,7 @@ export async function frontpageSearch(
 }
 
 const queryOnGivenPage = (
-  searchQuery: QueryToSearchWithoutPaginationArgs,
+  searchQuery: GQLQuerySearchWithoutPaginationArgs,
   page: string,
   context: Context,
 ) =>
@@ -185,7 +194,7 @@ const queryOnGivenPage = (
   );
 
 export async function searchWithoutPagination(
-  searchQuery: QueryToSearchWithoutPaginationArgs,
+  searchQuery: GQLQuerySearchWithoutPaginationArgs,
   context: Context,
 ): Promise<GQLSearchWithoutPagination> {
   const firstQuery = await queryOnGivenPage(searchQuery, '1', context);

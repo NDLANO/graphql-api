@@ -14,6 +14,7 @@ import {
   uptimeRepo,
   uptimeToken,
 } from '../config';
+import { GQLUptimeAlert } from '../types/schema';
 
 interface GithubLabel {
   name: string;

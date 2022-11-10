@@ -56,7 +56,7 @@ import {
   Mutations as FolderMutations,
 } from './folderResolvers';
 
-export const resolvers: GQLResolver = {
+export const resolvers = {
   Query: {
     ...TopicQuery,
     ...SubjectQuery,
@@ -87,7 +87,7 @@ export const resolvers: GQLResolver = {
   ...uptimeResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
-    __resolveType(entity: any): GQLPossibleTaxonomyEntityTypeNames {
+    __resolveType(entity: any) {
       if (entity.id.startsWith('urn:subject')) {
         return 'Subject';
       }
@@ -100,7 +100,7 @@ export const resolvers: GQLResolver = {
   },
   SearchResult: {
     // Resolves SearchResult interface
-    __resolveType(searchResult: any): GQLPossibleSearchResultTypeNames {
+    __resolveType(searchResult: any) {
       if (searchResult.learningResourceType === 'learningpath') {
         return 'LearningpathSearchResult';
       }
@@ -109,9 +109,7 @@ export const resolvers: GQLResolver = {
   },
   FolderResourceMeta: {
     // Resolves FolderResourceMeta interface
-    __resolveType(
-      folderResourceMeta: any,
-    ): GQLPossibleFolderResourceMetaTypeNames {
+    __resolveType(folderResourceMeta: any) {
       if (folderResourceMeta.type === 'learningpath') {
         return 'LearningpathFolderResourceMeta';
       }
