@@ -127,7 +127,6 @@ app.get('/health', (req: Request, res: Response) => {
 async function startApolloServer() {
   const server = new ApolloServer({
     typeDefs,
-    // @ts-ignore
     resolvers,
     introspection: true,
     allowBatchedHttpRequests: true,
