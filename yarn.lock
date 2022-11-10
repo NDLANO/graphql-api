@@ -1033,10 +1033,10 @@
   resolved "https://registry.yarnpkg.com/@ndla/types-image-api/-/types-image-api-0.0.8.tgz#4d1c7d830bb90ede23ac311c8f860811f83a0c39"
   integrity sha512-O8nVTzA8nLqawNArweLRcYgAyCRdhw/MK5T1pcOYJDnORllTgKCrbeaemWZH0Fu5jd4perFwCI1P+50FteNY6w==
 
-"@ndla/types-learningpath-api@^0.0.16":
-  version "0.0.16"
-  resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.16.tgz#2bc5f20b6b54ab3bca1288dd22e24107d9b46338"
-  integrity sha512-LpDvXxQd+ZINbIEJane/Tn3v/Wu9L0J69gJq2JEnFfKF4bI1nFkSe41OwMj7GKtZ4WdM/iMUbGUN3FYihl9TWA==
+"@ndla/types-learningpath-api@^0.0.17":
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.17.tgz#7ceca4372028e6f59b4e84e867ff01f7561fd851"
+  integrity sha512-bvI04Es2E5gJVDkDu6bRmPFgmvLn6JjXZNHQ47UHp7mek9p7sK9+MAeLyY04BswvidegIsdxJldxeStNq8uu/Q==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
