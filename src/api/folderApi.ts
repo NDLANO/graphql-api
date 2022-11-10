@@ -8,7 +8,7 @@
 
 import qs from 'query-string';
 import {
-  IFeideUser,
+  IMyNDLAUser,
   IFolder,
   IFolderData,
   IResource,
@@ -27,6 +27,7 @@ import {
   GQLMutationSortResourcesArgs,
   GQLMutationUpdateFolderArgs,
   GQLMutationUpdateFolderResourceArgs,
+  GQLMutationUpdatePersonalDataArgs,
   GQLQueryAllFolderResourcesArgs,
   GQLQueryFolderArgs,
   GQLQueryFoldersArgs,
@@ -183,7 +184,7 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
   }
 }
 
-export async function getPersonalData(context: Context): Promise<IFeideUser> {
+export async function getPersonalData(context: Context): Promise<IMyNDLAUser> {
   const response = await fetch(`/learningpath-api/v1/users/`, {
     ...context,
     shouldUseCache: false,
@@ -192,9 +193,9 @@ export async function getPersonalData(context: Context): Promise<IFeideUser> {
 }
 
 export async function patchPersonalData(
-  userData: MutationToUpdatePersonalDataArgs,
+  userData: GQLMutationUpdatePersonalDataArgs,
   context: Context,
-): Promise<IFeideUser> {
+): Promise<IMyNDLAUser> {
   const response = await fetch(`/learningpath-api/v1/users/`, context, {
     method: 'PATCH',
     body: JSON.stringify(userData),
