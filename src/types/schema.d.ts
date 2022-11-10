@@ -706,6 +706,7 @@ export type GQLMutation = {
   sortResources: GQLSortResult;
   updateFolder: GQLFolder;
   updateFolderResource: GQLFolderResource;
+  updatePersonalData: GQLMyNdlaPersonalData;
 };
 
 
@@ -758,6 +759,18 @@ export type GQLMutationUpdateFolderArgs = {
 export type GQLMutationUpdateFolderResourceArgs = {
   id: Scalars['String'];
   tags?: InputMaybe<Array<Scalars['String']>>;
+};
+
+
+export type GQLMutationUpdatePersonalDataArgs = {
+  favoriteSubjects: Array<Scalars['String']>;
+};
+
+export type GQLMyNdlaPersonalData = {
+  __typename?: 'MyNdlaPersonalData';
+  favoriteSubjects: Array<Scalars['String']>;
+  id: Scalars['Int'];
+  role: Scalars['String'];
 };
 
 export type GQLName = {
@@ -863,6 +876,7 @@ export type GQLQuery = {
   groupSearch?: Maybe<Array<GQLGroupSearch>>;
   learningpath?: Maybe<GQLLearningpath>;
   listingPage?: Maybe<GQLListingPage>;
+  personalData: GQLMyNdlaPersonalData;
   podcast?: Maybe<GQLAudioWithSeries>;
   podcastSearch?: Maybe<GQLAudioSearch>;
   podcastSeries?: Maybe<GQLPodcastSeriesWithEpisodes>;
@@ -1564,6 +1578,7 @@ export type GQLResolversTypes = {
   MovieResourceTypes: ResolverTypeWrapper<GQLMovieResourceTypes>;
   MovieTheme: ResolverTypeWrapper<GQLMovieTheme>;
   Mutation: ResolverTypeWrapper<{}>;
+  MyNdlaPersonalData: ResolverTypeWrapper<GQLMyNdlaPersonalData>;
   Name: ResolverTypeWrapper<GQLName>;
   NewFolder: ResolverTypeWrapper<GQLNewFolder>;
   NewFolderResource: ResolverTypeWrapper<GQLNewFolderResource>;
@@ -1685,6 +1700,7 @@ export type GQLResolversParentTypes = {
   MovieResourceTypes: GQLMovieResourceTypes;
   MovieTheme: GQLMovieTheme;
   Mutation: {};
+  MyNdlaPersonalData: GQLMyNdlaPersonalData;
   Name: GQLName;
   NewFolder: GQLNewFolder;
   NewFolderResource: GQLNewFolderResource;
@@ -2412,6 +2428,14 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
+  updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdatePersonalDataArgs, 'favoriteSubjects'>>;
+};
+
+export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
+  favoriteSubjects?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLNameResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Name'] = GQLResolversParentTypes['Name']> = {
@@ -2517,6 +2541,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   groupSearch?: Resolver<Maybe<Array<GQLResolversTypes['GroupSearch']>>, ParentType, ContextType, Partial<GQLQueryGroupSearchArgs>>;
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
+  personalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType>;
   podcast?: Resolver<Maybe<GQLResolversTypes['AudioWithSeries']>, ParentType, ContextType, RequireFields<GQLQueryPodcastArgs, 'id'>>;
   podcastSearch?: Resolver<Maybe<GQLResolversTypes['AudioSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSearchArgs, 'page' | 'pageSize'>>;
   podcastSeries?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesWithEpisodes']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesArgs, 'id'>>;
@@ -2895,6 +2920,7 @@ export type GQLResolvers<ContextType = any> = {
   MovieResourceTypes?: GQLMovieResourceTypesResolvers<ContextType>;
   MovieTheme?: GQLMovieThemeResolvers<ContextType>;
   Mutation?: GQLMutationResolvers<ContextType>;
+  MyNdlaPersonalData?: GQLMyNdlaPersonalDataResolvers<ContextType>;
   Name?: GQLNameResolvers<ContextType>;
   NewFolder?: GQLNewFolderResolvers<ContextType>;
   NewFolderResource?: GQLNewFolderResourceResolvers<ContextType>;

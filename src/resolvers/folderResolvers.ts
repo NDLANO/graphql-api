@@ -38,6 +38,8 @@ import {
   GQLMutationSortResourcesArgs,
   GQLMutationUpdateFolderArgs,
   GQLMutationUpdateFolderResourceArgs,
+  GQLMutationUpdatePersonalDataArgs,
+  GQLMyNdlaPersonalData,
   GQLQueryAllFolderResourcesArgs,
   GQLQueryFolderArgs,
   GQLQueryFolderResourceMetaArgs,
@@ -53,6 +55,7 @@ export const Query: Pick<
   | 'allFolderResources'
   | 'folderResourceMetaSearch'
   | 'folderResourceMeta'
+  | 'personalData'
 > = {
   async folders(
     _: any,
@@ -89,6 +92,13 @@ export const Query: Pick<
   ): Promise<GQLFolderResourceMeta> {
     return fetchFolderResourceMeta(params, context);
   },
+  async personalData(
+    _: any,
+    __: any,
+    context: ContextWithLoaders,
+  ): Promise<GQLMyNdlaPersonalData> {
+    return getPersonalData(context);
+  },
 };
 export const Mutations: Pick<
   GQLMutationResolvers,
@@ -101,6 +111,7 @@ export const Mutations: Pick<
   | 'deletePersonalData'
   | 'sortFolders'
   | 'sortResources'
+  | 'updatePersonalData'
 > = {
   async addFolder(
     _: any,
@@ -144,19 +155,12 @@ export const Mutations: Pick<
   ): Promise<string> {
     return deleteFolderResource(params, context);
   },
-  async deletePersonalData(_: any, __: unknown, context: ContextWithLoaders) {
+  async deletePersonalData(_: any, __: any, context: ContextWithLoaders) {
     return deletePersonalData(context);
-  },
-  async personalData(
-    _: any,
-    __: MutationToUpdatePersonalDataArgs,
-    context: ContextWithLoaders,
-  ) {
-    return getPersonalData(context);
   },
   async updatePersonalData(
     _: any,
-    params: unknown,
+    params: GQLMutationUpdatePersonalDataArgs,
     context: ContextWithLoaders,
   ) {
     return patchPersonalData(params, context);
