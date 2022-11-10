@@ -5,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { GQLTaxonomyEntity } from '../types/schema';
+
 export function isNDLAEmbedUrl(url: string) {
   return /^https:\/(.*).ndla.no/.test(url) || /^http:\/\/localhost/.test(url);
 }

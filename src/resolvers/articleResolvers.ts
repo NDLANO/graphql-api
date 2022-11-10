@@ -16,11 +16,18 @@ import {
   searchConcepts,
 } from '../api';
 import { Concept } from '../api/conceptApi';
+import {
+  GQLArticle,
+  GQLCompetenceGoal,
+  GQLCoreElement,
+  GQLCrossSubjectElement,
+  GQLQueryArticleArgs,
+} from '../types/schema';
 
 export const Query = {
   async article(
     _: any,
-    { id, subjectId, isOembed, path, showVisualElement }: QueryToArticleArgs,
+    { id, subjectId, isOembed, path, showVisualElement }: GQLQueryArticleArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArticle> {
     return fetchArticle(
@@ -77,7 +84,9 @@ export const resolvers = {
       );
       const topics = await fetchSubjectTopics(args.subjectId, context);
       return crossSubjectTopicInfo.map(crossSubjectTopic => ({
-        ...crossSubjectTopic,
+        title: crossSubjectTopic.title,
+        code: crossSubjectTopic.code,
+        id: crossSubjectTopic.id,
         path: topics.find(
           (topic: { name: string }) => topic.name === crossSubjectTopic.title,
         )?.path,

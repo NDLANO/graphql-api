@@ -8,6 +8,12 @@
  */
 import he from 'he';
 import { Response } from 'node-fetch';
+import {
+  GQLCompetenceGoal,
+  GQLCoreElement,
+  GQLElement,
+  GQLReference,
+} from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import {
   isoLanguageMapping,

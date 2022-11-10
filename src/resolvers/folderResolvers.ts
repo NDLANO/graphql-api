@@ -27,9 +27,27 @@ import {
   fetchFolderResourceMeta,
   fetchFolderResourcesMetaData,
 } from '../api/folderResourceMetaApi';
+import {
+  GQLFolderResourceMeta,
+  GQLMutationAddFolderArgs,
+  GQLMutationAddFolderResourceArgs,
+  GQLMutationDeleteFolderArgs,
+  GQLMutationDeleteFolderResourceArgs,
+  GQLMutationResolvers,
+  GQLMutationSortFoldersArgs,
+  GQLMutationSortResourcesArgs,
+  GQLMutationUpdateFolderArgs,
+  GQLMutationUpdateFolderResourceArgs,
+  GQLQueryAllFolderResourcesArgs,
+  GQLQueryFolderArgs,
+  GQLQueryFolderResourceMetaArgs,
+  GQLQueryFolderResourceMetaSearchArgs,
+  GQLQueryFoldersArgs,
+  GQLQueryResolvers,
+} from '../types/schema';
 
 export const Query: Pick<
-  GQLQueryTypeResolver,
+  GQLQueryResolvers,
   | 'folders'
   | 'folder'
   | 'allFolderResources'
@@ -38,42 +56,42 @@ export const Query: Pick<
 > = {
   async folders(
     _: any,
-    params: QueryToFoldersArgs,
+    params: GQLQueryFoldersArgs,
     context: ContextWithLoaders,
   ): Promise<IFolderData[]> {
     return fetchFolders(params, context);
   },
   async folder(
     _: any,
-    params: QueryToFolderArgs,
+    params: GQLQueryFolderArgs,
     context: ContextWithLoaders,
   ): Promise<IFolderData> {
     return fetchFolder(params, context);
   },
   async allFolderResources(
     _: any,
-    params: QueryToAllFolderResourcesArgs,
+    params: GQLQueryAllFolderResourcesArgs,
     context: ContextWithLoaders,
   ): Promise<IResource[]> {
     return fetchAllFolderResources(params, context);
   },
   async folderResourceMetaSearch(
     _: any,
-    params: QueryToFolderResourceMetaSearchArgs,
+    params: GQLQueryFolderResourceMetaSearchArgs,
     context: ContextWithLoaders,
   ): Promise<GQLFolderResourceMeta[]> {
     return fetchFolderResourcesMetaData(params, context);
   },
   async folderResourceMeta(
     _: any,
-    params: QueryToFolderResourceMetaArgs,
+    params: GQLQueryFolderResourceMetaArgs,
     context: ContextWithLoaders,
   ): Promise<GQLFolderResourceMeta> {
     return fetchFolderResourceMeta(params, context);
   },
 };
 export const Mutations: Pick<
-  GQLMutationTypeResolver,
+  GQLMutationResolvers,
   | 'addFolder'
   | 'updateFolder'
   | 'deleteFolder'
@@ -86,42 +104,42 @@ export const Mutations: Pick<
 > = {
   async addFolder(
     _: any,
-    params: MutationToAddFolderArgs,
+    params: GQLMutationAddFolderArgs,
     context: ContextWithLoaders,
   ): Promise<IFolderData> {
     return postFolder(params, context);
   },
   async updateFolder(
     _: any,
-    params: MutationToUpdateFolderArgs,
+    params: GQLMutationUpdateFolderArgs,
     context: ContextWithLoaders,
   ): Promise<IFolderData> {
     return patchFolder(params, context);
   },
   async deleteFolder(
     _: any,
-    params: MutationToDeleteFolderArgs,
+    params: GQLMutationDeleteFolderArgs,
     context: ContextWithLoaders,
   ): Promise<string> {
     return deleteFolder(params, context);
   },
   async addFolderResource(
     _: any,
-    params: MutationToAddFolderResourceArgs,
+    params: GQLMutationAddFolderResourceArgs,
     context: ContextWithLoaders,
   ): Promise<IResource> {
     return postFolderResource(params, context);
   },
   async updateFolderResource(
     _: any,
-    params: MutationToUpdateFolderResourceArgs,
+    params: GQLMutationUpdateFolderResourceArgs,
     context: ContextWithLoaders,
   ): Promise<IResource> {
     return patchFolderResource(params, context);
   },
   async deleteFolderResource(
     _: any,
-    params: MutationToDeleteFolderResourceArgs,
+    params: GQLMutationDeleteFolderResourceArgs,
     context: ContextWithLoaders,
   ): Promise<string> {
     return deleteFolderResource(params, context);
@@ -145,14 +163,14 @@ export const Mutations: Pick<
   },
   async sortFolders(
     _: any,
-    params: MutationToSortFoldersArgs,
+    params: GQLMutationSortFoldersArgs,
     context: ContextWithLoaders,
   ) {
     return sortFolders(params, context);
   },
   async sortResources(
     _: any,
-    params: MutationToSortResourcesArgs,
+    params: GQLMutationSortResourcesArgs,
     context: ContextWithLoaders,
   ) {
     return sortResources(params, context);

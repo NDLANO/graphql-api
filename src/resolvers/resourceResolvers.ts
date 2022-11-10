@@ -22,11 +22,21 @@ import {
   getLearningpathIdFromUrn,
 } from '../utils/articleHelpers';
 import { ndlaUrl } from '../config';
+import {
+  GQLArticle,
+  GQLLearningpath,
+  GQLMeta,
+  GQLQueryResourceArgs,
+  GQLResource,
+  GQLResourceType,
+  GQLResourceTypeDefinition,
+  GQLVisualElementOembed,
+} from '../types/schema';
 
 export const Query = {
   async resource(
     _: any,
-    { id, subjectId, topicId }: QueryToResourceArgs,
+    { id, subjectId, topicId }: GQLQueryResourceArgs,
     context: ContextWithLoaders,
   ): Promise<GQLResource> {
     return fetchResource({ id, subjectId, topicId }, context);
@@ -36,7 +46,7 @@ export const Query = {
     __: any,
     context: ContextWithLoaders,
   ): Promise<GQLResourceType[]> {
-    return fetchResourceTypes(context);
+    return fetchResourceTypes<GQLResourceType>(context);
   },
 };
 
@@ -123,12 +133,13 @@ export const resolvers = {
             context,
           ).then(article => {
             return Object.assign({}, article, {
-              oembed: fetchOembed(`${ndlaUrl}${resource.path}`, context).then(
-                oembed => {
-                  const parsed = cheerio.load(oembed.html);
-                  return parsed('iframe').attr('src');
-                },
-              ),
+              oembed: fetchOembed<GQLVisualElementOembed>(
+                `${ndlaUrl}${resource.path}`,
+                context,
+              ).then(oembed => {
+                const parsed = cheerio.load(oembed.html);
+                return parsed('iframe').attr('src');
+              }),
             });
           }),
         );

@@ -6,12 +6,16 @@
  *
  */
 
+import {
+  GQLH5pElement,
+  GQLLearningpathStepOembed,
+  GQLVisualElementOembed,
+} from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
-export async function fetchOembed(
-  url: string,
-  context: Context,
-): Promise<GQLLearningpathStepOembed> {
+export async function fetchOembed<
+  T extends GQLLearningpathStepOembed | GQLH5pElement | GQLVisualElementOembed
+>(url: string, context: Context): Promise<T> {
   return await fetch(`/oembed-proxy/v1/oembed?url=${url}`, context)
     .then(r => resolveJson(r))
     .catch(e => {

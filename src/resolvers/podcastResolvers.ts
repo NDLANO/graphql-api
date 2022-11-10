@@ -18,32 +18,39 @@ import {
   fetchPodcastsPage,
 } from '../api/audioApi';
 import { fetchImage } from '../api/imageApi';
+import {
+  GQLImageMetaInformation,
+  GQLQueryPodcastArgs,
+  GQLQueryPodcastSearchArgs,
+  GQLQueryPodcastSeriesArgs,
+  GQLQueryPodcastSeriesSearchArgs,
+} from '../types/schema';
 
 export const Query = {
   async podcast(
     _: any,
-    { id }: QueryToPodcastArgs,
+    { id }: GQLQueryPodcastArgs,
     context: ContextWithLoaders,
   ): Promise<IAudioMetaInformation | null> {
     return fetchPodcast(context, id);
   },
   async podcastSearch(
     _: any,
-    { pageSize, page, fallback }: QueryToPodcastSearchArgs,
+    { pageSize, page, fallback }: GQLQueryPodcastSearchArgs,
     context: ContextWithLoaders,
   ): Promise<IAudioSummarySearchResult> {
     return fetchPodcastsPage(context, pageSize, page, fallback ?? false);
   },
   async podcastSeries(
     _: any,
-    { id }: QueryToPodcastSeriesArgs,
+    { id }: GQLQueryPodcastSeriesArgs,
     context: ContextWithLoaders,
   ): Promise<IAudioMetaInformation> {
     return fetchPodcastSeries(context, id);
   },
   async podcastSeriesSearch(
     _: any,
-    { pageSize, page, fallback }: QueryToPodcastSeriesSearchArgs,
+    { pageSize, page, fallback }: GQLQueryPodcastSeriesSearchArgs,
     context: ContextWithLoaders,
   ): Promise<IAudioSummarySearchResult> {
     return fetchPodcastSeriesPage(context, pageSize, page, fallback ?? false);
