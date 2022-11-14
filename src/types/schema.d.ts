@@ -768,7 +768,7 @@ export type GQLMutationUpdatePersonalDataArgs = {
 
 export type GQLMyNdlaPersonalData = {
   __typename?: 'MyNdlaPersonalData';
-  favoriteSubjects: Array<Scalars['String']>;
+  favoriteSubjects?: Maybe<Array<Scalars['String']>>;
   id: Scalars['Int'];
   role: Scalars['String'];
 };
@@ -2432,7 +2432,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
-  favoriteSubjects?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  favoriteSubjects?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

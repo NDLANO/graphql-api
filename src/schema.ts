@@ -954,7 +954,7 @@ export const typeDefs = gql`
 
   type MyNdlaPersonalData {
     id: Int!
-    favoriteSubjects: [String!]!
+    favoriteSubjects: [String!]
     role: String!
   }
 
