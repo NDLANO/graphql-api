@@ -15,7 +15,7 @@ import cors from 'cors';
 
 import { isString } from 'lodash';
 import { port } from './config';
-import logger from './utils/logger';
+import getLogger from './utils/logger';
 import { typeDefs } from './schema';
 import { getToken } from './auth';
 import {
@@ -30,6 +30,8 @@ import {
   subjectLoader,
 } from './loaders';
 import { resolvers } from './resolvers';
+import correlationIdMiddleware from './utils/correlationIdMiddleware';
+import loggerMiddleware from './utils/loggerMiddleware';
 
 const GRAPHQL_PORT = port;
 
@@ -131,7 +133,7 @@ async function startApolloServer() {
     introspection: true,
     allowBatchedHttpRequests: true,
     formatError(err: any) {
-      logger.error(err);
+      getLogger().error(err);
       return {
         message: err.message,
         locations: err.locations,
@@ -146,9 +148,9 @@ async function startApolloServer() {
     '/graphql-api/graphql',
     cors(),
     json(),
-    expressMiddleware(server, {
-      context: getContext,
-    }),
+    correlationIdMiddleware,
+    loggerMiddleware,
+    expressMiddleware(server, { context: getContext }),
   );
 }
 
