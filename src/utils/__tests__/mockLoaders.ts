@@ -1,7 +1,7 @@
 // @ts-strict-ignore
 import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-frontpage-api';
 import DataLoader from 'dataloader';
-import { Subject } from '../../api/taxonomyApi';
+import { Node } from '../../api/taxonomyApi';
 import {
   GQLMeta,
   GQLReference,
@@ -54,13 +54,13 @@ export const mockSubjectsLoader = (mockData: GQLSubject[] = []) => {
   });
 };
 
-export const mockSubjectLoader = (mockData: Subject[] | null = null) => {
+export const mockSubjectLoader = (mockData: Node[] | null = null) => {
   return new DataLoader<
     {
       id?: string;
       visible?: boolean;
     },
-    Subject
+    Node
   >(async () => {
     return await mockFn(mockData);
   });

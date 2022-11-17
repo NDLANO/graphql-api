@@ -11,7 +11,7 @@ import { ISubjectPageData } from '@ndla/types-frontpage-api';
 import { fetchLK20CompetenceGoalSet, fetchSubjectPage } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
-import { Subject } from '../api/taxonomyApi';
+import { Node } from '../api/taxonomyApi';
 import { GQLQuerySubjectArgs, GQLSubject, GQLTopic } from '../types/schema';
 
 export const Query = {
@@ -19,7 +19,7 @@ export const Query = {
     _: any,
     { id }: GQLQuerySubjectArgs,
     context: ContextWithLoaders,
-  ): Promise<Subject> {
+  ): Promise<Node> {
     return await context.loaders.subjectLoader.load({ id });
   },
   async subjects(
