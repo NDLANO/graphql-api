@@ -7,12 +7,15 @@
  *
  */
 
-import express, { Request, Response } from 'express';
+import express, { json, Request, Response } from 'express';
 import compression from 'compression';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import cors from 'cors';
+
 import { isString } from 'lodash';
 import { port } from './config';
-import logger from './utils/logger';
+import getLogger from './utils/logger';
 import { typeDefs } from './schema';
 import { getToken } from './auth';
 import {
@@ -27,6 +30,8 @@ import {
   subjectLoader,
 } from './loaders';
 import { resolvers } from './resolvers';
+import correlationIdMiddleware from './utils/correlationIdMiddleware';
+import loggerMiddleware from './utils/loggerMiddleware';
 
 const GRAPHQL_PORT = port;
 
@@ -124,12 +129,11 @@ app.get('/health', (req: Request, res: Response) => {
 async function startApolloServer() {
   const server = new ApolloServer({
     typeDefs,
-    // @ts-ignore
     resolvers,
-    debug: false, // log errors in formatError
     introspection: true,
+    allowBatchedHttpRequests: true,
     formatError(err: any) {
-      logger.error(err);
+      getLogger().error(err);
       return {
         message: err.message,
         locations: err.locations,
@@ -138,10 +142,16 @@ async function startApolloServer() {
         json: err.originalError && err.originalError.json,
       };
     },
-    context: getContext,
   });
   await server.start();
-  server.applyMiddleware({ app, path: '/graphql-api/graphql' });
+  app.use(
+    '/graphql-api/graphql',
+    cors(),
+    json(),
+    correlationIdMiddleware,
+    loggerMiddleware,
+    expressMiddleware(server, { context: getContext }),
+  );
 }
 
 startApolloServer();

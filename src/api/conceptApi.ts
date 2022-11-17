@@ -11,6 +11,7 @@ import { uniq } from 'lodash';
 import { IConceptSearchResult, IConcept } from '@ndla/types-concept-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
+import { GQLListingPage, GQLSubject } from '../types/schema';
 
 export interface ConceptResult {
   totalCount: number;
@@ -23,7 +24,7 @@ export interface ConceptResult {
 export interface Concept {
   id: number;
   title: string;
-  content?: string;
+  content: string;
   created: string;
   tags: string[];
   articleIds: number[];

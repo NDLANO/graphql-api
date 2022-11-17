@@ -2,6 +2,13 @@
 import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-frontpage-api';
 import DataLoader from 'dataloader';
 import { Node } from '../../api/taxonomyApi';
+import {
+  GQLMeta,
+  GQLReference,
+  GQLResourceTypeDefinition,
+  GQLSubject,
+  GQLTopic,
+} from '../../types/schema';
 
 const mockFn = async <T>(mockData: T) => mockData;
 

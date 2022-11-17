@@ -6,18 +6,22 @@
  *
  */
 
-import bunyan, { default as Logger, LogLevelString } from 'bunyan';
+import Logger from 'bunyan';
+import bunyan from 'bunyan';
 import 'source-map-support/register';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
-interface INdlaLogger extends Logger {
-  logAndReturnValue(level: LogLevelString, msg: string, value: any): any;
+export const loggerStorage = new AsyncLocalStorage<Logger>();
+
+const baseLogger = bunyan.createLogger({ name: 'ndla-graphql-api' });
+
+export function getLogger(): Logger {
+  const storedLogger = loggerStorage.getStore();
+  if (!storedLogger) {
+    return baseLogger;
+  }
+
+  return storedLogger;
 }
 
-let log = bunyan.createLogger({ name: 'ndla-graphql-api' }) as INdlaLogger;
-
-log.logAndReturnValue = (level, msg, value) => {
-  log[level](msg, value);
-  return value;
-};
-
-export default log;
+export default getLogger;

@@ -12,11 +12,12 @@ import { fetchLK20CompetenceGoalSet, fetchSubjectPage } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
 import { Node } from '../api/taxonomyApi';
+import { GQLQuerySubjectArgs, GQLSubject, GQLTopic } from '../types/schema';
 
 export const Query = {
   async subject(
     _: any,
-    { id }: QueryToSubjectArgs,
+    { id }: GQLQuerySubjectArgs,
     context: ContextWithLoaders,
   ): Promise<Node> {
     return await context.loaders.subjectLoader.load({ id });

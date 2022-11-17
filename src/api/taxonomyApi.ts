@@ -9,6 +9,17 @@
 
 import { Response } from 'node-fetch';
 import qs from 'query-string';
+import {
+  GQLMoviePath,
+  GQLMovieResourceTypes,
+  GQLQueryResourceArgs,
+  GQLResource,
+  GQLResourceType,
+  GQLResourceTypeDefinition,
+  GQLSubject,
+  GQLTaxonomyEntity,
+  GQLTopic,
+} from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { findPrimaryPath } from '../utils/articleHelpers';
 
@@ -49,7 +60,7 @@ async function taxonomyFetch(
 }
 
 export async function fetchResource(
-  { id, subjectId, topicId }: QueryToResourceArgs,
+  { id, subjectId, topicId }: GQLQueryResourceArgs,
   context: ContextWithLoaders,
 ): Promise<GQLResource> {
   const query = qs.stringify({
@@ -89,9 +100,9 @@ export async function fetchResource(
   return { ...resource, path, paths, rank, relevanceId };
 }
 
-export async function fetchResourceTypes(
-  context: Context,
-): Promise<GQLResourceTypeDefinition[]> {
+export async function fetchResourceTypes<
+  T extends GQLResourceType | GQLResourceTypeDefinition
+>(context: Context): Promise<T[]> {
   const query = qs.stringify({
     language: context.language,
   });
@@ -278,10 +289,9 @@ export async function queryTopicsOnContentURI(
   return taxonomy;
 }
 
-export async function queryResourcesOnContentURI(
-  id: string,
-  context: Context,
-): Promise<GQLResource> {
+export async function queryResourcesOnContentURI<
+  T extends GQLMoviePath | GQLMovieResourceTypes | GQLResource
+>(id: string, context: Context): Promise<T> {
   const response = await fetch(
     `/${context.taxonomyUrl}/v1/resources?contentURI=${id}`,
     context,

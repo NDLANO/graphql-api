@@ -23,11 +23,24 @@ import {
 } from '../utils/articleHelpers';
 import { Node } from '../api/taxonomyApi';
 import { ndlaUrl } from '../config';
+import {
+  GQLArticle,
+  GQLMeta,
+  GQLQueryTopicArgs,
+  GQLQueryTopicsArgs,
+  GQLResource,
+  GQLTopic,
+  GQLTopicArticleArgs,
+  GQLTopicCoreResourcesArgs,
+  GQLTopicResolvers,
+  GQLTopicSupplementaryResourcesArgs,
+  GQLVisualElementOembed,
+} from '../types/schema';
 
 export const Query = {
   async topic(
     _: any,
-    { id, subjectId }: QueryToTopicArgs,
+    { id, subjectId }: GQLQueryTopicArgs,
     context: ContextWithLoaders,
   ): Promise<GQLTopic> {
     if (subjectId) {
@@ -38,7 +51,7 @@ export const Query = {
   },
   async topics(
     params: any,
-    { contentUri, filterVisible }: QueryToTopicsArgs,
+    { contentUri, filterVisible }: GQLQueryTopicsArgs,
     context: ContextWithLoaders,
   ): Promise<GQLTopic[]> {
     const topicList = await fetchTopics({ contentUri }, context);
@@ -58,11 +71,11 @@ export const Query = {
   },
 };
 
-export const resolvers: { Topic: GQLTopicTypeResolver<Node> } = {
+export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
   Topic: {
     async availability(
       topic: Node,
-      _: TopicToArticleArgs,
+      _: GQLTopicArticleArgs,
       context: ContextWithLoaders,
     ) {
       const article = await context.loaders.articlesLoader.load(
@@ -72,7 +85,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<Node> } = {
     },
     async article(
       topic: Node,
-      args: TopicToArticleArgs,
+      args: GQLTopicArticleArgs,
       context: ContextWithLoaders,
     ): Promise<GQLArticle> {
       if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
@@ -89,9 +102,10 @@ export const resolvers: { Topic: GQLTopicTypeResolver<Node> } = {
           ).then(article => {
             const path = topic.path || `/article/${articleId}`;
             return Object.assign({}, article, {
-              oembed: fetchOembed(`${ndlaUrl}${path}`, context).then(
-                oembed => oembed.html.split('"')[3],
-              ),
+              oembed: fetchOembed<GQLVisualElementOembed>(
+                `${ndlaUrl}${path}`,
+                context,
+              ).then(oembed => oembed.html.split('"')[3]),
             });
           }),
         );
@@ -114,7 +128,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<Node> } = {
     },
     async coreResources(
       topic: Node,
-      args: TopicToCoreResourcesArgs,
+      args: GQLTopicCoreResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchTopicResources(
@@ -129,7 +143,7 @@ export const resolvers: { Topic: GQLTopicTypeResolver<Node> } = {
     },
     async supplementaryResources(
       topic: Node,
-      args: TopicToSupplementaryResourcesArgs,
+      args: GQLTopicSupplementaryResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchTopicResources(

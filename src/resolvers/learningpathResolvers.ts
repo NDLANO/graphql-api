@@ -7,12 +7,19 @@
  */
 
 import { fetchLearningpath, fetchResource, fetchOembed } from '../api';
+import {
+  GQLLearningpath,
+  GQLLearningpathStep,
+  GQLLearningpathStepOembed,
+  GQLQueryLearningpathArgs,
+  GQLResource,
+} from '../types/schema';
 import { isNDLAEmbedUrl } from '../utils/articleHelpers';
 
 export const Query = {
   async learningpath(
     _: any,
-    { pathId }: QueryToLearningpathArgs,
+    { pathId }: GQLQueryLearningpathArgs,
     context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
@@ -50,7 +57,10 @@ export const resolvers = {
         learningpathStep.embedUrl.embedType === 'oembed' &&
         learningpathStep.embedUrl.url !== 'https://ndla.no'
       ) {
-        return fetchOembed(learningpathStep.embedUrl.url, context);
+        return fetchOembed<GQLLearningpathStepOembed>(
+          learningpathStep.embedUrl.url,
+          context,
+        );
       }
       return null;
     },

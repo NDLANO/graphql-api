@@ -10,7 +10,7 @@
 import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
 import { performance } from 'perf_hooks';
 import { IKeyValueCache, setHeaderIfShouldNotCache } from '../cache';
-import logger from '../utils/logger';
+import getLogger from '../utils/logger';
 
 function getCacheKey(
   url: string,
@@ -39,10 +39,17 @@ export default function createFetch(options: {
     const startTime = performance.now();
     const slowLogTimeout = 500;
 
-    const response = await nodeFetch(url, init);
+    const headers = {
+      ...init?.headers,
+      'x-correlation-id': ctx.res.locals.correlationId,
+    };
+
+    const requestInit = { ...init, headers };
+
+    const response = await nodeFetch(url, requestInit);
     const elapsedTime = performance.now() - startTime;
     if (elapsedTime > slowLogTimeout) {
-      logger.warn(
+      getLogger().warn(
         `Fetching '${url}' took ${elapsedTime.toFixed(
           2,
         )}ms which is slower than slow log timeout of ${slowLogTimeout}ms`,

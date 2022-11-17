@@ -9,6 +9,13 @@ import cheerio from 'cheerio';
 import { convertToSimpleImage, fetchImage } from '../api/imageApi';
 import { fetchOembed } from '../api/oembedApi';
 import { localConverter } from '../config';
+import {
+  GQLBrightcoveLicense,
+  GQLH5pElement,
+  GQLH5pLicense,
+  GQLVisualElement,
+  GQLVisualElementOembed,
+} from '../types/schema';
 import { fetch, resolveJson } from './apiHelpers';
 
 export async function fetchVisualElementLicense<T>(
@@ -53,7 +60,10 @@ export async function parseVisualElement(
         ...data,
       };
     } else if (data?.resource === 'h5p') {
-      const visualElementOembed = await fetchOembed(data.url, context);
+      const visualElementOembed = await fetchOembed<GQLH5pElement>(
+        data.url,
+        context,
+      );
       if (!visualElementOembed) return null;
       license = await fetchVisualElementLicense<GQLH5pLicense>(
         visualElementEmbed,
@@ -61,10 +71,7 @@ export async function parseVisualElement(
         context,
       );
       visualElement.url = data.url;
-      visualElement.h5p = {
-        ...visualElementOembed,
-        ...license,
-      };
+      visualElement.h5p = visualElementOembed;
     } else if (data?.resource === 'image') {
       const image = await fetchImage(data.resourceId, context);
       const transformedImage = image && convertToSimpleImage(image);
@@ -75,6 +82,7 @@ export async function parseVisualElement(
         ...transformedImage,
         ...data,
         ...license,
+        altText: data.alt,
         caption: data.caption,
       };
       visualElement.url = data.url;
@@ -85,7 +93,10 @@ export async function parseVisualElement(
     visualElement.copyright = license?.copyright;
     visualElement.title = license?.title;
   } else {
-    const visualElementOembed = await fetchOembed(data.url, context);
+    const visualElementOembed = await fetchOembed<GQLVisualElementOembed>(
+      data.url,
+      context,
+    );
     if (!visualElementOembed) return null;
     visualElement.url = data.url;
     visualElement.oembed = visualElementOembed;

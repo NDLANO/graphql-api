@@ -13,6 +13,20 @@ import {
   resolveJson,
   resolveNothingFromStatus,
 } from '../utils/apiHelpers';
+import {
+  GQLMutationAddFolderArgs,
+  GQLMutationAddFolderResourceArgs,
+  GQLMutationDeleteFolderArgs,
+  GQLMutationDeleteFolderResourceArgs,
+  GQLMutationSortFoldersArgs,
+  GQLMutationSortResourcesArgs,
+  GQLMutationUpdateFolderArgs,
+  GQLMutationUpdateFolderResourceArgs,
+  GQLQueryAllFolderResourcesArgs,
+  GQLQueryFolderArgs,
+  GQLQueryFoldersArgs,
+  GQLSortResult,
+} from '../types/schema';
 
 interface QueryParamsType {
   [key: string]: any;
@@ -24,7 +38,7 @@ export const queryString = (params: QueryParamsType) => {
 };
 
 export async function fetchFolders(
-  { includeResources, includeSubfolders }: QueryToFoldersArgs,
+  { includeResources, includeSubfolders }: GQLQueryFoldersArgs,
   context: Context,
 ): Promise<IFolder[]> {
   const params = queryString({
@@ -40,7 +54,7 @@ export async function fetchFolders(
 }
 
 export async function fetchFolder(
-  { id, includeResources, includeSubfolders }: QueryToFolderArgs,
+  { id, includeResources, includeSubfolders }: GQLQueryFolderArgs,
   context: Context,
 ): Promise<IFolderData> {
   const params = queryString({ includeResources, includeSubfolders });
@@ -52,7 +66,7 @@ export async function fetchFolder(
 }
 
 export async function fetchAllFolderResources(
-  { size }: QueryToAllFolderResourcesArgs,
+  { size }: GQLQueryAllFolderResourcesArgs,
   context: Context,
 ): Promise<IResource[]> {
   const params = queryString({ size });
@@ -68,7 +82,7 @@ export async function fetchAllFolderResources(
 }
 
 export async function postFolder(
-  { name, parentId, status }: MutationToAddFolderArgs,
+  { name, parentId, status }: GQLMutationAddFolderArgs,
   context: Context,
 ): Promise<IFolder> {
   const response = await fetch(`/learningpath-api/v1/folders`, context, {
@@ -80,7 +94,7 @@ export async function postFolder(
 }
 
 export async function patchFolder(
-  { id, name, status }: MutationToUpdateFolderArgs,
+  { id, name, status }: GQLMutationUpdateFolderArgs,
   context: Context,
 ): Promise<IFolder> {
   const response = await fetch(`/learningpath-api/v1/folders/${id}`, context, {
@@ -92,7 +106,7 @@ export async function patchFolder(
 }
 
 export async function deleteFolder(
-  { id }: MutationToDeleteFolderArgs,
+  { id }: GQLMutationDeleteFolderArgs,
   context: Context,
 ): Promise<string> {
   await fetch(`/learningpath-api/v1/folders/${id}`, context, {
@@ -108,7 +122,7 @@ export async function postFolderResource(
     path,
     tags,
     resourceId,
-  }: MutationToAddFolderResourceArgs,
+  }: GQLMutationAddFolderResourceArgs,
   context: Context,
 ): Promise<IResource> {
   const response = await fetch(
@@ -124,7 +138,7 @@ export async function postFolderResource(
 }
 
 export async function patchFolderResource(
-  { id, tags }: MutationToUpdateFolderResourceArgs,
+  { id, tags }: GQLMutationUpdateFolderResourceArgs,
   context: Context,
 ): Promise<IResource> {
   const response = await fetch(
@@ -140,7 +154,7 @@ export async function patchFolderResource(
 }
 
 export async function deleteFolderResource(
-  { folderId, resourceId }: MutationToDeleteFolderResourceArgs,
+  { folderId, resourceId }: GQLMutationDeleteFolderResourceArgs,
   context: Context,
 ): Promise<string> {
   await fetch(
@@ -165,7 +179,7 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
 }
 
 export async function sortFolders(
-  { parentId, sortedIds }: MutationToSortFoldersArgs,
+  { parentId, sortedIds }: GQLMutationSortFoldersArgs,
   context: Context,
 ): Promise<GQLSortResult> {
   const query = queryString({
@@ -185,7 +199,7 @@ export async function sortFolders(
 }
 
 export async function sortResources(
-  { parentId, sortedIds }: MutationToSortResourcesArgs,
+  { parentId, sortedIds }: GQLMutationSortResourcesArgs,
   context: Context,
 ): Promise<GQLSortResult> {
   const response = await fetch(

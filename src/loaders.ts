@@ -20,6 +20,12 @@ import {
   fetchLK20Curriculum,
 } from './api';
 import { fetchSubjectTyped, Node } from './api/taxonomyApi';
+import {
+  GQLMeta,
+  GQLReference,
+  GQLResourceTypeDefinition,
+  GQLSubject,
+} from './types/schema';
 
 export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
   return new DataLoader(
@@ -153,7 +159,9 @@ export function subjectTopicsLoader(context: Context): DataLoader<IInput, any> {
 
 export function resourceTypesLoader(context: Context): DataLoader<string, any> {
   return new DataLoader(async resourceTypeIds => {
-    const resourceTypes = await fetchResourceTypes(context);
+    const resourceTypes = await fetchResourceTypes<GQLResourceTypeDefinition>(
+      context,
+    );
 
     const allResourceTypes = resourceTypes.reduce(
       (acc: any[], resourceType) => {
