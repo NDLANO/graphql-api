@@ -21,6 +21,7 @@ import {
   filterMissingArticles,
   getArticleIdFromUrn,
 } from '../utils/articleHelpers';
+import { Node } from '../api/taxonomyApi';
 import { ndlaUrl } from '../config';
 import {
   GQLArticle,
@@ -35,14 +36,6 @@ import {
   GQLTopicSupplementaryResourcesArgs,
   GQLVisualElementOembed,
 } from '../types/schema';
-
-interface TopicResponse {
-  id: string;
-  name: string;
-  contentUri?: string;
-  path: string;
-  paths?: string[];
-}
 
 export const Query = {
   async topic(
@@ -81,7 +74,7 @@ export const Query = {
 export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
   Topic: {
     async availability(
-      topic: TopicResponse,
+      topic: Node,
       _: GQLTopicArticleArgs,
       context: ContextWithLoaders,
     ) {
@@ -91,7 +84,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
       return article.availability;
     },
     async article(
-      topic: TopicResponse,
+      topic: Node,
       args: GQLTopicArticleArgs,
       context: ContextWithLoaders,
     ): Promise<GQLArticle> {
@@ -123,7 +116,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
       );
     },
     async meta(
-      topic: TopicResponse,
+      topic: Node,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLMeta> {
@@ -134,7 +127,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
       }
     },
     async coreResources(
-      topic: TopicResponse,
+      topic: Node,
       args: GQLTopicCoreResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
@@ -149,7 +142,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
       return filterMissingArticles(topicResources, context);
     },
     async supplementaryResources(
-      topic: TopicResponse,
+      topic: Node,
       args: GQLTopicSupplementaryResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
@@ -164,7 +157,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
       return filterMissingArticles(topicResources, context);
     },
     async subtopics(
-      topic: TopicResponse,
+      topic: Node,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
@@ -172,7 +165,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
       return filterMissingArticles(subtopics, context);
     },
     async pathTopics(
-      topic: TopicResponse,
+      topic: Node,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLTopic[][]> {
@@ -190,7 +183,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
       );
     },
     async alternateTopics(
-      topic: TopicResponse,
+      topic: Node,
       params: any,
       context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
@@ -214,7 +207,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
       return;
     },
     async breadcrumbs(
-      topic: TopicResponse,
+      topic: Node,
       __: any,
       context: ContextWithLoaders,
     ): Promise<string[][]> {

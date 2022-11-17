@@ -20,10 +20,9 @@ RUN yarn ncc
 ### Run stage
 FROM node:16.17-alpine
 
-RUN npm install pm2 -g
 WORKDIR /home/app/graphql-api
 COPY --from=builder /home/app/graphql-api/build/index.js index.js
 
 ENV NODE_ENV=production
 
-CMD ["pm2-runtime", "-i", "max", "index.js", "|", "bunyan"]
+CMD ["node", "index.js", "'|'", "bunyan"]
