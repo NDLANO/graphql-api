@@ -120,6 +120,7 @@ export async function fetchSubjects(
     value?: string;
   },
   isVisible?: boolean,
+  ids?: string[],
 ): Promise<GQLSubject[]> {
   const query = qs.stringify({
     language: context.language,
@@ -127,6 +128,7 @@ export async function fetchSubjects(
     value: metadataFilter?.value,
     nodeType: 'SUBJECT',
     isVisible,
+    ids,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/?${query}`,
