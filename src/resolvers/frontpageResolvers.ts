@@ -11,6 +11,7 @@ import {
   ISubjectPageData,
   IFilmFrontPageData,
   ISubjectCollection,
+  IMovieTheme,
 } from '@ndla/types-frontpage-api';
 import {
   fetchResource,
@@ -21,6 +22,7 @@ import {
   fetchMovieMeta,
   queryResourcesOnContentURI,
 } from '../api';
+import { getArticleIdFromUrn } from '../utils/articleHelpers';
 import {
   GQLMetaImage,
   GQLMoviePath,
@@ -92,6 +94,24 @@ export const resolvers = {
         category.subjects.find(categorySubject => {
           return categorySubject.id === subject.id;
         }),
+      );
+    },
+  },
+
+  MovieTheme: {
+    async movies(
+      theme: IMovieTheme,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<string[]> {
+      const articles = await context.loaders.articlesLoader.loadMany(
+        theme.movies.map(movie => getArticleIdFromUrn(movie)),
+      );
+      const nonNullArticles = articles.filter(article => !!article);
+      return theme.movies.filter(movie =>
+        nonNullArticles.find(
+          article => `${article.id}` === getArticleIdFromUrn(movie),
+        ),
       );
     },
   },
