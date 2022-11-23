@@ -246,7 +246,7 @@ export async function fetchLK20CompetenceGoalSet(
     `/grep/kl06/v201906/kompetansemaalsett-lk20/${code}`,
     context,
   );
-  // Handle timeout events
+  // Fallback to empty object in case of timeout or 404
   const json: CompetenceGoalSet = await resolveJson(response, {});
   const promises = json?.kompetansemaal?.map(km => km.kode) || [];
   return Promise.all(promises);
