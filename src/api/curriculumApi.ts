@@ -242,12 +242,23 @@ export async function fetchLK20CompetenceGoalSet(
   code: string,
   context: Context,
 ): Promise<string[]> {
-  const response = await curriculumFetch(
-    `/grep/kl06/v201906/kompetansemaalsett-lk20/${code}`,
-    context,
-  );
-  const json: CompetenceGoalSet = await resolveJson(response);
-  return Promise.all(json.kompetansemaal.map(km => km.kode));
+  return Promise.resolve(
+    curriculumFetch(
+      `/grep/kl06/v201906/kompetansemaalsett-lk20/${code}`,
+      context,
+    ),
+  )
+    .then(async response => {
+      const json: CompetenceGoalSet = await resolveJson(response);
+      return Promise.all(json?.kompetansemaal?.map(km => km.kode));
+    })
+    .catch(reason => {
+      console.error(
+        `Something went wrong when fetching competence goal set, with code: '${code}':\n`,
+        reason,
+      );
+      return [];
+    });
 }
 
 export async function fetchCoreElement(
