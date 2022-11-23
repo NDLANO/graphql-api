@@ -83,7 +83,10 @@ export async function resolveNothingFromStatus(
   throw Object.assign(new Error(message), { status });
 }
 
-export async function resolveJson(response: Response): Promise<any> {
+export async function resolveJson(
+  response: Response,
+  fallback?: any,
+): Promise<any> {
   const { status, ok, url, statusText } = response;
 
   if (status === 204) {
@@ -97,6 +100,10 @@ export async function resolveJson(response: Response): Promise<any> {
   }
 
   const message = `Api call to ${url} failed with status ${status} ${statusText}`;
+  if (fallback) {
+    console.error(message);
+    return fallback;
+  }
   throw Object.assign(new Error(message), { status, json });
 }
 
