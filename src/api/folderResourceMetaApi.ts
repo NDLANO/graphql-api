@@ -35,7 +35,8 @@ const findResourceTypes = (
   resources: GQLFolderResourceMetaSearchInput[],
 ): GQLFolderResourceResourceType[] => {
   const resource = resources.find(r => result.id === r.id);
-  const context = result.contexts.find(cx => cx.path === resource.path);
+  const resourceId = `urn:${resource.path.split('/').pop()}`;
+  const context = result.contexts.find(cx => cx.id === resourceId);
   const resourceTypes = context.resourceTypes.map(t => ({
     id: t.id,
     name: t.name,
