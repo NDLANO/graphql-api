@@ -32,12 +32,9 @@ type MetaType = 'article' | 'learningpath' | 'multidisciplinary';
 
 const findResourceTypes = (
   result: GQLSearchResult,
-  resources: GQLFolderResourceMetaSearchInput[],
 ): GQLFolderResourceResourceType[] => {
-  const resource = resources.find(r => result.id === r.id);
-  const resourceId = `urn:${resource.path.split('/').pop()}`;
-  const context = result.contexts.find(cx => cx.id === resourceId);
-  const resourceTypes = context.resourceTypes.map(t => ({
+  const context = result.contexts?.[0];
+  const resourceTypes = context?.resourceTypes.map(t => ({
     id: t.id,
     name: t.name,
     language: t.language,
@@ -67,7 +64,7 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
     type,
     description: r.metaDescription,
     metaImage: r.metaImage,
-    resourceTypes: findResourceTypes(r, resources),
+    resourceTypes: findResourceTypes(r),
   }));
 };
 
@@ -95,7 +92,7 @@ const fetchAndTransformArticleMeta = async (
     type,
     description: r.metaDescription,
     metaImage: r.metaImage,
-    resourceTypes: findResourceTypes(r, resources),
+    resourceTypes: findResourceTypes(r),
   }));
 };
 
