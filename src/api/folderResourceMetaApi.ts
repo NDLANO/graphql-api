@@ -103,7 +103,9 @@ const fetchAndTransformArticleMeta = async (
       resourceTypes: findResourceTypes(r),
     }));
   } catch (e) {
-    console.error(`Failed to fetch article metas with parameters ${resources}`);
+    console.error(
+      `Failed to fetch article metas with parameters ${resources} and resource types ${resourceTypes}`,
+    );
     return [];
   }
 };
