@@ -13,7 +13,7 @@ declare global {
   }
 
   interface Loaders {
-    articlesLoader: DataLoader<string, GQLMeta>;
+    articlesLoader: DataLoader<string, GQLMeta | null>;
     learningpathsLoader: DataLoader<string, any>;
     subjectTopicsLoader: DataLoader<{ subjectId: string }, any>;
     subjectsLoader: DataLoader<
