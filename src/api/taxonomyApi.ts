@@ -243,7 +243,7 @@ export async function fetchTopicResources(
   const { subjectId, relevance, topic } = params;
   const query = qs.stringify({
     language: context.language,
-    relevanceId: relevance ?? '',
+    relevance: relevance ?? '',
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${topic.id}/resources/?${query}`,

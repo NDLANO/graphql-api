@@ -81,6 +81,9 @@ export const resolvers = {
       const metaImageId = concept.metaImage?.url?.split('/').pop();
       if (metaImageId) {
         const image = await fetchImage(metaImageId, context);
+        if (!image) {
+          return undefined;
+        }
         return convertToSimpleImage(image);
       }
       return undefined;
