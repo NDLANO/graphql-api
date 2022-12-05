@@ -27,7 +27,9 @@ import {
   GQLSubject,
 } from './types/schema';
 
-export function articlesLoader(context: Context): DataLoader<string, GQLMeta> {
+export function articlesLoader(
+  context: Context,
+): DataLoader<string, GQLMeta | null> {
   return new DataLoader(
     async articleIds => {
       return fetchArticles(articleIds, context);
