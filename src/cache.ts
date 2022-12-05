@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2018-present, NDLA.
  *
@@ -41,7 +40,7 @@ export const createCache = (
 
 const cacheControlValues = ['no-store', 'private', 'no-cache']; // In order of strictness
 const getCacheStrictness = (
-  cacheControlValue: string | number | string[],
+  cacheControlValue: string | number | string[] | undefined,
 ): number => {
   return cacheControlValues.findIndex(header => cacheControlValue === header);
 };
@@ -61,7 +60,7 @@ export const setHeaderIfShouldNotCache = (
   const presetStrictness = getCacheStrictness(presetHeader);
   const newStrictness = getCacheStrictness(cacheControlResponse);
 
-  if (presetStrictness < newStrictness) {
+  if (presetStrictness < newStrictness && cacheControlResponse) {
     res.setHeader('cache-control', cacheControlResponse);
   }
 
