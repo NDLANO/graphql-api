@@ -48,24 +48,31 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
   type: MetaType,
 ) => {
   if (!resources?.length) return [];
-  const res = await searchWithoutPagination(
-    {
-      language: context.language,
-      fallback: 'true',
-      // @ts-ignore ids are not parameterized correctly
-      ids: resources.map(r => r.id).join(','),
-      subjects: 'urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7',
-    },
-    context,
-  );
-  return res.results.map(r => ({
-    id: r.id,
-    title: r.title,
-    type,
-    description: r.metaDescription,
-    metaImage: r.metaImage,
-    resourceTypes: findResourceTypes(r),
-  }));
+  try {
+    const res = await searchWithoutPagination(
+      {
+        language: context.language,
+        fallback: 'true',
+        // @ts-ignore ids are not parameterized correctly
+        ids: resources.map(r => r.id).join(','),
+        subjects: 'urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7',
+      },
+      context,
+    );
+    return res.results.map(r => ({
+      id: r.id,
+      title: r.title,
+      type,
+      description: r.metaDescription,
+      metaImage: r.metaImage,
+      resourceTypes: findResourceTypes(r),
+    }));
+  } catch (e) {
+    console.error(
+      `Failed to fetch multidisciplinary topic metas with parameters ${resources}`,
+    );
+    return [];
+  }
 };
 
 const fetchAndTransformArticleMeta = async (
@@ -75,25 +82,32 @@ const fetchAndTransformArticleMeta = async (
   resourceTypes: string[],
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
-  const res = await searchWithoutPagination(
-    {
-      language: context.language,
-      fallback: 'true',
-      // @ts-ignore ids are not parameterized correctly
-      ids: resources.map(r => r.id).join(','),
-      resourceTypes: resourceTypes.join(','),
-    },
-    context,
-  );
+  try {
+    const res = await searchWithoutPagination(
+      {
+        language: context.language,
+        fallback: 'true',
+        // @ts-ignore ids are not parameterized correctly
+        ids: resources.map(r => r.id).join(','),
+        resourceTypes: resourceTypes.join(','),
+      },
+      context,
+    );
 
-  return res.results.map(r => ({
-    id: r.id,
-    title: r.title,
-    type,
-    description: r.metaDescription,
-    metaImage: r.metaImage,
-    resourceTypes: findResourceTypes(r),
-  }));
+    return res.results.map(r => ({
+      id: r.id,
+      title: r.title,
+      type,
+      description: r.metaDescription,
+      metaImage: r.metaImage,
+      resourceTypes: findResourceTypes(r),
+    }));
+  } catch (e) {
+    console.error(
+      `Failed to fetch article metas with parameters ${resources} and resource types ${resourceTypes}`,
+    );
+    return [];
+  }
 };
 
 export const fetchFolderResourceMeta = async (
