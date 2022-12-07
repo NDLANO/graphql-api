@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -133,7 +132,7 @@ export async function fetchArticlesPage(
 export async function fetchArticles(
   articleIds: string[],
   context: Context,
-): Promise<GQLMeta[]> {
+): Promise<(GQLMeta | null)[]> {
   const pageSize = 100;
   const ids = articleIds.filter(id => id && id !== 'undefined');
   const numberOfPages = Math.ceil(ids.length / pageSize);

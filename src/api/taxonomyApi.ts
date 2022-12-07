@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -92,7 +91,7 @@ export async function fetchResource(
   let rank;
   let relevanceId;
   if (topicId) {
-    const parent = resource.parents.find(topic => topic.id === topicId);
+    const parent = resource.parents?.find(topic => topic.id === topicId);
     rank = parent?.rank;
     relevanceId = parent?.relevanceId || 'urn:relevance:core';
   }

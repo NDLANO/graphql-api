@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2018-present, NDLA.
  *
@@ -71,7 +70,7 @@ function getShouldUseCache(request: Request): boolean {
   const feideAuthHeader = getFeideAuthorization(request);
   const disableCacheHeaders = ['no-cache', 'no-store'];
 
-  const cacheControlDisable = disableCacheHeaders.includes(cacheControl);
+  const cacheControlDisable = disableCacheHeaders.includes(cacheControl ?? '');
   const feideHeaderPresent = !!feideAuthHeader;
 
   return !cacheControlDisable && !feideHeaderPresent;
