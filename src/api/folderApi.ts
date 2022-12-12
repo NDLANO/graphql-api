@@ -7,7 +7,12 @@
  */
 
 import qs from 'query-string';
-import { IFolder, IFolderData, IResource } from '@ndla/types-learningpath-api';
+import {
+  IMyNDLAUser,
+  IFolder,
+  IFolderData,
+  IResource,
+} from '@ndla/types-learningpath-api';
 import {
   fetch,
   resolveJson,
@@ -22,6 +27,7 @@ import {
   GQLMutationSortResourcesArgs,
   GQLMutationUpdateFolderArgs,
   GQLMutationUpdateFolderResourceArgs,
+  GQLMutationUpdatePersonalDataArgs,
   GQLQueryAllFolderResourcesArgs,
   GQLQueryFolderArgs,
   GQLQueryFoldersArgs,
@@ -176,6 +182,25 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
   } catch (e) {
     return false;
   }
+}
+
+export async function getPersonalData(context: Context): Promise<IMyNDLAUser> {
+  const response = await fetch(`/learningpath-api/v1/users/`, {
+    ...context,
+    shouldUseCache: false,
+  });
+  return await resolveJson(response);
+}
+
+export async function patchPersonalData(
+  userData: GQLMutationUpdatePersonalDataArgs,
+  context: Context,
+): Promise<IMyNDLAUser> {
+  const response = await fetch(`/learningpath-api/v1/users/`, context, {
+    method: 'PATCH',
+    body: JSON.stringify(userData),
+  });
+  return await resolveJson(response);
 }
 
 export async function sortFolders(

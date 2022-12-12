@@ -952,6 +952,12 @@ export const typeDefs = gql`
     parentId: String
   }
 
+  type MyNdlaPersonalData {
+    id: Int!
+    favoriteSubjects: [String!]!
+    role: String!
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -969,6 +975,7 @@ export const typeDefs = gql`
       metadataFilterKey: String
       metadataFilterValue: String
       filterVisible: Boolean
+      ids: [String!]
     ): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
@@ -1063,6 +1070,7 @@ export const typeDefs = gql`
       includeResources: Boolean
     ): Folder!
     allFolderResources(size: Int): [FolderResource!]!
+    personalData: MyNdlaPersonalData!
   }
 
   type Mutation {
@@ -1079,6 +1087,7 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
+    updatePersonalData(favoriteSubjects: [String!]!): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
   }
