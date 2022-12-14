@@ -17,6 +17,7 @@ export function setupLogger(correlationId: string, next: NextFunction): void {
       correlationId,
     }),
     next,
+    'route',
   );
 }
 
