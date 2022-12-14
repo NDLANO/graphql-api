@@ -15,10 +15,7 @@ import {
   GQLReference,
 } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import {
-  isoLanguageMapping,
-  curriculumLanguageMapping,
-} from '../utils/mapping';
+import { isoLanguageMapping } from '../utils/mapping';
 
 interface Text {
   spraak: string;
@@ -64,43 +61,6 @@ interface Reference {
   id: string;
   kode: string;
   tittel: string;
-}
-
-interface CompetenceAimSet extends CompetenceAim {
-  competenceAims: CompetenceAim;
-  psis: string[];
-  upstreamId: string;
-}
-
-interface Name {
-  scopes: string[];
-  name: string;
-  isLanguageNeutral: boolean;
-}
-
-interface CompetenceAim {
-  id: string;
-  links: { parents: string[] };
-  names: Name[];
-}
-
-interface CurriculumRelation {
-  curriculumId: string;
-  competenceAim: CompetenceAim;
-  competenceAimSetId: string;
-}
-
-interface Resource {
-  resource: {
-    relations: CurriculumRelation[];
-  };
-}
-
-interface Curriculum {
-  curriculum: {
-    id: string;
-    names: Name[];
-  };
 }
 
 interface CoreElement extends GrepElement {
@@ -157,47 +117,23 @@ function filterTextsForLanguage(texts: Text[], language: string) {
   return text.verdi;
 }
 
-function findNameForAcceptLanguage(names: Name[], language: string) {
-  // find fallback name language
-  const { name: fallbackName } = names.find(
-    nameObj => nameObj.isLanguageNeutral === true,
-  );
-
-  // Try to find competenceAim name for language
-  const competenceAimI18N = names.find(
-    nameObj => nameObj.scopes[0] === curriculumLanguageMapping[language],
-  );
-
-  const name = competenceAimI18N ? competenceAimI18N.name : fallbackName;
-  return name;
-}
-
 export async function fetchCompetenceGoals(
   codes: string[],
-  nodeId: string,
   language: string,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> {
-  return Promise.all([
-    codes
-      ? fetchLK20CompetenceGoals(codes, language, context)
-      : Promise.resolve<GQLCompetenceGoal[]>([]),
-    nodeId
-      ? fetchLK06CompetenceGoals(nodeId, context)
-      : Promise.resolve<GQLCompetenceGoal[]>([]),
-  ])
-    .then(([lk20, lk06]) => {
-      return [...lk20, ...lk06];
-    })
-    .catch(reason => {
-      // This catch block makes fetching competence goals never fail but rather log the error and return an empty array.
-      // eslint-disable-next-line no-console
-      console.error(
-        `Something went wrong when fetching competence goals, with params codes: '${codes}', nodeId: '${nodeId}', language: '${language}':\n`,
-        reason,
-      );
-      return Promise.resolve([]);
-    });
+  return (codes
+    ? fetchLK20CompetenceGoals(codes, language, context)
+    : Promise.resolve<GQLCompetenceGoal[]>([])
+  ).catch(reason => {
+    // This catch block makes fetching competence goals never fail but rather log the error and return an empty array.
+    // eslint-disable-next-line no-console
+    console.error(
+      `Something went wrong when fetching competence goals, with params codes: '${codes}', language: '${language}':\n`,
+      reason,
+    );
+    return Promise.resolve([]);
+  });
 }
 
 async function fetchLK20CompetenceGoal(
@@ -417,63 +353,4 @@ export async function fetchLK20Curriculum(
     '/grep/kl06/v201906/laereplaner-lk20/',
     context,
   );
-}
-
-async function fetchLK06CompetenceGoals(
-  nodeId: string,
-  context: Context,
-): Promise<GQLCompetenceGoal[]> {
-  const response = await curriculumFetch(
-    `https://mycurriculum.ndla.no/v1/users/ndla/resources?psi=http://ndla.no/node/${nodeId}`,
-    context,
-  );
-  const json: Resource = await resolveJson(response);
-  const competenceGoals = json.resource.relations.map(relation => ({
-    id: relation.competenceAim.id,
-    title: `${findNameForAcceptLanguage(
-      relation.competenceAim.names,
-      context.language,
-    )} (${relation.competenceAim.id})`,
-    type: 'LK06',
-    curriculumId: relation.curriculumId,
-    competenceAimSetId: relation.competenceAimSetId,
-    parentLinks: relation.competenceAim.links.parents,
-  }));
-  return competenceGoals;
-}
-
-export async function fetchLK06CompetenceGoalSet(
-  competenceAimSetId: string,
-  context: Context,
-): Promise<GQLReference> {
-  const response = await curriculumFetch(
-    `https://mycurriculum.ndla.no/v1/users/ndla/competence-aim-sets/${competenceAimSetId}`,
-    context,
-  );
-  const json: { competenceAimSet: CompetenceAimSet } = await resolveJson(
-    response,
-  );
-  return {
-    id: json.competenceAimSet.id,
-    title: json.competenceAimSet.names.find(element => element.name).name,
-  };
-}
-
-export async function fetchLK06Curriculum(
-  curriculumId: string,
-  context: Context,
-): Promise<GQLReference> {
-  const response = await curriculumFetch(
-    `https://mycurriculum.ndla.no/v1/users/ndla/curriculums/${curriculumId}`,
-    context,
-  );
-  const json: Curriculum = await resolveJson(response);
-  const curriculum = json.curriculum;
-
-  const title = findNameForAcceptLanguage(curriculum.names, context.language);
-
-  return {
-    id: curriculum.id,
-    title,
-  };
 }

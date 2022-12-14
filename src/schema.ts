@@ -491,7 +491,6 @@ export const typeDefs = gql`
     crossSubjectTopics: [Element!]
     coreElementsCodes: [Element!]
     coreElements: [Element!]
-    competenceAimSetId: String
   }
 
   type CoreElement {
@@ -980,11 +979,7 @@ export const typeDefs = gql`
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: Frontpage
-    competenceGoals(
-      codes: [String]
-      nodeId: String
-      language: String
-    ): [CompetenceGoal!]
+    competenceGoals(codes: [String], language: String): [CompetenceGoal!]
     competenceGoal(code: String!, language: String): CompetenceGoal
     coreElements(codes: [String], language: String): [CoreElement!]
     coreElement(code: String!, language: String): CoreElement

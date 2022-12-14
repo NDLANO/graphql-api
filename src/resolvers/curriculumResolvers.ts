@@ -14,7 +14,6 @@ import {
   fetchCoreElementReferences,
   fetchCrossSubjectTopics,
 } from '../api';
-import { fetchLK06CompetenceGoalSet } from '../api/curriculumApi';
 import {
   GQLCompetenceGoal,
   GQLCoreElement,
@@ -25,14 +24,10 @@ import {
 export const Query = {
   async competenceGoals(
     _: any,
-    {
-      codes,
-      nodeId,
-      language,
-    }: { codes: string[]; nodeId?: string; language?: string },
+    { codes, language }: { codes: string[]; language?: string },
     context: ContextWithLoaders,
   ): Promise<GQLCompetenceGoal[]> {
-    return fetchCompetenceGoals(codes, nodeId, language, context);
+    return fetchCompetenceGoals(codes, language, context);
   },
   async coreElements(
     _: any,
@@ -52,11 +47,6 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLReference> {
-      if (competenceGoal.curriculumId) {
-        return context.loaders.lk06CurriculumLoader.load(
-          competenceGoal.curriculumId,
-        );
-      }
       return context.loaders.lk20CurriculumLoader.load({
         code: competenceGoal.curriculumCode,
         language: competenceGoal.language,
@@ -67,13 +57,6 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLReference> {
-      if (competenceGoal.competenceAimSetId) {
-        return fetchLK06CompetenceGoalSet(
-          competenceGoal.competenceAimSetId,
-          context,
-        );
-      }
-
       if (competenceGoal.competenceGoalSetCode) {
         return fetchCompetenceSet(
           competenceGoal.competenceGoalSetCode,
