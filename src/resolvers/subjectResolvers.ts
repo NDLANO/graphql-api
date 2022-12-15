@@ -29,7 +29,6 @@ export const Query = {
           metadataFilterKey?: string;
           metadataFilterValue?: string;
           filterVisible?: boolean;
-          ids?: string[];
         }
       | undefined,
     context: ContextWithLoaders,
@@ -46,7 +45,6 @@ export const Query = {
     const loaderParams = {
       ...metaDataFilter,
       filterVisible: input.filterVisible,
-      ids: input.ids,
     };
 
     return context.loaders.subjectsLoader
