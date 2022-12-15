@@ -135,8 +135,7 @@ async function startApolloServer() {
         message: err.message,
         locations: err.locations,
         path: err.path,
-        status: err.originalError && err.originalError.status,
-        json: err.originalError && err.originalError.json,
+        extensions: err?.extensions,
       };
     },
   });
