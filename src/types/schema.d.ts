@@ -1082,7 +1082,6 @@ export type GQLQuerySubjectpageArgs = {
 
 export type GQLQuerySubjectsArgs = {
   filterVisible?: InputMaybe<Scalars['Boolean']>;
-  ids?: InputMaybe<Array<Scalars['String']>>;
   metadataFilterKey?: InputMaybe<Scalars['String']>;
   metadataFilterValue?: InputMaybe<Scalars['String']>;
 };
