@@ -39,7 +39,7 @@ export async function parseVisualElement(
   context: Context,
 ) {
   const parsedElement = cheerio.load(visualElementEmbed);
-  const data = parsedElement('embed').data();
+  const data = parsedElement('ndlaembed').data();
   let visualElement: GQLVisualElement = {
     title: '',
     resource: data.resource,
