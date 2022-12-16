@@ -24,7 +24,6 @@ import {
   learningpathsLoader,
   subjectsLoader,
   frontpageLoader,
-  lk06CurriculumLoader,
   lk20CurriculumLoader,
   subjectLoader,
 } from './loaders';
@@ -116,7 +115,6 @@ async function getContext({
       subjectsLoader: subjectsLoader(defaultContext),
       subjectLoader: subjectLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
-      lk06CurriculumLoader: lk06CurriculumLoader(defaultContext),
       lk20CurriculumLoader: lk20CurriculumLoader(defaultContext),
     },
   };

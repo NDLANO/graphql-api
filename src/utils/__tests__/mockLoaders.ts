@@ -20,10 +20,6 @@ export const mockLearningpathsLoader = (mockData: GQLMeta[] = []) => {
   return new DataLoader<string, GQLMeta>(() => mockFn(mockData));
 };
 
-export const mockLk06CurriculumLoader = (mockData: GQLReference[] = []) => {
-  return new DataLoader<string, GQLReference>(() => mockFn(mockData));
-};
-
 export const mockLk20CurriculumLoader = (mockData: GQLReference[] = []) => {
   return new DataLoader<{ code: string; language: string }, GQLReference>(() =>
     mockFn(mockData),
@@ -95,7 +91,6 @@ export const mockFilmFrontPageDefaultResponse: IFilmFrontPageData = {
 export const mockLoaders = {
   articlesLoader: mockArticlesLoader(),
   learningpathsLoader: mockLearningpathsLoader(),
-  lk06CurriculumLoader: mockLk06CurriculumLoader(),
   lk20CurriculumLoader: mockLk20CurriculumLoader(),
   frontpageLoader: mockFrontpageLoader(),
   filmFrontpageLoader: mockFilmFrontpageLoader(),

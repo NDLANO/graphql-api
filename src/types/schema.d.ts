@@ -241,7 +241,6 @@ export type GQLCategory = {
 export type GQLCompetenceGoal = {
   __typename?: 'CompetenceGoal';
   code?: Maybe<Scalars['String']>;
-  competenceAimSetId?: Maybe<Scalars['String']>;
   competenceGoalSet?: Maybe<GQLReference>;
   competenceGoalSetCode?: Maybe<Scalars['String']>;
   coreElements?: Maybe<Array<GQLElement>>;
@@ -916,7 +915,6 @@ export type GQLQueryCompetenceGoalArgs = {
 export type GQLQueryCompetenceGoalsArgs = {
   codes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   language?: InputMaybe<Scalars['String']>;
-  nodeId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1968,7 +1966,6 @@ export type GQLCategoryResolvers<ContextType = any, ParentType extends GQLResolv
 
 export type GQLCompetenceGoalResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['CompetenceGoal'] = GQLResolversParentTypes['CompetenceGoal']> = {
   code?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  competenceAimSetId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   competenceGoalSet?: Resolver<Maybe<GQLResolversTypes['Reference']>, ParentType, ContextType>;
   competenceGoalSetCode?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   coreElements?: Resolver<Maybe<Array<GQLResolversTypes['Element']>>, ParentType, ContextType>;

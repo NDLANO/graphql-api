@@ -50,11 +50,10 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLCompetenceGoal[]> {
-      const nodeId = article.oldNdlaUrl?.split('/').pop();
       const language =
         article.supportedLanguages.find(lang => lang === context.language) ||
         article.supportedLanguages[0];
-      return fetchCompetenceGoals(article.grepCodes, nodeId, language, context);
+      return fetchCompetenceGoals(article.grepCodes, language, context);
     },
     async coreElements(
       article: GQLArticle,
