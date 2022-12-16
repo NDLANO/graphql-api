@@ -12,6 +12,46 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 export const typeDefs = gql`
   scalar StringRecord
 
+  type ImageMetaInformationV2 {
+    id: String!
+    metaUrl: String!
+    title: Title!
+    alttext: ImageAltText!
+    imageUrl: String!
+    size: Int!
+    contentType: String!
+    copyright: Copyright!
+    tags: Tags!
+    caption: Caption!
+    supportedLanguages: [String!]
+    created: String!
+    createdBy: String!
+    modelRelease: String!
+    editorNotes: [EditorNote!]
+    imageDimensions: ImageDimensions
+  }
+
+  type ImageDimensions {
+    width: Int!
+    height: Int!
+  }
+
+  type EditorNote {
+    timestamp: String!
+    updatedBy: String!
+    note: String!
+  }
+
+  type Caption {
+    caption: String!
+    language: String!
+  }
+
+  type ImageAltText {
+    alttext: String!
+    language: String!
+  }
+
   type AudioFile {
     url: String!
     mimeType: String!
@@ -1065,6 +1105,7 @@ export const typeDefs = gql`
     ): Folder!
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData!
+    image(id: String!): ImageMetaInformationV2
   }
 
   type Mutation {
