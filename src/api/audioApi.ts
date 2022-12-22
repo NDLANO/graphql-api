@@ -21,11 +21,7 @@ export async function fetchPodcast(
     context,
   );
   try {
-    const audio = await resolveJson(response);
-    if (audio.audioType !== 'podcast') {
-      return null;
-    }
-    return audio;
+    return await resolveJson(response);
   } catch (e) {
     return null;
   }
