@@ -12,7 +12,7 @@ import {
   IPodcastMeta,
 } from '@ndla/types-audio-api';
 import {
-  fetchPodcast,
+  fetchAudio,
   fetchPodcastSeries,
   fetchPodcastSeriesPage,
   fetchPodcastsPage,
@@ -20,19 +20,19 @@ import {
 import { fetchImage } from '../api/imageApi';
 import {
   GQLImageMetaInformation,
-  GQLQueryPodcastArgs,
+  GQLQueryAudioArgs,
   GQLQueryPodcastSearchArgs,
   GQLQueryPodcastSeriesArgs,
   GQLQueryPodcastSeriesSearchArgs,
 } from '../types/schema';
 
 export const Query = {
-  async podcast(
+  async audio(
     _: any,
-    { id }: GQLQueryPodcastArgs,
+    { id }: GQLQueryAudioArgs,
     context: ContextWithLoaders,
   ): Promise<IAudioMetaInformation | null> {
-    return fetchPodcast(context, id);
+    return fetchAudio(context, id);
   },
   async podcastSearch(
     _: any,

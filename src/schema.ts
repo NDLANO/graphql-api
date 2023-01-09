@@ -51,37 +51,7 @@ export const typeDefs = gql`
     language: String!
   }
 
-  interface AudioBase {
-    id: Int!
-    revision: Int!
-    title: Title!
-    audioFile: AudioFile!
-    copyright: Copyright!
-    tags: Tags!
-    supportedLanguages: [String!]!
-    audioType: String!
-    podcastMeta: PodcastMeta
-    manuscript: Manuscript
-    created: String!
-    updated: String!
-  }
-
-  type Audio implements AudioBase {
-    id: Int!
-    revision: Int!
-    title: Title!
-    audioFile: AudioFile!
-    copyright: Copyright!
-    tags: Tags!
-    supportedLanguages: [String!]!
-    audioType: String!
-    podcastMeta: PodcastMeta
-    manuscript: Manuscript
-    created: String!
-    updated: String!
-  }
-
-  type AudioWithSeries implements AudioBase {
+  type Audio {
     id: Int!
     revision: Int!
     title: Title!
@@ -1042,7 +1012,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
     ): SearchWithoutPagination
-    podcast(id: Int!): AudioWithSeries
+    audio(id: Int!): Audio
     podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
     podcastSeriesSearch(

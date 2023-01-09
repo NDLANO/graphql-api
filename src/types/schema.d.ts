@@ -101,7 +101,7 @@ export type GQLArticleSearchResult = GQLSearchResult & {
   url: Scalars['String'];
 };
 
-export type GQLAudio = GQLAudioBase & {
+export type GQLAudio = {
   __typename?: 'Audio';
   audioFile: GQLAudioFile;
   audioType: Scalars['String'];
@@ -111,21 +111,7 @@ export type GQLAudio = GQLAudioBase & {
   manuscript?: Maybe<GQLManuscript>;
   podcastMeta?: Maybe<GQLPodcastMeta>;
   revision: Scalars['Int'];
-  supportedLanguages: Array<Scalars['String']>;
-  tags: GQLTags;
-  title: GQLTitle;
-  updated: Scalars['String'];
-};
-
-export type GQLAudioBase = {
-  audioFile: GQLAudioFile;
-  audioType: Scalars['String'];
-  copyright: GQLCopyright;
-  created: Scalars['String'];
-  id: Scalars['Int'];
-  manuscript?: Maybe<GQLManuscript>;
-  podcastMeta?: Maybe<GQLPodcastMeta>;
-  revision: Scalars['Int'];
+  series?: Maybe<GQLPodcastSeries>;
   supportedLanguages: Array<Scalars['String']>;
   tags: GQLTags;
   title: GQLTitle;
@@ -168,23 +154,6 @@ export type GQLAudioSummary = {
   supportedLanguages: Array<Scalars['String']>;
   title: GQLTitle;
   url: Scalars['String'];
-};
-
-export type GQLAudioWithSeries = GQLAudioBase & {
-  __typename?: 'AudioWithSeries';
-  audioFile: GQLAudioFile;
-  audioType: Scalars['String'];
-  copyright: GQLCopyright;
-  created: Scalars['String'];
-  id: Scalars['Int'];
-  manuscript?: Maybe<GQLManuscript>;
-  podcastMeta?: Maybe<GQLPodcastMeta>;
-  revision: Scalars['Int'];
-  series?: Maybe<GQLPodcastSeries>;
-  supportedLanguages: Array<Scalars['String']>;
-  tags: GQLTags;
-  title: GQLTitle;
-  updated: Scalars['String'];
 };
 
 export type GQLBreadcrumb = {
@@ -859,6 +828,7 @@ export type GQLQuery = {
   alerts?: Maybe<Array<Maybe<GQLUptimeAlert>>>;
   allFolderResources: Array<GQLFolderResource>;
   article?: Maybe<GQLArticle>;
+  audio?: Maybe<GQLAudio>;
   competenceGoal?: Maybe<GQLCompetenceGoal>;
   competenceGoals?: Maybe<Array<GQLCompetenceGoal>>;
   concept?: Maybe<GQLConcept>;
@@ -876,7 +846,6 @@ export type GQLQuery = {
   learningpath?: Maybe<GQLLearningpath>;
   listingPage?: Maybe<GQLListingPage>;
   personalData: GQLMyNdlaPersonalData;
-  podcast?: Maybe<GQLAudioWithSeries>;
   podcastSearch?: Maybe<GQLAudioSearch>;
   podcastSeries?: Maybe<GQLPodcastSeriesWithEpisodes>;
   podcastSeriesSearch?: Maybe<GQLPodcastSeriesSearch>;
@@ -903,6 +872,11 @@ export type GQLQueryArticleArgs = {
   path?: InputMaybe<Scalars['String']>;
   showVisualElement?: InputMaybe<Scalars['String']>;
   subjectId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLQueryAudioArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -998,11 +972,6 @@ export type GQLQueryLearningpathArgs = {
 
 export type GQLQueryListingPageArgs = {
   subjects?: InputMaybe<Scalars['String']>;
-};
-
-
-export type GQLQueryPodcastArgs = {
-  id: Scalars['Int'];
 };
 
 
@@ -1510,12 +1479,10 @@ export type GQLResolversTypes = {
   ArticleRequiredLibrary: ResolverTypeWrapper<GQLArticleRequiredLibrary>;
   ArticleSearchResult: ResolverTypeWrapper<GQLArticleSearchResult>;
   Audio: ResolverTypeWrapper<GQLAudio>;
-  AudioBase: GQLResolversTypes['Audio'] | GQLResolversTypes['AudioWithSeries'];
   AudioFile: ResolverTypeWrapper<GQLAudioFile>;
   AudioLicense: ResolverTypeWrapper<GQLAudioLicense>;
   AudioSearch: ResolverTypeWrapper<GQLAudioSearch>;
   AudioSummary: ResolverTypeWrapper<GQLAudioSummary>;
-  AudioWithSeries: ResolverTypeWrapper<GQLAudioWithSeries>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Breadcrumb: ResolverTypeWrapper<GQLBreadcrumb>;
   BrightcoveElement: ResolverTypeWrapper<GQLBrightcoveElement>;
@@ -1632,12 +1599,10 @@ export type GQLResolversParentTypes = {
   ArticleRequiredLibrary: GQLArticleRequiredLibrary;
   ArticleSearchResult: GQLArticleSearchResult;
   Audio: GQLAudio;
-  AudioBase: GQLResolversParentTypes['Audio'] | GQLResolversParentTypes['AudioWithSeries'];
   AudioFile: GQLAudioFile;
   AudioLicense: GQLAudioLicense;
   AudioSearch: GQLAudioSearch;
   AudioSummary: GQLAudioSummary;
-  AudioWithSeries: GQLAudioWithSeries;
   Boolean: Scalars['Boolean'];
   Breadcrumb: GQLBreadcrumb;
   BrightcoveElement: GQLBrightcoveElement;
@@ -1835,27 +1800,12 @@ export type GQLAudioResolvers<ContextType = any, ParentType extends GQLResolvers
   manuscript?: Resolver<Maybe<GQLResolversTypes['Manuscript']>, ParentType, ContextType>;
   podcastMeta?: Resolver<Maybe<GQLResolversTypes['PodcastMeta']>, ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  series?: Resolver<Maybe<GQLResolversTypes['PodcastSeries']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<GQLResolversTypes['Tags'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLAudioBaseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioBase'] = GQLResolversParentTypes['AudioBase']> = {
-  __resolveType: TypeResolveFn<'Audio' | 'AudioWithSeries', ParentType, ContextType>;
-  audioFile?: Resolver<GQLResolversTypes['AudioFile'], ParentType, ContextType>;
-  audioType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
-  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  manuscript?: Resolver<Maybe<GQLResolversTypes['Manuscript']>, ParentType, ContextType>;
-  podcastMeta?: Resolver<Maybe<GQLResolversTypes['PodcastMeta']>, ParentType, ContextType>;
-  revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  tags?: Resolver<GQLResolversTypes['Tags'], ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
-  updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type GQLAudioFileResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioFile'] = GQLResolversParentTypes['AudioFile']> = {
@@ -1893,23 +1843,6 @@ export type GQLAudioSummaryResolvers<ContextType = any, ParentType extends GQLRe
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLAudioWithSeriesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioWithSeries'] = GQLResolversParentTypes['AudioWithSeries']> = {
-  audioFile?: Resolver<GQLResolversTypes['AudioFile'], ParentType, ContextType>;
-  audioType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
-  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  manuscript?: Resolver<Maybe<GQLResolversTypes['Manuscript']>, ParentType, ContextType>;
-  podcastMeta?: Resolver<Maybe<GQLResolversTypes['PodcastMeta']>, ParentType, ContextType>;
-  revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  series?: Resolver<Maybe<GQLResolversTypes['PodcastSeries']>, ParentType, ContextType>;
-  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  tags?: Resolver<GQLResolversTypes['Tags'], ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
-  updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2522,6 +2455,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   alerts?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['UptimeAlert']>>>, ParentType, ContextType>;
   allFolderResources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType, Partial<GQLQueryAllFolderResourcesArgs>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
+  audio?: Resolver<Maybe<GQLResolversTypes['Audio']>, ParentType, ContextType, RequireFields<GQLQueryAudioArgs, 'id'>>;
   competenceGoal?: Resolver<Maybe<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, RequireFields<GQLQueryCompetenceGoalArgs, 'code'>>;
   competenceGoals?: Resolver<Maybe<Array<GQLResolversTypes['CompetenceGoal']>>, ParentType, ContextType, Partial<GQLQueryCompetenceGoalsArgs>>;
   concept?: Resolver<Maybe<GQLResolversTypes['Concept']>, ParentType, ContextType, RequireFields<GQLQueryConceptArgs, 'id'>>;
@@ -2539,7 +2473,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
   personalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType>;
-  podcast?: Resolver<Maybe<GQLResolversTypes['AudioWithSeries']>, ParentType, ContextType, RequireFields<GQLQueryPodcastArgs, 'id'>>;
   podcastSearch?: Resolver<Maybe<GQLResolversTypes['AudioSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSearchArgs, 'page' | 'pageSize'>>;
   podcastSeries?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesWithEpisodes']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesArgs, 'id'>>;
   podcastSeriesSearch?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesSearchArgs, 'page' | 'pageSize'>>;
@@ -2855,12 +2788,10 @@ export type GQLResolvers<ContextType = any> = {
   ArticleRequiredLibrary?: GQLArticleRequiredLibraryResolvers<ContextType>;
   ArticleSearchResult?: GQLArticleSearchResultResolvers<ContextType>;
   Audio?: GQLAudioResolvers<ContextType>;
-  AudioBase?: GQLAudioBaseResolvers<ContextType>;
   AudioFile?: GQLAudioFileResolvers<ContextType>;
   AudioLicense?: GQLAudioLicenseResolvers<ContextType>;
   AudioSearch?: GQLAudioSearchResolvers<ContextType>;
   AudioSummary?: GQLAudioSummaryResolvers<ContextType>;
-  AudioWithSeries?: GQLAudioWithSeriesResolvers<ContextType>;
   Breadcrumb?: GQLBreadcrumbResolvers<ContextType>;
   BrightcoveElement?: GQLBrightcoveElementResolvers<ContextType>;
   BrightcoveIframe?: GQLBrightcoveIframeResolvers<ContextType>;
