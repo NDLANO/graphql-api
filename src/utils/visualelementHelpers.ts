@@ -40,67 +40,98 @@ export async function parseVisualElement(
 ) {
   const parsedElement = cheerio.load(visualElementEmbed);
   const data = parsedElement('ndlaembed').data();
-  let visualElement: GQLVisualElement = {
-    title: '',
-    resource: data.resource,
-  };
 
-  if (data?.resource !== 'external') {
-    let license;
-
-    if (data?.resource === 'brightcove') {
-      visualElement.url = `https://players.brightcove.net/${data.account}/${data.player}_default/index.html?videoId=${data.videoid}`;
-      license = await fetchVisualElementLicense<GQLBrightcoveLicense>(
-        visualElementEmbed,
-        'brightcoves',
-        context,
-      );
-      visualElement.brightcove = {
-        ...license,
-        ...data,
-      };
-    } else if (data?.resource === 'h5p') {
-      const visualElementOembed = await fetchOembed<GQLH5pElement>(
-        data.url,
-        context,
-      );
-      if (!visualElementOembed) return null;
-      license = await fetchVisualElementLicense<GQLH5pLicense>(
-        visualElementEmbed,
-        'h5ps',
-        context,
-      );
-      visualElement.url = data.url;
-      visualElement.h5p = visualElementOembed;
-    } else if (data?.resource === 'image') {
-      const image = await fetchImage(data.resourceId, context);
-      const transformedImage = image && convertToSimpleImage(image);
-      license = await fetchVisualElementLicense<
-        GQLBrightcoveLicense | GQLH5pLicense
-      >(visualElementEmbed, 'images', context);
-      visualElement.image = {
-        ...transformedImage,
-        ...data,
-        ...license,
-        altText: data.alt,
-        caption: data.caption,
-      };
-      visualElement.url = data.url;
-    } else {
-      visualElement.url = data.url;
-    }
-
-    visualElement.copyright = license?.copyright;
-    visualElement.title = license?.title;
-  } else {
-    const visualElementOembed = await fetchOembed<GQLVisualElementOembed>(
-      data.url,
-      context,
-    );
-    if (!visualElementOembed) return null;
-    visualElement.url = data.url;
-    visualElement.oembed = visualElementOembed;
+  switch (data?.resource) {
+    case 'brightcove':
+      return await parseBrightcoveFromEmbed(data, context);
+    case 'h5p':
+      return await parseH5PFromEmbed(data, context, visualElementEmbed);
+    case 'image':
+      return await parseImageFromEmbed(data, context, visualElementEmbed);
+    case 'oembed':
+      return await parseOembedFromEmbed(data, context);
+    default:
+        return { url: data.url };
   }
-
-  return visualElement;
 }
+
+const parseBrightcoveFromEmbed = async (
+  embedData: any,
+  context: Context,
+): Promise<GQLVisualElement> => {
+  const license = await fetchVisualElementLicense<GQLBrightcoveLicense>(
+    embedData,
+    'brightcoves',
+    context,
+  );
+  return {
+    url: `https://players.brightcove.net/${embedData.account}/${embedData.player}_default/index.html?videoId=${embedData.videoid}`,
+    brightcove: {
+      ...license,
+      ...embedData,
+    },
+    resource: 'brightcove',
+  };
+};
+
+const parseH5PFromEmbed = async (
+  embedData: any,
+  context: Context,
+  visualElementEmbed: string,
+) => {
+  const visualElementOembed = await fetchOembed<GQLH5pElement>(
+    embedData.url,
+    context,
+  );
+  if (!visualElementOembed) return null;
+  const license = await fetchVisualElementLicense<GQLH5pLicense>(
+    visualElementEmbed,
+    'h5ps',
+    context,
+  );
+  return {
+    url: embedData.url,
+    h5p: visualElementOembed,
+    copyright: license.copyright,
+    title: license.title,
+    resource: 'h5p',
+  };
+};
+
+const parseImageFromEmbed = async (
+  embedData: any,
+  context: Context,
+  visualElementEmbed: string,
+) => {
+  const image = await fetchImage(embedData.resourceId, context);
+  const transformedImage = image && convertToSimpleImage(image);
+  const license = await fetchVisualElementLicense<
+    GQLBrightcoveLicense | GQLH5pLicense
+  >(visualElementEmbed, 'images', context);
+  return {
+    image: {
+      ...transformedImage,
+      ...embedData,
+      ...license,
+      altText: embedData.alt,
+      caption: embedData.caption,
+    },
+    url: embedData.url,
+    copyright: license.copyright,
+    title: license.title,
+    resource: 'image',
+  };
+};
+
+const parseOembedFromEmbed = async (embedData: any, context: Context) => {
+  const visualElementOembed = await fetchOembed<GQLVisualElementOembed>(
+    embedData.url,
+    context,
+  );
+  if (!visualElementOembed) return null;
+  return {
+    url: embedData.url,
+    oembed: visualElementOembed,
+    resource: 'oembed',
+  };
+};
