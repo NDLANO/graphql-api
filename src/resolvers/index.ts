@@ -55,6 +55,7 @@ import {
   Query as FolderResolvers,
   Mutations as FolderMutations,
 } from './folderResolvers';
+import { Query as VideoQuery } from './videoResolvers';
 
 export const resolvers = {
   Query: {
@@ -70,6 +71,7 @@ export const resolvers = {
     ...ConceptQuery,
     ...UptimeQuery,
     ...FolderResolvers,
+    ...VideoQuery,
   },
   Mutation: {
     ...FolderMutations,

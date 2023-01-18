@@ -51,7 +51,7 @@ export async function parseVisualElement(
     case 'oembed':
       return await parseOembedFromEmbed(data, context);
     default:
-        return { url: data.url };
+      return { url: data.url };
   }
 }
 
@@ -79,16 +79,16 @@ const parseH5PFromEmbed = async (
   context: Context,
   visualElementEmbed: string,
 ) => {
-  const visualElementOembed = await fetchOembed<GQLH5pElement>(
-    embedData.url,
-    context,
-  );
+  const [license, visualElementOembed] = await Promise.all([
+    await fetchVisualElementLicense<GQLH5pLicense>(
+      visualElementEmbed,
+      'h5ps',
+      context,
+    ),
+    await fetchOembed<GQLH5pElement>(embedData.url, context),
+  ]);
+
   if (!visualElementOembed) return null;
-  const license = await fetchVisualElementLicense<GQLH5pLicense>(
-    visualElementEmbed,
-    'h5ps',
-    context,
-  );
   return {
     url: embedData.url,
     h5p: visualElementOembed,
@@ -103,11 +103,17 @@ const parseImageFromEmbed = async (
   context: Context,
   visualElementEmbed: string,
 ) => {
-  const image = await fetchImage(embedData.resourceId, context);
+  const [image, license] = await Promise.all([
+    fetchImage(embedData.resourceId, context),
+    fetchVisualElementLicense<GQLBrightcoveLicense | GQLH5pLicense>(
+      visualElementEmbed,
+      'images',
+      context,
+    ),
+  ]);
+
   const transformedImage = image && convertToSimpleImage(image);
-  const license = await fetchVisualElementLicense<
-    GQLBrightcoveLicense | GQLH5pLicense
-  >(visualElementEmbed, 'images', context);
+
   return {
     image: {
       ...transformedImage,
