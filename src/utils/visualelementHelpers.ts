@@ -43,7 +43,7 @@ export async function parseVisualElement(
 
   switch (data?.resource) {
     case 'brightcove':
-      return await parseBrightcoveFromEmbed(data, context);
+      return await parseBrightcoveFromEmbed(data, context, visualElementEmbed);
     case 'h5p':
       return await parseH5PFromEmbed(data, context, visualElementEmbed);
     case 'image':
@@ -58,9 +58,10 @@ export async function parseVisualElement(
 const parseBrightcoveFromEmbed = async (
   embedData: any,
   context: Context,
+  visualElementEmbed: string,
 ): Promise<GQLVisualElement> => {
   const license = await fetchVisualElementLicense<GQLBrightcoveLicense>(
-    embedData,
+    visualElementEmbed,
     'brightcoves',
     context,
   );
@@ -70,6 +71,7 @@ const parseBrightcoveFromEmbed = async (
       ...license,
       ...embedData,
     },
+    copyright: license.copyright,
     resource: 'brightcove',
   };
 };

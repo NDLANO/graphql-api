@@ -22,10 +22,10 @@ const b64EncodeUnicode = (str: string) =>
 const brightcoveTokenUrl = 'https://oauth.brightcove.com/v3/access_token';
 const brightcoveApiUrl = 'https://cms.api.brightcove.com';
 const clientIdSecret = `${getEnvironmentVariabel(
-  'BRIGHTCOVE_API_CLIENT_ID', // TODO lagre frontend
-)}:${getEnvironmentVariabel('BRIGHTCOVE_API_CLIENT_SECRET')}`; // TODO Lagre frontend
+  'BRIGHTCOVE_API_CLIENT_ID',
+)}:${getEnvironmentVariabel('BRIGHTCOVE_API_CLIENT_SECRET')}`;
 
-const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789'); // TODO Lagre i graphql
+const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789');
 
 export async function fetchBrightcoveVideo(
   id: string,
@@ -36,8 +36,8 @@ export async function fetchBrightcoveVideo(
     const brightcoveSourceUrl = `${brightcoveVideoUrl}/sources`;
 
     const [responseVideo, responseSource] = await Promise.all([
-      fetchWithBrightCoveToken(brightcoveVideoUrl, context),
-      fetchWithBrightCoveToken(brightcoveSourceUrl, context),
+      fetchWithBrightcoveToken(brightcoveVideoUrl, context),
+      fetchWithBrightcoveToken(brightcoveSourceUrl, context),
     ]);
     const brightcoveVideo: BrightcoveApiType = await resolveJson(responseVideo);
     const brightcoveSources: BrightcoveVideoSource[] = await resolveJson(
@@ -77,7 +77,7 @@ export async function fetchBrightcoveVideo(
   }
 }
 
-export const fetchWithBrightCoveToken = async (
+export const fetchWithBrightcoveToken = async (
   url: string,
   context: Context,
 ) => {
