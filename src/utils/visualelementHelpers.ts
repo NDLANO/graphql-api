@@ -42,7 +42,7 @@ export async function parseVisualElement(
   const data = parsedElement('ndlaembed').data();
   let visualElement: GQLVisualElement = {
     title: '',
-    resource: data.resource,
+    resource: data?.resource,
   };
 
   if (data?.resource !== 'external') {
@@ -85,9 +85,9 @@ export async function parseVisualElement(
         altText: data.alt,
         caption: data.caption,
       };
-      visualElement.url = data.url;
+      visualElement.url = data?.url;
     } else {
-      visualElement.url = data.url;
+      visualElement.url = data?.url;
     }
 
     visualElement.copyright = license?.copyright;
