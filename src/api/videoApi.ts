@@ -71,6 +71,7 @@ export async function fetchBrightcoveVideo(
         license: brightcoveVideo.custom_fields.license,
         accountId: accountId,
       },
+      name: brightcoveVideo.name,
     };
   } catch (e) {
     return null;
@@ -106,4 +107,5 @@ export interface BrightcoveVideoSource {
 export interface BrightcoveApiType {
   account_id?: string | null;
   custom_fields: Record<string, string>;
+  name?: string;
 }

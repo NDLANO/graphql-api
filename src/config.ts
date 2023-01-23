@@ -57,6 +57,21 @@ const ndlaFrontendUrl = () => {
   }
 };
 
+export const h5pHostUrl = () => {
+  const h5pHost = process.env.H5P_HOST;
+  if (!h5pHost) {
+    switch (process.env.NDLA_ENVIRONMENT) {
+      case 'prod':
+        return 'https://h5p.ndla.no';
+      default:
+        return `https://h5p-${ndlaEnvironment.toString().replace('_', '-') ||
+          'test'}.ndla.no`;
+    }
+  } else {
+    return h5pHost;
+  }
+};
+
 export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);

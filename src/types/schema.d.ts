@@ -209,6 +209,7 @@ export type GQLBrightcoveElement = {
   description?: Maybe<Scalars['String']>;
   download?: Maybe<Scalars['String']>;
   iframe?: Maybe<GQLBrightcoveIframe>;
+  name?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
   src?: Maybe<Scalars['String']>;
   uploadDate?: Maybe<Scalars['String']>;
@@ -2011,6 +2012,7 @@ export type GQLBrightcoveElementResolvers<ContextType = any, ParentType extends 
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   download?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   iframe?: Resolver<Maybe<GQLResolversTypes['BrightcoveIframe']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   player?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   uploadDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;

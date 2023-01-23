@@ -783,6 +783,7 @@ export const typeDefs = gql`
     iframe: BrightcoveIframe
     uploadDate: String
     customFields: BrightcoveCustomFields
+    name: String
   }
 
   type BrightcoveCustomFields {
