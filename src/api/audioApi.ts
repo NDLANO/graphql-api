@@ -12,20 +12,16 @@ import {
 } from '@ndla/types-audio-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
-export async function fetchPodcast(
+export async function fetchAudio(
   context: Context,
-  podcastId: number,
+  audioId: number,
 ): Promise<IAudioMetaInformation | null> {
   const response = await fetch(
-    `/audio-api/v1/audio/${podcastId}?language=${context.language}`,
+    `/audio-api/v1/audio/${audioId}?language=${context.language}`,
     context,
   );
   try {
-    const audio = await resolveJson(response);
-    if (audio.audioType !== 'podcast') {
-      return null;
-    }
-    return audio;
+    return await resolveJson(response);
   } catch (e) {
     return null;
   }
