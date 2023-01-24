@@ -782,6 +782,14 @@ export const typeDefs = gql`
     download: String
     iframe: BrightcoveIframe
     uploadDate: String
+    customFields: BrightcoveCustomFields
+    name: String
+  }
+
+  type BrightcoveCustomFields {
+    license: String!
+    licenseInfo: [String!]!
+    accountId: String
   }
 
   type H5pElement {
@@ -1106,6 +1114,7 @@ export const typeDefs = gql`
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
+    brightcoveVideo(id: String!): BrightcoveElement
   }
 
   type Mutation {

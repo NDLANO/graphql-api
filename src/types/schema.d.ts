@@ -193,14 +193,23 @@ export type GQLBreadcrumb = {
   name: Scalars['String'];
 };
 
+export type GQLBrightcoveCustomFields = {
+  __typename?: 'BrightcoveCustomFields';
+  accountId?: Maybe<Scalars['String']>;
+  license: Scalars['String'];
+  licenseInfo: Array<Scalars['String']>;
+};
+
 export type GQLBrightcoveElement = {
   __typename?: 'BrightcoveElement';
   account?: Maybe<Scalars['String']>;
   caption?: Maybe<Scalars['String']>;
   cover?: Maybe<Scalars['String']>;
+  customFields?: Maybe<GQLBrightcoveCustomFields>;
   description?: Maybe<Scalars['String']>;
   download?: Maybe<Scalars['String']>;
   iframe?: Maybe<GQLBrightcoveIframe>;
+  name?: Maybe<Scalars['String']>;
   player?: Maybe<Scalars['String']>;
   src?: Maybe<Scalars['String']>;
   uploadDate?: Maybe<Scalars['String']>;
@@ -904,6 +913,7 @@ export type GQLQuery = {
   alerts?: Maybe<Array<Maybe<GQLUptimeAlert>>>;
   allFolderResources: Array<GQLFolderResource>;
   article?: Maybe<GQLArticle>;
+  brightcoveVideo?: Maybe<GQLBrightcoveElement>;
   competenceGoal?: Maybe<GQLCompetenceGoal>;
   competenceGoals?: Maybe<Array<GQLCompetenceGoal>>;
   concept?: Maybe<GQLConcept>;
@@ -949,6 +959,11 @@ export type GQLQueryArticleArgs = {
   path?: InputMaybe<Scalars['String']>;
   showVisualElement?: InputMaybe<Scalars['String']>;
   subjectId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLQueryBrightcoveVideoArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -1569,6 +1584,7 @@ export type GQLResolversTypes = {
   AudioWithSeries: ResolverTypeWrapper<GQLAudioWithSeries>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Breadcrumb: ResolverTypeWrapper<GQLBreadcrumb>;
+  BrightcoveCustomFields: ResolverTypeWrapper<GQLBrightcoveCustomFields>;
   BrightcoveElement: ResolverTypeWrapper<GQLBrightcoveElement>;
   BrightcoveIframe: ResolverTypeWrapper<GQLBrightcoveIframe>;
   BrightcoveLicense: ResolverTypeWrapper<GQLBrightcoveLicense>;
@@ -1696,6 +1712,7 @@ export type GQLResolversParentTypes = {
   AudioWithSeries: GQLAudioWithSeries;
   Boolean: Scalars['Boolean'];
   Breadcrumb: GQLBreadcrumb;
+  BrightcoveCustomFields: GQLBrightcoveCustomFields;
   BrightcoveElement: GQLBrightcoveElement;
   BrightcoveIframe: GQLBrightcoveIframe;
   BrightcoveLicense: GQLBrightcoveLicense;
@@ -1980,13 +1997,22 @@ export type GQLBreadcrumbResolvers<ContextType = any, ParentType extends GQLReso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLBrightcoveCustomFieldsResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BrightcoveCustomFields'] = GQLResolversParentTypes['BrightcoveCustomFields']> = {
+  accountId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  license?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  licenseInfo?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLBrightcoveElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BrightcoveElement'] = GQLResolversParentTypes['BrightcoveElement']> = {
   account?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   caption?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   cover?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  customFields?: Resolver<Maybe<GQLResolversTypes['BrightcoveCustomFields']>, ParentType, ContextType>;
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   download?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   iframe?: Resolver<Maybe<GQLResolversTypes['BrightcoveIframe']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   player?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   uploadDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -2628,6 +2654,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   alerts?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['UptimeAlert']>>>, ParentType, ContextType>;
   allFolderResources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType, Partial<GQLQueryAllFolderResourcesArgs>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
+  brightcoveVideo?: Resolver<Maybe<GQLResolversTypes['BrightcoveElement']>, ParentType, ContextType, RequireFields<GQLQueryBrightcoveVideoArgs, 'id'>>;
   competenceGoal?: Resolver<Maybe<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, RequireFields<GQLQueryCompetenceGoalArgs, 'code'>>;
   competenceGoals?: Resolver<Maybe<Array<GQLResolversTypes['CompetenceGoal']>>, ParentType, ContextType, Partial<GQLQueryCompetenceGoalsArgs>>;
   concept?: Resolver<Maybe<GQLResolversTypes['Concept']>, ParentType, ContextType, RequireFields<GQLQueryConceptArgs, 'id'>>;
@@ -2969,6 +2996,7 @@ export type GQLResolvers<ContextType = any> = {
   AudioSummary?: GQLAudioSummaryResolvers<ContextType>;
   AudioWithSeries?: GQLAudioWithSeriesResolvers<ContextType>;
   Breadcrumb?: GQLBreadcrumbResolvers<ContextType>;
+  BrightcoveCustomFields?: GQLBrightcoveCustomFieldsResolvers<ContextType>;
   BrightcoveElement?: GQLBrightcoveElementResolvers<ContextType>;
   BrightcoveIframe?: GQLBrightcoveIframeResolvers<ContextType>;
   BrightcoveLicense?: GQLBrightcoveLicenseResolvers<ContextType>;
