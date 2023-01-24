@@ -48,3 +48,4 @@ export {
 export { fetchOembed } from './oembedApi';
 export { searchConcepts, fetchConcept, fetchListingPage } from './conceptApi';
 export { fetchUptimeIssues } from './uptimeApi';
+export { fetchBrightcoveVideo } from './videoApi';
