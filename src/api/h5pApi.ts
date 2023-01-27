@@ -61,7 +61,7 @@ export const fetchH5pLicenseInformation = async (
   context: Context,
 ): Promise<H5pLicenseInformation | undefined> => {
   if (!id) return undefined;
-  const url = `${h5pHostUrl()}/v1 /resource/${id}/copyright`;
+  const url = `${h5pHostUrl()}/v1/resource/${id}/copyright`;
   try {
     const response = await fetch(url, context);
     const oembed = await resolveJson(response);
