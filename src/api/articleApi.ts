@@ -1,4 +1,5 @@
 /**
+ *
  * Copyright (c) 2019-present, NDLA.
  *
  * This source code is licensed under the GPLv3 license found in the
@@ -7,11 +8,14 @@
  */
 
 import { IArticleV2 } from '@ndla/types-article-api';
+import { load } from 'cheerio';
 import { localConverter, ndlaUrl } from '../config';
 import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
+import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
 import { parseVisualElement } from '../utils/visualelementHelpers';
+import { transformEmbed } from './embedsApi';
 import {
   queryResourcesOnContentURI,
   queryTopicsOnContentURI,
@@ -24,22 +28,37 @@ export async function fetchArticle(
     isOembed?: string;
     showVisualElement?: string;
     path?: string;
+    previewH5p?: boolean;
   },
   context: Context,
 ): Promise<GQLArticle> {
   const host = localConverter ? 'http://localhost:3100' : '';
   const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : '';
+  const subject = params.subjectId;
+  const previewH5p = params.previewH5p;
   const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : '';
   const visualElementParam = params.showVisualElement
     ? `&showVisualElement=${params.showVisualElement}`
     : '';
   const pathParam = params.path ? `&path=${params.path}` : '';
-  const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${subjectParam}${oembedParam}${pathParam}${visualElementParam}`,
-    context,
-  );
+  // const response = await fetch(
+  //   `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${subjectParam}${oembedParam}${pathParam}${visualElementParam}`,
+  //   context,
+  // );
 
-  const article = await resolveJson(response);
+  const article = await fetchSimpleArticle(params.articleId, context);
+  const html = load(article.content.content, {
+    xmlMode: false,
+    decodeEntities: false,
+  });
+  const embeds = getEmbedsFromContent(html);
+  const embedPromises = embeds.map((embed, index) =>
+    transformEmbed(embed, context, index, { subject, previewH5p }),
+  );
+  await Promise.all(embedPromises);
+  const transformedContent = html('body').html();
+
+  // const article = await resolveJson(response);
   const nullableRelatedContent = await Promise.all(
     article?.relatedContent?.map(async (rc: any) => {
       if (typeof rc === 'number') {
@@ -94,6 +113,11 @@ export async function fetchArticle(
   const relatedContent = nullableRelatedContent.filter((rc: any) => !!rc);
   let transposedArticle: GQLArticle = {
     ...article,
+    introduction: article.introduction?.introduction ?? '',
+    metaDescription: article.metaDescription.metaDescription,
+    title: article.title.title,
+    tags: article.tags.tags,
+    content: transformedContent,
     relatedContent,
   };
 
@@ -173,7 +197,7 @@ export async function fetchSimpleArticle(
 ): Promise<IArticleV2 | undefined> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
-    `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,
+    `/article-api/v2/articles/${articleId}?language=${context.language}&fallback=true`,
     context,
   );
   return await resolveJson(response);

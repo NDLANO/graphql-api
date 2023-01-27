@@ -333,3 +333,35 @@ export async function fetchVersion(
   const json = await resolveJson(response);
   return json?.[0];
 }
+
+interface NodeQueryParams {
+  contentURI?: string;
+  nodeType?: 'NODE' | 'SUBJECT' | 'TOPIC' | 'RESOURCE';
+  language?: string;
+  isRoot?: boolean;
+  key?: string;
+  value?: string;
+  isVisible?: boolean;
+}
+
+export const queryNodes = async (
+  params: NodeQueryParams,
+  context: Context,
+): Promise<Node[]> => {
+  const res = await fetch(
+    `/${context.taxonomyUrl}/v1/nodes?${qs.stringify(params)}`,
+    context,
+  );
+  return await resolveJson(res);
+};
+
+export const fetchNodeByArticleId = async (
+  id: string,
+  context: Context,
+): Promise<Node> => {
+  const res: Node[] = await fetch(
+    `/${context.taxonomyUrl}/v1/nodes?contentURI=urn:article:${id}`,
+    context,
+  ).then(resolveJson);
+  return res[0];
+};

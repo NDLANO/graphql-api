@@ -8,7 +8,11 @@
 
 import queryString from 'query-string';
 import { uniq } from 'lodash';
-import { IConceptSearchResult, IConcept } from '@ndla/types-concept-api';
+import {
+  IConceptSearchResult,
+  IConcept,
+  IConceptSummary,
+} from '@ndla/types-concept-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { GQLListingPage, GQLSubject } from '../types/schema';
@@ -88,7 +92,7 @@ export async function searchConcepts(
 }
 
 export async function fetchConcept(
-  id: number,
+  id: string | number,
   context: Context,
 ): Promise<Concept | undefined> {
   const response = await fetch(
@@ -163,4 +167,27 @@ const getTags = (tags: string[] | TagType[]) => {
     return uniq(tags.flatMap(t => t.tags));
   }
   return [];
+};
+
+export const fetchEmbedConcept = async (
+  id: string,
+  context: Context,
+  draftConcept: boolean,
+): Promise<IConcept> => {
+  const endpoint = draftConcept ? 'drafts' : 'concepts';
+  const url = `/concept-api/v1/${endpoint}/${id}?language=${context.language}&fallback=true`;
+  const res = await fetch(url, context);
+  return await resolveJson(res);
+};
+
+export const fetchEmbedConcepts = async (
+  tag: string,
+  subjectId: string,
+  context: Context,
+  draftConcept: boolean,
+): Promise<IConceptSummary[]> => {
+  const endpoint = draftConcept ? 'drafts' : 'concepts';
+  const url = `/concept-api/v1/${endpoint}/?tags=${tag}&language=${context.language}&page-size=1000&subjects=${subjectId}`;
+  const res = await fetch(url, context).then(resolveJson);
+  return res.results;
 };
