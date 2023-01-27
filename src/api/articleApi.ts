@@ -197,7 +197,7 @@ export async function fetchSimpleArticle(
 ): Promise<IArticleV2 | undefined> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
-    `/article-api/v2/articles/${articleId}?language=${context.language}&fallback=true`,
+    `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,
     context,
   );
   return await resolveJson(response);
