@@ -181,6 +181,7 @@ export async function fetchSubjectTopics(
 ): Promise<GQLTopic[]> {
   const query = qs.stringify({
     recursive: true,
+    nodeType: 'TOPIC',
     language: context.language,
   });
   const response = await taxonomyFetch(
@@ -196,6 +197,7 @@ export async function fetchTopics(
 ): Promise<GQLTopic[]> {
   const query = qs.stringify({
     contentURI: args.contentUri ?? '',
+    nodeType: 'TOPIC',
     language: context.language,
   });
   const response = await taxonomyFetch(
@@ -224,6 +226,7 @@ export async function fetchSubtopics(
 ): Promise<GQLTopic[]> {
   const { id } = params;
   const query = qs.stringify({
+    nodeType: 'TOPIC',
     language: context.language,
   });
   const response = await taxonomyFetch(
