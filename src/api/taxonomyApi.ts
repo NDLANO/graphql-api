@@ -8,6 +8,7 @@
 
 import { Response } from 'node-fetch';
 import qs from 'query-string';
+import { NodeType } from '@ndla/types-embed';
 import {
   GQLMoviePath,
   GQLMovieResourceTypes,
@@ -358,8 +359,8 @@ export const queryNodes = async (
 export const fetchNodeByArticleId = async (
   id: string,
   context: Context,
-): Promise<Node> => {
-  const res: Node[] = await fetch(
+): Promise<NodeType> => {
+  const res: NodeType[] = await fetch(
     `/${context.taxonomyUrl}/v1/nodes?contentURI=urn:article:${id}`,
     context,
   ).then(resolveJson);

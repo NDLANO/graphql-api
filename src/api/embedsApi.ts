@@ -23,6 +23,7 @@ import {
   ConceptMetaData,
   ConceptData,
   ConceptListMetaData,
+  FileMetaData,
 } from '@ndla/types-embed';
 import { Cheerio, load } from 'cheerio';
 import { fetchImage } from './imageApi';
@@ -38,6 +39,7 @@ import { fetchVideo, fetchVideoSources } from './videoApi';
 import { fetchNodeByArticleId, queryNodes } from './taxonomyApi';
 import { fetchSimpleArticle } from './articleApi';
 import { fetchEmbedConcept, fetchEmbedConcepts } from './conceptApi';
+import { checkIfFileExists } from './fileApi';
 
 type Fetch<T extends EmbedMetaData> = (params: {
   embedData: T['embedData'];
@@ -459,6 +461,31 @@ const conceptListMeta: Fetch<ConceptListMetaData> = async ({
   }
 };
 
+const fileListMeta: Fetch<FileMetaData> = async ({
+  embedData,
+  index,
+  context,
+}) => {
+  try {
+    const response = await checkIfFileExists(embedData.path, context);
+    return {
+      resource: 'file',
+      status: 'success',
+      embedData,
+      seq: index,
+      data: { exists: response },
+    };
+  } catch (e) {
+    return {
+      resource: 'file',
+      status: 'error',
+      embedData,
+      seq: index,
+      message: 'Failed to check if file existed',
+    };
+  }
+};
+
 type FetchFunctions = {
   [K in EmbedMetaData['embedData']['resource']]:
     | Fetch<Extract<EmbedMetaData, { embedData: { resource: K } }>>
@@ -477,6 +504,7 @@ const transformFuncs: Partial<FetchFunctions> = {
   concept: conceptMeta,
   'content-link': contentLinkMeta,
   'concept-list': conceptListMeta,
+  file: fileListMeta,
 };
 
 export const transformEmbed = async (
@@ -507,13 +535,5 @@ export const transformEmbed = async (
     embed.embed.attr('data-json', JSON.stringify(meta));
     footnoteCount += 1;
     return;
-  } else {
-    const errorMeta: EmbedMetaData = {
-      embedData: embed.data,
-      seq: index,
-      status: 'error',
-      message: 'unsupported',
-    };
-    embed.embed.attr('data-json', JSON.stringify(errorMeta));
   }
 };

@@ -116,6 +116,7 @@ export interface BrightcoveVideoSource {
 }
 
 export interface BrightcoveApiType {
+  id: string;
   account_id?: string | null;
   custom_fields: Record<string, string>;
   name?: string;

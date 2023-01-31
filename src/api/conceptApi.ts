@@ -187,7 +187,13 @@ export const fetchEmbedConcepts = async (
   draftConcept: boolean,
 ): Promise<IConceptSummary[]> => {
   const endpoint = draftConcept ? 'drafts' : 'concepts';
-  const url = `/concept-api/v1/${endpoint}/?tags=${tag}&language=${context.language}&page-size=1000&subjects=${subjectId}`;
+  const params = queryString.stringify({
+    tags: tag,
+    subjects: subjectId,
+    language: context.language,
+    'page-size': 1000,
+  });
+  const url = `/concept-api/v1/${endpoint}/?${params}`;
   const res = await fetch(url, context).then(resolveJson);
   return res.results;
 };
