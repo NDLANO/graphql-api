@@ -27,7 +27,14 @@ import {
 export const Query = {
   async article(
     _: any,
-    { id, subjectId, isOembed, path, showVisualElement }: GQLQueryArticleArgs,
+    {
+      id,
+      subjectId,
+      isOembed,
+      path,
+      showVisualElement,
+      convertEmbeds,
+    }: GQLQueryArticleArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArticle> {
     return fetchArticle(
@@ -37,6 +44,7 @@ export const Query = {
         isOembed,
         path,
         showVisualElement,
+        convertEmbeds,
       },
       context,
     );

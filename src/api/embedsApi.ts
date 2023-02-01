@@ -371,6 +371,7 @@ const fetchConceptVisualElement = async (
     decodeEntities: false,
   });
   const embed = getEmbedsFromContent(html)[0];
+  //@ts-ignore
   return await transformFuncs[embed.data.resource]?.({
     embedData: embed.data,
     cheerio: embed.embed,

@@ -923,6 +923,7 @@ export type GQLQueryAllFolderResourcesArgs = {
 
 
 export type GQLQueryArticleArgs = {
+  convertEmbeds?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['String'];
   isOembed?: InputMaybe<Scalars['String']>;
   path?: InputMaybe<Scalars['String']>;
@@ -1166,6 +1167,7 @@ export type GQLResource = GQLTaxonomyEntity & GQLWithArticle & {
 
 
 export type GQLResourceArticleArgs = {
+  convertEmbeds?: InputMaybe<Scalars['Boolean']>;
   isOembed?: InputMaybe<Scalars['String']>;
   subjectId?: InputMaybe<Scalars['String']>;
 };
@@ -1410,6 +1412,7 @@ export type GQLTopic = GQLTaxonomyEntity & GQLWithArticle & {
 
 
 export type GQLTopicArticleArgs = {
+  convertEmbeds?: InputMaybe<Scalars['Boolean']>;
   showVisualElement?: InputMaybe<Scalars['String']>;
   subjectId?: InputMaybe<Scalars['String']>;
 };

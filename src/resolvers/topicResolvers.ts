@@ -96,6 +96,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
               articleId,
               subjectId: args.subjectId,
               showVisualElement: args.showVisualElement,
+              convertEmbeds: args.convertEmbeds,
               path: topic.path,
             },
             context,
