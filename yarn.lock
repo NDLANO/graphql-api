@@ -1763,40 +1763,45 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@ndla/types-article-api@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@ndla/types-article-api/-/types-article-api-0.0.6.tgz#cde5ec7c268a7b6b2fa8f5c58fe155002fa28fb1"
-  integrity sha512-kaY/cib+rdOlZN5ABFfgzikWXShVWDGcFyy/fAKbwiOLbXL1NnpqOWUcTLCq3Bpz8Aof0ftnjHYyAm7X3zeaKg==
+"@ndla/types-article-api@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@ndla/types-article-api/-/types-article-api-0.0.8.tgz#abfa38810c0aa31761af90c8af94953cdb2c42d7"
+  integrity sha512-h3+VzsmUDvhhRg9dsYu8AL5oPD0kMsQOtm0Y4P+3Jjv8c5XTx4TGyGcfde7t9gonQdthbcr+ubCQ1SU5EfHvcg==
 
-"@ndla/types-audio-api@^0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@ndla/types-audio-api/-/types-audio-api-0.0.11.tgz#4a52e184bf467c174fc816fc2036250b9bbbb31d"
-  integrity sha512-ZgoIq6UKT7AP0EvF1+MKJfcMZmMO2xp6binF+armDJ9zhN//HivSrgP1zYyaPKPOvx1K/8zN1hb9sFhJyoO65g==
+"@ndla/types-audio-api@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@ndla/types-audio-api/-/types-audio-api-0.0.12.tgz#cb2acb5cf873eb14cd60c505b75b788d0f743858"
+  integrity sha512-g+suRp9YV6kzPD7obQ1b4O1HO/DogfcLtXegT3KVTeFs5S6lZjK7JXWALqGZ0wnZHSNV6Via9LPHaoh4jKTijw==
 
 "@ndla/types-concept-api@^0.0.10":
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/@ndla/types-concept-api/-/types-concept-api-0.0.10.tgz#43bd9dcfede1c1680e52bdc0f1ffa31246fbca9c"
   integrity sha512-btJNLpUuSaQXH1RYAhF4867Ka8dYLFo1gAbwcXQj3uQdo6BWJfPKMHoRHGXJ9Qww+MuZArlLgWc+YEh2Hd0aJg==
 
-"@ndla/types-frontpage-api@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@ndla/types-frontpage-api/-/types-frontpage-api-0.0.3.tgz#31e6b1dba0b8a215c06b2918f34cfb0385192b0e"
-  integrity sha512-1sAwf7TyjAElbzvWjfLw1PI4pG9HQ+KArMNY8shDZnY3GiASko2GsJUxbTX/ryU85iTwkA9dPPR+Zuo6C9o9DA==
+"@ndla/types-embed@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-0.1.2.tgz#1b5133c8561ad9569b82e1f6e064fd90d3d0530c"
+  integrity sha512-cHpm2/nDRiUPCZtMxAjiUE0pKBUF3CWmBmhfK8uMzvWZZj4jJ1btglcILhFIuQyRNMd9vqt/aPsLZRqUqE/Hdw==
 
-"@ndla/types-image-api@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@ndla/types-image-api/-/types-image-api-0.0.8.tgz#4d1c7d830bb90ede23ac311c8f860811f83a0c39"
-  integrity sha512-O8nVTzA8nLqawNArweLRcYgAyCRdhw/MK5T1pcOYJDnORllTgKCrbeaemWZH0Fu5jd4perFwCI1P+50FteNY6w==
+"@ndla/types-frontpage-api@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@ndla/types-frontpage-api/-/types-frontpage-api-0.0.4.tgz#e8657dd94135164f921c02924090f9e578adba87"
+  integrity sha512-A6WAsDLDcw2U6xN98RytvPFpUEvZlJDe0UfSZQd6NR3EGRXaH8FgDu4mKlqvL4NXMt1zHVtBquah5jDU8qhupQ==
 
-"@ndla/types-learningpath-api@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.17.tgz#7ceca4372028e6f59b4e84e867ff01f7561fd851"
-  integrity sha512-bvI04Es2E5gJVDkDu6bRmPFgmvLn6JjXZNHQ47UHp7mek9p7sK9+MAeLyY04BswvidegIsdxJldxeStNq8uu/Q==
+"@ndla/types-image-api@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@ndla/types-image-api/-/types-image-api-0.0.10.tgz#0b358825e5ded24d602576997019492ffdd77160"
+  integrity sha512-/wlnvskF8xHzNx4ZPsxgaJDqs3jGURgC28mMljlPtgOgK07/1QemKaJIPAmSGNcxBIzMhNiBkkFDYbHw8pxOGw==
 
-"@ndla/types-search-api@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@ndla/types-search-api/-/types-search-api-0.0.5.tgz#d0edc7fe08a87997aa84ff212464d994a0e95f0b"
-  integrity sha512-EYeZsKq420EjoTnQQS98mb0+9tjN7g+AyHcCIOtvSkxQlU41BFVeVM6PR9g6jxeVCetH1NmbLlABCe3pvNk+Tg==
+"@ndla/types-learningpath-api@^0.0.19":
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.19.tgz#e8631e0dd42fb05f15a6f9fc3e2e60dbfbe7d032"
+  integrity sha512-vpRkP/G1SzkJ3ENDq5W27XPtsnOD/mc5EmnZwXWc0eEgnCfhHqchXKMT+TzlnkNP9AtFjs5pIP7RKd+796IXbQ==
+
+"@ndla/types-search-api@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@ndla/types-search-api/-/types-search-api-0.0.6.tgz#4403e42c1287f481bc19157c2d160acdc39061aa"
+  integrity sha512-Uiqz+7Z297zjQQ/HuK2FcElQs00rFIK+QrXPpCZc/VGxAKPGbD3EnNZNB6ITfmjWaldHjQxF0fif/Q+7uuYoLw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"

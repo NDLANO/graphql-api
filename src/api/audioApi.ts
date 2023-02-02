@@ -14,7 +14,7 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchAudio(
   context: Context,
-  audioId: number,
+  audioId: number | string,
 ): Promise<IAudioMetaInformation | null> {
   const response = await fetch(
     `/audio-api/v1/audio/${audioId}?language=${context.language}`,

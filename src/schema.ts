@@ -291,7 +291,11 @@ export const typeDefs = gql`
     learningpath: Learningpath
     relevanceId: String
     rank: Int
-    article(subjectId: String, isOembed: String): Article
+    article(
+      subjectId: String
+      isOembed: String
+      convertEmbeds: Boolean
+    ): Article
     availability: String
     resourceTypes: [ResourceType!]
     parents: [Topic!]
@@ -309,7 +313,11 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
-    article(subjectId: String, showVisualElement: String): Article
+    article(
+      subjectId: String
+      showVisualElement: String
+      convertEmbeds: Boolean
+    ): Article
     availability: String
     isPrimary: Boolean
     parent: String
@@ -983,6 +991,7 @@ export const typeDefs = gql`
       isOembed: String
       path: String
       showVisualElement: String
+      convertEmbeds: Boolean
     ): Article
     subject(id: String!): Subject
     subjectpage(id: Int!): SubjectPage

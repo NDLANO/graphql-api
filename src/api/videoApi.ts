@@ -27,22 +27,33 @@ const clientIdSecret = `${getEnvironmentVariabel(
 
 const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789');
 
+export const fetchVideo = async (
+  id: string,
+  account: string,
+  context: Context,
+): Promise<BrightcoveApiType> => {
+  const url = `${brightcoveApiUrl}/v1/accounts/${account}/videos/${id}`;
+  return await fetchWithBrightcoveToken(url, context).then(resolveJson);
+};
+
+export const fetchVideoSources = async (
+  id: string,
+  account: string,
+  context: Context,
+): Promise<BrightcoveVideoSource[]> => {
+  const url = `${brightcoveApiUrl}/v1/accounts/${account}/videos/${id}/sources`;
+  return await fetchWithBrightcoveToken(url, context).then(resolveJson);
+};
+
 export async function fetchBrightcoveVideo(
   id: string,
   context: Context,
 ): Promise<GQLBrightcoveElement | null> {
   try {
-    const brightcoveVideoUrl = `${brightcoveApiUrl}/v1/accounts/${accountId}/videos/${id}`;
-    const brightcoveSourceUrl = `${brightcoveVideoUrl}/sources`;
-
-    const [responseVideo, responseSource] = await Promise.all([
-      fetchWithBrightcoveToken(brightcoveVideoUrl, context),
-      fetchWithBrightcoveToken(brightcoveSourceUrl, context),
+    const [brightcoveVideo, brightcoveSources] = await Promise.all([
+      fetchVideo(id, accountId, context),
+      fetchVideoSources(id, accountId, context),
     ]);
-    const brightcoveVideo: BrightcoveApiType = await resolveJson(responseVideo);
-    const brightcoveSources: BrightcoveVideoSource[] = await resolveJson(
-      responseSource,
-    );
 
     const licenseInfo = Object.keys(brightcoveVideo.custom_fields)
       .filter(key => key.startsWith('licenseinfo'))
@@ -105,6 +116,7 @@ export interface BrightcoveVideoSource {
 }
 
 export interface BrightcoveApiType {
+  id: string;
   account_id?: string | null;
   custom_fields: Record<string, string>;
   name?: string;

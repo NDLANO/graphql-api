@@ -1,4 +1,5 @@
 /**
+ *
  * Copyright (c) 2019-present, NDLA.
  *
  * This source code is licensed under the GPLv3 license found in the
@@ -7,39 +8,98 @@
  */
 
 import { IArticleV2 } from '@ndla/types-article-api';
+import { load } from 'cheerio';
 import { localConverter, ndlaUrl } from '../config';
 import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
+import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
 import { parseVisualElement } from '../utils/visualelementHelpers';
+import { transformEmbed } from './embedsApi';
 import {
   queryResourcesOnContentURI,
   queryTopicsOnContentURI,
 } from './taxonomyApi';
 
+interface ArticleParams {
+  convertEmbeds?: boolean;
+  articleId: string;
+  subjectId?: string;
+  isOembed?: string;
+  showVisualElement?: string;
+  path?: string;
+  previewH5p?: boolean;
+}
+
+const _fetchTransformedArticle = async (
+  params: ArticleParams,
+  context: Context,
+) => {
+  if (!params.convertEmbeds) {
+    const host = localConverter ? 'http://localhost:3100' : '';
+    const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : '';
+    const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : '';
+    const visualElementParam = params.showVisualElement
+      ? `&showVisualElement=${params.showVisualElement}`
+      : '';
+    const pathParam = params.path ? `&path=${params.path}` : '';
+    const res = await fetch(
+      `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${subjectParam}${oembedParam}${pathParam}${visualElementParam}`,
+      context,
+    ).then(resolveJson);
+
+    if (res.visualElement) {
+      try {
+        res.visualElement = {
+          ...(await parseVisualElement(
+            res.visualElement.visualElement,
+            context,
+          )),
+          embed: res.visualElement.visualElement,
+          language: res.visualElement.language,
+        };
+      } catch (e) {
+        res.visualElement = undefined;
+      }
+    }
+
+    return res;
+  } else {
+    const subject = params.subjectId;
+    const previewH5p = params.previewH5p;
+    const article = await fetchSimpleArticle(params.articleId, context);
+    const html = load(article.content.content, {
+      xmlMode: false,
+      decodeEntities: false,
+    });
+    if (params.showVisualElement && article.visualElement?.visualElement) {
+      html('body').prepend(
+        `<section>${article.visualElement.visualElement}</section>`,
+      );
+    }
+    const embeds = getEmbedsFromContent(html);
+    const embedPromises = embeds.map((embed, index) =>
+      transformEmbed(embed, context, index, { subject, previewH5p }),
+    );
+    await Promise.all(embedPromises);
+    const transformedContent = html('body').html();
+    return {
+      ...article,
+      introduction: article.introduction?.introduction ?? '',
+      metaDescription: article.metaDescription.metaDescription,
+      title: article.title.title,
+      tags: article.tags.tags,
+      content: transformedContent,
+    };
+  }
+};
+
 export async function fetchArticle(
-  params: {
-    articleId: string;
-    subjectId?: string;
-    isOembed?: string;
-    showVisualElement?: string;
-    path?: string;
-  },
+  params: ArticleParams,
   context: Context,
 ): Promise<GQLArticle> {
-  const host = localConverter ? 'http://localhost:3100' : '';
-  const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : '';
-  const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : '';
-  const visualElementParam = params.showVisualElement
-    ? `&showVisualElement=${params.showVisualElement}`
-    : '';
-  const pathParam = params.path ? `&path=${params.path}` : '';
-  const response = await fetch(
-    `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${subjectParam}${oembedParam}${pathParam}${visualElementParam}`,
-    context,
-  );
+  const article = await _fetchTransformedArticle(params, context);
 
-  const article = await resolveJson(response);
   const nullableRelatedContent = await Promise.all(
     article?.relatedContent?.map(async (rc: any) => {
       if (typeof rc === 'number') {
@@ -92,27 +152,11 @@ export async function fetchArticle(
     }),
   );
   const relatedContent = nullableRelatedContent.filter((rc: any) => !!rc);
-  let transposedArticle: GQLArticle = {
+
+  return {
     ...article,
     relatedContent,
   };
-
-  if (transposedArticle.visualElement) {
-    try {
-      transposedArticle.visualElement = {
-        ...(await parseVisualElement(
-          article.visualElement.visualElement,
-          context,
-        )),
-        embed: article.visualElement.visualElement,
-        language: article.visualElement.language,
-      };
-    } catch (e) {
-      transposedArticle.visualElement = undefined;
-    }
-  }
-
-  return transposedArticle;
 }
 
 export async function fetchArticlesPage(
@@ -170,7 +214,7 @@ export async function fetchArticles(
 export async function fetchSimpleArticle(
   articleUrn: string,
   context: Context,
-): Promise<IArticleV2 | undefined> {
+): Promise<IArticleV2> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
     `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,

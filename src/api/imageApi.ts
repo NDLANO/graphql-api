@@ -13,7 +13,11 @@ export async function fetchImage(
   imageId: string,
   context: Context,
 ): Promise<IImageMetaInformationV2 | null> {
-  const response = await fetch(`/image-api/v2/images/${imageId}`, context);
+  const languageParam = context.language ? `?language=${context.language}` : '';
+  const response = await fetch(
+    `/image-api/v2/images/${imageId}${languageParam}`,
+    context,
+  );
   try {
     return await resolveJson(response);
   } catch (e) {
