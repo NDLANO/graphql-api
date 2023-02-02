@@ -72,7 +72,7 @@ const _fetchTransformedArticle = async (
       xmlMode: false,
       decodeEntities: false,
     });
-    if (params.showVisualElement && article.visualElement.visualElement) {
+    if (params.showVisualElement && article.visualElement?.visualElement) {
       html('body').prepend(
         `<section>${article.visualElement.visualElement}</section>`,
       );
@@ -214,7 +214,7 @@ export async function fetchArticles(
 export async function fetchSimpleArticle(
   articleUrn: string,
   context: Context,
-): Promise<IArticleV2 | undefined> {
+): Promise<IArticleV2> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
     `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,

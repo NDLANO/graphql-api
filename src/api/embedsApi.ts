@@ -49,13 +49,40 @@ type Fetch<T extends EmbedMetaData> = (params: {
   opts: TransformOptions;
 }) => Promise<T>;
 
+const fetchImageWrapper = async (id: string, context: Context) => {
+  const image = await fetchImage(id, context);
+  if (image === null) {
+    throw Error('Failed to fetch image');
+  }
+  return image;
+};
+
+const fetchAudioWrapper = async (context: Context, id: string | number) => {
+  const audio = await fetchAudio(context, id);
+  if (audio === null) {
+    throw Error('Failed to fetch audio');
+  }
+  return audio;
+};
+
+const fetchH5pLicenseInformationWrapper = async (
+  id: string,
+  context: Context,
+) => {
+  const licenseInformation = await fetchH5pLicenseInformation(id, context);
+  if (licenseInformation === undefined) {
+    throw Error('Failed to fetch h5p license information');
+  }
+  return licenseInformation;
+};
+
 const imageMeta: Fetch<ImageMetaData> = async ({
   embedData,
   context,
   index,
 }) => {
   try {
-    const image = await fetchImage(embedData.resourceId, context);
+    const image = await fetchImageWrapper(embedData.resourceId, context);
     return {
       resource: 'image',
       embedData,
@@ -74,10 +101,10 @@ const audioMeta: Fetch<AudioMetaData> = async ({
   index,
 }) => {
   try {
-    const audio = await fetchAudio(context, embedData.resourceId);
+    const audio = await fetchAudioWrapper(context, embedData.resourceId);
     const coverPhotoId = audio.podcastMeta?.coverPhoto?.id;
     if (coverPhotoId) {
-      const imageMeta = await fetchImage(coverPhotoId, context);
+      const imageMeta = await fetchImageWrapper(coverPhotoId, context);
       return {
         resource: 'audio',
         status: 'success',
@@ -113,7 +140,7 @@ const externalMeta: Fetch<OembedMetaData> = async ({
     const [oembed, iframeImage] = await Promise.all([
       fetchExternalOembed(embedData, context),
       embedData.imageid
-        ? fetchImage(embedData.imageid, context)
+        ? fetchImageWrapper(embedData.imageid, context)
         : Promise.resolve<undefined>(undefined),
     ]);
 
@@ -144,7 +171,7 @@ const iframeMeta: Fetch<IframeMetaData> = async ({
   index,
 }) => {
   const iframeImage = embedData.imageid
-    ? await fetchImage(embedData.imageid, context)
+    ? await fetchImageWrapper(embedData.imageid, context)
     : await Promise.resolve<undefined>(undefined);
 
   return {
@@ -174,8 +201,8 @@ const h5pMeta: Fetch<H5pMetaData> = async ({
     const pathArr = embedData.path?.split('/') || [];
     const h5pId = pathArr[pathArr.length - 1];
     const [oembedData, h5pLicenseInformation] = await Promise.all([
-      fetchH5pOembed(embedData, context, opts.previewH5p),
-      fetchH5pLicenseInformation(h5pId, context),
+      fetchH5pOembed(embedData, context, !!opts.previewH5p),
+      fetchH5pLicenseInformationWrapper(h5pId, context),
     ]);
 
     return {
@@ -295,9 +322,9 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({
     const nodes = await queryNodes({ contentURI }, context);
     const node = nodes.find(n => !!n.path);
     const nodePath =
-      node.paths?.find(
+      node?.paths?.find(
         p => p.split('/')[1] === opts.subject?.replace('urn:', ''),
-      ) ?? node.path;
+      ) ?? node?.path;
 
     if (nodePath) {
       path = `${host}/${context.language}${nodePath}`;
@@ -391,7 +418,7 @@ const conceptMeta: Fetch<ConceptMetaData> = async ({
     const concept = await fetchEmbedConcept(
       embedData.contentId,
       context,
-      opts.draftConcept,
+      !!opts.draftConcept,
     );
     const visualElement = await fetchConceptVisualElement(
       concept.visualElement?.visualElement,
@@ -431,7 +458,7 @@ const conceptListMeta: Fetch<ConceptListMetaData> = async ({
       embedData.tag,
       embedData.subjectId,
       context,
-      opts.draftConcept,
+      !!opts.draftConcept,
     );
     const concepts = await Promise.all(
       conceptList.map(async concept => {
