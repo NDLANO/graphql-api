@@ -65,17 +65,6 @@ const fetchAudioWrapper = async (context: Context, id: string | number) => {
   return audio;
 };
 
-const fetchH5pLicenseInformationWrapper = async (
-  id: string,
-  context: Context,
-) => {
-  const licenseInformation = await fetchH5pLicenseInformation(id, context);
-  if (licenseInformation === undefined) {
-    throw Error('Failed to fetch h5p license information');
-  }
-  return licenseInformation;
-};
-
 const imageMeta: Fetch<ImageMetaData> = async ({
   embedData,
   context,
@@ -202,7 +191,7 @@ const h5pMeta: Fetch<H5pMetaData> = async ({
     const h5pId = pathArr[pathArr.length - 1];
     const [oembedData, h5pLicenseInformation] = await Promise.all([
       fetchH5pOembed(embedData, context, !!opts.previewH5p),
-      fetchH5pLicenseInformationWrapper(h5pId, context),
+      fetchH5pLicenseInformation(h5pId, context),
     ]);
 
     return {
@@ -216,7 +205,7 @@ const h5pMeta: Fetch<H5pMetaData> = async ({
         oembed: oembedData,
       },
     };
-  } catch {
+  } catch (e) {
     return {
       resource: 'h5p',
       status: 'error',
