@@ -32,7 +32,9 @@ export const fetchVideo = async (
   account: string,
   context: Context,
 ): Promise<BrightcoveApiType> => {
-  const url = `${brightcoveApiUrl}/v1/accounts/${account}/videos/${id}`;
+  const url = `${brightcoveApiUrl}/v1/accounts/${account}/videos/${
+    `${id}`.split('&t=')[0]
+  }`;
   return await fetchWithBrightcoveToken(url, context).then(resolveJson);
 };
 
@@ -41,7 +43,9 @@ export const fetchVideoSources = async (
   account: string,
   context: Context,
 ): Promise<BrightcoveVideoSource[]> => {
-  const url = `${brightcoveApiUrl}/v1/accounts/${account}/videos/${id}/sources`;
+  const url = `${brightcoveApiUrl}/v1/accounts/${account}/videos/${
+    `${id}`.split('&t=')[0]
+  }/sources`;
   return await fetchWithBrightcoveToken(url, context).then(resolveJson);
 };
 
