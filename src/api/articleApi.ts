@@ -74,7 +74,7 @@ const _fetchTransformedArticle = async (
     });
     html('math').each((_, el) => {
       html(el)
-        .attr('data-math', html(el).html())
+        .attr('data-math', html(el).html() ?? '')
         .children()
         .replaceWith('');
     });
