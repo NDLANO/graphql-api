@@ -72,6 +72,12 @@ const _fetchTransformedArticle = async (
       xmlMode: false,
       decodeEntities: false,
     });
+    html('math').each((_, el) => {
+      html(el)
+        .attr('data-math', html(el).html() ?? '')
+        .children()
+        .replaceWith('');
+    });
     if (params.showVisualElement && article.visualElement?.visualElement) {
       html('body').prepend(
         `<section>${article.visualElement.visualElement}</section>`,
