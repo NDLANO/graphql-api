@@ -8,19 +8,16 @@
  */
 
 import { IArticleV2 } from '@ndla/types-article-api';
-import { load } from 'cheerio';
 import { localConverter, ndlaUrl } from '../config';
 import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
-import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
-import { toArticleMetaData } from '../utils/toArticleMetaData';
 import { parseVisualElement } from '../utils/visualelementHelpers';
-import { transformEmbed } from './embedsApi';
 import {
   queryResourcesOnContentURI,
   queryTopicsOnContentURI,
 } from './taxonomyApi';
+import { transformArticle } from './transformArticleApi';
 
 interface ArticleParams {
   convertEmbeds?: boolean;
@@ -69,29 +66,16 @@ const _fetchTransformedArticle = async (
     const subject = params.subjectId;
     const previewH5p = params.previewH5p;
     const article = await fetchSimpleArticle(params.articleId, context);
-    const html = load(article.content.content, {
-      xmlMode: false,
-      decodeEntities: false,
-    });
-    html('math').each((_, el) => {
-      html(el)
-        .attr('data-math', html(el).html() ?? '')
-        .children()
-        .replaceWith('');
-    });
-    if (params.showVisualElement && article.visualElement?.visualElement) {
-      html('body').prepend(
-        `<section>${article.visualElement.visualElement}</section>`,
-      );
-    }
-    const embeds = getEmbedsFromContent(html);
-    const embedPromises = await Promise.all(
-      embeds.map((embed, index) =>
-        transformEmbed(embed, context, index, { subject, previewH5p }),
-      ),
+    const { content, metaData } = await transformArticle(
+      article.content.content,
+      context,
+      article.visualElement?.visualElement,
+      {
+        subject,
+        previewH5p,
+        showVisualElement: params.showVisualElement === 'true',
+      },
     );
-    const metaData = toArticleMetaData(embedPromises);
-    const transformedContent = html('body').html();
     return {
       ...article,
       introduction: article.introduction?.introduction ?? '',
@@ -99,7 +83,7 @@ const _fetchTransformedArticle = async (
       title: article.title.title,
       metaData,
       tags: article.tags.tags,
-      content: transformedContent,
+      content,
     };
   }
 };
