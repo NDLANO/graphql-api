@@ -418,7 +418,7 @@ export const typeDefs = gql`
     src: String
     download: String
     iframe: BrightcoveIframe
-    copyright: Copyright!
+    copyright: Copyright
     uploadDate: String
   }
 
@@ -426,7 +426,7 @@ export const typeDefs = gql`
     title: String!
     src: String
     thumbnail: String
-    copyright: Copyright!
+    copyright: Copyright
   }
 
   type ConceptCopyright {

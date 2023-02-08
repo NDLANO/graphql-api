@@ -194,7 +194,7 @@ export type GQLBrightcoveIframe = {
 
 export type GQLBrightcoveLicense = {
   __typename?: 'BrightcoveLicense';
-  copyright: GQLCopyright;
+  copyright?: Maybe<GQLCopyright>;
   cover?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   download?: Maybe<Scalars['String']>;
@@ -476,7 +476,7 @@ export type GQLH5pElement = {
 
 export type GQLH5pLicense = {
   __typename?: 'H5pLicense';
-  copyright: GQLCopyright;
+  copyright?: Maybe<GQLCopyright>;
   src?: Maybe<Scalars['String']>;
   thumbnail?: Maybe<Scalars['String']>;
   title: Scalars['String'];
@@ -1964,7 +1964,7 @@ export type GQLBrightcoveIframeResolvers<ContextType = any, ParentType extends G
 };
 
 export type GQLBrightcoveLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BrightcoveLicense'] = GQLResolversParentTypes['BrightcoveLicense']> = {
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
+  copyright?: Resolver<Maybe<GQLResolversTypes['Copyright']>, ParentType, ContextType>;
   cover?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   download?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -2241,7 +2241,7 @@ export type GQLH5pElementResolvers<ContextType = any, ParentType extends GQLReso
 };
 
 export type GQLH5pLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['H5pLicense'] = GQLResolversParentTypes['H5pLicense']> = {
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
+  copyright?: Resolver<Maybe<GQLResolversTypes['Copyright']>, ParentType, ContextType>;
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   thumbnail?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

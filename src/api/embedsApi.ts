@@ -40,6 +40,7 @@ import { fetchNodeByArticleId, queryNodes } from './taxonomyApi';
 import { fetchSimpleArticle } from './articleApi';
 import { fetchEmbedConcept, fetchEmbedConcepts } from './conceptApi';
 import { checkIfFileExists } from './fileApi';
+import { getBrightcoveCopyright } from '../utils/brightcoveUtils';
 
 type Fetch<T extends EmbedMetaData> = (params: {
   embedData: T['embedData'];
@@ -276,6 +277,10 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({
       embedData,
       data: {
         ...video,
+        copyright: getBrightcoveCopyright(
+          video.custom_fields,
+          context.language,
+        ),
         sources,
       },
     };
@@ -529,7 +534,7 @@ export const transformEmbed = async (
   context: Context,
   index: number,
   opts: TransformOptions,
-): Promise<void> => {
+): Promise<EmbedMetaData | undefined> => {
   let footnoteCount = 1;
   if (embed.data.resource === 'nrk') {
     embed.embed.replaceWith('');
@@ -546,11 +551,11 @@ export const transformEmbed = async (
       opts,
     });
     embed.embed.attr('data-json', JSON.stringify(meta));
-    return;
+    return meta;
   } else if (embed.data.resource === 'footnote') {
     const meta = await footnoteMeta(embed.data, context, index, footnoteCount);
     embed.embed.attr('data-json', JSON.stringify(meta));
     footnoteCount += 1;
-    return;
+    return meta;
   }
 };

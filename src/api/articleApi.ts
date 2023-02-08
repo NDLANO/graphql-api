@@ -14,6 +14,7 @@ import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
 import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
+import { toArticleMetaData } from '../utils/toArticleMetaData';
 import { parseVisualElement } from '../utils/visualelementHelpers';
 import { transformEmbed } from './embedsApi';
 import {
@@ -84,16 +85,19 @@ const _fetchTransformedArticle = async (
       );
     }
     const embeds = getEmbedsFromContent(html);
-    const embedPromises = embeds.map((embed, index) =>
-      transformEmbed(embed, context, index, { subject, previewH5p }),
+    const embedPromises = await Promise.all(
+      embeds.map((embed, index) =>
+        transformEmbed(embed, context, index, { subject, previewH5p }),
+      ),
     );
-    await Promise.all(embedPromises);
+    const metaData = toArticleMetaData(embedPromises);
     const transformedContent = html('body').html();
     return {
       ...article,
       introduction: article.introduction?.introduction ?? '',
       metaDescription: article.metaDescription.metaDescription,
       title: article.title.title,
+      metaData,
       tags: article.tags.tags,
       content: transformedContent,
     };
