@@ -120,7 +120,7 @@ const h5pMetaData = ({ data, embedData }: Success<'h5p'>, acc: MetaData) => {
     : undefined;
   acc['h5ps'] = acc['h5ps'].concat({
     copyright: copyright,
-    title: h5p.title ?? embedData.title ?? '',
+    title: h5p?.title ?? embedData.title ?? '',
     thumbnail: h5p?.thumbnail ?? h5p?.assets?.[0]?.thumbnail ?? '',
     src: data.h5pUrl,
   });
