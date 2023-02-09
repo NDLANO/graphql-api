@@ -989,6 +989,8 @@ export const typeDefs = gql`
       id: String!
       subjectId: String
       isOembed: String
+      draftConcept: Boolean
+      absoluteUrl: Boolean
       path: String
       showVisualElement: String
       convertEmbeds: Boolean
@@ -1113,6 +1115,14 @@ export const typeDefs = gql`
     updatePersonalData(favoriteSubjects: [String!]!): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
+    transformArticleContent(
+      content: String!
+      visualElement: String
+      subject: String
+      previewH5p: Boolean
+      draftConcept: Boolean
+      absoluteUrl: Boolean
+    ): String!
   }
 `;
 

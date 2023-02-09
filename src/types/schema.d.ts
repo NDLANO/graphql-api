@@ -726,6 +726,7 @@ export type GQLMutation = {
   deletePersonalData: Scalars['Boolean'];
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
+  transformArticleContent: Scalars['String'];
   updateFolder: GQLFolder;
   updateFolderResource: GQLFolderResource;
   updatePersonalData: GQLMyNdlaPersonalData;
@@ -768,6 +769,16 @@ export type GQLMutationSortFoldersArgs = {
 export type GQLMutationSortResourcesArgs = {
   parentId: Scalars['String'];
   sortedIds: Array<Scalars['String']>;
+};
+
+
+export type GQLMutationTransformArticleContentArgs = {
+  absoluteUrl?: InputMaybe<Scalars['Boolean']>;
+  content: Scalars['String'];
+  draftConcept?: InputMaybe<Scalars['Boolean']>;
+  previewH5p?: InputMaybe<Scalars['Boolean']>;
+  subject?: InputMaybe<Scalars['String']>;
+  visualElement?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -923,7 +934,9 @@ export type GQLQueryAllFolderResourcesArgs = {
 
 
 export type GQLQueryArticleArgs = {
+  absoluteUrl?: InputMaybe<Scalars['Boolean']>;
   convertEmbeds?: InputMaybe<Scalars['Boolean']>;
+  draftConcept?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['String'];
   isOembed?: InputMaybe<Scalars['String']>;
   path?: InputMaybe<Scalars['String']>;
@@ -2491,6 +2504,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
+  transformArticleContent?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationTransformArticleContentArgs, 'content'>>;
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdatePersonalDataArgs, 'favoriteSubjects'>>;

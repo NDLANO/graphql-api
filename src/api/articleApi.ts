@@ -27,6 +27,8 @@ interface ArticleParams {
   showVisualElement?: string;
   path?: string;
   previewH5p?: boolean;
+  draftConcept?: boolean;
+  absoluteUrl?: boolean;
 }
 
 const _fetchTransformedArticle = async (
@@ -72,7 +74,9 @@ const _fetchTransformedArticle = async (
       article.visualElement?.visualElement,
       {
         subject,
+        draftConcept: params.draftConcept,
         previewH5p,
+        absoluteUrl: params.absoluteUrl,
         showVisualElement: params.showVisualElement === 'true',
       },
     );

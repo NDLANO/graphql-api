@@ -231,7 +231,6 @@ const codeMeta: Fetch<CodeMetaData> = async ({ embedData, index }) => {
 export interface TransformOptions {
   draftConcept?: boolean;
   previewH5p?: boolean;
-  previewAlt?: boolean;
   absoluteUrl?: boolean;
   subject?: string;
 }

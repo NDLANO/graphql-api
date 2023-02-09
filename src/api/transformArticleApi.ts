@@ -16,13 +16,21 @@ interface TransformArticleOptions {
   subject?: string;
   previewH5p?: boolean;
   showVisualElement?: boolean;
+  draftConcept?: boolean;
+  absoluteUrl?: boolean;
 }
 
 export const transformArticle = async (
   content: string,
   context: Context,
   visualElement: string | undefined,
-  { subject, previewH5p, showVisualElement }: TransformArticleOptions,
+  {
+    subject,
+    previewH5p,
+    showVisualElement,
+    draftConcept,
+    absoluteUrl,
+  }: TransformArticleOptions,
 ) => {
   const html = load(content, {
     xmlMode: false,
@@ -40,7 +48,12 @@ export const transformArticle = async (
   const embeds = getEmbedsFromContent(html);
   const embedPromises = await Promise.all(
     embeds.map((embed, index) =>
-      transformEmbed(embed, context, index, { subject, previewH5p }),
+      transformEmbed(embed, context, index, {
+        subject,
+        previewH5p,
+        draftConcept,
+        absoluteUrl,
+      }),
     ),
   );
   const metaData = toArticleMetaData(embedPromises);
