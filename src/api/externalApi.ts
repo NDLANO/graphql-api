@@ -15,8 +15,9 @@ export const fetchExternalOembed = async (
   embed: OembedEmbedData,
   context: Context,
 ): Promise<OembedProxyData> => {
-  const url = `/oembed-proxy/v1/oembed${queryString.stringify({
+  const url = `/oembed-proxy/v1/oembed?${queryString.stringify({
     url: embed.url,
   })}`;
-  return await fetch(url, context).then(resolveJson);
+  const res = await fetch(url, context);
+  return await resolveJson(res);
 };
