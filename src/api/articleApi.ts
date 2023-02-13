@@ -68,7 +68,7 @@ const _fetchTransformedArticle = async (
     const subject = params.subjectId;
     const previewH5p = params.previewH5p;
     const article = await fetchSimpleArticle(params.articleId, context);
-    const { content, metaData } = await transformArticle(
+    const { content, metaData, visualElement } = await transformArticle(
       article.content.content,
       context,
       article.visualElement?.visualElement,
@@ -87,7 +87,13 @@ const _fetchTransformedArticle = async (
       title: article.title.title,
       metaData,
       tags: article.tags.tags,
-      content,
+      content:
+        article.articleType === 'standard'
+          ? content
+          : content === '<section></section>'
+          ? ''
+          : content,
+      visualElement,
     };
   }
 };
