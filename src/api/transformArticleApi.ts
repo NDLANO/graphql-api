@@ -25,7 +25,7 @@ interface TransformArticleOptions {
 
 export const toVisualElement = (
   meta: Extract<EmbedMetaData, { status: 'success' }>,
-): GQLVisualElement => {
+): GQLVisualElement | undefined => {
   switch (meta.resource) {
     case 'brightcove': {
       const { embedData, data } = meta;
