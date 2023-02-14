@@ -1086,7 +1086,12 @@ export const typeDefs = gql`
       resources: [FolderResourceMetaSearchInput!]!
     ): [FolderResourceMeta!]!
     folder(
-      id: Int!
+      id: String!
+      includeSubfolders: Boolean
+      includeResources: Boolean
+    ): Folder!
+    sharedFolder(
+      id: String!
       includeSubfolders: Boolean
       includeResources: Boolean
     ): Folder!

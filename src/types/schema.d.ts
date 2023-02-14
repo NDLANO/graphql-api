@@ -909,6 +909,7 @@ export type GQLQuery = {
   resourceTypes?: Maybe<Array<GQLResourceTypeDefinition>>;
   search?: Maybe<GQLSearch>;
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
+  sharedFolder: GQLFolder;
   subject?: Maybe<GQLSubject>;
   subjectpage?: Maybe<GQLSubjectPage>;
   subjects?: Maybe<Array<GQLSubject>>;
@@ -985,7 +986,7 @@ export type GQLQueryCoreElementsArgs = {
 
 
 export type GQLQueryFolderArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
   includeResources?: InputMaybe<Scalars['Boolean']>;
   includeSubfolders?: InputMaybe<Scalars['Boolean']>;
 };
@@ -1101,6 +1102,13 @@ export type GQLQuerySearchWithoutPaginationArgs = {
   resourceTypes?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
   subjects?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLQuerySharedFolderArgs = {
+  id: Scalars['String'];
+  includeResources?: InputMaybe<Scalars['Boolean']>;
+  includeSubfolders?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -2617,6 +2625,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
   search?: Resolver<Maybe<GQLResolversTypes['Search']>, ParentType, ContextType, Partial<GQLQuerySearchArgs>>;
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
+  sharedFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLQuerySharedFolderArgs, 'id'>>;
   subject?: Resolver<Maybe<GQLResolversTypes['Subject']>, ParentType, ContextType, RequireFields<GQLQuerySubjectArgs, 'id'>>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType, RequireFields<GQLQuerySubjectpageArgs, 'id'>>;
   subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType, Partial<GQLQuerySubjectsArgs>>;

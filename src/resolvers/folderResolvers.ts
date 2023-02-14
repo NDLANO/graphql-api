@@ -14,6 +14,7 @@ import {
   fetchAllFolderResources,
   fetchFolder,
   fetchFolders,
+  fetchSharedFolder,
   getPersonalData,
   patchFolder,
   patchFolderResource,
@@ -46,12 +47,14 @@ import {
   GQLQueryFolderResourceMetaSearchArgs,
   GQLQueryFoldersArgs,
   GQLQueryResolvers,
+  GQLQuerySharedFolderArgs,
 } from '../types/schema';
 
 export const Query: Pick<
   GQLQueryResolvers,
   | 'folders'
   | 'folder'
+  | 'sharedFolder'
   | 'allFolderResources'
   | 'folderResourceMetaSearch'
   | 'folderResourceMeta'
@@ -70,6 +73,13 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<IFolderData> {
     return fetchFolder(params, context);
+  },
+  async sharedFolder(
+    _: any,
+    params: GQLQuerySharedFolderArgs,
+    context: ContextWithLoaders,
+  ): Promise<IFolderData> {
+    return fetchSharedFolder(params, context);
   },
   async allFolderResources(
     _: any,
