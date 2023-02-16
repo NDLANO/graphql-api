@@ -16,12 +16,13 @@ import {
   fetchFolders,
   getPersonalData,
   patchFolder,
-  patchFolderResource,
+  updateFolderStatus,
   patchPersonalData,
   postFolder,
   postFolderResource,
   sortFolders,
   sortResources,
+  patchFolderResource,
 } from '../api/folderApi';
 import {
   fetchFolderResourceMeta,
@@ -38,6 +39,7 @@ import {
   GQLMutationSortResourcesArgs,
   GQLMutationUpdateFolderArgs,
   GQLMutationUpdateFolderResourceArgs,
+  GQLMutationUpdateFolderStatusArgs,
   GQLMutationUpdatePersonalDataArgs,
   GQLMyNdlaPersonalData,
   GQLQueryAllFolderResourcesArgs,
@@ -112,6 +114,7 @@ export const Mutations: Pick<
   | 'sortFolders'
   | 'sortResources'
   | 'updatePersonalData'
+  | 'updateFolderStatus'
 > = {
   async addFolder(
     _: any,
@@ -178,5 +181,12 @@ export const Mutations: Pick<
     context: ContextWithLoaders,
   ) {
     return sortResources(params, context);
+  },
+  async updateFolderStatus(
+    _: any,
+    params: GQLMutationUpdateFolderStatusArgs,
+    context: ContextWithLoaders,
+  ) {
+    return updateFolderStatus(params, context);
   },
 };

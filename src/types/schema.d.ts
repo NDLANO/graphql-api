@@ -728,6 +728,7 @@ export type GQLMutation = {
   sortResources: GQLSortResult;
   updateFolder: GQLFolder;
   updateFolderResource: GQLFolderResource;
+  updateFolderStatus: Array<Scalars['String']>;
   updatePersonalData: GQLMyNdlaPersonalData;
 };
 
@@ -781,6 +782,12 @@ export type GQLMutationUpdateFolderArgs = {
 export type GQLMutationUpdateFolderResourceArgs = {
   id: Scalars['String'];
   tags?: InputMaybe<Array<Scalars['String']>>;
+};
+
+
+export type GQLMutationUpdateFolderStatusArgs = {
+  folderId: Scalars['String'];
+  status: Scalars['String'];
 };
 
 
@@ -2493,6 +2500,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
+  updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdatePersonalDataArgs, 'favoriteSubjects'>>;
 };
 
