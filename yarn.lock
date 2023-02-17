@@ -1763,6 +1763,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@ndla/licenses@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@ndla/licenses/-/licenses-7.0.0.tgz#f21465119f6bb723e5c528221e413ff1a3b09eea"
+  integrity sha512-wwy1fSC3zMYfHzyu4UY2bOknFE/B0d8XPVszAvCjTwDG2hkmXlYOg/zG3/+8EKY6uelZFeQ9878z0ziYzoXVjA==
+
 "@ndla/types-article-api@^0.0.8":
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@ndla/types-article-api/-/types-article-api-0.0.8.tgz#abfa38810c0aa31761af90c8af94953cdb2c42d7"
@@ -1778,10 +1783,10 @@
   resolved "https://registry.yarnpkg.com/@ndla/types-concept-api/-/types-concept-api-0.0.10.tgz#43bd9dcfede1c1680e52bdc0f1ffa31246fbca9c"
   integrity sha512-btJNLpUuSaQXH1RYAhF4867Ka8dYLFo1gAbwcXQj3uQdo6BWJfPKMHoRHGXJ9Qww+MuZArlLgWc+YEh2Hd0aJg==
 
-"@ndla/types-embed@^0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-0.1.3.tgz#1c16cc33b2d41da048211ba6dca7b01791712451"
-  integrity sha512-vBWRsckc9kyz52HNZaSfeuxLGYS/OtTkR8kCTpGSH4qAXZ03qPiMRNXFS65YOrcPcVJntPMxv3yN80oSwmo6Hg==
+"@ndla/types-embed@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-0.1.4.tgz#ac1e1944c016d141e75ea52014543762f20bf4b6"
+  integrity sha512-D9ROtclbNJEQ8YkthqamuZMbY35IDgU6Yfg2jWzfSjAOSAAx2k9hJg26aQ7IWebKCSiFNcxF2lT3C2kuFLOitQ==
 
 "@ndla/types-frontpage-api@^0.0.4":
   version "0.0.4"
