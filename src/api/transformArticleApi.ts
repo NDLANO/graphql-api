@@ -118,6 +118,9 @@ export const transformArticle = async (
       .children()
       .replaceWith('');
   });
+  html('h2').each((_, el) => {
+    html(el).attr('data-text', html(el).text());
+  });
   if (showVisualElement && visualElement) {
     html('body').prepend(`<section>${visualElement}</section>`);
   }
