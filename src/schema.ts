@@ -418,7 +418,7 @@ export const typeDefs = gql`
     src: String
     download: String
     iframe: BrightcoveIframe
-    copyright: Copyright!
+    copyright: Copyright
     uploadDate: String
   }
 
@@ -426,7 +426,7 @@ export const typeDefs = gql`
     title: String!
     src: String
     thumbnail: String
-    copyright: Copyright!
+    copyright: Copyright
   }
 
   type ConceptCopyright {
@@ -989,6 +989,8 @@ export const typeDefs = gql`
       id: String!
       subjectId: String
       isOembed: String
+      draftConcept: Boolean
+      absoluteUrl: Boolean
       path: String
       showVisualElement: String
       convertEmbeds: Boolean
@@ -1086,7 +1088,12 @@ export const typeDefs = gql`
       resources: [FolderResourceMetaSearchInput!]!
     ): [FolderResourceMeta!]!
     folder(
-      id: Int!
+      id: String!
+      includeSubfolders: Boolean
+      includeResources: Boolean
+    ): Folder!
+    sharedFolder(
+      id: String!
       includeSubfolders: Boolean
       includeResources: Boolean
     ): Folder!
@@ -1114,6 +1121,14 @@ export const typeDefs = gql`
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
+    transformArticleContent(
+      content: String!
+      visualElement: String
+      subject: String
+      previewH5p: Boolean
+      draftConcept: Boolean
+      absoluteUrl: Boolean
+    ): String!
   }
 `;
 

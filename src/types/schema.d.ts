@@ -194,7 +194,7 @@ export type GQLBrightcoveIframe = {
 
 export type GQLBrightcoveLicense = {
   __typename?: 'BrightcoveLicense';
-  copyright: GQLCopyright;
+  copyright?: Maybe<GQLCopyright>;
   cover?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   download?: Maybe<Scalars['String']>;
@@ -476,7 +476,7 @@ export type GQLH5pElement = {
 
 export type GQLH5pLicense = {
   __typename?: 'H5pLicense';
-  copyright: GQLCopyright;
+  copyright?: Maybe<GQLCopyright>;
   src?: Maybe<Scalars['String']>;
   thumbnail?: Maybe<Scalars['String']>;
   title: Scalars['String'];
@@ -726,6 +726,7 @@ export type GQLMutation = {
   deletePersonalData: Scalars['Boolean'];
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
+  transformArticleContent: Scalars['String'];
   updateFolder: GQLFolder;
   updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']>;
@@ -769,6 +770,16 @@ export type GQLMutationSortFoldersArgs = {
 export type GQLMutationSortResourcesArgs = {
   parentId: Scalars['String'];
   sortedIds: Array<Scalars['String']>;
+};
+
+
+export type GQLMutationTransformArticleContentArgs = {
+  absoluteUrl?: InputMaybe<Scalars['Boolean']>;
+  content: Scalars['String'];
+  draftConcept?: InputMaybe<Scalars['Boolean']>;
+  previewH5p?: InputMaybe<Scalars['Boolean']>;
+  subject?: InputMaybe<Scalars['String']>;
+  visualElement?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -916,6 +927,7 @@ export type GQLQuery = {
   resourceTypes?: Maybe<Array<GQLResourceTypeDefinition>>;
   search?: Maybe<GQLSearch>;
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
+  sharedFolder: GQLFolder;
   subject?: Maybe<GQLSubject>;
   subjectpage?: Maybe<GQLSubjectPage>;
   subjects?: Maybe<Array<GQLSubject>>;
@@ -930,7 +942,9 @@ export type GQLQueryAllFolderResourcesArgs = {
 
 
 export type GQLQueryArticleArgs = {
+  absoluteUrl?: InputMaybe<Scalars['Boolean']>;
   convertEmbeds?: InputMaybe<Scalars['Boolean']>;
+  draftConcept?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['String'];
   isOembed?: InputMaybe<Scalars['String']>;
   path?: InputMaybe<Scalars['String']>;
@@ -992,7 +1006,7 @@ export type GQLQueryCoreElementsArgs = {
 
 
 export type GQLQueryFolderArgs = {
-  id: Scalars['Int'];
+  id: Scalars['String'];
   includeResources?: InputMaybe<Scalars['Boolean']>;
   includeSubfolders?: InputMaybe<Scalars['Boolean']>;
 };
@@ -1108,6 +1122,13 @@ export type GQLQuerySearchWithoutPaginationArgs = {
   resourceTypes?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
   subjects?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLQuerySharedFolderArgs = {
+  id: Scalars['String'];
+  includeResources?: InputMaybe<Scalars['Boolean']>;
+  includeSubfolders?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -1971,7 +1992,7 @@ export type GQLBrightcoveIframeResolvers<ContextType = any, ParentType extends G
 };
 
 export type GQLBrightcoveLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BrightcoveLicense'] = GQLResolversParentTypes['BrightcoveLicense']> = {
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
+  copyright?: Resolver<Maybe<GQLResolversTypes['Copyright']>, ParentType, ContextType>;
   cover?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   download?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -2248,7 +2269,7 @@ export type GQLH5pElementResolvers<ContextType = any, ParentType extends GQLReso
 };
 
 export type GQLH5pLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['H5pLicense'] = GQLResolversParentTypes['H5pLicense']> = {
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
+  copyright?: Resolver<Maybe<GQLResolversTypes['Copyright']>, ParentType, ContextType>;
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   thumbnail?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2498,6 +2519,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
+  transformArticleContent?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationTransformArticleContentArgs, 'content'>>;
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
@@ -2625,6 +2647,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
   search?: Resolver<Maybe<GQLResolversTypes['Search']>, ParentType, ContextType, Partial<GQLQuerySearchArgs>>;
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
+  sharedFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLQuerySharedFolderArgs, 'id'>>;
   subject?: Resolver<Maybe<GQLResolversTypes['Subject']>, ParentType, ContextType, RequireFields<GQLQuerySubjectArgs, 'id'>>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType, RequireFields<GQLQuerySubjectpageArgs, 'id'>>;
   subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType, Partial<GQLQuerySubjectsArgs>>;

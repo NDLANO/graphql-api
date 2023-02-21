@@ -32,6 +32,8 @@ export const Query = {
       subjectId,
       isOembed,
       path,
+      absoluteUrl,
+      draftConcept,
       showVisualElement,
       convertEmbeds,
     }: GQLQueryArticleArgs,
@@ -41,6 +43,8 @@ export const Query = {
       {
         articleId: id,
         subjectId,
+        absoluteUrl,
+        draftConcept,
         isOembed,
         path,
         showVisualElement,

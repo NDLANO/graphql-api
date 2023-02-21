@@ -72,6 +72,21 @@ export async function fetchFolder(
   return await resolveJson(response);
 }
 
+export async function fetchSharedFolder(
+  { id, includeResources, includeSubfolders }: GQLQueryFolderArgs,
+  context: Context,
+): Promise<IFolderData> {
+  const params = queryString({ includeResources, includeSubfolders });
+  const response = await fetch(
+    `/learningpath-api/v1/folders/shared/${id}${params}`,
+    {
+      ...context,
+      shouldUseCache: false,
+    },
+  );
+  return await resolveJson(response);
+}
+
 export async function fetchAllFolderResources(
   { size }: GQLQueryAllFolderResourcesArgs,
   context: Context,

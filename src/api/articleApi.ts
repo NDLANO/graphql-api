@@ -8,18 +8,16 @@
  */
 
 import { IArticleV2 } from '@ndla/types-article-api';
-import { load } from 'cheerio';
 import { localConverter, ndlaUrl } from '../config';
 import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
-import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
 import { parseVisualElement } from '../utils/visualelementHelpers';
-import { transformEmbed } from './embedsApi';
 import {
   queryResourcesOnContentURI,
   queryTopicsOnContentURI,
 } from './taxonomyApi';
+import { transformArticle } from './transformArticleApi';
 
 interface ArticleParams {
   convertEmbeds?: boolean;
@@ -29,6 +27,8 @@ interface ArticleParams {
   showVisualElement?: string;
   path?: string;
   previewH5p?: boolean;
+  draftConcept?: boolean;
+  absoluteUrl?: boolean;
 }
 
 const _fetchTransformedArticle = async (
@@ -68,34 +68,32 @@ const _fetchTransformedArticle = async (
     const subject = params.subjectId;
     const previewH5p = params.previewH5p;
     const article = await fetchSimpleArticle(params.articleId, context);
-    const html = load(article.content.content, {
-      xmlMode: false,
-      decodeEntities: false,
-    });
-    html('math').each((_, el) => {
-      html(el)
-        .attr('data-math', html(el).html() ?? '')
-        .children()
-        .replaceWith('');
-    });
-    if (params.showVisualElement && article.visualElement?.visualElement) {
-      html('body').prepend(
-        `<section>${article.visualElement.visualElement}</section>`,
-      );
-    }
-    const embeds = getEmbedsFromContent(html);
-    const embedPromises = embeds.map((embed, index) =>
-      transformEmbed(embed, context, index, { subject, previewH5p }),
+    const { content, metaData, visualElement } = await transformArticle(
+      article.content.content,
+      context,
+      article.visualElement?.visualElement,
+      {
+        subject,
+        draftConcept: params.draftConcept,
+        previewH5p,
+        absoluteUrl: params.absoluteUrl,
+        showVisualElement: params.showVisualElement === 'true',
+      },
     );
-    await Promise.all(embedPromises);
-    const transformedContent = html('body').html();
     return {
       ...article,
       introduction: article.introduction?.introduction ?? '',
       metaDescription: article.metaDescription.metaDescription,
       title: article.title.title,
+      metaData,
       tags: article.tags.tags,
-      content: transformedContent,
+      content:
+        article.articleType === 'standard'
+          ? content
+          : content === '<section></section>'
+          ? ''
+          : content,
+      visualElement,
     };
   }
 };

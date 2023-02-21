@@ -160,7 +160,7 @@ function externalsToH5pMetaData(obj: any) {
 }
 
 // map roles to same roles we use
-function roleMapper(role: string): string {
+export function roleMapper(role: string): string {
   const objRoles: { [key: string]: string } = {
     Author: 'Writer',
     Editor: 'Editorial',
