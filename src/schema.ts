@@ -1120,6 +1120,7 @@ export const typeDefs = gql`
     updatePersonalData(favoriteSubjects: [String!]!): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
+    updateFolderStatus(folderId: String!, status: String!): [String!]!
     transformArticleContent(
       content: String!
       visualElement: String
