@@ -36,7 +36,8 @@ const fetchOembed = async (
   embed: H5pEmbedData,
   context: Context,
 ): Promise<OembedProxyData> => {
-  const url = `/oembed-proxy/v1/oembed?url=${embed.url}`;
+  const params = queryString.stringify({ url: embed.url });
+  const url = `/oembed-proxy/v1/oembed?${params}`;
   const res = await fetch(url, context).then(resolveJson);
   return {
     ...res,
