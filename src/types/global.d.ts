@@ -31,7 +31,6 @@ declare global {
     >;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPageData>;
-    lk06CurriculumLoader: DataLoader<string, GQLReference | undefined>;
     lk20CurriculumLoader: DataLoader<
       { code: string; language: string },
       GQLReference | undefined

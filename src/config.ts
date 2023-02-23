@@ -57,10 +57,46 @@ const ndlaFrontendUrl = () => {
   }
 };
 
+export const h5pHostUrl = () => {
+  const h5pHost = process.env.H5P_HOST;
+  if (!h5pHost) {
+    switch (process.env.NDLA_ENVIRONMENT) {
+      case 'prod':
+        return 'https://h5p.ndla.no';
+      default:
+        return `https://h5p-${ndlaEnvironment.toString().replace('_', '-') ||
+          'test'}.ndla.no`;
+    }
+  } else {
+    return h5pHost;
+  }
+};
+
+const listingFrontendDomain = () => {
+  const listingDomain = process.env.LISTING_DOMAIN;
+  if (!listingDomain) {
+    switch (process.env.NDLA_ENVIRONMENT) {
+      case 'local':
+        return 'http://localhost:30020';
+      case 'prod':
+        return 'https://liste.ndla.no';
+      default:
+        return `https://liste.${process.env.NDLA_ENVIRONMENT ??
+          'test'}.ndla.no`;
+    }
+  } else {
+    return listingDomain;
+  }
+};
+
 export const port = getEnvironmentVariabel('PORT', '4000');
 export const apiUrl = getEnvironmentVariabel('API_URL', ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel('LOCAL_CONVERTER', false);
 export const ndlaUrl = getEnvironmentVariabel('NDLA_URL', ndlaFrontendUrl());
+export const listingUrl = getEnvironmentVariabel(
+  'NDLA_LISTING_URL',
+  listingFrontendDomain(),
+);
 export const uptimeOwner = getEnvironmentVariabel('UPTIME_OWNER', 'NDLANO');
 export const uptimeRepo = getEnvironmentVariabel('UPTIME_REPO', 'oppetid');
 export const uptimeToken = getEnvironmentVariabel(

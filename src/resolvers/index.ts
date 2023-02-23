@@ -55,6 +55,12 @@ import {
   Query as FolderResolvers,
   Mutations as FolderMutations,
 } from './folderResolvers';
+import { Query as VideoQuery } from './videoResolvers';
+import {
+  Query as ImageQuery,
+  resolvers as ImageResolvers,
+} from './imageResolvers';
+import { Mutations as TransformArticleMutations } from './transformResolvers';
 
 export const resolvers = {
   Query: {
@@ -70,9 +76,12 @@ export const resolvers = {
     ...ConceptQuery,
     ...UptimeQuery,
     ...FolderResolvers,
+    ...VideoQuery,
+    ...ImageQuery,
   },
   Mutation: {
     ...FolderMutations,
+    ...TransformArticleMutations,
   },
   ...articleResolvers,
   ...subjectResolvers,
@@ -85,6 +94,7 @@ export const resolvers = {
   ...podcastResolvers,
   ...conceptResolvers,
   ...uptimeResolvers,
+  ...ImageResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any) {

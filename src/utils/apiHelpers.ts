@@ -8,6 +8,7 @@
  */
 
 import { Response } from 'node-fetch';
+import { GraphQLError } from 'graphql';
 import { apiUrl } from '../config';
 import createFetch from './fetch';
 import { createCache } from '../cache';
@@ -80,7 +81,7 @@ export async function resolveNothingFromStatus(
   }
 
   const message = `Api call to ${url} failed with status ${status} ${statusText}`;
-  throw Object.assign(new Error(message), { status });
+  throw new GraphQLError(message, { extensions: { status } });
 }
 
 export async function resolveJson(
@@ -104,7 +105,7 @@ export async function resolveJson(
     console.error(message);
     return fallback;
   }
-  throw Object.assign(new Error(message), { status, json });
+  throw new GraphQLError(message, { extensions: { status, json } });
 }
 
 // converting h5p object from externals to graphQL schema type (Copyright-type)
@@ -159,7 +160,7 @@ function externalsToH5pMetaData(obj: any) {
 }
 
 // map roles to same roles we use
-function roleMapper(role: string): string {
+export function roleMapper(role: string): string {
   const objRoles: { [key: string]: string } = {
     Author: 'Writer',
     Editor: 'Editorial',

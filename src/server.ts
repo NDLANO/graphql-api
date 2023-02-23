@@ -24,7 +24,6 @@ import {
   learningpathsLoader,
   subjectsLoader,
   frontpageLoader,
-  lk06CurriculumLoader,
   lk20CurriculumLoader,
   subjectLoader,
 } from './loaders';
@@ -38,6 +37,7 @@ const app = express();
 
 // compress all responses
 app.use(compression());
+app.use(express.json({ limit: '1mb' }));
 
 function getAcceptLanguage(request: Request): string {
   const language = request.headers['accept-language'];
@@ -116,7 +116,6 @@ async function getContext({
       subjectsLoader: subjectsLoader(defaultContext),
       subjectLoader: subjectLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
-      lk06CurriculumLoader: lk06CurriculumLoader(defaultContext),
       lk20CurriculumLoader: lk20CurriculumLoader(defaultContext),
     },
   };
@@ -137,8 +136,7 @@ async function startApolloServer() {
         message: err.message,
         locations: err.locations,
         path: err.path,
-        status: err.originalError && err.originalError.status,
-        json: err.originalError && err.originalError.json,
+        extensions: err?.extensions,
       };
     },
   });

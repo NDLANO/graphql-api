@@ -27,6 +27,7 @@ import {
   GQLMutationSortResourcesArgs,
   GQLMutationUpdateFolderArgs,
   GQLMutationUpdateFolderResourceArgs,
+  GQLMutationUpdateFolderStatusArgs,
   GQLMutationUpdatePersonalDataArgs,
   GQLQueryAllFolderResourcesArgs,
   GQLQueryFolderArgs,
@@ -68,6 +69,21 @@ export async function fetchFolder(
     ...context,
     shouldUseCache: false,
   });
+  return await resolveJson(response);
+}
+
+export async function fetchSharedFolder(
+  { id, includeResources, includeSubfolders }: GQLQueryFolderArgs,
+  context: Context,
+): Promise<IFolderData> {
+  const params = queryString({ includeResources, includeSubfolders });
+  const response = await fetch(
+    `/learningpath-api/v1/folders/shared/${id}${params}`,
+    {
+      ...context,
+      shouldUseCache: false,
+    },
+  );
   return await resolveJson(response);
 }
 
@@ -237,4 +253,20 @@ export async function sortResources(
   );
   await resolveNothingFromStatus(response);
   return { parentId, sortedIds };
+}
+
+export async function updateFolderStatus(
+  { folderId, status }: GQLMutationUpdateFolderStatusArgs,
+  context: Context,
+): Promise<string[]> {
+  const params = queryString({ 'folder-status': status });
+  const response = await fetch(
+    `/learningpath-api/v1/folders/shared/${folderId}${params}`,
+    context,
+    {
+      method: 'PATCH',
+    },
+  );
+
+  return await resolveJson(response);
 }

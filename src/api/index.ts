@@ -14,7 +14,6 @@ export {
   fetchCoreElementReferences,
   fetchCrossSubjectTopicsByCode,
   fetchCrossSubjectTopics,
-  fetchLK06Curriculum,
   fetchLK20Curriculum,
   fetchLK20CompetenceGoalSet,
 } from './curriculumApi';
@@ -49,3 +48,4 @@ export {
 export { fetchOembed } from './oembedApi';
 export { searchConcepts, fetchConcept, fetchListingPage } from './conceptApi';
 export { fetchUptimeIssues } from './uptimeApi';
+export { fetchBrightcoveVideo } from './videoApi';

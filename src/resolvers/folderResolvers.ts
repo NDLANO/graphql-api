@@ -14,14 +14,16 @@ import {
   fetchAllFolderResources,
   fetchFolder,
   fetchFolders,
+  fetchSharedFolder,
   getPersonalData,
   patchFolder,
-  patchFolderResource,
+  updateFolderStatus,
   patchPersonalData,
   postFolder,
   postFolderResource,
   sortFolders,
   sortResources,
+  patchFolderResource,
 } from '../api/folderApi';
 import {
   fetchFolderResourceMeta,
@@ -38,6 +40,7 @@ import {
   GQLMutationSortResourcesArgs,
   GQLMutationUpdateFolderArgs,
   GQLMutationUpdateFolderResourceArgs,
+  GQLMutationUpdateFolderStatusArgs,
   GQLMutationUpdatePersonalDataArgs,
   GQLMyNdlaPersonalData,
   GQLQueryAllFolderResourcesArgs,
@@ -46,12 +49,14 @@ import {
   GQLQueryFolderResourceMetaSearchArgs,
   GQLQueryFoldersArgs,
   GQLQueryResolvers,
+  GQLQuerySharedFolderArgs,
 } from '../types/schema';
 
 export const Query: Pick<
   GQLQueryResolvers,
   | 'folders'
   | 'folder'
+  | 'sharedFolder'
   | 'allFolderResources'
   | 'folderResourceMetaSearch'
   | 'folderResourceMeta'
@@ -70,6 +75,13 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<IFolderData> {
     return fetchFolder(params, context);
+  },
+  async sharedFolder(
+    _: any,
+    params: GQLQuerySharedFolderArgs,
+    context: ContextWithLoaders,
+  ): Promise<IFolderData> {
+    return fetchSharedFolder(params, context);
   },
   async allFolderResources(
     _: any,
@@ -112,6 +124,7 @@ export const Mutations: Pick<
   | 'sortFolders'
   | 'sortResources'
   | 'updatePersonalData'
+  | 'updateFolderStatus'
 > = {
   async addFolder(
     _: any,
@@ -178,5 +191,12 @@ export const Mutations: Pick<
     context: ContextWithLoaders,
   ) {
     return sortResources(params, context);
+  },
+  async updateFolderStatus(
+    _: any,
+    params: GQLMutationUpdateFolderStatusArgs,
+    context: ContextWithLoaders,
+  ) {
+    return updateFolderStatus(params, context);
   },
 };

@@ -8,6 +8,7 @@
 
 import { Response } from 'node-fetch';
 import qs from 'query-string';
+import { NodeType } from '@ndla/types-embed';
 import {
   GQLMoviePath,
   GQLMovieResourceTypes,
@@ -181,6 +182,7 @@ export async function fetchSubjectTopics(
 ): Promise<GQLTopic[]> {
   const query = qs.stringify({
     recursive: true,
+    nodeType: 'TOPIC',
     language: context.language,
   });
   const response = await taxonomyFetch(
@@ -196,6 +198,7 @@ export async function fetchTopics(
 ): Promise<GQLTopic[]> {
   const query = qs.stringify({
     contentURI: args.contentUri ?? '',
+    nodeType: 'TOPIC',
     language: context.language,
   });
   const response = await taxonomyFetch(
@@ -224,6 +227,7 @@ export async function fetchSubtopics(
 ): Promise<GQLTopic[]> {
   const { id } = params;
   const query = qs.stringify({
+    nodeType: 'TOPIC',
     language: context.language,
   });
   const response = await taxonomyFetch(
@@ -333,3 +337,35 @@ export async function fetchVersion(
   const json = await resolveJson(response);
   return json?.[0];
 }
+
+interface NodeQueryParams {
+  contentURI?: string;
+  nodeType?: 'NODE' | 'SUBJECT' | 'TOPIC' | 'RESOURCE';
+  language?: string;
+  isRoot?: boolean;
+  key?: string;
+  value?: string;
+  isVisible?: boolean;
+}
+
+export const queryNodes = async (
+  params: NodeQueryParams,
+  context: Context,
+): Promise<Node[]> => {
+  const res = await fetch(
+    `/${context.taxonomyUrl}/v1/nodes?${qs.stringify(params)}`,
+    context,
+  );
+  return await resolveJson(res);
+};
+
+export const fetchNodeByArticleId = async (
+  id: string,
+  context: Context,
+): Promise<NodeType> => {
+  const res: NodeType[] = await fetch(
+    `/${context.taxonomyUrl}/v1/nodes?contentURI=urn:article:${id}`,
+    context,
+  ).then(resolveJson);
+  return res[0];
+};

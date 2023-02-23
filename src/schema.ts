@@ -12,6 +12,46 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 export const typeDefs = gql`
   scalar StringRecord
 
+  type ImageMetaInformationV2 {
+    id: String!
+    metaUrl: String!
+    title: Title!
+    alttext: ImageAltText!
+    imageUrl: String!
+    size: Int!
+    contentType: String!
+    copyright: Copyright!
+    tags: Tags!
+    caption: Caption!
+    supportedLanguages: [String!]
+    created: String!
+    createdBy: String!
+    modelRelease: String!
+    editorNotes: [EditorNote!]
+    imageDimensions: ImageDimensions
+  }
+
+  type ImageDimensions {
+    width: Int!
+    height: Int!
+  }
+
+  type EditorNote {
+    timestamp: String!
+    updatedBy: String!
+    note: String!
+  }
+
+  type Caption {
+    caption: String!
+    language: String!
+  }
+
+  type ImageAltText {
+    alttext: String!
+    language: String!
+  }
+
   type AudioFile {
     url: String!
     mimeType: String!
@@ -51,37 +91,7 @@ export const typeDefs = gql`
     language: String!
   }
 
-  interface AudioBase {
-    id: Int!
-    revision: Int!
-    title: Title!
-    audioFile: AudioFile!
-    copyright: Copyright!
-    tags: Tags!
-    supportedLanguages: [String!]!
-    audioType: String!
-    podcastMeta: PodcastMeta
-    manuscript: Manuscript
-    created: String!
-    updated: String!
-  }
-
-  type Audio implements AudioBase {
-    id: Int!
-    revision: Int!
-    title: Title!
-    audioFile: AudioFile!
-    copyright: Copyright!
-    tags: Tags!
-    supportedLanguages: [String!]!
-    audioType: String!
-    podcastMeta: PodcastMeta
-    manuscript: Manuscript
-    created: String!
-    updated: String!
-  }
-
-  type AudioWithSeries implements AudioBase {
+  type Audio {
     id: Int!
     revision: Int!
     title: Title!
@@ -281,7 +291,11 @@ export const typeDefs = gql`
     learningpath: Learningpath
     relevanceId: String
     rank: Int
-    article(subjectId: String, isOembed: String): Article
+    article(
+      subjectId: String
+      isOembed: String
+      convertEmbeds: Boolean
+    ): Article
     availability: String
     resourceTypes: [ResourceType!]
     parents: [Topic!]
@@ -299,7 +313,11 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
-    article(subjectId: String, showVisualElement: String): Article
+    article(
+      subjectId: String
+      showVisualElement: String
+      convertEmbeds: Boolean
+    ): Article
     availability: String
     isPrimary: Boolean
     parent: String
@@ -400,7 +418,7 @@ export const typeDefs = gql`
     src: String
     download: String
     iframe: BrightcoveIframe
-    copyright: Copyright!
+    copyright: Copyright
     uploadDate: String
   }
 
@@ -408,7 +426,7 @@ export const typeDefs = gql`
     title: String!
     src: String
     thumbnail: String
-    copyright: Copyright!
+    copyright: Copyright
   }
 
   type ConceptCopyright {
@@ -491,7 +509,6 @@ export const typeDefs = gql`
     crossSubjectTopics: [Element!]
     coreElementsCodes: [Element!]
     coreElements: [Element!]
-    competenceAimSetId: String
   }
 
   type CoreElement {
@@ -743,6 +760,14 @@ export const typeDefs = gql`
     download: String
     iframe: BrightcoveIframe
     uploadDate: String
+    customFields: BrightcoveCustomFields
+    name: String
+  }
+
+  type BrightcoveCustomFields {
+    license: String!
+    licenseInfo: [String!]!
+    accountId: String
   }
 
   type H5pElement {
@@ -964,8 +989,11 @@ export const typeDefs = gql`
       id: String!
       subjectId: String
       isOembed: String
+      draftConcept: Boolean
+      absoluteUrl: Boolean
       path: String
       showVisualElement: String
+      convertEmbeds: Boolean
     ): Article
     subject(id: String!): Subject
     subjectpage(id: Int!): SubjectPage
@@ -975,16 +1003,11 @@ export const typeDefs = gql`
       metadataFilterKey: String
       metadataFilterValue: String
       filterVisible: Boolean
-      ids: [String!]
     ): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: Frontpage
-    competenceGoals(
-      codes: [String]
-      nodeId: String
-      language: String
-    ): [CompetenceGoal!]
+    competenceGoals(codes: [String], language: String): [CompetenceGoal!]
     competenceGoal(code: String!, language: String): CompetenceGoal
     coreElements(codes: [String], language: String): [CoreElement!]
     coreElement(code: String!, language: String): CoreElement
@@ -1048,7 +1071,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
     ): SearchWithoutPagination
-    podcast(id: Int!): AudioWithSeries
+    audio(id: Int!): Audio
     podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
     podcastSeriesSearch(
@@ -1065,12 +1088,19 @@ export const typeDefs = gql`
       resources: [FolderResourceMetaSearchInput!]!
     ): [FolderResourceMeta!]!
     folder(
-      id: Int!
+      id: String!
+      includeSubfolders: Boolean
+      includeResources: Boolean
+    ): Folder!
+    sharedFolder(
+      id: String!
       includeSubfolders: Boolean
       includeResources: Boolean
     ): Folder!
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData!
+    image(id: String!): ImageMetaInformationV2
+    brightcoveVideo(id: String!): BrightcoveElement
   }
 
   type Mutation {
@@ -1090,6 +1120,15 @@ export const typeDefs = gql`
     updatePersonalData(favoriteSubjects: [String!]!): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
+    updateFolderStatus(folderId: String!, status: String!): [String!]!
+    transformArticleContent(
+      content: String!
+      visualElement: String
+      subject: String
+      previewH5p: Boolean
+      draftConcept: Boolean
+      absoluteUrl: Boolean
+    ): String!
   }
 `;
 

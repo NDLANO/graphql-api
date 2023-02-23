@@ -16,7 +16,6 @@ import {
   fetchSubjects,
   fetchFrontpage,
   fetchFilmFrontpage,
-  fetchLK06Curriculum,
   fetchLK20Curriculum,
 } from './api';
 import { fetchSubjectTyped, Node } from './api/taxonomyApi';
@@ -63,22 +62,6 @@ export function lk20CurriculumLoader(
     );
     return uniqueCurriculumIds.map(({ code, language }) => {
       return responses.find(response => response.code === code);
-    });
-  });
-}
-
-export function lk06CurriculumLoader(
-  context: Context,
-): DataLoader<string, GQLReference | undefined> {
-  return new DataLoader(async curriculumIds => {
-    const uniqueCurriculumIds = Array.from(new Set(curriculumIds));
-    const responses = await Promise.all(
-      uniqueCurriculumIds.map(async id => {
-        return fetchLK06Curriculum(id, context);
-      }),
-    );
-    return uniqueCurriculumIds.map(id => {
-      return responses.find(response => response.id === id);
     });
   });
 }

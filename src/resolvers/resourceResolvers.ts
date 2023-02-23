@@ -117,6 +117,7 @@ export const resolvers = {
       args: {
         subjectId?: string;
         isOembed?: string;
+        convertEmbeds?: boolean;
       },
       context: ContextWithLoaders,
     ): Promise<GQLArticle> {
@@ -129,6 +130,7 @@ export const resolvers = {
               subjectId: args.subjectId,
               isOembed: args.isOembed,
               path: resource.path,
+              convertEmbeds: args.convertEmbeds,
             },
             context,
           ).then(article => {
