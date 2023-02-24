@@ -253,6 +253,7 @@ export type GQLConcept = {
   source?: Maybe<Scalars['String']>;
   subjectIds?: Maybe<Array<Scalars['String']>>;
   subjectNames?: Maybe<Array<Scalars['String']>>;
+  supportedLanguages: Array<Scalars['String']>;
   tags: Array<Scalars['String']>;
   title: Scalars['String'];
   visualElement?: Maybe<GQLVisualElement>;
@@ -2051,6 +2052,7 @@ export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolve
   source?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   subjectIds?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   subjectNames?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;

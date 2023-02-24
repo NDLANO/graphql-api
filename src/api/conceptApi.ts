@@ -37,6 +37,7 @@ export interface Concept {
   source?: string;
   metaImage?: IConcept['metaImage'];
   visualElement?: IConcept['visualElement'];
+  supportedLanguages: string[];
 }
 
 export async function searchConcepts(
@@ -87,6 +88,7 @@ export async function searchConcepts(
       metaImage: res.metaImage,
       copyright: res.copyright,
       visualElement: res.visualElement,
+      supportedLanguages: res.supportedLanguages,
     })),
   };
 }
@@ -113,6 +115,7 @@ export async function fetchConcept(
       source: concept.source,
       metaImage: concept.metaImage,
       visualElement: concept.visualElement,
+      supportedLanguages: concept.supportedLanguages,
     };
   } catch (e) {
     return undefined;

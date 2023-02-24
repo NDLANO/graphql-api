@@ -803,6 +803,7 @@ export const typeDefs = gql`
     visualElement: VisualElement
     copyright: ConceptCopyright
     source: String
+    supportedLanguages: [String!]!
   }
 
   type Search {
