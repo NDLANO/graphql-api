@@ -95,6 +95,16 @@ export async function resolveJson(
     return;
   }
 
+  if (status === 410) {
+    throw new GraphQLError(statusText, {
+      extensions: {
+        http: {
+          status: 410,
+        },
+      },
+    });
+  }
+
   const json = await response.json();
   if (ok) {
     return externalsToH5pMetaData(json);
