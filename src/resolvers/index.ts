@@ -54,6 +54,7 @@ import {
 import {
   Query as FolderResolvers,
   Mutations as FolderMutations,
+  resolvers as folderResolvers,
 } from './folderResolvers';
 import { Query as VideoQuery } from './videoResolvers';
 import {
@@ -83,6 +84,7 @@ export const resolvers = {
     ...FolderMutations,
     ...TransformArticleMutations,
   },
+  ...folderResolvers,
   ...articleResolvers,
   ...subjectResolvers,
   ...topicResolvers,

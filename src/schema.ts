@@ -902,11 +902,13 @@ export const typeDefs = gql`
     parentId: String
     subfolders: [Folder!]!
     resources: [FolderResource!]!
+    created: String!
+    updated: String!
   }
 
   type FolderResource {
     id: String!
-    resourceId: Int!
+    resourceId: String!
     resourceType: String!
     path: String!
     created: String!
@@ -914,7 +916,7 @@ export const typeDefs = gql`
   }
 
   input FolderResourceMetaSearchInput {
-    id: Int!
+    id: String!
     resourceType: String!
     path: String!
   }
@@ -925,7 +927,7 @@ export const typeDefs = gql`
   }
 
   interface FolderResourceMeta {
-    id: Int!
+    id: String!
     type: String!
     resourceTypes: [FolderResourceResourceType!]!
     metaImage: MetaImage
@@ -934,7 +936,7 @@ export const typeDefs = gql`
   }
 
   type ArticleFolderResourceMeta implements FolderResourceMeta {
-    id: Int!
+    id: String!
     type: String!
     resourceTypes: [FolderResourceResourceType!]!
     metaImage: MetaImage
@@ -943,7 +945,43 @@ export const typeDefs = gql`
   }
 
   type LearningpathFolderResourceMeta implements FolderResourceMeta {
-    id: Int!
+    id: String!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type ConceptFolderResourceMeta implements FolderResourceMeta {
+    id: String!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type ImageFolderResourceMeta implements FolderResourceMeta {
+    id: String!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type AudioFolderResourceMeta implements FolderResourceMeta {
+    id: String!
+    type: String!
+    resourceTypes: [FolderResourceResourceType!]!
+    metaImage: MetaImage
+    title: String!
+    description: String!
+  }
+
+  type VideoFolderResourceMeta implements FolderResourceMeta {
+    id: String!
     type: String!
     resourceTypes: [FolderResourceResourceType!]!
     metaImage: MetaImage
@@ -1108,7 +1146,7 @@ export const typeDefs = gql`
     updateFolder(id: String!, name: String, status: String): Folder!
     deleteFolder(id: String!): String!
     addFolderResource(
-      resourceId: Int!
+      resourceId: String!
       folderId: String!
       resourceType: String!
       path: String!

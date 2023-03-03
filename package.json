@@ -59,7 +59,7 @@
     "@ndla/types-embed": "^0.1.4",
     "@ndla/types-frontpage-api": "^0.0.4",
     "@ndla/types-image-api": "^0.0.10",
-    "@ndla/types-learningpath-api": "^0.0.19",
+    "@ndla/types-learningpath-api": "^0.0.20",
     "@ndla/types-search-api": "^0.0.6",
     "@types/bunyan": "^1.8.5",
     "@types/compression": "^1.7.2",

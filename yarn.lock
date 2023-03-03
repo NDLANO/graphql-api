@@ -1516,10 +1516,10 @@
   resolved "https://registry.yarnpkg.com/@ndla/types-image-api/-/types-image-api-0.0.10.tgz#0b358825e5ded24d602576997019492ffdd77160"
   integrity sha512-/wlnvskF8xHzNx4ZPsxgaJDqs3jGURgC28mMljlPtgOgK07/1QemKaJIPAmSGNcxBIzMhNiBkkFDYbHw8pxOGw==
 
-"@ndla/types-learningpath-api@^0.0.19":
-  version "0.0.19"
-  resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.19.tgz#e8631e0dd42fb05f15a6f9fc3e2e60dbfbe7d032"
-  integrity sha512-vpRkP/G1SzkJ3ENDq5W27XPtsnOD/mc5EmnZwXWc0eEgnCfhHqchXKMT+TzlnkNP9AtFjs5pIP7RKd+796IXbQ==
+"@ndla/types-learningpath-api@^0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@ndla/types-learningpath-api/-/types-learningpath-api-0.0.20.tgz#5794c7300834fb857199f26fa934823102003b2e"
+  integrity sha512-uiM43AhkqSYFGVpwitixQM1ksmn4QqMqNN0O3S2wssAWT9koWxa4o1GjysUm8WwlCz774qOVWqnZJ0dEXjHTeQ==
 
 "@ndla/types-search-api@^0.0.6":
   version "0.0.6"
