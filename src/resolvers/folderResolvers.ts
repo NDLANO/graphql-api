@@ -112,6 +112,25 @@ export const Query: Pick<
     return getPersonalData(context);
   },
 };
+
+export const resolvers = {
+  Folder: {
+    async id(folder: IFolderData, _: any, context: ContextWithLoaders) {
+      return folder.id.toString();
+    },
+  },
+  FolderResource: {
+    async id(resource: IResource, _: any, context: ContextWithLoaders) {
+      return resource.id.toString();
+    },
+  },
+  FolderResourceMeta: {
+    async id(meta: GQLFolderResourceMeta, _: any, context: ContextWithLoaders) {
+      return meta.id.toString();
+    },
+  },
+};
+
 export const Mutations: Pick<
   GQLMutationResolvers,
   | 'addFolder'
