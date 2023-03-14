@@ -13,6 +13,7 @@ import {
   H5pLicenseInformation,
   H5pOembedData,
   OembedProxyData,
+  H5pInfo,
 } from '@ndla/types-embed';
 import { h5pHostUrl } from '../config';
 import { fetch, resolveJson } from '../utils/apiHelpers';
@@ -62,11 +63,25 @@ export const fetchH5pLicenseInformation = async (
   context: Context,
 ): Promise<H5pLicenseInformation | undefined> => {
   if (!id) return undefined;
-  const url = `${h5pHostUrl()}/v1/resource/${id}/copyright`;
+  const url = `${h5pHostUrl()}/v2/resource/${id}/copyright`;
   try {
     const response = await fetch(url, context);
     const oembed = await resolveJson(response);
     return oembed;
+  } catch (e) {
+    return undefined;
+  }
+};
+
+export const fetchH5pInfo = async (
+  id: string | undefined,
+  context: Context,
+): Promise<H5pInfo | undefined> => {
+  if (!id) return undefined;
+  const infoUrl = `${h5pHostUrl()}/v1/resource/${id}/info`;
+  try {
+    const response = await fetch(infoUrl, context);
+    return await resolveJson(response);
   } catch (e) {
     return undefined;
   }

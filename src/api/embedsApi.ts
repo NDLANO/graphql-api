@@ -33,7 +33,11 @@ import {
 } from '../utils/getEmbedsFromContent';
 import { fetchAudio } from './audioApi';
 import { ndlaUrl } from '../config';
-import { fetchH5pLicenseInformation, fetchH5pOembed } from './h5pApi';
+import {
+  fetchH5pLicenseInformation,
+  fetchH5pOembed,
+  fetchH5pInfo,
+} from './h5pApi';
 import { fetchExternalOembed } from './externalApi';
 import { fetchVideo, fetchVideoSources } from './videoApi';
 import { fetchNodeByArticleId, queryNodes } from './taxonomyApi';
@@ -190,9 +194,10 @@ const h5pMeta: Fetch<H5pMetaData> = async ({
     embedData.url = `${embedData.url}?locale=${lang}&cssUrl=${cssUrl}`;
     const pathArr = embedData.path?.split('/') || [];
     const h5pId = pathArr[pathArr.length - 1];
-    const [oembedData, h5pLicenseInformation] = await Promise.all([
+    const [oembedData, h5pLicenseInformation, h5pInfo] = await Promise.all([
       fetchH5pOembed(embedData, context, !!opts.previewH5p),
       fetchH5pLicenseInformation(h5pId, context),
+      fetchH5pInfo(h5pId, context),
     ]);
 
     return {
@@ -201,7 +206,13 @@ const h5pMeta: Fetch<H5pMetaData> = async ({
       seq: index,
       embedData,
       data: {
-        h5pLicenseInformation,
+        h5pLicenseInformation: {
+          h5p: {
+            ...h5pLicenseInformation?.h5p,
+            authors: h5pLicenseInformation?.h5p.authors ?? [],
+            title: h5pInfo?.title ?? '',
+          },
+        },
         h5pUrl: embedData.url,
         oembed: oembedData,
       },

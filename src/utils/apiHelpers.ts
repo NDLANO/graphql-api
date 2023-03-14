@@ -62,7 +62,6 @@ async function fetchHelper(
     ...accessTokenAuth,
     ...cacheHeaders,
   };
-
   return fetchFn(apiResourceUrl(path), context, {
     headers,
     ...options,
