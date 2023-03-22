@@ -321,6 +321,7 @@ export const typeDefs = gql`
     availability: String
     isPrimary: Boolean
     parent: String
+    parentId: String
     subtopics: [Topic!]
     pathTopics: [[Topic!]!]
     coreResources(subjectId: String): [Resource!]

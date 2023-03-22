@@ -1461,6 +1461,7 @@ export type GQLTopic = GQLTaxonomyEntity & GQLWithArticle & {
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String'];
   parent?: Maybe<Scalars['String']>;
+  parentId?: Maybe<Scalars['String']>;
   path: Scalars['String'];
   pathTopics?: Maybe<Array<Array<GQLTopic>>>;
   paths: Array<Scalars['String']>;
@@ -2975,6 +2976,7 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parent?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   pathTopics?: Resolver<Maybe<Array<Array<GQLResolversTypes['Topic']>>>, ParentType, ContextType>;
   paths?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
