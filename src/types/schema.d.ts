@@ -960,7 +960,7 @@ export type GQLQuery = {
   resourceTypes?: Maybe<Array<GQLResourceTypeDefinition>>;
   search?: Maybe<GQLSearch>;
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
-  sharedFolder: GQLFolder;
+  sharedFolder: GQLSharedFolder;
   subject?: Maybe<GQLSubject>;
   subjectpage?: Maybe<GQLSubjectPage>;
   subjects?: Maybe<Array<GQLSubject>>;
@@ -1314,6 +1314,19 @@ export type GQLSearchSuggestion = {
 export type GQLSearchWithoutPagination = {
   __typename?: 'SearchWithoutPagination';
   results: Array<GQLSearchResult>;
+};
+
+export type GQLSharedFolder = {
+  __typename?: 'SharedFolder';
+  breadcrumbs: Array<GQLBreadcrumb>;
+  created: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  parentId?: Maybe<Scalars['String']>;
+  resources: Array<GQLFolderResource>;
+  status: Scalars['String'];
+  subfolders: Array<GQLSharedFolder>;
+  updated: Scalars['String'];
 };
 
 export type GQLSortResult = {
@@ -1717,6 +1730,7 @@ export type GQLResolversTypes = {
   SearchResult: GQLResolversTypes['ArticleSearchResult'] | GQLResolversTypes['LearningpathSearchResult'];
   SearchSuggestion: ResolverTypeWrapper<GQLSearchSuggestion>;
   SearchWithoutPagination: ResolverTypeWrapper<GQLSearchWithoutPagination>;
+  SharedFolder: ResolverTypeWrapper<GQLSharedFolder>;
   SortResult: ResolverTypeWrapper<GQLSortResult>;
   String: ResolverTypeWrapper<Scalars['String']>;
   StringRecord: ResolverTypeWrapper<Scalars['StringRecord']>;
@@ -1847,6 +1861,7 @@ export type GQLResolversParentTypes = {
   SearchResult: GQLResolversParentTypes['ArticleSearchResult'] | GQLResolversParentTypes['LearningpathSearchResult'];
   SearchSuggestion: GQLSearchSuggestion;
   SearchWithoutPagination: GQLSearchWithoutPagination;
+  SharedFolder: GQLSharedFolder;
   SortResult: GQLSortResult;
   String: Scalars['String'];
   StringRecord: Scalars['StringRecord'];
@@ -2732,7 +2747,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
   search?: Resolver<Maybe<GQLResolversTypes['Search']>, ParentType, ContextType, Partial<GQLQuerySearchArgs>>;
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
-  sharedFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLQuerySharedFolderArgs, 'id'>>;
+  sharedFolder?: Resolver<GQLResolversTypes['SharedFolder'], ParentType, ContextType, RequireFields<GQLQuerySharedFolderArgs, 'id'>>;
   subject?: Resolver<Maybe<GQLResolversTypes['Subject']>, ParentType, ContextType, RequireFields<GQLQuerySubjectArgs, 'id'>>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType, RequireFields<GQLQuerySubjectpageArgs, 'id'>>;
   subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType, Partial<GQLQuerySubjectsArgs>>;
@@ -2849,6 +2864,19 @@ export type GQLSearchSuggestionResolvers<ContextType = any, ParentType extends G
 
 export type GQLSearchWithoutPaginationResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchWithoutPagination'] = GQLResolversParentTypes['SearchWithoutPagination']> = {
   results?: Resolver<Array<GQLResolversTypes['SearchResult']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLSharedFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SharedFolder'] = GQLResolversParentTypes['SharedFolder']> = {
+  breadcrumbs?: Resolver<Array<GQLResolversTypes['Breadcrumb']>, ParentType, ContextType>;
+  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  resources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType>;
+  status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  subfolders?: Resolver<Array<GQLResolversTypes['SharedFolder']>, ParentType, ContextType>;
+  updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3145,6 +3173,7 @@ export type GQLResolvers<ContextType = any> = {
   SearchResult?: GQLSearchResultResolvers<ContextType>;
   SearchSuggestion?: GQLSearchSuggestionResolvers<ContextType>;
   SearchWithoutPagination?: GQLSearchWithoutPaginationResolvers<ContextType>;
+  SharedFolder?: GQLSharedFolderResolvers<ContextType>;
   SortResult?: GQLSortResultResolvers<ContextType>;
   StringRecord?: GraphQLScalarType;
   Subject?: GQLSubjectResolvers<ContextType>;
