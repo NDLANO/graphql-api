@@ -6,9 +6,10 @@
  *
  */
 import cheerio from 'cheerio';
+import { fetchH5pLicenseInformation, fetchH5pInfo } from '../api/h5pApi';
 import { convertToSimpleImage, fetchImage } from '../api/imageApi';
 import { fetchOembed } from '../api/oembedApi';
-import { h5pHostUrl, localConverter } from '../config';
+import { localConverter } from '../config';
 import {
   GQLBrightcoveLicense,
   GQLCopyright,
@@ -59,24 +60,6 @@ export async function parseVisualElement(
   }
 }
 
-const fetchH5pLicenseInformation = async (
-  id: string,
-  context: Context,
-): Promise<H5PLicenseInformation | undefined> => {
-  const url = `${h5pHostUrl()}/v1/resource/${id}/copyright`;
-  try {
-    const response = await fetch(url, context, {
-      method: 'GET',
-      headers: {
-        'content-type': 'Content-Type: application/json',
-      },
-    });
-    return await resolveJson(response);
-  } catch (e) {
-    return undefined;
-  }
-};
-
 interface VisualElementBrightcove {
   account: string;
   player: string;
@@ -113,15 +96,6 @@ const parseBrightcoveFromEmbed = async (
   };
 };
 
-interface H5PLicenseInformation {
-  h5p: {
-    title: string;
-    authors: {
-      name: string;
-      role: string;
-    }[];
-  };
-}
 interface VisualElementH5P {
   resource: string;
   path: string;
@@ -132,12 +106,12 @@ const parseH5PFromEmbed = async (
   embedData: VisualElementH5P,
   context: Context,
 ): Promise<GQLVisualElement | null> => {
-  const [license, visualElementOembed] = await Promise.all([
-    await fetchH5pLicenseInformation(
-      embedData.path.split('/').pop() ?? '',
-      context,
-    ),
-    await fetchOembed<GQLH5pElement>(embedData.url, context),
+  const pathArr = embedData.path?.split('/') || [];
+  const h5pId = pathArr[pathArr.length - 1];
+  const [license, visualElementOembed, h5pInfo] = await Promise.all([
+    fetchH5pLicenseInformation(h5pId, context),
+    fetchOembed<GQLH5pElement>(embedData.url, context),
+    fetchH5pInfo(h5pId, context),
   ]);
 
   if (!visualElementOembed) return null;
@@ -161,7 +135,7 @@ const parseH5PFromEmbed = async (
       src: embedData.url,
     },
     copyright: copyright,
-    title: license?.h5p.title,
+    title: h5pInfo?.title,
     resource: 'h5p',
   };
 };
