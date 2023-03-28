@@ -7,7 +7,7 @@
  *
  */
 
-import { IArticleV2 } from '@ndla/types-article-api';
+import { IArticleV2 } from '@ndla/types-backend/article-api';
 import { localConverter, ndlaUrl } from '../config';
 import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';

@@ -1,5 +1,5 @@
 // @ts-strict-ignore
-import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-frontpage-api';
+import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-backend/frontpage-api';
 import DataLoader from 'dataloader';
 import { Node } from '../../api/taxonomyApi';
 import {

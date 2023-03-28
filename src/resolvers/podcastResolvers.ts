@@ -10,7 +10,7 @@ import {
   IAudioMetaInformation,
   IAudioSummarySearchResult,
   IPodcastMeta,
-} from '@ndla/types-audio-api';
+} from '@ndla/types-backend/audio-api';
 import {
   fetchAudio,
   fetchPodcastSeries,

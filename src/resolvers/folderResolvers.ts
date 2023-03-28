@@ -6,7 +6,7 @@
  *
  */
 
-import { IFolderData, IResource } from '@ndla/types-learningpath-api';
+import { IFolderData, IResource } from '@ndla/types-backend/learningpath-api';
 import {
   deleteFolder,
   deleteFolderResource,

@@ -1,7 +1,7 @@
 import DataLoader from 'dataloader';
 import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
-import { IFrontPageData } from '@ndla/types-frontpage-api';
+import { IFrontPageData } from '@ndla/types-backend/frontpage-api';
 import { Node } from '../api/taxonomyApi';
 import { GQLMeta, GQLReference, GQLSubject } from './schema';
 

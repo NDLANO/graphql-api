@@ -12,7 +12,7 @@ import {
   IConceptSearchResult,
   IConcept,
   IConceptSummary,
-} from '@ndla/types-concept-api';
+} from '@ndla/types-backend/concept-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { GQLListingPage, GQLSubject } from '../types/schema';

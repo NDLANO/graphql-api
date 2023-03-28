@@ -7,7 +7,7 @@
  *
  */
 
-import { ISubjectPageData } from '@ndla/types-frontpage-api';
+import { ISubjectPageData } from '@ndla/types-backend/frontpage-api';
 import { fetchLK20CompetenceGoalSet, fetchSubjectPage } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';

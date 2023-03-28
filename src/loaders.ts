@@ -6,7 +6,7 @@
  *
  */
 
-import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-frontpage-api';
+import { IFilmFrontPageData, IFrontPageData } from '@ndla/types-backend/frontpage-api';
 import DataLoader from 'dataloader';
 import {
   fetchArticles,
