@@ -908,6 +908,18 @@ export const typeDefs = gql`
     updated: String!
   }
 
+  type SharedFolder {
+    id: String!
+    name: String!
+    status: String!
+    breadcrumbs: [Breadcrumb!]!
+    parentId: String
+    subfolders: [SharedFolder!]!
+    resources: [FolderResource!]!
+    created: String!
+    updated: String!
+  }
+
   type FolderResource {
     id: String!
     resourceId: String!
@@ -1136,7 +1148,7 @@ export const typeDefs = gql`
       id: String!
       includeSubfolders: Boolean
       includeResources: Boolean
-    ): Folder!
+    ): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
