@@ -6,7 +6,9 @@
  *
  */
 
+import { IConfigMetaRestricted } from '@ndla/types-backend/build/learningpath-api';
 import { fetchLearningpath, fetchResource, fetchOembed } from '../api';
+import { fetchExamLockStatus } from '../api/learningpathApi';
 import {
   GQLLearningpath,
   GQLLearningpathStep,
@@ -23,6 +25,13 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
+  },
+  async examLockStatus(
+    _: any,
+    __: any,
+    context: ContextWithLoaders,
+  ): Promise<IConfigMetaRestricted> {
+    return fetchExamLockStatus(context);
   },
 };
 

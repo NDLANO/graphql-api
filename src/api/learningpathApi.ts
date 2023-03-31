@@ -6,7 +6,11 @@
  *
  */
 
-import { ILearningPathV2, ISearchResultV2 } from '@ndla/types-backend/learningpath-api';
+import {
+  IConfigMetaRestricted,
+  ILearningPathV2,
+  ISearchResultV2,
+} from '@ndla/types-backend/learningpath-api';
 import { GQLLearningpath, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
@@ -73,3 +77,14 @@ export async function fetchLearningpath(
     learningsteps,
   };
 }
+
+export const fetchExamLockStatus = async (
+  context: Context,
+): Promise<IConfigMetaRestricted> => {
+  const response = await fetch(
+    '/learningpath-api/v1/config/MY_NDLA_WRITE_RESTRICTED',
+    context,
+  );
+  const examLockStatus: IConfigMetaRestricted = await resolveJson(response);
+  return examLockStatus;
+};

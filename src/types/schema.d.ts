@@ -304,6 +304,12 @@ export type GQLConceptResult = {
   totalCount: Scalars['Int'];
 };
 
+export type GQLConfigMetaRestricted = {
+  __typename?: 'ConfigMetaRestricted';
+  key: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type GQLContributor = {
   __typename?: 'Contributor';
   name: Scalars['String'];
@@ -941,6 +947,7 @@ export type GQLQuery = {
   conceptSearch?: Maybe<GQLConceptResult>;
   coreElement?: Maybe<GQLCoreElement>;
   coreElements?: Maybe<Array<GQLCoreElement>>;
+  examLockStatus: GQLConfigMetaRestricted;
   filmfrontpage?: Maybe<GQLFilmFrontpage>;
   folder: GQLFolder;
   folderResourceMeta?: Maybe<GQLFolderResourceMeta>;
@@ -1653,6 +1660,7 @@ export type GQLResolversTypes = {
   ConceptFolderResourceMeta: ResolverTypeWrapper<GQLConceptFolderResourceMeta>;
   ConceptLicense: ResolverTypeWrapper<GQLConceptLicense>;
   ConceptResult: ResolverTypeWrapper<GQLConceptResult>;
+  ConfigMetaRestricted: ResolverTypeWrapper<GQLConfigMetaRestricted>;
   Contributor: ResolverTypeWrapper<GQLContributor>;
   Copyright: ResolverTypeWrapper<GQLCopyright>;
   CoreElement: ResolverTypeWrapper<GQLCoreElement>;
@@ -1784,6 +1792,7 @@ export type GQLResolversParentTypes = {
   ConceptFolderResourceMeta: GQLConceptFolderResourceMeta;
   ConceptLicense: GQLConceptLicense;
   ConceptResult: GQLConceptResult;
+  ConfigMetaRestricted: GQLConfigMetaRestricted;
   Contributor: GQLContributor;
   Copyright: GQLCopyright;
   CoreElement: GQLCoreElement;
@@ -2167,6 +2176,12 @@ export type GQLConceptResultResolvers<ContextType = any, ParentType extends GQLR
   page?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   pageSize?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   totalCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLConfigMetaRestrictedResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaRestricted'] = GQLResolversParentTypes['ConfigMetaRestricted']> = {
+  key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2728,6 +2743,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   conceptSearch?: Resolver<Maybe<GQLResolversTypes['ConceptResult']>, ParentType, ContextType, Partial<GQLQueryConceptSearchArgs>>;
   coreElement?: Resolver<Maybe<GQLResolversTypes['CoreElement']>, ParentType, ContextType, RequireFields<GQLQueryCoreElementArgs, 'code'>>;
   coreElements?: Resolver<Maybe<Array<GQLResolversTypes['CoreElement']>>, ParentType, ContextType, Partial<GQLQueryCoreElementsArgs>>;
+  examLockStatus?: Resolver<GQLResolversTypes['ConfigMetaRestricted'], ParentType, ContextType>;
   filmfrontpage?: Resolver<Maybe<GQLResolversTypes['FilmFrontpage']>, ParentType, ContextType>;
   folder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLQueryFolderArgs, 'id'>>;
   folderResourceMeta?: Resolver<Maybe<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaArgs, 'resource'>>;
@@ -3099,6 +3115,7 @@ export type GQLResolvers<ContextType = any> = {
   ConceptFolderResourceMeta?: GQLConceptFolderResourceMetaResolvers<ContextType>;
   ConceptLicense?: GQLConceptLicenseResolvers<ContextType>;
   ConceptResult?: GQLConceptResultResolvers<ContextType>;
+  ConfigMetaRestricted?: GQLConfigMetaRestrictedResolvers<ContextType>;
   Contributor?: GQLContributorResolvers<ContextType>;
   Copyright?: GQLCopyrightResolvers<ContextType>;
   CoreElement?: GQLCoreElementResolvers<ContextType>;

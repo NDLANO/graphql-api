@@ -1481,20 +1481,20 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@ndla/licenses@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/@ndla/licenses/-/licenses-7.0.0.tgz#f21465119f6bb723e5c528221e413ff1a3b09eea"
-  integrity sha512-wwy1fSC3zMYfHzyu4UY2bOknFE/B0d8XPVszAvCjTwDG2hkmXlYOg/zG3/+8EKY6uelZFeQ9878z0ziYzoXVjA==
+"@ndla/licenses@^7.0.4":
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/@ndla/licenses/-/licenses-7.0.4.tgz#11f66025f8cfdb8cecf71f6499b17800999961e2"
+  integrity sha512-Z9Q9/+YJxt6+LURWsKN3UVL7098cqqVKHEvOfgQLhQNmhJJI2poqtrtD6h3dLKueIRMolgkndOMoTl8XfydPlQ==
 
-"@ndla/types-backend@^0.1.3":
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/@ndla/types-backend/-/types-backend-0.1.16.tgz#667691342031c700e10328dae60503968d077306"
-  integrity sha512-PoMuWTfSL/eichqG0Wq30ZZVPCnA9QT0eXIHfmXTxR++dom4J5OrPKrGU0iFsmUQKJ+i9gM+ck3MhNpjl+s5vA==
+"@ndla/types-backend@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@ndla/types-backend/-/types-backend-0.2.2.tgz#0b80d988c4b15ba1c50c6823e7b3646ee7bc3e9d"
+  integrity sha512-h2DLy/1q0caOubE1EHS+UdhMNoqxkjiKdsdad4epTaAeshbwec/XfBi5WFiSUyjaMk9ChkNWg5MJnkI2wXegCQ==
 
-"@ndla/types-embed@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-1.0.6.tgz#60b5100d9d69425a7999f481a6a8fc83d9474260"
-  integrity sha512-ObHKr4sBmlacXKlnJkB7UqAxXSDXu9N79IETsDWfpE8UdM6lOSsMRFguHoBe3bJqh3W861ZQE8d3O4OUl+G/eA==
+"@ndla/types-embed@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-1.0.9.tgz#b7295efb6cfe82d67e070aa0d1c73f03b3dfe740"
+  integrity sha512-13gUNmz3thNpgf+s2H/GqaTHdcZEH0q6cboOuRn30LjBpCJ+nTQwE2BxEVUZ7x7LVRfowag/6w4dCVojybJ8Hg==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"

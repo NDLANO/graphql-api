@@ -1035,6 +1035,11 @@ export const typeDefs = gql`
     role: String!
   }
 
+  type ConfigMetaRestricted {
+    key: String!
+    value: String!
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -1153,6 +1158,7 @@ export const typeDefs = gql`
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
     brightcoveVideo(id: String!): BrightcoveElement
+    examLockStatus: ConfigMetaRestricted!
   }
 
   type Mutation {
