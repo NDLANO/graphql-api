@@ -6,9 +6,9 @@
  *
  */
 
-import { IConcept, IConceptSummary } from '@ndla/types-concept-api';
+import { IConcept, IConceptSummary } from '@ndla/types-backend/concept-api';
 import { ConceptVisualElementMeta, EmbedMetaData } from '@ndla/types-embed';
-import { IImageMetaInformationV2 } from '@ndla/types-image-api';
+import { IImageMetaInformationV2 } from '@ndla/types-backend/image-api';
 import sortBy from 'lodash/sortBy';
 import { listingUrl } from '../config';
 import {

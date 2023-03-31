@@ -12,7 +12,7 @@ import {
   IFolder,
   IFolderData,
   IResource,
-} from '@ndla/types-learningpath-api';
+} from '@ndla/types-backend/learningpath-api';
 import {
   fetch,
   resolveJson,

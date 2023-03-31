@@ -1,4 +1,4 @@
-import { IImageMetaInformationV2 } from '@ndla/types-image-api';
+import { IImageMetaInformationV2 } from '@ndla/types-backend/image-api';
 import { GQLQueryImageArgs } from '../types/schema';
 import { fetchImage } from '../api/imageApi';
 

@@ -6,7 +6,7 @@
  *
  */
 
-import { IImageMetaInformationV2 } from '@ndla/types-image-api';
+import { IImageMetaInformationV2 } from '@ndla/types-backend/image-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchImage(

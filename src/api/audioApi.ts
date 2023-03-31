@@ -9,7 +9,7 @@
 import {
   IAudioMetaInformation,
   IAudioSummarySearchResult,
-} from '@ndla/types-audio-api';
+} from '@ndla/types-backend/audio-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchAudio(

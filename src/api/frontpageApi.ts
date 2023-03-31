@@ -10,7 +10,7 @@ import {
   IFrontPageData,
   IFilmFrontPageData,
   ISubjectPageData,
-} from '@ndla/types-frontpage-api';
+} from '@ndla/types-backend/frontpage-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSimpleArticle } from './articleApi';
 

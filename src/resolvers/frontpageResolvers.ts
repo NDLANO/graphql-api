@@ -12,7 +12,7 @@ import {
   IFilmFrontPageData,
   ISubjectCollection,
   IMovieTheme,
-} from '@ndla/types-frontpage-api';
+} from '@ndla/types-backend/frontpage-api';
 import {
   fetchResource,
   fetchSubjectPage,
