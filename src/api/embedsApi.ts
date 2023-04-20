@@ -543,9 +543,9 @@ export const transformEmbed = async (
   embed: CheerioEmbed,
   context: Context,
   index: number,
+  footnoteCount: number,
   opts: TransformOptions,
 ): Promise<EmbedMetaData | undefined> => {
-  let footnoteCount = 1;
   if (embed.data.resource === 'nrk') {
     embed.embed.replaceWith('');
     return;
@@ -565,7 +565,6 @@ export const transformEmbed = async (
   } else if (embed.data.resource === 'footnote') {
     const meta = await footnoteMeta(embed.data, context, index, footnoteCount);
     embed.embed.attr('data-json', JSON.stringify(meta));
-    footnoteCount += 1;
     return meta;
   }
 };
