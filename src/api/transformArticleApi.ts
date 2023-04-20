@@ -136,15 +136,20 @@ export const transformArticle = async (
   const embeds = visEl
     ? getEmbedsFromContent(visEl).concat(getEmbedsFromContent(html))
     : getEmbedsFromContent(html);
+
+  let footnoteCount = 0;
   const embedPromises = await Promise.all(
-    embeds.map((embed, index) =>
-      transformEmbed(embed, context, index, {
+    embeds.map((embed, index) => {
+      if (embed.data.resource === 'footnote') {
+        footnoteCount += 1;
+      }
+      return transformEmbed(embed, context, index, footnoteCount, {
         subject,
         previewH5p,
         draftConcept,
         absoluteUrl,
-      }),
-    ),
+      });
+    }),
   );
   const metaData = toArticleMetaData(embedPromises);
   const transformedContent = html('body').html();
