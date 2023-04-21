@@ -24,9 +24,12 @@ import {
   ConceptData,
   ConceptListMetaData,
   FileMetaData,
+  BlogPostMetaData,
+  ContactBlockMetaData,
+  KeyPerformanceIndicatorMetaData,
 } from '@ndla/types-embed';
 import { Cheerio, load } from 'cheerio';
-import { fetchImage } from './imageApi';
+import { fetchImage, fetchImageV3 } from './imageApi';
 import {
   CheerioEmbed,
   getEmbedsFromContent,
@@ -518,6 +521,81 @@ const fileListMeta: Fetch<FileMetaData> = async ({
   }
 };
 
+const blogPostMeta: Fetch<BlogPostMetaData> = async ({
+  embedData,
+  index,
+  context,
+}) => {
+  try {
+    const response = await fetchImage(embedData.imageId, context);
+    return {
+      resource: 'blog-post',
+      status: 'success',
+      embedData,
+      seq: index,
+      data: { metaImage: response ?? undefined },
+    };
+  } catch (e) {
+    return {
+      resource: 'blog-post',
+      status: 'error',
+      embedData,
+      seq: index,
+      message: 'Failed to fetch image',
+    };
+  }
+};
+
+const contactBlockMeta: Fetch<ContactBlockMetaData> = async ({
+  embedData,
+  index,
+  context,
+}) => {
+  try {
+    const response = await fetchImageV3(embedData.imageId, context);
+    return {
+      resource: 'contact-block',
+      status: 'success',
+      embedData,
+      seq: index,
+      data: { image: response },
+    };
+  } catch (e) {
+    return {
+      resource: 'contact-block',
+      status: 'error',
+      embedData,
+      seq: index,
+      message: 'Failed to fetch image',
+    };
+  }
+};
+
+const kpiMeta: Fetch<KeyPerformanceIndicatorMetaData> = async ({
+  embedData,
+  index,
+  context,
+}) => {
+  const response = await fetchImageV3(embedData.imageId, context);
+  try {
+    return {
+      resource: 'key-performance-indicator',
+      status: 'success',
+      embedData,
+      seq: index,
+      data: { metaImage: response },
+    };
+  } catch (e) {
+    return {
+      resource: 'key-performance-indicator',
+      status: 'error',
+      embedData,
+      seq: index,
+      messsage: 'Failed to fetch image',
+    };
+  }
+};
+
 type FetchFunctions = {
   [K in EmbedMetaData['embedData']['resource']]:
     | Fetch<Extract<EmbedMetaData, { embedData: { resource: K } }>>
@@ -537,6 +615,9 @@ const transformFuncs: Partial<FetchFunctions> = {
   'content-link': contentLinkMeta,
   'concept-list': conceptListMeta,
   file: fileListMeta,
+  'blog-post': blogPostMeta,
+  'contact-block': contactBlockMeta,
+  'key-performance-indicator': kpiMeta,
 };
 
 export const transformEmbed = async (

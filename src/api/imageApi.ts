@@ -6,7 +6,10 @@
  *
  */
 
-import { IImageMetaInformationV2 } from '@ndla/types-backend/image-api';
+import {
+  IImageMetaInformationV2,
+  IImageMetaInformationV3,
+} from '@ndla/types-backend/image-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function fetchImage(
@@ -23,6 +26,18 @@ export async function fetchImage(
   } catch (e) {
     return null;
   }
+}
+
+export async function fetchImageV3(
+  imageId: string,
+  context: Context,
+): Promise<IImageMetaInformationV3> {
+  const languageParam = context.language ? `?language=${context.language}` : '';
+  const response = await fetch(
+    `/image-api/v3/images/${imageId}${languageParam}`,
+    context,
+  );
+  return await resolveJson(response);
 }
 
 export function convertToSimpleImage(image: IImageMetaInformationV2) {
