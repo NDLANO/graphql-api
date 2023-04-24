@@ -1491,10 +1491,10 @@
   resolved "https://registry.yarnpkg.com/@ndla/types-backend/-/types-backend-0.2.2.tgz#0b80d988c4b15ba1c50c6823e7b3646ee7bc3e9d"
   integrity sha512-h2DLy/1q0caOubE1EHS+UdhMNoqxkjiKdsdad4epTaAeshbwec/XfBi5WFiSUyjaMk9ChkNWg5MJnkI2wXegCQ==
 
-"@ndla/types-embed@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-1.0.9.tgz#b7295efb6cfe82d67e070aa0d1c73f03b3dfe740"
-  integrity sha512-13gUNmz3thNpgf+s2H/GqaTHdcZEH0q6cboOuRn30LjBpCJ+nTQwE2BxEVUZ7x7LVRfowag/6w4dCVojybJ8Hg==
+"@ndla/types-embed@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-1.1.0.tgz#fa31148c6c7e088a74d3206f415894e1c69da215"
+  integrity sha512-iqMswUxOR8Q59MQtbycf6cpPwEFOluvzQgULPCLIHtgkwjhaovynx5s9TQPYN6YVOE/od7FSHr0x7f+REd4aKw==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
