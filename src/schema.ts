@@ -900,6 +900,7 @@ export const typeDefs = gql`
     id: String!
     name: String!
     status: String!
+    description: String
     breadcrumbs: [Breadcrumb!]!
     parentId: String
     subfolders: [Folder!]!
@@ -912,6 +913,7 @@ export const typeDefs = gql`
     id: String!
     name: String!
     status: String!
+    description: String
     breadcrumbs: [Breadcrumb!]!
     parentId: String
     subfolders: [SharedFolder!]!
@@ -1162,8 +1164,18 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addFolder(name: String!, parentId: String, status: String): Folder!
-    updateFolder(id: String!, name: String, status: String): Folder!
+    addFolder(
+      name: String!
+      parentId: String
+      status: String
+      description: String
+    ): Folder!
+    updateFolder(
+      id: String!
+      name: String
+      status: String
+      description: String
+    ): Folder!
     deleteFolder(id: String!): String!
     addFolderResource(
       resourceId: String!

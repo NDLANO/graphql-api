@@ -393,6 +393,7 @@ export type GQLFolder = {
   __typename?: 'Folder';
   breadcrumbs: Array<GQLBreadcrumb>;
   created: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   name: Scalars['String'];
   parentId?: Maybe<Scalars['String']>;
@@ -774,6 +775,7 @@ export type GQLMutation = {
 
 
 export type GQLMutationAddFolderArgs = {
+  description?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   parentId?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
@@ -823,6 +825,7 @@ export type GQLMutationTransformArticleContentArgs = {
 
 
 export type GQLMutationUpdateFolderArgs = {
+  description?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
   name?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Scalars['String']>;
@@ -2267,6 +2270,7 @@ export type GQLFilmPageAboutResolvers<ContextType = any, ParentType extends GQLR
 export type GQLFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Folder'] = GQLResolversParentTypes['Folder']> = {
   breadcrumbs?: Resolver<Array<GQLResolversTypes['Breadcrumb']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
