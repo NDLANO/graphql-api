@@ -104,24 +104,24 @@ export async function fetchAllFolderResources(
 }
 
 export async function postFolder(
-  { name, parentId, status }: GQLMutationAddFolderArgs,
+  { name, parentId, status, description }: GQLMutationAddFolderArgs,
   context: Context,
 ): Promise<IFolder> {
   const response = await fetch(`/learningpath-api/v1/folders`, context, {
     method: 'POST',
-    body: JSON.stringify({ name, parentId, status }),
+    body: JSON.stringify({ name, parentId, status, description }),
   });
   const folder = await resolveJson(response);
   return folder;
 }
 
 export async function patchFolder(
-  { id, name, status }: GQLMutationUpdateFolderArgs,
+  { id, name, status, description }: GQLMutationUpdateFolderArgs,
   context: Context,
 ): Promise<IFolder> {
   const response = await fetch(`/learningpath-api/v1/folders/${id}`, context, {
     method: 'PATCH',
-    body: JSON.stringify({ name, status }),
+    body: JSON.stringify({ name, status, description }),
   });
   const folder = await resolveJson(response);
   return folder;
