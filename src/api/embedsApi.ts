@@ -502,7 +502,7 @@ const fileListMeta: Fetch<FileMetaData> = async ({
   context,
 }) => {
   try {
-    const response = await checkIfFileExists(embedData.path, context);
+    const response = await checkIfFileExists(embedData.url, context);
     return {
       resource: 'file',
       status: 'success',
