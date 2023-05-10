@@ -180,7 +180,7 @@ export const fetchImageMeta = async (
       url: img.imageUrl,
       alt: img.alttext.alttext ?? '',
     },
-    resourceTypes: [{ id: 'urn:resourcetype:image', name: 'image' }],
+    resourceTypes: [{ id: 'image', name: 'image' }],
     title: img.title.title,
     type,
   }));
@@ -206,7 +206,7 @@ const fetchAudios = async (
         }
       : undefined,
     title: audio.title.title,
-    resourceTypes: [{ id: 'urn:resourcetype:audio', name: 'audio' }],
+    resourceTypes: [{ id: 'audio', name: 'audio' }],
     type,
   }));
 };
@@ -224,7 +224,7 @@ const fetchBrightcoves = async (
   return brightcoves.map(video => ({
     description: video.description ?? '',
     id: video.videoid,
-    resourceTypes: [{ id: 'urn:resourcetype:video', name: 'video' }],
+    resourceTypes: [{ id: 'video', name: 'video' }],
     title: video.name,
     type,
   }));
@@ -245,7 +245,7 @@ const fetchConceptsMeta = async (
     description: c.content,
     metaImage: c.metaImage,
     title: c.title,
-    resourceTypes: [{ id: 'urn:resourcetype:concept', name: 'concept' }],
+    resourceTypes: [{ id: 'concept', name: 'concept' }],
     type,
   }));
 };
