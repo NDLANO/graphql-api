@@ -8,7 +8,7 @@
 
 import { IConcept, IConceptSummary } from '@ndla/types-backend/concept-api';
 import { ConceptVisualElementMeta, EmbedMetaData } from '@ndla/types-embed';
-import { IImageMetaInformationV2 } from '@ndla/types-backend/image-api';
+import { IImageMetaInformationV3 } from '@ndla/types-backend/image-api';
 import sortBy from 'lodash/sortBy';
 import { listingUrl } from '../config';
 import {
@@ -41,12 +41,12 @@ const footnoteMetaData = (
   });
 };
 
-const imageMetaData = (data: IImageMetaInformationV2, acc: MetaData) => {
+const imageMetaData = (data: IImageMetaInformationV3, acc: MetaData) => {
   acc['images'] = acc['images'].concat({
     title: data.title.title,
     altText: data.alttext.alttext,
     copyright: data.copyright,
-    src: data.imageUrl,
+    src: data.image.imageUrl,
   });
 };
 
