@@ -390,12 +390,15 @@ export const transformEmbed = async (
     if (opts.shortCircuitOnError) {
       throw e;
     }
-    return {
+    const embedMeta = {
       resource: embedData.resource,
       embedData: embedData,
       status: 'error',
       seq: index,
       message: `Failed to fetch data for embed of type ${embedData.resource} with seq ${index}`,
     } as EmbedMetaData;
+
+    embed.embed.attr('data-json', JSON.stringify(embedMeta));
+    return embedMeta;
   }
 };
