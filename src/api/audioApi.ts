@@ -27,6 +27,17 @@ export async function fetchAudio(
   }
 }
 
+export async function fetchAudioV2(
+  context: Context,
+  audioId: number | string,
+): Promise<IAudioMetaInformation> {
+  const response = await fetch(
+    `/audio-api/v1/audio/${audioId}?language=${context.language}`,
+    context,
+  );
+  return await resolveJson(response);
+}
+
 export async function fetchPodcastsPage(
   context: Context,
   pageSize: number,

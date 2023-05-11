@@ -77,14 +77,14 @@ export const toVisualElement = (
     case 'image':
       return {
         resource: 'image',
-        url: meta.data.imageUrl,
+        url: meta.data.image.imageUrl,
         title: meta.data.title.title,
         copyright: meta.data.copyright,
         image: {
           caption: meta.embedData.caption ?? meta.data.caption.caption,
           alt: meta.embedData.alt,
           altText: meta.data.alttext.alttext,
-          src: meta.data.imageUrl,
+          src: meta.data.image.imageUrl,
           focalX: Number(meta.embedData.focalX) || undefined,
           focalY: Number(meta.embedData.focalY) || undefined,
           lowerRightX: Number(meta.embedData.lowerRightX) || undefined,
