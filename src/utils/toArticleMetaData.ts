@@ -57,6 +57,7 @@ const audioMetaData = ({ data }: Success<'audio'>, acc: MetaData) => {
       copyright: data.copyright,
       src: data.audioFile.url,
       description: data.podcastMeta?.introduction,
+      coverPhotoUrl: data.podcastMeta?.coverPhoto.url,
     });
   } else {
     acc['audios'] = acc['audios'].concat({
@@ -135,6 +136,8 @@ const conceptMetaData = (
     title: concept.title.title,
     copyright: concept.copyright,
     src: `${listingUrl}/concepts/${concept.id}`,
+    content: concept.content?.content ?? '',
+    metaImageUrl: concept.metaImage?.url,
   });
   if (visualElement?.status === 'success') {
     switch (visualElement.resource) {
@@ -169,7 +172,7 @@ interface MetaData {
 
 export const toArticleMetaData = (
   embeds: (EmbedMetaData | undefined)[],
-): GQLArticleMetaData => {
+): Omit<GQLArticleMetaData, '__typename'> => {
   return embeds.reduce<MetaData>(
     (acc, curr) => {
       if (!curr || curr.status === 'error') {

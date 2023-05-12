@@ -290,7 +290,9 @@ export type GQLConceptFolderResourceMeta = GQLFolderResourceMeta & {
 
 export type GQLConceptLicense = {
   __typename?: 'ConceptLicense';
+  content?: Maybe<Scalars['String']>;
   copyright?: Maybe<GQLConceptCopyright>;
+  metaImageUrl?: Maybe<Scalars['String']>;
   src?: Maybe<Scalars['String']>;
   title: Scalars['String'];
 };
@@ -879,6 +881,7 @@ export type GQLPodcastLicense = {
   __typename?: 'PodcastLicense';
   copyText?: Maybe<Scalars['String']>;
   copyright: GQLCopyright;
+  coverPhotoUrl?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   src: Scalars['String'];
   title: Scalars['String'];
@@ -967,6 +970,7 @@ export type GQLQuery = {
   podcastSeries?: Maybe<GQLPodcastSeriesWithEpisodes>;
   podcastSeriesSearch?: Maybe<GQLPodcastSeriesSearch>;
   resource?: Maybe<GQLResource>;
+  resourceEmbed: GQLResourceEmbed;
   resourceTypes?: Maybe<Array<GQLResourceTypeDefinition>>;
   search?: Maybe<GQLSearch>;
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
@@ -1132,6 +1136,12 @@ export type GQLQueryResourceArgs = {
 };
 
 
+export type GQLQueryResourceEmbedArgs = {
+  id: Scalars['String'];
+  type: Scalars['String'];
+};
+
+
 export type GQLQuerySearchArgs = {
   aggregatePaths?: InputMaybe<Array<Scalars['String']>>;
   contextFilters?: InputMaybe<Scalars['String']>;
@@ -1243,6 +1253,22 @@ export type GQLResourceArticleArgs = {
   subjectId?: InputMaybe<Scalars['String']>;
 };
 
+export type GQLResourceEmbed = {
+  __typename?: 'ResourceEmbed';
+  content: Scalars['String'];
+  meta: GQLResourceMetaData;
+};
+
+export type GQLResourceMetaData = {
+  __typename?: 'ResourceMetaData';
+  audios?: Maybe<Array<GQLAudioLicense>>;
+  brightcoves?: Maybe<Array<GQLBrightcoveLicense>>;
+  concepts?: Maybe<Array<GQLConceptLicense>>;
+  h5ps?: Maybe<Array<GQLH5pLicense>>;
+  images?: Maybe<Array<GQLImageLicense>>;
+  podcasts?: Maybe<Array<GQLPodcastLicense>>;
+};
+
 export type GQLResourceType = {
   __typename?: 'ResourceType';
   id: Scalars['String'];
@@ -1330,6 +1356,7 @@ export type GQLSharedFolder = {
   __typename?: 'SharedFolder';
   breadcrumbs: Array<GQLBreadcrumb>;
   created: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   name: Scalars['String'];
   parentId?: Maybe<Scalars['String']>;
@@ -1732,6 +1759,8 @@ export type GQLResolversTypes = {
   Reference: ResolverTypeWrapper<GQLReference>;
   RelatedContent: ResolverTypeWrapper<GQLRelatedContent>;
   Resource: ResolverTypeWrapper<GQLResource>;
+  ResourceEmbed: ResolverTypeWrapper<GQLResourceEmbed>;
+  ResourceMetaData: ResolverTypeWrapper<GQLResourceMetaData>;
   ResourceType: ResolverTypeWrapper<GQLResourceType>;
   ResourceTypeDefinition: ResolverTypeWrapper<GQLResourceTypeDefinition>;
   Search: ResolverTypeWrapper<GQLSearch>;
@@ -1864,6 +1893,8 @@ export type GQLResolversParentTypes = {
   Reference: GQLReference;
   RelatedContent: GQLRelatedContent;
   Resource: GQLResource;
+  ResourceEmbed: GQLResourceEmbed;
+  ResourceMetaData: GQLResourceMetaData;
   ResourceType: GQLResourceType;
   ResourceTypeDefinition: GQLResourceTypeDefinition;
   Search: GQLSearch;
@@ -2167,7 +2198,9 @@ export type GQLConceptFolderResourceMetaResolvers<ContextType = any, ParentType 
 };
 
 export type GQLConceptLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConceptLicense'] = GQLResolversParentTypes['ConceptLicense']> = {
+  content?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
+  metaImageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2675,6 +2708,7 @@ export type GQLNewFolderResourceResolvers<ContextType = any, ParentType extends 
 export type GQLPodcastLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastLicense'] = GQLResolversParentTypes['PodcastLicense']> = {
   copyText?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
+  coverPhotoUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   src?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2764,6 +2798,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   podcastSeries?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesWithEpisodes']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesArgs, 'id'>>;
   podcastSeriesSearch?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesSearchArgs, 'page' | 'pageSize'>>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, RequireFields<GQLQueryResourceArgs, 'id'>>;
+  resourceEmbed?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedArgs, 'id' | 'type'>>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
   search?: Resolver<Maybe<GQLResolversTypes['Search']>, ParentType, ContextType, Partial<GQLQuerySearchArgs>>;
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
@@ -2805,6 +2840,22 @@ export type GQLResourceResolvers<ContextType = any, ParentType extends GQLResolv
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLResourceEmbedResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceEmbed'] = GQLResolversParentTypes['ResourceEmbed']> = {
+  content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  meta?: Resolver<GQLResolversTypes['ResourceMetaData'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLResourceMetaDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceMetaData'] = GQLResolversParentTypes['ResourceMetaData']> = {
+  audios?: Resolver<Maybe<Array<GQLResolversTypes['AudioLicense']>>, ParentType, ContextType>;
+  brightcoves?: Resolver<Maybe<Array<GQLResolversTypes['BrightcoveLicense']>>, ParentType, ContextType>;
+  concepts?: Resolver<Maybe<Array<GQLResolversTypes['ConceptLicense']>>, ParentType, ContextType>;
+  h5ps?: Resolver<Maybe<Array<GQLResolversTypes['H5pLicense']>>, ParentType, ContextType>;
+  images?: Resolver<Maybe<Array<GQLResolversTypes['ImageLicense']>>, ParentType, ContextType>;
+  podcasts?: Resolver<Maybe<Array<GQLResolversTypes['PodcastLicense']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2890,6 +2941,7 @@ export type GQLSearchWithoutPaginationResolvers<ContextType = any, ParentType ex
 export type GQLSharedFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SharedFolder'] = GQLResolversParentTypes['SharedFolder']> = {
   breadcrumbs?: Resolver<Array<GQLResolversTypes['Breadcrumb']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3185,6 +3237,8 @@ export type GQLResolvers<ContextType = any> = {
   Reference?: GQLReferenceResolvers<ContextType>;
   RelatedContent?: GQLRelatedContentResolvers<ContextType>;
   Resource?: GQLResourceResolvers<ContextType>;
+  ResourceEmbed?: GQLResourceEmbedResolvers<ContextType>;
+  ResourceMetaData?: GQLResourceMetaDataResolvers<ContextType>;
   ResourceType?: GQLResourceTypeResolvers<ContextType>;
   ResourceTypeDefinition?: GQLResourceTypeDefinitionResolvers<ContextType>;
   Search?: GQLSearchResolvers<ContextType>;
