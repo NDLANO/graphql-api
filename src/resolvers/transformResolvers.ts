@@ -7,10 +7,24 @@
  */
 
 import { transformArticle } from '../api/transformArticleApi';
+import { fetchResourceEmbed } from '../api/resourceEmbedApi';
 import {
   GQLMutationResolvers,
+  GQLQueryResolvers,
   GQLMutationTransformArticleContentArgs,
+  GQLQueryResourceEmbedArgs,
+  GQLResourceEmbed,
 } from '../types/schema';
+
+export const Query: Pick<GQLQueryResolvers, 'resourceEmbed'> = {
+  async resourceEmbed(
+    _: any,
+    params: GQLQueryResourceEmbedArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLResourceEmbed> {
+    return await fetchResourceEmbed(params, context);
+  },
+};
 
 export const Mutations: Pick<
   GQLMutationResolvers,

@@ -383,6 +383,7 @@ export const typeDefs = gql`
   }
 
   type ImageLicense {
+    id: String!
     title: String!
     src: String!
     altText: String!
@@ -392,6 +393,7 @@ export const typeDefs = gql`
   }
 
   type AudioLicense {
+    id: String!
     title: String!
     src: String!
     copyright: Copyright!
@@ -399,11 +401,13 @@ export const typeDefs = gql`
   }
 
   type PodcastLicense {
+    id: String!
     title: String!
     src: String!
     copyright: Copyright!
     copyText: String
     description: String
+    coverPhotoUrl: String
   }
 
   type BrightcoveIframe {
@@ -413,6 +417,7 @@ export const typeDefs = gql`
   }
 
   type BrightcoveLicense {
+    id: String!
     title: String!
     description: String
     cover: String
@@ -424,6 +429,7 @@ export const typeDefs = gql`
   }
 
   type H5pLicense {
+    id: String!
     title: String!
     src: String
     thumbnail: String
@@ -439,8 +445,11 @@ export const typeDefs = gql`
   }
 
   type ConceptLicense {
+    id: String!
     title: String!
     src: String
+    content: String
+    metaImageUrl: String
     copyright: ConceptCopyright
   }
 
@@ -1042,6 +1051,20 @@ export const typeDefs = gql`
     value: String!
   }
 
+  type ResourceMetaData {
+    images: [ImageLicense!]
+    audios: [AudioLicense!]
+    podcasts: [PodcastLicense!]
+    brightcoves: [BrightcoveLicense!]
+    h5ps: [H5pLicense!]
+    concepts: [ConceptLicense!]
+  }
+
+  type ResourceEmbed {
+    content: String!
+    meta: ResourceMetaData!
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -1161,6 +1184,7 @@ export const typeDefs = gql`
     image(id: String!): ImageMetaInformationV2
     brightcoveVideo(id: String!): BrightcoveElement
     examLockStatus: ConfigMetaRestricted!
+    resourceEmbed(id: String!, type: String!): ResourceEmbed!
   }
 
   type Mutation {

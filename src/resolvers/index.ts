@@ -61,7 +61,10 @@ import {
   Query as ImageQuery,
   resolvers as ImageResolvers,
 } from './imageResolvers';
-import { Mutations as TransformArticleMutations } from './transformResolvers';
+import {
+  Query as TransformQuery,
+  Mutations as TransformArticleMutations,
+} from './transformResolvers';
 
 export const resolvers = {
   Query: {
@@ -79,6 +82,7 @@ export const resolvers = {
     ...FolderResolvers,
     ...VideoQuery,
     ...ImageQuery,
+    ...TransformQuery,
   },
   Mutation: {
     ...FolderMutations,
