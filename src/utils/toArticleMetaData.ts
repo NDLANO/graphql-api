@@ -43,6 +43,7 @@ const footnoteMetaData = (
 
 const imageMetaData = (data: IImageMetaInformationV3, acc: MetaData) => {
   acc['images'] = acc['images'].concat({
+    id: data.id,
     title: data.title.title,
     altText: data.alttext.alttext,
     copyright: data.copyright,
@@ -53,6 +54,7 @@ const imageMetaData = (data: IImageMetaInformationV3, acc: MetaData) => {
 const audioMetaData = ({ data }: Success<'audio'>, acc: MetaData) => {
   if (data.podcastMeta) {
     acc['podcasts'] = acc['podcasts'].concat({
+      id: data.id.toString(),
       title: data.title.title,
       copyright: data.copyright,
       src: data.audioFile.url,
@@ -61,6 +63,7 @@ const audioMetaData = ({ data }: Success<'audio'>, acc: MetaData) => {
     });
   } else {
     acc['audios'] = acc['audios'].concat({
+      id: data.id.toString(),
       title: data.title.title,
       copyright: data.copyright,
       src: data.audioFile.url,
@@ -86,6 +89,7 @@ const brightcoveMetaData = (
     s => s.height,
   )?.[0];
   acc['brightcoves'] = acc['brightcoves'].concat({
+    id: data.id,
     title: data.name ?? '',
     description: data.description ?? data['long_description'] ?? data.name,
     uploadDate: data['published_at'] ?? undefined,
@@ -120,6 +124,7 @@ const h5pMetaData = ({ data, embedData }: Success<'h5p'>, acc: MetaData) => {
       }
     : undefined;
   acc['h5ps'] = acc['h5ps'].concat({
+    id: embedData.path.replace('/resource/', ''),
     copyright: copyright,
     title: h5p?.title ?? embedData.title ?? '',
     thumbnail: h5p?.thumbnail ?? h5p?.assets?.[0]?.thumbnail ?? '',
@@ -133,6 +138,7 @@ const conceptMetaData = (
   acc: MetaData,
 ) => {
   acc['concepts'] = acc['concepts'].concat({
+    id: concept.id.toString(),
     title: concept.title.title,
     copyright: concept.copyright,
     src: `${listingUrl}/concepts/${concept.id}`,

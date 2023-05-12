@@ -383,6 +383,7 @@ export const typeDefs = gql`
   }
 
   type ImageLicense {
+    id: String!
     title: String!
     src: String!
     altText: String!
@@ -392,6 +393,7 @@ export const typeDefs = gql`
   }
 
   type AudioLicense {
+    id: String!
     title: String!
     src: String!
     copyright: Copyright!
@@ -399,6 +401,7 @@ export const typeDefs = gql`
   }
 
   type PodcastLicense {
+    id: String!
     title: String!
     src: String!
     copyright: Copyright!
@@ -414,6 +417,7 @@ export const typeDefs = gql`
   }
 
   type BrightcoveLicense {
+    id: String!
     title: String!
     description: String
     cover: String
@@ -425,6 +429,7 @@ export const typeDefs = gql`
   }
 
   type H5pLicense {
+    id: String!
     title: String!
     src: String
     thumbnail: String
@@ -440,6 +445,7 @@ export const typeDefs = gql`
   }
 
   type ConceptLicense {
+    id: String!
     title: String!
     src: String
     content: String
