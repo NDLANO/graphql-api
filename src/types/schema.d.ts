@@ -1330,6 +1330,7 @@ export type GQLSharedFolder = {
   __typename?: 'SharedFolder';
   breadcrumbs: Array<GQLBreadcrumb>;
   created: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   name: Scalars['String'];
   parentId?: Maybe<Scalars['String']>;
@@ -2890,6 +2891,7 @@ export type GQLSearchWithoutPaginationResolvers<ContextType = any, ParentType ex
 export type GQLSharedFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SharedFolder'] = GQLResolversParentTypes['SharedFolder']> = {
   breadcrumbs?: Resolver<Array<GQLResolversTypes['Breadcrumb']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
