@@ -63,6 +63,7 @@ export async function search(
     'context-filters': searchQuery.contextFilters,
     'grep-codes': searchQuery.grepCodes,
     'aggregate-paths': searchQuery.aggregatePaths,
+    'filter-inactive': searchQuery.filterInactive,
   };
   const response = await fetch(
     `/search-api/v1/search/?${queryString.stringify(query)}`,
@@ -95,6 +96,7 @@ export async function groupSearch(
     'context-types': searchQuery.contextTypes,
     'grep-codes': searchQuery.grepCodes,
     'aggregate-paths': searchQuery.aggregatePaths,
+    'filter-inactive': searchQuery.filterInactive,
   };
   const response = await fetch(
     `/search-api/v1/search/group/?${queryString.stringify(query)}`,

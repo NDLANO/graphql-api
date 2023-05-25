@@ -1110,6 +1110,7 @@ export const typeDefs = gql`
       relevance: String
       grepCodes: String
       aggregatePaths: [String!]
+      filterInactive: String
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
@@ -1124,6 +1125,7 @@ export const typeDefs = gql`
       fallback: String
       grepCodes: String
       aggregatePaths: [String!]
+      filterInactive: String
     ): [GroupSearch!]
     listingPage(subjects: String): ListingPage
     concept(id: Int!): Concept
