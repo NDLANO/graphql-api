@@ -20,7 +20,7 @@ import { fetchAudio } from './audioApi';
 import { searchConcepts } from './conceptApi';
 import { fetchImage } from './imageApi';
 import { searchWithoutPagination } from './searchApi';
-import { fetchBrightcoveVideo } from './videoApi';
+import { fetchVideo } from './videoApi';
 
 const articleResourceTypes = [
   'urn:resourcetype:subjectMaterial',
@@ -218,12 +218,18 @@ const fetchBrightcoves = async (
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   const brightcoves = await Promise.all(
-    resources.map(r => fetchBrightcoveVideo(r.id.toString(), context)),
+    resources.map(r => fetchVideo(r.id.toString(), undefined, context)),
   );
 
   return brightcoves.map(video => ({
     description: video.description ?? '',
-    id: video.videoid,
+    id: video.id,
+    metaImage: video.images?.poster?.src
+      ? {
+          url: video.images.poster.src,
+          alt: '',
+        }
+      : undefined,
     resourceTypes: [{ id: 'video', name: 'video' }],
     title: video.name,
     type,
