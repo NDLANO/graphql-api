@@ -952,7 +952,6 @@ export type GQLQuery = {
   allFolderResources: Array<GQLFolderResource>;
   article?: Maybe<GQLArticle>;
   audio?: Maybe<GQLAudio>;
-  brightcoveVideo?: Maybe<GQLBrightcoveElement>;
   competenceGoal?: Maybe<GQLCompetenceGoal>;
   competenceGoals?: Maybe<Array<GQLCompetenceGoal>>;
   concept?: Maybe<GQLConcept>;
@@ -1008,11 +1007,6 @@ export type GQLQueryArticleArgs = {
 
 export type GQLQueryAudioArgs = {
   id: Scalars['Int'];
-};
-
-
-export type GQLQueryBrightcoveVideoArgs = {
-  id: Scalars['String'];
 };
 
 
@@ -2788,7 +2782,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   allFolderResources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType, Partial<GQLQueryAllFolderResourcesArgs>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
   audio?: Resolver<Maybe<GQLResolversTypes['Audio']>, ParentType, ContextType, RequireFields<GQLQueryAudioArgs, 'id'>>;
-  brightcoveVideo?: Resolver<Maybe<GQLResolversTypes['BrightcoveElement']>, ParentType, ContextType, RequireFields<GQLQueryBrightcoveVideoArgs, 'id'>>;
   competenceGoal?: Resolver<Maybe<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, RequireFields<GQLQueryCompetenceGoalArgs, 'code'>>;
   competenceGoals?: Resolver<Maybe<Array<GQLResolversTypes['CompetenceGoal']>>, ParentType, ContextType, Partial<GQLQueryCompetenceGoalsArgs>>;
   concept?: Resolver<Maybe<GQLResolversTypes['Concept']>, ParentType, ContextType, RequireFields<GQLQueryConceptArgs, 'id'>>;

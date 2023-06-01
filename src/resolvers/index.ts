@@ -56,7 +56,6 @@ import {
   Mutations as FolderMutations,
   resolvers as folderResolvers,
 } from './folderResolvers';
-import { Query as VideoQuery } from './videoResolvers';
 import {
   Query as ImageQuery,
   resolvers as ImageResolvers,
@@ -80,7 +79,6 @@ export const resolvers = {
     ...ConceptQuery,
     ...UptimeQuery,
     ...FolderResolvers,
-    ...VideoQuery,
     ...ImageQuery,
     ...TransformQuery,
   },

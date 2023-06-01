@@ -1184,7 +1184,6 @@ export const typeDefs = gql`
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
-    brightcoveVideo(id: String!): BrightcoveElement
     examLockStatus: ConfigMetaRestricted!
     resourceEmbed(id: String!, type: String!): ResourceEmbed!
   }
