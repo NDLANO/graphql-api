@@ -272,6 +272,8 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
+    contexts: [TaxonomyContext!]!
+    breadcrumbs: [String!]!
     supportedLanguages: [String!]!
   }
 
@@ -299,7 +301,7 @@ export const typeDefs = gql`
     availability: String
     resourceTypes: [ResourceType!]
     parents: [Topic!]
-    breadcrumbs: [[String!]!]
+    breadcrumbs: [String!]!
     contexts: [TaxonomyContext!]!
     supportedLanguages: [String!]!
   }

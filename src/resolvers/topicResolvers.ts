@@ -31,7 +31,6 @@ import {
   GQLTopic,
   GQLTopicArticleArgs,
   GQLTopicCoreResourcesArgs,
-  GQLTopicResolvers,
   GQLTopicSupplementaryResourcesArgs,
   GQLVisualElementOembed,
 } from '../types/schema';
@@ -70,7 +69,7 @@ export const Query = {
   },
 };
 
-export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
+export const resolvers = {
   Topic: {
     async availability(
       topic: Node,
