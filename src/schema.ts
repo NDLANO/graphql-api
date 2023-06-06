@@ -300,7 +300,14 @@ export const typeDefs = gql`
     resourceTypes: [ResourceType!]
     parents: [Topic!]
     breadcrumbs: [[String!]!]
+    contexts: [TaxonomyContext!]!
     supportedLanguages: [String!]!
+  }
+
+  type TaxonomyContext {
+    breadcrumbs: [String!]!
+    path: String!
+    parentIds: [String!]!
   }
 
   type Topic implements TaxonomyEntity & WithArticle {
@@ -327,7 +334,8 @@ export const typeDefs = gql`
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
-    breadcrumbs: [[String!]!]
+    breadcrumbs: [String!]!
+    contexts: [TaxonomyContext!]!
     supportedLanguages: [String!]!
   }
 

@@ -14,7 +14,6 @@ import {
   fetchTopicResources,
   fetchSubtopics,
   fetchOembed,
-  fetchSubject,
   fetchSubjectTopics,
 } from '../api';
 import {
@@ -206,28 +205,6 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
         return topicsWithVisibleSubject;
       }
       return;
-    },
-    async breadcrumbs(
-      topic: Node,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<string[][]> {
-      return Promise.all(
-        topic.paths?.map(async path => {
-          return Promise.all(
-            path
-              .split('/')
-              .slice(1)
-              .map(async id => {
-                if (id.includes('subject:')) {
-                  return (await fetchSubject(context, `urn:${id}`)).name;
-                } else if (id.includes('topic:')) {
-                  return (await fetchTopic({ id: `urn:${id}` }, context)).name;
-                }
-              }),
-          );
-        }),
-      );
     },
   },
 };
