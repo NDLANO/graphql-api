@@ -143,10 +143,12 @@ export async function frontpageSearch(
 ): Promise<GQLFrontpageSearch> {
   const topicQuery = {
     ...searchQuery,
+    'filter-inactive': true,
     'context-types': 'topic-article',
   };
   const resourceQuery = {
     ...searchQuery,
+    'filter-inactive': true,
     'context-types': 'standard',
   };
   const [topicReponse, resourceResponse] = await Promise.all([
