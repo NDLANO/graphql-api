@@ -75,9 +75,10 @@ export const toVisualElement = (
       };
 
     case 'image':
+      const src = `/image/${meta.data.id}`;
       return {
         resource: 'image',
-        url: meta.data.image.imageUrl,
+        url: src,
         title: meta.data.title.title,
         copyright: meta.data.copyright,
         image: {
