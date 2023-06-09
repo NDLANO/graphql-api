@@ -325,6 +325,7 @@ export const transformEmbed = async (
 
   try {
     if (embedData.resource === 'image') {
+      embedData.url = `/image/${embedData.resourceId}`;
       meta = await imageMeta({ embedData, context, index, opts });
     } else if (embedData.resource === 'audio') {
       meta = await audioMeta({ embedData, context, index, opts });
