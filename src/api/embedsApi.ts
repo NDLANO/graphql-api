@@ -325,10 +325,11 @@ export const transformEmbed = async (
 
   try {
     if (embedData.resource === 'image') {
-      embedData.url = `/image/${embedData.resourceId}`;
       meta = await imageMeta({ embedData, context, index, opts });
+      embedData.pageUrl = `/${embedData.resource}/${embedData.resourceId}`;
     } else if (embedData.resource === 'audio') {
       meta = await audioMeta({ embedData, context, index, opts });
+      embedData.pageUrl = `/${embedData.resource}/${embedData.resourceId}`;
     } else if (embedData.resource === 'external') {
       meta = await externalMeta({ embedData, context, index, opts });
     } else if (embedData.resource === 'iframe') {
@@ -343,6 +344,7 @@ export const transformEmbed = async (
       const cssUrl = `${ndlaUrl}/static/h5p-custom-css.css`;
       embedData.url = `${embedData.url}?locale=${lang}&cssUrl=${cssUrl}`;
       meta = await h5pMeta({ embedData, context, index, opts });
+      embedData.pageUrl = `/${embedData.resource}${embedData.path}`;
     } else if (embedData.resource === 'code-block') {
       meta = await codeMeta({ embedData, context, index, opts });
     } else if (embedData.resource === 'footnote') {
@@ -355,6 +357,7 @@ export const transformEmbed = async (
       });
     } else if (embedData.resource === 'brightcove') {
       meta = await brightcoveMeta({ embedData, context, index, opts });
+      embedData.pageUrl = `/video/${embedData.videoid}`;
     } else if (embedData.resource === 'content-link') {
       const embedContent = embed.embed.html();
       embedData.linkText = embedContent ?? embedData.linkText;
@@ -363,6 +366,7 @@ export const transformEmbed = async (
       meta = await relatedContentMeta({ embedData, context, index, opts });
     } else if (embedData.resource === 'concept') {
       meta = await conceptMeta({ embedData, context, index, opts });
+      embedData.pageUrl = `/${embedData.resource}/${embedData.contentId}`;
     } else if (embedData.resource === 'concept-list') {
       meta = await conceptListMeta({ embedData, context, index, opts });
     } else if (embedData.resource === 'file') {
