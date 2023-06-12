@@ -1486,15 +1486,15 @@
   resolved "https://registry.yarnpkg.com/@ndla/licenses/-/licenses-7.0.4.tgz#11f66025f8cfdb8cecf71f6499b17800999961e2"
   integrity sha512-Z9Q9/+YJxt6+LURWsKN3UVL7098cqqVKHEvOfgQLhQNmhJJI2poqtrtD6h3dLKueIRMolgkndOMoTl8XfydPlQ==
 
-"@ndla/types-backend@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@ndla/types-backend/-/types-backend-0.2.2.tgz#0b80d988c4b15ba1c50c6823e7b3646ee7bc3e9d"
-  integrity sha512-h2DLy/1q0caOubE1EHS+UdhMNoqxkjiKdsdad4epTaAeshbwec/XfBi5WFiSUyjaMk9ChkNWg5MJnkI2wXegCQ==
+"@ndla/types-backend@^0.2.12":
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/@ndla/types-backend/-/types-backend-0.2.12.tgz#c06a29ba924c86c8c9b96a76ecd2d13be0a813e4"
+  integrity sha512-n3b41tyw/Of07bhNIvRJ6Qz/kMYbGM9mlvDvCkYDLDQpq9zSnFpsGASD1tPBRydmz9oDApM8F2GvQVT6Zk7jKA==
 
-"@ndla/types-embed@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-2.0.0.tgz#1a8372fe8d08e7ce6a3e2720cf13b95c92248b39"
-  integrity sha512-0XzIj8DW8rdMxJnU0bKy7q4YuR01w6wTkVCtuv4eOL6aky9P5YJFaGfwu8b2LdzjtvABqZtclcRRy+CGQGsafQ==
+"@ndla/types-embed@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-2.0.4.tgz#9f7e8a9f9ac16f2253759c8c83648324a330d6be"
+  integrity sha512-NbCVn5ORDYqe/+ZuIoSLnPYL6Pc9BgQFWiS2Br+6WDmPLjza+QsUr3t/ElG2i8F8p7qlCsBAWFOfdaMPsR/fHQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
