@@ -14,8 +14,7 @@ import {
   fetchArticle,
   fetchLearningpath,
   fetchOembed,
-  fetchSubject,
-  fetchTopic,
+  fetchNode,
 } from '../api';
 import {
   getArticleIdFromUrn,
@@ -168,11 +167,7 @@ export const resolvers = {
               .split('/')
               .slice(1, -1)
               .map(async id => {
-                if (id.includes('subject:')) {
-                  return (await fetchSubject(context, `urn:${id}`)).name;
-                } else if (id.includes('topic:')) {
-                  return (await fetchTopic({ id: `urn:${id}` }, context)).name;
-                }
+                return (await fetchNode({ id: `urn:${id}` }, context)).name;
               }),
           );
         }),
