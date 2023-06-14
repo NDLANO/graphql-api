@@ -696,20 +696,27 @@ export const typeDefs = gql`
     resourceTypes: [SearchContextResourceTypes!]!
     subject: String!
     path: String!
-    filters: [SearchContextFilter!]!
   }
 
   type SearchContext {
     breadcrumbs: [String!]!
+    contextType: String!
     learningResourceType: String!
     resourceTypes: [SearchContextResourceTypes!]!
     subject: String!
+    root: String!
     subjectId: String!
+    rootId: String!
     relevance: String!
     path: String!
     id: String!
+    publicId: String!
+    parentIds: [String!]!
     language: String!
-    filters: [SearchContextFilter!]!
+    isPrimary: Boolean!
+    isActive: Boolean!
+    isVisible: Boolean!
+    contextId: String!
   }
 
   type SearchContextResourceTypes {
