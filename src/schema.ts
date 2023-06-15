@@ -113,6 +113,7 @@ export const typeDefs = gql`
     description: Description!
     supportedLanguages: [String!]!
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type PodcastSeries implements PodcastSeriesBase {
@@ -121,6 +122,7 @@ export const typeDefs = gql`
     description: Description!
     supportedLanguages: [String!]!
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type PodcastSeriesWithEpisodes implements PodcastSeriesBase {
