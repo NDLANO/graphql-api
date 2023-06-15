@@ -130,6 +130,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     episodes: [Audio!]
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type AudioSummary {
