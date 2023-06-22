@@ -273,6 +273,7 @@ export const typeDefs = gql`
     relevanceId: String
     rank: Int
     supportedLanguages: [String!]!
+    resourceTypes: [ResourceType!]
   }
 
   interface WithArticle {
@@ -327,6 +328,7 @@ export const typeDefs = gql`
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
+    resourceTypes: [ResourceType!]
     breadcrumbs: [[String!]!]
     supportedLanguages: [String!]!
   }
@@ -577,19 +579,11 @@ export const typeDefs = gql`
   }
 
   type SubjectPage {
-    topical(subjectId: String): TaxonomyEntity
-    mostRead(subjectId: String): [TaxonomyEntity!]!
     banner: SubjectPageBanner!
     id: Int!
     name: String!
-    facebook: String
-    editorsChoices(subjectId: String): [TaxonomyEntity!]!
-    latestContent(subjectId: String): [TaxonomyEntity!]
     about: SubjectPageAbout
-    goTo: [ResourceTypeDefinition!]!
     metaDescription: String
-    layout: String!
-    twitter: String
     supportedLanguages: [String!]!
   }
 
@@ -654,6 +648,7 @@ export const typeDefs = gql`
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]!
+    resourceTypes: [ResourceType!]
     supportedLanguages: [String!]!
   }
 

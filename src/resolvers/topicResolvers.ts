@@ -10,11 +10,10 @@
 import {
   fetchArticle,
   fetchTopics,
-  fetchTopic,
+  fetchNode,
   fetchTopicResources,
   fetchSubtopics,
   fetchOembed,
-  fetchSubject,
   fetchSubjectTopics,
 } from '../api';
 import {
@@ -47,7 +46,7 @@ export const Query = {
       const topics = await fetchSubjectTopics(subjectId, context);
       return topics.find(topic => topic.id === id);
     }
-    return fetchTopic({ id }, context);
+    return fetchNode({ id }, context);
   },
   async topics(
     params: any,
@@ -177,7 +176,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
             .filter(pathElement => pathElement.includes('topic:'));
           return Promise.all(
             topicsToFetch.map(async id =>
-              fetchTopic({ id: `urn:${id}` }, context),
+              fetchNode({ id: `urn:${id}` }, context),
             ),
           );
         }),
@@ -219,11 +218,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
               .split('/')
               .slice(1)
               .map(async id => {
-                if (id.includes('subject:')) {
-                  return (await fetchSubject(context, `urn:${id}`)).name;
-                } else if (id.includes('topic:')) {
-                  return (await fetchTopic({ id: `urn:${id}` }, context)).name;
-                }
+                return (await fetchNode({ id: `urn:${id}` }, context)).name;
               }),
           );
         }),
