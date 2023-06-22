@@ -904,6 +904,7 @@ export type GQLPodcastSeries = GQLPodcastSeriesBase & {
   __typename?: 'PodcastSeries';
   coverPhoto: GQLCoverPhoto;
   description: GQLDescription;
+  hasRSS: Scalars['Boolean'];
   id: Scalars['Int'];
   supportedLanguages: Array<Scalars['String']>;
   title: GQLTitle;
@@ -912,6 +913,7 @@ export type GQLPodcastSeries = GQLPodcastSeriesBase & {
 export type GQLPodcastSeriesBase = {
   coverPhoto: GQLCoverPhoto;
   description: GQLDescription;
+  hasRSS: Scalars['Boolean'];
   id: Scalars['Int'];
   supportedLanguages: Array<Scalars['String']>;
   title: GQLTitle;
@@ -941,6 +943,7 @@ export type GQLPodcastSeriesWithEpisodes = GQLPodcastSeriesBase & {
   coverPhoto: GQLCoverPhoto;
   description: GQLDescription;
   episodes?: Maybe<Array<GQLAudio>>;
+  hasRSS: Scalars['Boolean'];
   id: Scalars['Int'];
   supportedLanguages: Array<Scalars['String']>;
   title: GQLTitle;
@@ -2708,6 +2711,7 @@ export type GQLPodcastMetaResolvers<ContextType = any, ParentType extends GQLRes
 export type GQLPodcastSeriesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastSeries'] = GQLResolversParentTypes['PodcastSeries']> = {
   coverPhoto?: Resolver<GQLResolversTypes['CoverPhoto'], ParentType, ContextType>;
   description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
+  hasRSS?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
@@ -2718,6 +2722,7 @@ export type GQLPodcastSeriesBaseResolvers<ContextType = any, ParentType extends 
   __resolveType: TypeResolveFn<'PodcastSeries' | 'PodcastSeriesWithEpisodes', ParentType, ContextType>;
   coverPhoto?: Resolver<GQLResolversTypes['CoverPhoto'], ParentType, ContextType>;
   description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
+  hasRSS?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
@@ -2746,6 +2751,7 @@ export type GQLPodcastSeriesWithEpisodesResolvers<ContextType = any, ParentType 
   coverPhoto?: Resolver<GQLResolversTypes['CoverPhoto'], ParentType, ContextType>;
   description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
   episodes?: Resolver<Maybe<Array<GQLResolversTypes['Audio']>>, ParentType, ContextType>;
+  hasRSS?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
