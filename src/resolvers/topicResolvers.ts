@@ -10,7 +10,7 @@
 import {
   fetchArticle,
   fetchTopics,
-  fetchTopic,
+  fetchNode,
   fetchTopicResources,
   fetchSubtopics,
   fetchOembed,
@@ -45,7 +45,7 @@ export const Query = {
       const topics = await fetchSubjectTopics(subjectId, context);
       return topics.find(topic => topic.id === id);
     }
-    return fetchTopic({ id }, context);
+    return fetchNode({ id }, context);
   },
   async topics(
     params: any,
@@ -175,7 +175,7 @@ export const resolvers = {
             .filter(pathElement => pathElement.includes('topic:'));
           return Promise.all(
             topicsToFetch.map(async id =>
-              fetchTopic({ id: `urn:${id}` }, context),
+              fetchNode({ id: `urn:${id}` }, context),
             ),
           );
         }),

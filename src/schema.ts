@@ -113,6 +113,7 @@ export const typeDefs = gql`
     description: Description!
     supportedLanguages: [String!]!
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type PodcastSeries implements PodcastSeriesBase {
@@ -121,6 +122,7 @@ export const typeDefs = gql`
     description: Description!
     supportedLanguages: [String!]!
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type PodcastSeriesWithEpisodes implements PodcastSeriesBase {
@@ -130,6 +132,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     episodes: [Audio!]
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type AudioSummary {
@@ -275,6 +278,7 @@ export const typeDefs = gql`
     contexts: [TaxonomyContext!]!
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
+    resourceTypes: [ResourceType!]
   }
 
   interface WithArticle {
@@ -336,6 +340,7 @@ export const typeDefs = gql`
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
+    resourceTypes: [ResourceType!]
     breadcrumbs: [String!]!
     contexts: [TaxonomyContext!]!
     supportedLanguages: [String!]!
@@ -587,19 +592,11 @@ export const typeDefs = gql`
   }
 
   type SubjectPage {
-    topical(subjectId: String): TaxonomyEntity
-    mostRead(subjectId: String): [TaxonomyEntity!]!
     banner: SubjectPageBanner!
     id: Int!
     name: String!
-    facebook: String
-    editorsChoices(subjectId: String): [TaxonomyEntity!]!
-    latestContent(subjectId: String): [TaxonomyEntity!]
     about: SubjectPageAbout
-    goTo: [ResourceTypeDefinition!]!
     metaDescription: String
-    layout: String!
-    twitter: String
     supportedLanguages: [String!]!
   }
 
@@ -664,7 +661,10 @@ export const typeDefs = gql`
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]!
+    resourceTypes: [ResourceType!]
     supportedLanguages: [String!]!
+    breadcrumbs: [String!]!
+    contexts: [TaxonomyContext!]!
   }
 
   interface SearchResult {
@@ -1120,7 +1120,7 @@ export const typeDefs = gql`
       relevance: String
       grepCodes: String
       aggregatePaths: [String!]
-      filterInactive: String
+      filterInactive: Boolean
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
@@ -1135,7 +1135,7 @@ export const typeDefs = gql`
       fallback: String
       grepCodes: String
       aggregatePaths: [String!]
-      filterInactive: String
+      filterInactive: Boolean
     ): [GroupSearch!]
     listingPage(subjects: String): ListingPage
     concept(id: Int!): Concept

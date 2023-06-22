@@ -89,7 +89,7 @@ export const resolvers = {
       }
 
       const lastResourceMatch = learningpathStep.embedUrl.url
-        .match(/resource(:\d+)?(:\d+)/g)
+        .match(/(resource:[:\da-fA-F-]+)/g)
         ?.pop();
 
       if (lastResourceMatch !== undefined) {
