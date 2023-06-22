@@ -473,6 +473,7 @@ export const typeDefs = gql`
     id: Int!
     revision: Int!
     title: String!
+    slug: String
     introduction: String
     content: String!
     created: String!
@@ -547,14 +548,15 @@ export const typeDefs = gql`
     code: String
   }
 
-  type Category {
-    name: String!
-    subjects: [Subject!]!
+  type Menu {
+    title: String
+    slug: String
+    menu: [Menu]!
   }
 
   type Frontpage {
-    topical: [Resource!]!
-    categories: [Category!]!
+    article: Article
+    menu: [Menu]!
   }
 
   type SubjectPageVisualElement {

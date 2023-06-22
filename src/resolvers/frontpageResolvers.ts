@@ -7,16 +7,15 @@
  */
 
 import {
-  IFrontPageData,
+  IFrontPage,
   ISubjectPageData,
   IFilmFrontPageData,
-  ISubjectCollection,
   IMovieTheme,
+  IMenu,
 } from '@ndla/types-backend/frontpage-api';
 import {
-  fetchResource,
+  fetchArticle,
   fetchSubjectPage,
-  fetchTopic,
   fetchResourcesAndTopics,
   fetchFilmFrontpage,
   fetchMovieMeta,
@@ -24,16 +23,14 @@ import {
 } from '../api';
 import { getArticleIdFromUrn } from '../utils/articleHelpers';
 import {
+  GQLArticle,
   GQLMeta,
   GQLMetaImage,
   GQLMoviePath,
   GQLMovieResourceTypes,
-  GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
-  GQLSubject,
   GQLTaxonomyEntity,
-  GQLTopic,
 } from '../types/schema';
 
 interface Id {
@@ -45,7 +42,7 @@ export const Query = {
     _: any,
     __: any,
     context: ContextWithLoaders,
-  ): Promise<IFrontPageData> {
+  ): Promise<IFrontPage> {
     return context.loaders.frontpageLoader.load('frontpage');
   },
 
@@ -68,34 +65,49 @@ export const Query = {
 
 export const resolvers = {
   Frontpage: {
-    async topical(
-      frontpage: IFrontPageData,
+    async article(
+      frontpage: IFrontPage,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<(GQLResource | GQLTopic)[]> {
-      return Promise.all(
-        frontpage.topical.map(id => {
-          if (id.startsWith('urn:topic')) {
-            return fetchTopic({ id }, context);
-          }
-
-          return fetchResource({ id }, context);
-        }),
+    ): Promise<GQLArticle> {
+      return fetchArticle(
+        {
+          articleId: `${frontpage.articleId}`,
+          convertEmbeds: true,
+        },
+        context,
       );
     },
   },
-  Category: {
-    async subjects(
-      category: ISubjectCollection,
-      params: any,
+
+  Menu: {
+    async title(
+      menu: IMenu,
+      _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLSubject[]> {
-      const data = await context.loaders.subjectsLoader.load(params);
-      return data.subjects.filter(subject =>
-        category.subjects.find(categorySubject => {
-          return categorySubject.id === subject.id;
-        }),
+    ): Promise<string> {
+      const article = await fetchArticle(
+        {
+          articleId: `${menu.articleId}`,
+          convertEmbeds: true,
+        },
+        context,
       );
+      return article.title;
+    },
+    async slug(
+      menu: IMenu,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<string> {
+      const article = await fetchArticle(
+        {
+          articleId: `${menu.articleId}`,
+          convertEmbeds: true,
+        },
+        context,
+      );
+      return article.slug || '';
     },
   },
 

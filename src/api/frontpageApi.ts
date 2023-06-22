@@ -7,7 +7,7 @@
  */
 
 import {
-  IFrontPageData,
+  IFrontPage,
   IFilmFrontPageData,
   ISubjectPageData,
 } from '@ndla/types-backend/frontpage-api';
@@ -24,9 +24,7 @@ export interface IMovieMeta {
   };
 }
 
-export async function fetchFrontpage(
-  context: Context,
-): Promise<IFrontPageData> {
+export async function fetchFrontpage(context: Context): Promise<IFrontPage> {
   const response = await fetch(`/frontpage-api/v1/frontpage/`, context);
   return await resolveJson(response);
 }

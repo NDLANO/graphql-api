@@ -1,7 +1,7 @@
 // @ts-strict-ignore
 import {
   IFilmFrontPageData,
-  IFrontPageData,
+  IFrontPage,
 } from '@ndla/types-backend/frontpage-api';
 import DataLoader from 'dataloader';
 import { Node } from '../../api/taxonomyApi';
@@ -30,9 +30,9 @@ export const mockLk20CurriculumLoader = (mockData: GQLReference[] = []) => {
 };
 
 export const mockFrontpageLoader = (
-  mockData: IFrontPageData[] = [mockFrontpageDefaultResponse],
+  mockData: IFrontPage[] = [mockFrontpageDefaultResponse],
 ) => {
-  return new DataLoader<string, IFrontPageData>(() => mockFn(mockData));
+  return new DataLoader<string, IFrontPage>(() => mockFn(mockData));
 };
 
 export const mockFilmFrontpageLoader = (
@@ -79,9 +79,9 @@ export const mockResourceTypesLoader = (
   );
 };
 
-export const mockFrontpageDefaultResponse: IFrontPageData = {
-  topical: [],
-  categories: [],
+export const mockFrontpageDefaultResponse: IFrontPage = {
+  articleId: undefined,
+  menu: [],
 };
 
 export const mockFilmFrontPageDefaultResponse: IFilmFrontPageData = {
