@@ -13,10 +13,7 @@ import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
 import { parseVisualElement } from '../utils/visualelementHelpers';
-import {
-  queryResourcesOnContentURI,
-  queryTopicsOnContentURI,
-} from './taxonomyApi';
+import { nodesFromContentURI } from './taxonomyApi';
 import { transformArticle } from './transformArticleApi';
 
 interface ArticleParams {
@@ -109,19 +106,11 @@ export async function fetchArticle(
       if (typeof rc === 'number') {
         return Promise.resolve(fetchArticle({ articleId: `${rc}` }, context))
           .then(async related => {
-            let topicOrResource;
-            if (related.articleType === 'topic-article') {
-              topicOrResource = await queryTopicsOnContentURI(
-                `urn:article:${related.id}`,
-                context,
-              );
-            } else {
-              topicOrResource = await queryResourcesOnContentURI(
-                `urn:article:${related.id}`,
-                context,
-              );
-            }
-            return topicOrResource || related;
+            const node = await nodesFromContentURI(
+              `urn:article:${related.id}`,
+              context,
+            );
+            return node || related;
           })
           .then((topicOrResource: any) => {
             let path = `/article/${topicOrResource.id}`;
