@@ -56,27 +56,4 @@ declare global {
     cache?: RequestCache;
     useTaxonomyCache?: boolean;
   }
-
-  interface SearchResultJson {
-    id: number;
-    title: {
-      title: string;
-    };
-    content?: {
-      content: string;
-    };
-    metaDescription?: {
-      metaDescription: string;
-    };
-    metaImage?: { url: string; alt: string };
-    contexts?: Array<{
-      id: string;
-      path: string;
-      subject: string;
-      resourceTypes: Array<{ name: string }>;
-    }>;
-    tags?: {
-      tags: string[];
-    };
-  }
 }

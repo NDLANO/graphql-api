@@ -6,49 +6,24 @@
  *
  */
 
+import {
+  IApiTaxonomyContext,
+  IGroupSearchResult,
+  IMultiSearchResult,
+  IMultiSearchSummary,
+} from '@ndla/types-backend/search-api';
 import queryString from 'query-string';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { searchConcepts } from './conceptApi';
-import { expandResourcesFromAllContexts } from '../utils/apiHelpers';
 import {
   GQLFrontpageSearch,
+  GQLFrontpageSearchResult,
   GQLGroupSearch,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
   GQLSearch,
-  GQLSearchContext,
   GQLSearchWithoutPagination,
 } from '../types/schema';
-
-interface GroupSearchJSON {
-  results: [ContentTypeJSON];
-  resourceType: string;
-}
-
-interface ContentTypeJSON {
-  id: number;
-  paths: [string];
-  url: string;
-  title: {
-    title: string;
-  };
-  metaDescription: {
-    metaDescription: string;
-  };
-  metaImage: {
-    url: string;
-    alt: string;
-  };
-  contexts: GQLSearchContext;
-  learningResourceType: string;
-}
-
-interface SearchResultContexts {
-  id: string;
-  path: string;
-  subject: string;
-  resourceTypes: Array<{ name: string }>;
-}
 
 export async function search(
   searchQuery: GQLQuerySearchArgs,
@@ -78,7 +53,7 @@ export async function search(
   const concepts = await searchConcepts(conceptQuery, context);
   return {
     ...searchResults,
-    results: searchResults.results.map((result: SearchResultJson) =>
+    results: searchResults.results.map((result: IMultiSearchSummary) =>
       transformResult(result),
     ),
     concepts: { concepts },
@@ -105,9 +80,9 @@ export async function groupSearch(
   );
   const subjects = searchQuery.subjects?.split(',') || [];
   const json = await resolveJson(response);
-  return json.map((result: GroupSearchJSON) => ({
+  return json.map((result: IGroupSearchResult) => ({
     ...result,
-    resources: result.results.map((contentTypeResult: ContentTypeJSON) => {
+    resources: result.results.map(contentTypeResult => {
       const path =
         subjects.length === 1
           ? contentTypeResult.paths?.find(
@@ -164,8 +139,8 @@ export async function frontpageSearch(
     ),
   ]);
 
-  const topicJson = await resolveJson(topicReponse);
-  const resourceJson = await resolveJson(resourceResponse);
+  const topicJson: IMultiSearchResult = await resolveJson(topicReponse);
+  const resourceJson: IMultiSearchResult = await resolveJson(resourceResponse);
   return {
     topicResources: {
       ...topicJson,
@@ -218,12 +193,14 @@ export async function searchWithoutPagination(
   allResultsJson.push(firstPageJson);
   return {
     results: allResultsJson.flatMap(json =>
-      json.results.map((result: SearchResultJson) => transformResult(result)),
+      json.results.map((result: IMultiSearchSummary) =>
+        transformResult(result),
+      ),
     ),
   };
 }
 
-const transformResult = (result: SearchResultJson) => ({
+const transformResult = (result: IMultiSearchSummary) => ({
   ...result,
   title: result.title.title,
   contexts: fixContext(result.contexts),
@@ -231,10 +208,20 @@ const transformResult = (result: SearchResultJson) => ({
   metaImage: result.metaImage,
 });
 
-const fixContext = (contexts: SearchResultContexts[] | undefined) =>
+const fixContext = (contexts: IApiTaxonomyContext[] | undefined) =>
   contexts?.map(context => ({
     ...context,
     path: context.path.includes('/resource/')
       ? `${context.path}/`
       : context.path,
   }));
+
+const expandResourcesFromAllContexts = (
+  resourceResult: IMultiSearchSummary[],
+) =>
+  resourceResult.reduce<GQLFrontpageSearchResult[]>((allResults, resource) => {
+    resource.contexts.forEach(ctx => {
+      allResults.push({ ...ctx, name: resource.title.title });
+    });
+    return allResults;
+  }, []);
