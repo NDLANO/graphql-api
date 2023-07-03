@@ -7,6 +7,7 @@
  *
  */
 
+import { TaxonomyContext } from '@ndla/types-taxonomy';
 import {
   fetchArticle,
   fetchTopics,
@@ -31,7 +32,6 @@ import {
   GQLTopic,
   GQLTopicArticleArgs,
   GQLTopicCoreResourcesArgs,
-  GQLTopicResolvers,
   GQLTopicSupplementaryResourcesArgs,
   GQLVisualElementOembed,
 } from '../types/schema';
@@ -70,7 +70,17 @@ export const Query = {
   },
 };
 
-export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
+export const resolvers = {
+  // Also for resources
+  TaxonomyContext: {
+    async breadcrumbs(
+      taxonomyContext: TaxonomyContext,
+      _: GQLTopicArticleArgs,
+      context: ContextWithLoaders,
+    ): Promise<string[]> {
+      return taxonomyContext.breadcrumbs[context.language] || [];
+    },
+  },
   Topic: {
     async availability(
       topic: Node,
@@ -205,24 +215,6 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
         return topicsWithVisibleSubject;
       }
       return;
-    },
-    async breadcrumbs(
-      topic: Node,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<string[][]> {
-      return Promise.all(
-        topic.paths?.map(async path => {
-          return Promise.all(
-            path
-              .split('/')
-              .slice(1)
-              .map(async id => {
-                return (await fetchNode({ id: `urn:${id}` }, context)).name;
-              }),
-          );
-        }),
-      );
     },
   },
 };

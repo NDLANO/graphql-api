@@ -275,6 +275,8 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
+    contexts: [TaxonomyContext!]!
+    breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
   }
@@ -303,8 +305,15 @@ export const typeDefs = gql`
     availability: String
     resourceTypes: [ResourceType!]
     parents: [Topic!]
-    breadcrumbs: [[String!]!]
+    breadcrumbs: [String!]!
+    contexts: [TaxonomyContext!]!
     supportedLanguages: [String!]!
+  }
+
+  type TaxonomyContext {
+    breadcrumbs: [String!]!
+    path: String!
+    parentIds: [String!]!
   }
 
   type Topic implements TaxonomyEntity & WithArticle {
@@ -332,7 +341,8 @@ export const typeDefs = gql`
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
     resourceTypes: [ResourceType!]
-    breadcrumbs: [[String!]!]
+    breadcrumbs: [String!]!
+    contexts: [TaxonomyContext!]!
     supportedLanguages: [String!]!
   }
 
@@ -655,6 +665,8 @@ export const typeDefs = gql`
     grepCodes: [String!]!
     resourceTypes: [ResourceType!]
     supportedLanguages: [String!]!
+    breadcrumbs: [String!]!
+    contexts: [TaxonomyContext!]!
   }
 
   interface SearchResult {

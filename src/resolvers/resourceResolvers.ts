@@ -14,7 +14,6 @@ import {
   fetchArticle,
   fetchLearningpath,
   fetchOembed,
-  fetchNode,
 } from '../api';
 import {
   getArticleIdFromUrn,
@@ -153,24 +152,6 @@ export const resolvers = {
           'Missing article contentUri for resource with id: ' + resource.id,
         ),
         { status: 404 },
-      );
-    },
-    async breadcrumbs(
-      resource: GQLResource,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<string[][]> {
-      return Promise.all(
-        resource.paths?.map(async path => {
-          return Promise.all(
-            path
-              .split('/')
-              .slice(1, -1)
-              .map(async id => {
-                return (await fetchNode({ id: `urn:${id}` }, context)).name;
-              }),
-          );
-        }),
       );
     },
   },
