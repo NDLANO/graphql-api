@@ -1,7 +1,7 @@
 import DataLoader from 'dataloader';
 import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
-import { IFrontPageData } from '@ndla/types-backend/frontpage-api';
+import { IFrontPage } from '@ndla/types-backend/frontpage-api';
 import { Node } from '../api/taxonomyApi';
 import { GQLMeta, GQLReference, GQLSubject } from './schema';
 
@@ -30,7 +30,7 @@ declare global {
       Node
     >;
     resourceTypesLoader: DataLoader<any, any>;
-    frontpageLoader: DataLoader<string, IFrontPageData>;
+    frontpageLoader: DataLoader<string, IFrontPage>;
     lk20CurriculumLoader: DataLoader<
       { code: string; language: string },
       GQLReference | undefined
@@ -55,28 +55,5 @@ declare global {
   interface RequestOptions extends RequestInit {
     cache?: RequestCache;
     useTaxonomyCache?: boolean;
-  }
-
-  interface SearchResultJson {
-    id: number;
-    title: {
-      title: string;
-    };
-    content?: {
-      content: string;
-    };
-    metaDescription?: {
-      metaDescription: string;
-    };
-    metaImage?: { url: string; alt: string };
-    contexts?: Array<{
-      id: string;
-      path: string;
-      subject: string;
-      resourceTypes: Array<{ name: string }>;
-    }>;
-    tags?: {
-      tags: string[];
-    };
   }
 }

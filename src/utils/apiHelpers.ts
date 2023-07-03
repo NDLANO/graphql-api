@@ -178,17 +178,3 @@ export function licenseFixer(lic: string, licVer: string) {
   }
   return `${lic.replace(' ', '-')}-${licVer}`;
 }
-
-export const expandResourcesFromAllContexts = (
-  resourceResult: [SearchResultJson],
-) =>
-  resourceResult.reduce((allResults: [], resource: SearchResultJson) => {
-    return [
-      ...allResults,
-      ...resource.contexts.map(ctx => ({
-        ...ctx,
-        path: `${ctx.path}`,
-        name: resource.title.title,
-      })),
-    ];
-  }, []);
