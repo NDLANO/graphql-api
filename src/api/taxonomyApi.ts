@@ -64,9 +64,10 @@ export async function fetchResource(
 ): Promise<GQLResource> {
   const query = qs.stringify({
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/resources/${id}/full?${query}`,
+    `/${context.taxonomyUrl}/v1/nodes/${id}/full?${query}`,
     context,
   );
   const resource: GQLResource = await resolveJson(response);
@@ -183,6 +184,7 @@ export async function fetchSubjectTopics(
     recursive: true,
     nodeType: 'TOPIC',
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${subjectId}/nodes?${query}`,
@@ -199,6 +201,7 @@ export async function fetchTopics(
     contentURI: args.contentUri ?? '',
     nodeType: 'TOPIC',
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/?${query}`,
@@ -211,6 +214,7 @@ export async function fetchNode(params: { id: string }, context: Context) {
   const { id } = params;
   const query = qs.stringify({
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}?${query}`,
@@ -228,6 +232,7 @@ export async function fetchSubtopics(
   const query = qs.stringify({
     nodeType: 'TOPIC',
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}/nodes/?${query}`,
@@ -244,6 +249,7 @@ export async function fetchTopicResources(
   const query = qs.stringify({
     language: context.language,
     relevance: relevance ?? '',
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${topic.id}/resources/?${query}`,

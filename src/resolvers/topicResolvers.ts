@@ -7,6 +7,7 @@
  *
  */
 
+import { TaxonomyContext } from '@ndla/types-taxonomy';
 import {
   fetchArticle,
   fetchTopics,
@@ -70,6 +71,16 @@ export const Query = {
 };
 
 export const resolvers = {
+  // Also for resources
+  TaxonomyContext: {
+    async breadcrumbs(
+      taxonomyContext: TaxonomyContext,
+      _: GQLTopicArticleArgs,
+      context: ContextWithLoaders,
+    ): Promise<string[]> {
+      return taxonomyContext.breadcrumbs[context.language] || [];
+    },
+  },
   Topic: {
     async availability(
       topic: Node,
