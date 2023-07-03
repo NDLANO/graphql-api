@@ -8,7 +8,7 @@
 
 import {
   IFilmFrontPageData,
-  IFrontPageData,
+  IFrontPage,
 } from '@ndla/types-backend/frontpage-api';
 import DataLoader from 'dataloader';
 import {
@@ -71,7 +71,7 @@ export function lk20CurriculumLoader(
 
 export function frontpageLoader(
   context: Context,
-): DataLoader<string, IFrontPageData> {
+): DataLoader<string, IFrontPage> {
   return new DataLoader(async () => {
     const frontpage = await fetchFrontpage(context);
     return [frontpage];

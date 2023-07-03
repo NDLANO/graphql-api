@@ -48,6 +48,7 @@ export type GQLArticle = {
   requiredLibraries?: Maybe<Array<GQLArticleRequiredLibrary>>;
   revision: Scalars['Int'];
   revisionDate?: Maybe<Scalars['String']>;
+  slug?: Maybe<Scalars['String']>;
   supportedLanguages?: Maybe<Array<Scalars['String']>>;
   tags?: Maybe<Array<Scalars['String']>>;
   title: Scalars['String'];
@@ -226,12 +227,6 @@ export type GQLCaption = {
   __typename?: 'Caption';
   caption: Scalars['String'];
   language: Scalars['String'];
-};
-
-export type GQLCategory = {
-  __typename?: 'Category';
-  name: Scalars['String'];
-  subjects: Array<GQLSubject>;
 };
 
 export type GQLCompetenceGoal = {
@@ -459,8 +454,8 @@ export type GQLFrontPageResources = {
 
 export type GQLFrontpage = {
   __typename?: 'Frontpage';
-  categories: Array<GQLCategory>;
-  topical: Array<GQLResource>;
+  article?: Maybe<GQLArticle>;
+  menu: Array<Maybe<GQLMenu>>;
 };
 
 export type GQLFrontpageSearch = {
@@ -710,6 +705,13 @@ export type GQLManuscript = {
   __typename?: 'Manuscript';
   language: Scalars['String'];
   manuscript: Scalars['String'];
+};
+
+export type GQLMenu = {
+  __typename?: 'Menu';
+  menu: Array<Maybe<GQLMenu>>;
+  slug?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
 };
 
 export type GQLMeta = {
@@ -1670,7 +1672,6 @@ export type GQLResolversTypes = {
   BrightcoveLicense: ResolverTypeWrapper<GQLBrightcoveLicense>;
   BucketResult: ResolverTypeWrapper<GQLBucketResult>;
   Caption: ResolverTypeWrapper<GQLCaption>;
-  Category: ResolverTypeWrapper<GQLCategory>;
   CompetenceGoal: ResolverTypeWrapper<GQLCompetenceGoal>;
   Concept: ResolverTypeWrapper<GQLConcept>;
   ConceptCopyright: ResolverTypeWrapper<GQLConceptCopyright>;
@@ -1723,6 +1724,7 @@ export type GQLResolversTypes = {
   License: ResolverTypeWrapper<GQLLicense>;
   ListingPage: ResolverTypeWrapper<GQLListingPage>;
   Manuscript: ResolverTypeWrapper<GQLManuscript>;
+  Menu: ResolverTypeWrapper<GQLMenu>;
   Meta: ResolverTypeWrapper<GQLMeta>;
   MetaImage: ResolverTypeWrapper<GQLMetaImage>;
   Movie: ResolverTypeWrapper<GQLMovie>;
@@ -1804,7 +1806,6 @@ export type GQLResolversParentTypes = {
   BrightcoveLicense: GQLBrightcoveLicense;
   BucketResult: GQLBucketResult;
   Caption: GQLCaption;
-  Category: GQLCategory;
   CompetenceGoal: GQLCompetenceGoal;
   Concept: GQLConcept;
   ConceptCopyright: GQLConceptCopyright;
@@ -1857,6 +1858,7 @@ export type GQLResolversParentTypes = {
   License: GQLLicense;
   ListingPage: GQLListingPage;
   Manuscript: GQLManuscript;
+  Menu: GQLMenu;
   Meta: GQLMeta;
   MetaImage: GQLMetaImage;
   Movie: GQLMovie;
@@ -1948,6 +1950,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   requiredLibraries?: Resolver<Maybe<Array<GQLResolversTypes['ArticleRequiredLibrary']>>, ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   revisionDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  slug?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2121,12 +2124,6 @@ export type GQLBucketResultResolvers<ContextType = any, ParentType extends GQLRe
 export type GQLCaptionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Caption'] = GQLResolversParentTypes['Caption']> = {
   caption?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLCategoryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Category'] = GQLResolversParentTypes['Category']> = {
-  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  subjects?: Resolver<Array<GQLResolversTypes['Subject']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2349,8 +2346,8 @@ export type GQLFrontPageResourcesResolvers<ContextType = any, ParentType extends
 };
 
 export type GQLFrontpageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Frontpage'] = GQLResolversParentTypes['Frontpage']> = {
-  categories?: Resolver<Array<GQLResolversTypes['Category']>, ParentType, ContextType>;
-  topical?: Resolver<Array<GQLResolversTypes['Resource']>, ParentType, ContextType>;
+  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
+  menu?: Resolver<Array<Maybe<GQLResolversTypes['Menu']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2600,6 +2597,13 @@ export type GQLListingPageResolvers<ContextType = any, ParentType extends GQLRes
 export type GQLManuscriptResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Manuscript'] = GQLResolversParentTypes['Manuscript']> = {
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   manuscript?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMenuResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Menu'] = GQLResolversParentTypes['Menu']> = {
+  menu?: Resolver<Array<Maybe<GQLResolversTypes['Menu']>>, ParentType, ContextType>;
+  slug?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3161,7 +3165,6 @@ export type GQLResolvers<ContextType = any> = {
   BrightcoveLicense?: GQLBrightcoveLicenseResolvers<ContextType>;
   BucketResult?: GQLBucketResultResolvers<ContextType>;
   Caption?: GQLCaptionResolvers<ContextType>;
-  Category?: GQLCategoryResolvers<ContextType>;
   CompetenceGoal?: GQLCompetenceGoalResolvers<ContextType>;
   Concept?: GQLConceptResolvers<ContextType>;
   ConceptCopyright?: GQLConceptCopyrightResolvers<ContextType>;
@@ -3211,6 +3214,7 @@ export type GQLResolvers<ContextType = any> = {
   License?: GQLLicenseResolvers<ContextType>;
   ListingPage?: GQLListingPageResolvers<ContextType>;
   Manuscript?: GQLManuscriptResolvers<ContextType>;
+  Menu?: GQLMenuResolvers<ContextType>;
   Meta?: GQLMetaResolvers<ContextType>;
   MetaImage?: GQLMetaImageResolvers<ContextType>;
   Movie?: GQLMovieResolvers<ContextType>;
