@@ -198,6 +198,7 @@ export async function fetchArticles(
         lastUpdated: article.lastUpdated,
         metaImage: article.metaImage,
         availability: article.availability,
+        slug: article.slug,
       };
     }
     return null;

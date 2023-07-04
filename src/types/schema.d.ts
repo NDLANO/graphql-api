@@ -722,6 +722,7 @@ export type GQLMeta = {
   lastUpdated?: Maybe<Scalars['String']>;
   metaDescription?: Maybe<Scalars['String']>;
   metaImage?: Maybe<GQLMetaImage>;
+  slug?: Maybe<Scalars['String']>;
   title: Scalars['String'];
 };
 
@@ -2629,6 +2630,7 @@ export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversP
   lastUpdated?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  slug?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
