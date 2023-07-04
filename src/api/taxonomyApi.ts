@@ -10,12 +10,11 @@ import { Response } from 'node-fetch';
 import qs from 'query-string';
 import { NodeType } from '@ndla/types-embed';
 import {
-  GQLMoviePath,
-  GQLMovieResourceTypes,
   GQLQueryResourceArgs,
   GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
+  GQLSearchContext,
   GQLSubject,
   GQLTaxonomyEntity,
   GQLTopic,
@@ -65,9 +64,10 @@ export async function fetchResource(
 ): Promise<GQLResource> {
   const query = qs.stringify({
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/resources/${id}/full?${query}`,
+    `/${context.taxonomyUrl}/v1/nodes/${id}/full?${query}`,
     context,
   );
   const resource: GQLResource = await resolveJson(response);
@@ -184,6 +184,7 @@ export async function fetchSubjectTopics(
     recursive: true,
     nodeType: 'TOPIC',
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${subjectId}/nodes?${query}`,
@@ -200,6 +201,7 @@ export async function fetchTopics(
     contentURI: args.contentUri ?? '',
     nodeType: 'TOPIC',
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/?${query}`,
@@ -208,10 +210,11 @@ export async function fetchTopics(
   return resolveJson(response);
 }
 
-export async function fetchTopic(params: { id: string }, context: Context) {
+export async function fetchNode(params: { id: string }, context: Context) {
   const { id } = params;
   const query = qs.stringify({
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}?${query}`,
@@ -229,6 +232,7 @@ export async function fetchSubtopics(
   const query = qs.stringify({
     nodeType: 'TOPIC',
     language: context.language,
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}/nodes/?${query}`,
@@ -245,6 +249,7 @@ export async function fetchTopicResources(
   const query = qs.stringify({
     language: context.language,
     relevance: relevance ?? '',
+    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${topic.id}/resources/?${query}`,
@@ -261,50 +266,26 @@ export async function fetchTopicResources(
   return resources;
 }
 
-export async function fetchResourcesAndTopics(
-  params: { ids: string[]; subjectId?: string },
-  context: ContextWithLoaders,
-): Promise<GQLTaxonomyEntity[]> {
-  const { ids, ...args } = params;
-  return Promise.all(
-    ids.map(id => {
-      if (id.startsWith('urn:topic')) {
-        return fetchTopic({ id, ...args }, context);
-      }
-      return fetchResource({ id, ...args }, context);
-    }),
-  );
-}
-
-export async function queryTopicsOnContentURI(
-  id: string,
+export async function nodesFromContentURI(
+  contentURI: string,
   context: Context,
-): Promise<GQLTopic> {
+): Promise<GQLTaxonomyEntity> {
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/nodes?contentURI=${id}`,
+    `/${context.taxonomyUrl}/v1/nodes?contentURI=${contentURI}`,
     context,
   );
-  const json = await resolveJson(response);
-
-  const taxonomy = json.find((item: { contentUri: string }) => {
-    return item.contentUri === id;
-  });
-  return taxonomy;
+  return await resolveJson(response);
 }
 
-export async function queryResourcesOnContentURI<
-  T extends GQLMoviePath | GQLMovieResourceTypes | GQLResource
->(id: string, context: Context): Promise<T> {
+export async function queryContexts(
+  contentURI: string,
+  context: Context,
+): Promise<GQLSearchContext[]> {
   const response = await fetch(
-    `/${context.taxonomyUrl}/v1/resources?contentURI=${id}`,
+    `/${context.taxonomyUrl}/v1/queries/${contentURI}`,
     context,
   );
-  const json = await resolveJson(response);
-
-  const taxonomy = json.find((item: { contentUri: string }) => {
-    return item.contentUri === id;
-  });
-  return taxonomy;
+  return await resolveJson(response);
 }
 
 interface VersionType {

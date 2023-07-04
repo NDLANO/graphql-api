@@ -113,6 +113,7 @@ export const typeDefs = gql`
     description: Description!
     supportedLanguages: [String!]!
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type PodcastSeries implements PodcastSeriesBase {
@@ -121,6 +122,7 @@ export const typeDefs = gql`
     description: Description!
     supportedLanguages: [String!]!
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type PodcastSeriesWithEpisodes implements PodcastSeriesBase {
@@ -130,6 +132,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     episodes: [Audio!]
     coverPhoto: CoverPhoto!
+    hasRSS: Boolean!
   }
 
   type AudioSummary {
@@ -272,7 +275,10 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     rank: Int
+    contexts: [TaxonomyContext!]!
+    breadcrumbs: [String!]!
     supportedLanguages: [String!]!
+    resourceTypes: [ResourceType!]
   }
 
   interface WithArticle {
@@ -299,8 +305,15 @@ export const typeDefs = gql`
     availability: String
     resourceTypes: [ResourceType!]
     parents: [Topic!]
-    breadcrumbs: [[String!]!]
+    breadcrumbs: [String!]!
+    contexts: [TaxonomyContext!]!
     supportedLanguages: [String!]!
+  }
+
+  type TaxonomyContext {
+    breadcrumbs: [String!]!
+    path: String!
+    parentIds: [String!]!
   }
 
   type Topic implements TaxonomyEntity & WithArticle {
@@ -327,7 +340,9 @@ export const typeDefs = gql`
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
-    breadcrumbs: [[String!]!]
+    resourceTypes: [ResourceType!]
+    breadcrumbs: [String!]!
+    contexts: [TaxonomyContext!]!
     supportedLanguages: [String!]!
   }
 
@@ -473,6 +488,7 @@ export const typeDefs = gql`
     id: Int!
     revision: Int!
     title: String!
+    slug: String
     introduction: String
     content: String!
     created: String!
@@ -547,14 +563,15 @@ export const typeDefs = gql`
     code: String
   }
 
-  type Category {
-    name: String!
-    subjects: [Subject!]!
+  type Menu {
+    title: String
+    slug: String
+    menu: [Menu]!
   }
 
   type Frontpage {
-    topical: [Resource!]!
-    categories: [Category!]!
+    article: Article
+    menu: [Menu]!
   }
 
   type SubjectPageVisualElement {
@@ -577,19 +594,11 @@ export const typeDefs = gql`
   }
 
   type SubjectPage {
-    topical(subjectId: String): TaxonomyEntity
-    mostRead(subjectId: String): [TaxonomyEntity!]!
     banner: SubjectPageBanner!
     id: Int!
     name: String!
-    facebook: String
-    editorsChoices(subjectId: String): [TaxonomyEntity!]!
-    latestContent(subjectId: String): [TaxonomyEntity!]
     about: SubjectPageAbout
-    goTo: [ResourceTypeDefinition!]!
     metaDescription: String
-    layout: String!
-    twitter: String
     supportedLanguages: [String!]!
   }
 
@@ -654,7 +663,10 @@ export const typeDefs = gql`
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]!
+    resourceTypes: [ResourceType!]
     supportedLanguages: [String!]!
+    breadcrumbs: [String!]!
+    contexts: [TaxonomyContext!]!
   }
 
   interface SearchResult {
@@ -696,20 +708,27 @@ export const typeDefs = gql`
     resourceTypes: [SearchContextResourceTypes!]!
     subject: String!
     path: String!
-    filters: [SearchContextFilter!]!
   }
 
   type SearchContext {
     breadcrumbs: [String!]!
+    contextType: String!
     learningResourceType: String!
     resourceTypes: [SearchContextResourceTypes!]!
     subject: String!
+    root: String!
     subjectId: String!
+    rootId: String!
     relevance: String!
     path: String!
     id: String!
+    publicId: String!
+    parentIds: [String!]!
     language: String!
-    filters: [SearchContextFilter!]!
+    isPrimary: Boolean!
+    isActive: Boolean!
+    isVisible: Boolean!
+    contextId: String!
   }
 
   type SearchContextResourceTypes {

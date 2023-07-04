@@ -7,14 +7,14 @@
  *
  */
 
+import { TaxonomyContext } from '@ndla/types-taxonomy';
 import {
   fetchArticle,
   fetchTopics,
-  fetchTopic,
+  fetchNode,
   fetchTopicResources,
   fetchSubtopics,
   fetchOembed,
-  fetchSubject,
   fetchSubjectTopics,
 } from '../api';
 import {
@@ -32,7 +32,6 @@ import {
   GQLTopic,
   GQLTopicArticleArgs,
   GQLTopicCoreResourcesArgs,
-  GQLTopicResolvers,
   GQLTopicSupplementaryResourcesArgs,
   GQLVisualElementOembed,
 } from '../types/schema';
@@ -47,7 +46,7 @@ export const Query = {
       const topics = await fetchSubjectTopics(subjectId, context);
       return topics.find(topic => topic.id === id);
     }
-    return fetchTopic({ id }, context);
+    return fetchNode({ id }, context);
   },
   async topics(
     params: any,
@@ -71,7 +70,17 @@ export const Query = {
   },
 };
 
-export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
+export const resolvers = {
+  // Also for resources
+  TaxonomyContext: {
+    async breadcrumbs(
+      taxonomyContext: TaxonomyContext,
+      _: GQLTopicArticleArgs,
+      context: ContextWithLoaders,
+    ): Promise<string[]> {
+      return taxonomyContext.breadcrumbs[context.language] || [];
+    },
+  },
   Topic: {
     async availability(
       topic: Node,
@@ -177,7 +186,7 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
             .filter(pathElement => pathElement.includes('topic:'));
           return Promise.all(
             topicsToFetch.map(async id =>
-              fetchTopic({ id: `urn:${id}` }, context),
+              fetchNode({ id: `urn:${id}` }, context),
             ),
           );
         }),
@@ -206,28 +215,6 @@ export const resolvers: { Topic: GQLTopicResolvers<ContextWithLoaders> } = {
         return topicsWithVisibleSubject;
       }
       return;
-    },
-    async breadcrumbs(
-      topic: Node,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<string[][]> {
-      return Promise.all(
-        topic.paths?.map(async path => {
-          return Promise.all(
-            path
-              .split('/')
-              .slice(1)
-              .map(async id => {
-                if (id.includes('subject:')) {
-                  return (await fetchSubject(context, `urn:${id}`)).name;
-                } else if (id.includes('topic:')) {
-                  return (await fetchTopic({ id: `urn:${id}` }, context)).name;
-                }
-              }),
-          );
-        }),
-      );
     },
   },
 };
