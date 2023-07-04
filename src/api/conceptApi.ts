@@ -51,6 +51,7 @@ export async function searchConcepts(
     exactMatch?: boolean;
     language?: string;
     fallback?: boolean;
+    conceptType?: string;
   },
   context: Context,
 ): Promise<ConceptResult> {
@@ -65,6 +66,7 @@ export async function searchConcepts(
     ids: idsString,
     'page-size': params.pageSize,
     'exact-match': params.exactMatch,
+    'concept-type': params.conceptType,
     sort: 'title',
   };
   const response = await fetch(
