@@ -10,7 +10,6 @@
 import cheerio from 'cheerio';
 import {
   fetchNode,
-  fetchNodeResources,
   fetchResourceTypes,
   fetchArticle,
   fetchLearningpath,
@@ -32,7 +31,6 @@ import {
   GQLTaxonomyContext,
   GQLVisualElementOembed,
 } from '../types/schema';
-import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
 
 export const Query = {
   async resource(
@@ -40,22 +38,20 @@ export const Query = {
     { id, subjectId, topicId }: GQLQueryResourceArgs,
     context: ContextWithLoaders,
   ): Promise<GQLResource> {
-    if (topicId) {
-      const resources = await fetchNodeResources({ id: topicId }, context);
-      const resource = resources.find(res => res.id === id);
-      return nodeToTaxonomyEntity(resource, context);
-    }
-
     const resource = await fetchNode({ id }, context);
+
     const visibleCtx = resource.contexts.filter(c => c.isVisible);
     const subjectCtx = subjectId
       ? visibleCtx.filter(c => c.rootId === subjectId)
       : visibleCtx;
+    const topicCtx = topicId
+      ? subjectCtx.filter(c => c.parentIds.includes(topicId))
+      : subjectCtx;
 
-    const path = subjectCtx?.[0]?.path || resource.path;
-    const rank = subjectCtx?.[0]?.rank;
-    const relevanceId = subjectCtx?.[0]?.relevanceId || 'urn:relevance:core';
-    const contexts: GQLTaxonomyContext[] = subjectCtx.map(c => {
+    const path = topicCtx?.[0]?.path || resource.path;
+    const rank = topicCtx?.[0]?.rank;
+    const relevanceId = topicCtx?.[0]?.relevanceId || 'urn:relevance:core';
+    const contexts: GQLTaxonomyContext[] = visibleCtx.map(c => {
       const breadcrumbs = c.breadcrumbs[context.language];
       return {
         path: c.path,
