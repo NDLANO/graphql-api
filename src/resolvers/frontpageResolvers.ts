@@ -13,6 +13,7 @@ import {
   IMovieTheme,
   IMenu,
 } from '@ndla/types-backend/frontpage-api';
+import { TaxonomyContext } from '@ndla/types-taxonomy';
 import {
   fetchArticle,
   fetchSubjectPage,
@@ -28,7 +29,6 @@ import {
   GQLMetaImage,
   GQLMovieResourceTypes,
   GQLResourceType,
-  GQLSearchContext,
 } from '../types/schema';
 
 interface Id {
@@ -162,7 +162,7 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<string> {
-      const contexts: GQLSearchContext[] = await queryContexts(id, context);
+      const contexts: TaxonomyContext[] = await queryContexts(id, context);
       return (
         contexts?.find(ctx => ctx.path.startsWith('/subject:20/'))?.path || ''
       );

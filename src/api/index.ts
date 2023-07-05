@@ -26,13 +26,13 @@ export {
 export { fetchArticle, fetchArticles } from './articleApi';
 export { fetchLearningpaths, fetchLearningpath } from './learningpathApi';
 export {
-  fetchResource,
   fetchResourceTypes,
   fetchSubjectTopics,
   fetchSubjects,
   fetchSubject,
+  fetchSubjectTyped,
   fetchNode,
-  fetchTopicResources,
+  fetchNodeResources,
   fetchTopics,
   fetchSubtopics,
   nodesFromContentURI,

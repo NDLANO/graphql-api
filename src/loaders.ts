@@ -10,6 +10,7 @@ import {
   IFilmFrontPageData,
   IFrontPage,
 } from '@ndla/types-backend/frontpage-api';
+import { Node } from '@ndla/types-taxonomy';
 import DataLoader from 'dataloader';
 import {
   fetchArticles,
@@ -17,11 +18,11 @@ import {
   fetchLearningpaths,
   fetchResourceTypes,
   fetchSubjects,
+  fetchSubjectTyped,
   fetchFrontpage,
   fetchFilmFrontpage,
   fetchLK20Curriculum,
 } from './api';
-import { fetchSubjectTyped, Node } from './api/taxonomyApi';
 import {
   GQLMeta,
   GQLReference,

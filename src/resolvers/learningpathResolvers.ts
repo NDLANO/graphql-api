@@ -7,7 +7,7 @@
  */
 
 import { IConfigMetaRestricted } from '@ndla/types-backend/build/learningpath-api';
-import { fetchLearningpath, fetchResource, fetchOembed } from '../api';
+import { fetchLearningpath, fetchNode, fetchOembed } from '../api';
 import { fetchExamLockStatus } from '../api/learningpathApi';
 import {
   GQLLearningpath,
@@ -17,6 +17,7 @@ import {
   GQLResource,
 } from '../types/schema';
 import { isNDLAEmbedUrl } from '../utils/articleHelpers';
+import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
 
 export const Query = {
   async learningpath(
@@ -93,7 +94,11 @@ export const resolvers = {
         ?.pop();
 
       if (lastResourceMatch !== undefined) {
-        return fetchResource({ id: `urn:${lastResourceMatch}` }, context);
+        const resource = await fetchNode(
+          { id: `urn:${lastResourceMatch}` },
+          context,
+        );
+        return nodeToTaxonomyEntity(resource, context);
       }
       return null;
     },

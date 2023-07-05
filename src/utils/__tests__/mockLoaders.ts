@@ -3,8 +3,8 @@ import {
   IFilmFrontPageData,
   IFrontPage,
 } from '@ndla/types-backend/frontpage-api';
+import { Node } from '@ndla/types-taxonomy';
 import DataLoader from 'dataloader';
-import { Node } from '../../api/taxonomyApi';
 import {
   GQLMeta,
   GQLReference,

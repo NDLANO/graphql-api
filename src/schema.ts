@@ -274,7 +274,6 @@ export const typeDefs = gql`
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
-    rank: Int
     contexts: [TaxonomyContext!]!
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
@@ -292,22 +291,22 @@ export const typeDefs = gql`
     contentUri: String
     path: String!
     paths: [String!]!
-    meta: Meta
     metadata: TaxonomyMetadata!
-    learningpath: Learningpath
     relevanceId: String
+    contexts: [TaxonomyContext!]!
+    breadcrumbs: [String!]!
+    resourceTypes: [ResourceType!]
+    supportedLanguages: [String!]!
     rank: Int
+    parents: [Topic!]
+    meta: Meta
+    learningpath: Learningpath
     article(
       subjectId: String
       isOembed: String
       convertEmbeds: Boolean
     ): Article
     availability: String
-    resourceTypes: [ResourceType!]
-    parents: [Topic!]
-    breadcrumbs: [String!]!
-    contexts: [TaxonomyContext!]!
-    supportedLanguages: [String!]!
   }
 
   type TaxonomyContext {
