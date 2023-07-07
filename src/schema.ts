@@ -197,6 +197,7 @@ export const typeDefs = gql`
     metaImage: MetaImage
     lastUpdated: String
     availability: String
+    slug: String
   }
 
   type LearningpathStepEmbedUrl {

@@ -84,28 +84,20 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<string> {
-      const article = await fetchArticle(
-        {
-          articleId: `${menu.articleId}`,
-          convertEmbeds: true,
-        },
-        context,
+      const article = await context.loaders.articlesLoader.load(
+        `${menu.articleId}`,
       );
-      return article.title;
+      return article?.title || '';
     },
     async slug(
       menu: IMenu,
       _: any,
       context: ContextWithLoaders,
     ): Promise<string> {
-      const article = await fetchArticle(
-        {
-          articleId: `${menu.articleId}`,
-          convertEmbeds: true,
-        },
-        context,
+      const article = await context.loaders.articlesLoader.load(
+        `${menu.articleId}`,
       );
-      return article.slug || '';
+      return article?.slug || '';
     },
   },
 
