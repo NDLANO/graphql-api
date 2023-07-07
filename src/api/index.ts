@@ -30,13 +30,12 @@ export {
   fetchSubjectTopics,
   fetchSubjects,
   fetchSubject,
-  fetchSubjectTyped,
   fetchNode,
   fetchNodeResources,
   fetchTopics,
-  fetchSubtopics,
-  nodesFromContentURI,
+  fetchChildren,
   queryContexts,
+  queryNodes,
 } from './taxonomyApi';
 export {
   search,

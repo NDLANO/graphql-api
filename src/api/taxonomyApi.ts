@@ -79,35 +79,6 @@ export async function fetchSubject(
   return resolveJson(response);
 }
 
-export async function fetchSubjectTyped(
-  context: Context,
-  id: string,
-): Promise<Node> {
-  const query = qs.stringify({ language: context.language });
-  const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/${id}?${query}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchSubjectsTyped(
-  context: Context,
-  isVisible?: boolean,
-): Promise<Node> {
-  const query = qs.stringify({
-    language: context.language,
-    nodeType: 'SUBJECT',
-    isVisible,
-  });
-
-  const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/?${query}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
 export async function fetchSubjectTopics(
   subjectId: string,
   context: Context,
@@ -158,15 +129,20 @@ export async function fetchNode(
   return await resolveJson(response);
 }
 
-export async function fetchSubtopics(
-  params: { id: string },
+export async function fetchChildren(
+  params: {
+    id: string;
+    nodeType?: NodeType;
+    recursive?: boolean;
+  },
   context: Context,
 ): Promise<NodeChild[]> {
-  const { id } = params;
+  const { id, nodeType, recursive } = params;
   const query = qs.stringify({
-    nodeType: 'TOPIC',
-    language: context.language,
+    nodeType,
+    recursive,
     includeContexts: true,
+    language: context.language,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}/nodes/?${query}`,
@@ -194,18 +170,6 @@ export async function fetchNodeResources(
     context,
   );
   return await resolveJson(response);
-}
-
-export async function nodesFromContentURI(
-  contentURI: string,
-  context: Context,
-): Promise<Node> {
-  const response = await fetch(
-    `/${context.taxonomyUrl}/v1/nodes?contentURI=${contentURI}`,
-    context,
-  );
-  const result: Node[] = await resolveJson(response);
-  return result[0];
 }
 
 export async function queryContexts(
@@ -250,6 +214,7 @@ interface NodeQueryParams {
   key?: string;
   value?: string;
   isVisible?: boolean;
+  includeContexts?: boolean;
 }
 
 export const queryNodes = async (
@@ -261,15 +226,4 @@ export const queryNodes = async (
     context,
   );
   return await resolveJson(res);
-};
-
-export const fetchNodeByArticleId = async (
-  id: string,
-  context: Context,
-): Promise<Node> => {
-  const res: Node[] = await fetch(
-    `/${context.taxonomyUrl}/v1/nodes?contentURI=urn:article:${id}`,
-    context,
-  ).then(resolveJson);
-  return res[0];
 };

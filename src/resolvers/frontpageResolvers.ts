@@ -19,15 +19,14 @@ import {
   fetchSubjectPage,
   fetchFilmFrontpage,
   fetchMovieMeta,
-  nodesFromContentURI,
   queryContexts,
+  queryNodes,
 } from '../api';
 import { getArticleIdFromUrn } from '../utils/articleHelpers';
 import {
   GQLArticle,
   GQLMeta,
   GQLMetaImage,
-  GQLMovieResourceTypes,
   GQLResourceType,
 } from '../types/schema';
 
@@ -172,11 +171,8 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLResourceType[]> {
-      const movieResourceTypes: GQLMovieResourceTypes = await nodesFromContentURI(
-        id,
-        context,
-      );
-      return movieResourceTypes.resourceTypes ?? [];
+      const nodes = await queryNodes({ contentURI: id }, context);
+      return nodes[0]?.resourceTypes ?? [];
     },
   },
 };

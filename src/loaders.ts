@@ -18,7 +18,7 @@ import {
   fetchLearningpaths,
   fetchResourceTypes,
   fetchSubjects,
-  fetchSubjectTyped,
+  fetchNode,
   fetchFrontpage,
   fetchFilmFrontpage,
   fetchLK20Curriculum,
@@ -98,7 +98,7 @@ export function subjectLoader(
           if (!input.id) {
             throw Error('Tried to get subject with bad or empty id');
           }
-          return fetchSubjectTyped(context, input.id);
+          return fetchNode({ id: input.id }, context);
         }),
       );
     },

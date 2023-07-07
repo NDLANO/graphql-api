@@ -44,7 +44,7 @@ import {
 } from './h5pApi';
 import { fetchExternalOembed } from './externalApi';
 import { fetchVideo, fetchVideoSources } from './videoApi';
-import { fetchNodeByArticleId, queryNodes } from './taxonomyApi';
+import { queryNodes } from './taxonomyApi';
 import { fetchSimpleArticle } from './articleApi';
 import { fetchEmbedConcept, fetchEmbedConcepts } from './conceptApi';
 import { checkIfFileExists } from './fileApi';
@@ -201,10 +201,11 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({
 }) => {
   const articleId = embedData.articleId;
   if (typeof articleId === 'string' || typeof articleId === 'number') {
-    const [article, resource] = await Promise.all([
+    const [article, resources] = await Promise.all([
       fetchSimpleArticle(`urn:article:${articleId}`, context),
-      fetchNodeByArticleId(articleId, context),
+      queryNodes({ contentURI: `urn:article:${articleId}` }, context),
     ]);
+    const resource = resources?.[0];
     return { article, resource };
   } else {
     return undefined;
