@@ -33,60 +33,9 @@ export function findPrimaryPath(
     .find(path => path.includes(`/${stripUrn(topicId)}`));
 }
 
-export async function filterMissingArticles(
-  entities: GQLTaxonomyEntity[],
-  context: ContextWithLoaders,
-): Promise<GQLTaxonomyEntity[]> {
-  const visibleEntities = entities.filter(taxonomyEntity =>
-    taxonomyEntity.metadata ? taxonomyEntity.metadata.visible : true,
-  );
-
-  const entitiesWithContentUri = visibleEntities.filter(
-    taxonomyEntity => !!taxonomyEntity.contentUri,
-  );
-
-  const learningpathResources = entitiesWithContentUri.filter(taxonomyEntity =>
-    taxonomyEntity.contentUri?.includes('urn:learningpath'),
-  );
-
-  const articleResources = entitiesWithContentUri.filter(taxonomyEntity =>
-    taxonomyEntity.contentUri?.includes('urn:article'),
-  );
-
-  const articles = await context.loaders.articlesLoader.loadMany(
-    articleResources.map(taxonomyEntity =>
-      getArticleIdFromUrn(taxonomyEntity.contentUri ?? ''),
-    ),
-  );
-  const nonNullArticles = articles.filter(
-    (article): article is GQLMeta => !!article,
-  );
-
-  const activeResources = articleResources.filter(taxonomyEntity =>
-    nonNullArticles.find(
-      article =>
-        getArticleIdFromUrn(taxonomyEntity.contentUri ?? '') ===
-        `${article.id}`,
-    ),
-  );
-
-  const withAvailability = activeResources.map(taxonomyEntity => {
-    const article = nonNullArticles.find(
-      a => getArticleIdFromUrn(taxonomyEntity.contentUri ?? '') === `${a.id}`,
-    );
-    return {
-      ...taxonomyEntity,
-      availability: article?.availability,
-    };
-  });
-
-  return [...learningpathResources, ...withAvailability];
-}
-
-export async function filterMissingArticlesNodeChild(
-  entities: NodeChild[],
-  context: ContextWithLoaders,
-): Promise<NodeChild[]> {
+export async function filterMissingArticles<
+  T extends GQLTaxonomyEntity | NodeChild
+>(entities: T[], context: ContextWithLoaders): Promise<T[]> {
   const visibleEntities = entities.filter(taxonomyEntity =>
     taxonomyEntity.metadata ? taxonomyEntity.metadata.visible : true,
   );

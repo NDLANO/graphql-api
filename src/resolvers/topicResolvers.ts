@@ -18,7 +18,7 @@ import {
   fetchSubjectTopics,
 } from '../api';
 import {
-  filterMissingArticlesNodeChild,
+  filterMissingArticles,
   getArticleIdFromUrn,
 } from '../utils/articleHelpers';
 import { ndlaUrl } from '../config';
@@ -139,10 +139,7 @@ export const resolvers = {
         },
         context,
       );
-      const filtered = await filterMissingArticlesNodeChild(
-        topicResources,
-        context,
-      );
+      const filtered = await filterMissingArticles(topicResources, context);
       return filtered.map(f => nodeToTaxonomyEntity(f, context));
     },
     async supplementaryResources(
@@ -157,10 +154,7 @@ export const resolvers = {
         },
         context,
       );
-      const filtered = await filterMissingArticlesNodeChild(
-        topicResources,
-        context,
-      );
+      const filtered = await filterMissingArticles(topicResources, context);
       return filtered.map(f => nodeToTaxonomyEntity(f, context));
     },
     async subtopics(
@@ -169,7 +163,7 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
       const subtopics = await fetchSubtopics({ id: topic.id }, context);
-      const filtered = await filterMissingArticlesNodeChild(subtopics, context);
+      const filtered = await filterMissingArticles(subtopics, context);
       return filtered.map(f => nodeToTaxonomyEntity(f, context));
     },
     async pathTopics(
