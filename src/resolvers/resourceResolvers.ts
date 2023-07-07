@@ -39,7 +39,6 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLResource> {
     const resource = await fetchNode({ id }, context);
-
     const visibleCtx = resource.contexts.filter(c => c.isVisible);
     const subjectCtx = subjectId
       ? visibleCtx.filter(c => c.rootId === subjectId)
@@ -52,7 +51,8 @@ export const Query = {
     const rank = topicCtx?.[0]?.rank;
     const relevanceId = topicCtx?.[0]?.relevanceId || 'urn:relevance:core';
     const contexts: GQLTaxonomyContext[] = visibleCtx.map(c => {
-      const breadcrumbs = c.breadcrumbs[context.language];
+      const breadcrumbs =
+        c.breadcrumbs[context.language] || c.breadcrumbs['nb'] || [];
       return {
         path: c.path,
         parentIds: c.parentIds,
