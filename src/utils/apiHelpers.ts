@@ -7,8 +7,10 @@
  *
  */
 
+import { Node } from '@ndla/types-taxonomy';
 import { Response } from 'node-fetch';
 import { GraphQLError } from 'graphql';
+import { GQLTaxonomyEntity, GQLTaxonomyContext } from '../types/schema';
 import { apiUrl } from '../config';
 import createFetch from './fetch';
 import { createCache } from '../cache';
@@ -178,3 +180,18 @@ export function licenseFixer(lic: string, licVer: string) {
   }
   return `${lic.replace(' ', '-')}-${licVer}`;
 }
+
+export const nodeToTaxonomyEntity = (
+  node: Node,
+  context: Context,
+): GQLTaxonomyEntity => {
+  const contexts: GQLTaxonomyContext[] = node.contexts.map(c => {
+    const breadcrumbs = c.breadcrumbs[context.language];
+    return {
+      path: c.path,
+      parentIds: c.parentIds,
+      breadcrumbs,
+    };
+  });
+  return { ...node, contexts };
+};

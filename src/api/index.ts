@@ -26,17 +26,16 @@ export {
 export { fetchArticle, fetchArticles } from './articleApi';
 export { fetchLearningpaths, fetchLearningpath } from './learningpathApi';
 export {
-  fetchResource,
   fetchResourceTypes,
   fetchSubjectTopics,
   fetchSubjects,
   fetchSubject,
   fetchNode,
-  fetchTopicResources,
+  fetchNodeResources,
   fetchTopics,
-  fetchSubtopics,
-  nodesFromContentURI,
+  fetchChildren,
   queryContexts,
+  queryNodes,
 } from './taxonomyApi';
 export {
   search,

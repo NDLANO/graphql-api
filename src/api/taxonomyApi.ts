@@ -8,47 +8,20 @@
 
 import { Response } from 'node-fetch';
 import qs from 'query-string';
-import { NodeType } from '@ndla/types-embed';
 import {
-  GQLQueryResourceArgs,
-  GQLResource,
+  Node,
+  NodeChild,
+  NodeType,
+  TaxonomyContext,
+  Version,
+} from '@ndla/types-taxonomy';
+import {
   GQLResourceType,
   GQLResourceTypeDefinition,
-  GQLSearchContext,
   GQLSubject,
-  GQLTaxonomyEntity,
   GQLTopic,
 } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
-import { findPrimaryPath } from '../utils/articleHelpers';
-
-interface FetchNodeResourcesParams {
-  topic: Node;
-  relevance: string;
-  subjectId?: string;
-}
-interface TaxonomyTranslation {
-  name: string;
-  language: string;
-}
-
-interface TaxonomyMetadata {
-  customFields: Record<string, string>;
-  grepCodes: string[];
-  visible: boolean;
-}
-
-export interface Node {
-  contentUri?: string;
-  id: string;
-  metadata: TaxonomyMetadata;
-  name: string;
-  path: string;
-  paths: string[];
-  relevanceId?: string;
-  supportedLanguages: string[];
-  translations: TaxonomyTranslation[];
-}
 
 async function taxonomyFetch(
   path: string,
@@ -56,48 +29,6 @@ async function taxonomyFetch(
   options?: RequestOptions,
 ): Promise<Response> {
   return fetch(path, context, { ...options, useTaxonomyCache: true });
-}
-
-export async function fetchResource(
-  { id, subjectId, topicId }: GQLQueryResourceArgs,
-  context: ContextWithLoaders,
-): Promise<GQLResource> {
-  const query = qs.stringify({
-    language: context.language,
-    includeContexts: true,
-  });
-  const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/${id}/full?${query}`,
-    context,
-  );
-  const resource: GQLResource = await resolveJson(response);
-  // TODO: Replace parent-filtering with changes in taxonomy
-  const data = await context.loaders.subjectsLoader.load({
-    filterVisible: true,
-  });
-  const paths = resource.paths?.filter(p => {
-    const sId = p.split('/')[1];
-    const parentSubject = data.subjects.find(
-      subject => subject.id === `urn:${sId}`,
-    );
-    return parentSubject?.metadata.visible === true;
-  });
-  let path = paths[0];
-
-  if (subjectId) {
-    const primaryPath = findPrimaryPath(paths, subjectId, topicId);
-    path = primaryPath ? primaryPath : path;
-  }
-
-  let rank;
-  let relevanceId;
-  if (topicId) {
-    const parent = resource.parents?.find(topic => topic.id === topicId);
-    rank = parent?.rank;
-    relevanceId = parent?.relevanceId || 'urn:relevance:core';
-  }
-
-  return { ...resource, path, paths, rank, relevanceId };
 }
 
 export async function fetchResourceTypes<
@@ -126,6 +57,7 @@ export async function fetchSubjects(
     key: metadataFilter?.key,
     value: metadataFilter?.value,
     nodeType: 'SUBJECT',
+    includeContexts: true,
     isVisible,
   });
   const response = await taxonomyFetch(
@@ -142,35 +74,6 @@ export async function fetchSubject(
   const query = qs.stringify({ language: context.language });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}?${query}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchSubjectTyped(
-  context: Context,
-  id: string,
-): Promise<Node> {
-  const query = qs.stringify({ language: context.language });
-  const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/${id}?${query}`,
-    context,
-  );
-  return resolveJson(response);
-}
-
-export async function fetchSubjectsTyped(
-  context: Context,
-  isVisible?: boolean,
-): Promise<Node> {
-  const query = qs.stringify({
-    language: context.language,
-    nodeType: 'SUBJECT',
-    isVisible,
-  });
-
-  const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/?${query}`,
     context,
   );
   return resolveJson(response);
@@ -210,7 +113,10 @@ export async function fetchTopics(
   return resolveJson(response);
 }
 
-export async function fetchNode(params: { id: string }, context: Context) {
+export async function fetchNode(
+  params: { id: string },
+  context: Context,
+): Promise<Node> {
   const { id } = params;
   const query = qs.stringify({
     language: context.language,
@@ -220,19 +126,23 @@ export async function fetchNode(params: { id: string }, context: Context) {
     `/${context.taxonomyUrl}/v1/nodes/${id}?${query}`,
     context,
   );
-  const topic: GQLTopic = await resolveJson(response);
-  return topic;
+  return await resolveJson(response);
 }
 
-export async function fetchSubtopics(
-  params: { id: string },
+export async function fetchChildren(
+  params: {
+    id: string;
+    nodeType?: NodeType;
+    recursive?: boolean;
+  },
   context: Context,
-): Promise<GQLTopic[]> {
-  const { id } = params;
+): Promise<NodeChild[]> {
+  const { id, nodeType, recursive } = params;
   const query = qs.stringify({
-    nodeType: 'TOPIC',
-    language: context.language,
+    nodeType,
+    recursive,
     includeContexts: true,
+    language: context.language,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}/nodes/?${query}`,
@@ -241,37 +151,22 @@ export async function fetchSubtopics(
   return resolveJson(response);
 }
 
-export async function fetchTopicResources(
+interface FetchNodeResourcesParams {
+  id: string;
+  relevance?: string;
+}
+export async function fetchNodeResources(
   params: FetchNodeResourcesParams,
   context: Context,
-): Promise<GQLResource[]> {
-  const { subjectId, relevance, topic } = params;
+): Promise<NodeChild[]> {
+  const { id, relevance } = params;
   const query = qs.stringify({
     language: context.language,
-    relevance: relevance ?? '',
+    relevance: relevance,
     includeContexts: true,
   });
   const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/${topic.id}/resources/?${query}`,
-    context,
-  );
-  const resources: GQLTaxonomyEntity[] = await resolveJson(response);
-  resources.forEach(resource => {
-    if (subjectId) {
-      const primaryPath = findPrimaryPath(resource.paths, subjectId, topic.id);
-      const path = primaryPath ? primaryPath : resource.path;
-      resource.path = path;
-    }
-  });
-  return resources;
-}
-
-export async function nodesFromContentURI(
-  contentURI: string,
-  context: Context,
-): Promise<GQLTaxonomyEntity> {
-  const response = await fetch(
-    `/${context.taxonomyUrl}/v1/nodes?contentURI=${contentURI}`,
+    `/${context.taxonomyUrl}/v1/nodes/${id}/resources/?${query}`,
     context,
   );
   return await resolveJson(response);
@@ -280,7 +175,7 @@ export async function nodesFromContentURI(
 export async function queryContexts(
   contentURI: string,
   context: Context,
-): Promise<GQLSearchContext[]> {
+): Promise<TaxonomyContext[]> {
   const response = await fetch(
     `/${context.taxonomyUrl}/v1/queries/${contentURI}`,
     context,
@@ -288,20 +183,10 @@ export async function queryContexts(
   return await resolveJson(response);
 }
 
-interface VersionType {
-  id: string;
-  versionType: 'BETA' | 'ARCHIVED' | 'PUBLISHED';
-  name: string;
-  hash: string;
-  locked: boolean;
-  published?: string;
-  archived?: string;
-}
-
 export async function fetchVersion(
   hash: string,
   context: Context,
-): Promise<VersionType | undefined> {
+): Promise<Version | undefined> {
   const response = await fetch(
     `/${context.taxonomyUrl}/v1/versions?hash=${hash}`,
     { ...context, versionHash: 'default' },
@@ -313,6 +198,7 @@ export async function fetchVersion(
       name: 'Draft',
       hash: 'default',
       locked: false,
+      created: '',
     };
   }
   const json = await resolveJson(response);
@@ -321,12 +207,14 @@ export async function fetchVersion(
 
 interface NodeQueryParams {
   contentURI?: string;
-  nodeType?: 'NODE' | 'SUBJECT' | 'TOPIC' | 'RESOURCE';
+  nodeType?: NodeType;
   language?: string;
   isRoot?: boolean;
+  isContext?: boolean;
   key?: string;
   value?: string;
   isVisible?: boolean;
+  includeContexts?: boolean;
 }
 
 export const queryNodes = async (
@@ -338,15 +226,4 @@ export const queryNodes = async (
     context,
   );
   return await resolveJson(res);
-};
-
-export const fetchNodeByArticleId = async (
-  id: string,
-  context: Context,
-): Promise<NodeType> => {
-  const res: NodeType[] = await fetch(
-    `/${context.taxonomyUrl}/v1/nodes?contentURI=urn:article:${id}`,
-    context,
-  ).then(resolveJson);
-  return res[0];
 };

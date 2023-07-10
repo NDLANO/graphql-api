@@ -13,22 +13,21 @@ import {
   IMovieTheme,
   IMenu,
 } from '@ndla/types-backend/frontpage-api';
+import { TaxonomyContext } from '@ndla/types-taxonomy';
 import {
   fetchArticle,
   fetchSubjectPage,
   fetchFilmFrontpage,
   fetchMovieMeta,
-  nodesFromContentURI,
   queryContexts,
+  queryNodes,
 } from '../api';
 import { getArticleIdFromUrn } from '../utils/articleHelpers';
 import {
   GQLArticle,
   GQLMeta,
   GQLMetaImage,
-  GQLMovieResourceTypes,
   GQLResourceType,
-  GQLSearchContext,
 } from '../types/schema';
 
 interface Id {
@@ -162,7 +161,7 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<string> {
-      const contexts: GQLSearchContext[] = await queryContexts(id, context);
+      const contexts: TaxonomyContext[] = await queryContexts(id, context);
       return (
         contexts?.find(ctx => ctx.path.startsWith('/subject:20/'))?.path || ''
       );
@@ -172,11 +171,8 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLResourceType[]> {
-      const movieResourceTypes: GQLMovieResourceTypes = await nodesFromContentURI(
-        id,
-        context,
-      );
-      return movieResourceTypes.resourceTypes ?? [];
+      const nodes = await queryNodes({ contentURI: id }, context);
+      return nodes[0]?.resourceTypes ?? [];
     },
   },
 };

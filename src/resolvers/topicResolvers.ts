@@ -7,21 +7,19 @@
  *
  */
 
-import { TaxonomyContext } from '@ndla/types-taxonomy';
+import { Node } from '@ndla/types-taxonomy';
 import {
   fetchArticle,
-  fetchTopics,
   fetchNode,
-  fetchTopicResources,
-  fetchSubtopics,
+  fetchNodeResources,
+  fetchChildren,
   fetchOembed,
-  fetchSubjectTopics,
+  queryNodes,
 } from '../api';
 import {
   filterMissingArticles,
   getArticleIdFromUrn,
 } from '../utils/articleHelpers';
-import { Node } from '../api/taxonomyApi';
 import { ndlaUrl } from '../config';
 import {
   GQLArticle,
@@ -35,6 +33,7 @@ import {
   GQLTopicSupplementaryResourcesArgs,
   GQLVisualElementOembed,
 } from '../types/schema';
+import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
 
 export const Query = {
   async topic(
@@ -43,44 +42,36 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLTopic> {
     if (subjectId) {
-      const topics = await fetchSubjectTopics(subjectId, context);
-      return topics.find(topic => topic.id === id);
+      const children = await fetchChildren(
+        { id: subjectId, nodeType: 'TOPIC', recursive: true },
+        context,
+      );
+      const node = children.find(child => child.id === id);
+      return nodeToTaxonomyEntity(node, context);
     }
-    return fetchNode({ id }, context);
+    const node = await fetchNode({ id }, context);
+    return nodeToTaxonomyEntity(node, context);
   },
   async topics(
-    params: any,
+    _: any,
     { contentUri, filterVisible }: GQLQueryTopicsArgs,
     context: ContextWithLoaders,
   ): Promise<GQLTopic[]> {
-    const topicList = await fetchTopics({ contentUri }, context);
-    if (!filterVisible) return topicList;
+    const nodes = await queryNodes(
+      { contentURI: contentUri, includeContexts: true },
+      context,
+    );
+    const filtered = filterVisible
+      ? nodes.filter(node => node.contexts.find(context => context.isVisible))
+      : nodes;
 
-    const topicsWithPath = topicList.filter(t => t.path != null);
-    // TODO: Replace parent-filtering with changes in taxonomy
-    const data = await context.loaders.subjectsLoader.load(params);
-    const topicsWithVisibleSubject = topicsWithPath.filter(topic => {
-      const subjectId = topic.path.split('/')[1];
-      const parentSubject = data.subjects.find(subject =>
-        subject.id.includes(subjectId),
-      );
-      return parentSubject.metadata.visible === true;
+    return filtered.map(node => {
+      return nodeToTaxonomyEntity(node, context);
     });
-    return topicsWithVisibleSubject;
   },
 };
 
 export const resolvers = {
-  // Also for resources
-  TaxonomyContext: {
-    async breadcrumbs(
-      taxonomyContext: TaxonomyContext,
-      _: GQLTopicArticleArgs,
-      context: ContextWithLoaders,
-    ): Promise<string[]> {
-      return taxonomyContext.breadcrumbs[context.language] || [];
-    },
-  },
   Topic: {
     async availability(
       topic: Node,
@@ -141,78 +132,76 @@ export const resolvers = {
       args: GQLTopicCoreResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
-      const topicResources = await fetchTopicResources(
+      const topicResources = await fetchNodeResources(
         {
-          topic,
-          subjectId: args.subjectId,
+          id: topic.id,
           relevance: 'urn:relevance:core',
         },
         context,
       );
-      return filterMissingArticles(topicResources, context);
+      const filtered = await filterMissingArticles(topicResources, context);
+      return filtered.map(f => nodeToTaxonomyEntity(f, context));
     },
     async supplementaryResources(
       topic: Node,
       args: GQLTopicSupplementaryResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
-      const topicResources = await fetchTopicResources(
+      const topicResources = await fetchNodeResources(
         {
-          topic,
-          subjectId: args.subjectId,
+          id: topic.id,
           relevance: 'urn:relevance:supplementary',
         },
         context,
       );
-      return filterMissingArticles(topicResources, context);
+      const filtered = await filterMissingArticles(topicResources, context);
+      return filtered.map(f => nodeToTaxonomyEntity(f, context));
     },
     async subtopics(
       topic: Node,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
-      const subtopics = await fetchSubtopics({ id: topic.id }, context);
-      return filterMissingArticles(subtopics, context);
+      const subtopics = await fetchChildren(
+        { id: topic.id, nodeType: 'TOPIC' },
+        context,
+      );
+      const filtered = await filterMissingArticles(subtopics, context);
+      return filtered.map(f => nodeToTaxonomyEntity(f, context));
     },
     async pathTopics(
       topic: Node,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLTopic[][]> {
-      return Promise.all(
-        topic.paths?.map(async path => {
-          const topicsToFetch = path
-            .split('/')
-            .filter(pathElement => pathElement.includes('topic:'));
-          return Promise.all(
-            topicsToFetch.map(async id =>
-              fetchNode({ id: `urn:${id}` }, context),
+    ): Promise<Node[][]> {
+      return await Promise.all(
+        topic.contexts.map(async ctx => {
+          const parents = await Promise.all(
+            ctx.parentIds.map(async parentId =>
+              fetchNode({ id: parentId }, context),
             ),
           );
+          return parents.filter(p => p.nodeType === 'TOPIC');
         }),
       );
     },
     async alternateTopics(
       topic: Node,
-      params: any,
+      _: any,
       context: ContextWithLoaders,
     ): Promise<GQLTopic[]> {
       const { contentUri, id, path } = topic;
       if (!path) {
-        const topicList = await fetchTopics({ contentUri }, context);
-        const alternatesWithPath = topicList
-          .filter(t => t.id !== id)
-          .filter(t => t.path);
-        // TODO: Replace parent-filtering with changes in taxonomy
-        const data = await context.loaders.subjectsLoader.load(params);
-        const topicsWithVisibleSubject = alternatesWithPath.filter(t => {
-          const subjectId = t.path.split('/')[1];
-          const parentSubject = data.subjects.find(
-            subject => subject.id === `urn:${subjectId}`,
-          );
-          return parentSubject?.metadata.visible === true;
-        });
-        return topicsWithVisibleSubject;
+        const nodes = await queryNodes(
+          { contentURI: contentUri, includeContexts: true },
+          context,
+        );
+        const theVisibleOthers = nodes
+          .filter(node => node.id !== id)
+          .filter(node => node.contexts.find(context => context.isVisible));
+        return theVisibleOthers.map(node =>
+          nodeToTaxonomyEntity(node, context),
+        );
       }
       return;
     },

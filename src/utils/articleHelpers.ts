@@ -4,6 +4,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { NodeChild } from '@ndla/types-taxonomy';
 import { GQLMeta, GQLTaxonomyEntity } from '../types/schema';
 
 export function isNDLAEmbedUrl(url: string) {
@@ -32,10 +33,9 @@ export function findPrimaryPath(
     .find(path => path.includes(`/${stripUrn(topicId)}`));
 }
 
-export async function filterMissingArticles(
-  entities: GQLTaxonomyEntity[],
-  context: ContextWithLoaders,
-): Promise<GQLTaxonomyEntity[]> {
+export async function filterMissingArticles<
+  T extends GQLTaxonomyEntity | NodeChild
+>(entities: T[], context: ContextWithLoaders): Promise<T[]> {
   const visibleEntities = entities.filter(taxonomyEntity =>
     taxonomyEntity.metadata ? taxonomyEntity.metadata.visible : true,
   );

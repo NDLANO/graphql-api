@@ -13,7 +13,7 @@ import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
 import { parseVisualElement } from '../utils/visualelementHelpers';
-import { nodesFromContentURI } from './taxonomyApi';
+import { queryNodes } from './taxonomyApi';
 import { transformArticle } from './transformArticleApi';
 
 interface ArticleParams {
@@ -106,8 +106,8 @@ export async function fetchArticle(
       if (typeof rc === 'number') {
         return Promise.resolve(fetchArticle({ articleId: `${rc}` }, context))
           .then(async related => {
-            const node = await nodesFromContentURI(
-              `urn:article:${related.id}`,
+            const node = await queryNodes(
+              { contentURI: `urn:article:${related.id}` },
               context,
             );
             return node || related;

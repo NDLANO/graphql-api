@@ -10,6 +10,7 @@ import {
   IFilmFrontPageData,
   IFrontPage,
 } from '@ndla/types-backend/frontpage-api';
+import { Node } from '@ndla/types-taxonomy';
 import DataLoader from 'dataloader';
 import {
   fetchArticles,
@@ -17,11 +18,11 @@ import {
   fetchLearningpaths,
   fetchResourceTypes,
   fetchSubjects,
+  fetchNode,
   fetchFrontpage,
   fetchFilmFrontpage,
   fetchLK20Curriculum,
 } from './api';
-import { fetchSubjectTyped, Node } from './api/taxonomyApi';
 import {
   GQLMeta,
   GQLReference,
@@ -97,7 +98,7 @@ export function subjectLoader(
           if (!input.id) {
             throw Error('Tried to get subject with bad or empty id');
           }
-          return fetchSubjectTyped(context, input.id);
+          return fetchNode({ id: input.id }, context);
         }),
       );
     },

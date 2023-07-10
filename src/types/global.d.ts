@@ -2,7 +2,7 @@ import DataLoader from 'dataloader';
 import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
 import { IFrontPage } from '@ndla/types-backend/frontpage-api';
-import { Node } from '../api/taxonomyApi';
+import { Node } from '@ndla/types-taxonomy';
 import { GQLMeta, GQLReference, GQLSubject } from './schema';
 
 declare global {
