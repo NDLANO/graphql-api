@@ -232,7 +232,7 @@ export type GQLCaption = {
 export type GQLCategory = {
   __typename?: 'Category';
   id: Scalars['String'];
-  subjects: Array<Scalars['String']>;
+  subjects?: Maybe<Array<Scalars['String']>>;
   title: GQLTitle;
 };
 
@@ -482,7 +482,7 @@ export type GQLFrontpageSearchResult = {
 
 export type GQLGrade = {
   __typename?: 'Grade';
-  categories: Array<GQLCategory>;
+  categories?: Maybe<Array<GQLCategory>>;
   id: Scalars['String'];
   title: GQLTitle;
   url: Scalars['String'];
@@ -2186,7 +2186,7 @@ export type GQLCaptionResolvers<ContextType = any, ParentType extends GQLResolve
 
 export type GQLCategoryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Category'] = GQLResolversParentTypes['Category']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  subjects?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  subjects?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2431,7 +2431,7 @@ export type GQLFrontpageSearchResultResolvers<ContextType = any, ParentType exte
 };
 
 export type GQLGradeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Grade'] = GQLResolversParentTypes['Grade']> = {
-  categories?: Resolver<Array<GQLResolversTypes['Category']>, ParentType, ContextType>;
+  categories?: Resolver<Maybe<Array<GQLResolversTypes['Category']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

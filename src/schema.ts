@@ -685,13 +685,13 @@ export const typeDefs = gql`
     id: String!
     title: Title!
     url: String!
-    categories: [Category!]!
+    categories: [Category!]
   }
 
   type Category {
     id: String!
     title: Title!
-    subjects: [String!]!
+    subjects: [String!]
   }
 
   interface SearchResult {

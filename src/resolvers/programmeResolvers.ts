@@ -6,8 +6,21 @@
  *
  */
 
-import { queryNodes } from '../api/taxonomyApi';
-import { GQLMetaImage, GQLProgrammePage } from '../types/schema';
+import { Node } from '@ndla/types-taxonomy';
+import { fetchChildren, queryNodes } from '../api/taxonomyApi';
+import { GQLCategory, GQLGrade, GQLMetaImage, GQLProgrammePage, GQLQueryProgrammeArgs } from '../types/schema';
+
+const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
+  return {
+    id: node.id,
+    title: {
+      title: node.name,
+      language: language,
+    },
+    url: node.url || node.path,
+    contentUri: node.contentUri,
+  };
+}
 
 export const Query = {
   async programmes(
@@ -25,17 +38,16 @@ export const Query = {
       },
       context,
     );
-    return nodes.map(node => {
-      return {
-        id: node.id,
-        title: {
-          title: node.name,
-          language: context.language,
-        },
-        url: node.url || node.path,
-        contentUri: node.contentUri,
-      };
-    });
+    return nodes.map(node => nodeToProgramme(node, context.language));
+  },
+  async programme(
+    _: any,
+    { path }: GQLQueryProgrammeArgs,
+    context: ContextWithLoaders
+  ): Promise<GQLProgrammePage> {
+    const contextId = path.split('__')[1];
+    const node = await queryNodes({contextId}, context);
+    return nodeToProgramme(node[0], context.language);
   },
 };
 
@@ -92,5 +104,51 @@ export const resolvers = {
         }
       }
     },
+    async grades(
+      programme: GQLProgrammePage,
+      __: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLGrade[]> {
+      const children = await fetchChildren({id: programme.id, nodeType: 'PROGRAMME'}, context);
+      return children.map(child => {
+        return {
+          id: child.id,
+          title: {
+            title: child.name,
+            language: context.language,
+          },
+          url: child.url || child.path,
+        }
+      })
+    }
+  },
+  Grade: {
+    async categories(
+      grade: GQLGrade,
+      __: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLCategory[]> {
+      const children = await fetchChildren({id: grade.id, nodeType: 'PROGRAMME'}, context);
+      return children.map(child => {
+        return {
+          id: child.id,
+          title: {
+            title: child.name,
+            language: context.language,
+          },
+          url: child.url || child.path,
+        }
+      })
+    }
+  },
+  Category: {
+    async subjects(
+      category: GQLCategory,
+      __: any,
+      context: ContextWithLoaders,
+    ): Promise<String[]> {
+      const children = await fetchChildren({id: category.id, nodeType: 'SUBJECT'}, context);
+      return children.map(child => child.id);
+    }
   },
 };
