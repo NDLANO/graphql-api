@@ -168,12 +168,13 @@ export const resolvers = {
         { id: category.id, nodeType: 'SUBJECT' },
         context,
       );
-      // use loader to fetch correct contexts
-      const ids = children.map(c => {
-        return { id: c.id };
+      const nodes = children.map(child => {
+        const context =
+          child.contexts.find(c => c.path.startsWith('/subject')) ||
+          child.contexts[0];
+        const path = context.path;
+        return { ...child, path };
       });
-      // Possibly a performance hit. Maby rather pick shortest context?
-      const nodes = await context.loaders.subjectLoader.loadMany(ids);
       return nodes.map(node => nodeToTaxonomyEntity(node, context));
     },
   },
