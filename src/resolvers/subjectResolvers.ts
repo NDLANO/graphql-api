@@ -83,7 +83,9 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<ISubjectPageData | undefined> {
       if (subject.contentUri?.startsWith('urn:frontpage')) {
-        return context.loaders.subjectpageLoader.load(subject.contentUri.replace('urn:frontpage:', ''));
+        return context.loaders.subjectpageLoader.load(
+          subject.contentUri.replace('urn:frontpage:', ''),
+        );
       }
     },
     async grepCodes(
