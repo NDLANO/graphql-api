@@ -46,7 +46,7 @@ export const Query = {
     _: any,
     { id }: Id,
     context: ContextWithLoaders,
-  ): Promise<ISubjectPageData> {
+  ): Promise<ISubjectPageData | null> {
     return context.loaders.subjectpageLoader.load(`${id}`);
   },
 
