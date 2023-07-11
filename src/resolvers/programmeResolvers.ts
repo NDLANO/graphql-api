@@ -8,7 +8,15 @@
 
 import { Node } from '@ndla/types-taxonomy';
 import { fetchChildren, queryNodes } from '../api/taxonomyApi';
-import { GQLCategory, GQLGrade, GQLMetaImage, GQLProgrammePage, GQLQueryProgrammeArgs } from '../types/schema';
+import {
+  GQLCategory,
+  GQLGrade,
+  GQLMetaImage,
+  GQLProgrammePage,
+  GQLQueryProgrammeArgs,
+  GQLSubject,
+} from '../types/schema';
+import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
 
 const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
   return {
@@ -20,7 +28,7 @@ const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
     url: node.url || node.path,
     contentUri: node.contentUri,
   };
-}
+};
 
 export const Query = {
   async programmes(
@@ -43,10 +51,13 @@ export const Query = {
   async programme(
     _: any,
     { path }: GQLQueryProgrammeArgs,
-    context: ContextWithLoaders
+    context: ContextWithLoaders,
   ): Promise<GQLProgrammePage> {
+    if (!path) {
+      throw Error('Tried to fetch programme with invalid path');
+    }
     const contextId = path.split('__')[1];
-    const node = await queryNodes({contextId}, context);
+    const node = await queryNodes({ contextId }, context);
     return nodeToProgramme(node[0], context.language);
   },
 };
@@ -109,7 +120,10 @@ export const resolvers = {
       __: any,
       context: ContextWithLoaders,
     ): Promise<GQLGrade[]> {
-      const children = await fetchChildren({id: programme.id, nodeType: 'PROGRAMME'}, context);
+      const children = await fetchChildren(
+        { id: programme.id, nodeType: 'PROGRAMME' },
+        context,
+      );
       return children.map(child => {
         return {
           id: child.id,
@@ -118,9 +132,9 @@ export const resolvers = {
             language: context.language,
           },
           url: child.url || child.path,
-        }
-      })
-    }
+        };
+      });
+    },
   },
   Grade: {
     async categories(
@@ -128,7 +142,10 @@ export const resolvers = {
       __: any,
       context: ContextWithLoaders,
     ): Promise<GQLCategory[]> {
-      const children = await fetchChildren({id: grade.id, nodeType: 'PROGRAMME'}, context);
+      const children = await fetchChildren(
+        { id: grade.id, nodeType: 'PROGRAMME' },
+        context,
+      );
       return children.map(child => {
         return {
           id: child.id,
@@ -137,18 +154,27 @@ export const resolvers = {
             language: context.language,
           },
           url: child.url || child.path,
-        }
-      })
-    }
+        };
+      });
+    },
   },
   Category: {
     async subjects(
       category: GQLCategory,
       __: any,
       context: ContextWithLoaders,
-    ): Promise<String[]> {
-      const children = await fetchChildren({id: category.id, nodeType: 'SUBJECT'}, context);
-      return children.map(child => child.id);
-    }
+    ): Promise<GQLSubject[]> {
+      const children = await fetchChildren(
+        { id: category.id, nodeType: 'SUBJECT' },
+        context,
+      );
+      // use loader to fetch correct contexts
+      const ids = children.map(c => {
+        return { id: c.id };
+      });
+      // Possibly a performance hit. Maby rather pick shortest context?
+      const nodes = await context.loaders.subjectLoader.loadMany(ids);
+      return nodes.map(node => nodeToTaxonomyEntity(node, context));
+    },
   },
 };

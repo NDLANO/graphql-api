@@ -667,7 +667,7 @@ export const typeDefs = gql`
     subjectpage: SubjectPage
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
-    grepCodes: [String!]!
+    grepCodes: [String!]
   }
 
   type ProgrammePage {
@@ -691,7 +691,7 @@ export const typeDefs = gql`
   type Category {
     id: String!
     title: Title!
-    subjects: [String!]
+    subjects: [Subject!]
   }
 
   interface SearchResult {

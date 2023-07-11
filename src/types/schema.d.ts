@@ -232,7 +232,7 @@ export type GQLCaption = {
 export type GQLCategory = {
   __typename?: 'Category';
   id: Scalars['String'];
-  subjects?: Maybe<Array<Scalars['String']>>;
+  subjects?: Maybe<Array<GQLSubject>>;
   title: GQLTitle;
 };
 
@@ -1429,7 +1429,7 @@ export type GQLSubject = GQLTaxonomyEntity & {
   breadcrumbs: Array<Scalars['String']>;
   contentUri?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
-  grepCodes: Array<Scalars['String']>;
+  grepCodes?: Maybe<Array<Scalars['String']>>;
   id: Scalars['String'];
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String'];
@@ -2186,7 +2186,7 @@ export type GQLCaptionResolvers<ContextType = any, ParentType extends GQLResolve
 
 export type GQLCategoryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Category'] = GQLResolversParentTypes['Category']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  subjects?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3061,7 +3061,7 @@ export type GQLSubjectResolvers<ContextType = any, ParentType extends GQLResolve
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
-  grepCodes?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
