@@ -53,7 +53,7 @@ export const Query = {
     { path }: GQLQueryProgrammeArgs,
     context: ContextWithLoaders,
   ): Promise<GQLProgrammePage> {
-    if (!path) {
+    if (!path || !path.includes('__')) {
       throw Error('Tried to fetch programme with invalid path');
     }
     const contextId = path.split('__')[1];
