@@ -1,7 +1,10 @@
 import DataLoader from 'dataloader';
 import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
-import { IFrontPage } from '@ndla/types-backend/frontpage-api';
+import {
+  IFrontPage,
+  ISubjectPageData,
+} from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
 import { GQLMeta, GQLReference, GQLSubject } from './schema';
 
@@ -31,6 +34,7 @@ declare global {
     >;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPage>;
+    subjectpageLoader: DataLoader<string, ISubjectPageData | null>;
     lk20CurriculumLoader: DataLoader<
       { code: string; language: string },
       GQLReference | undefined

@@ -9,6 +9,7 @@
 import {
   IFilmFrontPageData,
   IFrontPage,
+  ISubjectPageData,
 } from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
 import DataLoader from 'dataloader';
@@ -22,6 +23,7 @@ import {
   fetchFrontpage,
   fetchFilmFrontpage,
   fetchLK20Curriculum,
+  fetchSubjectPage,
 } from './api';
 import {
   GQLMeta,
@@ -85,6 +87,21 @@ export function filmFrontpageLoader(
   return new DataLoader(async () => {
     const filmFrontpage = await fetchFilmFrontpage(context);
     return [filmFrontpage];
+  });
+}
+
+export function subjectpageLoader(
+  context: Context,
+): DataLoader<string, ISubjectPageData | null> {
+  return new DataLoader(async subjectPageIds => {
+    return Promise.all(
+      subjectPageIds.map(subjectPageId => {
+        if (!subjectPageId && !(typeof subjectPageId === 'number')) {
+          throw Error('Tried to get subjectpage with bad or empty id');
+        }
+        return fetchSubjectPage(Number(subjectPageId), context);
+      }),
+    );
   });
 }
 

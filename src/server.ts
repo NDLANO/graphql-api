@@ -26,6 +26,7 @@ import {
   frontpageLoader,
   lk20CurriculumLoader,
   subjectLoader,
+  subjectpageLoader,
 } from './loaders';
 import { resolvers } from './resolvers';
 import correlationIdMiddleware from './utils/correlationIdMiddleware';
@@ -116,6 +117,7 @@ async function getContext({
       subjectsLoader: subjectsLoader(defaultContext),
       subjectLoader: subjectLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
+      subjectpageLoader: subjectpageLoader(defaultContext),
       lk20CurriculumLoader: lk20CurriculumLoader(defaultContext),
     },
   };

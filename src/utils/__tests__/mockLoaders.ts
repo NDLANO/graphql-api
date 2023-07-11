@@ -2,6 +2,7 @@
 import {
   IFilmFrontPageData,
   IFrontPage,
+  ISubjectPageData,
 } from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
 import DataLoader from 'dataloader';
@@ -65,6 +66,12 @@ export const mockSubjectLoader = (mockData: Node[] | null = null) => {
   });
 };
 
+export const mockSubjectpageLoader = (
+  mockData: ISubjectPageData[] | null = null,
+) => {
+  return new DataLoader<string, ISubjectPageData>(() => mockFn(mockData));
+};
+
 export const mockSubjectTopicsLoader = (mockData: GQLTopic[] = []) => {
   return new DataLoader<{ subjectId: string }, GQLTopic>(() =>
     mockFn(mockData),
@@ -99,6 +106,7 @@ export const mockLoaders = {
   filmFrontpageLoader: mockFilmFrontpageLoader(),
   subjectsLoader: mockSubjectTopicsLoader(),
   subjectLoader: mockSubjectLoader(),
+  subjectPageLoader: mockSubjectpageLoader(),
   subjectTopicsLoader: mockSubjectTopicsLoader(),
   resourceTypesLoader: mockResourceTypesLoader(),
 };

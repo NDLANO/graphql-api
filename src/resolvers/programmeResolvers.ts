@@ -6,20 +6,15 @@
  *
  */
 
-import { ISubjectPageData } from '@ndla/types-backend/frontpage-api';
-import { Node } from '@ndla/types-taxonomy';
-import { fetchSubjectPage } from '../api';
-
 import { queryNodes } from '../api/taxonomyApi';
-import { GQLProgramme } from '../types/schema';
-import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
+import { GQLMetaImage, GQLProgrammePage } from '../types/schema';
 
 export const Query = {
   async programmes(
     _: any,
     __: any,
     context: ContextWithLoaders,
-  ): Promise<GQLProgramme[]> {
+  ): Promise<GQLProgrammePage[]> {
     const nodes = await queryNodes(
       {
         nodeType: 'PROGRAMME',
@@ -30,22 +25,71 @@ export const Query = {
       },
       context,
     );
-    return nodes.map(node => nodeToTaxonomyEntity(node, context));
+    return nodes.map(node => {
+      return {
+        id: node.id,
+        title: {
+          title: node.name,
+          language: context.language,
+        },
+        url: node.url || node.path,
+        contentUri: node.contentUri,
+      };
+    });
   },
 };
 
 export const resolvers = {
-  Programme: {
-    async subjectpage(
-      node: Node,
+  ProgrammePage: {
+    async metaDescription(
+      programme: GQLProgrammePage,
       __: any,
       context: ContextWithLoaders,
-    ): Promise<ISubjectPageData | undefined> {
-      if (node.contentUri?.startsWith('urn:frontpage')) {
-        return fetchSubjectPage(
-          Number(node.contentUri.replace('urn:frontpage:', '')),
-          context,
+    ): Promise<String | undefined> {
+      if (programme.contentUri?.startsWith('urn:frontpage')) {
+        const subjectpage = await context.loaders.subjectpageLoader.load(
+          programme.contentUri.replace('urn:frontpage:', ''),
         );
+        return subjectpage?.metaDescription;
+      }
+    },
+    async desktopImage(
+      programme: GQLProgrammePage,
+      __: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLMetaImage | undefined> {
+      if (programme.contentUri?.startsWith('urn:frontpage')) {
+        if (programme.contentUri?.startsWith('urn:frontpage')) {
+          const subjectpage = await context.loaders.subjectpageLoader.load(
+            programme.contentUri.replace('urn:frontpage:', ''),
+          );
+          if (subjectpage) {
+            return {
+              url: subjectpage.banner.desktopUrl,
+              alt: '',
+            };
+          }
+        }
+      }
+    },
+    async mobileImage(
+      programme: GQLProgrammePage,
+      __: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLMetaImage | undefined> {
+      if (programme.contentUri?.startsWith('urn:frontpage')) {
+        if (programme.contentUri?.startsWith('urn:frontpage')) {
+          const subjectpage = await context.loaders.subjectpageLoader.load(
+            programme.contentUri.replace('urn:frontpage:', ''),
+          );
+          if (subjectpage) {
+            return {
+              url:
+                subjectpage.banner.mobileUrl || subjectpage.banner.desktopUrl,
+              alt: '',
+            };
+          }
+        }
       }
     },
   },

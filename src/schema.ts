@@ -670,20 +670,28 @@ export const typeDefs = gql`
     grepCodes: [String!]!
   }
 
-  type Programme implements TaxonomyEntity {
+  type ProgrammePage {
     id: String!
-    name: String!
+    title: Title!
+    url: String!
     contentUri: String
-    path: String!
-    paths: [String!]!
-    metadata: TaxonomyMetadata!
-    relevanceId: String
-    contexts: [TaxonomyContext!]!
-    breadcrumbs: [String!]!
-    supportedLanguages: [String!]!
-    resourceTypes: [ResourceType!]
-    url: String
-    subjectpage: SubjectPage
+    metaDescription: String
+    desktopImage: MetaImage
+    mobileImage: MetaImage
+    grades: [Grade!]
+  }
+
+  type Grade {
+    id: String!
+    title: Title!
+    url: String!
+    categories: [Category!]!
+  }
+
+  type Category {
+    id: String!
+    title: Title!
+    subjects: [String!]!
   }
 
   interface SearchResult {
@@ -1117,7 +1125,8 @@ export const typeDefs = gql`
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
-    programmes: [Programme!]
+    programmes: [ProgrammePage!]
+    programme(path: String): ProgrammePage
     subjects(
       metadataFilterKey: String
       metadataFilterValue: String
