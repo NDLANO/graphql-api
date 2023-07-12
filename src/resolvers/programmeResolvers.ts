@@ -46,7 +46,9 @@ export const Query = {
       },
       context,
     );
-    return nodes.map(node => nodeToProgramme(node, context.language));
+    return nodes
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(node => nodeToProgramme(node, context.language));
   },
   async programme(
     _: any,
@@ -147,6 +149,8 @@ export const resolvers = {
         context,
       );
       return children.map(child => {
+        const isProgrammeSubject =
+          child.metadata.customFields['programfag'] === 'true';
         return {
           id: child.id,
           title: {
@@ -154,6 +158,7 @@ export const resolvers = {
             language: context.language,
           },
           url: child.url || child.path,
+          isProgrammeSubject,
         };
       });
     },

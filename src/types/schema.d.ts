@@ -232,6 +232,7 @@ export type GQLCaption = {
 export type GQLCategory = {
   __typename?: 'Category';
   id: Scalars['String'];
+  isProgrammeSubject: Scalars['Boolean'];
   subjects?: Maybe<Array<GQLSubject>>;
   title: GQLTitle;
 };
@@ -2186,6 +2187,7 @@ export type GQLCaptionResolvers<ContextType = any, ParentType extends GQLResolve
 
 export type GQLCategoryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Category'] = GQLResolversParentTypes['Category']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  isProgrammeSubject?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

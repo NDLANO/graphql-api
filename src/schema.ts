@@ -691,6 +691,7 @@ export const typeDefs = gql`
   type Category {
     id: String!
     title: Title!
+    isProgrammeSubject: Boolean!
     subjects: [Subject!]
   }
 
