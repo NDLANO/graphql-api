@@ -278,6 +278,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
+    url: String
   }
 
   interface WithArticle {
@@ -295,8 +296,9 @@ export const typeDefs = gql`
     relevanceId: String
     contexts: [TaxonomyContext!]!
     breadcrumbs: [String!]!
-    resourceTypes: [ResourceType!]
     supportedLanguages: [String!]!
+    resourceTypes: [ResourceType!]
+    url: String
     rank: Int
     parents: [Topic!]
     meta: Meta
@@ -321,10 +323,14 @@ export const typeDefs = gql`
     contentUri: String
     path: String!
     paths: [String!]!
-    meta: Meta
     metadata: TaxonomyMetadata!
     relevanceId: String
-    rank: Int
+    contexts: [TaxonomyContext!]!
+    breadcrumbs: [String!]!
+    supportedLanguages: [String!]!
+    resourceTypes: [ResourceType!]
+    url: String
+    meta: Meta
     article(
       subjectId: String
       showVisualElement: String
@@ -339,10 +345,6 @@ export const typeDefs = gql`
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
-    resourceTypes: [ResourceType!]
-    breadcrumbs: [String!]!
-    contexts: [TaxonomyContext!]!
-    supportedLanguages: [String!]!
   }
 
   type License {
@@ -651,21 +653,45 @@ export const typeDefs = gql`
 
   type Subject implements TaxonomyEntity {
     id: String!
-    contentUri: String
     name: String!
+    contentUri: String
     path: String!
     paths: [String!]!
     metadata: TaxonomyMetadata!
-    relevanceId: String!
-    rank: Int
+    relevanceId: String
+    contexts: [TaxonomyContext!]!
+    breadcrumbs: [String!]!
+    supportedLanguages: [String!]!
+    resourceTypes: [ResourceType!]
+    url: String
     subjectpage: SubjectPage
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
-    grepCodes: [String!]!
-    resourceTypes: [ResourceType!]
-    supportedLanguages: [String!]!
-    breadcrumbs: [String!]!
-    contexts: [TaxonomyContext!]!
+    grepCodes: [String!]
+  }
+
+  type ProgrammePage {
+    id: String!
+    title: Title!
+    url: String!
+    contentUri: String
+    metaDescription: String
+    desktopImage: MetaImage
+    mobileImage: MetaImage
+    grades: [Grade!]
+  }
+
+  type Grade {
+    id: String!
+    title: Title!
+    url: String!
+    categories: [Category!]
+  }
+
+  type Category {
+    id: String!
+    title: Title!
+    subjects: [Subject!]
   }
 
   interface SearchResult {
@@ -1099,6 +1125,8 @@ export const typeDefs = gql`
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
+    programmes: [ProgrammePage!]
+    programme(path: String): ProgrammePage
     subjects(
       metadataFilterKey: String
       metadataFilterValue: String

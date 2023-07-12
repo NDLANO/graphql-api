@@ -64,6 +64,10 @@ import {
   Query as TransformQuery,
   Mutations as TransformArticleMutations,
 } from './transformResolvers';
+import {
+  Query as ProgrammeQuery,
+  resolvers as ProgrammeResolvers,
+} from './programmeResolvers';
 
 export const resolvers = {
   Query: {
@@ -81,6 +85,7 @@ export const resolvers = {
     ...FolderResolvers,
     ...ImageQuery,
     ...TransformQuery,
+    ...ProgrammeQuery,
   },
   Mutation: {
     ...FolderMutations,
@@ -99,6 +104,7 @@ export const resolvers = {
   ...conceptResolvers,
   ...uptimeResolvers,
   ...ImageResolvers,
+  ...ProgrammeResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any) {
@@ -107,6 +113,9 @@ export const resolvers = {
       }
       if (entity.id.startsWith('urn:topic')) {
         return 'Topic';
+      }
+      if (entity.id.startsWith('urn:programme')) {
+        return 'Programme';
       }
 
       return 'Resource';

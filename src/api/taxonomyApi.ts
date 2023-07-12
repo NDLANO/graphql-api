@@ -207,6 +207,7 @@ export async function fetchVersion(
 
 interface NodeQueryParams {
   contentURI?: string;
+  contextId?: string;
   nodeType?: NodeType;
   language?: string;
   isRoot?: boolean;

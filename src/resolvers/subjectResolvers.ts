@@ -9,7 +9,7 @@
 
 import { ISubjectPageData } from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
-import { fetchLK20CompetenceGoalSet, fetchSubjectPage } from '../api';
+import { fetchLK20CompetenceGoalSet } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
 import { GQLQuerySubjectArgs, GQLSubject, GQLTopic } from '../types/schema';
@@ -83,9 +83,8 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<ISubjectPageData | undefined> {
       if (subject.contentUri?.startsWith('urn:frontpage')) {
-        return fetchSubjectPage(
-          Number(subject.contentUri.replace('urn:frontpage:', '')),
-          context,
+        return context.loaders.subjectpageLoader.load(
+          subject.contentUri.replace('urn:frontpage:', ''),
         );
       }
     },

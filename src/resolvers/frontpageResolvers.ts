@@ -16,7 +16,6 @@ import {
 import { TaxonomyContext } from '@ndla/types-taxonomy';
 import {
   fetchArticle,
-  fetchSubjectPage,
   fetchFilmFrontpage,
   fetchMovieMeta,
   queryContexts,
@@ -47,8 +46,8 @@ export const Query = {
     _: any,
     { id }: Id,
     context: ContextWithLoaders,
-  ): Promise<ISubjectPageData> {
-    return fetchSubjectPage(id, context);
+  ): Promise<ISubjectPageData | null> {
+    return context.loaders.subjectpageLoader.load(`${id}`);
   },
 
   async filmfrontpage(
