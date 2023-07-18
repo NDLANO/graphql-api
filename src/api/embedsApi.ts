@@ -27,6 +27,7 @@ import {
   KeyFigureMetaData,
   EmbedData,
   ConceptVisualElementMeta,
+  CampaignBlockMetaData,
 } from '@ndla/types-embed';
 import { IImageMetaInformationV3 } from '@ndla/types-backend/image-api';
 import { load } from 'cheerio';
@@ -309,6 +310,19 @@ const keyFigureMeta: Fetch<KeyFigureMetaData> = async ({
   return { metaImage };
 };
 
+const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({
+  embedData,
+  context,
+}) => {
+  const imageBefore = !!embedData.imageBeforeId
+    ? await fetchImageV3(embedData.imageBeforeId, context)
+    : undefined;
+  const imageAfter = !!embedData.imageAfterId
+    ? await fetchImageV3(embedData.imageAfterId, context)
+    : undefined;
+  return { imageAfter, imageBefore };
+};
+
 export const transformEmbed = async (
   embed: CheerioEmbed,
   context: Context,
@@ -378,6 +392,8 @@ export const transformEmbed = async (
       meta = await contactBlockMeta({ embedData, context, index, opts });
     } else if (embedData.resource === 'key-figure') {
       meta = await keyFigureMeta({ embedData, context, index, opts });
+    } else if (embedData.resource === 'campaign-block') {
+      meta = await campaignBlockMeta({ embedData, context, index, opts });
     } else {
       return;
     }
