@@ -316,10 +316,11 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({
 }) => {
   const imageBeforePromise = !!embedData.imageBeforeId
     ? fetchImageV3(embedData.imageBeforeId, context)
-    : undefined;
+    : Promise.resolve<undefined>(undefined);
+
   const imageAfterPromise = !!embedData.imageAfterId
     ? fetchImageV3(embedData.imageAfterId, context)
-    : undefined;
+    : Promise.resolve<undefined>(undefined);
 
   const [imageAfter, imageBefore] = await Promise.all([
     imageAfterPromise,
