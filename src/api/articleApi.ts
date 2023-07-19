@@ -65,7 +65,12 @@ const _fetchTransformedArticle = async (
     const subject = params.subjectId;
     const previewH5p = params.previewH5p;
     const article = await fetchSimpleArticle(params.articleId, context);
-    const { content, metaData, visualElement } = await transformArticle(
+    const {
+      content,
+      metaData,
+      visualElement,
+      stringifiedVisualElement,
+    } = await transformArticle(
       article.content.content,
       context,
       article.visualElement?.visualElement,
@@ -84,6 +89,7 @@ const _fetchTransformedArticle = async (
       title: article.title.title,
       metaData,
       tags: article.tags.tags,
+      stringifiedVisualElement,
       content:
         article.articleType === 'standard'
           ? content

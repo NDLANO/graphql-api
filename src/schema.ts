@@ -515,6 +515,7 @@ export const typeDefs = gql`
     relatedContent: [RelatedContent!]
     availability: String
     revisionDate: String
+    stringifiedVisualElement: String
   }
 
   type EmbedVisualelement {
