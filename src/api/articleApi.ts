@@ -69,7 +69,7 @@ const _fetchTransformedArticle = async (
       content,
       metaData,
       visualElement,
-      stringifiedVisualElement,
+      visualElementEmbed,
     } = await transformArticle(
       article.content.content,
       context,
@@ -89,7 +89,7 @@ const _fetchTransformedArticle = async (
       title: article.title.title,
       metaData,
       tags: article.tags.tags,
-      stringifiedVisualElement,
+      visualElementEmbed,
       content:
         article.articleType === 'standard'
           ? content
@@ -110,18 +110,20 @@ export async function fetchArticle(
   const nullableRelatedContent = await Promise.all(
     article?.relatedContent?.map(async (rc: any) => {
       if (typeof rc === 'number') {
-        return Promise.resolve(fetchArticle({ articleId: `${rc}` }, context))
+        return Promise.resolve(
+          fetchSimpleArticle(`urn:article:${article.id}`, context),
+        )
           .then(async related => {
             const node = await queryNodes(
               { contentURI: `urn:article:${related.id}` },
               context,
             );
-            return node || related;
+            return node?.[0] || related;
           })
-          .then((topicOrResource: any) => {
+          .then(topicOrResource => {
             let path = `/article/${topicOrResource.id}`;
             let title = '';
-            if (topicOrResource.hasOwnProperty('paths')) {
+            if ('paths' in topicOrResource) {
               path = topicOrResource.path;
               if (params.subjectId) {
                 const primaryPath = findPrimaryPath(
@@ -132,7 +134,7 @@ export async function fetchArticle(
               }
               title = topicOrResource.name;
             } else {
-              title = topicOrResource.title;
+              title = topicOrResource.title.title ?? '';
             }
             return {
               title,
@@ -154,7 +156,7 @@ export async function fetchArticle(
 
   return {
     ...article,
-    relatedContent,
+    relatedContent: relatedContent ?? [],
   };
 }
 

@@ -49,12 +49,12 @@ export type GQLArticle = {
   revision: Scalars['Int'];
   revisionDate?: Maybe<Scalars['String']>;
   slug?: Maybe<Scalars['String']>;
-  stringifiedVisualElement?: Maybe<Scalars['String']>;
   supportedLanguages?: Maybe<Array<Scalars['String']>>;
   tags?: Maybe<Array<Scalars['String']>>;
   title: Scalars['String'];
   updated: Scalars['String'];
   visualElement?: Maybe<GQLVisualElement>;
+  visualElementEmbed?: Maybe<GQLResourceEmbed>;
 };
 
 
@@ -1011,6 +1011,7 @@ export type GQLQuery = {
   programmes?: Maybe<Array<GQLProgrammePage>>;
   resource?: Maybe<GQLResource>;
   resourceEmbed: GQLResourceEmbed;
+  resourceEmbeds: GQLResourceEmbed;
   resourceTypes?: Maybe<Array<GQLResourceTypeDefinition>>;
   search?: Maybe<GQLSearch>;
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
@@ -1184,6 +1185,11 @@ export type GQLQueryResourceEmbedArgs = {
 };
 
 
+export type GQLQueryResourceEmbedsArgs = {
+  resources: Array<GQLResourceEmbedInput>;
+};
+
+
 export type GQLQuerySearchArgs = {
   aggregatePaths?: InputMaybe<Array<Scalars['String']>>;
   contextFilters?: InputMaybe<Scalars['String']>;
@@ -1302,6 +1308,12 @@ export type GQLResourceEmbed = {
   __typename?: 'ResourceEmbed';
   content: Scalars['String'];
   meta: GQLResourceMetaData;
+};
+
+export type GQLResourceEmbedInput = {
+  conceptType?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type GQLResourceMetaData = {
@@ -1803,6 +1815,7 @@ export type GQLResolversTypes = {
   RelatedContent: ResolverTypeWrapper<GQLRelatedContent>;
   Resource: ResolverTypeWrapper<GQLResource>;
   ResourceEmbed: ResolverTypeWrapper<GQLResourceEmbed>;
+  ResourceEmbedInput: GQLResourceEmbedInput;
   ResourceMetaData: ResolverTypeWrapper<GQLResourceMetaData>;
   ResourceType: ResolverTypeWrapper<GQLResourceType>;
   ResourceTypeDefinition: ResolverTypeWrapper<GQLResourceTypeDefinition>;
@@ -1941,6 +1954,7 @@ export type GQLResolversParentTypes = {
   RelatedContent: GQLRelatedContent;
   Resource: GQLResource;
   ResourceEmbed: GQLResourceEmbed;
+  ResourceEmbedInput: GQLResourceEmbedInput;
   ResourceMetaData: GQLResourceMetaData;
   ResourceType: GQLResourceType;
   ResourceTypeDefinition: GQLResourceTypeDefinition;
@@ -2010,12 +2024,12 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   revisionDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  stringifiedVisualElement?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;
+  visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2887,6 +2901,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   programmes?: Resolver<Maybe<Array<GQLResolversTypes['ProgrammePage']>>, ParentType, ContextType>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, RequireFields<GQLQueryResourceArgs, 'id'>>;
   resourceEmbed?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedArgs, 'id' | 'type'>>;
+  resourceEmbeds?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedsArgs, 'resources'>>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
   search?: Resolver<Maybe<GQLResolversTypes['Search']>, ParentType, ContextType, Partial<GQLQuerySearchArgs>>;
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;

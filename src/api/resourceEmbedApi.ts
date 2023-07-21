@@ -15,17 +15,23 @@ import {
 } from '@ndla/types-embed';
 import { load } from 'cheerio';
 import { getEnvironmentVariabel } from '../config';
-import { GQLQueryResourceEmbedArgs, GQLResourceEmbed } from '../types/schema';
+import {
+  GQLQueryResourceEmbedArgs,
+  GQLQueryResourceEmbedsArgs,
+  GQLResourceEmbed,
+  GQLResourceEmbedInput,
+} from '../types/schema';
 import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
 import { toArticleMetaData } from '../utils/toArticleMetaData';
 import { transformEmbed } from './embedsApi';
 
 const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789');
 
-const toEmbed = (
-  id: string,
-  type: string,
-):
+const toEmbed = ({
+  type,
+  id,
+  conceptType,
+}: GQLResourceEmbedInput):
   | BrightcoveEmbedData
   | ImageEmbedData
   | AudioEmbedData
@@ -57,7 +63,7 @@ const toEmbed = (
     return {
       resource: 'concept',
       contentId: id,
-      type: 'block',
+      type: (conceptType ?? 'block') as 'block' | 'inline' | 'notion',
       linkText: '',
     };
   } else {
@@ -67,26 +73,32 @@ const toEmbed = (
 
 const attributeRegex = /[A-Z]/g;
 
-export const toHtml = (data: EmbedData): string => {
+export const toEmbedHtml = (data: EmbedData): string => {
   const entries = Object.entries(data ?? {});
   const dataSet = entries.reduce<string>((acc, [key, value]) => {
     const newKey = key.replace(attributeRegex, m => `-${m.toLowerCase()}`);
     return acc.concat(`data-${newKey}="${value.toString()}" `);
   }, '');
 
-  return `<html><body><ndlaembed ${dataSet}></ndlaembed></body></html>`;
+  return `<ndlaembed ${dataSet}></ndlaembed>`;
+};
+
+export const toHtml = (embedString: string): string => {
+  return `<html><body>${embedString}</body></html>`;
 };
 
 export const fetchResourceEmbed = async (
   params: GQLQueryResourceEmbedArgs,
   context: ContextWithLoaders,
 ): Promise<GQLResourceEmbed> => {
-  const embed = toEmbed(params.id, params.type);
+  const embed = toEmbed(params);
   if (!embed) {
     throw new Error('Unsupported embed');
   }
 
-  const content = toHtml(embed);
+  const embedHtml = toEmbedHtml(embed);
+
+  const content = toHtml(embedHtml);
   const html = load(content, {
     xmlMode: false,
     decodeEntities: false,
@@ -97,6 +109,37 @@ export const fetchResourceEmbed = async (
   });
 
   const metadata = toArticleMetaData([embedPromise]);
+
+  return {
+    meta: metadata,
+    content: html('body').html() ?? '',
+  };
+};
+
+export const fetchResourceEmbeds = async (
+  { resources }: GQLQueryResourceEmbedsArgs,
+  context: ContextWithLoaders,
+) => {
+  const embeds = resources
+    .map(params => toEmbed(params))
+    .filter(embed => !!embed);
+  const content = embeds.map(embed => toEmbedHtml(embed!)).join('');
+  const bodyString = toHtml(content);
+  const html = load(bodyString, {
+    xmlMode: false,
+    decodeEntities: false,
+  });
+  const embedsFromContent = getEmbedsFromContent(html);
+
+  const embedPromises = await Promise.all(
+    embedsFromContent.map((embed, index) =>
+      transformEmbed(embed, context, index, 0, {
+        shortCircuitOnError: true,
+      }),
+    ),
+  );
+
+  const metadata = toArticleMetaData(embedPromises);
 
   return {
     meta: metadata,
