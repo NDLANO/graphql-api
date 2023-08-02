@@ -958,6 +958,7 @@ export type GQLPodcastSeriesSummary = {
 
 export type GQLPodcastSeriesWithEpisodes = GQLPodcastSeriesBase & {
   __typename?: 'PodcastSeriesWithEpisodes';
+  content?: Maybe<GQLResourceEmbed>;
   coverPhoto: GQLCoverPhoto;
   description: GQLDescription;
   episodes?: Maybe<Array<GQLAudio>>;
@@ -2848,6 +2849,7 @@ export type GQLPodcastSeriesSummaryResolvers<ContextType = any, ParentType exten
 };
 
 export type GQLPodcastSeriesWithEpisodesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastSeriesWithEpisodes'] = GQLResolversParentTypes['PodcastSeriesWithEpisodes']> = {
+  content?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
   coverPhoto?: Resolver<GQLResolversTypes['CoverPhoto'], ParentType, ContextType>;
   description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
   episodes?: Resolver<Maybe<Array<GQLResolversTypes['Audio']>>, ParentType, ContextType>;

@@ -9,6 +9,7 @@
 import {
   IAudioMetaInformation,
   IAudioSummarySearchResult,
+  ISeries,
 } from '@ndla/types-backend/audio-api';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
@@ -54,7 +55,7 @@ export async function fetchPodcastsPage(
 export async function fetchPodcastSeries(
   context: Context,
   podcastId: number,
-): Promise<IAudioMetaInformation> {
+): Promise<ISeries> {
   const response = await fetch(
     `/audio-api/v1/series/${podcastId}?language=${context.language}`,
     context,

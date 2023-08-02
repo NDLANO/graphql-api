@@ -133,6 +133,7 @@ export const typeDefs = gql`
     episodes: [Audio!]
     coverPhoto: CoverPhoto!
     hasRSS: Boolean!
+    content: ResourceEmbed
   }
 
   type AudioSummary {
