@@ -109,46 +109,36 @@ export async function fetchArticle(
 
   const nullableRelatedContent = await Promise.all(
     article?.relatedContent?.map(async (rc: any) => {
-      if (typeof rc === 'number') {
-        return Promise.resolve(
-          fetchSimpleArticle(`urn:article:${article.id}`, context),
-        )
-          .then(async related => {
-            const node = await queryNodes(
-              { contentURI: `urn:article:${related.id}` },
-              context,
-            );
-            return node?.[0] || related;
-          })
-          .then(topicOrResource => {
-            let path = `/article/${topicOrResource.id}`;
-            let title = '';
-            if ('paths' in topicOrResource) {
-              path = topicOrResource.path;
-              if (params.subjectId) {
-                const primaryPath = findPrimaryPath(
-                  topicOrResource.paths,
-                  params.subjectId,
-                );
-                path = primaryPath || path;
-              }
-              title = topicOrResource.name;
-            } else {
-              title = topicOrResource.title.title ?? '';
-            }
-            return {
-              title,
-              url: `${ndlaUrl}${path}`,
-            };
-          })
-          .catch(err => {
-            return undefined;
-          });
-      } else {
+      if (typeof rc !== 'number') {
         return {
           title: rc.title,
           url: rc.url,
         };
+      }
+      try {
+        const related = await fetchSimpleArticle(`urn:article:${rc}`, context);
+        const nodes = await queryNodes(
+          { contentURI: `urn:article:${related.id}` },
+          context,
+        );
+        const node = nodes?.[0];
+        if (node) {
+          const primaryPath = params.subjectId
+            ? findPrimaryPath(node.paths, params.subjectId)
+            : undefined;
+          const path = primaryPath ?? node.path;
+          return {
+            title: node.name,
+            url: `${ndlaUrl}${path}`,
+          };
+        } else {
+          return {
+            title: related.title.title ?? '',
+            url: `${ndlaUrl}/article/${related.id}`,
+          };
+        }
+      } catch (e) {
+        return undefined;
       }
     }),
   );
