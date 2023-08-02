@@ -30,7 +30,7 @@
     "@apollo/server": "^4.7.4",
     "@graphql-tools/mock": "^8.7.10",
     "@graphql-tools/schema": "^9.0.8",
-    "@ndla/licenses": "^7.0.4",
+    "@ndla/licenses": "^7.1.1",
     "bunyan": "^1.8.12",
     "cheerio": "^1.0.0-rc.6",
     "compression": "^1.7.4",
