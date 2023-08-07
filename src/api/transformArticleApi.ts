@@ -153,6 +153,8 @@ export const transformArticle = async (
     }),
   );
   const metaData = toArticleMetaData(embedPromises);
+  const visualElementCheerio = visEl?.('body') ?? embeds[0].embed;
+  const transformedVisEl = visualElementCheerio?.html();
   const transformedContent = html('body').html();
   const visualElementMeta =
     visEl || (visualElement && showVisualElement)
@@ -167,5 +169,10 @@ export const transformArticle = async (
     metaData,
     content: transformedContent,
     visualElement: transformedVisualElement,
+    visualElementEmbed: !!transformedVisEl &&
+      !!visualElementMeta && {
+        content: transformedVisEl,
+        meta: toArticleMetaData([visualElementMeta]),
+      },
   };
 };

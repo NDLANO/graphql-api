@@ -10,6 +10,7 @@ import {
   IAudioMetaInformation,
   IAudioSummarySearchResult,
   IPodcastMeta,
+  ISeries,
 } from '@ndla/types-backend/audio-api';
 import {
   fetchAudio,
@@ -18,12 +19,15 @@ import {
   fetchPodcastsPage,
 } from '../api/audioApi';
 import { fetchImage } from '../api/imageApi';
+import { fetchResourceEmbeds } from '../api/resourceEmbedApi';
 import {
   GQLImageMetaInformation,
   GQLQueryAudioArgs,
   GQLQueryPodcastSearchArgs,
   GQLQueryPodcastSeriesArgs,
   GQLQueryPodcastSeriesSearchArgs,
+  GQLResourceEmbed,
+  GQLResourceEmbedInput,
 } from '../types/schema';
 
 export const Query = {
@@ -45,7 +49,7 @@ export const Query = {
     _: any,
     { id }: GQLQueryPodcastSeriesArgs,
     context: ContextWithLoaders,
-  ): Promise<IAudioMetaInformation> {
+  ): Promise<ISeries> {
     return fetchPodcastSeries(context, id);
   },
   async podcastSeriesSearch(
@@ -58,6 +62,22 @@ export const Query = {
 };
 
 export const resolvers = {
+  PodcastSeriesWithEpisodes: {
+    async content(
+      series: ISeries,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLResourceEmbed | null> {
+      if (!series.episodes?.length) {
+        return null;
+      }
+      const embeds: GQLResourceEmbedInput[] = series.episodes.map(ep => ({
+        id: ep.id.toString(),
+        type: 'audio',
+      }));
+      return await fetchResourceEmbeds({ resources: embeds }, context);
+    },
+  },
   PodcastMeta: {
     async image(
       podcastMeta: IPodcastMeta,

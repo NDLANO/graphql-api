@@ -133,6 +133,7 @@ export const typeDefs = gql`
     episodes: [Audio!]
     coverPhoto: CoverPhoto!
     hasRSS: Boolean!
+    content: ResourceEmbed
   }
 
   type AudioSummary {
@@ -515,6 +516,7 @@ export const typeDefs = gql`
     relatedContent: [RelatedContent!]
     availability: String
     revisionDate: String
+    visualElementEmbed: ResourceEmbed
   }
 
   type EmbedVisualelement {
@@ -1110,6 +1112,12 @@ export const typeDefs = gql`
     meta: ResourceMetaData!
   }
 
+  input ResourceEmbedInput {
+    id: String!
+    type: String!
+    conceptType: String
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -1234,6 +1242,7 @@ export const typeDefs = gql`
     image(id: String!): ImageMetaInformationV2
     examLockStatus: ConfigMetaRestricted!
     resourceEmbed(id: String!, type: String!): ResourceEmbed!
+    resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
   }
 
   type Mutation {

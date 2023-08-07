@@ -65,7 +65,12 @@ const _fetchTransformedArticle = async (
     const subject = params.subjectId;
     const previewH5p = params.previewH5p;
     const article = await fetchSimpleArticle(params.articleId, context);
-    const { content, metaData, visualElement } = await transformArticle(
+    const {
+      content,
+      metaData,
+      visualElement,
+      visualElementEmbed,
+    } = await transformArticle(
       article.content.content,
       context,
       article.visualElement?.visualElement,
@@ -84,6 +89,7 @@ const _fetchTransformedArticle = async (
       title: article.title.title,
       metaData,
       tags: article.tags.tags,
+      visualElementEmbed,
       content:
         article.articleType === 'standard'
           ? content
@@ -103,44 +109,36 @@ export async function fetchArticle(
 
   const nullableRelatedContent = await Promise.all(
     article?.relatedContent?.map(async (rc: any) => {
-      if (typeof rc === 'number') {
-        return Promise.resolve(fetchArticle({ articleId: `${rc}` }, context))
-          .then(async related => {
-            const node = await queryNodes(
-              { contentURI: `urn:article:${related.id}` },
-              context,
-            );
-            return node || related;
-          })
-          .then((topicOrResource: any) => {
-            let path = `/article/${topicOrResource.id}`;
-            let title = '';
-            if (topicOrResource.hasOwnProperty('paths')) {
-              path = topicOrResource.path;
-              if (params.subjectId) {
-                const primaryPath = findPrimaryPath(
-                  topicOrResource.paths,
-                  params.subjectId,
-                );
-                path = primaryPath || path;
-              }
-              title = topicOrResource.name;
-            } else {
-              title = topicOrResource.title;
-            }
-            return {
-              title,
-              url: `${ndlaUrl}${path}`,
-            };
-          })
-          .catch(err => {
-            return undefined;
-          });
-      } else {
+      if (typeof rc !== 'number') {
         return {
           title: rc.title,
           url: rc.url,
         };
+      }
+      try {
+        const related = await fetchSimpleArticle(`urn:article:${rc}`, context);
+        const nodes = await queryNodes(
+          { contentURI: `urn:article:${related.id}` },
+          context,
+        );
+        const node = nodes?.[0];
+        if (node) {
+          const primaryPath = params.subjectId
+            ? findPrimaryPath(node.paths, params.subjectId)
+            : undefined;
+          const path = primaryPath ?? node.path;
+          return {
+            title: node.name,
+            url: `${ndlaUrl}${path}`,
+          };
+        } else {
+          return {
+            title: related.title.title ?? '',
+            url: `${ndlaUrl}/article/${related.id}`,
+          };
+        }
+      } catch (e) {
+        return undefined;
       }
     }),
   );
@@ -148,7 +146,7 @@ export async function fetchArticle(
 
   return {
     ...article,
-    relatedContent,
+    relatedContent: relatedContent ?? [],
   };
 }
 

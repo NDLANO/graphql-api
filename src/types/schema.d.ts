@@ -54,6 +54,7 @@ export type GQLArticle = {
   title: Scalars['String'];
   updated: Scalars['String'];
   visualElement?: Maybe<GQLVisualElement>;
+  visualElementEmbed?: Maybe<GQLResourceEmbed>;
 };
 
 
@@ -957,6 +958,7 @@ export type GQLPodcastSeriesSummary = {
 
 export type GQLPodcastSeriesWithEpisodes = GQLPodcastSeriesBase & {
   __typename?: 'PodcastSeriesWithEpisodes';
+  content?: Maybe<GQLResourceEmbed>;
   coverPhoto: GQLCoverPhoto;
   description: GQLDescription;
   episodes?: Maybe<Array<GQLAudio>>;
@@ -1010,6 +1012,7 @@ export type GQLQuery = {
   programmes?: Maybe<Array<GQLProgrammePage>>;
   resource?: Maybe<GQLResource>;
   resourceEmbed: GQLResourceEmbed;
+  resourceEmbeds: GQLResourceEmbed;
   resourceTypes?: Maybe<Array<GQLResourceTypeDefinition>>;
   search?: Maybe<GQLSearch>;
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
@@ -1183,6 +1186,11 @@ export type GQLQueryResourceEmbedArgs = {
 };
 
 
+export type GQLQueryResourceEmbedsArgs = {
+  resources: Array<GQLResourceEmbedInput>;
+};
+
+
 export type GQLQuerySearchArgs = {
   aggregatePaths?: InputMaybe<Array<Scalars['String']>>;
   contextFilters?: InputMaybe<Scalars['String']>;
@@ -1301,6 +1309,12 @@ export type GQLResourceEmbed = {
   __typename?: 'ResourceEmbed';
   content: Scalars['String'];
   meta: GQLResourceMetaData;
+};
+
+export type GQLResourceEmbedInput = {
+  conceptType?: InputMaybe<Scalars['String']>;
+  id: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type GQLResourceMetaData = {
@@ -1802,6 +1816,7 @@ export type GQLResolversTypes = {
   RelatedContent: ResolverTypeWrapper<GQLRelatedContent>;
   Resource: ResolverTypeWrapper<GQLResource>;
   ResourceEmbed: ResolverTypeWrapper<GQLResourceEmbed>;
+  ResourceEmbedInput: GQLResourceEmbedInput;
   ResourceMetaData: ResolverTypeWrapper<GQLResourceMetaData>;
   ResourceType: ResolverTypeWrapper<GQLResourceType>;
   ResourceTypeDefinition: ResolverTypeWrapper<GQLResourceTypeDefinition>;
@@ -1940,6 +1955,7 @@ export type GQLResolversParentTypes = {
   RelatedContent: GQLRelatedContent;
   Resource: GQLResource;
   ResourceEmbed: GQLResourceEmbed;
+  ResourceEmbedInput: GQLResourceEmbedInput;
   ResourceMetaData: GQLResourceMetaData;
   ResourceType: GQLResourceType;
   ResourceTypeDefinition: GQLResourceTypeDefinition;
@@ -2014,6 +2030,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;
+  visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2832,6 +2849,7 @@ export type GQLPodcastSeriesSummaryResolvers<ContextType = any, ParentType exten
 };
 
 export type GQLPodcastSeriesWithEpisodesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastSeriesWithEpisodes'] = GQLResolversParentTypes['PodcastSeriesWithEpisodes']> = {
+  content?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
   coverPhoto?: Resolver<GQLResolversTypes['CoverPhoto'], ParentType, ContextType>;
   description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
   episodes?: Resolver<Maybe<Array<GQLResolversTypes['Audio']>>, ParentType, ContextType>;
@@ -2885,6 +2903,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   programmes?: Resolver<Maybe<Array<GQLResolversTypes['ProgrammePage']>>, ParentType, ContextType>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, RequireFields<GQLQueryResourceArgs, 'id'>>;
   resourceEmbed?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedArgs, 'id' | 'type'>>;
+  resourceEmbeds?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedsArgs, 'resources'>>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
   search?: Resolver<Maybe<GQLResolversTypes['Search']>, ParentType, ContextType, Partial<GQLQuerySearchArgs>>;
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
