@@ -401,6 +401,8 @@ export const transformEmbed = async (
       meta = await keyFigureMeta({ embedData, context, index, opts });
     } else if (embedData.resource === 'campaign-block') {
       meta = await campaignBlockMeta({ embedData, context, index, opts });
+    } else if (embedData.resource === 'link-block') {
+      meta = undefined;
     } else {
       return;
     }
