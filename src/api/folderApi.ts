@@ -21,6 +21,7 @@ import {
 import {
   GQLMutationAddFolderArgs,
   GQLMutationAddFolderResourceArgs,
+  GQLMutationCopySharedFolderArgs,
   GQLMutationDeleteFolderArgs,
   GQLMutationDeleteFolderResourceArgs,
   GQLMutationSortFoldersArgs,
@@ -268,5 +269,18 @@ export async function updateFolderStatus(
     },
   );
 
+  return await resolveJson(response);
+}
+
+export async function copySharedFolder(
+  { folderId, destinationFolderId }: GQLMutationCopySharedFolderArgs,
+  context: Context,
+) {
+  const params = queryString({ 'destination-folder-id': destinationFolderId });
+  const response = await fetch(
+    `/learningpath-api/v1/folders/clone/${folderId}${params}`,
+    context,
+    { method: 'POST' },
+  );
   return await resolveJson(response);
 }

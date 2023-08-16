@@ -1273,6 +1273,10 @@ export const typeDefs = gql`
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
+    copySharedFolder(
+      folderId: String!
+      destinationFolderId: String
+    ): FolderResource!
     transformArticleContent(
       content: String!
       visualElement: String

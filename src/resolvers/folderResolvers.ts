@@ -24,6 +24,7 @@ import {
   sortFolders,
   sortResources,
   patchFolderResource,
+  copySharedFolder,
 } from '../api/folderApi';
 import {
   fetchFolderResourceMeta,
@@ -50,6 +51,7 @@ import {
   GQLQueryFoldersArgs,
   GQLQueryResolvers,
   GQLQuerySharedFolderArgs,
+  GQLMutationCopySharedFolderArgs,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -144,6 +146,7 @@ export const Mutations: Pick<
   | 'sortResources'
   | 'updatePersonalData'
   | 'updateFolderStatus'
+  | 'copySharedFolder'
 > = {
   async addFolder(
     _: any,
@@ -217,5 +220,12 @@ export const Mutations: Pick<
     context: ContextWithLoaders,
   ) {
     return updateFolderStatus(params, context);
+  },
+  async copySharedFolder(
+    _: any,
+    params: GQLMutationCopySharedFolderArgs,
+    context: ContextWithLoaders,
+  ) {
+    return copySharedFolder(params, context);
   },
 };
