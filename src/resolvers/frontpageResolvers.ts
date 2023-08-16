@@ -60,50 +60,13 @@ export const Query = {
 };
 
 export const resolvers = {
-  Frontpage: {
+  FrontpageMenu: {
     async article(
-      frontpage: IFrontPage,
+      menu: IFrontPage,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLArticle> {
-      return fetchArticle(
-        {
-          articleId: `${frontpage.articleId}`,
-          convertEmbeds: true,
-        },
-        context,
-      );
-    },
-  },
-
-  Menu: {
-    async title(
-      menu: IMenu,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<string> {
-      const article = await fetchArticle(
-        {
-          articleId: `${menu.articleId}`,
-          convertEmbeds: true,
-        },
-        context,
-      );
-      return article.title;
-    },
-    async slug(
-      menu: IMenu,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<string> {
-      const article = await fetchArticle(
-        {
-          articleId: `${menu.articleId}`,
-          convertEmbeds: true,
-        },
-        context,
-      );
-      return article.slug || '';
+      return fetchArticle({ articleId: `${menu.articleId}` }, context);
     },
   },
 

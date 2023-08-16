@@ -566,15 +566,10 @@ export const typeDefs = gql`
     code: String
   }
 
-  type Menu {
-    title: String
-    slug: String
-    menu: [Menu]!
-  }
-
-  type Frontpage {
-    article: Article
-    menu: [Menu]!
+  type FrontpageMenu {
+    articleId: Int!
+    article: Article!
+    menu: [FrontpageMenu]!
   }
 
   type SubjectPageVisualElement {
@@ -1143,7 +1138,7 @@ export const typeDefs = gql`
     ): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
-    frontpage: Frontpage
+    frontpage: FrontpageMenu
     competenceGoals(codes: [String], language: String): [CompetenceGoal!]
     competenceGoal(code: String!, language: String): CompetenceGoal
     coreElements(codes: [String], language: String): [CoreElement!]
