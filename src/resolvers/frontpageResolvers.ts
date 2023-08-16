@@ -11,7 +11,6 @@ import {
   ISubjectPageData,
   IFilmFrontPageData,
   IMovieTheme,
-  IMenu,
 } from '@ndla/types-backend/frontpage-api';
 import { TaxonomyContext } from '@ndla/types-taxonomy';
 import {
