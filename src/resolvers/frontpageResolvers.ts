@@ -65,7 +65,10 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLArticle> {
-      return fetchArticle({ articleId: `${menu.articleId}` }, context);
+      return fetchArticle(
+        { articleId: `${menu.articleId}`, convertEmbeds: true },
+        context,
+      );
     },
   },
 
