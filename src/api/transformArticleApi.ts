@@ -153,7 +153,7 @@ export const transformArticle = async (
     }),
   );
   const metaData = toArticleMetaData(embedPromises);
-  const visualElementCheerio = visEl?.('body') ?? embeds[0].embed;
+  const visualElementCheerio = visEl?.('body') ?? embeds[0]?.embed;
   const transformedVisEl = visualElementCheerio?.html();
   const transformedContent = html('body').html();
   const visualElementMeta =
