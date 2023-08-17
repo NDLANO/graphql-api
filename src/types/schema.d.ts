@@ -461,10 +461,11 @@ export type GQLFrontPageResources = {
   totalCount: Scalars['Int'];
 };
 
-export type GQLFrontpage = {
-  __typename?: 'Frontpage';
-  article?: Maybe<GQLArticle>;
-  menu: Array<Maybe<GQLMenu>>;
+export type GQLFrontpageMenu = {
+  __typename?: 'FrontpageMenu';
+  article: GQLArticle;
+  articleId: Scalars['Int'];
+  menu: Array<Maybe<GQLFrontpageMenu>>;
 };
 
 export type GQLFrontpageSearch = {
@@ -722,13 +723,6 @@ export type GQLManuscript = {
   __typename?: 'Manuscript';
   language: Scalars['String'];
   manuscript: Scalars['String'];
-};
-
-export type GQLMenu = {
-  __typename?: 'Menu';
-  menu: Array<Maybe<GQLMenu>>;
-  slug?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
 };
 
 export type GQLMeta = {
@@ -1005,7 +999,7 @@ export type GQLQuery = {
   folderResourceMeta?: Maybe<GQLFolderResourceMeta>;
   folderResourceMetaSearch: Array<GQLFolderResourceMeta>;
   folders: Array<GQLFolder>;
-  frontpage?: Maybe<GQLFrontpage>;
+  frontpage?: Maybe<GQLFrontpageMenu>;
   frontpageSearch?: Maybe<GQLFrontpageSearch>;
   groupSearch?: Maybe<Array<GQLGroupSearch>>;
   image?: Maybe<GQLImageMetaInformationV2>;
@@ -1770,7 +1764,7 @@ export type GQLResolversTypes = {
   FolderResourceResourceType: ResolverTypeWrapper<GQLFolderResourceResourceType>;
   FootNote: ResolverTypeWrapper<GQLFootNote>;
   FrontPageResources: ResolverTypeWrapper<GQLFrontPageResources>;
-  Frontpage: ResolverTypeWrapper<GQLFrontpage>;
+  FrontpageMenu: ResolverTypeWrapper<GQLFrontpageMenu>;
   FrontpageSearch: ResolverTypeWrapper<GQLFrontpageSearch>;
   FrontpageSearchResult: ResolverTypeWrapper<GQLFrontpageSearchResult>;
   Grade: ResolverTypeWrapper<GQLGrade>;
@@ -1797,7 +1791,6 @@ export type GQLResolversTypes = {
   License: ResolverTypeWrapper<GQLLicense>;
   ListingPage: ResolverTypeWrapper<GQLListingPage>;
   Manuscript: ResolverTypeWrapper<GQLManuscript>;
-  Menu: ResolverTypeWrapper<GQLMenu>;
   Meta: ResolverTypeWrapper<GQLMeta>;
   MetaImage: ResolverTypeWrapper<GQLMetaImage>;
   Movie: ResolverTypeWrapper<GQLMovie>;
@@ -1909,7 +1902,7 @@ export type GQLResolversParentTypes = {
   FolderResourceResourceType: GQLFolderResourceResourceType;
   FootNote: GQLFootNote;
   FrontPageResources: GQLFrontPageResources;
-  Frontpage: GQLFrontpage;
+  FrontpageMenu: GQLFrontpageMenu;
   FrontpageSearch: GQLFrontpageSearch;
   FrontpageSearchResult: GQLFrontpageSearchResult;
   Grade: GQLGrade;
@@ -1936,7 +1929,6 @@ export type GQLResolversParentTypes = {
   License: GQLLicense;
   ListingPage: GQLListingPage;
   Manuscript: GQLManuscript;
-  Menu: GQLMenu;
   Meta: GQLMeta;
   MetaImage: GQLMetaImage;
   Movie: GQLMovie;
@@ -2435,9 +2427,10 @@ export type GQLFrontPageResourcesResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLFrontpageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Frontpage'] = GQLResolversParentTypes['Frontpage']> = {
-  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
-  menu?: Resolver<Array<Maybe<GQLResolversTypes['Menu']>>, ParentType, ContextType>;
+export type GQLFrontpageMenuResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FrontpageMenu'] = GQLResolversParentTypes['FrontpageMenu']> = {
+  article?: Resolver<GQLResolversTypes['Article'], ParentType, ContextType>;
+  articleId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  menu?: Resolver<Array<Maybe<GQLResolversTypes['FrontpageMenu']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2698,13 +2691,6 @@ export type GQLManuscriptResolvers<ContextType = any, ParentType extends GQLReso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLMenuResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Menu'] = GQLResolversParentTypes['Menu']> = {
-  menu?: Resolver<Array<Maybe<GQLResolversTypes['Menu']>>, ParentType, ContextType>;
-  slug?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Meta'] = GQLResolversParentTypes['Meta']> = {
   availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -2897,7 +2883,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   folderResourceMeta?: Resolver<Maybe<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaArgs, 'resource'>>;
   folderResourceMetaSearch?: Resolver<Array<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaSearchArgs, 'resources'>>;
   folders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType, Partial<GQLQueryFoldersArgs>>;
-  frontpage?: Resolver<Maybe<GQLResolversTypes['Frontpage']>, ParentType, ContextType>;
+  frontpage?: Resolver<Maybe<GQLResolversTypes['FrontpageMenu']>, ParentType, ContextType>;
   frontpageSearch?: Resolver<Maybe<GQLResolversTypes['FrontpageSearch']>, ParentType, ContextType, Partial<GQLQueryFrontpageSearchArgs>>;
   groupSearch?: Resolver<Maybe<Array<GQLResolversTypes['GroupSearch']>>, ParentType, ContextType, Partial<GQLQueryGroupSearchArgs>>;
   image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV2']>, ParentType, ContextType, RequireFields<GQLQueryImageArgs, 'id'>>;
@@ -3319,7 +3305,7 @@ export type GQLResolvers<ContextType = any> = {
   FolderResourceResourceType?: GQLFolderResourceResourceTypeResolvers<ContextType>;
   FootNote?: GQLFootNoteResolvers<ContextType>;
   FrontPageResources?: GQLFrontPageResourcesResolvers<ContextType>;
-  Frontpage?: GQLFrontpageResolvers<ContextType>;
+  FrontpageMenu?: GQLFrontpageMenuResolvers<ContextType>;
   FrontpageSearch?: GQLFrontpageSearchResolvers<ContextType>;
   FrontpageSearchResult?: GQLFrontpageSearchResultResolvers<ContextType>;
   Grade?: GQLGradeResolvers<ContextType>;
@@ -3345,7 +3331,6 @@ export type GQLResolvers<ContextType = any> = {
   License?: GQLLicenseResolvers<ContextType>;
   ListingPage?: GQLListingPageResolvers<ContextType>;
   Manuscript?: GQLManuscriptResolvers<ContextType>;
-  Menu?: GQLMenuResolvers<ContextType>;
   Meta?: GQLMetaResolvers<ContextType>;
   MetaImage?: GQLMetaImageResolvers<ContextType>;
   Movie?: GQLMovieResolvers<ContextType>;
