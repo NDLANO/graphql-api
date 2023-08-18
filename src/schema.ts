@@ -569,7 +569,7 @@ export const typeDefs = gql`
   type FrontpageMenu {
     articleId: Int!
     article: Article!
-    menu: [FrontpageMenu]!
+    menu: [FrontpageMenu]
   }
 
   type SubjectPageVisualElement {

@@ -465,7 +465,7 @@ export type GQLFrontpageMenu = {
   __typename?: 'FrontpageMenu';
   article: GQLArticle;
   articleId: Scalars['Int'];
-  menu: Array<Maybe<GQLFrontpageMenu>>;
+  menu?: Maybe<Array<Maybe<GQLFrontpageMenu>>>;
 };
 
 export type GQLFrontpageSearch = {
@@ -2430,7 +2430,7 @@ export type GQLFrontPageResourcesResolvers<ContextType = any, ParentType extends
 export type GQLFrontpageMenuResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FrontpageMenu'] = GQLResolversParentTypes['FrontpageMenu']> = {
   article?: Resolver<GQLResolversTypes['Article'], ParentType, ContextType>;
   articleId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  menu?: Resolver<Array<Maybe<GQLResolversTypes['FrontpageMenu']>>, ParentType, ContextType>;
+  menu?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['FrontpageMenu']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
