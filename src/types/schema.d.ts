@@ -780,7 +780,7 @@ export type GQLMutation = {
   __typename?: 'Mutation';
   addFolder: GQLFolder;
   addFolderResource: GQLFolderResource;
-  copySharedFolder: GQLFolderResource;
+  copySharedFolder: GQLFolder;
   deleteFolder: Scalars['String'];
   deleteFolderResource: Scalars['String'];
   deletePersonalData: Scalars['Boolean'];
@@ -2745,7 +2745,7 @@ export type GQLMovieThemeResolvers<ContextType = any, ParentType extends GQLReso
 export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation']> = {
   addFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationAddFolderArgs, 'name'>>;
   addFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationAddFolderResourceArgs, 'folderId' | 'path' | 'resourceId' | 'resourceType'>>;
-  copySharedFolder?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationCopySharedFolderArgs, 'folderId'>>;
+  copySharedFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationCopySharedFolderArgs, 'folderId'>>;
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
