@@ -88,7 +88,8 @@ export async function groupSearch(
           ? contentTypeResult.paths?.find(
               p => p.split('/')[1] === subjects[0].replace('urn:', ''),
             )
-          : contentTypeResult.paths?.[0];
+          : contentTypeResult.contexts.find(c => c.isPrimary)?.path ??
+            contentTypeResult.paths?.[0];
       const isLearningpath =
         contentTypeResult.learningResourceType === 'learningpath';
       return {
