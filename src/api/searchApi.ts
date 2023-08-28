@@ -85,7 +85,7 @@ export async function groupSearch(
     resources: result.results.map(contentTypeResult => {
       const path =
         contentTypeResult.contexts.find(c =>
-          subjects.length === 1 ? c.subjectId === subjects[0] : c.isPrimary,
+          subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary,
         )?.path ?? contentTypeResult.paths?.[0];
 
       const isLearningpath =
