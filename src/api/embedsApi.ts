@@ -412,7 +412,6 @@ export const transformEmbed = async (
       embedData: embedData,
       status: 'success',
       data: meta,
-      seq: index,
     } as EmbedMetaData;
 
     embed.embed.attr('data-json', JSON.stringify(embedMeta));
@@ -425,8 +424,7 @@ export const transformEmbed = async (
       resource: embedData.resource,
       embedData: embedData,
       status: 'error',
-      seq: index,
-      message: `Failed to fetch data for embed of type ${embedData.resource} with seq ${index}`,
+      message: `Failed to fetch data for embed of type ${embedData.resource} with index ${index}`,
     } as EmbedMetaData;
 
     embed.embed.attr('data-json', JSON.stringify(embedMeta));
