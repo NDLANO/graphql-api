@@ -30,7 +30,7 @@ export type GQLArticle = {
   competenceGoals?: Maybe<Array<GQLCompetenceGoal>>;
   conceptIds?: Maybe<Array<Scalars['Int']>>;
   concepts?: Maybe<Array<GQLConcept>>;
-  content: Scalars['String'];
+  content: GQLContent;
   copyright: GQLCopyright;
   coreElements?: Maybe<Array<GQLCoreElement>>;
   created: Scalars['String'];
@@ -51,7 +51,7 @@ export type GQLArticle = {
   slug?: Maybe<Scalars['String']>;
   supportedLanguages?: Maybe<Array<Scalars['String']>>;
   tags?: Maybe<Array<Scalars['String']>>;
-  title: Scalars['String'];
+  title: GQLTitle;
   updated: Scalars['String'];
   visualElement?: Maybe<GQLVisualElement>;
   visualElementEmbed?: Maybe<GQLResourceEmbed>;
@@ -317,6 +317,12 @@ export type GQLConfigMetaRestricted = {
   __typename?: 'ConfigMetaRestricted';
   key: Scalars['String'];
   value: Scalars['String'];
+};
+
+export type GQLContent = {
+  __typename?: 'Content';
+  content: Scalars['String'];
+  language: Scalars['String'];
 };
 
 export type GQLContributor = {
@@ -1745,6 +1751,7 @@ export type GQLResolversTypes = {
   ConceptLicense: ResolverTypeWrapper<GQLConceptLicense>;
   ConceptResult: ResolverTypeWrapper<GQLConceptResult>;
   ConfigMetaRestricted: ResolverTypeWrapper<GQLConfigMetaRestricted>;
+  Content: ResolverTypeWrapper<GQLContent>;
   Contributor: ResolverTypeWrapper<GQLContributor>;
   Copyright: ResolverTypeWrapper<GQLCopyright>;
   CoreElement: ResolverTypeWrapper<GQLCoreElement>;
@@ -1883,6 +1890,7 @@ export type GQLResolversParentTypes = {
   ConceptLicense: GQLConceptLicense;
   ConceptResult: GQLConceptResult;
   ConfigMetaRestricted: GQLConfigMetaRestricted;
+  Content: GQLContent;
   Contributor: GQLContributor;
   Copyright: GQLCopyright;
   CoreElement: GQLCoreElement;
@@ -2005,7 +2013,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   competenceGoals?: Resolver<Maybe<Array<GQLResolversTypes['CompetenceGoal']>>, ParentType, ContextType>;
   conceptIds?: Resolver<Maybe<Array<GQLResolversTypes['Int']>>, ParentType, ContextType>;
   concepts?: Resolver<Maybe<Array<GQLResolversTypes['Concept']>>, ParentType, ContextType>;
-  content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  content?: Resolver<GQLResolversTypes['Content'], ParentType, ContextType>;
   copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
   coreElements?: Resolver<Maybe<Array<GQLResolversTypes['CoreElement']>>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2026,7 +2034,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   slug?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;
   visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
@@ -2287,6 +2295,12 @@ export type GQLConceptResultResolvers<ContextType = any, ParentType extends GQLR
 export type GQLConfigMetaRestrictedResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaRestricted'] = GQLResolversParentTypes['ConfigMetaRestricted']> = {
   key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLContentResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Content'] = GQLResolversParentTypes['Content']> = {
+  content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3288,6 +3302,7 @@ export type GQLResolvers<ContextType = any> = {
   ConceptLicense?: GQLConceptLicenseResolvers<ContextType>;
   ConceptResult?: GQLConceptResultResolvers<ContextType>;
   ConfigMetaRestricted?: GQLConfigMetaRestrictedResolvers<ContextType>;
+  Content?: GQLContentResolvers<ContextType>;
   Contributor?: GQLContributorResolvers<ContextType>;
   Copyright?: GQLCopyrightResolvers<ContextType>;
   CoreElement?: GQLCoreElementResolvers<ContextType>;
