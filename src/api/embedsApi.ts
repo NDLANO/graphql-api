@@ -50,6 +50,7 @@ import { fetchSimpleArticle } from './articleApi';
 import { fetchEmbedConcept, fetchEmbedConcepts } from './conceptApi';
 import { checkIfFileExists } from './fileApi';
 import { getBrightcoveCopyright } from '../utils/brightcoveUtils';
+import highlightCode from '../utils/highlightCode';
 
 type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
   params: {
@@ -132,7 +133,8 @@ const h5pMeta: Fetch<H5pMetaData> = async ({ embedData, context, opts }) => {
 
 const codeMeta: Fetch<CodeMetaData> = async ({ embedData }) => {
   const decodedContent = he.decode(embedData.codeContent);
-  return { decodedContent };
+  const highlighted = highlightCode(decodedContent, embedData.codeFormat);
+  return { decodedContent, highlightedCode: highlighted };
 };
 
 export interface TransformOptions {
