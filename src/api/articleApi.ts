@@ -86,19 +86,18 @@ const _fetchTransformedArticle = async (
       ...article,
       introduction: article.introduction?.introduction ?? '',
       metaDescription: article.metaDescription.metaDescription,
+      title: article.title.title,
       metaData,
       tags: article.tags.tags,
       visualElementEmbed,
-      content: {
-        ...article.content,
-        content:
-          article.articleType === 'standard'
-            ? content
-            : content === '<section></section>'
-            ? ''
-            : content,
-      },
+      content:
+        article.articleType === 'standard'
+          ? content
+          : content === '<section></section>'
+          ? ''
+          : content,
       visualElement,
+      language: article.content.language,
     };
   }
 };

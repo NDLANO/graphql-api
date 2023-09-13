@@ -486,18 +486,13 @@ export const typeDefs = gql`
     url: String!
   }
 
-  type Content {
-    content: String!
-    language: String!
-  }
-
   type Article {
     id: Int!
     revision: Int!
-    title: Title!
+    title: String!
     slug: String
     introduction: String
-    content: Content!
+    content: String!
     created: String!
     updated: String!
     published: String!
@@ -522,6 +517,7 @@ export const typeDefs = gql`
     availability: String
     revisionDate: String
     visualElementEmbed: ResourceEmbed
+    language: String!
   }
 
   type EmbedVisualelement {
