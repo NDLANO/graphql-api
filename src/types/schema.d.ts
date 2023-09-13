@@ -38,6 +38,7 @@ export type GQLArticle = {
   grepCodes?: Maybe<Array<Scalars['String']>>;
   id: Scalars['Int'];
   introduction?: Maybe<Scalars['String']>;
+  language: Scalars['String'];
   metaData?: Maybe<GQLArticleMetaData>;
   metaDescription: Scalars['String'];
   metaImage?: Maybe<GQLMetaImage>;
@@ -2013,6 +2014,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaData?: Resolver<Maybe<GQLResolversTypes['ArticleMetaData']>, ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;

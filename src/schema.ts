@@ -517,6 +517,7 @@ export const typeDefs = gql`
     availability: String
     revisionDate: String
     visualElementEmbed: ResourceEmbed
+    language: String!
   }
 
   type EmbedVisualelement {

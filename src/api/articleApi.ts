@@ -97,6 +97,7 @@ const _fetchTransformedArticle = async (
           ? ''
           : content,
       visualElement,
+      language: article.content.language,
     };
   }
 };
