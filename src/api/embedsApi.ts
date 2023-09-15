@@ -206,7 +206,10 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({
   if (typeof articleId === 'string' || typeof articleId === 'number') {
     const [article, resources] = await Promise.all([
       fetchSimpleArticle(`urn:article:${articleId}`, context),
-      queryNodes({ contentURI: `urn:article:${articleId}` }, context),
+      queryNodes(
+        { contentURI: `urn:article:${articleId}`, language: context.language },
+        context,
+      ),
     ]);
     const resource = resources?.[0];
     return { article, resource };

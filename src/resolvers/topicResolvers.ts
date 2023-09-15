@@ -58,7 +58,11 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLTopic[]> {
     const nodes = await queryNodes(
-      { contentURI: contentUri, includeContexts: true },
+      {
+        contentURI: contentUri,
+        includeContexts: true,
+        language: context.language,
+      },
       context,
     );
     const filtered = filterVisible
@@ -193,7 +197,11 @@ export const resolvers = {
       const { contentUri, id, path } = topic;
       if (!path) {
         const nodes = await queryNodes(
-          { contentURI: contentUri, includeContexts: true },
+          {
+            contentURI: contentUri,
+            includeContexts: true,
+            language: context.language,
+          },
           context,
         );
         const theVisibleOthers = nodes

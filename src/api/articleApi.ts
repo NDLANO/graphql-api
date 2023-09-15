@@ -119,7 +119,10 @@ export async function fetchArticle(
       try {
         const related = await fetchSimpleArticle(`urn:article:${rc}`, context);
         const nodes = await queryNodes(
-          { contentURI: `urn:article:${related.id}` },
+          {
+            contentURI: `urn:article:${related.id}`,
+            language: context.language,
+          },
           context,
         );
         const node = nodes?.[0];

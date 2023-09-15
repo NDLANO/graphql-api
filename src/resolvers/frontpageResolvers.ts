@@ -135,7 +135,10 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLResourceType[]> {
-      const nodes = await queryNodes({ contentURI: id }, context);
+      const nodes = await queryNodes(
+        { contentURI: id, language: context.language },
+        context,
+      );
       return nodes[0]?.resourceTypes ?? [];
     },
   },
