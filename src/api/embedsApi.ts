@@ -319,20 +319,11 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({
   embedData,
   context,
 }) => {
-  const imageBeforePromise = !!embedData.imageBeforeId
-    ? fetchImageV3(embedData.imageBeforeId, context)
-    : Promise.resolve<undefined>(undefined);
+  const image = !!embedData.imageId
+    ? await fetchImageV3(embedData.imageId, context)
+    : await Promise.resolve<undefined>(undefined);
 
-  const imageAfterPromise = !!embedData.imageAfterId
-    ? fetchImageV3(embedData.imageAfterId, context)
-    : Promise.resolve<undefined>(undefined);
-
-  const [imageAfter, imageBefore] = await Promise.all([
-    imageAfterPromise,
-    imageBeforePromise,
-  ]);
-
-  return { imageAfter, imageBefore };
+  return { image };
 };
 
 export const transformEmbed = async (
