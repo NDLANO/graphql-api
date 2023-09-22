@@ -13,8 +13,8 @@ import {
   getLicenseByAbbreviation,
 } from '@ndla/licenses';
 
-const getLicenseByNBTitle = (title: string) => {
-  switch (title.replace(/\s/g, '').toLowerCase()) {
+const getLicenseByNBTitle = (title?: string) => {
+  switch (title?.replace(/\s/g, '').toLowerCase()) {
     case 'navngivelse-ikkekommersiell-ingenbearbeidelse':
       return 'CC-BY-NC-ND-4.0';
     case 'navngivelse-ikkekommersiell-delpåsammevilkår':
@@ -110,8 +110,11 @@ export const getContributorGroups = (fields: Record<string, string>) => {
 export const getBrightcoveCopyright = (
   customFields: Record<string, string>,
   locale: string,
-): BrightcoveCopyright => {
+): BrightcoveCopyright | undefined => {
   const licenseCode = getLicenseByNBTitle(customFields.license);
+  if (!licenseCode) {
+    return undefined;
+  }
   const license = getLicenseByAbbreviation(licenseCode, locale);
 
   return {
