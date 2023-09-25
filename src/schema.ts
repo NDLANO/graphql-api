@@ -365,6 +365,7 @@ export const typeDefs = gql`
     processors: [Contributor!]!
     rightsholders: [Contributor!]!
     origin: String
+    processed: Boolean
   }
 
   type ArticleRequiredLibrary {
@@ -459,6 +460,7 @@ export const typeDefs = gql`
     processors: [Contributor!]!
     rightsholders: [Contributor!]!
     origin: String
+    processed: Boolean
   }
 
   type ConceptLicense {

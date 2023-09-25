@@ -281,6 +281,7 @@ export type GQLConceptCopyright = {
   creators: Array<GQLContributor>;
   license?: Maybe<GQLLicense>;
   origin?: Maybe<Scalars['String']>;
+  processed?: Maybe<Scalars['Boolean']>;
   processors: Array<GQLContributor>;
   rightsholders: Array<GQLContributor>;
 };
@@ -331,6 +332,7 @@ export type GQLCopyright = {
   creators: Array<GQLContributor>;
   license: GQLLicense;
   origin?: Maybe<Scalars['String']>;
+  processed?: Maybe<Scalars['Boolean']>;
   processors: Array<GQLContributor>;
   rightsholders: Array<GQLContributor>;
 };
@@ -2252,6 +2254,7 @@ export type GQLConceptCopyrightResolvers<ContextType = any, ParentType extends G
   creators?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
   origin?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  processed?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   processors?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   rightsholders?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2302,6 +2305,7 @@ export type GQLCopyrightResolvers<ContextType = any, ParentType extends GQLResol
   creators?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   license?: Resolver<GQLResolversTypes['License'], ParentType, ContextType>;
   origin?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  processed?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   processors?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   rightsholders?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
