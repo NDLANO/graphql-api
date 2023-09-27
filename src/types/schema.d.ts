@@ -261,9 +261,11 @@ export type GQLConcept = {
   __typename?: 'Concept';
   articleIds: Array<Scalars['Int']>;
   articles?: Maybe<Array<GQLMeta>>;
+  conceptType: Scalars['String'];
   content: Scalars['String'];
   copyright?: Maybe<GQLConceptCopyright>;
   created: Scalars['String'];
+  glossData?: Maybe<GQLGloss>;
   id: Scalars['Int'];
   image?: Maybe<GQLImageLicense>;
   metaImage?: Maybe<GQLMetaImage>;
@@ -385,6 +387,13 @@ export type GQLEmbedVisualelement = {
   visualElement?: Maybe<GQLVisualElement>;
 };
 
+export type GQLExamples = {
+  __typename?: 'Examples';
+  example: Scalars['String'];
+  language: Scalars['String'];
+  transcriptions: GQLTranscription;
+};
+
 export type GQLFilmFrontpage = {
   __typename?: 'FilmFrontpage';
   about: Array<GQLFilmPageAbout>;
@@ -484,6 +493,15 @@ export type GQLFrontpageSearchResult = {
   path: Scalars['String'];
   resourceTypes: Array<GQLSearchContextResourceTypes>;
   subject: Scalars['String'];
+};
+
+export type GQLGloss = {
+  __typename?: 'Gloss';
+  examples?: Maybe<Array<Array<GQLExamples>>>;
+  gloss: Scalars['String'];
+  originalLanguage: Scalars['String'];
+  transcriptions: GQLTranscription;
+  wordClass: Scalars['String'];
 };
 
 export type GQLGrade = {
@@ -1596,6 +1614,12 @@ export type GQLTopicSupplementaryResourcesArgs = {
   subjectId?: InputMaybe<Scalars['String']>;
 };
 
+export type GQLTranscription = {
+  __typename?: 'Transcription';
+  pinyin?: Maybe<Scalars['String']>;
+  traditional?: Maybe<Scalars['String']>;
+};
+
 export type GQLUpdatedFolder = {
   __typename?: 'UpdatedFolder';
   name?: Maybe<Scalars['String']>;
@@ -1757,6 +1781,7 @@ export type GQLResolversTypes = {
   EditorNote: ResolverTypeWrapper<GQLEditorNote>;
   Element: ResolverTypeWrapper<GQLElement>;
   EmbedVisualelement: ResolverTypeWrapper<GQLEmbedVisualelement>;
+  Examples: ResolverTypeWrapper<GQLExamples>;
   FilmFrontpage: ResolverTypeWrapper<GQLFilmFrontpage>;
   FilmPageAbout: ResolverTypeWrapper<GQLFilmPageAbout>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
@@ -1770,6 +1795,7 @@ export type GQLResolversTypes = {
   FrontpageMenu: ResolverTypeWrapper<GQLFrontpageMenu>;
   FrontpageSearch: ResolverTypeWrapper<GQLFrontpageSearch>;
   FrontpageSearchResult: ResolverTypeWrapper<GQLFrontpageSearchResult>;
+  Gloss: ResolverTypeWrapper<GQLGloss>;
   Grade: ResolverTypeWrapper<GQLGrade>;
   GroupSearch: ResolverTypeWrapper<GQLGroupSearch>;
   GroupSearchResult: ResolverTypeWrapper<GQLGroupSearchResult>;
@@ -1847,6 +1873,7 @@ export type GQLResolversTypes = {
   TaxonomyMetadata: ResolverTypeWrapper<GQLTaxonomyMetadata>;
   Title: ResolverTypeWrapper<GQLTitle>;
   Topic: ResolverTypeWrapper<GQLTopic>;
+  Transcription: ResolverTypeWrapper<GQLTranscription>;
   UpdatedFolder: ResolverTypeWrapper<GQLUpdatedFolder>;
   UpdatedFolderResource: ResolverTypeWrapper<GQLUpdatedFolderResource>;
   UptimeAlert: ResolverTypeWrapper<GQLUptimeAlert>;
@@ -1895,6 +1922,7 @@ export type GQLResolversParentTypes = {
   EditorNote: GQLEditorNote;
   Element: GQLElement;
   EmbedVisualelement: GQLEmbedVisualelement;
+  Examples: GQLExamples;
   FilmFrontpage: GQLFilmFrontpage;
   FilmPageAbout: GQLFilmPageAbout;
   Float: Scalars['Float'];
@@ -1908,6 +1936,7 @@ export type GQLResolversParentTypes = {
   FrontpageMenu: GQLFrontpageMenu;
   FrontpageSearch: GQLFrontpageSearch;
   FrontpageSearchResult: GQLFrontpageSearchResult;
+  Gloss: GQLGloss;
   Grade: GQLGrade;
   GroupSearch: GQLGroupSearch;
   GroupSearchResult: GQLGroupSearchResult;
@@ -1985,6 +2014,7 @@ export type GQLResolversParentTypes = {
   TaxonomyMetadata: GQLTaxonomyMetadata;
   Title: GQLTitle;
   Topic: GQLTopic;
+  Transcription: GQLTranscription;
   UpdatedFolder: GQLUpdatedFolder;
   UpdatedFolderResource: GQLUpdatedFolderResource;
   UptimeAlert: GQLUptimeAlert;
@@ -2234,9 +2264,11 @@ export type GQLCompetenceGoalResolvers<ContextType = any, ParentType extends GQL
 export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Concept'] = GQLResolversParentTypes['Concept']> = {
   articleIds?: Resolver<Array<GQLResolversTypes['Int']>, ParentType, ContextType>;
   articles?: Resolver<Maybe<Array<GQLResolversTypes['Meta']>>, ParentType, ContextType>;
+  conceptType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  glossData?: Resolver<Maybe<GQLResolversTypes['Gloss']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   image?: Resolver<Maybe<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
@@ -2359,6 +2391,13 @@ export type GQLEmbedVisualelementResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLExamplesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Examples'] = GQLResolversParentTypes['Examples']> = {
+  example?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  transcriptions?: Resolver<GQLResolversTypes['Transcription'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLFilmFrontpageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FilmFrontpage'] = GQLResolversParentTypes['FilmFrontpage']> = {
   about?: Resolver<Array<GQLResolversTypes['FilmPageAbout']>, ParentType, ContextType>;
   movieThemes?: Resolver<Array<GQLResolversTypes['MovieTheme']>, ParentType, ContextType>;
@@ -2452,6 +2491,15 @@ export type GQLFrontpageSearchResultResolvers<ContextType = any, ParentType exte
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   resourceTypes?: Resolver<Array<GQLResolversTypes['SearchContextResourceTypes']>, ParentType, ContextType>;
   subject?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLGlossResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Gloss'] = GQLResolversParentTypes['Gloss']> = {
+  examples?: Resolver<Maybe<Array<Array<GQLResolversTypes['Examples']>>>, ParentType, ContextType>;
+  gloss?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  originalLanguage?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  transcriptions?: Resolver<GQLResolversTypes['Transcription'], ParentType, ContextType>;
+  wordClass?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3210,6 +3258,12 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLTranscriptionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Transcription'] = GQLResolversParentTypes['Transcription']> = {
+  pinyin?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  traditional?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLUpdatedFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UpdatedFolder'] = GQLResolversParentTypes['UpdatedFolder']> = {
   name?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3303,6 +3357,7 @@ export type GQLResolvers<ContextType = any> = {
   EditorNote?: GQLEditorNoteResolvers<ContextType>;
   Element?: GQLElementResolvers<ContextType>;
   EmbedVisualelement?: GQLEmbedVisualelementResolvers<ContextType>;
+  Examples?: GQLExamplesResolvers<ContextType>;
   FilmFrontpage?: GQLFilmFrontpageResolvers<ContextType>;
   FilmPageAbout?: GQLFilmPageAboutResolvers<ContextType>;
   Folder?: GQLFolderResolvers<ContextType>;
@@ -3314,6 +3369,7 @@ export type GQLResolvers<ContextType = any> = {
   FrontpageMenu?: GQLFrontpageMenuResolvers<ContextType>;
   FrontpageSearch?: GQLFrontpageSearchResolvers<ContextType>;
   FrontpageSearchResult?: GQLFrontpageSearchResultResolvers<ContextType>;
+  Gloss?: GQLGlossResolvers<ContextType>;
   Grade?: GQLGradeResolvers<ContextType>;
   GroupSearch?: GQLGroupSearchResolvers<ContextType>;
   GroupSearchResult?: GQLGroupSearchResultResolvers<ContextType>;
@@ -3388,6 +3444,7 @@ export type GQLResolvers<ContextType = any> = {
   TaxonomyMetadata?: GQLTaxonomyMetadataResolvers<ContextType>;
   Title?: GQLTitleResolvers<ContextType>;
   Topic?: GQLTopicResolvers<ContextType>;
+  Transcription?: GQLTranscriptionResolvers<ContextType>;
   UpdatedFolder?: GQLUpdatedFolderResolvers<ContextType>;
   UpdatedFolderResource?: GQLUpdatedFolderResourceResolvers<ContextType>;
   UptimeAlert?: GQLUptimeAlertResolvers<ContextType>;

@@ -38,6 +38,8 @@ export interface Concept {
   metaImage?: IConcept['metaImage'];
   visualElement?: IConcept['visualElement'];
   supportedLanguages: string[];
+  glossData?: IConcept['glossData'];
+  conceptType: IConcept['conceptType'];
 }
 
 export async function searchConcepts(
@@ -91,6 +93,7 @@ export async function searchConcepts(
       copyright: res.copyright,
       visualElement: res.visualElement,
       supportedLanguages: res.supportedLanguages,
+      conceptType: res.conceptType,
     })),
   };
 }
@@ -118,6 +121,8 @@ export async function fetchConcept(
       metaImage: concept.metaImage,
       visualElement: concept.visualElement,
       supportedLanguages: concept.supportedLanguages,
+      conceptType: concept.conceptType,
+      glossData: concept.glossData,
     };
   } catch (e) {
     return undefined;
