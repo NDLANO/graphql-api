@@ -859,6 +859,27 @@ export const typeDefs = gql`
     copyright: ConceptCopyright
     source: String
     supportedLanguages: [String!]!
+    glossData: Gloss
+    conceptType: String!
+  }
+
+  type Gloss {
+    gloss: String!
+    wordClass: String!
+    originalLanguage: String!
+    transcriptions: Transcription!
+    examples: [[Examples!]!]
+  }
+
+  type Examples {
+    example: String!
+    language: String!
+    transcriptions: Transcription!
+  }
+
+  type Transcription {
+    pinyin: String
+    traditional: String
   }
 
   type Search {
