@@ -1,0 +1,68 @@
+/**
+ * Copyright (c) 2023-present, NDLA.
+ *
+ * This source code is licensed under the GPLv3 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+import {
+  fetchArenaCategories,
+  fetchArenaCategory,
+  fetchArenaRecentTopics,
+  fetchArenaTopic,
+  fetchArenaTopicsByUser,
+} from '../api/arenaApi';
+import {
+  GQLArenaCategory,
+  GQLArenaTopic,
+  GQLQueryArenaCategoryArgs,
+  GQLQueryArenaTopicArgs,
+  GQLQueryArenaTopicsByUserArgs,
+  GQLQueryResolvers,
+} from '../types/schema';
+
+export const Query: Pick<
+  GQLQueryResolvers,
+  | 'arenaCategories'
+  | 'arenaCategory'
+  | 'arenaTopic'
+  | 'arenaRecentTopics'
+  | 'arenaTopicsByUser'
+> = {
+  async arenaCategories(
+    _: any,
+    __: any,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaCategory[]> {
+    return fetchArenaCategories(context);
+  },
+  async arenaCategory(
+    _: any,
+    params: GQLQueryArenaCategoryArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaCategory> {
+    return fetchArenaCategory(params, context);
+  },
+  async arenaTopic(
+    _: any,
+    params: GQLQueryArenaTopicArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaTopic> {
+    return fetchArenaTopic(params, context);
+  },
+  async arenaRecentTopics(
+    _: any,
+    __: any,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaTopic[]> {
+    return fetchArenaRecentTopics(context);
+  },
+  async arenaTopicsByUser(
+    _: any,
+    params: GQLQueryArenaTopicsByUserArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaTopic[]> {
+    return fetchArenaTopicsByUser(params, context);
+  },
+};
