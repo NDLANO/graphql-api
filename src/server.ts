@@ -12,7 +12,7 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
 
-import { isString } from 'lodash';
+import isString from 'lodash/isString';
 import { port } from './config';
 import getLogger from './utils/logger';
 import { typeDefs } from './schema';

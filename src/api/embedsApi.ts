@@ -358,7 +358,7 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({
   embedData,
   context,
 }) => {
-  const image = !!embedData.imageId
+  const image = embedData.imageId
     ? await fetchImageV3(embedData.imageId, context)
     : await Promise.resolve<undefined>(undefined);
 
@@ -378,7 +378,7 @@ export const transformEmbed = async (
   }
 
   let meta: Extract<EmbedMetaData, { status: 'success' }>['data'];
-  let embedData: EmbedData = embed.data;
+  const embedData: EmbedData = embed.data;
 
   try {
     if (embedData.resource === 'image') {

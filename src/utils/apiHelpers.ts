@@ -118,7 +118,7 @@ function externalsToH5pMetaData(obj: any) {
       (i: { h5p: any; assets: any[]; url: string; copyText: string }) => {
         if (i && i.h5p) {
           // this element have h5p object
-          let copyrightElement = {
+          const copyrightElement = {
             license: {
               license: licenseFixer(
                 i.h5p.license || '',

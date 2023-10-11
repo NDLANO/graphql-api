@@ -6,7 +6,7 @@
  *
  */
 
-import { IConfigMetaRestricted } from '@ndla/types-backend/build/learningpath-api';
+import { IConfigMetaRestricted } from '@ndla/types-backend/learningpath-api';
 import { fetchLearningpath, fetchNode, fetchOembed } from '../api';
 import { fetchExamLockStatus } from '../api/learningpathApi';
 import {

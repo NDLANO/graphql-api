@@ -7,7 +7,7 @@
  */
 
 import queryString from 'query-string';
-import { uniq } from 'lodash';
+import uniq from 'lodash/uniq';
 import {
   IConceptSearchResult,
   IConcept,
