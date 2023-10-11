@@ -23,6 +23,7 @@ import {
   GQLCrossSubjectElement,
   GQLQueryArticleArgs,
 } from '../types/schema';
+import parseMarkdown from '../utils/parseMarkdown';
 
 export const Query = {
   async article(
@@ -116,6 +117,9 @@ export const resolvers = {
         return results.concepts;
       }
       return [];
+    },
+    introduction(article: GQLArticle): string {
+      return parseMarkdown({ markdown: article.introduction ?? '' });
     },
   },
 };

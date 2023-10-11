@@ -41,7 +41,7 @@ export async function parseVisualElement(
   context: Context,
 ): Promise<GQLVisualElement | null> {
   const parsedElement = cheerio.load(visualElementEmbed);
-  const data = parsedElement('ndlaembed').data();
+  const data: any = parsedElement('ndlaembed').data();
 
   switch (data?.resource) {
     case 'brightcove':

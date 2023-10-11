@@ -15,6 +15,7 @@ import {
   uptimeToken,
 } from '../config';
 import { GQLUptimeAlert } from '../types/schema';
+import parseMarkdown from '../utils/parseMarkdown';
 
 interface GithubLabel {
   name: string;
@@ -44,7 +45,10 @@ export async function fetchUptimeIssues(
       title: issue.title,
       number: issue.number,
       closable: !issue.labels?.find(label => label.name === 'permanent'),
-      body: he.decode(issue.body).replace(/<[^>]*>?/gm, ''),
+      body: parseMarkdown({
+        markdown: he.decode(issue.body).replace(/<[^>]*>?/gm, ''),
+        inline: true,
+      }),
     };
   });
 }
