@@ -161,7 +161,7 @@ export async function fetchArticlesPage(
   page: number,
 ) {
   return fetch(
-    `/article-api/v2/articles/ids/?ids=${articleIds.join(',')}&language=${
+    `/article-api/v2/articles/ids?ids=${articleIds.join(',')}&language=${
       context.language
     }&page-size=${pageSize}&page=${page}&license=all&fallback=true`,
     context,
