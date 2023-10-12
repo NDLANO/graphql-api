@@ -61,7 +61,7 @@ export async function fetchSubjects(
     isVisible,
   });
   const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/?${query}`,
+    `/${context.taxonomyUrl}/v1/nodes?${query}`,
     context,
   );
   return resolveJson(response);
@@ -107,7 +107,7 @@ export async function fetchTopics(
     includeContexts: true,
   });
   const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/?${query}`,
+    `/${context.taxonomyUrl}/v1/nodes?${query}`,
     context,
   );
   return resolveJson(response);
@@ -145,7 +145,7 @@ export async function fetchChildren(
     language: context.language,
   });
   const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/${id}/nodes/?${query}`,
+    `/${context.taxonomyUrl}/v1/nodes/${id}/nodes?${query}`,
     context,
   );
   return resolveJson(response);
@@ -166,7 +166,7 @@ export async function fetchNodeResources(
     includeContexts: true,
   });
   const response = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes/${id}/resources/?${query}`,
+    `/${context.taxonomyUrl}/v1/nodes/${id}/resources?${query}`,
     context,
   );
   return await resolveJson(response);
