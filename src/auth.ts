@@ -7,7 +7,7 @@
  */
 
 import { Request } from 'express';
-import { isString } from 'lodash';
+import isString from 'lodash/isString';
 
 export async function getToken(
   request: Request,

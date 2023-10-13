@@ -74,7 +74,7 @@ export const toVisualElement = (
         oembed: meta.data.oembed,
       };
 
-    case 'image':
+    case 'image': {
       const src = `/image/${meta.data.id}`;
       return {
         resource: 'image',
@@ -92,6 +92,7 @@ export const toVisualElement = (
           lowerRightY: Number(meta.embedData.lowerRightY) || undefined,
         },
       };
+    }
     default:
       return undefined;
   }

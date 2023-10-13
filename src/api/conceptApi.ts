@@ -7,7 +7,7 @@
  */
 
 import queryString from 'query-string';
-import { uniq } from 'lodash';
+import uniq from 'lodash/uniq';
 import {
   IConceptSearchResult,
   IConcept,
@@ -16,6 +16,7 @@ import {
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { GQLListingPage, GQLSubject } from '../types/schema';
+import parseMarkdown from '../utils/parseMarkdown';
 
 export interface ConceptResult {
   totalCount: number;
@@ -187,7 +188,17 @@ export const fetchEmbedConcept = async (
   const endpoint = draftConcept ? 'drafts' : 'concepts';
   const url = `/concept-api/v1/${endpoint}/${id}?language=${context.language}&fallback=true`;
   const res = await fetch(url, context);
-  return await resolveJson(res);
+  const resolved: IConcept = await resolveJson(res);
+  if (resolved.content) {
+    return {
+      ...resolved,
+      content: {
+        ...resolved.content,
+        content: parseMarkdown({ markdown: resolved.content.content }),
+      },
+    };
+  }
+  return resolved;
 };
 
 export const fetchEmbedConcepts = async (

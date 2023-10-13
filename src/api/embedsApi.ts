@@ -51,6 +51,7 @@ import { fetchEmbedConcept, fetchEmbedConcepts } from './conceptApi';
 import { checkIfFileExists } from './fileApi';
 import { getBrightcoveCopyright } from '../utils/brightcoveUtils';
 import highlightCode from '../utils/highlightCode';
+import parseMarkdown from '../utils/parseMarkdown';
 
 type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
   params: {
@@ -65,22 +66,43 @@ type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
 
 // Some embeds depend on fetching image information, but can function just fine without.
 // This function simply suppresses the error. Do not use it for fetching the actual imageMeta.
-const fetchImageWrapper = async (id: string, context: Context) => {
+const fetchImageWrapper = async (
+  id: string,
+  context: Context,
+): Promise<IImageMetaInformationV3> => {
   const image = await fetchImageV3(id, context);
   if (image === null) {
     throw Error('Failed to fetch image');
   }
-  return image;
+  return {
+    ...image,
+    caption: {
+      ...image.caption,
+      caption: parseMarkdown({ markdown: image.caption.caption, inline: true }),
+    },
+  };
 };
 
 const imageMeta: Fetch<ImageMetaData> = async ({ embedData, context }) => {
-  return await fetchImageV3(embedData.resourceId, context);
+  const res = await fetchImageV3(embedData.resourceId, context);
+  return {
+    ...res,
+    caption: {
+      ...res.caption,
+      caption: parseMarkdown({ markdown: res.caption.caption, inline: true }),
+    },
+  };
 };
 
 const audioMeta: Fetch<AudioMetaData> = async ({ embedData, context }) => {
   const audio = await fetchAudioV2(context, embedData.resourceId);
   const coverPhotoId = audio.podcastMeta?.coverPhoto?.id;
   let imageMeta: IImageMetaInformationV3 | undefined;
+  if (audio.manuscript) {
+    audio.manuscript.manuscript = parseMarkdown({
+      markdown: audio.manuscript.manuscript,
+    });
+  }
   if (coverPhotoId) {
     imageMeta = await fetchImageWrapper(coverPhotoId, context);
   }
@@ -163,6 +185,13 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({
     fetchVideo(videoid, account, context),
     fetchVideoSources(videoid, account, context),
   ]);
+
+  if (video.description) {
+    video.description = parseMarkdown({
+      markdown: video.description,
+      inline: true,
+    });
+  }
 
   return {
     ...video,
@@ -272,6 +301,7 @@ const conceptListMeta: Fetch<ConceptListMetaData> = async ({
     context,
     !!opts.draftConcept,
   );
+
   const concepts = await Promise.all(
     conceptList.map(async concept => {
       const visualElement = await fetchConceptVisualElement(
@@ -280,7 +310,16 @@ const conceptListMeta: Fetch<ConceptListMetaData> = async ({
         index,
         opts,
       );
-      return { concept, visualElement };
+      return {
+        concept: {
+          ...concept,
+          content: {
+            ...concept.content,
+            content: parseMarkdown({ markdown: concept.content.content }),
+          },
+        },
+        visualElement,
+      };
     }),
   );
   return { concepts };
@@ -319,7 +358,7 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({
   embedData,
   context,
 }) => {
-  const image = !!embedData.imageId
+  const image = embedData.imageId
     ? await fetchImageV3(embedData.imageId, context)
     : await Promise.resolve<undefined>(undefined);
 
@@ -339,11 +378,17 @@ export const transformEmbed = async (
   }
 
   let meta: Extract<EmbedMetaData, { status: 'success' }>['data'];
-  let embedData: EmbedData = embed.data;
+  const embedData: EmbedData = embed.data;
 
   try {
     if (embedData.resource === 'image') {
       meta = await imageMeta({ embedData, context, index, opts });
+      if (embedData.caption) {
+        embedData.caption = parseMarkdown({
+          markdown: embedData.caption,
+          inline: true,
+        });
+      }
       embedData.pageUrl = `/${embedData.resource}/${embedData.resourceId}`;
     } else if (embedData.resource === 'audio') {
       meta = await audioMeta({ embedData, context, index, opts });
@@ -376,6 +421,12 @@ export const transformEmbed = async (
     } else if (embedData.resource === 'brightcove') {
       meta = await brightcoveMeta({ embedData, context, index, opts });
       embedData.pageUrl = `/video/${embedData.videoid}`;
+      if (embedData.caption?.length) {
+        embedData.caption = parseMarkdown({
+          markdown: embedData.caption,
+          inline: true,
+        });
+      }
     } else if (embedData.resource === 'content-link') {
       const embedContent = embed.embed.html();
       embedData.linkText = embedContent ?? embedData.linkText;

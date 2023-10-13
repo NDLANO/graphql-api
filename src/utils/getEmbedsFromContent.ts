@@ -6,15 +6,15 @@
  *
  */
 
-import { Cheerio, Root } from 'cheerio';
+import { Cheerio, CheerioAPI } from 'cheerio';
 import { EmbedData } from '@ndla/types-embed';
 
 export interface CheerioEmbed {
-  embed: Cheerio;
+  embed: Cheerio<any>;
   data: EmbedData;
 }
 
-export const getEmbedsFromContent = (html: Root): CheerioEmbed[] => {
+export const getEmbedsFromContent = (html: CheerioAPI): CheerioEmbed[] => {
   return html('ndlaembed')
     .toArray()
     .map(embed => ({

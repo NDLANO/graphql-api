@@ -22,7 +22,7 @@ const correlationIdMiddleware = (
   next: NextFunction,
 ): void => {
   const fromReq = getAsString(req.headers['x-correlation-id']);
-  const cid = !!fromReq ? fromReq : uuid();
+  const cid = fromReq ? fromReq : uuid();
 
   asyncLocalStorage.run(cid, () => {
     res.locals.correlationId = cid;
