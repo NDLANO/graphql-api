@@ -69,6 +69,8 @@ import {
   resolvers as ProgrammeResolvers,
 } from './programmeResolvers';
 
+import { Query as ArenaQuery } from './arenaResolvers';
+
 export const resolvers = {
   Query: {
     ...TopicQuery,
@@ -86,6 +88,7 @@ export const resolvers = {
     ...ImageQuery,
     ...TransformQuery,
     ...ProgrammeQuery,
+    ...ArenaQuery,
   },
   Mutation: {
     ...FolderMutations,

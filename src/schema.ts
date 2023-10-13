@@ -1137,6 +1137,52 @@ export const typeDefs = gql`
     conceptType: String
   }
 
+  type ArenaCategory {
+    id: Int!
+    name: String!
+    description: String!
+    htmlDescription: String!
+    slug: String!
+    topicCount: Int!
+    postCount: Int!
+    disabled: Boolean!
+    topics: [ArenaTopic!]
+  }
+
+  type ArenaUser {
+    id: Int!
+    displayName: String!
+    profilePicture: String
+    slug: String!
+  }
+
+  type ArenaPost {
+    id: Int!
+    topicId: Int!
+    content: String!
+    timestamp: String!
+    isMainPost: Boolean!
+    user: ArenaUser!
+  }
+
+  type ArenaBreadcrumb {
+    name: String!
+    id: Int!
+    type: String!
+  }
+
+  type ArenaTopic {
+    id: Int!
+    categoryId: Int!
+    title: String!
+    slug: String!
+    postCount: Int!
+    locked: Boolean!
+    timestamp: String!
+    posts: [ArenaPost!]!
+    breadcrumbs: [ArenaBreadcrumb!]!
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     article(
@@ -1262,6 +1308,11 @@ export const typeDefs = gql`
     examLockStatus: ConfigMetaRestricted!
     resourceEmbed(id: String!, type: String!): ResourceEmbed!
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
+    arenaCategories: [ArenaCategory!]!
+    arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
+    arenaTopic(topicId: Int!, page: Int!): ArenaTopic
+    arenaRecentTopics: [ArenaTopic!]!
+    arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
   }
 
   type Mutation {
