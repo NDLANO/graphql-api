@@ -11,10 +11,11 @@ import {
   BrightcoveEmbedData,
   ConceptEmbedData,
   EmbedData,
+  H5pEmbedData,
   ImageEmbedData,
 } from '@ndla/types-embed';
 import { load } from 'cheerio';
-import { getEnvironmentVariabel } from '../config';
+import { getEnvironmentVariabel, h5pHostUrl } from '../config';
 import {
   GQLQueryResourceEmbedArgs,
   GQLQueryResourceEmbedsArgs,
@@ -36,6 +37,7 @@ const toEmbed = ({
   | ImageEmbedData
   | AudioEmbedData
   | ConceptEmbedData
+  | H5pEmbedData
   | null => {
   if (type === 'video') {
     return {
@@ -58,6 +60,12 @@ const toEmbed = ({
       resourceId: id,
       type: 'audio',
       url: '',
+    };
+  } else if (type === 'h5p') {
+    return {
+      resource: 'h5p',
+      path: `/resource/${id}`,
+      url: `${h5pHostUrl()}/resource/${id}`,
     };
   } else if (type === 'concept') {
     return {
