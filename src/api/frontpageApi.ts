@@ -51,7 +51,9 @@ export async function fetchMovieMeta(
   articleUrn: string,
   context: Context,
 ): Promise<IMovieMeta | null> {
-  const article = await fetchSimpleArticle(articleUrn, context);
+  const article = await fetchSimpleArticle(articleUrn, context).catch(
+    () => null,
+  );
 
   if (article) {
     return {
