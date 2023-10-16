@@ -47,7 +47,6 @@ export async function fetchUptimeIssues(
       closable: !issue.labels?.find(label => label.name === 'permanent'),
       body: parseMarkdown({
         markdown: he.decode(issue.body).replace(/<[^>]*>?/gm, ''),
-        inline: true,
       }),
     };
   });
