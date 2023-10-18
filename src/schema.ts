@@ -113,6 +113,7 @@ export const typeDefs = gql`
     description: Description!
     supportedLanguages: [String!]!
     coverPhoto: CoverPhoto!
+    image: ImageMetaInformation!
     hasRSS: Boolean!
   }
 
@@ -122,6 +123,7 @@ export const typeDefs = gql`
     description: Description!
     supportedLanguages: [String!]!
     coverPhoto: CoverPhoto!
+    image: ImageMetaInformation!
     hasRSS: Boolean!
   }
 
@@ -132,6 +134,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     episodes: [Audio!]
     coverPhoto: CoverPhoto!
+    image: ImageMetaInformation!
     hasRSS: Boolean!
     content: ResourceEmbed
   }

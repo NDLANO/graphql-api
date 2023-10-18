@@ -78,6 +78,31 @@ export const resolvers = {
       return await fetchResourceEmbeds({ resources: embeds }, context);
     },
   },
+  PodcastSeriesBase: {
+    async image(
+      podcastSeries: ISeries,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLImageMetaInformation | null> {
+      const id = podcastSeries?.coverPhoto.id;
+      if (!id) {
+        return null;
+      }
+      const image = await fetchImage(id, context);
+
+      if (!image) {
+        return null;
+      }
+
+      return {
+        ...image,
+        title: image.title.title,
+        altText: image.alttext.alttext,
+        caption: image.caption.caption,
+        tags: image.tags.tags,
+      };
+    },
+  },
   PodcastMeta: {
     async image(
       podcastMeta: IPodcastMeta,
