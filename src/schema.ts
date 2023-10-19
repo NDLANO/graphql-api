@@ -601,6 +601,9 @@ export const typeDefs = gql`
     about: SubjectPageAbout
     metaDescription: String
     supportedLanguages: [String!]!
+    connectedTo: [String!]!
+    buildsOn: [String!]!
+    leadsTo: [String!]!
   }
 
   type FilmPageAbout {
