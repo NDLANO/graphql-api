@@ -1471,6 +1471,7 @@ export type GQLSearchContext = {
   path: Scalars['String'];
   publicId: Scalars['String'];
   relevance: Scalars['String'];
+  relevanceId: Scalars['String'];
   resourceTypes: Array<GQLSearchContextResourceTypes>;
   root: Scalars['String'];
   rootId: Scalars['String'];
@@ -1817,8 +1818,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   context: TContext,
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
-
-
 
 /** Mapping between all available schema types and the resolvers types */
 export type GQLResolversTypes = {
@@ -3201,6 +3200,7 @@ export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLR
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   publicId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   relevance?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  relevanceId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   resourceTypes?: Resolver<Array<GQLResolversTypes['SearchContextResourceTypes']>, ParentType, ContextType>;
   root?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   rootId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
