@@ -1208,7 +1208,6 @@ export const typeDefs = gql`
     ): Article
     subject(id: String!): Subject
     subjectpage(id: Int!): SubjectPage
-    subjectLink(id: String!): SubjectLink
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
     programmes: [ProgrammePage!]
