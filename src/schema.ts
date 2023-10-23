@@ -601,9 +601,14 @@ export const typeDefs = gql`
     about: SubjectPageAbout
     metaDescription: String
     supportedLanguages: [String!]!
-    connectedTo: [String!]!
-    buildsOn: [String!]!
-    leadsTo: [String!]!
+    connectedTo: [SubjectLink]!
+    buildsOn: [SubjectLink]!
+    leadsTo: [SubjectLink]!
+  }
+
+  type SubjectLink {
+    name: String
+    path: String
   }
 
   type FilmPageAbout {
@@ -671,6 +676,9 @@ export const typeDefs = gql`
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]
+    connectedTo: [String!]!
+    buildsOn: [String!]!
+    leadsTo: [String!]!
   }
 
   type ProgrammePage {
@@ -1200,6 +1208,7 @@ export const typeDefs = gql`
     ): Article
     subject(id: String!): Subject
     subjectpage(id: Int!): SubjectPage
+    subjectLink(id: String!): SubjectLink
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
     programmes: [ProgrammePage!]

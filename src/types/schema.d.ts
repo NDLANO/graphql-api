@@ -1096,6 +1096,7 @@ export type GQLQuery = {
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
   sharedFolder: GQLSharedFolder;
   subject?: Maybe<GQLSubject>;
+  subjectLink?: Maybe<GQLSubjectLink>;
   subjectpage?: Maybe<GQLSubjectPage>;
   subjects?: Maybe<Array<GQLSubject>>;
   topic?: Maybe<GQLTopic>;
@@ -1335,6 +1336,11 @@ export type GQLQuerySubjectArgs = {
 };
 
 
+export type GQLQuerySubjectLinkArgs = {
+  id: Scalars['String'];
+};
+
+
 export type GQLQuerySubjectpageArgs = {
   id: Scalars['Int'];
 };
@@ -1537,10 +1543,13 @@ export type GQLSubject = GQLTaxonomyEntity & {
   __typename?: 'Subject';
   allTopics?: Maybe<Array<GQLTopic>>;
   breadcrumbs: Array<Scalars['String']>;
+  buildsOn?: Maybe<Array<Scalars['String']>>;
+  connectedTo?: Maybe<Array<Scalars['String']>>;
   contentUri?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
   grepCodes?: Maybe<Array<Scalars['String']>>;
   id: Scalars['String'];
+  leadsTo?: Maybe<Array<Scalars['String']>>;
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String'];
   path: Scalars['String'];
@@ -1558,11 +1567,20 @@ export type GQLSubjectTopicsArgs = {
   all?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type GQLSubjectLink = {
+  __typename?: 'SubjectLink';
+  name?: Maybe<Scalars['String']>;
+  path?: Maybe<Scalars['String']>;
+};
+
 export type GQLSubjectPage = {
   __typename?: 'SubjectPage';
   about?: Maybe<GQLSubjectPageAbout>;
   banner: GQLSubjectPageBanner;
+  buildsOn: Array<Maybe<GQLSubjectLink>>;
+  connectedTo: Array<Maybe<GQLSubjectLink>>;
   id: Scalars['Int'];
+  leadsTo: Array<Maybe<GQLSubjectLink>>;
   metaDescription?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   supportedLanguages: Array<Scalars['String']>;
@@ -1939,6 +1957,7 @@ export type GQLResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>;
   StringRecord: ResolverTypeWrapper<Scalars['StringRecord']>;
   Subject: ResolverTypeWrapper<GQLSubject>;
+  SubjectLink: ResolverTypeWrapper<GQLSubjectLink>;
   SubjectPage: ResolverTypeWrapper<GQLSubjectPage>;
   SubjectPageAbout: ResolverTypeWrapper<GQLSubjectPageAbout>;
   SubjectPageBanner: ResolverTypeWrapper<GQLSubjectPageBanner>;
@@ -2085,6 +2104,7 @@ export type GQLResolversParentTypes = {
   String: Scalars['String'];
   StringRecord: Scalars['StringRecord'];
   Subject: GQLSubject;
+  SubjectLink: GQLSubjectLink;
   SubjectPage: GQLSubjectPage;
   SubjectPageAbout: GQLSubjectPageAbout;
   SubjectPageBanner: GQLSubjectPageBanner;
@@ -3096,6 +3116,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
   sharedFolder?: Resolver<GQLResolversTypes['SharedFolder'], ParentType, ContextType, RequireFields<GQLQuerySharedFolderArgs, 'id'>>;
   subject?: Resolver<Maybe<GQLResolversTypes['Subject']>, ParentType, ContextType, RequireFields<GQLQuerySubjectArgs, 'id'>>;
+  subjectLink?: Resolver<Maybe<GQLResolversTypes['SubjectLink']>, ParentType, ContextType, RequireFields<GQLQuerySubjectLinkArgs, 'id'>>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType, RequireFields<GQLQuerySubjectpageArgs, 'id'>>;
   subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType, Partial<GQLQuerySubjectsArgs>>;
   topic?: Resolver<Maybe<GQLResolversTypes['Topic']>, ParentType, ContextType, RequireFields<GQLQueryTopicArgs, 'id'>>;
@@ -3267,10 +3288,13 @@ export interface GQLStringRecordScalarConfig extends GraphQLScalarTypeConfig<GQL
 export type GQLSubjectResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Subject'] = GQLResolversParentTypes['Subject']> = {
   allTopics?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  buildsOn?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  connectedTo?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
   grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  leadsTo?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3284,10 +3308,19 @@ export type GQLSubjectResolvers<ContextType = any, ParentType extends GQLResolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLSubjectLinkResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectLink'] = GQLResolversParentTypes['SubjectLink']> = {
+  name?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  path?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLSubjectPageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectPage'] = GQLResolversParentTypes['SubjectPage']> = {
   about?: Resolver<Maybe<GQLResolversTypes['SubjectPageAbout']>, ParentType, ContextType>;
   banner?: Resolver<GQLResolversTypes['SubjectPageBanner'], ParentType, ContextType>;
+  buildsOn?: Resolver<Array<Maybe<GQLResolversTypes['SubjectLink']>>, ParentType, ContextType>;
+  connectedTo?: Resolver<Array<Maybe<GQLResolversTypes['SubjectLink']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  leadsTo?: Resolver<Array<Maybe<GQLResolversTypes['SubjectLink']>>, ParentType, ContextType>;
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3576,6 +3609,7 @@ export type GQLResolvers<ContextType = any> = {
   SortResult?: GQLSortResultResolvers<ContextType>;
   StringRecord?: GraphQLScalarType;
   Subject?: GQLSubjectResolvers<ContextType>;
+  SubjectLink?: GQLSubjectLinkResolvers<ContextType>;
   SubjectPage?: GQLSubjectPageResolvers<ContextType>;
   SubjectPageAbout?: GQLSubjectPageAboutResolvers<ContextType>;
   SubjectPageBanner?: GQLSubjectPageBannerResolvers<ContextType>;

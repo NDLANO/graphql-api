@@ -9,7 +9,7 @@
 
 import { ISubjectPageData } from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
-import { fetchLK20CompetenceGoalSet } from '../api';
+import { fetchLK20CompetenceGoalSet, fetchSubject } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
 import { GQLQuerySubjectArgs, GQLSubject, GQLTopic } from '../types/schema';
@@ -98,6 +98,31 @@ export const resolvers = {
         return code ? fetchLK20CompetenceGoalSet(code, context) : [];
       }
       return [];
+    },
+  },
+  SubjectPage: {
+    async connectedTo(
+      subject: GQLSubject,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLSubject[]> {
+      return Promise.all(
+        subject.connectedTo.map(id => fetchSubject(context, id)),
+      );
+    },
+    async buildsOn(
+      subject: GQLSubject,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLSubject[]> {
+      return Promise.all(subject.buildsOn.map(id => fetchSubject(context, id)));
+    },
+    async leadsTo(
+      subject: GQLSubject,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLSubject[]> {
+      return Promise.all(subject.leadsTo.map(id => fetchSubject(context, id)));
     },
   },
 };
