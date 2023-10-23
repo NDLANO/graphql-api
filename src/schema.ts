@@ -749,6 +749,7 @@ export const typeDefs = gql`
     subjectId: String!
     rootId: String!
     relevance: String!
+    relevanceId: String!
     path: String!
     id: String!
     publicId: String!
