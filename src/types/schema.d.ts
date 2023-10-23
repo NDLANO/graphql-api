@@ -1543,13 +1543,13 @@ export type GQLSubject = GQLTaxonomyEntity & {
   __typename?: 'Subject';
   allTopics?: Maybe<Array<GQLTopic>>;
   breadcrumbs: Array<Scalars['String']>;
-  buildsOn?: Maybe<Array<Scalars['String']>>;
-  connectedTo?: Maybe<Array<Scalars['String']>>;
+  buildsOn: Array<Scalars['String']>;
+  connectedTo: Array<Scalars['String']>;
   contentUri?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
   grepCodes?: Maybe<Array<Scalars['String']>>;
   id: Scalars['String'];
-  leadsTo?: Maybe<Array<Scalars['String']>>;
+  leadsTo: Array<Scalars['String']>;
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String'];
   path: Scalars['String'];
@@ -3288,13 +3288,13 @@ export interface GQLStringRecordScalarConfig extends GraphQLScalarTypeConfig<GQL
 export type GQLSubjectResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Subject'] = GQLResolversParentTypes['Subject']> = {
   allTopics?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  buildsOn?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  connectedTo?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  buildsOn?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  connectedTo?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
   grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  leadsTo?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  leadsTo?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
