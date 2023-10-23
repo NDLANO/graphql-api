@@ -280,6 +280,9 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    connectedTo: [String!]
+    buildsOn: [String!]
+    leadsTo: [String!]
   }
 
   interface WithArticle {
@@ -676,9 +679,9 @@ export const typeDefs = gql`
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]
-    connectedTo: [String!]!
-    buildsOn: [String!]!
-    leadsTo: [String!]!
+    connectedTo: [String!]
+    buildsOn: [String!]
+    leadsTo: [String!]
   }
 
   type ProgrammePage {
