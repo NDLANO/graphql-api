@@ -280,9 +280,6 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
-    connectedTo: [String!]
-    buildsOn: [String!]
-    leadsTo: [String!]
   }
 
   interface WithArticle {

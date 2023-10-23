@@ -2,13 +2,11 @@
 
 exports[`can run query on schema 1`] = `
 {
-  "errors": [
-    [GraphQLError: Interface field TaxonomyEntity.connectedTo expected but Resource does not provide it.],
-    [GraphQLError: Interface field TaxonomyEntity.buildsOn expected but Resource does not provide it.],
-    [GraphQLError: Interface field TaxonomyEntity.leadsTo expected but Resource does not provide it.],
-    [GraphQLError: Interface field TaxonomyEntity.connectedTo expected but Topic does not provide it.],
-    [GraphQLError: Interface field TaxonomyEntity.buildsOn expected but Topic does not provide it.],
-    [GraphQLError: Interface field TaxonomyEntity.leadsTo expected but Topic does not provide it.],
-  ],
+  "data": {
+    "resource": {
+      "id": "Hello World",
+      "name": "Hello World",
+    },
+  },
 }
 `;
