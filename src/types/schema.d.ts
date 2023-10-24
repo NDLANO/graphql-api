@@ -1096,7 +1096,6 @@ export type GQLQuery = {
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
   sharedFolder: GQLSharedFolder;
   subject?: Maybe<GQLSubject>;
-  subjectLink?: Maybe<GQLSubjectLink>;
   subjectpage?: Maybe<GQLSubjectPage>;
   subjects?: Maybe<Array<GQLSubject>>;
   topic?: Maybe<GQLTopic>;
@@ -1332,11 +1331,6 @@ export type GQLQuerySharedFolderArgs = {
 
 
 export type GQLQuerySubjectArgs = {
-  id: Scalars['String'];
-};
-
-
-export type GQLQuerySubjectLinkArgs = {
   id: Scalars['String'];
 };
 
@@ -1635,12 +1629,9 @@ export type GQLTaxonomyContext = {
 
 export type GQLTaxonomyEntity = {
   breadcrumbs: Array<Scalars['String']>;
-  buildsOn?: Maybe<Array<Scalars['String']>>;
-  connectedTo?: Maybe<Array<Scalars['String']>>;
   contentUri?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
   id: Scalars['String'];
-  leadsTo?: Maybe<Array<Scalars['String']>>;
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String'];
   path: Scalars['String'];
@@ -3119,7 +3110,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
   sharedFolder?: Resolver<GQLResolversTypes['SharedFolder'], ParentType, ContextType, RequireFields<GQLQuerySharedFolderArgs, 'id'>>;
   subject?: Resolver<Maybe<GQLResolversTypes['Subject']>, ParentType, ContextType, RequireFields<GQLQuerySubjectArgs, 'id'>>;
-  subjectLink?: Resolver<Maybe<GQLResolversTypes['SubjectLink']>, ParentType, ContextType, RequireFields<GQLQuerySubjectLinkArgs, 'id'>>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType, RequireFields<GQLQuerySubjectpageArgs, 'id'>>;
   subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType, Partial<GQLQuerySubjectsArgs>>;
   topic?: Resolver<Maybe<GQLResolversTypes['Topic']>, ParentType, ContextType, RequireFields<GQLQueryTopicArgs, 'id'>>;
@@ -3380,12 +3370,9 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
 export type GQLTaxonomyEntityResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyEntity'] = GQLResolversParentTypes['TaxonomyEntity']> = {
   __resolveType: TypeResolveFn<'Resource' | 'Subject' | 'Topic', ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  buildsOn?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  connectedTo?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  leadsTo?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

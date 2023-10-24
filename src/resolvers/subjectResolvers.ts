@@ -9,10 +9,15 @@
 
 import { ISubjectPageData } from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
-import { fetchLK20CompetenceGoalSet, fetchSubject } from '../api';
+import { fetchLK20CompetenceGoalSet } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
-import { GQLQuerySubjectArgs, GQLSubject, GQLTopic } from '../types/schema';
+import {
+  GQLQuerySubjectArgs,
+  GQLSubject,
+  GQLSubjectLink,
+  GQLTopic,
+} from '../types/schema';
 
 export const Query = {
   async subject(
@@ -105,7 +110,7 @@ export const resolvers = {
       subject: GQLSubject,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<Node[]> {
+    ): Promise<GQLSubjectLink[]> {
       return Promise.all(
         await context.loaders.subjectLoader.loadMany(
           subject.connectedTo.map(id => {
@@ -118,7 +123,7 @@ export const resolvers = {
       subject: GQLSubject,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<Node[]> {
+    ): Promise<GQLSubjectLink[]> {
       return Promise.all(
         await context.loaders.subjectLoader.loadMany(
           subject.buildsOn.map(id => {
@@ -131,7 +136,7 @@ export const resolvers = {
       subject: GQLSubject,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<Node[]> {
+    ): Promise<GQLSubjectLink[]> {
       return Promise.all(
         await context.loaders.subjectLoader.loadMany(
           subject.leadsTo.map(id => {
