@@ -676,9 +676,6 @@ export const typeDefs = gql`
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
     grepCodes: [String!]
-    connectedTo: [String!]
-    buildsOn: [String!]
-    leadsTo: [String!]
   }
 
   type ProgrammePage {
