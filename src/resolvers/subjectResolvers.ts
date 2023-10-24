@@ -113,7 +113,7 @@ export const resolvers = {
     ): Promise<GQLSubjectLink[]> {
       return await context.loaders.subjectLoader.loadMany(
         subjectpage.connectedTo.map(id => {
-          return { id: id };
+          return { id };
         }),
       );
     },
@@ -124,7 +124,7 @@ export const resolvers = {
     ): Promise<GQLSubjectLink[]> {
       return await context.loaders.subjectLoader.loadMany(
         subjectpage.buildsOn.map(id => {
-          return { id: id };
+          return { id };
         }),
       );
     },
@@ -135,7 +135,7 @@ export const resolvers = {
     ): Promise<GQLSubjectLink[]> {
       return await context.loaders.subjectLoader.loadMany(
         subjectpage.leadsTo.map(id => {
-          return { id: id };
+          return { id };
         }),
       );
     },
