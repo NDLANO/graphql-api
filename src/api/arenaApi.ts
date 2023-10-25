@@ -78,7 +78,7 @@ export const fetchArenaUser = async (
 export const fetchArenaCategories = async (
   context: Context,
 ): Promise<GQLArenaCategory[]> => {
-  const response = await fetch('/grupper/api/categories', context);
+  const response = await fetch('/groups/api/categories', context);
   const resolved: any = await resolveJson(response);
   return resolved.categories.map(toCategory);
 };
@@ -88,7 +88,7 @@ export const fetchArenaCategory = async (
   context: Context,
 ): Promise<GQLArenaCategory> => {
   const response = await fetch(
-    `/grupper/api/category/${categoryId}?page=${page}`,
+    `/groups/api/category/${categoryId}?page=${page}`,
     context,
   );
   const resolved: any = await resolveJson(response);
@@ -100,7 +100,7 @@ export const fetchArenaTopic = async (
   context: Context,
 ): Promise<GQLArenaTopic> => {
   const response = await fetch(
-    `/grupper/api/topic/${topicId}?page=${page}`,
+    `/groups/api/topic/${topicId}?page=${page}`,
     context,
   );
   const resolved: any = await resolveJson(response);
@@ -110,7 +110,7 @@ export const fetchArenaTopic = async (
 export const fetchArenaRecentTopics = async (
   context: Context,
 ): Promise<GQLArenaTopic[]> => {
-  const response = await fetch('/grupper/api/recent', context);
+  const response = await fetch('/groups/api/recent', context);
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
 };
@@ -119,7 +119,7 @@ export const fetchArenaTopicsByUser = async (
   { userSlug }: GQLQueryArenaTopicsByUserArgs,
   context: Context,
 ): Promise<GQLArenaTopic[]> => {
-  const response = await fetch(`/grupper/api/user/${userSlug}/topics`, context);
+  const response = await fetch(`/groups/api/user/${userSlug}/topics`, context);
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
 };
