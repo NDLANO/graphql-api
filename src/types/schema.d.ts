@@ -1110,12 +1110,14 @@ export type GQLQueryAllFolderResourcesArgs = {
   size?: InputMaybe<Scalars['Int']>;
 };
 
-
 export type GQLQueryArenaCategoryArgs = {
   categoryId: Scalars['Int'];
   page: Scalars['Int'];
 };
 
+export type GQLQueryArenaUserArgs = {
+  id: Scalars['Int'];
+};
 
 export type GQLQueryArenaTopicArgs = {
   page: Scalars['Int'];
@@ -3067,6 +3069,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   arenaCategories?: Resolver<Array<GQLResolversTypes['ArenaCategory']>, ParentType, ContextType>;
   arenaCategory?: Resolver<Maybe<GQLResolversTypes['ArenaCategory']>, ParentType, ContextType, RequireFields<GQLQueryArenaCategoryArgs, 'categoryId' | 'page'>>;
   arenaRecentTopics?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType>;
+  arenaUser?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserArgs, 'id'>>;
   arenaTopic?: Resolver<Maybe<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicArgs, 'page' | 'topicId'>>;
   arenaTopicsByUser?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicsByUserArgs, 'userSlug'>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
