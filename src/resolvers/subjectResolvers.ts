@@ -12,7 +12,12 @@ import { Node } from '@ndla/types-taxonomy';
 import { fetchLK20CompetenceGoalSet } from '../api';
 
 import { filterMissingArticles } from '../utils/articleHelpers';
-import { GQLQuerySubjectArgs, GQLSubject, GQLTopic } from '../types/schema';
+import {
+  GQLQuerySubjectArgs,
+  GQLSubject,
+  GQLSubjectLink,
+  GQLTopic,
+} from '../types/schema';
 
 export const Query = {
   async subject(
@@ -98,6 +103,41 @@ export const resolvers = {
         return code ? fetchLK20CompetenceGoalSet(code, context) : [];
       }
       return [];
+    },
+  },
+  SubjectPage: {
+    async connectedTo(
+      subjectpage: ISubjectPageData,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLSubjectLink[]> {
+      return await context.loaders.subjectLoader.loadMany(
+        subjectpage.connectedTo.map(id => {
+          return { id };
+        }),
+      );
+    },
+    async buildsOn(
+      subjectpage: ISubjectPageData,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLSubjectLink[]> {
+      return await context.loaders.subjectLoader.loadMany(
+        subjectpage.buildsOn.map(id => {
+          return { id };
+        }),
+      );
+    },
+    async leadsTo(
+      subjectpage: ISubjectPageData,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLSubjectLink[]> {
+      return await context.loaders.subjectLoader.loadMany(
+        subjectpage.leadsTo.map(id => {
+          return { id };
+        }),
+      );
     },
   },
 };
