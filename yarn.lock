@@ -1516,10 +1516,10 @@
   resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-4.0.0.tgz#47717795264a9afe495a4b8f4d3ba99d204ae8b6"
   integrity sha512-uJdlIpc6b6P3U5LlvEKNxelI3RtG8FVEDTQbC9h4wNAhGQYP9zUPsEMld/jsRfSYJ0d2En2txpmwmw5+/ZDJRA==
 
-"@ndla/types-taxonomy@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@ndla/types-taxonomy/-/types-taxonomy-1.0.18.tgz#854258b5355aa911aaa91b262b72bd3fa3225116"
-  integrity sha512-wxJgzE+dzvLsYyw5AXNcfxJMV64/rfdN3UGOry2y9zxcLdyVnJPZ+mLJZ5kwndEKWjSGNCFBsLweycl4QZXUcw==
+"@ndla/types-taxonomy@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@ndla/types-taxonomy/-/types-taxonomy-1.0.19.tgz#9fdfd8a5934a9108421f0b30f8f4a135a5fa7642"
+  integrity sha512-F0rN7OWD7iUnJv8F/R9ZMW5Zu1ZjEd9pXHxO/BsiaxqaJWXT8b4TQtF0pUQ17pEXZkZlr156+hyfx3bQTw8+iw==
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
