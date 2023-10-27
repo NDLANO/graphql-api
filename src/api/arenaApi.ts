@@ -70,7 +70,7 @@ export const fetchArenaUser = async (
   { id }: GQLQueryArenaUserArgs,
   context: Context,
 ): Promise<GQLArenaUser> => {
-  const response = await fetch(`/groups/api/userId=${id}`, context); //change path when API is ready
+  const response = await fetch(`/groups/api/user/uid/${id}`, context);
   const resolved: any = await resolveJson(response);
   return toUser(resolved);
 };
