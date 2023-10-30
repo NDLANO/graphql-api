@@ -10,13 +10,16 @@ import {
   fetchArenaCategories,
   fetchArenaCategory,
   fetchArenaRecentTopics,
+  fetchArenaUser,
   fetchArenaTopic,
   fetchArenaTopicsByUser,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
+  GQLArenaUser,
   GQLArenaTopic,
   GQLQueryArenaCategoryArgs,
+  GQLQueryArenaUserArgs,
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
   GQLQueryResolvers,
@@ -24,12 +27,20 @@ import {
 
 export const Query: Pick<
   GQLQueryResolvers,
+  | 'arenaUser'
   | 'arenaCategories'
   | 'arenaCategory'
   | 'arenaTopic'
   | 'arenaRecentTopics'
   | 'arenaTopicsByUser'
 > = {
+  async arenaUser(
+    _: any,
+    params: GQLQueryArenaUserArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaUser> {
+    return fetchArenaUser(params, context);
+  },
   async arenaCategories(
     _: any,
     __: any,

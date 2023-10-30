@@ -1164,6 +1164,7 @@ export const typeDefs = gql`
   type ArenaUser {
     id: Int!
     displayName: String!
+    username: String!
     profilePicture: String
     slug: String!
   }
@@ -1322,6 +1323,7 @@ export const typeDefs = gql`
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
+    arenaUser(username: String!): ArenaUser
     arenaTopic(topicId: Int!, page: Int!): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!

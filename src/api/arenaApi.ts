@@ -14,12 +14,14 @@ import {
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
+  GQLQueryArenaUserArgs,
 } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
 const toUser = (user: any): GQLArenaUser => ({
   id: user.uid,
   displayName: user.displayname,
+  username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
 });
@@ -63,6 +65,18 @@ const toCategory = (category: any): GQLArenaCategory => {
     disabled: category.disabled === 1,
     topics: category.topics?.map(toTopic),
   };
+};
+
+export const fetchArenaUser = async (
+  { username }: GQLQueryArenaUserArgs,
+  context: Context,
+): Promise<GQLArenaUser> => {
+  const response = await fetch(
+    `/groups/api/user/username/${username}`,
+    context,
+  );
+  const resolved: any = await resolveJson(response);
+  return toUser(resolved);
 };
 
 export const fetchArenaCategories = async (
