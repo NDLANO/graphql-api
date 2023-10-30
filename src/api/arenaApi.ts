@@ -21,6 +21,7 @@ import { fetch, resolveJson } from '../utils/apiHelpers';
 const toUser = (user: any): GQLArenaUser => ({
   id: user.uid,
   displayName: user.displayname,
+  username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
 });
@@ -67,10 +68,13 @@ const toCategory = (category: any): GQLArenaCategory => {
 };
 
 export const fetchArenaUser = async (
-  { id }: GQLQueryArenaUserArgs,
+  { username }: GQLQueryArenaUserArgs,
   context: Context,
 ): Promise<GQLArenaUser> => {
-  const response = await fetch(`/groups/api/user/uid/${id}`, context);
+  const response = await fetch(
+    `/groups/api/user/username/${username}`,
+    context,
+  );
   const resolved: any = await resolveJson(response);
   return toUser(resolved);
 };
