@@ -1164,6 +1164,7 @@ export const typeDefs = gql`
   type ArenaUser {
     id: Int!
     displayName: String!
+    username: String!
     profilePicture: String
     slug: String!
   }
