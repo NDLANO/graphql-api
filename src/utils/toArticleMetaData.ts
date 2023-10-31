@@ -216,6 +216,18 @@ export const toArticleMetaData = (
           }
           break;
         }
+        case 'contact-block':
+        case 'campaign-block':
+          if (curr.data.image) {
+            imageMetaData(curr.data.image, acc);
+          }
+          break;
+        case 'key-figure':
+        case 'blog-post':
+          if (curr.data.metaImage) {
+            imageMetaData(curr.data.metaImage, acc);
+          }
+          break;
       }
       return acc;
     },
