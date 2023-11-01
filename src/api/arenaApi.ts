@@ -96,7 +96,7 @@ export const fetchArenaCategory = async (
     context,
   );
   const resolved: any = await resolveJson(response);
-  return toCategory(resolved.category);
+  return toCategory(resolved);
 };
 
 export const fetchArenaTopic = async (
