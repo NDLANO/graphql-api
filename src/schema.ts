@@ -283,6 +283,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    language: String
   }
 
   interface WithArticle {
@@ -303,6 +304,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    language: String
     rank: Int
     parents: [Topic!]
     meta: Meta
@@ -334,6 +336,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    language: String
     meta: Meta
     article(
       subjectId: String
@@ -675,6 +678,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    language: String
     subjectpage: SubjectPage
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
