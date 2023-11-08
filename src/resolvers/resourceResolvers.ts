@@ -24,6 +24,7 @@ import {
   GQLArticle,
   GQLLearningpath,
   GQLMeta,
+  GQLQueryArticleResourceArgs,
   GQLQueryResourceArgs,
   GQLResource,
   GQLResourceType,
@@ -31,8 +32,39 @@ import {
   GQLTaxonomyContext,
   GQLVisualElementOembed,
 } from '../types/schema';
+import { fetchNodeByContentUri } from '../api/taxonomyApi';
 
 export const Query = {
+  async articleResource(
+    _: any,
+    { articleId, taxonomyId }: GQLQueryArticleResourceArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLResource | null> {
+    const resource = articleId
+      ? await fetchNodeByContentUri(`urn:article:${articleId}`, context)
+      : taxonomyId
+      ? await fetchNode({ id: taxonomyId }, context)
+      : null;
+    if (!resource) return null;
+
+    const visibleCtx = resource.contexts.filter(c => c.isVisible);
+
+    return {
+      ...resource,
+      path: resource.path,
+      rank: visibleCtx?.[0]?.rank,
+      relevanceId: visibleCtx?.[0]?.relevanceId || 'urn:relevance:core',
+      contexts: visibleCtx.map(ctx => {
+        const breadcrumbs =
+          ctx.breadcrumbs[context.language] || ctx.breadcrumbs['nb'] || [];
+        return {
+          path: ctx.path,
+          parentIds: ctx.parentIds,
+          breadcrumbs,
+        };
+      }),
+    };
+  },
   async resource(
     _: any,
     { id, subjectId, topicId }: GQLQueryResourceArgs,

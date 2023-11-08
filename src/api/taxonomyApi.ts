@@ -113,6 +113,23 @@ export async function fetchTopics(
   return resolveJson(response);
 }
 
+export async function fetchNodeByContentUri(
+  contentUri: string,
+  context: Context,
+): Promise<Node | undefined> {
+  const query = qs.stringify({
+    contentURI: contentUri,
+    language: context.language,
+    includeContexts: true,
+  });
+  const response = await taxonomyFetch(
+    `/${context.taxonomyUrl}/v1/nodes?${query}`,
+    context,
+  );
+  const resolved: Node[] = await resolveJson(response);
+  return resolved[0];
+}
+
 export async function fetchNode(
   params: { id: string },
   context: Context,

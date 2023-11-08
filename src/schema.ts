@@ -1202,6 +1202,7 @@ export const typeDefs = gql`
 
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
+    articleResource(articleId: String, taxonomyId: String): Resource
     article(
       id: String!
       subjectId: String

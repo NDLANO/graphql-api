@@ -69,10 +69,10 @@ export type GQLArenaTopic = {
 export type GQLArenaUser = {
   __typename?: 'ArenaUser';
   displayName: Scalars['String'];
-  username: Scalars['String'];
   id: Scalars['Int'];
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type GQLArticle = {
@@ -1066,7 +1066,9 @@ export type GQLQuery = {
   arenaRecentTopics: Array<GQLArenaTopic>;
   arenaTopic?: Maybe<GQLArenaTopic>;
   arenaTopicsByUser: Array<GQLArenaTopic>;
+  arenaUser?: Maybe<GQLArenaUser>;
   article?: Maybe<GQLArticle>;
+  articleResource?: Maybe<GQLResource>;
   audio?: Maybe<GQLAudio>;
   competenceGoal?: Maybe<GQLCompetenceGoal>;
   competenceGoals?: Maybe<Array<GQLCompetenceGoal>>;
@@ -1111,14 +1113,12 @@ export type GQLQueryAllFolderResourcesArgs = {
   size?: InputMaybe<Scalars['Int']>;
 };
 
+
 export type GQLQueryArenaCategoryArgs = {
   categoryId: Scalars['Int'];
   page: Scalars['Int'];
 };
 
-export type GQLQueryArenaUserArgs = {
-  username: Scalars['String'];
-};
 
 export type GQLQueryArenaTopicArgs = {
   page: Scalars['Int'];
@@ -1131,6 +1131,11 @@ export type GQLQueryArenaTopicsByUserArgs = {
 };
 
 
+export type GQLQueryArenaUserArgs = {
+  username: Scalars['String'];
+};
+
+
 export type GQLQueryArticleArgs = {
   absoluteUrl?: InputMaybe<Scalars['Boolean']>;
   convertEmbeds?: InputMaybe<Scalars['Boolean']>;
@@ -1140,6 +1145,12 @@ export type GQLQueryArticleArgs = {
   path?: InputMaybe<Scalars['String']>;
   showVisualElement?: InputMaybe<Scalars['String']>;
   subjectId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLQueryArticleResourceArgs = {
+  articleId?: InputMaybe<Scalars['String']>;
+  taxonomyId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2185,6 +2196,7 @@ export type GQLArenaUserResolvers<ContextType = any, ParentType extends GQLResol
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3085,10 +3097,11 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   arenaCategories?: Resolver<Array<GQLResolversTypes['ArenaCategory']>, ParentType, ContextType>;
   arenaCategory?: Resolver<Maybe<GQLResolversTypes['ArenaCategory']>, ParentType, ContextType, RequireFields<GQLQueryArenaCategoryArgs, 'categoryId' | 'page'>>;
   arenaRecentTopics?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType>;
-  arenaUser?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserArgs, 'username'>>;
   arenaTopic?: Resolver<Maybe<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicArgs, 'page' | 'topicId'>>;
   arenaTopicsByUser?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicsByUserArgs, 'userSlug'>>;
+  arenaUser?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserArgs, 'username'>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
+  articleResource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLQueryArticleResourceArgs>>;
   audio?: Resolver<Maybe<GQLResolversTypes['Audio']>, ParentType, ContextType, RequireFields<GQLQueryAudioArgs, 'id'>>;
   competenceGoal?: Resolver<Maybe<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, RequireFields<GQLQueryCompetenceGoalArgs, 'code'>>;
   competenceGoals?: Resolver<Maybe<Array<GQLResolversTypes['CompetenceGoal']>>, ParentType, ContextType, Partial<GQLQueryCompetenceGoalsArgs>>;
