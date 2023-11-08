@@ -1130,11 +1130,6 @@ export const typeDefs = gql`
     organization: String!
   }
 
-  type ConfigMetaRestricted {
-    key: String!
-    value: String!
-  }
-
   type ConfigMetaBoolean {
     key: String!
     value: Boolean!
