@@ -69,10 +69,10 @@ export type GQLArenaTopic = {
 export type GQLArenaUser = {
   __typename?: 'ArenaUser';
   displayName: Scalars['String'];
-  username: Scalars['String'];
   id: Scalars['Int'];
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type GQLArticle = {
@@ -373,12 +373,6 @@ export type GQLConfigMetaBoolean = {
   __typename?: 'ConfigMetaBoolean';
   key: Scalars['String'];
   value: Scalars['Boolean'];
-};
-
-export type GQLConfigMetaRestricted = {
-  __typename?: 'ConfigMetaRestricted';
-  key: Scalars['String'];
-  value: Scalars['String'];
 };
 
 export type GQLConfigMetaStringList = {
@@ -1081,6 +1075,7 @@ export type GQLQuery = {
   arenaRecentTopics: Array<GQLArenaTopic>;
   arenaTopic?: Maybe<GQLArenaTopic>;
   arenaTopicsByUser: Array<GQLArenaTopic>;
+  arenaUser?: Maybe<GQLArenaUser>;
   article?: Maybe<GQLArticle>;
   audio?: Maybe<GQLAudio>;
   competenceGoal?: Maybe<GQLCompetenceGoal>;
@@ -1126,14 +1121,12 @@ export type GQLQueryAllFolderResourcesArgs = {
   size?: InputMaybe<Scalars['Int']>;
 };
 
+
 export type GQLQueryArenaCategoryArgs = {
   categoryId: Scalars['Int'];
   page: Scalars['Int'];
 };
 
-export type GQLQueryArenaUserArgs = {
-  username: Scalars['String'];
-};
 
 export type GQLQueryArenaTopicArgs = {
   page: Scalars['Int'];
@@ -1143,6 +1136,11 @@ export type GQLQueryArenaTopicArgs = {
 
 export type GQLQueryArenaTopicsByUserArgs = {
   userSlug: Scalars['String'];
+};
+
+
+export type GQLQueryArenaUserArgs = {
+  username: Scalars['String'];
 };
 
 
@@ -1885,7 +1883,6 @@ export type GQLResolversTypes = {
   ConceptLicense: ResolverTypeWrapper<GQLConceptLicense>;
   ConceptResult: ResolverTypeWrapper<GQLConceptResult>;
   ConfigMetaBoolean: ResolverTypeWrapper<GQLConfigMetaBoolean>;
-  ConfigMetaRestricted: ResolverTypeWrapper<GQLConfigMetaRestricted>;
   ConfigMetaStringList: ResolverTypeWrapper<GQLConfigMetaStringList>;
   Contributor: ResolverTypeWrapper<GQLContributor>;
   Copyright: ResolverTypeWrapper<GQLCopyright>;
@@ -2034,7 +2031,6 @@ export type GQLResolversParentTypes = {
   ConceptLicense: GQLConceptLicense;
   ConceptResult: GQLConceptResult;
   ConfigMetaBoolean: GQLConfigMetaBoolean;
-  ConfigMetaRestricted: GQLConfigMetaRestricted;
   ConfigMetaStringList: GQLConfigMetaStringList;
   Contributor: GQLContributor;
   Copyright: GQLCopyright;
@@ -2204,6 +2200,7 @@ export type GQLArenaUserResolvers<ContextType = any, ParentType extends GQLResol
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2499,12 +2496,6 @@ export type GQLConceptResultResolvers<ContextType = any, ParentType extends GQLR
 export type GQLConfigMetaBooleanResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaBoolean'] = GQLResolversParentTypes['ConfigMetaBoolean']> = {
   key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLConfigMetaRestrictedResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaRestricted'] = GQLResolversParentTypes['ConfigMetaRestricted']> = {
-  key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3119,9 +3110,9 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   arenaCategory?: Resolver<Maybe<GQLResolversTypes['ArenaCategory']>, ParentType, ContextType, RequireFields<GQLQueryArenaCategoryArgs, 'categoryId' | 'page'>>;
   arenaEnabledOrgs?: Resolver<Maybe<GQLResolversTypes['ConfigMetaStringList']>, ParentType, ContextType>;
   arenaRecentTopics?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType>;
-  arenaUser?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserArgs, 'username'>>;
   arenaTopic?: Resolver<Maybe<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicArgs, 'page' | 'topicId'>>;
   arenaTopicsByUser?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicsByUserArgs, 'userSlug'>>;
+  arenaUser?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserArgs, 'username'>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
   audio?: Resolver<Maybe<GQLResolversTypes['Audio']>, ParentType, ContextType, RequireFields<GQLQueryAudioArgs, 'id'>>;
   competenceGoal?: Resolver<Maybe<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, RequireFields<GQLQueryCompetenceGoalArgs, 'code'>>;
@@ -3566,7 +3557,6 @@ export type GQLResolvers<ContextType = any> = {
   ConceptLicense?: GQLConceptLicenseResolvers<ContextType>;
   ConceptResult?: GQLConceptResultResolvers<ContextType>;
   ConfigMetaBoolean?: GQLConfigMetaBooleanResolvers<ContextType>;
-  ConfigMetaRestricted?: GQLConfigMetaRestrictedResolvers<ContextType>;
   ConfigMetaStringList?: GQLConfigMetaStringListResolvers<ContextType>;
   Contributor?: GQLContributorResolvers<ContextType>;
   Copyright?: GQLCopyrightResolvers<ContextType>;
