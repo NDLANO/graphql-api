@@ -1506,10 +1506,10 @@
   resolved "https://registry.yarnpkg.com/@ndla/licenses/-/licenses-7.1.3.tgz#3a826083fdf29cafe66b6197087c455d80a7a0ec"
   integrity sha512-3GNJxmAlFHnc4Q77sJL+RapEUcxxyBe9jDaFZ9f4miVpu3cIiZUhSXdqWR6E4C9EOKk86tuGftbr9BXIqREa+Q==
 
-"@ndla/types-backend@^0.2.23":
-  version "0.2.23"
-  resolved "https://registry.yarnpkg.com/@ndla/types-backend/-/types-backend-0.2.23.tgz#dbd64746100e9ba4fc89332987ba3d89ed9fd503"
-  integrity sha512-jPU9uj/ItVyNnBCuPIqbSnOhfhVqC1nmEQzbV9cLCF0ijp7KmHpQ7UzfbG3zOg8/3GfuKVZT1Tk3vpVzlS4waQ==
+"@ndla/types-backend@^0.2.26":
+  version "0.2.26"
+  resolved "https://registry.npmjs.org/@ndla/types-backend/-/types-backend-0.2.26.tgz#cf0e5ff76ce2893d7b54a475df4fa4865bf7a0a7"
+  integrity sha512-xSl2C20vXo1VvcOH7qWfsgg+T9sSmxInuPTcWgZPChKSX+Mo8nIZlz1Arz2gw9pg9YYDrMnMwKVD8B7i9xOihQ==
 
 "@ndla/types-embed@^4.0.0":
   version "4.0.0"

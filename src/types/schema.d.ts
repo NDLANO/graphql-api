@@ -369,10 +369,16 @@ export type GQLConceptResult = {
   totalCount: Scalars['Int'];
 };
 
-export type GQLConfigMetaRestricted = {
-  __typename?: 'ConfigMetaRestricted';
+export type GQLConfigMetaBoolean = {
+  __typename?: 'ConfigMetaBoolean';
   key: Scalars['String'];
-  value: Scalars['String'];
+  value: Scalars['Boolean'];
+};
+
+export type GQLConfigMetaStringList = {
+  __typename?: 'ConfigMetaStringList';
+  key: Scalars['String'];
+  value: Array<Scalars['String']>;
 };
 
 export type GQLContributor = {
@@ -949,8 +955,10 @@ export type GQLMutationUpdatePersonalDataArgs = {
 
 export type GQLMyNdlaPersonalData = {
   __typename?: 'MyNdlaPersonalData';
+  arenaEnabled: Scalars['Boolean'];
   favoriteSubjects: Array<Scalars['String']>;
   id: Scalars['Int'];
+  organization: Scalars['String'];
   role: Scalars['String'];
 };
 
@@ -1063,6 +1071,7 @@ export type GQLQuery = {
   allFolderResources: Array<GQLFolderResource>;
   arenaCategories: Array<GQLArenaCategory>;
   arenaCategory?: Maybe<GQLArenaCategory>;
+  arenaEnabledOrgs?: Maybe<GQLConfigMetaStringList>;
   arenaRecentTopics: Array<GQLArenaTopic>;
   arenaTopic?: Maybe<GQLArenaTopic>;
   arenaTopicsByUser: Array<GQLArenaTopic>;
@@ -1076,7 +1085,7 @@ export type GQLQuery = {
   conceptSearch?: Maybe<GQLConceptResult>;
   coreElement?: Maybe<GQLCoreElement>;
   coreElements?: Maybe<Array<GQLCoreElement>>;
-  examLockStatus: GQLConfigMetaRestricted;
+  examLockStatus: GQLConfigMetaBoolean;
   filmfrontpage?: Maybe<GQLFilmFrontpage>;
   folder: GQLFolder;
   folderResourceMeta?: Maybe<GQLFolderResourceMeta>;
@@ -1880,7 +1889,8 @@ export type GQLResolversTypes = {
   ConceptFolderResourceMeta: ResolverTypeWrapper<GQLConceptFolderResourceMeta>;
   ConceptLicense: ResolverTypeWrapper<GQLConceptLicense>;
   ConceptResult: ResolverTypeWrapper<GQLConceptResult>;
-  ConfigMetaRestricted: ResolverTypeWrapper<GQLConfigMetaRestricted>;
+  ConfigMetaBoolean: ResolverTypeWrapper<GQLConfigMetaBoolean>;
+  ConfigMetaStringList: ResolverTypeWrapper<GQLConfigMetaStringList>;
   Contributor: ResolverTypeWrapper<GQLContributor>;
   Copyright: ResolverTypeWrapper<GQLCopyright>;
   CoreElement: ResolverTypeWrapper<GQLCoreElement>;
@@ -2027,7 +2037,8 @@ export type GQLResolversParentTypes = {
   ConceptFolderResourceMeta: GQLConceptFolderResourceMeta;
   ConceptLicense: GQLConceptLicense;
   ConceptResult: GQLConceptResult;
-  ConfigMetaRestricted: GQLConfigMetaRestricted;
+  ConfigMetaBoolean: GQLConfigMetaBoolean;
+  ConfigMetaStringList: GQLConfigMetaStringList;
   Contributor: GQLContributor;
   Copyright: GQLCopyright;
   CoreElement: GQLCoreElement;
@@ -2489,9 +2500,15 @@ export type GQLConceptResultResolvers<ContextType = any, ParentType extends GQLR
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLConfigMetaRestrictedResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaRestricted'] = GQLResolversParentTypes['ConfigMetaRestricted']> = {
+export type GQLConfigMetaBooleanResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaBoolean'] = GQLResolversParentTypes['ConfigMetaBoolean']> = {
   key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLConfigMetaStringListResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaStringList'] = GQLResolversParentTypes['ConfigMetaStringList']> = {
+  key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2981,8 +2998,10 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
+  arenaEnabled?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   favoriteSubjects?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3096,6 +3115,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   allFolderResources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType, Partial<GQLQueryAllFolderResourcesArgs>>;
   arenaCategories?: Resolver<Array<GQLResolversTypes['ArenaCategory']>, ParentType, ContextType>;
   arenaCategory?: Resolver<Maybe<GQLResolversTypes['ArenaCategory']>, ParentType, ContextType, RequireFields<GQLQueryArenaCategoryArgs, 'categoryId' | 'page'>>;
+  arenaEnabledOrgs?: Resolver<Maybe<GQLResolversTypes['ConfigMetaStringList']>, ParentType, ContextType>;
   arenaRecentTopics?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType>;
   arenaTopic?: Resolver<Maybe<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicArgs, 'page' | 'topicId'>>;
   arenaTopicsByUser?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicsByUserArgs, 'userSlug'>>;
@@ -3109,7 +3129,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   conceptSearch?: Resolver<Maybe<GQLResolversTypes['ConceptResult']>, ParentType, ContextType, Partial<GQLQueryConceptSearchArgs>>;
   coreElement?: Resolver<Maybe<GQLResolversTypes['CoreElement']>, ParentType, ContextType, RequireFields<GQLQueryCoreElementArgs, 'code'>>;
   coreElements?: Resolver<Maybe<Array<GQLResolversTypes['CoreElement']>>, ParentType, ContextType, Partial<GQLQueryCoreElementsArgs>>;
-  examLockStatus?: Resolver<GQLResolversTypes['ConfigMetaRestricted'], ParentType, ContextType>;
+  examLockStatus?: Resolver<GQLResolversTypes['ConfigMetaBoolean'], ParentType, ContextType>;
   filmfrontpage?: Resolver<Maybe<GQLResolversTypes['FilmFrontpage']>, ParentType, ContextType>;
   folder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLQueryFolderArgs, 'id'>>;
   folderResourceMeta?: Resolver<Maybe<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaArgs, 'resource'>>;
@@ -3544,7 +3564,8 @@ export type GQLResolvers<ContextType = any> = {
   ConceptFolderResourceMeta?: GQLConceptFolderResourceMetaResolvers<ContextType>;
   ConceptLicense?: GQLConceptLicenseResolvers<ContextType>;
   ConceptResult?: GQLConceptResultResolvers<ContextType>;
-  ConfigMetaRestricted?: GQLConfigMetaRestrictedResolvers<ContextType>;
+  ConfigMetaBoolean?: GQLConfigMetaBooleanResolvers<ContextType>;
+  ConfigMetaStringList?: GQLConfigMetaStringListResolvers<ContextType>;
   Contributor?: GQLContributorResolvers<ContextType>;
   Copyright?: GQLCopyrightResolvers<ContextType>;
   CoreElement?: GQLCoreElementResolvers<ContextType>;

@@ -1126,11 +1126,18 @@ export const typeDefs = gql`
     id: Int!
     favoriteSubjects: [String!]!
     role: String!
+    arenaEnabled: Boolean!
+    organization: String!
   }
 
-  type ConfigMetaRestricted {
+  type ConfigMetaBoolean {
     key: String!
-    value: String!
+    value: Boolean!
+  }
+
+  type ConfigMetaStringList {
+    key: String!
+    value: [String!]!
   }
 
   type ResourceMetaData {
@@ -1323,7 +1330,8 @@ export const typeDefs = gql`
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
-    examLockStatus: ConfigMetaRestricted!
+    examLockStatus: ConfigMetaBoolean!
+    arenaEnabledOrgs: ConfigMetaStringList
     resourceEmbed(id: String!, type: String!): ResourceEmbed!
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
     arenaCategories: [ArenaCategory!]!
