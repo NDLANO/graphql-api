@@ -153,6 +153,9 @@ const conceptMetaData = (
       case 'image':
         imageMetaData(visualElement.data, acc);
         break;
+      case 'audio':
+        audioMetaData(visualElement, acc);
+        break;
       case 'h5p':
         h5pMetaData(visualElement, acc);
         break;
