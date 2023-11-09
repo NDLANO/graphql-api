@@ -1511,10 +1511,10 @@
   resolved "https://registry.npmjs.org/@ndla/types-backend/-/types-backend-0.2.26.tgz#cf0e5ff76ce2893d7b54a475df4fa4865bf7a0a7"
   integrity sha512-xSl2C20vXo1VvcOH7qWfsgg+T9sSmxInuPTcWgZPChKSX+Mo8nIZlz1Arz2gw9pg9YYDrMnMwKVD8B7i9xOihQ==
 
-"@ndla/types-embed@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-4.0.0.tgz#47717795264a9afe495a4b8f4d3ba99d204ae8b6"
-  integrity sha512-uJdlIpc6b6P3U5LlvEKNxelI3RtG8FVEDTQbC9h4wNAhGQYP9zUPsEMld/jsRfSYJ0d2En2txpmwmw5+/ZDJRA==
+"@ndla/types-embed@^4.0.5":
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-4.0.5.tgz#e0b274016c92a326a0eca7281f057811bacfd8f4"
+  integrity sha512-aSxO6/Y49sKf/h2BjEpt/VbWpclwRMx1BtxfX9ehc02zijk8y7AYhpnuUSkcoIV8gz8aW8vV6Z6fmPes6/bH6A==
 
 "@ndla/types-taxonomy@^1.0.19":
   version "1.0.19"
