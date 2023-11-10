@@ -1331,6 +1331,7 @@ export const typeDefs = gql`
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
     examLockStatus: ConfigMetaBoolean!
+    aiEnabledOrgs: ConfigMetaStringList
     arenaEnabledOrgs: ConfigMetaStringList
     resourceEmbed(id: String!, type: String!): ResourceEmbed!
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
