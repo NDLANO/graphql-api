@@ -147,7 +147,7 @@ const conceptMetaData = (
     metaImageUrl: concept.metaImage?.url,
   };
   if (concept.conceptType === 'gloss') {
-    acc['glossaries'] = acc['glossaries'].concat(data);
+    acc['glosses'] = acc['glosses'].concat(data);
   } else {
     acc['concepts'] = acc['concepts'].concat(data);
   }
@@ -183,7 +183,7 @@ interface MetaData {
   brightcoves: GQLBrightcoveLicense[];
   h5ps: GQLH5pLicense[];
   concepts: GQLConceptLicense[];
-  glossaries: GQLGlossLicense[];
+  glosses: GQLGlossLicense[];
 }
 
 export const toArticleMetaData = (
@@ -249,7 +249,7 @@ export const toArticleMetaData = (
       brightcoves: [],
       h5ps: [],
       concepts: [],
-      glossaries: [],
+      glosses: [],
     },
   );
 };

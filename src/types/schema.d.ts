@@ -132,6 +132,7 @@ export type GQLArticleMetaData = {
   concepts?: Maybe<Array<GQLConceptLicense>>;
   copyText?: Maybe<Scalars['String']>;
   footnotes?: Maybe<Array<GQLFootNote>>;
+  glosses?: Maybe<Array<GQLGlossLicense>>;
   h5ps?: Maybe<Array<GQLH5pLicense>>;
   images?: Maybe<Array<GQLImageLicense>>;
   podcasts?: Maybe<Array<GQLPodcastLicense>>;
@@ -1454,6 +1455,7 @@ export type GQLResourceMetaData = {
   audios?: Maybe<Array<GQLAudioLicense>>;
   brightcoves?: Maybe<Array<GQLBrightcoveLicense>>;
   concepts?: Maybe<Array<GQLConceptLicense>>;
+  glosses?: Maybe<Array<GQLGlossLicense>>;
   h5ps?: Maybe<Array<GQLH5pLicense>>;
   images?: Maybe<Array<GQLImageLicense>>;
   podcasts?: Maybe<Array<GQLPodcastLicense>>;
@@ -2274,6 +2276,7 @@ export type GQLArticleMetaDataResolvers<ContextType = any, ParentType extends GQ
   concepts?: Resolver<Maybe<Array<GQLResolversTypes['ConceptLicense']>>, ParentType, ContextType>;
   copyText?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   footnotes?: Resolver<Maybe<Array<GQLResolversTypes['FootNote']>>, ParentType, ContextType>;
+  glosses?: Resolver<Maybe<Array<GQLResolversTypes['GlossLicense']>>, ParentType, ContextType>;
   h5ps?: Resolver<Maybe<Array<GQLResolversTypes['H5pLicense']>>, ParentType, ContextType>;
   images?: Resolver<Maybe<Array<GQLResolversTypes['ImageLicense']>>, ParentType, ContextType>;
   podcasts?: Resolver<Maybe<Array<GQLResolversTypes['PodcastLicense']>>, ParentType, ContextType>;
@@ -3229,6 +3232,7 @@ export type GQLResourceMetaDataResolvers<ContextType = any, ParentType extends G
   audios?: Resolver<Maybe<Array<GQLResolversTypes['AudioLicense']>>, ParentType, ContextType>;
   brightcoves?: Resolver<Maybe<Array<GQLResolversTypes['BrightcoveLicense']>>, ParentType, ContextType>;
   concepts?: Resolver<Maybe<Array<GQLResolversTypes['ConceptLicense']>>, ParentType, ContextType>;
+  glosses?: Resolver<Maybe<Array<GQLResolversTypes['GlossLicense']>>, ParentType, ContextType>;
   h5ps?: Resolver<Maybe<Array<GQLResolversTypes['H5pLicense']>>, ParentType, ContextType>;
   images?: Resolver<Maybe<Array<GQLResolversTypes['ImageLicense']>>, ParentType, ContextType>;
   podcasts?: Resolver<Maybe<Array<GQLResolversTypes['PodcastLicense']>>, ParentType, ContextType>;

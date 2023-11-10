@@ -495,6 +495,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
+    glosses: [GlossLicense!]
     copyText: String
   }
 
@@ -1156,6 +1157,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
+    glosses: [GlossLicense!]
   }
 
   type ResourceEmbed {
