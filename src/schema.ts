@@ -1200,6 +1200,19 @@ export const typeDefs = gql`
     breadcrumbs: [ArenaBreadcrumb!]!
   }
 
+  type ArenaNotification {
+    bodyShort: String!
+    path: String!
+    from: Int!
+    importance: Int!
+    datetime: Int!
+    datetimeISO: String!
+    read: Boolean!
+    user: ArenaUser!
+    image: String!
+    readClass: String!
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
@@ -1332,6 +1345,7 @@ export const typeDefs = gql`
     arenaTopic(topicId: Int!, page: Int!): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
+    arenaNotifications: [ArenaNotification!]!
   }
 
   type Mutation {

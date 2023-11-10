@@ -13,6 +13,7 @@ import {
   fetchArenaUser,
   fetchArenaTopic,
   fetchArenaTopicsByUser,
+  fetchArenaNotifications,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
@@ -23,6 +24,7 @@ import {
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
   GQLQueryResolvers,
+  GQLArenaNotification,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -33,6 +35,7 @@ export const Query: Pick<
   | 'arenaTopic'
   | 'arenaRecentTopics'
   | 'arenaTopicsByUser'
+  | 'arenaNotifications'
 > = {
   async arenaUser(
     _: any,
@@ -75,5 +78,12 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopic[]> {
     return fetchArenaTopicsByUser(params, context);
+  },
+  async arenaNotifications(
+    _: any,
+    __: any,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaNotification[]> {
+    return fetchArenaNotifications(context);
   },
 };

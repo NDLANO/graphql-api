@@ -8,6 +8,7 @@
 
 import {
   GQLArenaCategory,
+  GQLArenaNotification,
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
@@ -66,6 +67,19 @@ const toCategory = (category: any): GQLArenaCategory => {
     topics: category.topics?.map(toTopic),
   };
 };
+
+const toNotification = (notification: any): GQLArenaNotification => ({
+  bodyShort: notification.bodyShort,
+  datetimeISO: notification.datetimeISO,
+  datetime: notification.datetime,
+  from: notification.from,
+  importance: notification.importance,
+  path: notification.path,
+  read: notification.read,
+  user: toUser(notification.user),
+  readClass: notification.readClass,
+  image: notification.image,
+});
 
 export const fetchArenaUser = async (
   { username }: GQLQueryArenaUserArgs,
@@ -126,4 +140,12 @@ export const fetchArenaTopicsByUser = async (
   const response = await fetch(`/groups/api/user/${userSlug}/topics`, context);
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
+};
+
+export const fetchArenaNotifications = async (
+  context: Context,
+): Promise<GQLArenaNotification[]> => {
+  const response = await fetch(`/groups/api/notifications`, context);
+  const resolved = await resolveJson(response);
+  return resolved.notifications.map(toNotification);
 };
