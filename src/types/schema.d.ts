@@ -1067,6 +1067,7 @@ export type GQLProgrammePage = {
 
 export type GQLQuery = {
   __typename?: 'Query';
+  aiEnabledOrgs?: Maybe<GQLConfigMetaStringList>;
   alerts?: Maybe<Array<Maybe<GQLUptimeAlert>>>;
   allFolderResources: Array<GQLFolderResource>;
   arenaCategories: Array<GQLArenaCategory>;
@@ -3111,6 +3112,7 @@ export type GQLProgrammePageResolvers<ContextType = any, ParentType extends GQLR
 };
 
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
+  aiEnabledOrgs?: Resolver<Maybe<GQLResolversTypes['ConfigMetaStringList']>, ParentType, ContextType>;
   alerts?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['UptimeAlert']>>>, ParentType, ContextType>;
   allFolderResources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType, Partial<GQLQueryAllFolderResourcesArgs>>;
   arenaCategories?: Resolver<Array<GQLResolversTypes['ArenaCategory']>, ParentType, ContextType>;
