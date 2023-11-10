@@ -562,6 +562,16 @@ export type GQLGloss = {
   wordClass: Scalars['String'];
 };
 
+export type GQLGlossLicense = {
+  __typename?: 'GlossLicense';
+  content?: Maybe<Scalars['String']>;
+  copyright?: Maybe<GQLConceptCopyright>;
+  id: Scalars['String'];
+  metaImageUrl?: Maybe<Scalars['String']>;
+  src?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+};
+
 export type GQLGrade = {
   __typename?: 'Grade';
   categories?: Maybe<Array<GQLCategory>>;
@@ -1915,6 +1925,7 @@ export type GQLResolversTypes = {
   FrontpageSearch: ResolverTypeWrapper<GQLFrontpageSearch>;
   FrontpageSearchResult: ResolverTypeWrapper<GQLFrontpageSearchResult>;
   Gloss: ResolverTypeWrapper<GQLGloss>;
+  GlossLicense: ResolverTypeWrapper<GQLGlossLicense>;
   Grade: ResolverTypeWrapper<GQLGrade>;
   GroupSearch: ResolverTypeWrapper<GQLGroupSearch>;
   GroupSearchResult: ResolverTypeWrapper<GQLGroupSearchResult>;
@@ -2063,6 +2074,7 @@ export type GQLResolversParentTypes = {
   FrontpageSearch: GQLFrontpageSearch;
   FrontpageSearchResult: GQLFrontpageSearchResult;
   Gloss: GQLGloss;
+  GlossLicense: GQLGlossLicense;
   Grade: GQLGrade;
   GroupSearch: GQLGroupSearch;
   GroupSearchResult: GQLGroupSearchResult;
@@ -2685,6 +2697,16 @@ export type GQLGlossResolvers<ContextType = any, ParentType extends GQLResolvers
   originalLanguage?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   transcriptions?: Resolver<GQLResolversTypes['Transcription'], ParentType, ContextType>;
   wordClass?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLGlossLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['GlossLicense'] = GQLResolversParentTypes['GlossLicense']> = {
+  content?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3588,6 +3610,7 @@ export type GQLResolvers<ContextType = any> = {
   FrontpageSearch?: GQLFrontpageSearchResolvers<ContextType>;
   FrontpageSearchResult?: GQLFrontpageSearchResultResolvers<ContextType>;
   Gloss?: GQLGlossResolvers<ContextType>;
+  GlossLicense?: GQLGlossLicenseResolvers<ContextType>;
   Grade?: GQLGradeResolvers<ContextType>;
   GroupSearch?: GQLGroupSearchResolvers<ContextType>;
   GroupSearchResult?: GQLGroupSearchResultResolvers<ContextType>;

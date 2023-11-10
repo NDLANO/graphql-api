@@ -478,6 +478,15 @@ export const typeDefs = gql`
     copyright: ConceptCopyright
   }
 
+  type GlossLicense {
+    id: String!
+    title: String!
+    src: String
+    content: String
+    metaImageUrl: String
+    copyright: ConceptCopyright
+  }
+
   type ArticleMetaData {
     footnotes: [FootNote!]
     images: [ImageLicense!]
