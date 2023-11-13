@@ -1189,6 +1189,7 @@ export const typeDefs = gql`
     username: String!
     profilePicture: String
     slug: String!
+    groupTitleArray: [String]
   }
 
   type ArenaPost {
