@@ -114,6 +114,7 @@ export const fetchResourceEmbed = async (
   const embeds = getEmbedsFromContent(html)[0];
   const embedPromise = await transformEmbed(embeds, context, 0, 0, {
     shortCircuitOnError: true,
+    standalone: true,
   });
 
   const metadata = toArticleMetaData([embedPromise]);
@@ -143,6 +144,7 @@ export const fetchResourceEmbeds = async (
     embedsFromContent.map((embed, index) =>
       transformEmbed(embed, context, index, 0, {
         shortCircuitOnError: true,
+        standalone: true,
       }),
     ),
   );

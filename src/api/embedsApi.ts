@@ -28,6 +28,7 @@ import {
   EmbedData,
   ConceptVisualElementMeta,
   CampaignBlockMetaData,
+  ConceptData,
 } from '@ndla/types-embed';
 import { IImageMetaInformationV3 } from '@ndla/types-backend/image-api';
 import { load } from 'cheerio';
@@ -165,6 +166,7 @@ export interface TransformOptions {
   absoluteUrl?: boolean;
   subject?: string;
   shortCircuitOnError?: boolean;
+  standalone?: boolean;
 }
 
 const footnoteMeta: Fetch<
@@ -434,7 +436,18 @@ export const transformEmbed = async (
     } else if (embedData.resource === 'related-content') {
       meta = await relatedContentMeta({ embedData, context, index, opts });
     } else if (embedData.resource === 'concept') {
-      meta = await conceptMeta({ embedData, context, index, opts });
+      const response: ConceptData | undefined = await conceptMeta({
+        embedData,
+        context,
+        index,
+        opts,
+      }).catch(_ => undefined);
+      // If the concept does not exist and we are not requesting a standalone concept, remove it from the article.
+      if (!opts.standalone && !response) {
+        embed.embed.replaceWith('');
+        return;
+      }
+      meta = response;
       embedData.pageUrl = `/${embedData.resource}/${embedData.contentId}`;
     } else if (embedData.resource === 'concept-list') {
       meta = await conceptListMeta({ embedData, context, index, opts });
