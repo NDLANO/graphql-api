@@ -73,7 +73,7 @@ export type GQLArenaUser = {
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
   username: Scalars['String'];
-  groupTitle?: Scalars['String']
+  groupTitleArray?: Maybe<Array<Scalars['String']>>;
 };
 
 export type GQLArticle = {

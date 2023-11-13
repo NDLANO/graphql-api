@@ -24,7 +24,7 @@ const toUser = (user: any): GQLArenaUser => ({
   username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
-  groupTitle: user.groupTitle,
+  groupTitleArray: user.groupTitleArray,
 });
 
 const toArenaPost = (post: any): GQLArenaPost => ({
