@@ -478,6 +478,15 @@ export const typeDefs = gql`
     copyright: ConceptCopyright
   }
 
+  type GlossLicense {
+    id: String!
+    title: String!
+    src: String
+    content: String
+    metaImageUrl: String
+    copyright: ConceptCopyright
+  }
+
   type ArticleMetaData {
     footnotes: [FootNote!]
     images: [ImageLicense!]
@@ -486,6 +495,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
+    glosses: [GlossLicense!]
     copyText: String
   }
 
@@ -1147,6 +1157,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
+    glosses: [GlossLicense!]
   }
 
   type ResourceEmbed {

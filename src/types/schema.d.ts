@@ -132,6 +132,7 @@ export type GQLArticleMetaData = {
   concepts?: Maybe<Array<GQLConceptLicense>>;
   copyText?: Maybe<Scalars['String']>;
   footnotes?: Maybe<Array<GQLFootNote>>;
+  glosses?: Maybe<Array<GQLGlossLicense>>;
   h5ps?: Maybe<Array<GQLH5pLicense>>;
   images?: Maybe<Array<GQLImageLicense>>;
   podcasts?: Maybe<Array<GQLPodcastLicense>>;
@@ -560,6 +561,16 @@ export type GQLGloss = {
   originalLanguage: Scalars['String'];
   transcriptions: GQLTranscription;
   wordClass: Scalars['String'];
+};
+
+export type GQLGlossLicense = {
+  __typename?: 'GlossLicense';
+  content?: Maybe<Scalars['String']>;
+  copyright?: Maybe<GQLConceptCopyright>;
+  id: Scalars['String'];
+  metaImageUrl?: Maybe<Scalars['String']>;
+  src?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
 };
 
 export type GQLGrade = {
@@ -1445,6 +1456,7 @@ export type GQLResourceMetaData = {
   audios?: Maybe<Array<GQLAudioLicense>>;
   brightcoves?: Maybe<Array<GQLBrightcoveLicense>>;
   concepts?: Maybe<Array<GQLConceptLicense>>;
+  glosses?: Maybe<Array<GQLGlossLicense>>;
   h5ps?: Maybe<Array<GQLH5pLicense>>;
   images?: Maybe<Array<GQLImageLicense>>;
   podcasts?: Maybe<Array<GQLPodcastLicense>>;
@@ -1916,6 +1928,7 @@ export type GQLResolversTypes = {
   FrontpageSearch: ResolverTypeWrapper<GQLFrontpageSearch>;
   FrontpageSearchResult: ResolverTypeWrapper<GQLFrontpageSearchResult>;
   Gloss: ResolverTypeWrapper<GQLGloss>;
+  GlossLicense: ResolverTypeWrapper<GQLGlossLicense>;
   Grade: ResolverTypeWrapper<GQLGrade>;
   GroupSearch: ResolverTypeWrapper<GQLGroupSearch>;
   GroupSearchResult: ResolverTypeWrapper<GQLGroupSearchResult>;
@@ -2064,6 +2077,7 @@ export type GQLResolversParentTypes = {
   FrontpageSearch: GQLFrontpageSearch;
   FrontpageSearchResult: GQLFrontpageSearchResult;
   Gloss: GQLGloss;
+  GlossLicense: GQLGlossLicense;
   Grade: GQLGrade;
   GroupSearch: GQLGroupSearch;
   GroupSearchResult: GQLGroupSearchResult;
@@ -2263,6 +2277,7 @@ export type GQLArticleMetaDataResolvers<ContextType = any, ParentType extends GQ
   concepts?: Resolver<Maybe<Array<GQLResolversTypes['ConceptLicense']>>, ParentType, ContextType>;
   copyText?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   footnotes?: Resolver<Maybe<Array<GQLResolversTypes['FootNote']>>, ParentType, ContextType>;
+  glosses?: Resolver<Maybe<Array<GQLResolversTypes['GlossLicense']>>, ParentType, ContextType>;
   h5ps?: Resolver<Maybe<Array<GQLResolversTypes['H5pLicense']>>, ParentType, ContextType>;
   images?: Resolver<Maybe<Array<GQLResolversTypes['ImageLicense']>>, ParentType, ContextType>;
   podcasts?: Resolver<Maybe<Array<GQLResolversTypes['PodcastLicense']>>, ParentType, ContextType>;
@@ -2686,6 +2701,16 @@ export type GQLGlossResolvers<ContextType = any, ParentType extends GQLResolvers
   originalLanguage?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   transcriptions?: Resolver<GQLResolversTypes['Transcription'], ParentType, ContextType>;
   wordClass?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLGlossLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['GlossLicense'] = GQLResolversParentTypes['GlossLicense']> = {
+  content?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3209,6 +3234,7 @@ export type GQLResourceMetaDataResolvers<ContextType = any, ParentType extends G
   audios?: Resolver<Maybe<Array<GQLResolversTypes['AudioLicense']>>, ParentType, ContextType>;
   brightcoves?: Resolver<Maybe<Array<GQLResolversTypes['BrightcoveLicense']>>, ParentType, ContextType>;
   concepts?: Resolver<Maybe<Array<GQLResolversTypes['ConceptLicense']>>, ParentType, ContextType>;
+  glosses?: Resolver<Maybe<Array<GQLResolversTypes['GlossLicense']>>, ParentType, ContextType>;
   h5ps?: Resolver<Maybe<Array<GQLResolversTypes['H5pLicense']>>, ParentType, ContextType>;
   images?: Resolver<Maybe<Array<GQLResolversTypes['ImageLicense']>>, ParentType, ContextType>;
   podcasts?: Resolver<Maybe<Array<GQLResolversTypes['PodcastLicense']>>, ParentType, ContextType>;
@@ -3590,6 +3616,7 @@ export type GQLResolvers<ContextType = any> = {
   FrontpageSearch?: GQLFrontpageSearchResolvers<ContextType>;
   FrontpageSearchResult?: GQLFrontpageSearchResultResolvers<ContextType>;
   Gloss?: GQLGlossResolvers<ContextType>;
+  GlossLicense?: GQLGlossLicenseResolvers<ContextType>;
   Grade?: GQLGradeResolvers<ContextType>;
   GroupSearch?: GQLGroupSearchResolvers<ContextType>;
   GroupSearchResult?: GQLGroupSearchResultResolvers<ContextType>;
