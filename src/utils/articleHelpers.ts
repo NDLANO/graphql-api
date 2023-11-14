@@ -69,15 +69,16 @@ export async function filterMissingArticles<
     ),
   );
 
-  const withAvailability = activeResources.map(taxonomyEntity => {
+  const withAvailabilityAndLanguage = activeResources.map(taxonomyEntity => {
     const article = nonNullArticles.find(
       a => getArticleIdFromUrn(taxonomyEntity.contentUri ?? '') === `${a.id}`,
     );
     return {
       ...taxonomyEntity,
       availability: article?.availability,
+      language: article?.language ?? taxonomyEntity.language,
     };
   });
 
-  return [...learningpathResources, ...withAvailability];
+  return [...learningpathResources, ...withAvailabilityAndLanguage];
 }

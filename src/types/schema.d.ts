@@ -69,11 +69,11 @@ export type GQLArenaTopic = {
 export type GQLArenaUser = {
   __typename?: 'ArenaUser';
   displayName: Scalars['String'];
+  groupTitleArray?: Maybe<Array<Maybe<Scalars['String']>>>;
   id: Scalars['Int'];
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
   username: Scalars['String'];
-  groupTitleArray?: Maybe<Array<Scalars['String']>>;
 };
 
 export type GQLArticle = {
@@ -821,6 +821,7 @@ export type GQLMeta = {
   availability?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   introduction?: Maybe<Scalars['String']>;
+  language?: Maybe<Scalars['String']>;
   lastUpdated?: Maybe<Scalars['String']>;
   metaDescription?: Maybe<Scalars['String']>;
   metaImage?: Maybe<GQLMetaImage>;
@@ -2220,6 +2221,7 @@ export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLReso
 
 export type GQLArenaUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaUser'] = GQLResolversParentTypes['ArenaUser']> = {
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  groupTitleArray?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['String']>>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2961,6 +2963,7 @@ export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversP
   availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   lastUpdated?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
