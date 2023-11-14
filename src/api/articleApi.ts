@@ -159,7 +159,7 @@ export async function fetchArticlesPage(
   context: Context,
   pageSize: number,
   page: number,
-) {
+): Promise<IArticleV2[]> {
   return fetch(
     `/article-api/v2/articles/ids?ids=${articleIds.join(',')}&language=${
       context.language
@@ -187,7 +187,7 @@ export async function fetchArticles(
 
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
-  return articleIds.map(id => {
+  return articleIds.map<GQLMeta | null>(id => {
     const article = articles.find((item: { id: number }) => {
       return item.id.toString() === id.toString();
     });
@@ -197,9 +197,10 @@ export async function fetchArticles(
         title: article.title.title,
         introduction: article.introduction?.introduction,
         metaDescription: article.metaDescription?.metaDescription,
-        lastUpdated: article.lastUpdated,
+        lastUpdated: article.updated,
         metaImage: article.metaImage,
         availability: article.availability,
+        language: article.content.language,
       };
     }
     return null;
