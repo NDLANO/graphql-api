@@ -77,8 +77,6 @@ export const resolvers = {
       }));
       return await fetchResourceEmbeds({ resources: embeds }, context);
     },
-  },
-  PodcastSeriesBase: {
     async image(
       podcastSeries: ISeries,
       _: any,
