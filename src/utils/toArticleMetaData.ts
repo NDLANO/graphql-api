@@ -18,6 +18,7 @@ import {
   GQLConceptLicense,
   GQLCopyright,
   GQLFootNote,
+  GQLGlossLicense,
   GQLH5pLicense,
   GQLImageLicense,
   GQLPodcastLicense,
@@ -137,14 +138,19 @@ const conceptMetaData = (
   visualElement: ConceptVisualElementMeta | undefined,
   acc: MetaData,
 ) => {
-  acc['concepts'] = acc['concepts'].concat({
+  const data = {
     id: concept.id.toString(),
     title: concept.title.title,
     copyright: concept.copyright,
     src: `${listingUrl}/concepts/${concept.id}`,
     content: concept.content?.content ?? '',
     metaImageUrl: concept.metaImage?.url,
-  });
+  };
+  if (concept.conceptType === 'gloss') {
+    acc['glosses'] = acc['glosses'].concat(data);
+  } else {
+    acc['concepts'] = acc['concepts'].concat(data);
+  }
   if (visualElement?.status === 'success') {
     switch (visualElement.resource) {
       case 'brightcove':
@@ -152,6 +158,9 @@ const conceptMetaData = (
         break;
       case 'image':
         imageMetaData(visualElement.data, acc);
+        break;
+      case 'audio':
+        audioMetaData(visualElement, acc);
         break;
       case 'h5p':
         h5pMetaData(visualElement, acc);
@@ -174,6 +183,7 @@ interface MetaData {
   brightcoves: GQLBrightcoveLicense[];
   h5ps: GQLH5pLicense[];
   concepts: GQLConceptLicense[];
+  glosses: GQLGlossLicense[];
 }
 
 export const toArticleMetaData = (
@@ -239,6 +249,7 @@ export const toArticleMetaData = (
       brightcoves: [],
       h5ps: [],
       concepts: [],
+      glosses: [],
     },
   );
 };

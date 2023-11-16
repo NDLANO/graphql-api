@@ -201,6 +201,7 @@ export const typeDefs = gql`
     metaImage: MetaImage
     lastUpdated: String
     availability: String
+    language: String
   }
 
   type LearningpathStepEmbedUrl {
@@ -478,6 +479,15 @@ export const typeDefs = gql`
     copyright: ConceptCopyright
   }
 
+  type GlossLicense {
+    id: String!
+    title: String!
+    src: String
+    content: String
+    metaImageUrl: String
+    copyright: ConceptCopyright
+  }
+
   type ArticleMetaData {
     footnotes: [FootNote!]
     images: [ImageLicense!]
@@ -486,6 +496,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
+    glosses: [GlossLicense!]
     copyText: String
   }
 
@@ -1126,11 +1137,18 @@ export const typeDefs = gql`
     id: Int!
     favoriteSubjects: [String!]!
     role: String!
+    arenaEnabled: Boolean!
+    organization: String!
   }
 
-  type ConfigMetaRestricted {
+  type ConfigMetaBoolean {
     key: String!
-    value: String!
+    value: Boolean!
+  }
+
+  type ConfigMetaStringList {
+    key: String!
+    value: [String!]!
   }
 
   type ResourceMetaData {
@@ -1140,6 +1158,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
+    glosses: [GlossLicense!]
   }
 
   type ResourceEmbed {
@@ -1171,6 +1190,7 @@ export const typeDefs = gql`
     username: String!
     profilePicture: String
     slug: String!
+    groupTitleArray: [String!]!
   }
 
   type ArenaPost {
@@ -1336,7 +1356,9 @@ export const typeDefs = gql`
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
-    examLockStatus: ConfigMetaRestricted!
+    examLockStatus: ConfigMetaBoolean!
+    aiEnabledOrgs: ConfigMetaStringList
+    arenaEnabledOrgs: ConfigMetaStringList
     resourceEmbed(id: String!, type: String!): ResourceEmbed!
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
     arenaCategories: [ArenaCategory!]!
