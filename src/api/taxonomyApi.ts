@@ -58,6 +58,7 @@ export async function fetchSubjects(
     value: metadataFilter?.value,
     nodeType: 'SUBJECT',
     includeContexts: true,
+    filterProgrammes: true,
     isVisible,
   });
   const response = await taxonomyFetch(
@@ -88,6 +89,7 @@ export async function fetchSubjectTopics(
     nodeType: 'TOPIC',
     language: context.language,
     includeContexts: true,
+    filterProgrammes: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${subjectId}/nodes?${query}`,
@@ -105,6 +107,7 @@ export async function fetchTopics(
     nodeType: 'TOPIC',
     language: context.language,
     includeContexts: true,
+    filterProgrammes: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes?${query}`,
@@ -121,6 +124,7 @@ export async function fetchNodeByContentUri(
     contentURI: contentUri,
     language: context.language,
     includeContexts: true,
+    filterProgrammes: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes?${query}`,
@@ -137,7 +141,6 @@ export async function fetchNode(
   const { id } = params;
   const query = qs.stringify({
     language: context.language,
-    includeContexts: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}?${query}`,
@@ -159,6 +162,7 @@ export async function fetchChildren(
     nodeType,
     recursive,
     includeContexts: true,
+    filterProgrammes: true,
     language: context.language,
   });
   const response = await taxonomyFetch(
@@ -181,6 +185,7 @@ export async function fetchNodeResources(
     language: context.language,
     relevance: relevance,
     includeContexts: true,
+    filterProgrammes: true,
   });
   const response = await taxonomyFetch(
     `/${context.taxonomyUrl}/v1/nodes/${id}/resources?${query}`,
@@ -233,6 +238,7 @@ interface NodeQueryParams {
   value?: string;
   isVisible?: boolean;
   includeContexts?: boolean;
+  filterProgrammes?: boolean;
 }
 
 export const queryNodes = async (

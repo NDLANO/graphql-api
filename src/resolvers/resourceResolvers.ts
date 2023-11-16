@@ -71,7 +71,9 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLResource> {
     const resource = await fetchNode({ id }, context);
-    const visibleCtx = resource.contexts.filter(c => c.isVisible);
+    const visibleCtx = resource.contexts
+      .filter(c => c.isVisible)
+      .filter(c => !c.rootId.startsWith('urn:programme'));
     const subjectCtx = subjectId
       ? visibleCtx.filter(c => c.rootId === subjectId)
       : visibleCtx;
