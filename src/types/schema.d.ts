@@ -69,7 +69,7 @@ export type GQLArenaTopic = {
 export type GQLArenaUser = {
   __typename?: 'ArenaUser';
   displayName: Scalars['String'];
-  groupTitleArray?: Maybe<Array<Maybe<Scalars['String']>>>;
+  groupTitleArray: Array<Scalars['String']>;
   id: Scalars['Int'];
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
