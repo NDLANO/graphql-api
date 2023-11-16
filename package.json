@@ -26,6 +26,9 @@
   "resolutions": {
     "@types/serve-static": "1.13.10"
   },
+  "engines": {
+    "node": ">=20.6.0"
+  },
   "dependencies": {
     "@apollo/server": "^4.9.3",
     "@graphql-tools/mock": "^8.7.10",
