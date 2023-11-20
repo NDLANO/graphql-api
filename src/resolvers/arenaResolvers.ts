@@ -13,6 +13,8 @@ import {
   fetchArenaUser,
   fetchArenaTopic,
   fetchArenaTopicsByUser,
+  fetchCsrfTokenForSession,
+  newTopic,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
@@ -23,6 +25,7 @@ import {
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
   GQLQueryResolvers,
+  GQLMutationResolvers,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -75,5 +78,15 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopic[]> {
     return fetchArenaTopicsByUser(params, context);
+  },
+};
+
+export const Mutations: Pick<GQLMutationResolvers, 'newArenaTopic'> = {
+  async newArenaTopic(
+    _: any,
+    params,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaTopic> {
+    return newTopic(params, context);
   },
 };

@@ -11,6 +11,7 @@ import {
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
+  GQLMutationNewArenaTopicArgs,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
@@ -65,6 +66,24 @@ const toCategory = (category: any): GQLArenaCategory => {
     postCount: category.post_count,
     disabled: category.disabled === 1,
     topics: category.topics?.map(toTopic),
+  };
+};
+
+export const fetchCsrfTokenForSession = async (
+  context: Context,
+): Promise<{ cookie: string; 'x-csrf-token': string }> => {
+  const incomingCookie = context.req.headers.cookie;
+  const incomingCsrfToken = context.req.headers['x-csrf-token'];
+  if (incomingCookie !== undefined && typeof incomingCsrfToken === 'string') {
+    return { cookie: incomingCookie, 'x-csrf-token': incomingCsrfToken };
+  }
+
+  const response = await fetch('/groups/api/config', context);
+  const resolved: any = await resolveJson(response);
+  const token = resolved.csrf_token;
+  return {
+    'x-csrf-token': token,
+    cookie: response.headers.get('set-cookie')!,
   };
 };
 
@@ -127,4 +146,22 @@ export const fetchArenaTopicsByUser = async (
   const response = await fetch(`/groups/api/user/${userSlug}/topics`, context);
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
+};
+
+export const newTopic = async (
+  { title, content, categoryId }: GQLMutationNewArenaTopicArgs,
+  context: Context,
+): Promise<GQLArenaTopic> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/topics`, context, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...csrfHeaders },
+    body: JSON.stringify({
+      cid: categoryId,
+      title,
+      content,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toTopic(resolved.response);
 };

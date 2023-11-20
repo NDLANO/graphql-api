@@ -1393,6 +1393,11 @@ export const typeDefs = gql`
       draftConcept: Boolean
       absoluteUrl: Boolean
     ): String!
+    newArenaTopic(
+      categoryId: Int!
+      title: String!
+      content: String!
+    ): ArenaTopic!
   }
 `;
 
