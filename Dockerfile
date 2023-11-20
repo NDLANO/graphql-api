@@ -1,5 +1,5 @@
 ### Build stage
-FROM node:20.6-alpine as builder
+FROM node:20.9.0-alpine3.18 as builder
 
 ENV HOME=/home/app
 ENV APP_PATH=$HOME/graphql-api
@@ -18,7 +18,7 @@ COPY src $APP_PATH/src
 RUN yarn ncc
 
 ### Run stage
-FROM node:20.6-alpine
+FROM node:20.9.0-alpine3.18
 
 WORKDIR /home/app/graphql-api
 COPY --from=builder /home/app/graphql-api/build/index.js index.js
