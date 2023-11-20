@@ -15,6 +15,7 @@ import {
   fetchArenaTopicsByUser,
   fetchCsrfTokenForSession,
   newTopic,
+  replyToTopic,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
@@ -26,6 +27,7 @@ import {
   GQLQueryArenaTopicsByUserArgs,
   GQLQueryResolvers,
   GQLMutationResolvers,
+  GQLArenaPost,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -81,12 +83,22 @@ export const Query: Pick<
   },
 };
 
-export const Mutations: Pick<GQLMutationResolvers, 'newArenaTopic'> = {
+export const Mutations: Pick<
+  GQLMutationResolvers,
+  'newArenaTopic' | 'replyToTopic'
+> = {
   async newArenaTopic(
     _: any,
     params,
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopic> {
     return newTopic(params, context);
+  },
+  async replyToTopic(
+    _: any,
+    params,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaPost> {
+    return replyToTopic(params, context);
   },
 };

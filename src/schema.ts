@@ -1398,6 +1398,7 @@ export const typeDefs = gql`
       title: String!
       content: String!
     ): ArenaTopic!
+    replyToTopic(topicId: Int!, content: String!): ArenaPost!
   }
 `;
 
