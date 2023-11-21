@@ -1011,6 +1011,10 @@ export const typeDefs = gql`
     updated: String!
   }
 
+  type Owner {
+    name: String!
+  }
+
   type SharedFolder {
     id: String!
     name: String!
@@ -1022,6 +1026,7 @@ export const typeDefs = gql`
     resources: [FolderResource!]!
     created: String!
     updated: String!
+    owner: Owner
   }
 
   type FolderResource {
@@ -1138,6 +1143,7 @@ export const typeDefs = gql`
     favoriteSubjects: [String!]!
     role: String!
     arenaEnabled: Boolean!
+    shareName: Boolean!
     organization: String!
   }
 
@@ -1380,7 +1386,10 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
-    updatePersonalData(favoriteSubjects: [String!]!): MyNdlaPersonalData!
+    updatePersonalData(
+      favoriteSubjects: [String!]!
+      shareName: Boolean
+    ): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
