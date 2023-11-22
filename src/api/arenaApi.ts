@@ -29,12 +29,12 @@ const toUser = (user: any): GQLArenaUser => ({
   groupTitleArray: user.groupTitleArray,
 });
 
-const toArenaPost = (post: any): GQLArenaPost => ({
+const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   id: post.pid,
   topicId: post.tid,
   content: post.content,
   timestamp: post.timestampISO,
-  isMainPost: post.isMainPost,
+  isMainPost: post.isMainPost ?? post.pid === mainPid,
   user: toUser(post.user),
 });
 
@@ -51,7 +51,11 @@ const toTopic = (topic: any): GQLArenaTopic => {
     postCount: topic.postcount,
     timestamp: topic.timestampISO,
     locked: topic.locked === 1,
-    posts: topic.posts ? topic.posts.map(toArenaPost) : [],
+    posts: topic.posts
+      ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
+      : topic.mainPost
+      ? [toArenaPost(topic.mainPost, topic.mainPid)]
+      : [],
     breadcrumbs: crumbs,
   };
 };
@@ -190,5 +194,5 @@ export const replyToTopic = async (
     }),
   });
   const resolved = await resolveJson(response);
-  return toArenaPost(resolved.response);
+  return toArenaPost(resolved.response, undefined);
 };
