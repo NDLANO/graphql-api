@@ -25,6 +25,8 @@ import {
   GQLQueryArenaTopicsByUserArgs,
   GQLQueryResolvers,
   GQLArenaNotification,
+  GQLMutationResolvers,
+  GQLMutationMarkNotificationAsReadArgs,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -85,5 +87,16 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<GQLArenaNotification[]> {
     return fetchArenaNotifications(context);
+  },
+};
+
+export const Mutations: Pick<GQLMutationResolvers, 'markNotificationAsRead'> = {
+  async markNotificationAsRead(
+    _: any,
+    params: GQLMutationMarkNotificationAsReadArgs,
+    context: Context,
+  ) {
+    await fetchArenaTopic(params, context);
+    return params.topicId;
   },
 };

@@ -1225,12 +1225,17 @@ export const typeDefs = gql`
     path: String!
     from: Int!
     importance: Int!
-    datetime: Int!
     datetimeISO: String!
     read: Boolean!
     user: ArenaUser!
     image: String!
     readClass: String!
+    postId: Int!
+    topicId: Int!
+    notificationId: String!
+    topicTitle: String!
+    type: String!
+    subject: String!
   }
 
   type Query {
@@ -1364,7 +1369,7 @@ export const typeDefs = gql`
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
     arenaUser(username: String!): ArenaUser
-    arenaTopic(topicId: Int!, page: Int!): ArenaTopic
+    arenaTopic(topicId: Int!, page: Int): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
     arenaNotifications: [ArenaNotification!]!
@@ -1407,6 +1412,7 @@ export const typeDefs = gql`
       draftConcept: Boolean
       absoluteUrl: Boolean
     ): String!
+    markNotificationAsRead(topicId: Int!): Int!
   }
 `;
 
