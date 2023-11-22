@@ -11,6 +11,8 @@ import {
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
+  GQLMutationNewArenaTopicArgs,
+  GQLMutationReplyToTopicArgs,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
@@ -65,6 +67,31 @@ const toCategory = (category: any): GQLArenaCategory => {
     postCount: category.post_count,
     disabled: category.disabled === 1,
     topics: category.topics?.map(toTopic),
+  };
+};
+
+export const fetchCsrfTokenForSession = async (
+  context: Context,
+): Promise<{ cookie: string; 'x-csrf-token': string }> => {
+  const incomingCookie = context.req.headers.cookie;
+  const incomingCsrfToken = context.req.headers['x-csrf-token'];
+  if (incomingCookie !== undefined && typeof incomingCsrfToken === 'string') {
+    return { cookie: incomingCookie, 'x-csrf-token': incomingCsrfToken };
+  }
+
+  const response = await fetch('/groups/api/config', context);
+  const resolved: any = await resolveJson(response);
+  const responseCookie = response.headers.get('set-cookie');
+
+  if (!responseCookie)
+    throw new Error(
+      'Did not get set-cookie header from /groups/api/config endpoint to use together with csrf token.',
+    );
+
+  const token = resolved.csrf_token;
+  return {
+    'x-csrf-token': token,
+    cookie: responseCookie,
   };
 };
 
@@ -127,4 +154,41 @@ export const fetchArenaTopicsByUser = async (
   const response = await fetch(`/groups/api/user/${userSlug}/topics`, context);
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
+};
+
+export const newTopic = async (
+  { title, content, categoryId }: GQLMutationNewArenaTopicArgs,
+  context: Context,
+): Promise<GQLArenaTopic> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/topics`, context, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...csrfHeaders },
+    body: JSON.stringify({
+      cid: categoryId,
+      title,
+      content,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toTopic(resolved.response);
+};
+
+export const replyToTopic = async (
+  { topicId, content }: GQLMutationReplyToTopicArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/topics/${topicId}`, context, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+    body: JSON.stringify({
+      content,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toArenaPost(resolved.response);
 };

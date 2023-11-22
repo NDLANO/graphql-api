@@ -876,6 +876,8 @@ export type GQLMutation = {
   deleteFolder: Scalars['String'];
   deleteFolderResource: Scalars['String'];
   deletePersonalData: Scalars['Boolean'];
+  newArenaTopic: GQLArenaTopic;
+  replyToTopic: GQLArenaPost;
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
   transformArticleContent: Scalars['String'];
@@ -917,6 +919,19 @@ export type GQLMutationDeleteFolderArgs = {
 export type GQLMutationDeleteFolderResourceArgs = {
   folderId: Scalars['String'];
   resourceId: Scalars['String'];
+};
+
+
+export type GQLMutationNewArenaTopicArgs = {
+  categoryId: Scalars['Int'];
+  content: Scalars['String'];
+  title: Scalars['String'];
+};
+
+
+export type GQLMutationReplyToTopicArgs = {
+  content: Scalars['String'];
+  topicId: Scalars['Int'];
 };
 
 
@@ -2221,7 +2236,7 @@ export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLReso
 
 export type GQLArenaUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaUser'] = GQLResolversParentTypes['ArenaUser']> = {
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  groupTitleArray?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['String']>>>, ParentType, ContextType>;
+  groupTitleArray?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3018,6 +3033,8 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  newArenaTopic?: Resolver<GQLResolversTypes['ArenaTopic'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicArgs, 'categoryId' | 'content' | 'title'>>;
+  replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
   transformArticleContent?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationTransformArticleContentArgs, 'content'>>;
