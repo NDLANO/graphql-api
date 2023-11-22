@@ -53,6 +53,8 @@ const toTopic = (topic: any): GQLArenaTopic => {
     locked: topic.locked === 1,
     posts: topic.posts
       ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
+      : topic.mainPost
+      ? [toArenaPost(topic.mainPost, topic.mainPid)]
       : [],
     breadcrumbs: crumbs,
   };
