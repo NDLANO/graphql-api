@@ -963,7 +963,7 @@ export type GQLMutationUpdateFolderStatusArgs = {
 
 
 export type GQLMutationUpdatePersonalDataArgs = {
-  favoriteSubjects: Array<Scalars['String']>;
+  favoriteSubjects?: InputMaybe<Array<Scalars['String']>>;
   shareName?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -3034,7 +3034,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
-  updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdatePersonalDataArgs, 'favoriteSubjects'>>;
+  updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
