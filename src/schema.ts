@@ -1207,7 +1207,7 @@ export const typeDefs = gql`
     groupTitleArray: [String!]!
   }
 
-  type ArenaUserNotification implements BaseUser {
+  type ArenaNotificationUser implements BaseUser {
     id: Int!
     displayName: String!
     username: String!
@@ -1249,7 +1249,7 @@ export const typeDefs = gql`
     importance: Int!
     datetimeISO: String!
     read: Boolean!
-    user: ArenaUserNotification!
+    user: ArenaNotificationUser!
     image: String
     readClass: String!
     postId: Int!

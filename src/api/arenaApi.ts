@@ -9,10 +9,10 @@
 import {
   GQLArenaCategory,
   GQLArenaNotification,
+  GQLArenaNotificationUser,
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
-  GQLArenaUserNotification,
   GQLBaseUser,
   GQLMutationNewArenaTopicArgs,
   GQLMutationReplyToTopicArgs,
@@ -36,7 +36,7 @@ const toArenaUser = (user: any): GQLArenaUser => ({
   groupTitleArray: user.groupTitleArray,
 });
 
-const toArenaNotificationUser = (user: any): GQLArenaUserNotification => ({
+const toArenaNotificationUser = (user: any): GQLArenaNotificationUser => ({
   ...toBaseUser(user),
 });
 
