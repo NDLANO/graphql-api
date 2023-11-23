@@ -23,6 +23,15 @@ const clientIdSecret = `${getEnvironmentVariabel(
   'BRIGHTCOVE_API_CLIENT_ID',
 )}:${getEnvironmentVariabel('BRIGHTCOVE_API_CLIENT_SECRET')}`;
 
+interface Token {
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+}
+
+let token: Token | undefined;
+let tokenExpires: number | undefined;
+
 const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789');
 
 export const fetchVideo = async (
@@ -47,15 +56,32 @@ export const fetchVideoSources = async (
   return await fetchWithBrightcoveToken(url, context).then(resolveJson);
 };
 
+const refetchAccessToken = async (context: Context) => {
+  const response = await fetchBrightcoveAccessToken(context);
+  token = response;
+  tokenExpires = Date.now() + response.expires_in * 1000 - 10 * 1000;
+  return response;
+};
+
 export const fetchWithBrightcoveToken = async (
   url: string,
   context: Context,
-) => {
-  const response = await fetchBrightcoveAccessToken(context);
-  return await fetch(url, { ...context, token: response });
+  hasRetried = false,
+): Promise<any> => {
+  if (!token || !tokenExpires || tokenExpires < Date.now() - 10 * 1000) {
+    await refetchAccessToken(context);
+  }
+  return await fetch(url, { ...context, token: token }).catch(e => {
+    if (e.status === 401 && !hasRetried) {
+      token = undefined;
+      tokenExpires = undefined;
+      return fetchWithBrightcoveToken(url, context, true);
+    }
+    throw e;
+  });
 };
 
-const fetchBrightcoveAccessToken = async (context: Context) =>
+const fetchBrightcoveAccessToken = async (context: Context): Promise<Token> =>
   await fetch(brightcoveTokenUrl, context, {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
