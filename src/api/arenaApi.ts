@@ -13,6 +13,8 @@ import {
   GQLArenaTopic,
   GQLArenaUser,
   GQLMutationMarkNotificationAsReadArgs,
+  GQLMutationNewArenaTopicArgs,
+  GQLMutationReplyToTopicArgs,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
@@ -29,12 +31,12 @@ const toUser = (user: any): GQLArenaUser => ({
   groupTitleArray: user.groupTitleArray,
 });
 
-const toArenaPost = (post: any): GQLArenaPost => ({
+const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   id: post.pid,
   topicId: post.tid,
   content: post.content,
   timestamp: post.timestampISO,
-  isMainPost: post.isMainPost,
+  isMainPost: post.isMainPost ?? post.pid === mainPid,
   user: toUser(post.user),
 });
 
@@ -51,7 +53,11 @@ const toTopic = (topic: any): GQLArenaTopic => {
     postCount: topic.postcount,
     timestamp: topic.timestampISO,
     locked: topic.locked === 1,
-    posts: topic.posts ? topic.posts.map(toArenaPost) : [],
+    posts: topic.posts
+      ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
+      : topic.mainPost
+      ? [toArenaPost(topic.mainPost, topic.mainPid)]
+      : [],
     breadcrumbs: crumbs,
   };
 };
@@ -87,6 +93,30 @@ const toNotification = (notification: any): GQLArenaNotification => ({
   postId: notification.pid,
   notificationId: notification.nid,
 });
+export const fetchCsrfTokenForSession = async (
+  context: Context,
+): Promise<{ cookie: string; 'x-csrf-token': string }> => {
+  const incomingCookie = context.req.headers.cookie;
+  const incomingCsrfToken = context.req.headers['x-csrf-token'];
+  if (incomingCookie !== undefined && typeof incomingCsrfToken === 'string') {
+    return { cookie: incomingCookie, 'x-csrf-token': incomingCsrfToken };
+  }
+
+  const response = await fetch('/groups/api/config', context);
+  const resolved: any = await resolveJson(response);
+  const responseCookie = response.headers.get('set-cookie');
+
+  if (!responseCookie)
+    throw new Error(
+      'Did not get set-cookie header from /groups/api/config endpoint to use together with csrf token.',
+    );
+
+  const token = resolved.csrf_token;
+  return {
+    'x-csrf-token': token,
+    cookie: responseCookie,
+  };
+};
 
 export const fetchArenaUser = async (
   { username }: GQLQueryArenaUserArgs,
@@ -163,4 +193,41 @@ export const markNotificationRead = async (
 ): Promise<number> => {
   await fetch(`/groups/api/topic/${topicId}`, context);
   return topicId;
+};
+
+export const newTopic = async (
+  { title, content, categoryId }: GQLMutationNewArenaTopicArgs,
+  context: Context,
+): Promise<GQLArenaTopic> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/topics`, context, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...csrfHeaders },
+    body: JSON.stringify({
+      cid: categoryId,
+      title,
+      content,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toTopic(resolved.response);
+};
+
+export const replyToTopic = async (
+  { topicId, content }: GQLMutationReplyToTopicArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/topics/${topicId}`, context, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+    body: JSON.stringify({
+      content,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toArenaPost(resolved.response, undefined);
 };

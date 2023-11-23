@@ -14,6 +14,9 @@ import {
   fetchArenaTopic,
   fetchArenaTopicsByUser,
   fetchArenaNotifications,
+  fetchCsrfTokenForSession,
+  newTopic,
+  replyToTopic,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
@@ -27,6 +30,7 @@ import {
   GQLArenaNotification,
   GQLMutationResolvers,
   GQLMutationMarkNotificationAsReadArgs,
+  GQLArenaPost,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -90,7 +94,24 @@ export const Query: Pick<
   },
 };
 
-export const Mutations: Pick<GQLMutationResolvers, 'markNotificationAsRead'> = {
+export const Mutations: Pick<
+  GQLMutationResolvers,
+  'newArenaTopic' | 'replyToTopic' | 'markNotificationAsRead'
+> = {
+  async newArenaTopic(
+    _: any,
+    params,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaTopic> {
+    return newTopic(params, context);
+  },
+  async replyToTopic(
+    _: any,
+    params,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaPost> {
+    return replyToTopic(params, context);
+  },
   async markNotificationAsRead(
     _: any,
     params: GQLMutationMarkNotificationAsReadArgs,

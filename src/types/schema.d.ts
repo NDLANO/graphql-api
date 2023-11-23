@@ -896,6 +896,8 @@ export type GQLMutation = {
   deleteFolderResource: Scalars['String'];
   deletePersonalData: Scalars['Boolean'];
   markNotificationAsRead: Scalars['Int'];
+  newArenaTopic: GQLArenaTopic;
+  replyToTopic: GQLArenaPost;
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
   transformArticleContent: Scalars['String'];
@@ -945,6 +947,19 @@ export type GQLMutationMarkNotificationAsReadArgs = {
 };
 
 
+export type GQLMutationNewArenaTopicArgs = {
+  categoryId: Scalars['Int'];
+  content: Scalars['String'];
+  title: Scalars['String'];
+};
+
+
+export type GQLMutationReplyToTopicArgs = {
+  content: Scalars['String'];
+  topicId: Scalars['Int'];
+};
+
+
 export type GQLMutationSortFoldersArgs = {
   parentId?: InputMaybe<Scalars['String']>;
   sortedIds: Array<Scalars['String']>;
@@ -988,7 +1003,8 @@ export type GQLMutationUpdateFolderStatusArgs = {
 
 
 export type GQLMutationUpdatePersonalDataArgs = {
-  favoriteSubjects: Array<Scalars['String']>;
+  favoriteSubjects?: InputMaybe<Array<Scalars['String']>>;
+  shareName?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type GQLMyNdlaPersonalData = {
@@ -998,6 +1014,7 @@ export type GQLMyNdlaPersonalData = {
   id: Scalars['Int'];
   organization: Scalars['String'];
   role: Scalars['String'];
+  shareName: Scalars['Boolean'];
 };
 
 export type GQLName = {
@@ -1018,6 +1035,11 @@ export type GQLNewFolderResource = {
   path: Scalars['String'];
   resourceType: Scalars['String'];
   tags?: Maybe<Array<Scalars['String']>>;
+};
+
+export type GQLOwner = {
+  __typename?: 'Owner';
+  name: Scalars['String'];
 };
 
 export type GQLPodcastLicense = {
@@ -1589,6 +1611,7 @@ export type GQLSharedFolder = {
   description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   name: Scalars['String'];
+  owner?: Maybe<GQLOwner>;
   parentId?: Maybe<Scalars['String']>;
   resources: Array<GQLFolderResource>;
   status: Scalars['String'];
@@ -1994,6 +2017,7 @@ export type GQLResolversTypes = {
   Name: ResolverTypeWrapper<GQLName>;
   NewFolder: ResolverTypeWrapper<GQLNewFolder>;
   NewFolderResource: ResolverTypeWrapper<GQLNewFolderResource>;
+  Owner: ResolverTypeWrapper<GQLOwner>;
   PodcastLicense: ResolverTypeWrapper<GQLPodcastLicense>;
   PodcastMeta: ResolverTypeWrapper<GQLPodcastMeta>;
   PodcastSeries: ResolverTypeWrapper<GQLPodcastSeries>;
@@ -2144,6 +2168,7 @@ export type GQLResolversParentTypes = {
   Name: GQLName;
   NewFolder: GQLNewFolder;
   NewFolderResource: GQLNewFolderResource;
+  Owner: GQLOwner;
   PodcastLicense: GQLPodcastLicense;
   PodcastMeta: GQLPodcastMeta;
   PodcastSeries: GQLPodcastSeries;
@@ -3066,13 +3091,15 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   markNotificationAsRead?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationMarkNotificationAsReadArgs, 'topicId'>>;
+  newArenaTopic?: Resolver<GQLResolversTypes['ArenaTopic'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicArgs, 'categoryId' | 'content' | 'title'>>;
+  replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
   transformArticleContent?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationTransformArticleContentArgs, 'content'>>;
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
-  updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdatePersonalDataArgs, 'favoriteSubjects'>>;
+  updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
@@ -3081,6 +3108,7 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  shareName?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3101,6 +3129,11 @@ export type GQLNewFolderResourceResolvers<ContextType = any, ParentType extends 
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   resourceType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLOwnerResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Owner'] = GQLResolversParentTypes['Owner']> = {
+  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3388,6 +3421,7 @@ export type GQLSharedFolderResolvers<ContextType = any, ParentType extends GQLRe
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  owner?: Resolver<Maybe<GQLResolversTypes['Owner']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3706,6 +3740,7 @@ export type GQLResolvers<ContextType = any> = {
   Name?: GQLNameResolvers<ContextType>;
   NewFolder?: GQLNewFolderResolvers<ContextType>;
   NewFolderResource?: GQLNewFolderResourceResolvers<ContextType>;
+  Owner?: GQLOwnerResolvers<ContextType>;
   PodcastLicense?: GQLPodcastLicenseResolvers<ContextType>;
   PodcastMeta?: GQLPodcastMetaResolvers<ContextType>;
   PodcastSeries?: GQLPodcastSeriesResolvers<ContextType>;
