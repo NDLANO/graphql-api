@@ -1387,7 +1387,7 @@ export const typeDefs = gql`
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
     updatePersonalData(
-      favoriteSubjects: [String!]
+      favoriteSubjects: [String]
       shareName: Boolean
     ): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!

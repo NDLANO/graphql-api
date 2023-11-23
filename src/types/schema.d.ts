@@ -978,7 +978,7 @@ export type GQLMutationUpdateFolderStatusArgs = {
 
 
 export type GQLMutationUpdatePersonalDataArgs = {
-  favoriteSubjects?: InputMaybe<Array<Scalars['String']>>;
+  favoriteSubjects?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   shareName?: InputMaybe<Scalars['Boolean']>;
 };
 
