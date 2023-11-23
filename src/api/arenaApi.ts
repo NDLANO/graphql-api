@@ -8,9 +8,12 @@
 
 import {
   GQLArenaCategory,
+  GQLArenaNotification,
+  GQLArenaNotificationUser,
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
+  GQLBaseUser,
   GQLMutationNewArenaTopicArgs,
   GQLMutationReplyToTopicArgs,
   GQLQueryArenaCategoryArgs,
@@ -20,13 +23,21 @@ import {
 } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
-const toUser = (user: any): GQLArenaUser => ({
+const toBaseUser = (user: any): Omit<GQLBaseUser, '__typename'> => ({
   id: user.uid,
   displayName: user.displayname,
   username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
+});
+
+const toArenaUser = (user: any): GQLArenaUser => ({
+  ...toBaseUser(user),
   groupTitleArray: user.groupTitleArray,
+});
+
+const toArenaNotificationUser = (user: any): GQLArenaNotificationUser => ({
+  ...toBaseUser(user),
 });
 
 const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
@@ -35,7 +46,7 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   content: post.content,
   timestamp: post.timestampISO,
   isMainPost: post.isMainPost ?? post.pid === mainPid,
-  user: toUser(post.user),
+  user: toArenaUser(post.user),
 });
 
 const toTopic = (topic: any): GQLArenaTopic => {
@@ -74,6 +85,23 @@ const toCategory = (category: any): GQLArenaCategory => {
   };
 };
 
+const toNotification = (notification: any): GQLArenaNotification => ({
+  bodyShort: notification.bodyShort,
+  datetimeISO: notification.datetimeISO,
+  from: notification.from,
+  importance: notification.importance,
+  path: notification.path,
+  read: notification.read,
+  user: toArenaNotificationUser(notification.user),
+  readClass: notification.readClass,
+  image: notification.image,
+  topicTitle: notification.topicTitle,
+  type: notification.type,
+  subject: notification.subject,
+  topicId: notification.tid,
+  postId: notification.pid,
+  notificationId: notification.nid,
+});
 export const fetchCsrfTokenForSession = async (
   context: Context,
 ): Promise<{ cookie: string; 'x-csrf-token': string }> => {
@@ -108,7 +136,7 @@ export const fetchArenaUser = async (
     context,
   );
   const resolved: any = await resolveJson(response);
-  return toUser(resolved);
+  return toArenaUser(resolved);
 };
 
 export const fetchArenaCategories = async (
@@ -127,7 +155,7 @@ export const fetchArenaCategory = async (
     `/groups/api/category/${categoryId}?page=${page}`,
     context,
   );
-  const resolved: any = await resolveJson(response);
+  const resolved = await resolveJson(response);
   return toCategory(resolved);
 };
 
@@ -135,11 +163,13 @@ export const fetchArenaTopic = async (
   { topicId, page }: GQLQueryArenaTopicArgs,
   context: Context,
 ): Promise<GQLArenaTopic> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
-    `/groups/api/topic/${topicId}?page=${page}`,
+    `/groups/api/topic/${topicId}?page=${page ?? 1}`,
     context,
+    { headers: csrfHeaders },
   );
-  const resolved: any = await resolveJson(response);
+  const resolved = await resolveJson(response);
   return toTopic(resolved);
 };
 
@@ -158,6 +188,14 @@ export const fetchArenaTopicsByUser = async (
   const response = await fetch(`/groups/api/user/${userSlug}/topics`, context);
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
+};
+
+export const fetchArenaNotifications = async (
+  context: Context,
+): Promise<GQLArenaNotification[]> => {
+  const response = await fetch('/groups/api/notifications', context);
+  const resolved = await resolveJson(response);
+  return resolved.notifications.map(toNotification);
 };
 
 export const newTopic = async (

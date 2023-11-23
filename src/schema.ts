@@ -1190,13 +1190,29 @@ export const typeDefs = gql`
     topics: [ArenaTopic!]
   }
 
-  type ArenaUser {
+  interface BaseUser {
+    id: Int!
+    displayName: String!
+    username: String!
+    profilePicture: String
+    slug: String!
+  }
+
+  type ArenaUser implements BaseUser {
     id: Int!
     displayName: String!
     username: String!
     profilePicture: String
     slug: String!
     groupTitleArray: [String!]!
+  }
+
+  type ArenaNotificationUser implements BaseUser {
+    id: Int!
+    displayName: String!
+    username: String!
+    profilePicture: String
+    slug: String!
   }
 
   type ArenaPost {
@@ -1224,6 +1240,24 @@ export const typeDefs = gql`
     timestamp: String!
     posts: [ArenaPost!]!
     breadcrumbs: [ArenaBreadcrumb!]!
+  }
+
+  type ArenaNotification {
+    bodyShort: String!
+    path: String!
+    from: Int!
+    importance: Int!
+    datetimeISO: String!
+    read: Boolean!
+    user: ArenaNotificationUser!
+    image: String
+    readClass: String!
+    postId: Int!
+    topicId: Int!
+    notificationId: String!
+    topicTitle: String!
+    type: String!
+    subject: String!
   }
 
   type Query {
@@ -1357,9 +1391,10 @@ export const typeDefs = gql`
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
     arenaUser(username: String!): ArenaUser
-    arenaTopic(topicId: Int!, page: Int!): ArenaTopic
+    arenaTopic(topicId: Int!, page: Int): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
+    arenaNotifications: [ArenaNotification!]!
   }
 
   type Mutation {
@@ -1402,6 +1437,7 @@ export const typeDefs = gql`
       draftConcept: Boolean
       absoluteUrl: Boolean
     ): String!
+    markNotificationAsRead(topicIds: [Int!]!): [Int!]!
     newArenaTopic(
       categoryId: Int!
       title: String!
