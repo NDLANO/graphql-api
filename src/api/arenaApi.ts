@@ -12,7 +12,8 @@ import {
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
-  GQLMutationMarkNotificationAsReadArgs,
+  GQLArenaUserNotification,
+  GQLBaseUser,
   GQLMutationNewArenaTopicArgs,
   GQLMutationReplyToTopicArgs,
   GQLQueryArenaCategoryArgs,
@@ -22,13 +23,21 @@ import {
 } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
-const toUser = (user: any): GQLArenaUser => ({
+const toBaseUser = (user: any): Omit<GQLBaseUser, '__typename'> => ({
   id: user.uid,
   displayName: user.displayname,
   username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
+});
+
+const toArenaUser = (user: any): GQLArenaUser => ({
+  ...toBaseUser(user),
   groupTitleArray: user.groupTitleArray,
+});
+
+const toArenaNotificationUser = (user: any): GQLArenaUserNotification => ({
+  ...toBaseUser(user),
 });
 
 const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
@@ -37,7 +46,7 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   content: post.content,
   timestamp: post.timestampISO,
   isMainPost: post.isMainPost ?? post.pid === mainPid,
-  user: toUser(post.user),
+  user: toArenaUser(post.user),
 });
 
 const toTopic = (topic: any): GQLArenaTopic => {
@@ -83,7 +92,7 @@ const toNotification = (notification: any): GQLArenaNotification => ({
   importance: notification.importance,
   path: notification.path,
   read: notification.read,
-  user: toUser(notification.user),
+  user: toArenaNotificationUser(notification.user),
   readClass: notification.readClass,
   image: notification.image,
   topicTitle: notification.topicTitle,
@@ -127,7 +136,7 @@ export const fetchArenaUser = async (
     context,
   );
   const resolved: any = await resolveJson(response);
-  return toUser(resolved);
+  return toArenaUser(resolved);
 };
 
 export const fetchArenaCategories = async (
