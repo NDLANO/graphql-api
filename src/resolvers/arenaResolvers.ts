@@ -13,7 +13,6 @@ import {
   fetchArenaUser,
   fetchArenaTopic,
   fetchArenaTopicsByUser,
-  fetchCsrfTokenForSession,
   newTopic,
   replyToTopic,
 } from '../api/arenaApi';
@@ -80,6 +79,22 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopic[]> {
     return fetchArenaTopicsByUser(params, context);
+  },
+};
+
+export const resolvers = {
+  ArenaPost: {
+    async user(
+      post: GQLArenaPost,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLArenaUser> {
+      const arenaUser = fetchArenaUser(
+        { username: post.user.username },
+        context,
+      );
+      return arenaUser;
+    },
   },
 };
 

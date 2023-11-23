@@ -71,6 +71,7 @@ export type GQLArenaUser = {
   displayName: Scalars['String'];
   groupTitleArray: Array<Scalars['String']>;
   id: Scalars['Int'];
+  location?: Maybe<Scalars['String']>;
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
   username: Scalars['String'];
@@ -2248,6 +2249,7 @@ export type GQLArenaUserResolvers<ContextType = any, ParentType extends GQLResol
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   groupTitleArray?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  location?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

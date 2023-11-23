@@ -1194,6 +1194,7 @@ export const typeDefs = gql`
     id: Int!
     displayName: String!
     username: String!
+    location: String
     profilePicture: String
     slug: String!
     groupTitleArray: [String!]!

@@ -24,6 +24,7 @@ const toUser = (user: any): GQLArenaUser => ({
   id: user.uid,
   displayName: user.displayname,
   username: user.username,
+  location: user.location,
   profilePicture: user.picture,
   slug: user.userslug,
   groupTitleArray: user.groupTitleArray,
