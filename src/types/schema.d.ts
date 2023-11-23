@@ -48,7 +48,7 @@ export type GQLArenaNotification = {
   bodyShort: Scalars['String'];
   datetimeISO: Scalars['String'];
   from: Scalars['Int'];
-  image: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
   importance: Scalars['Int'];
   notificationId: Scalars['String'];
   path: Scalars['String'];
@@ -2253,7 +2253,7 @@ export type GQLArenaNotificationResolvers<ContextType = any, ParentType extends 
   bodyShort?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   datetimeISO?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   from?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  image?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  image?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   importance?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   notificationId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

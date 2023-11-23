@@ -1234,7 +1234,7 @@ export const typeDefs = gql`
     datetimeISO: String!
     read: Boolean!
     user: ArenaUser!
-    image: String!
+    image: String
     readClass: String!
     postId: Int!
     topicId: Int!
