@@ -117,7 +117,9 @@ export const Mutations: Pick<
     params: GQLMutationMarkNotificationAsReadArgs,
     context: Context,
   ) {
-    await fetchArenaTopic(params, context);
-    return params.topicId;
+    await Promise.all(
+      params.topicIds.map(topicId => fetchArenaTopic({ topicId }, context)),
+    );
+    return params.topicIds;
   },
 };

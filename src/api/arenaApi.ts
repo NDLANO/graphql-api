@@ -146,7 +146,7 @@ export const fetchArenaCategory = async (
     `/groups/api/category/${categoryId}?page=${page}`,
     context,
   );
-  const resolved: any = await resolveJson(response);
+  const resolved = await resolveJson(response);
   return toCategory(resolved);
 };
 
@@ -154,11 +154,13 @@ export const fetchArenaTopic = async (
   { topicId, page }: GQLQueryArenaTopicArgs,
   context: Context,
 ): Promise<GQLArenaTopic> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
-    `/groups/api/topic/${topicId}?page=${page}`,
+    `/groups/api/topic/${topicId}?page=${page ?? 1}`,
     context,
+    { headers: csrfHeaders },
   );
-  const resolved: any = await resolveJson(response);
+  const resolved = await resolveJson(response);
   return toTopic(resolved);
 };
 
@@ -182,17 +184,9 @@ export const fetchArenaTopicsByUser = async (
 export const fetchArenaNotifications = async (
   context: Context,
 ): Promise<GQLArenaNotification[]> => {
-  const response = await fetch(`/groups/api/notifications`, context);
+  const response = await fetch('/groups/api/notifications', context);
   const resolved = await resolveJson(response);
   return resolved.notifications.map(toNotification);
-};
-
-export const markNotificationRead = async (
-  { topicId }: GQLMutationMarkNotificationAsReadArgs,
-  context: Context,
-): Promise<number> => {
-  await fetch(`/groups/api/topic/${topicId}`, context);
-  return topicId;
 };
 
 export const newTopic = async (

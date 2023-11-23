@@ -895,7 +895,7 @@ export type GQLMutation = {
   deleteFolder: Scalars['String'];
   deleteFolderResource: Scalars['String'];
   deletePersonalData: Scalars['Boolean'];
-  markNotificationAsRead: Scalars['Int'];
+  markNotificationAsRead: Array<Scalars['Int']>;
   newArenaTopic: GQLArenaTopic;
   replyToTopic: GQLArenaPost;
   sortFolders: GQLSortResult;
@@ -943,7 +943,7 @@ export type GQLMutationDeleteFolderResourceArgs = {
 
 
 export type GQLMutationMarkNotificationAsReadArgs = {
-  topicId: Scalars['Int'];
+  topicIds: Array<Scalars['Int']>;
 };
 
 
@@ -3090,7 +3090,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
-  markNotificationAsRead?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationMarkNotificationAsReadArgs, 'topicId'>>;
+  markNotificationAsRead?: Resolver<Array<GQLResolversTypes['Int']>, ParentType, ContextType, RequireFields<GQLMutationMarkNotificationAsReadArgs, 'topicIds'>>;
   newArenaTopic?: Resolver<GQLResolversTypes['ArenaTopic'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicArgs, 'categoryId' | 'content' | 'title'>>;
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;

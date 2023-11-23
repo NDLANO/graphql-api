@@ -1421,7 +1421,7 @@ export const typeDefs = gql`
       draftConcept: Boolean
       absoluteUrl: Boolean
     ): String!
-    markNotificationAsRead(topicId: Int!): Int!
+    markNotificationAsRead(topicIds: [Int!]!): [Int!]!
     newArenaTopic(
       categoryId: Int!
       title: String!
