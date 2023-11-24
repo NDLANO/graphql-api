@@ -1148,6 +1148,7 @@ export const typeDefs = gql`
   type MyNdlaPersonalData {
     id: Int!
     username: String!
+    displayName: String!
     favoriteSubjects: [String!]!
     role: String!
     arenaEnabled: Boolean!
@@ -1390,7 +1391,7 @@ export const typeDefs = gql`
       includeResources: Boolean
     ): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
-    myNdlaUser: MyNdlaPersonalData!
+    myNdlaUser: MyNdlaPersonalData
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
     examLockStatus: ConfigMetaBoolean!

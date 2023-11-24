@@ -1035,6 +1035,7 @@ export type GQLMyNdlaGroup = {
 export type GQLMyNdlaPersonalData = {
   __typename?: 'MyNdlaPersonalData';
   arenaEnabled: Scalars['Boolean'];
+  displayName: Scalars['String'];
   favoriteSubjects: Array<Scalars['String']>;
   groups: Array<Maybe<GQLMyNdlaGroup>>;
   id: Scalars['Int'];
@@ -3164,6 +3165,7 @@ export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLRes
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
   arenaEnabled?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   favoriteSubjects?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   groups?: Resolver<Array<Maybe<GQLResolversTypes['MyNdlaGroup']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
