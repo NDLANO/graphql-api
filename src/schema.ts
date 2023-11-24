@@ -1138,13 +1138,22 @@ export const typeDefs = gql`
     parentId: String
   }
 
+  type MyNdlaGroup {
+    id: String!
+    displayName: String!
+    isPrimarySchool: Boolean!
+    parentId: String
+  }
+
   type MyNdlaPersonalData {
     id: Int!
+    username: String!
     favoriteSubjects: [String!]!
     role: String!
     arenaEnabled: Boolean!
     shareName: Boolean!
     organization: String!
+    groups: [MyNdlaGroup]!
   }
 
   type ConfigMetaBoolean {
@@ -1381,6 +1390,7 @@ export const typeDefs = gql`
       includeResources: Boolean
     ): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
+    myNdlaUser: MyNdlaPersonalData!
     personalData: MyNdlaPersonalData!
     image(id: String!): ImageMetaInformationV2
     examLockStatus: ConfigMetaBoolean!

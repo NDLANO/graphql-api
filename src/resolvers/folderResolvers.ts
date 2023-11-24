@@ -62,6 +62,7 @@ export const Query: Pick<
   | 'allFolderResources'
   | 'folderResourceMetaSearch'
   | 'folderResourceMeta'
+  | 'myNdlaUser'
   | 'personalData'
 > = {
   async folders(
@@ -105,6 +106,13 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<GQLFolderResourceMeta> {
     return fetchFolderResourceMeta(params, context);
+  },
+  async myNdlaUser(
+    _: any,
+    __: any,
+    context: ContextWithLoaders,
+  ): Promise<GQLMyNdlaPersonalData> {
+    return getPersonalData(context);
   },
   async personalData(
     _: any,
