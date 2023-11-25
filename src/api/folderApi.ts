@@ -207,8 +207,8 @@ export async function getPersonalData(context: Context): Promise<IMyNDLAUser> {
       ...context,
       shouldUseCache: false,
     });
-    return await resolveJson(response);  
-  } catch(e) {
+    return await resolveJson(response);
+  } catch (e) {
     return undefined;
   }
 }
