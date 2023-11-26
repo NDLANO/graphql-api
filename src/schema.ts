@@ -1011,6 +1011,10 @@ export const typeDefs = gql`
     updated: String!
   }
 
+  type Owner {
+    name: String!
+  }
+
   type SharedFolder {
     id: String!
     name: String!
@@ -1022,6 +1026,7 @@ export const typeDefs = gql`
     resources: [FolderResource!]!
     created: String!
     updated: String!
+    owner: Owner
   }
 
   type FolderResource {
@@ -1138,6 +1143,7 @@ export const typeDefs = gql`
     favoriteSubjects: [String!]!
     role: String!
     arenaEnabled: Boolean!
+    shareName: Boolean!
     organization: String!
   }
 
@@ -1184,13 +1190,29 @@ export const typeDefs = gql`
     topics: [ArenaTopic!]
   }
 
-  type ArenaUser {
+  interface BaseUser {
+    id: Int!
+    displayName: String!
+    username: String!
+    profilePicture: String
+    slug: String!
+  }
+
+  type ArenaUser implements BaseUser {
     id: Int!
     displayName: String!
     username: String!
     profilePicture: String
     slug: String!
     groupTitleArray: [String!]!
+  }
+
+  type ArenaNotificationUser implements BaseUser {
+    id: Int!
+    displayName: String!
+    username: String!
+    profilePicture: String
+    slug: String!
   }
 
   type ArenaPost {
@@ -1218,6 +1240,24 @@ export const typeDefs = gql`
     timestamp: String!
     posts: [ArenaPost!]!
     breadcrumbs: [ArenaBreadcrumb!]!
+  }
+
+  type ArenaNotification {
+    bodyShort: String!
+    path: String!
+    from: Int!
+    importance: Int!
+    datetimeISO: String!
+    read: Boolean!
+    user: ArenaNotificationUser!
+    image: String
+    readClass: String!
+    postId: Int!
+    topicId: Int!
+    notificationId: String!
+    topicTitle: String!
+    type: String!
+    subject: String!
   }
 
   type Query {
@@ -1351,9 +1391,10 @@ export const typeDefs = gql`
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
     arenaUser(username: String!): ArenaUser
-    arenaTopic(topicId: Int!, page: Int!): ArenaTopic
+    arenaTopic(topicId: Int!, page: Int): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
+    arenaNotifications: [ArenaNotification!]!
   }
 
   type Mutation {
@@ -1380,7 +1421,10 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
-    updatePersonalData(favoriteSubjects: [String!]!): MyNdlaPersonalData!
+    updatePersonalData(
+      favoriteSubjects: [String]
+      shareName: Boolean
+    ): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
@@ -1393,6 +1437,13 @@ export const typeDefs = gql`
       draftConcept: Boolean
       absoluteUrl: Boolean
     ): String!
+    markNotificationAsRead(topicIds: [Int!]!): [Int!]!
+    newArenaTopic(
+      categoryId: Int!
+      title: String!
+      content: String!
+    ): ArenaTopic!
+    replyToTopic(topicId: Int!, content: String!): ArenaPost!
   }
 `;
 

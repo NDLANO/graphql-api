@@ -8,9 +8,14 @@
 
 import {
   GQLArenaCategory,
+  GQLArenaNotification,
+  GQLArenaNotificationUser,
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
+  GQLBaseUser,
+  GQLMutationNewArenaTopicArgs,
+  GQLMutationReplyToTopicArgs,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
@@ -18,22 +23,30 @@ import {
 } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
-const toUser = (user: any): GQLArenaUser => ({
+const toBaseUser = (user: any): Omit<GQLBaseUser, '__typename'> => ({
   id: user.uid,
   displayName: user.displayname,
   username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
+});
+
+const toArenaUser = (user: any): GQLArenaUser => ({
+  ...toBaseUser(user),
   groupTitleArray: user.groupTitleArray,
 });
 
-const toArenaPost = (post: any): GQLArenaPost => ({
+const toArenaNotificationUser = (user: any): GQLArenaNotificationUser => ({
+  ...toBaseUser(user),
+});
+
+const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   id: post.pid,
   topicId: post.tid,
   content: post.content,
   timestamp: post.timestampISO,
-  isMainPost: post.isMainPost,
-  user: toUser(post.user),
+  isMainPost: post.isMainPost ?? post.pid === mainPid,
+  user: toArenaUser(post.user),
 });
 
 const toTopic = (topic: any): GQLArenaTopic => {
@@ -49,7 +62,11 @@ const toTopic = (topic: any): GQLArenaTopic => {
     postCount: topic.postcount,
     timestamp: topic.timestampISO,
     locked: topic.locked === 1,
-    posts: topic.posts ? topic.posts.map(toArenaPost) : [],
+    posts: topic.posts
+      ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
+      : topic.mainPost
+      ? [toArenaPost(topic.mainPost, topic.mainPid)]
+      : [],
     breadcrumbs: crumbs,
   };
 };
@@ -68,6 +85,48 @@ const toCategory = (category: any): GQLArenaCategory => {
   };
 };
 
+const toNotification = (notification: any): GQLArenaNotification => ({
+  bodyShort: notification.bodyShort,
+  datetimeISO: notification.datetimeISO,
+  from: notification.from,
+  importance: notification.importance,
+  path: notification.path,
+  read: notification.read,
+  user: toArenaNotificationUser(notification.user),
+  readClass: notification.readClass,
+  image: notification.image,
+  topicTitle: notification.topicTitle,
+  type: notification.type,
+  subject: notification.subject,
+  topicId: notification.tid,
+  postId: notification.pid,
+  notificationId: notification.nid,
+});
+export const fetchCsrfTokenForSession = async (
+  context: Context,
+): Promise<{ cookie: string; 'x-csrf-token': string }> => {
+  const incomingCookie = context.req.headers.cookie;
+  const incomingCsrfToken = context.req.headers['x-csrf-token'];
+  if (incomingCookie !== undefined && typeof incomingCsrfToken === 'string') {
+    return { cookie: incomingCookie, 'x-csrf-token': incomingCsrfToken };
+  }
+
+  const response = await fetch('/groups/api/config', context);
+  const resolved: any = await resolveJson(response);
+  const responseCookie = response.headers.get('set-cookie');
+
+  if (!responseCookie)
+    throw new Error(
+      'Did not get set-cookie header from /groups/api/config endpoint to use together with csrf token.',
+    );
+
+  const token = resolved.csrf_token;
+  return {
+    'x-csrf-token': token,
+    cookie: responseCookie,
+  };
+};
+
 export const fetchArenaUser = async (
   { username }: GQLQueryArenaUserArgs,
   context: Context,
@@ -77,7 +136,7 @@ export const fetchArenaUser = async (
     context,
   );
   const resolved: any = await resolveJson(response);
-  return toUser(resolved);
+  return toArenaUser(resolved);
 };
 
 export const fetchArenaCategories = async (
@@ -96,7 +155,7 @@ export const fetchArenaCategory = async (
     `/groups/api/category/${categoryId}?page=${page}`,
     context,
   );
-  const resolved: any = await resolveJson(response);
+  const resolved = await resolveJson(response);
   return toCategory(resolved);
 };
 
@@ -104,11 +163,13 @@ export const fetchArenaTopic = async (
   { topicId, page }: GQLQueryArenaTopicArgs,
   context: Context,
 ): Promise<GQLArenaTopic> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
-    `/groups/api/topic/${topicId}?page=${page}`,
+    `/groups/api/topic/${topicId}?page=${page ?? 1}`,
     context,
+    { headers: csrfHeaders },
   );
-  const resolved: any = await resolveJson(response);
+  const resolved = await resolveJson(response);
   return toTopic(resolved);
 };
 
@@ -127,4 +188,49 @@ export const fetchArenaTopicsByUser = async (
   const response = await fetch(`/groups/api/user/${userSlug}/topics`, context);
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
+};
+
+export const fetchArenaNotifications = async (
+  context: Context,
+): Promise<GQLArenaNotification[]> => {
+  const response = await fetch('/groups/api/notifications', context);
+  const resolved = await resolveJson(response);
+  return resolved.notifications.map(toNotification);
+};
+
+export const newTopic = async (
+  { title, content, categoryId }: GQLMutationNewArenaTopicArgs,
+  context: Context,
+): Promise<GQLArenaTopic> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/topics`, context, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...csrfHeaders },
+    body: JSON.stringify({
+      cid: categoryId,
+      title,
+      content,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toTopic(resolved.response);
+};
+
+export const replyToTopic = async (
+  { topicId, content }: GQLMutationReplyToTopicArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/topics/${topicId}`, context, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+    body: JSON.stringify({
+      content,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toArenaPost(resolved.response, undefined);
 };

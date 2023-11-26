@@ -69,7 +69,10 @@ import {
   resolvers as ProgrammeResolvers,
 } from './programmeResolvers';
 
-import { Query as ArenaQuery } from './arenaResolvers';
+import {
+  Query as ArenaQuery,
+  Mutations as ArenaMutations,
+} from './arenaResolvers';
 
 export const resolvers = {
   Query: {
@@ -93,6 +96,7 @@ export const resolvers = {
   Mutation: {
     ...FolderMutations,
     ...TransformArticleMutations,
+    ...ArenaMutations,
   },
   ...folderResolvers,
   ...articleResolvers,
