@@ -142,4 +142,20 @@ export const resolvers = {
       return nodes[0]?.resourceTypes ?? [];
     },
   },
+
+  FilmFrontpage: {
+    async article(
+      frontpage: IFilmFrontPageData,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLArticle> {
+      return fetchArticle(
+        {
+          articleId: `${getArticleIdFromUrn(frontpage.article)}`,
+          convertEmbeds: true,
+        },
+        context,
+      );
+    },
+  },
 };
