@@ -151,7 +151,7 @@ export const resolvers = {
     ): Promise<GQLArticle> {
       return fetchArticle(
         {
-          articleId: `${getArticleIdFromUrn(frontpage.article)}`,
+          articleId: `${getArticleIdFromUrn(frontpage.article || '')}`,
           convertEmbeds: true,
         },
         context,
