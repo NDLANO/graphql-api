@@ -107,18 +107,11 @@ export const Query: Pick<
   ): Promise<GQLFolderResourceMeta> {
     return fetchFolderResourceMeta(params, context);
   },
-  async myNdlaUser(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLMyNdlaPersonalData> {
-    return getPersonalData(context);
-  },
   async personalData(
     _: any,
     __: any,
     context: ContextWithLoaders,
-  ): Promise<GQLMyNdlaPersonalData> {
+  ): Promise<GQLMyNdlaPersonalData | undefined> {
     return getPersonalData(context);
   },
 };

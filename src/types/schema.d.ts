@@ -1187,8 +1187,7 @@ export type GQLQuery = {
   image?: Maybe<GQLImageMetaInformationV2>;
   learningpath?: Maybe<GQLLearningpath>;
   listingPage?: Maybe<GQLListingPage>;
-  myNdlaUser: GQLMyNdlaPersonalData;
-  personalData: GQLMyNdlaPersonalData;
+  personalData?: Maybe<GQLMyNdlaPersonalData>;
   podcastSearch?: Maybe<GQLAudioSearch>;
   podcastSeries?: Maybe<GQLPodcastSeriesWithEpisodes>;
   podcastSeriesSearch?: Maybe<GQLPodcastSeriesSearch>;
@@ -3318,8 +3317,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV2']>, ParentType, ContextType, RequireFields<GQLQueryImageArgs, 'id'>>;
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
-  myNdlaUser?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType>;
-  personalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType>;
+  personalData?: Resolver<Maybe<GQLResolversTypes['MyNdlaPersonalData']>, ParentType, ContextType>;
   podcastSearch?: Resolver<Maybe<GQLResolversTypes['AudioSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSearchArgs, 'page' | 'pageSize'>>;
   podcastSeries?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesWithEpisodes']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesArgs, 'id'>>;
   podcastSeriesSearch?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesSearchArgs, 'page' | 'pageSize'>>;

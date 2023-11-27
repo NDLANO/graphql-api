@@ -1391,8 +1391,7 @@ export const typeDefs = gql`
       includeResources: Boolean
     ): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
-    myNdlaUser: MyNdlaPersonalData
-    personalData: MyNdlaPersonalData!
+    personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV2
     examLockStatus: ConfigMetaBoolean!
     aiEnabledOrgs: ConfigMetaStringList
