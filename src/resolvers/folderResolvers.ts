@@ -62,7 +62,6 @@ export const Query: Pick<
   | 'allFolderResources'
   | 'folderResourceMetaSearch'
   | 'folderResourceMeta'
-  | 'myNdlaUser'
   | 'personalData'
 > = {
   async folders(

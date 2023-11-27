@@ -1037,8 +1037,9 @@ export type GQLMyNdlaPersonalData = {
   arenaEnabled: Scalars['Boolean'];
   displayName: Scalars['String'];
   favoriteSubjects: Array<Scalars['String']>;
+  feideId: Scalars['String'];
   groups: Array<Maybe<GQLMyNdlaGroup>>;
-  id: Scalars['String'];
+  id: Scalars['Int'];
   organization: Scalars['String'];
   role: Scalars['String'];
   shareName: Scalars['Boolean'];
@@ -3166,8 +3167,9 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   arenaEnabled?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   favoriteSubjects?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  feideId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   groups?: Resolver<Array<Maybe<GQLResolversTypes['MyNdlaGroup']>>, ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   shareName?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
