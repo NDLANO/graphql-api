@@ -14,9 +14,9 @@ import {
   fetchArenaTopic,
   fetchArenaTopicsByUser,
   fetchArenaNotifications,
-  fetchCsrfTokenForSession,
   newTopic,
   replyToTopic,
+  newFlag,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
@@ -31,6 +31,7 @@ import {
   GQLMutationResolvers,
   GQLMutationMarkNotificationAsReadArgs,
   GQLArenaPost,
+  GQLArenaFlag,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -96,7 +97,7 @@ export const Query: Pick<
 
 export const Mutations: Pick<
   GQLMutationResolvers,
-  'newArenaTopic' | 'replyToTopic' | 'markNotificationAsRead'
+  'newArenaTopic' | 'replyToTopic' | 'markNotificationAsRead' | 'newFlag'
 > = {
   async newArenaTopic(
     _: any,
@@ -121,5 +122,12 @@ export const Mutations: Pick<
       params.topicIds.map(topicId => fetchArenaTopic({ topicId }, context)),
     );
     return params.topicIds;
+  },
+  async newFlag(
+    _: any,
+    params,
+    context: ContextWithLoaders,
+  ): Promise<GQLArenaFlag> {
+    return newFlag(params, context);
   },
 };

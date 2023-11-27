@@ -1222,6 +1222,7 @@ export const typeDefs = gql`
     timestamp: String!
     isMainPost: Boolean!
     user: ArenaUser!
+    flagId: Int
   }
 
   type ArenaBreadcrumb {
@@ -1258,6 +1259,13 @@ export const typeDefs = gql`
     topicTitle: String!
     type: String!
     subject: String!
+  }
+
+  type ArenaFlag {
+    flagId: String!
+    targetId: String!
+    state: String!
+    datetimeISO: String!
   }
 
   type Query {
@@ -1444,6 +1452,7 @@ export const typeDefs = gql`
       content: String!
     ): ArenaTopic!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
+    newFlag(type: String!, postId: Int!, reason: String!): ArenaFlag!
   }
 `;
 

@@ -8,6 +8,7 @@
 
 import {
   GQLArenaCategory,
+  GQLArenaFlag,
   GQLArenaNotification,
   GQLArenaNotificationUser,
   GQLArenaPost,
@@ -15,6 +16,7 @@ import {
   GQLArenaUser,
   GQLBaseUser,
   GQLMutationNewArenaTopicArgs,
+  GQLMutationNewFlagArgs,
   GQLMutationReplyToTopicArgs,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
@@ -47,6 +49,7 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   timestamp: post.timestampISO,
   isMainPost: post.isMainPost ?? post.pid === mainPid,
   user: toArenaUser(post.user),
+  flagId: post.flagId,
 });
 
 const toTopic = (topic: any): GQLArenaTopic => {
@@ -102,6 +105,14 @@ const toNotification = (notification: any): GQLArenaNotification => ({
   postId: notification.pid,
   notificationId: notification.nid,
 });
+
+const toFlag = (flag: any): GQLArenaFlag => ({
+  flagId: flag.flagId,
+  targetId: flag.targetId,
+  state: flag.state,
+  datetimeISO: flag.datetimeISO,
+});
+
 export const fetchCsrfTokenForSession = async (
   context: Context,
 ): Promise<{ cookie: string; 'x-csrf-token': string }> => {
@@ -233,4 +244,25 @@ export const replyToTopic = async (
   });
   const resolved = await resolveJson(response);
   return toArenaPost(resolved.response, undefined);
+};
+
+export const newFlag = async (
+  { type, postId, reason }: GQLMutationNewFlagArgs,
+  context: Context,
+): Promise<GQLArenaFlag> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/flags`, context, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+    body: JSON.stringify({
+      id: postId,
+      type: type,
+      reason: reason,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toFlag(resolved.response);
 };
