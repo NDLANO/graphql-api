@@ -247,7 +247,7 @@ export const replyToTopic = async (
 };
 
 export const newFlag = async (
-  { type, postId, reason }: GQLMutationNewFlagArgs,
+  { type, id, reason }: GQLMutationNewFlagArgs,
   context: Context,
 ): Promise<GQLArenaFlag> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
@@ -258,7 +258,7 @@ export const newFlag = async (
       ...csrfHeaders,
     },
     body: JSON.stringify({
-      id: postId,
+      id: id,
       type: type,
       reason: reason,
     }),

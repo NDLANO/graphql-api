@@ -1452,7 +1452,7 @@ export const typeDefs = gql`
       content: String!
     ): ArenaTopic!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
-    newFlag(type: String!, postId: Int!, reason: String!): ArenaFlag!
+    newFlag(type: String!, id: Int!, reason: String!): ArenaFlag!
   }
 `;
 
