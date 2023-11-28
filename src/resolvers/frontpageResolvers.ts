@@ -149,13 +149,16 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLArticle> {
-      return fetchArticle(
-        {
-          articleId: `${getArticleIdFromUrn(frontpage.article || '')}`,
-          convertEmbeds: true,
-        },
-        context,
-      );
+      if (frontpage.article) {
+        return fetchArticle(
+          {
+            articleId: `${getArticleIdFromUrn(frontpage.article)}`,
+            convertEmbeds: true,
+          },
+          context,
+        );
+      }
+      return undefined;
     },
   },
 };
