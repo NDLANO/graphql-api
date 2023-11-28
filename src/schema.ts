@@ -1149,6 +1149,7 @@ export const typeDefs = gql`
     id: Int!
     feideId: String!
     username: String!
+    email: String!
     displayName: String!
     favoriteSubjects: [String!]!
     role: String!
