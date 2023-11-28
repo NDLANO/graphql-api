@@ -513,6 +513,7 @@ export type GQLFolder = {
   description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   name: Scalars['String'];
+  owner?: Maybe<GQLOwner>;
   parentId?: Maybe<Scalars['String']>;
   resources: Array<GQLFolderResource>;
   status: Scalars['String'];
@@ -2735,6 +2736,7 @@ export type GQLFolderResolvers<ContextType = any, ParentType extends GQLResolver
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  owner?: Resolver<Maybe<GQLResolversTypes['Owner']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
