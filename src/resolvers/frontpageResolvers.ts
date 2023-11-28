@@ -158,7 +158,6 @@ export const resolvers = {
           context,
         );
       }
-      return undefined;
     },
   },
 };
