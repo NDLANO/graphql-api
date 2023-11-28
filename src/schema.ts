@@ -1009,6 +1009,7 @@ export const typeDefs = gql`
     resources: [FolderResource!]!
     created: String!
     updated: String!
+    owner: Owner
   }
 
   type Owner {
