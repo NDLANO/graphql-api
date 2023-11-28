@@ -1191,29 +1191,13 @@ export const typeDefs = gql`
     topics: [ArenaTopic!]
   }
 
-  interface BaseUser {
+  type ArenaUser {
     id: Int!
     displayName: String!
     username: String!
     profilePicture: String
     slug: String!
-  }
-
-  type ArenaUser implements BaseUser {
-    id: Int!
-    displayName: String!
-    username: String!
-    profilePicture: String
-    slug: String!
-    groupTitleArray: [String!]!
-  }
-
-  type ArenaNotificationUser implements BaseUser {
-    id: Int!
-    displayName: String!
-    username: String!
-    profilePicture: String
-    slug: String!
+    groupTitleArray: [String!]
   }
 
   type ArenaPost {
@@ -1250,7 +1234,7 @@ export const typeDefs = gql`
     importance: Int!
     datetimeISO: String!
     read: Boolean!
-    user: ArenaNotificationUser!
+    user: ArenaUser!
     image: String
     readClass: String!
     postId: Int!

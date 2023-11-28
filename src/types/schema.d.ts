@@ -59,16 +59,7 @@ export type GQLArenaNotification = {
   topicId: Scalars['Int'];
   topicTitle: Scalars['String'];
   type: Scalars['String'];
-  user: GQLArenaNotificationUser;
-};
-
-export type GQLArenaNotificationUser = GQLBaseUser & {
-  __typename?: 'ArenaNotificationUser';
-  displayName: Scalars['String'];
-  id: Scalars['Int'];
-  profilePicture?: Maybe<Scalars['String']>;
-  slug: Scalars['String'];
-  username: Scalars['String'];
+  user: GQLArenaUser;
 };
 
 export type GQLArenaPost = {
@@ -94,10 +85,10 @@ export type GQLArenaTopic = {
   title: Scalars['String'];
 };
 
-export type GQLArenaUser = GQLBaseUser & {
+export type GQLArenaUser = {
   __typename?: 'ArenaUser';
   displayName: Scalars['String'];
-  groupTitleArray: Array<Scalars['String']>;
+  groupTitleArray?: Maybe<Array<Scalars['String']>>;
   id: Scalars['Int'];
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
@@ -250,14 +241,6 @@ export type GQLAudioSummary = {
   supportedLanguages: Array<Scalars['String']>;
   title: GQLTitle;
   url: Scalars['String'];
-};
-
-export type GQLBaseUser = {
-  displayName: Scalars['String'];
-  id: Scalars['Int'];
-  profilePicture?: Maybe<Scalars['String']>;
-  slug: Scalars['String'];
-  username: Scalars['String'];
 };
 
 export type GQLBreadcrumb = {
@@ -1943,7 +1926,6 @@ export type GQLResolversTypes = {
   ArenaBreadcrumb: ResolverTypeWrapper<GQLArenaBreadcrumb>;
   ArenaCategory: ResolverTypeWrapper<GQLArenaCategory>;
   ArenaNotification: ResolverTypeWrapper<GQLArenaNotification>;
-  ArenaNotificationUser: ResolverTypeWrapper<GQLArenaNotificationUser>;
   ArenaPost: ResolverTypeWrapper<GQLArenaPost>;
   ArenaTopic: ResolverTypeWrapper<GQLArenaTopic>;
   ArenaUser: ResolverTypeWrapper<GQLArenaUser>;
@@ -1958,7 +1940,6 @@ export type GQLResolversTypes = {
   AudioLicense: ResolverTypeWrapper<GQLAudioLicense>;
   AudioSearch: ResolverTypeWrapper<GQLAudioSearch>;
   AudioSummary: ResolverTypeWrapper<GQLAudioSummary>;
-  BaseUser: GQLResolversTypes['ArenaNotificationUser'] | GQLResolversTypes['ArenaUser'];
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Breadcrumb: ResolverTypeWrapper<GQLBreadcrumb>;
   BrightcoveCustomFields: ResolverTypeWrapper<GQLBrightcoveCustomFields>;
@@ -2096,7 +2077,6 @@ export type GQLResolversParentTypes = {
   ArenaBreadcrumb: GQLArenaBreadcrumb;
   ArenaCategory: GQLArenaCategory;
   ArenaNotification: GQLArenaNotification;
-  ArenaNotificationUser: GQLArenaNotificationUser;
   ArenaPost: GQLArenaPost;
   ArenaTopic: GQLArenaTopic;
   ArenaUser: GQLArenaUser;
@@ -2111,7 +2091,6 @@ export type GQLResolversParentTypes = {
   AudioLicense: GQLAudioLicense;
   AudioSearch: GQLAudioSearch;
   AudioSummary: GQLAudioSummary;
-  BaseUser: GQLResolversParentTypes['ArenaNotificationUser'] | GQLResolversParentTypes['ArenaUser'];
   Boolean: Scalars['Boolean'];
   Breadcrumb: GQLBreadcrumb;
   BrightcoveCustomFields: GQLBrightcoveCustomFields;
@@ -2286,16 +2265,7 @@ export type GQLArenaNotificationResolvers<ContextType = any, ParentType extends 
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   topicTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  user?: Resolver<GQLResolversTypes['ArenaNotificationUser'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLArenaNotificationUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaNotificationUser'] = GQLResolversParentTypes['ArenaNotificationUser']> = {
-  displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<GQLResolversTypes['ArenaUser'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2324,7 +2294,7 @@ export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLReso
 
 export type GQLArenaUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaUser'] = GQLResolversParentTypes['ArenaUser']> = {
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  groupTitleArray?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  groupTitleArray?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2473,15 +2443,6 @@ export type GQLAudioSummaryResolvers<ContextType = any, ParentType extends GQLRe
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLBaseUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BaseUser'] = GQLResolversParentTypes['BaseUser']> = {
-  __resolveType: TypeResolveFn<'ArenaNotificationUser' | 'ArenaUser', ParentType, ContextType>;
-  displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type GQLBreadcrumbResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Breadcrumb'] = GQLResolversParentTypes['Breadcrumb']> = {
@@ -3693,7 +3654,6 @@ export type GQLResolvers<ContextType = any> = {
   ArenaBreadcrumb?: GQLArenaBreadcrumbResolvers<ContextType>;
   ArenaCategory?: GQLArenaCategoryResolvers<ContextType>;
   ArenaNotification?: GQLArenaNotificationResolvers<ContextType>;
-  ArenaNotificationUser?: GQLArenaNotificationUserResolvers<ContextType>;
   ArenaPost?: GQLArenaPostResolvers<ContextType>;
   ArenaTopic?: GQLArenaTopicResolvers<ContextType>;
   ArenaUser?: GQLArenaUserResolvers<ContextType>;
@@ -3708,7 +3668,6 @@ export type GQLResolvers<ContextType = any> = {
   AudioLicense?: GQLAudioLicenseResolvers<ContextType>;
   AudioSearch?: GQLAudioSearchResolvers<ContextType>;
   AudioSummary?: GQLAudioSummaryResolvers<ContextType>;
-  BaseUser?: GQLBaseUserResolvers<ContextType>;
   Breadcrumb?: GQLBreadcrumbResolvers<ContextType>;
   BrightcoveCustomFields?: GQLBrightcoveCustomFieldsResolvers<ContextType>;
   BrightcoveElement?: GQLBrightcoveElementResolvers<ContextType>;

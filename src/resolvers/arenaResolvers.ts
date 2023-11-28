@@ -30,7 +30,9 @@ import {
   GQLArenaNotification,
   GQLMutationResolvers,
   GQLMutationMarkNotificationAsReadArgs,
+  GQLMutationNewArenaTopicArgs,
   GQLArenaPost,
+  GQLMutationReplyToTopicArgs,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -100,17 +102,17 @@ export const Mutations: Pick<
 > = {
   async newArenaTopic(
     _: any,
-    params,
+    params: GQLMutationNewArenaTopicArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopic> {
-    return newTopic(params, context);
+    return await newTopic(params, context);
   },
   async replyToTopic(
     _: any,
-    params,
+    params: GQLMutationReplyToTopicArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArenaPost> {
-    return replyToTopic(params, context);
+    return await replyToTopic(params, context);
   },
   async markNotificationAsRead(
     _: any,
