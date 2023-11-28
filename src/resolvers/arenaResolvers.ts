@@ -14,14 +14,13 @@ import {
   fetchArenaTopic,
   fetchArenaTopicsByUser,
   fetchArenaNotifications,
-  fetchCsrfTokenForSession,
   newTopic,
   replyToTopic,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
-  GQLArenaUser,
   GQLArenaTopic,
+  GQLFullArenaUser,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaUserArgs,
   GQLQueryArenaTopicArgs,
@@ -47,7 +46,7 @@ export const Query: Pick<
     _: any,
     params: GQLQueryArenaUserArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLArenaUser> {
+  ): Promise<GQLFullArenaUser> {
     return fetchArenaUser(params, context);
   },
   async arenaCategories(

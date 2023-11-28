@@ -71,7 +71,6 @@ import {
 
 import {
   Query as ArenaQuery,
-  resolvers as ArenaResolvers,
   Mutations as ArenaMutations,
 } from './arenaResolvers';
 
@@ -113,7 +112,6 @@ export const resolvers = {
   ...uptimeResolvers,
   ...ImageResolvers,
   ...ProgrammeResolvers,
-  ...ArenaResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any) {
