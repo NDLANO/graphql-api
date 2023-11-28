@@ -14,13 +14,11 @@ import {
   fetchArenaTopic,
   fetchArenaTopicsByUser,
   fetchArenaNotifications,
-  fetchCsrfTokenForSession,
   newTopic,
   replyToTopic,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
-  GQLArenaUser,
   GQLArenaTopic,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaUserArgs,
@@ -33,6 +31,7 @@ import {
   GQLMutationNewArenaTopicArgs,
   GQLArenaPost,
   GQLMutationReplyToTopicArgs,
+  GQLArenaUser,
 } from '../types/schema';
 
 export const Query: Pick<

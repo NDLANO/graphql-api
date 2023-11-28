@@ -90,6 +90,7 @@ export type GQLArenaUser = {
   displayName: Scalars['String'];
   groupTitleArray?: Maybe<Array<Scalars['String']>>;
   id: Scalars['Int'];
+  location?: Maybe<Scalars['String']>;
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
   username: Scalars['String'];
@@ -476,6 +477,7 @@ export type GQLExamples = {
 export type GQLFilmFrontpage = {
   __typename?: 'FilmFrontpage';
   about: Array<GQLFilmPageAbout>;
+  article?: Maybe<GQLArticle>;
   movieThemes: Array<GQLMovieTheme>;
   name: Scalars['String'];
   slideShow: Array<GQLMovie>;
@@ -2296,6 +2298,7 @@ export type GQLArenaUserResolvers<ContextType = any, ParentType extends GQLResol
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   groupTitleArray?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  location?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2677,6 +2680,7 @@ export type GQLExamplesResolvers<ContextType = any, ParentType extends GQLResolv
 
 export type GQLFilmFrontpageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FilmFrontpage'] = GQLResolversParentTypes['FilmFrontpage']> = {
   about?: Resolver<Array<GQLResolversTypes['FilmPageAbout']>, ParentType, ContextType>;
+  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
   movieThemes?: Resolver<Array<GQLResolversTypes['MovieTheme']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   slideShow?: Resolver<Array<GQLResolversTypes['Movie']>, ParentType, ContextType>;

@@ -21,13 +21,13 @@ import {
 } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
-
 const toArenaUser = (user: any): GQLArenaUser => ({
   id: user.uid,
   displayName: user.displayname,
   username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
+  location: user.location,
   groupTitleArray: user.groupTitleArray,
 });
 
@@ -56,8 +56,8 @@ const toTopic = (topic: any): GQLArenaTopic => {
     posts: topic.posts
       ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
       : topic.mainPost
-        ? [toArenaPost(topic.mainPost, topic.mainPid)]
-        : [],
+      ? [toArenaPost(topic.mainPost, topic.mainPid)]
+      : [],
     breadcrumbs: crumbs,
   };
 };

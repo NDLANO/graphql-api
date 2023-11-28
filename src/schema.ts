@@ -640,6 +640,7 @@ export const typeDefs = gql`
     about: [FilmPageAbout!]!
     movieThemes: [MovieTheme!]!
     slideShow: [Movie!]!
+    article: Article
   }
 
   type MovieTheme {
@@ -1198,6 +1199,7 @@ export const typeDefs = gql`
     profilePicture: String
     slug: String!
     groupTitleArray: [String!]
+    location: String
   }
 
   type ArenaPost {
