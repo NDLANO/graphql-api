@@ -148,7 +148,7 @@ export const resolvers = {
       frontpage: IFilmFrontPageData,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLArticle> {
+    ): Promise<GQLArticle | undefined> {
       if (frontpage.article) {
         return fetchArticle(
           {
@@ -158,6 +158,7 @@ export const resolvers = {
           context,
         );
       }
+      return undefined;
     },
   },
 };
