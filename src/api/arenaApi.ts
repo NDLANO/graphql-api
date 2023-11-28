@@ -14,6 +14,7 @@ import {
   GQLArenaTopic,
   GQLArenaUser,
   GQLBaseUser,
+  GQLFullArenaUser,
   GQLMutationNewArenaTopicArgs,
   GQLMutationReplyToTopicArgs,
   GQLQueryArenaCategoryArgs,
@@ -29,6 +30,12 @@ const toBaseUser = (user: any): Omit<GQLBaseUser, '__typename'> => ({
   username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
+});
+
+const toFullArenaUser = (user: any): GQLFullArenaUser => ({
+  ...toBaseUser(user),
+  location: user.location,
+  groupTitleArray: user.groupTitleArray,
 });
 
 const toArenaUser = (user: any): GQLArenaUser => ({
@@ -130,13 +137,13 @@ export const fetchCsrfTokenForSession = async (
 export const fetchArenaUser = async (
   { username }: GQLQueryArenaUserArgs,
   context: Context,
-): Promise<GQLArenaUser> => {
+): Promise<GQLFullArenaUser> => {
   const response = await fetch(
     `/groups/api/user/username/${username}`,
     context,
   );
   const resolved: any = await resolveJson(response);
-  return toArenaUser(resolved);
+  return toFullArenaUser(resolved);
 };
 
 export const fetchArenaCategories = async (

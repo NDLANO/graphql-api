@@ -1200,6 +1200,16 @@ export const typeDefs = gql`
     slug: String!
   }
 
+  type FullArenaUser implements BaseUser {
+    id: Int!
+    displayName: String!
+    username: String!
+    location: String
+    profilePicture: String
+    slug: String!
+    groupTitleArray: [String!]!
+  }
+
   type ArenaUser implements BaseUser {
     id: Int!
     displayName: String!
@@ -1392,7 +1402,7 @@ export const typeDefs = gql`
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
-    arenaUser(username: String!): ArenaUser
+    arenaUser(username: String!): FullArenaUser
     arenaTopic(topicId: Int!, page: Int): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
