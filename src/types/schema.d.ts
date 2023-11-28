@@ -493,6 +493,7 @@ export type GQLExamples = {
 export type GQLFilmFrontpage = {
   __typename?: 'FilmFrontpage';
   about: Array<GQLFilmPageAbout>;
+  article?: Maybe<GQLArticle>;
   movieThemes: Array<GQLMovieTheme>;
   name: Scalars['String'];
   slideShow: Array<GQLMovie>;
@@ -2716,6 +2717,7 @@ export type GQLExamplesResolvers<ContextType = any, ParentType extends GQLResolv
 
 export type GQLFilmFrontpageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FilmFrontpage'] = GQLResolversParentTypes['FilmFrontpage']> = {
   about?: Resolver<Array<GQLResolversTypes['FilmPageAbout']>, ParentType, ContextType>;
+  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
   movieThemes?: Resolver<Array<GQLResolversTypes['MovieTheme']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   slideShow?: Resolver<Array<GQLResolversTypes['Movie']>, ParentType, ContextType>;

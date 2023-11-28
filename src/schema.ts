@@ -640,6 +640,7 @@ export const typeDefs = gql`
     about: [FilmPageAbout!]!
     movieThemes: [MovieTheme!]!
     slideShow: [Movie!]!
+    article: Article
   }
 
   type MovieTheme {
