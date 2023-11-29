@@ -60,8 +60,8 @@ const toTopic = (topic: any): GQLArenaTopic => {
     posts: topic.posts
       ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
       : topic.mainPost
-      ? [toArenaPost(topic.mainPost, topic.mainPid)]
-      : [],
+        ? [toArenaPost(topic.mainPost, topic.mainPid)]
+        : [],
     breadcrumbs: crumbs,
   };
 };
@@ -235,7 +235,7 @@ export const deletePost = async (
   context: Context,
 ) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(`/groups/api/v3/posts/${postId}`, context, {
+  await fetch(`/groups/api/v3/posts/${postId}/state`, context, {
     method: 'DELETE',
     headers: {
       'content-type': 'application/json',
@@ -250,7 +250,7 @@ export const deleteTopic = async (
   context: Context,
 ) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(`/groups/api/v3/topics/${topicId}`, context, {
+  await fetch(`/groups/api/v3/topics/${topicId}/state`, context, {
     method: 'DELETE',
     headers: {
       'content-type': 'application/json',
