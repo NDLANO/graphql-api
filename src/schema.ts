@@ -640,6 +640,7 @@ export const typeDefs = gql`
     about: [FilmPageAbout!]!
     movieThemes: [MovieTheme!]!
     slideShow: [Movie!]!
+    article: Article
   }
 
   type MovieTheme {
@@ -1009,6 +1010,7 @@ export const typeDefs = gql`
     resources: [FolderResource!]!
     created: String!
     updated: String!
+    owner: Owner
   }
 
   type Owner {
@@ -1202,29 +1204,14 @@ export const typeDefs = gql`
     topics: [ArenaTopic!]
   }
 
-  interface BaseUser {
+  type ArenaUser {
     id: Int!
     displayName: String!
     username: String!
     profilePicture: String
     slug: String!
-  }
-
-  type ArenaUser implements BaseUser {
-    id: Int!
-    displayName: String!
-    username: String!
-    profilePicture: String
-    slug: String!
-    groupTitleArray: [String!]!
-  }
-
-  type ArenaNotificationUser implements BaseUser {
-    id: Int!
-    displayName: String!
-    username: String!
-    profilePicture: String
-    slug: String!
+    groupTitleArray: [String!]
+    location: String
   }
 
   type ArenaPost {
@@ -1261,7 +1248,7 @@ export const typeDefs = gql`
     importance: Int!
     datetimeISO: String!
     read: Boolean!
-    user: ArenaNotificationUser!
+    user: ArenaUser!
     image: String
     readClass: String!
     postId: Int!

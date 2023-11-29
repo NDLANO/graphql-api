@@ -9,11 +9,9 @@
 import {
   GQLArenaCategory,
   GQLArenaNotification,
-  GQLArenaNotificationUser,
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
-  GQLBaseUser,
   GQLMutationNewArenaTopicArgs,
   GQLMutationReplyToTopicArgs,
   GQLQueryArenaCategoryArgs,
@@ -23,21 +21,14 @@ import {
 } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 
-const toBaseUser = (user: any): Omit<GQLBaseUser, '__typename'> => ({
+const toArenaUser = (user: any): GQLArenaUser => ({
   id: user.uid,
   displayName: user.displayname,
   username: user.username,
   profilePicture: user.picture,
   slug: user.userslug,
-});
-
-const toArenaUser = (user: any): GQLArenaUser => ({
-  ...toBaseUser(user),
+  location: user.location,
   groupTitleArray: user.groupTitleArray,
-});
-
-const toArenaNotificationUser = (user: any): GQLArenaNotificationUser => ({
-  ...toBaseUser(user),
 });
 
 const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
@@ -92,7 +83,7 @@ const toNotification = (notification: any): GQLArenaNotification => ({
   importance: notification.importance,
   path: notification.path,
   read: notification.read,
-  user: toArenaNotificationUser(notification.user),
+  user: toArenaUser(notification.user),
   readClass: notification.readClass,
   image: notification.image,
   topicTitle: notification.topicTitle,
