@@ -43,14 +43,6 @@ export type GQLArenaCategory = {
   topics?: Maybe<Array<GQLArenaTopic>>;
 };
 
-export type GQLArenaFlag = {
-  __typename?: 'ArenaFlag';
-  datetimeISO: Scalars['String'];
-  flagId: Scalars['String'];
-  state: Scalars['String'];
-  targetId: Scalars['String'];
-};
-
 export type GQLArenaNotification = {
   __typename?: 'ArenaNotification';
   bodyShort: Scalars['String'];
@@ -923,7 +915,7 @@ export type GQLMutation = {
   deletePersonalData: Scalars['Boolean'];
   markNotificationAsRead: Array<Scalars['Int']>;
   newArenaTopic: GQLArenaTopic;
-  newFlag: GQLArenaFlag;
+  newFlag: Scalars['Int'];
   replyToTopic: GQLArenaPost;
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
@@ -1958,7 +1950,6 @@ export type GQLResolversTypes = {
   AggregationResult: ResolverTypeWrapper<GQLAggregationResult>;
   ArenaBreadcrumb: ResolverTypeWrapper<GQLArenaBreadcrumb>;
   ArenaCategory: ResolverTypeWrapper<GQLArenaCategory>;
-  ArenaFlag: ResolverTypeWrapper<GQLArenaFlag>;
   ArenaNotification: ResolverTypeWrapper<GQLArenaNotification>;
   ArenaNotificationUser: ResolverTypeWrapper<GQLArenaNotificationUser>;
   ArenaPost: ResolverTypeWrapper<GQLArenaPost>;
@@ -2112,7 +2103,6 @@ export type GQLResolversParentTypes = {
   AggregationResult: GQLAggregationResult;
   ArenaBreadcrumb: GQLArenaBreadcrumb;
   ArenaCategory: GQLArenaCategory;
-  ArenaFlag: GQLArenaFlag;
   ArenaNotification: GQLArenaNotification;
   ArenaNotificationUser: GQLArenaNotificationUser;
   ArenaPost: GQLArenaPost;
@@ -2286,14 +2276,6 @@ export type GQLArenaCategoryResolvers<ContextType = any, ParentType extends GQLR
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   topicCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   topics?: Resolver<Maybe<Array<GQLResolversTypes['ArenaTopic']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLArenaFlagResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaFlag'] = GQLResolversParentTypes['ArenaFlag']> = {
-  datetimeISO?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  flagId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  state?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  targetId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3159,7 +3141,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   markNotificationAsRead?: Resolver<Array<GQLResolversTypes['Int']>, ParentType, ContextType, RequireFields<GQLMutationMarkNotificationAsReadArgs, 'topicIds'>>;
   newArenaTopic?: Resolver<GQLResolversTypes['ArenaTopic'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicArgs, 'categoryId' | 'content' | 'title'>>;
-  newFlag?: Resolver<GQLResolversTypes['ArenaFlag'], ParentType, ContextType, RequireFields<GQLMutationNewFlagArgs, 'id' | 'reason' | 'type'>>;
+  newFlag?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagArgs, 'id' | 'reason' | 'type'>>;
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
@@ -3719,7 +3701,6 @@ export type GQLResolvers<ContextType = any> = {
   AggregationResult?: GQLAggregationResultResolvers<ContextType>;
   ArenaBreadcrumb?: GQLArenaBreadcrumbResolvers<ContextType>;
   ArenaCategory?: GQLArenaCategoryResolvers<ContextType>;
-  ArenaFlag?: GQLArenaFlagResolvers<ContextType>;
   ArenaNotification?: GQLArenaNotificationResolvers<ContextType>;
   ArenaNotificationUser?: GQLArenaNotificationUserResolvers<ContextType>;
   ArenaPost?: GQLArenaPostResolvers<ContextType>;

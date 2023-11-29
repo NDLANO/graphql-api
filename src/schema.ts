@@ -1261,13 +1261,6 @@ export const typeDefs = gql`
     subject: String!
   }
 
-  type ArenaFlag {
-    flagId: String!
-    targetId: String!
-    state: String!
-    datetimeISO: String!
-  }
-
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
@@ -1452,7 +1445,7 @@ export const typeDefs = gql`
       content: String!
     ): ArenaTopic!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
-    newFlag(type: String!, id: Int!, reason: String!): ArenaFlag!
+    newFlag(type: String!, id: Int!, reason: String!): Int!
   }
 `;
 

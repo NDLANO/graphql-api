@@ -6,9 +6,9 @@
  *
  */
 
+import { GraphQLError } from 'graphql';
 import {
   GQLArenaCategory,
-  GQLArenaFlag,
   GQLArenaNotification,
   GQLArenaNotificationUser,
   GQLArenaPost,
@@ -104,13 +104,6 @@ const toNotification = (notification: any): GQLArenaNotification => ({
   topicId: notification.tid,
   postId: notification.pid,
   notificationId: notification.nid,
-});
-
-const toFlag = (flag: any): GQLArenaFlag => ({
-  flagId: flag.flagId,
-  targetId: flag.targetId,
-  state: flag.state,
-  datetimeISO: flag.datetimeISO,
 });
 
 export const fetchCsrfTokenForSession = async (
@@ -249,7 +242,7 @@ export const replyToTopic = async (
 export const newFlag = async (
   { type, id, reason }: GQLMutationNewFlagArgs,
   context: Context,
-): Promise<GQLArenaFlag> => {
+): Promise<number> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(`/groups/api/v3/flags`, context, {
     method: 'POST',
@@ -263,6 +256,11 @@ export const newFlag = async (
       reason: reason,
     }),
   });
-  const resolved = await resolveJson(response);
-  return toFlag(resolved.response);
+  const { status, ok } = response;
+  const jsonResponse = await response.json();
+
+  if (ok) return id;
+  throw new GraphQLError(jsonResponse.status.message, {
+    extensions: { status },
+  });
 };

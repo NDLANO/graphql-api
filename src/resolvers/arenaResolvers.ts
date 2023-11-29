@@ -31,7 +31,6 @@ import {
   GQLMutationResolvers,
   GQLMutationMarkNotificationAsReadArgs,
   GQLArenaPost,
-  GQLArenaFlag,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -123,11 +122,7 @@ export const Mutations: Pick<
     );
     return params.topicIds;
   },
-  async newFlag(
-    _: any,
-    params,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaFlag> {
+  async newFlag(_: any, params, context: ContextWithLoaders): Promise<number> {
     return newFlag(params, context);
   },
 };
