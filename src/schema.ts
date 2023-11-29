@@ -1221,6 +1221,7 @@ export const typeDefs = gql`
     timestamp: String!
     isMainPost: Boolean!
     user: ArenaUser!
+    deleted: Boolean!
   }
 
   type ArenaBreadcrumb {
@@ -1239,6 +1240,7 @@ export const typeDefs = gql`
     timestamp: String!
     posts: [ArenaPost!]!
     breadcrumbs: [ArenaBreadcrumb!]!
+    deleted: Boolean!
   }
 
   type ArenaNotification {

@@ -42,6 +42,7 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   timestamp: post.timestampISO,
   isMainPost: post.isMainPost ?? post.pid === mainPid,
   user: toArenaUser(post.user),
+  deleted: post.deleted,
 });
 
 const toTopic = (topic: any): GQLArenaTopic => {
@@ -60,9 +61,10 @@ const toTopic = (topic: any): GQLArenaTopic => {
     posts: topic.posts
       ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
       : topic.mainPost
-        ? [toArenaPost(topic.mainPost, topic.mainPid)]
-        : [],
+      ? [toArenaPost(topic.mainPost, topic.mainPid)]
+      : [],
     breadcrumbs: crumbs,
+    deleted: topic.deleted,
   };
 };
 

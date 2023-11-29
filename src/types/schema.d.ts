@@ -65,6 +65,7 @@ export type GQLArenaNotification = {
 export type GQLArenaPost = {
   __typename?: 'ArenaPost';
   content: Scalars['String'];
+  deleted: Scalars['Boolean'];
   id: Scalars['Int'];
   isMainPost: Scalars['Boolean'];
   timestamp: Scalars['String'];
@@ -76,6 +77,7 @@ export type GQLArenaTopic = {
   __typename?: 'ArenaTopic';
   breadcrumbs: Array<GQLArenaBreadcrumb>;
   categoryId: Scalars['Int'];
+  deleted: Scalars['Boolean'];
   id: Scalars['Int'];
   locked: Scalars['Boolean'];
   postCount: Scalars['Int'];
@@ -2308,6 +2310,7 @@ export type GQLArenaNotificationResolvers<ContextType = any, ParentType extends 
 
 export type GQLArenaPostResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaPost'] = GQLResolversParentTypes['ArenaPost']> = {
   content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  deleted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isMainPost?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   timestamp?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2319,6 +2322,7 @@ export type GQLArenaPostResolvers<ContextType = any, ParentType extends GQLResol
 export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaTopic'] = GQLResolversParentTypes['ArenaTopic']> = {
   breadcrumbs?: Resolver<Array<GQLResolversTypes['ArenaBreadcrumb']>, ParentType, ContextType>;
   categoryId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  deleted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   locked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   postCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
