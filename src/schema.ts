@@ -1192,39 +1192,14 @@ export const typeDefs = gql`
     topics: [ArenaTopic!]
   }
 
-  interface BaseUser {
+  type ArenaUser {
     id: Int!
     displayName: String!
     username: String!
     profilePicture: String
     slug: String!
-  }
-
-  type FullArenaUser implements BaseUser {
-    id: Int!
-    displayName: String!
-    username: String!
+    groupTitleArray: [String!]
     location: String
-    profilePicture: String
-    slug: String!
-    groupTitleArray: [String!]!
-  }
-
-  type ArenaUser implements BaseUser {
-    id: Int!
-    displayName: String!
-    username: String!
-    profilePicture: String
-    slug: String!
-    groupTitleArray: [String!]!
-  }
-
-  type ArenaNotificationUser implements BaseUser {
-    id: Int!
-    displayName: String!
-    username: String!
-    profilePicture: String
-    slug: String!
   }
 
   type ArenaPost {
@@ -1261,7 +1236,7 @@ export const typeDefs = gql`
     importance: Int!
     datetimeISO: String!
     read: Boolean!
-    user: ArenaNotificationUser!
+    user: ArenaUser!
     image: String
     readClass: String!
     postId: Int!
@@ -1402,7 +1377,7 @@ export const typeDefs = gql`
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
-    arenaUser(username: String!): FullArenaUser
+    arenaUser(username: String!): ArenaUser
     arenaTopic(topicId: Int!, page: Int): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
