@@ -898,6 +898,8 @@ export type GQLMutation = {
   deleteFolder: Scalars['String'];
   deleteFolderResource: Scalars['String'];
   deletePersonalData: Scalars['Boolean'];
+  deletePost: Scalars['Boolean'];
+  deleteTopic: Scalars['Boolean'];
   markNotificationAsRead: Array<Scalars['Int']>;
   newArenaTopic: GQLArenaTopic;
   replyToTopic: GQLArenaPost;
@@ -908,6 +910,7 @@ export type GQLMutation = {
   updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']>;
   updatePersonalData: GQLMyNdlaPersonalData;
+  updatePost: GQLArenaPost;
 };
 
 
@@ -942,6 +945,16 @@ export type GQLMutationDeleteFolderArgs = {
 export type GQLMutationDeleteFolderResourceArgs = {
   folderId: Scalars['String'];
   resourceId: Scalars['String'];
+};
+
+
+export type GQLMutationDeletePostArgs = {
+  postId: Scalars['Int'];
+};
+
+
+export type GQLMutationDeleteTopicArgs = {
+  topicId: Scalars['Int'];
 };
 
 
@@ -1008,6 +1021,13 @@ export type GQLMutationUpdateFolderStatusArgs = {
 export type GQLMutationUpdatePersonalDataArgs = {
   favoriteSubjects?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   shareName?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type GQLMutationUpdatePostArgs = {
+  content: Scalars['String'];
+  postId: Scalars['Int'];
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type GQLMyNdlaPersonalData = {
@@ -3096,6 +3116,8 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  deletePost?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLMutationDeletePostArgs, 'postId'>>;
+  deleteTopic?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLMutationDeleteTopicArgs, 'topicId'>>;
   markNotificationAsRead?: Resolver<Array<GQLResolversTypes['Int']>, ParentType, ContextType, RequireFields<GQLMutationMarkNotificationAsReadArgs, 'topicIds'>>;
   newArenaTopic?: Resolver<GQLResolversTypes['ArenaTopic'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicArgs, 'categoryId' | 'content' | 'title'>>;
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
@@ -3106,6 +3128,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
+  updatePost?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostArgs, 'content' | 'postId'>>;
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {

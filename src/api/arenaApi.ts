@@ -6,14 +6,18 @@
  *
  */
 
+import { isContext } from 'vm';
 import {
   GQLArenaCategory,
   GQLArenaNotification,
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
+  GQLMutationDeletePostArgs,
+  GQLMutationDeleteTopicArgs,
   GQLMutationNewArenaTopicArgs,
   GQLMutationReplyToTopicArgs,
+  GQLMutationUpdatePostArgs,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
@@ -224,4 +228,64 @@ export const replyToTopic = async (
   });
   const resolved = await resolveJson(response);
   return toArenaPost(resolved.response, undefined);
+};
+
+export const deletePost = async (
+  { postId }: GQLMutationDeletePostArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    `/groups/api/v3/posts/${postId}/state`,
+    context,
+    {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
+    },
+  );
+  const resolved = await resolveJson(response);
+  return resolved.status.code === 'ok';
+};
+
+export const deleteTopic = async (
+  { topicId }: GQLMutationDeleteTopicArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    `/groups/api/v3/topics/${topicId}/state`,
+    context,
+    {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
+    },
+  );
+  const resolved = await resolveJson(response);
+  return resolved.status.code === 'ok';
+};
+
+export const updatePost = async (
+  { postId, content, title }: GQLMutationUpdatePostArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/posts/${postId}`, context, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+    body: JSON.stringify({
+      content,
+      title,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toArenaPost(resolved.response);
 };
