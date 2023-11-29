@@ -235,19 +235,14 @@ export const deletePost = async (
   context: Context,
 ) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(
-    `/groups/api/v3/posts/${postId}/state`,
-    context,
-    {
-      method: 'DELETE',
-      headers: {
-        'content-type': 'application/json',
-        ...csrfHeaders,
-      },
+  const response = await fetch(`/groups/api/v3/posts/${postId}`, context, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
     },
-  );
-  const resolved = await resolveJson(response);
-  return resolved.status.code === 'ok';
+  });
+  return postId;
 };
 
 export const deleteTopic = async (
@@ -255,19 +250,14 @@ export const deleteTopic = async (
   context: Context,
 ) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(
-    `/groups/api/v3/topics/${topicId}/state`,
-    context,
-    {
-      method: 'DELETE',
-      headers: {
-        'content-type': 'application/json',
-        ...csrfHeaders,
-      },
+  const response = await fetch(`/groups/api/v3/topics/${topicId}`, context, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
     },
-  );
-  const resolved = await resolveJson(response);
-  return resolved.status.code === 'ok';
+  });
+  return topicId;
 };
 
 export const updatePost = async (

@@ -1444,8 +1444,8 @@ export const typeDefs = gql`
     ): ArenaTopic!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
     updatePost(postId: Int!, content: String!, title: String): ArenaPost!
-    deletePost(postId: Int!): Boolean!
-    deleteTopic(topicId: Int!): Boolean!
+    deletePost(postId: Int!): Int!
+    deleteTopic(topicId: Int!): Int!
   }
 `;
 
