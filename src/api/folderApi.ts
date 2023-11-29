@@ -201,7 +201,9 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
   }
 }
 
-export async function getPersonalData(context: Context): Promise<IMyNDLAUser | undefined> {
+export async function getPersonalData(
+  context: Context,
+): Promise<IMyNDLAUser | undefined> {
   try {
     const response = await fetch(`/learningpath-api/v1/users/`, {
       ...context,
