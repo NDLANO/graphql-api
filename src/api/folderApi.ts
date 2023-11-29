@@ -201,12 +201,18 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
   }
 }
 
-export async function getPersonalData(context: Context): Promise<IMyNDLAUser> {
-  const response = await fetch(`/learningpath-api/v1/users/`, {
-    ...context,
-    shouldUseCache: false,
-  });
-  return await resolveJson(response);
+export async function getPersonalData(
+  context: Context,
+): Promise<IMyNDLAUser | undefined> {
+  try {
+    const response = await fetch(`/learningpath-api/v1/users/`, {
+      ...context,
+      shouldUseCache: false,
+    });
+    return await resolveJson(response);
+  } catch (e) {
+    return undefined;
+  }
 }
 
 export async function patchPersonalData(
