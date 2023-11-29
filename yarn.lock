@@ -1506,20 +1506,20 @@
   resolved "https://registry.yarnpkg.com/@ndla/licenses/-/licenses-7.2.2.tgz#5b165694638acac7a431266b9ece3751a6497578"
   integrity sha512-DGMdoa/5QGdnZcOLLL3tbC95dEc+YWhjavtj6aRoeCbl4vsTX1nzMY4ZsdbiDxtZsnlcASouvG5ffYTbCW3s0Q==
 
-"@ndla/types-backend@^0.2.29":
-  version "0.2.29"
-  resolved "https://registry.yarnpkg.com/@ndla/types-backend/-/types-backend-0.2.29.tgz#0c6b611f701b077bb427297395069959a6bbda23"
-  integrity sha512-VkPoyNMi9wLHZb8ikHCdYKz7xc3TbNqHqvz9/lgjlL+pTZCSsvXpPnix/E3FnZGf9jq+SCfZGqkbvBJR4e2gQA==
+"@ndla/types-backend@^0.2.30":
+  version "0.2.30"
+  resolved "https://registry.yarnpkg.com/@ndla/types-backend/-/types-backend-0.2.30.tgz#048d8f7a292602f3cf1852c29c6e3f8187c48da3"
+  integrity sha512-lJStzANa90o5INue8TlCKzw9e/b0bgeD5vs4zDii+3rAnfIogTd5jBQEqsyqbfu+MynJdYG+oBVx5EZMZjNStg==
 
 "@ndla/types-embed@^4.0.7":
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/@ndla/types-embed/-/types-embed-4.0.7.tgz#6dd6d4eb17db22e8ee6d4182888cd18fef29624d"
   integrity sha512-PduZNoLAegJk8DnseqYzZ0+P3J20ol4lx1qcMlgn61YbWHwRC8oEKkL85zHkv+EkqCf8tRgJfVG5YcTh+jfBzQ==
 
-"@ndla/types-taxonomy@^1.0.19":
-  version "1.0.19"
-  resolved "https://registry.yarnpkg.com/@ndla/types-taxonomy/-/types-taxonomy-1.0.19.tgz#9fdfd8a5934a9108421f0b30f8f4a135a5fa7642"
-  integrity sha512-F0rN7OWD7iUnJv8F/R9ZMW5Zu1ZjEd9pXHxO/BsiaxqaJWXT8b4TQtF0pUQ17pEXZkZlr156+hyfx3bQTw8+iw==
+"@ndla/types-taxonomy@^1.0.21":
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/@ndla/types-taxonomy/-/types-taxonomy-1.0.21.tgz#fe3db31cbd859385fa21b27ade81f98a6d314200"
+  integrity sha512-80QnSj1cg0vgX001W13Sl/VJTreTWNFx5uC5ZJcDGJNbU+dK1fQ8zRUkNa46od61+JjX6ZNWYBqpVCOb0urexQ==
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"

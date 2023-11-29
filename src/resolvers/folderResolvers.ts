@@ -111,7 +111,7 @@ export const Query: Pick<
     __: any,
     context: ContextWithLoaders,
   ): Promise<GQLMyNdlaPersonalData> {
-    return getPersonalData(context);
+    return (getPersonalData(context) as unknown) as GQLMyNdlaPersonalData;
   },
 };
 
