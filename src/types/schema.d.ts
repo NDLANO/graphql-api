@@ -59,16 +59,7 @@ export type GQLArenaNotification = {
   topicId: Scalars['Int'];
   topicTitle: Scalars['String'];
   type: Scalars['String'];
-  user: GQLArenaNotificationUser;
-};
-
-export type GQLArenaNotificationUser = GQLBaseUser & {
-  __typename?: 'ArenaNotificationUser';
-  displayName: Scalars['String'];
-  id: Scalars['Int'];
-  profilePicture?: Maybe<Scalars['String']>;
-  slug: Scalars['String'];
-  username: Scalars['String'];
+  user: GQLArenaUser;
 };
 
 export type GQLArenaPost = {
@@ -95,11 +86,12 @@ export type GQLArenaTopic = {
   title: Scalars['String'];
 };
 
-export type GQLArenaUser = GQLBaseUser & {
+export type GQLArenaUser = {
   __typename?: 'ArenaUser';
   displayName: Scalars['String'];
-  groupTitleArray: Array<Scalars['String']>;
+  groupTitleArray?: Maybe<Array<Scalars['String']>>;
   id: Scalars['Int'];
+  location?: Maybe<Scalars['String']>;
   profilePicture?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
   username: Scalars['String'];
@@ -251,14 +243,6 @@ export type GQLAudioSummary = {
   supportedLanguages: Array<Scalars['String']>;
   title: GQLTitle;
   url: Scalars['String'];
-};
-
-export type GQLBaseUser = {
-  displayName: Scalars['String'];
-  id: Scalars['Int'];
-  profilePicture?: Maybe<Scalars['String']>;
-  slug: Scalars['String'];
-  username: Scalars['String'];
 };
 
 export type GQLBreadcrumb = {
@@ -494,6 +478,7 @@ export type GQLExamples = {
 export type GQLFilmFrontpage = {
   __typename?: 'FilmFrontpage';
   about: Array<GQLFilmPageAbout>;
+  article?: Maybe<GQLArticle>;
   movieThemes: Array<GQLMovieTheme>;
   name: Scalars['String'];
   slideShow: Array<GQLMovie>;
@@ -514,6 +499,7 @@ export type GQLFolder = {
   description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   name: Scalars['String'];
+  owner?: Maybe<GQLOwner>;
   parentId?: Maybe<Scalars['String']>;
   resources: Array<GQLFolderResource>;
   status: Scalars['String'];
@@ -1033,14 +1019,27 @@ export type GQLMutationUpdatePersonalDataArgs = {
   shareName?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type GQLMyNdlaGroup = {
+  __typename?: 'MyNdlaGroup';
+  displayName: Scalars['String'];
+  id: Scalars['String'];
+  isPrimarySchool: Scalars['Boolean'];
+  parentId?: Maybe<Scalars['String']>;
+};
+
 export type GQLMyNdlaPersonalData = {
   __typename?: 'MyNdlaPersonalData';
   arenaEnabled: Scalars['Boolean'];
+  displayName: Scalars['String'];
+  email: Scalars['String'];
   favoriteSubjects: Array<Scalars['String']>;
+  feideId: Scalars['String'];
+  groups: Array<GQLMyNdlaGroup>;
   id: Scalars['Int'];
   organization: Scalars['String'];
   role: Scalars['String'];
   shareName: Scalars['Boolean'];
+  username: Scalars['String'];
 };
 
 export type GQLName = {
@@ -1185,7 +1184,7 @@ export type GQLQuery = {
   image?: Maybe<GQLImageMetaInformationV2>;
   learningpath?: Maybe<GQLLearningpath>;
   listingPage?: Maybe<GQLListingPage>;
-  personalData: GQLMyNdlaPersonalData;
+  personalData?: Maybe<GQLMyNdlaPersonalData>;
   podcastSearch?: Maybe<GQLAudioSearch>;
   podcastSeries?: Maybe<GQLPodcastSeriesWithEpisodes>;
   podcastSeriesSearch?: Maybe<GQLPodcastSeriesSearch>;
@@ -1951,7 +1950,6 @@ export type GQLResolversTypes = {
   ArenaBreadcrumb: ResolverTypeWrapper<GQLArenaBreadcrumb>;
   ArenaCategory: ResolverTypeWrapper<GQLArenaCategory>;
   ArenaNotification: ResolverTypeWrapper<GQLArenaNotification>;
-  ArenaNotificationUser: ResolverTypeWrapper<GQLArenaNotificationUser>;
   ArenaPost: ResolverTypeWrapper<GQLArenaPost>;
   ArenaTopic: ResolverTypeWrapper<GQLArenaTopic>;
   ArenaUser: ResolverTypeWrapper<GQLArenaUser>;
@@ -1966,7 +1964,6 @@ export type GQLResolversTypes = {
   AudioLicense: ResolverTypeWrapper<GQLAudioLicense>;
   AudioSearch: ResolverTypeWrapper<GQLAudioSearch>;
   AudioSummary: ResolverTypeWrapper<GQLAudioSummary>;
-  BaseUser: GQLResolversTypes['ArenaNotificationUser'] | GQLResolversTypes['ArenaUser'];
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Breadcrumb: ResolverTypeWrapper<GQLBreadcrumb>;
   BrightcoveCustomFields: ResolverTypeWrapper<GQLBrightcoveCustomFields>;
@@ -2041,6 +2038,7 @@ export type GQLResolversTypes = {
   MovieResourceTypes: ResolverTypeWrapper<GQLMovieResourceTypes>;
   MovieTheme: ResolverTypeWrapper<GQLMovieTheme>;
   Mutation: ResolverTypeWrapper<{}>;
+  MyNdlaGroup: ResolverTypeWrapper<GQLMyNdlaGroup>;
   MyNdlaPersonalData: ResolverTypeWrapper<GQLMyNdlaPersonalData>;
   Name: ResolverTypeWrapper<GQLName>;
   NewFolder: ResolverTypeWrapper<GQLNewFolder>;
@@ -2104,7 +2102,6 @@ export type GQLResolversParentTypes = {
   ArenaBreadcrumb: GQLArenaBreadcrumb;
   ArenaCategory: GQLArenaCategory;
   ArenaNotification: GQLArenaNotification;
-  ArenaNotificationUser: GQLArenaNotificationUser;
   ArenaPost: GQLArenaPost;
   ArenaTopic: GQLArenaTopic;
   ArenaUser: GQLArenaUser;
@@ -2119,7 +2116,6 @@ export type GQLResolversParentTypes = {
   AudioLicense: GQLAudioLicense;
   AudioSearch: GQLAudioSearch;
   AudioSummary: GQLAudioSummary;
-  BaseUser: GQLResolversParentTypes['ArenaNotificationUser'] | GQLResolversParentTypes['ArenaUser'];
   Boolean: Scalars['Boolean'];
   Breadcrumb: GQLBreadcrumb;
   BrightcoveCustomFields: GQLBrightcoveCustomFields;
@@ -2194,6 +2190,7 @@ export type GQLResolversParentTypes = {
   MovieResourceTypes: GQLMovieResourceTypes;
   MovieTheme: GQLMovieTheme;
   Mutation: {};
+  MyNdlaGroup: GQLMyNdlaGroup;
   MyNdlaPersonalData: GQLMyNdlaPersonalData;
   Name: GQLName;
   NewFolder: GQLNewFolder;
@@ -2294,16 +2291,7 @@ export type GQLArenaNotificationResolvers<ContextType = any, ParentType extends 
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   topicTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  user?: Resolver<GQLResolversTypes['ArenaNotificationUser'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLArenaNotificationUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaNotificationUser'] = GQLResolversParentTypes['ArenaNotificationUser']> = {
-  displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<GQLResolversTypes['ArenaUser'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2333,8 +2321,9 @@ export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLReso
 
 export type GQLArenaUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaUser'] = GQLResolversParentTypes['ArenaUser']> = {
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  groupTitleArray?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  groupTitleArray?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  location?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2482,15 +2471,6 @@ export type GQLAudioSummaryResolvers<ContextType = any, ParentType extends GQLRe
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLBaseUserResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BaseUser'] = GQLResolversParentTypes['BaseUser']> = {
-  __resolveType: TypeResolveFn<'ArenaNotificationUser' | 'ArenaUser', ParentType, ContextType>;
-  displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  profilePicture?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type GQLBreadcrumbResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Breadcrumb'] = GQLResolversParentTypes['Breadcrumb']> = {
@@ -2725,6 +2705,7 @@ export type GQLExamplesResolvers<ContextType = any, ParentType extends GQLResolv
 
 export type GQLFilmFrontpageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FilmFrontpage'] = GQLResolversParentTypes['FilmFrontpage']> = {
   about?: Resolver<Array<GQLResolversTypes['FilmPageAbout']>, ParentType, ContextType>;
+  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
   movieThemes?: Resolver<Array<GQLResolversTypes['MovieTheme']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   slideShow?: Resolver<Array<GQLResolversTypes['Movie']>, ParentType, ContextType>;
@@ -2745,6 +2726,7 @@ export type GQLFolderResolvers<ContextType = any, ParentType extends GQLResolver
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  owner?: Resolver<Maybe<GQLResolversTypes['Owner']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3152,13 +3134,26 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
 };
 
+export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaGroup'] = GQLResolversParentTypes['MyNdlaGroup']> = {
+  displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  isPrimarySchool?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
   arenaEnabled?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   favoriteSubjects?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  feideId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  groups?: Resolver<Array<GQLResolversTypes['MyNdlaGroup']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   shareName?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3304,7 +3299,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV2']>, ParentType, ContextType, RequireFields<GQLQueryImageArgs, 'id'>>;
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
-  personalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType>;
+  personalData?: Resolver<Maybe<GQLResolversTypes['MyNdlaPersonalData']>, ParentType, ContextType>;
   podcastSearch?: Resolver<Maybe<GQLResolversTypes['AudioSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSearchArgs, 'page' | 'pageSize'>>;
   podcastSeries?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesWithEpisodes']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesArgs, 'id'>>;
   podcastSeriesSearch?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesSearchArgs, 'page' | 'pageSize'>>;
@@ -3702,7 +3697,6 @@ export type GQLResolvers<ContextType = any> = {
   ArenaBreadcrumb?: GQLArenaBreadcrumbResolvers<ContextType>;
   ArenaCategory?: GQLArenaCategoryResolvers<ContextType>;
   ArenaNotification?: GQLArenaNotificationResolvers<ContextType>;
-  ArenaNotificationUser?: GQLArenaNotificationUserResolvers<ContextType>;
   ArenaPost?: GQLArenaPostResolvers<ContextType>;
   ArenaTopic?: GQLArenaTopicResolvers<ContextType>;
   ArenaUser?: GQLArenaUserResolvers<ContextType>;
@@ -3717,7 +3711,6 @@ export type GQLResolvers<ContextType = any> = {
   AudioLicense?: GQLAudioLicenseResolvers<ContextType>;
   AudioSearch?: GQLAudioSearchResolvers<ContextType>;
   AudioSummary?: GQLAudioSummaryResolvers<ContextType>;
-  BaseUser?: GQLBaseUserResolvers<ContextType>;
   Breadcrumb?: GQLBreadcrumbResolvers<ContextType>;
   BrightcoveCustomFields?: GQLBrightcoveCustomFieldsResolvers<ContextType>;
   BrightcoveElement?: GQLBrightcoveElementResolvers<ContextType>;
@@ -3788,6 +3781,7 @@ export type GQLResolvers<ContextType = any> = {
   MovieResourceTypes?: GQLMovieResourceTypesResolvers<ContextType>;
   MovieTheme?: GQLMovieThemeResolvers<ContextType>;
   Mutation?: GQLMutationResolvers<ContextType>;
+  MyNdlaGroup?: GQLMyNdlaGroupResolvers<ContextType>;
   MyNdlaPersonalData?: GQLMyNdlaPersonalDataResolvers<ContextType>;
   Name?: GQLNameResolvers<ContextType>;
   NewFolder?: GQLNewFolderResolvers<ContextType>;
