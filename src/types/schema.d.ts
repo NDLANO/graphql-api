@@ -1039,7 +1039,7 @@ export type GQLMyNdlaPersonalData = {
   email: Scalars['String'];
   favoriteSubjects: Array<Scalars['String']>;
   feideId: Scalars['String'];
-  groups: Array<Maybe<GQLMyNdlaGroup>>;
+  groups: Array<GQLMyNdlaGroup>;
   id: Scalars['Int'];
   organization: Scalars['String'];
   role: Scalars['String'];
@@ -3170,7 +3170,7 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   email?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   favoriteSubjects?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   feideId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  groups?: Resolver<Array<Maybe<GQLResolversTypes['MyNdlaGroup']>>, ParentType, ContextType>;
+  groups?: Resolver<Array<GQLResolversTypes['MyNdlaGroup']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

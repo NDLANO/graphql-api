@@ -1156,7 +1156,7 @@ export const typeDefs = gql`
     arenaEnabled: Boolean!
     shareName: Boolean!
     organization: String!
-    groups: [MyNdlaGroup]!
+    groups: [MyNdlaGroup!]!
   }
 
   type ConfigMetaBoolean {

@@ -110,8 +110,8 @@ export const Query: Pick<
     _: any,
     __: any,
     context: ContextWithLoaders,
-  ): Promise<GQLMyNdlaPersonalData | undefined> {
-    return getPersonalData(context);
+  ): Promise<GQLMyNdlaPersonalData> {
+    return (getPersonalData(context) as unknown) as GQLMyNdlaPersonalData;
   },
 };
 
