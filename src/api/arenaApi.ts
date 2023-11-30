@@ -19,6 +19,8 @@ import {
   GQLMutationNewArenaTopicArgs,
   GQLMutationNewFlagArgs,
   GQLMutationReplyToTopicArgs,
+  GQLMutationSubscribeToTopicArgs,
+  GQLMutationUnsubscribeFromTopicArgs,
   GQLMutationUpdatePostArgs,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
@@ -68,6 +70,7 @@ const toTopic = (topic: any): GQLArenaTopic => {
       : [],
     breadcrumbs: crumbs,
     deleted: topic.deleted,
+    isFollowing: topic.isFollowing,
   };
 };
 
@@ -132,9 +135,11 @@ export const fetchArenaUser = async (
   { username }: GQLQueryArenaUserArgs,
   context: Context,
 ): Promise<GQLArenaUser> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/user/username/${username}`,
-    context,
+    { ...context, shouldUseCache: false },
+    { headers: csrfHeaders },
   );
   const resolved: any = await resolveJson(response);
   return toArenaUser(resolved);
@@ -143,7 +148,12 @@ export const fetchArenaUser = async (
 export const fetchArenaCategories = async (
   context: Context,
 ): Promise<GQLArenaCategory[]> => {
-  const response = await fetch('/groups/api/categories', context);
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    '/groups/api/categories',
+    { ...context, shouldUseCache: false },
+    { headers: csrfHeaders },
+  );
   const resolved: any = await resolveJson(response);
   return resolved.categories.map(toCategory);
 };
@@ -152,9 +162,11 @@ export const fetchArenaCategory = async (
   { categoryId, page }: GQLQueryArenaCategoryArgs,
   context: Context,
 ): Promise<GQLArenaCategory> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/category/${categoryId}?page=${page}`,
-    context,
+    { ...context, shouldUseCache: false },
+    { headers: csrfHeaders },
   );
   const resolved = await resolveJson(response);
   return toCategory(resolved);
@@ -167,7 +179,7 @@ export const fetchArenaTopic = async (
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/topic/${topicId}?page=${page ?? 1}`,
-    context,
+    { ...context, shouldUseCache: false },
     { headers: csrfHeaders },
   );
   const resolved = await resolveJson(response);
@@ -177,7 +189,12 @@ export const fetchArenaTopic = async (
 export const fetchArenaRecentTopics = async (
   context: Context,
 ): Promise<GQLArenaTopic[]> => {
-  const response = await fetch('/groups/api/recent', context);
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    '/groups/api/recent',
+    { ...context, shouldUseCache: false },
+    { headers: csrfHeaders },
+  );
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
 };
@@ -186,7 +203,12 @@ export const fetchArenaTopicsByUser = async (
   { userSlug }: GQLQueryArenaTopicsByUserArgs,
   context: Context,
 ): Promise<GQLArenaTopic[]> => {
-  const response = await fetch(`/groups/api/user/${userSlug}/topics`, context);
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    `/groups/api/user/${userSlug}/topics`,
+    { ...context, shouldUseCache: false },
+    { headers: csrfHeaders },
+  );
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
 };
@@ -194,7 +216,12 @@ export const fetchArenaTopicsByUser = async (
 export const fetchArenaNotifications = async (
   context: Context,
 ): Promise<GQLArenaNotification[]> => {
-  const response = await fetch('/groups/api/notifications', context);
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    '/groups/api/notifications',
+    { ...context, shouldUseCache: false },
+    { headers: csrfHeaders },
+  );
   const resolved = await resolveJson(response);
   return resolved.notifications.map(toNotification);
 };
@@ -204,15 +231,19 @@ export const newTopic = async (
   context: Context,
 ): Promise<GQLArenaTopic> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(`/groups/api/v3/topics`, context, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', ...csrfHeaders },
-    body: JSON.stringify({
-      cid: categoryId,
-      title,
-      content,
-    }),
-  });
+  const response = await fetch(
+    `/groups/api/v3/topics`,
+    { ...context, shouldUseCache: false },
+    {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', ...csrfHeaders },
+      body: JSON.stringify({
+        cid: categoryId,
+        title,
+        content,
+      }),
+    },
+  );
   const resolved = await resolveJson(response);
   return toTopic(resolved.response);
 };
@@ -222,16 +253,20 @@ export const replyToTopic = async (
   context: Context,
 ) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(`/groups/api/v3/topics/${topicId}`, context, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      ...csrfHeaders,
+  const response = await fetch(
+    `/groups/api/v3/topics/${topicId}`,
+    { ...context, shouldUseCache: false },
+    {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
+      body: JSON.stringify({
+        content,
+      }),
     },
-    body: JSON.stringify({
-      content,
-    }),
-  });
+  );
   const resolved = await resolveJson(response);
   return toArenaPost(resolved.response, undefined);
 };
@@ -241,13 +276,17 @@ export const deletePost = async (
   context: Context,
 ) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  await fetch(`/groups/api/v3/posts/${postId}/state`, context, {
-    method: 'DELETE',
-    headers: {
-      'content-type': 'application/json',
-      ...csrfHeaders,
+  await fetch(
+    `/groups/api/v3/posts/${postId}/state`,
+    { ...context, shouldUseCache: false },
+    {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
     },
-  });
+  );
   return postId;
 };
 
@@ -256,13 +295,17 @@ export const deleteTopic = async (
   context: Context,
 ) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  await fetch(`/groups/api/v3/topics/${topicId}/state`, context, {
-    method: 'DELETE',
-    headers: {
-      'content-type': 'application/json',
-      ...csrfHeaders,
+  await fetch(
+    `/groups/api/v3/topics/${topicId}/state`,
+    { ...context, shouldUseCache: false },
+    {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
     },
-  });
+  );
   return topicId;
 };
 
@@ -271,17 +314,21 @@ export const updatePost = async (
   context: Context,
 ) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(`/groups/api/v3/posts/${postId}`, context, {
-    method: 'PUT',
-    headers: {
-      'content-type': 'application/json',
-      ...csrfHeaders,
+  const response = await fetch(
+    `/groups/api/v3/posts/${postId}`,
+    { ...context, shouldUseCache: false },
+    {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
+      body: JSON.stringify({
+        content,
+        title,
+      }),
     },
-    body: JSON.stringify({
-      content,
-      title,
-    }),
-  });
+  );
   const resolved = await resolveJson(response);
   return toArenaPost(resolved.response);
 };
@@ -291,23 +338,81 @@ export const newFlag = async (
   context: Context,
 ): Promise<number> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(`/groups/api/v3/flags`, context, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      ...csrfHeaders,
+  const response = await fetch(
+    `/groups/api/v3/flags`,
+    { ...context, shouldUseCache: false },
+    {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
+      body: JSON.stringify({
+        id: id,
+        type: type,
+        reason: reason,
+      }),
     },
-    body: JSON.stringify({
-      id: id,
-      type: type,
-      reason: reason,
-    }),
-  });
+  );
   const { status, ok } = response;
   const jsonResponse = await response.json();
 
   if (ok) return id;
   throw new GraphQLError(jsonResponse.status.message, {
     extensions: { status },
+  });
+};
+
+export const subscribeToTopic = async (
+  { topicId }: GQLMutationSubscribeToTopicArgs,
+  context: Context,
+): Promise<number> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    `/groups/api/v3/topics/${topicId}/follow`,
+    { ...context, shouldUseCache: false },
+    {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
+    },
+  );
+
+  if (response.ok) {
+    return topicId;
+  }
+
+  const resolved = await resolveJson(response);
+  throw new GraphQLError(resolved.status.message, {
+    extensions: { status: response.status },
+  });
+};
+
+export const unsubscribeFromTopic = async (
+  { topicId }: GQLMutationUnsubscribeFromTopicArgs,
+  context: Context,
+): Promise<number> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    `/groups/api/v3/topics/${topicId}/follow`,
+    { ...context, shouldUseCache: false },
+    {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        ...csrfHeaders,
+      },
+    },
+  );
+
+  if (response.ok) {
+    return topicId;
+  }
+
+  const resolved = await resolveJson(response);
+  throw new GraphQLError(resolved.status.message, {
+    extensions: { status: response.status },
   });
 };

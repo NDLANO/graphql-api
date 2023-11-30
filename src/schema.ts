@@ -1242,6 +1242,7 @@ export const typeDefs = gql`
     posts: [ArenaPost!]!
     breadcrumbs: [ArenaBreadcrumb!]!
     deleted: Boolean!
+    isFollowing: Boolean
   }
 
   type ArenaNotification {
@@ -1450,6 +1451,8 @@ export const typeDefs = gql`
     deletePost(postId: Int!): Int!
     deleteTopic(topicId: Int!): Int!
     newFlag(type: String!, id: Int!, reason: String!): Int!
+    subscribeToTopic(topicId: Int!): Int!
+    unsubscribeFromTopic(topicId: Int!): Int!
   }
 `;
 

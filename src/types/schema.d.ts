@@ -80,6 +80,7 @@ export type GQLArenaTopic = {
   categoryId: Scalars['Int'];
   deleted: Scalars['Boolean'];
   id: Scalars['Int'];
+  isFollowing?: Maybe<Scalars['Boolean']>;
   locked: Scalars['Boolean'];
   postCount: Scalars['Int'];
   posts: Array<GQLArenaPost>;
@@ -909,7 +910,9 @@ export type GQLMutation = {
   replyToTopic: GQLArenaPost;
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
+  subscribeToTopic: Scalars['Int'];
   transformArticleContent: Scalars['String'];
+  unsubscribeFromTopic: Scalars['Int'];
   updateFolder: GQLFolder;
   updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']>;
@@ -999,6 +1002,11 @@ export type GQLMutationSortResourcesArgs = {
 };
 
 
+export type GQLMutationSubscribeToTopicArgs = {
+  topicId: Scalars['Int'];
+};
+
+
 export type GQLMutationTransformArticleContentArgs = {
   absoluteUrl?: InputMaybe<Scalars['Boolean']>;
   content: Scalars['String'];
@@ -1006,6 +1014,11 @@ export type GQLMutationTransformArticleContentArgs = {
   previewH5p?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   visualElement?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLMutationUnsubscribeFromTopicArgs = {
+  topicId: Scalars['Int'];
 };
 
 
@@ -2334,6 +2347,7 @@ export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLReso
   categoryId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   deleted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  isFollowing?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   locked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   postCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   posts?: Resolver<Array<GQLResolversTypes['ArenaPost']>, ParentType, ContextType>;
@@ -3153,7 +3167,9 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
+  subscribeToTopic?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationSubscribeToTopicArgs, 'topicId'>>;
   transformArticleContent?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationTransformArticleContentArgs, 'content'>>;
+  unsubscribeFromTopic?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationUnsubscribeFromTopicArgs, 'topicId'>>;
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
