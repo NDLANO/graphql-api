@@ -7,6 +7,7 @@
  */
 
 import { GraphQLError } from 'graphql';
+import he from 'he';
 import {
   GQLArenaCategory,
   GQLArenaNotification,
@@ -55,7 +56,7 @@ const toTopic = (topic: any): GQLArenaTopic => {
   return {
     id: topic.tid,
     categoryId: topic.cid,
-    title: topic.title,
+    title: he.decode(topic.title),
     slug: topic.slug,
     postCount: topic.postcount,
     timestamp: topic.timestampISO,
@@ -75,7 +76,7 @@ const toCategory = (category: any): GQLArenaCategory => {
     id: category.cid,
     description: category.description,
     htmlDescription: category.descriptionParsed,
-    name: category.name,
+    name: he.decode(category.name),
     slug: category.slug,
     topicCount: category.topic_count,
     postCount: category.post_count,
@@ -94,7 +95,7 @@ const toNotification = (notification: any): GQLArenaNotification => ({
   user: toArenaUser(notification.user),
   readClass: notification.readClass,
   image: notification.image,
-  topicTitle: notification.topicTitle,
+  topicTitle: he.decode(notification.topicTitle),
   type: notification.type,
   subject: notification.subject,
   topicId: notification.tid,
