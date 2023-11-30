@@ -1221,6 +1221,7 @@ export const typeDefs = gql`
     timestamp: String!
     isMainPost: Boolean!
     user: ArenaUser!
+    deleted: Boolean!
     flagId: Int
   }
 
@@ -1240,6 +1241,7 @@ export const typeDefs = gql`
     timestamp: String!
     posts: [ArenaPost!]!
     breadcrumbs: [ArenaBreadcrumb!]!
+    deleted: Boolean!
   }
 
   type ArenaNotification {
@@ -1444,6 +1446,9 @@ export const typeDefs = gql`
       content: String!
     ): ArenaTopic!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
+    updatePost(postId: Int!, content: String!, title: String): ArenaPost!
+    deletePost(postId: Int!): Int!
+    deleteTopic(topicId: Int!): Int!
     newFlag(type: String!, id: Int!, reason: String!): Int!
   }
 `;

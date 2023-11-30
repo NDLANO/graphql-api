@@ -16,6 +16,9 @@ import {
   fetchArenaNotifications,
   newTopic,
   replyToTopic,
+  deletePost,
+  deleteTopic,
+  updatePost,
   newFlag,
 } from '../api/arenaApi';
 import {
@@ -33,6 +36,9 @@ import {
   GQLArenaPost,
   GQLMutationReplyToTopicArgs,
   GQLArenaUser,
+  GQLMutationDeletePostArgs,
+  GQLMutationDeleteTopicArgs,
+  GQLMutationUpdatePostArgs,
 } from '../types/schema';
 
 export const Query: Pick<
@@ -98,7 +104,13 @@ export const Query: Pick<
 
 export const Mutations: Pick<
   GQLMutationResolvers,
-  'newArenaTopic' | 'replyToTopic' | 'markNotificationAsRead' | 'newFlag'
+  | 'newArenaTopic'
+  | 'replyToTopic'
+  | 'markNotificationAsRead'
+  | 'deletePost'
+  | 'deleteTopic'
+  | 'updatePost'
+  | 'newFlag'
 > = {
   async newArenaTopic(
     _: any,
@@ -123,6 +135,27 @@ export const Mutations: Pick<
       params.topicIds.map(topicId => fetchArenaTopic({ topicId }, context)),
     );
     return params.topicIds;
+  },
+  async deletePost(
+    _: any,
+    params: GQLMutationDeletePostArgs,
+    context: Context,
+  ) {
+    return await deletePost(params, context);
+  },
+  async deleteTopic(
+    _: any,
+    params: GQLMutationDeleteTopicArgs,
+    context: Context,
+  ) {
+    return await deleteTopic(params, context);
+  },
+  async updatePost(
+    _: any,
+    params: GQLMutationUpdatePostArgs,
+    context: Context,
+  ) {
+    return await updatePost(params, context);
   },
   async newFlag(_: any, params, context: ContextWithLoaders): Promise<number> {
     return newFlag(params, context);

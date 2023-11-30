@@ -65,6 +65,7 @@ export type GQLArenaNotification = {
 export type GQLArenaPost = {
   __typename?: 'ArenaPost';
   content: Scalars['String'];
+  deleted: Scalars['Boolean'];
   flagId?: Maybe<Scalars['Int']>;
   id: Scalars['Int'];
   isMainPost: Scalars['Boolean'];
@@ -77,6 +78,7 @@ export type GQLArenaTopic = {
   __typename?: 'ArenaTopic';
   breadcrumbs: Array<GQLArenaBreadcrumb>;
   categoryId: Scalars['Int'];
+  deleted: Scalars['Boolean'];
   id: Scalars['Int'];
   locked: Scalars['Boolean'];
   postCount: Scalars['Int'];
@@ -899,6 +901,8 @@ export type GQLMutation = {
   deleteFolder: Scalars['String'];
   deleteFolderResource: Scalars['String'];
   deletePersonalData: Scalars['Boolean'];
+  deletePost: Scalars['Int'];
+  deleteTopic: Scalars['Int'];
   markNotificationAsRead: Array<Scalars['Int']>;
   newArenaTopic: GQLArenaTopic;
   newFlag: Scalars['Int'];
@@ -910,6 +914,7 @@ export type GQLMutation = {
   updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']>;
   updatePersonalData: GQLMyNdlaPersonalData;
+  updatePost: GQLArenaPost;
 };
 
 
@@ -944,6 +949,16 @@ export type GQLMutationDeleteFolderArgs = {
 export type GQLMutationDeleteFolderResourceArgs = {
   folderId: Scalars['String'];
   resourceId: Scalars['String'];
+};
+
+
+export type GQLMutationDeletePostArgs = {
+  postId: Scalars['Int'];
+};
+
+
+export type GQLMutationDeleteTopicArgs = {
+  topicId: Scalars['Int'];
 };
 
 
@@ -1017,6 +1032,13 @@ export type GQLMutationUpdateFolderStatusArgs = {
 export type GQLMutationUpdatePersonalDataArgs = {
   favoriteSubjects?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   shareName?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type GQLMutationUpdatePostArgs = {
+  content: Scalars['String'];
+  postId: Scalars['Int'];
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type GQLMyNdlaGroup = {
@@ -2297,6 +2319,7 @@ export type GQLArenaNotificationResolvers<ContextType = any, ParentType extends 
 
 export type GQLArenaPostResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaPost'] = GQLResolversParentTypes['ArenaPost']> = {
   content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  deleted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   flagId?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isMainPost?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
@@ -2309,6 +2332,7 @@ export type GQLArenaPostResolvers<ContextType = any, ParentType extends GQLResol
 export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaTopic'] = GQLResolversParentTypes['ArenaTopic']> = {
   breadcrumbs?: Resolver<Array<GQLResolversTypes['ArenaBreadcrumb']>, ParentType, ContextType>;
   categoryId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  deleted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   locked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   postCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -3121,6 +3145,8 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  deletePost?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostArgs, 'postId'>>;
+  deleteTopic?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteTopicArgs, 'topicId'>>;
   markNotificationAsRead?: Resolver<Array<GQLResolversTypes['Int']>, ParentType, ContextType, RequireFields<GQLMutationMarkNotificationAsReadArgs, 'topicIds'>>;
   newArenaTopic?: Resolver<GQLResolversTypes['ArenaTopic'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicArgs, 'categoryId' | 'content' | 'title'>>;
   newFlag?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagArgs, 'id' | 'reason' | 'type'>>;
@@ -3132,6 +3158,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
+  updatePost?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostArgs, 'content' | 'postId'>>;
 };
 
 export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaGroup'] = GQLResolversParentTypes['MyNdlaGroup']> = {

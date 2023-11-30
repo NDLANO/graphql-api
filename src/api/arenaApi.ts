@@ -13,9 +13,12 @@ import {
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
+  GQLMutationDeletePostArgs,
+  GQLMutationDeleteTopicArgs,
   GQLMutationNewArenaTopicArgs,
   GQLMutationNewFlagArgs,
   GQLMutationReplyToTopicArgs,
+  GQLMutationUpdatePostArgs,
   GQLQueryArenaCategoryArgs,
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
@@ -40,6 +43,7 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   timestamp: post.timestampISO,
   isMainPost: post.isMainPost ?? post.pid === mainPid,
   user: toArenaUser(post.user),
+  deleted: post.deleted,
   flagId: post.flagId,
 });
 
@@ -62,6 +66,7 @@ const toTopic = (topic: any): GQLArenaTopic => {
       ? [toArenaPost(topic.mainPost, topic.mainPid)]
       : [],
     breadcrumbs: crumbs,
+    deleted: topic.deleted,
   };
 };
 
@@ -228,6 +233,56 @@ export const replyToTopic = async (
   });
   const resolved = await resolveJson(response);
   return toArenaPost(resolved.response, undefined);
+};
+
+export const deletePost = async (
+  { postId }: GQLMutationDeletePostArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  await fetch(`/groups/api/v3/posts/${postId}/state`, context, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+  });
+  return postId;
+};
+
+export const deleteTopic = async (
+  { topicId }: GQLMutationDeleteTopicArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  await fetch(`/groups/api/v3/topics/${topicId}/state`, context, {
+    method: 'DELETE',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+  });
+  return topicId;
+};
+
+export const updatePost = async (
+  { postId, content, title }: GQLMutationUpdatePostArgs,
+  context: Context,
+) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/posts/${postId}`, context, {
+    method: 'PUT',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+    body: JSON.stringify({
+      content,
+      title,
+    }),
+  });
+  const resolved = await resolveJson(response);
+  return toArenaPost(resolved.response);
 };
 
 export const newFlag = async (
