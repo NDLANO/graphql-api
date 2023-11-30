@@ -7,10 +7,13 @@ ENV APP_PATH=$HOME/graphql-api
 WORKDIR $APP_PATH
 
 # Copy necessary files for installing dependencies
-COPY yarn.lock package.json tsconfig.json  $APP_PATH/
+COPY yarn.lock package.json tsconfig.json .yarnrc.yml $APP_PATH/
+
+# Enable yarn
+RUN corepack enable
 
 # Run yarn before src copy to enable better layer caching
-RUN yarn
+RUN yarn install --immutable
 
 COPY src $APP_PATH/src
 
