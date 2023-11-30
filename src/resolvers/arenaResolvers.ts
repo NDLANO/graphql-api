@@ -19,6 +19,7 @@ import {
   deletePost,
   deleteTopic,
   updatePost,
+  newFlag,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
@@ -109,6 +110,7 @@ export const Mutations: Pick<
   | 'deletePost'
   | 'deleteTopic'
   | 'updatePost'
+  | 'newFlag'
 > = {
   async newArenaTopic(
     _: any,
@@ -154,5 +156,8 @@ export const Mutations: Pick<
     context: Context,
   ) {
     return await updatePost(params, context);
+  },
+  async newFlag(_: any, params, context: ContextWithLoaders): Promise<number> {
+    return newFlag(params, context);
   },
 };

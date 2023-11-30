@@ -1222,6 +1222,7 @@ export const typeDefs = gql`
     isMainPost: Boolean!
     user: ArenaUser!
     deleted: Boolean!
+    flagId: Int
   }
 
   type ArenaBreadcrumb {
@@ -1448,6 +1449,7 @@ export const typeDefs = gql`
     updatePost(postId: Int!, content: String!, title: String): ArenaPost!
     deletePost(postId: Int!): Int!
     deleteTopic(topicId: Int!): Int!
+    newFlag(type: String!, id: Int!, reason: String!): Int!
   }
 `;
 

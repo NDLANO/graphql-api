@@ -6,7 +6,7 @@
  *
  */
 
-import { isContext } from 'vm';
+import { GraphQLError } from 'graphql';
 import {
   GQLArenaCategory,
   GQLArenaNotification,
@@ -16,6 +16,7 @@ import {
   GQLMutationDeletePostArgs,
   GQLMutationDeleteTopicArgs,
   GQLMutationNewArenaTopicArgs,
+  GQLMutationNewFlagArgs,
   GQLMutationReplyToTopicArgs,
   GQLMutationUpdatePostArgs,
   GQLQueryArenaCategoryArgs,
@@ -43,6 +44,7 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   isMainPost: post.isMainPost ?? post.pid === mainPid,
   user: toArenaUser(post.user),
   deleted: post.deleted,
+  flagId: post.flagId,
 });
 
 const toTopic = (topic: any): GQLArenaTopic => {
@@ -99,6 +101,7 @@ const toNotification = (notification: any): GQLArenaNotification => ({
   postId: notification.pid,
   notificationId: notification.nid,
 });
+
 export const fetchCsrfTokenForSession = async (
   context: Context,
 ): Promise<{ cookie: string; 'x-csrf-token': string }> => {
@@ -280,4 +283,30 @@ export const updatePost = async (
   });
   const resolved = await resolveJson(response);
   return toArenaPost(resolved.response);
+};
+
+export const newFlag = async (
+  { type, id, reason }: GQLMutationNewFlagArgs,
+  context: Context,
+): Promise<number> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(`/groups/api/v3/flags`, context, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      ...csrfHeaders,
+    },
+    body: JSON.stringify({
+      id: id,
+      type: type,
+      reason: reason,
+    }),
+  });
+  const { status, ok } = response;
+  const jsonResponse = await response.json();
+
+  if (ok) return id;
+  throw new GraphQLError(jsonResponse.status.message, {
+    extensions: { status },
+  });
 };
