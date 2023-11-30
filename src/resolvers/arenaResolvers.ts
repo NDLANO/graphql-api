@@ -20,6 +20,8 @@ import {
   deleteTopic,
   updatePost,
   newFlag,
+  subscribeToTopic,
+  unsubscribeFromTopic,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
@@ -111,6 +113,8 @@ export const Mutations: Pick<
   | 'deleteTopic'
   | 'updatePost'
   | 'newFlag'
+  | 'subscribeToTopic'
+  | 'unsubscribeFromTopic'
 > = {
   async newArenaTopic(
     _: any,
@@ -159,5 +163,19 @@ export const Mutations: Pick<
   },
   async newFlag(_: any, params, context: ContextWithLoaders): Promise<number> {
     return newFlag(params, context);
+  },
+  async subscribeToTopic(
+    _: any,
+    params,
+    context: ContextWithLoaders,
+  ): Promise<number> {
+    return subscribeToTopic(params, context);
+  },
+  async unsubscribeFromTopic(
+    _: any,
+    params,
+    context: ContextWithLoaders,
+  ): Promise<number> {
+    return unsubscribeFromTopic(params, context);
   },
 };
