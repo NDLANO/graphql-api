@@ -223,7 +223,9 @@ export const fetchArenaNotifications = async (
     { headers: csrfHeaders },
   );
   const resolved = await resolveJson(response);
-  return resolved.notifications.map(toNotification);
+  return resolved.notifications
+    .filter(({ type }: any) => type === 'new-reply')
+    .map(toNotification);
 };
 
 export const newTopic = async (
