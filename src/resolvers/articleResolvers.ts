@@ -119,7 +119,10 @@ export const resolvers = {
       return [];
     },
     introduction(article: GQLArticle): string {
-      return parseMarkdown({ markdown: article.introduction ?? '' });
+      return parseMarkdown({
+        markdown: article.introduction ?? '',
+        inline: true,
+      });
     },
   },
 };
