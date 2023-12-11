@@ -182,8 +182,16 @@ export const fetchArenaTopic = async (
     { ...context, shouldUseCache: false },
     { headers: csrfHeaders },
   );
+
   const resolved = await resolveJson(response);
-  return toTopic(resolved);
+
+  if (resolved.ok) {
+    return toTopic(resolved);
+  } else {
+    throw new GraphQLError(resolved.status.message, {
+      extensions: { status: response.status },
+    });
+  }
 };
 
 export const fetchArenaRecentTopics = async (
