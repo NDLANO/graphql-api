@@ -186,6 +186,15 @@ export const fetchArenaTopic = async (
   return toTopic(resolved);
 };
 
+export const markNotificationRead = async (tid: number, context: Context) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  await fetch(
+    `/groups/api/v3/topics/${tid}/read`,
+    { ...context, shouldUseCache: false },
+    { headers: csrfHeaders, method: 'PUT' },
+  );
+};
+
 export const fetchArenaRecentTopics = async (
   context: Context,
 ): Promise<GQLArenaTopic[]> => {

@@ -22,6 +22,7 @@ import {
   newFlag,
   subscribeToTopic,
   unsubscribeFromTopic,
+  markNotificationRead,
 } from '../api/arenaApi';
 import {
   GQLArenaCategory,
@@ -136,7 +137,7 @@ export const Mutations: Pick<
     context: Context,
   ) {
     await Promise.all(
-      params.topicIds.map(topicId => fetchArenaTopic({ topicId }, context)),
+      params?.topicIds?.map(topicId => markNotificationRead(topicId, context)),
     );
     return params.topicIds;
   },
