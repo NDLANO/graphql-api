@@ -185,7 +185,7 @@ export const fetchArenaTopic = async (
 
   const resolved = await resolveJson(response);
 
-  if (resolved.ok) {
+  if (response.ok) {
     return toTopic(resolved);
   } else {
     throw new GraphQLError(resolved.status.message, {
