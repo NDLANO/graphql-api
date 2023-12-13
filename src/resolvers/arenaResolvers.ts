@@ -180,3 +180,15 @@ export const Mutations: Pick<
     return unsubscribeFromTopic(params, context);
   },
 };
+
+export const resolvers = {
+  ArenaPost: {
+    async user(
+      post: GQLArenaPost,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLArenaUser> {
+      return fetchArenaUser({ username: post.user.username }, context);
+    },
+  },
+};
