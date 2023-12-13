@@ -7,7 +7,6 @@
  */
 
 import he from 'he';
-import { fetch, resolveJson } from '../utils/apiHelpers';
 import {
   ndlaEnvironment,
   uptimeOwner,
@@ -15,6 +14,7 @@ import {
   uptimeToken,
 } from '../config';
 import { GQLUptimeAlert } from '../types/schema';
+import { fetch, resolveJson } from '../utils/apiHelpers';
 import parseMarkdown from '../utils/parseMarkdown';
 
 interface GithubLabel {

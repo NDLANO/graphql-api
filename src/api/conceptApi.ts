@@ -6,16 +6,16 @@
  *
  */
 
-import queryString from 'query-string';
 import uniq from 'lodash/uniq';
+import queryString from 'query-string';
 import {
   IConceptSearchResult,
   IConcept,
   IConceptSummary,
 } from '@ndla/types-backend/concept-api';
-import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSubject } from './taxonomyApi';
 import { GQLListingPage, GQLSubject } from '../types/schema';
+import { fetch, resolveJson } from '../utils/apiHelpers';
 import parseMarkdown from '../utils/parseMarkdown';
 
 export interface ConceptResult {

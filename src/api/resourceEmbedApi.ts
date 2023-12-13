@@ -6,6 +6,7 @@
  *
  */
 
+import { load } from 'cheerio';
 import {
   AudioEmbedData,
   BrightcoveEmbedData,
@@ -14,7 +15,7 @@ import {
   H5pEmbedData,
   ImageEmbedData,
 } from '@ndla/types-embed';
-import { load } from 'cheerio';
+import { transformEmbed } from './embedsApi';
 import { getEnvironmentVariabel, h5pHostUrl } from '../config';
 import {
   GQLQueryResourceEmbedArgs,
@@ -24,7 +25,6 @@ import {
 } from '../types/schema';
 import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
 import { toArticleMetaData } from '../utils/toArticleMetaData';
-import { transformEmbed } from './embedsApi';
 
 const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789');
 

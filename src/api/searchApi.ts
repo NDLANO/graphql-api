@@ -6,14 +6,13 @@
  *
  */
 
+import queryString from 'query-string';
 import {
   IApiTaxonomyContext,
   IGroupSearchResult,
   IMultiSearchResult,
   IMultiSearchSummary,
 } from '@ndla/types-backend/search-api';
-import queryString from 'query-string';
-import { fetch, resolveJson } from '../utils/apiHelpers';
 import { searchConcepts } from './conceptApi';
 import {
   GQLFrontpageSearch,
@@ -24,6 +23,7 @@ import {
   GQLSearch,
   GQLSearchWithoutPagination,
 } from '../types/schema';
+import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export async function search(
   searchQuery: GQLQuerySearchArgs,

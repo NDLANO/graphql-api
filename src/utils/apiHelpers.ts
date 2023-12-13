@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2018-present, NDLA.
  *
@@ -7,13 +6,15 @@
  *
  */
 
-import { Node } from '@ndla/types-taxonomy';
-import { Response } from 'node-fetch';
+// @ts-strict-ignore
+
 import { GraphQLError } from 'graphql';
-import { GQLTaxonomyEntity, GQLTaxonomyContext } from '../types/schema';
-import { apiUrl } from '../config';
+import { Response } from 'node-fetch';
+import { Node } from '@ndla/types-taxonomy';
 import createFetch from './fetch';
 import { createCache } from '../cache';
+import { apiUrl } from '../config';
+import { GQLTaxonomyEntity, GQLTaxonomyContext } from '../types/schema';
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {

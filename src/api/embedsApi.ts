@@ -6,7 +6,9 @@
  *
  */
 
+import { load } from 'cheerio';
 import he from 'he';
+import { IImageMetaInformationV3 } from '@ndla/types-backend/image-api';
 import {
   AudioMetaData,
   ImageMetaData,
@@ -30,27 +32,25 @@ import {
   CampaignBlockMetaData,
   ConceptData,
 } from '@ndla/types-embed';
-import { IImageMetaInformationV3 } from '@ndla/types-backend/image-api';
-import { load } from 'cheerio';
-import { fetchImageV3 } from './imageApi';
-import {
-  CheerioEmbed,
-  getEmbedsFromContent,
-} from '../utils/getEmbedsFromContent';
+import { fetchSimpleArticle } from './articleApi';
 import { fetchAudioV2 } from './audioApi';
-import { ndlaUrl } from '../config';
+import { fetchEmbedConcept, fetchEmbedConcepts } from './conceptApi';
+import { fetchExternalOembed } from './externalApi';
+import { checkIfFileExists } from './fileApi';
 import {
   fetchH5pLicenseInformation,
   fetchH5pOembed,
   fetchH5pInfo,
 } from './h5pApi';
-import { fetchExternalOembed } from './externalApi';
-import { fetchVideo, fetchVideoSources } from './videoApi';
+import { fetchImageV3 } from './imageApi';
 import { queryNodes } from './taxonomyApi';
-import { fetchSimpleArticle } from './articleApi';
-import { fetchEmbedConcept, fetchEmbedConcepts } from './conceptApi';
-import { checkIfFileExists } from './fileApi';
+import { fetchVideo, fetchVideoSources } from './videoApi';
+import { ndlaUrl } from '../config';
 import { getBrightcoveCopyright } from '../utils/brightcoveUtils';
+import {
+  CheerioEmbed,
+  getEmbedsFromContent,
+} from '../utils/getEmbedsFromContent';
 import highlightCode from '../utils/highlightCode';
 import parseMarkdown from '../utils/parseMarkdown';
 

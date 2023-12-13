@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2021-present, NDLA.
  *
@@ -6,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
+// @ts-strict-ignore
 
 import {
   searchConcepts,

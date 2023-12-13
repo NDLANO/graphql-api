@@ -1,4 +1,5 @@
 module.exports = {
+  ignorePatterns: ['**/schema.d.ts'],
   extends: 'eslint-config-ndla',
   overrides: [
     {

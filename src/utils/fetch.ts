@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2018-present, NDLA.
  *
@@ -7,8 +6,10 @@
  *
  */
 
-import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
+// @ts-strict-ignore
+
 import { performance } from 'perf_hooks';
+import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
 import { IKeyValueCache, setHeaderIfShouldNotCache } from '../cache';
 import getLogger from '../utils/logger';
 

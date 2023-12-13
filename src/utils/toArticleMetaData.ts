@@ -6,10 +6,11 @@
  *
  */
 
-import { IConcept, IConceptSummary } from '@ndla/types-backend/concept-api';
-import { ConceptVisualElementMeta, EmbedMetaData } from '@ndla/types-embed';
-import { IImageMetaInformationV3 } from '@ndla/types-backend/image-api';
 import sortBy from 'lodash/sortBy';
+import { IConcept, IConceptSummary } from '@ndla/types-backend/concept-api';
+import { IImageMetaInformationV3 } from '@ndla/types-backend/image-api';
+import { ConceptVisualElementMeta, EmbedMetaData } from '@ndla/types-embed';
+import { licenseFixer, roleMapper } from './apiHelpers';
 import { listingUrl } from '../config';
 import {
   GQLArticleMetaData,
@@ -23,7 +24,6 @@ import {
   GQLImageLicense,
   GQLPodcastLicense,
 } from '../types/schema';
-import { licenseFixer, roleMapper } from './apiHelpers';
 
 type Success<T extends EmbedMetaData['resource']> = Extract<
   EmbedMetaData,

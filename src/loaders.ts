@@ -6,13 +6,13 @@
  *
  */
 
+import DataLoader from 'dataloader';
 import {
   IFilmFrontPageData,
   IFrontPage,
   ISubjectPageData,
 } from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
-import DataLoader from 'dataloader';
 import {
   fetchArticles,
   fetchSubjectTopics,

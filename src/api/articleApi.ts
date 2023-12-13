@@ -1,5 +1,4 @@
 /**
- *
  * Copyright (c) 2019-present, NDLA.
  *
  * This source code is licensed under the GPLv3 license found in the
@@ -8,13 +7,13 @@
  */
 
 import { IArticleV2 } from '@ndla/types-backend/article-api';
+import { queryNodes } from './taxonomyApi';
+import { transformArticle } from './transformArticleApi';
 import { localConverter, ndlaUrl } from '../config';
 import { GQLArticle, GQLMeta } from '../types/schema';
 import { fetch, resolveJson } from '../utils/apiHelpers';
 import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
 import { parseVisualElement } from '../utils/visualelementHelpers';
-import { queryNodes } from './taxonomyApi';
-import { transformArticle } from './transformArticleApi';
 
 interface ArticleParams {
   convertEmbeds?: boolean;

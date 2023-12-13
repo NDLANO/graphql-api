@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -6,6 +5,9 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
+// @ts-strict-ignore
+
 import he from 'he';
 import { Response } from 'node-fetch';
 import {
@@ -146,10 +148,13 @@ async function fetchLK20CompetenceGoal(
     `/grep/kl06/v201906/kompetansemaal-lk20/${code}`,
     context,
   );
-  const json: CompetenceGoal = await resolveJson(response);
+  // Fallback to empty object in case of timeout or 404
+  const json: CompetenceGoal = await resolveJson(response, {});
   return {
     id: json.kode,
-    title: `${filterTextsForLanguage(json.tittel.tekst, lang)} (${json.kode})`,
+    title: `${filterTextsForLanguage(json.tittel?.tekst ?? [], lang)} (${
+      json.kode
+    })`,
     type: 'LK20',
     code: json.kode,
     language: lang,
@@ -182,7 +187,6 @@ export async function fetchLK20CompetenceGoalSet(
     `/grep/kl06/v201906/kompetansemaalsett-lk20/${code}`,
     context,
   );
-  // Fallback to empty object in case of timeout or 404
   const json: CompetenceGoalSet = await resolveJson(response, {});
   const promises = json?.kompetansemaal?.map(km => km.kode) || [];
   return Promise.all(promises);
@@ -198,10 +202,12 @@ export async function fetchCoreElement(
     `/grep/kl06/v201906/kjerneelementer-lk20/${code}`,
     context,
   );
-  const json: CoreElement = await resolveJson(response);
+  const json: CoreElement = await resolveJson(response, {});
   return {
     id: json.kode,
-    title: `${filterTextsForLanguage(json.tittel.tekst, lang)} (${json.kode})`,
+    title: `${filterTextsForLanguage(json.tittel?.tekst ?? [], lang)} (${
+      json.kode
+    })`,
     description: htmlToText(
       filterTextsForLanguage(json.beskrivelse.tekst, lang),
     ),
@@ -230,9 +236,8 @@ export async function fetchGrepElement(
 ): Promise<GQLReference> {
   const lang = language || context.language;
   const response = await curriculumFetch(`${url}${code}`, context);
-  const json: GrepElement = await resolveJson(response);
-
-  const title = filterTextsForLanguage(json.tittel.tekst, lang);
+  const json: GrepElement = await resolveJson(response, {});
+  const title = filterTextsForLanguage(json.tittel?.tekst ?? [], lang);
 
   return {
     code: json.kode,
@@ -297,9 +302,9 @@ export async function fetchCrossSubjectTopicsByCode(
         `/grep/kl06/v201906/tverrfaglige-temaer-lk20/${code}`,
         context,
       );
-      const json: CrossSubjectTopic = await resolveJson(response);
+      const json: CrossSubjectTopic = await resolveJson(response, {});
 
-      const title = filterTextsForLanguage(json.tittel, language);
+      const title = filterTextsForLanguage(json.tittel ?? [], language);
 
       return {
         code: json.kode,
