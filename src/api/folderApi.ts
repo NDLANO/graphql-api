@@ -14,11 +14,6 @@ import {
   IResource,
 } from '@ndla/types-backend/learningpath-api';
 import {
-  fetch,
-  resolveJson,
-  resolveNothingFromStatus,
-} from '../utils/apiHelpers';
-import {
   GQLMutationAddFolderArgs,
   GQLMutationAddFolderResourceArgs,
   GQLMutationCopySharedFolderArgs,
@@ -35,6 +30,11 @@ import {
   GQLQueryFoldersArgs,
   GQLSortResult,
 } from '../types/schema';
+import {
+  fetch,
+  resolveJson,
+  resolveNothingFromStatus,
+} from '../utils/apiHelpers';
 
 interface QueryParamsType {
   [key: string]: any;

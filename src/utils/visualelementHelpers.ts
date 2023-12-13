@@ -6,6 +6,7 @@
  *
  */
 import cheerio from 'cheerio';
+import { fetch, resolveJson } from './apiHelpers';
 import { fetchH5pLicenseInformation, fetchH5pInfo } from '../api/h5pApi';
 import { convertToSimpleImage, fetchImage } from '../api/imageApi';
 import { fetchOembed } from '../api/oembedApi';
@@ -18,7 +19,6 @@ import {
   GQLVisualElement,
   GQLVisualElementOembed,
 } from '../types/schema';
-import { fetch, resolveJson } from './apiHelpers';
 
 export async function fetchVisualElementLicense<T>(
   visualElement: string,

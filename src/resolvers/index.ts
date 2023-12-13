@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -8,33 +7,35 @@
  */
 
 import {
-  Query as TopicQuery,
-  resolvers as topicResolvers,
-} from './topicResolvers';
-import {
-  Query as SubjectQuery,
-  resolvers as subjectResolvers,
-} from './subjectResolvers';
-import {
-  Query as FrontpageQuery,
-  resolvers as frontpageResolvers,
-} from './frontpageResolvers';
-import {
-  Query as ResourceQuery,
-  resolvers as resourceResolvers,
-} from './resourceResolvers';
+  Query as ArenaQuery,
+  Mutations as ArenaMutations,
+  resolvers as ArenaResolvers,
+} from './arenaResolvers';
 import {
   Query as ArticleQuery,
   resolvers as articleResolvers,
 } from './articleResolvers';
 import {
-  Query as SearchQuery,
-  resolvers as searchResolvers,
-} from './searchResolvers';
+  Query as ConceptQuery,
+  resolvers as conceptResolvers,
+} from './conceptResolvers';
 import {
   Query as CurriculumQuery,
   resolvers as curriculumResolvers,
 } from './curriculumResolvers';
+import {
+  Query as FolderResolvers,
+  Mutations as FolderMutations,
+  resolvers as folderResolvers,
+} from './folderResolvers';
+import {
+  Query as FrontpageQuery,
+  resolvers as frontpageResolvers,
+} from './frontpageResolvers';
+import {
+  Query as ImageQuery,
+  resolvers as ImageResolvers,
+} from './imageResolvers';
 import {
   Query as LearningpathQuery,
   resolvers as learningpathResolvers,
@@ -44,36 +45,33 @@ import {
   resolvers as podcastResolvers,
 } from './podcastResolvers';
 import {
-  Query as ConceptQuery,
-  resolvers as conceptResolvers,
-} from './conceptResolvers';
+  Query as ProgrammeQuery,
+  resolvers as ProgrammeResolvers,
+} from './programmeResolvers';
 import {
-  Query as UptimeQuery,
-  resolvers as uptimeResolvers,
-} from './uptimeResolvers';
+  Query as ResourceQuery,
+  resolvers as resourceResolvers,
+} from './resourceResolvers';
 import {
-  Query as FolderResolvers,
-  Mutations as FolderMutations,
-  resolvers as folderResolvers,
-} from './folderResolvers';
+  Query as SearchQuery,
+  resolvers as searchResolvers,
+} from './searchResolvers';
 import {
-  Query as ImageQuery,
-  resolvers as ImageResolvers,
-} from './imageResolvers';
+  Query as SubjectQuery,
+  resolvers as subjectResolvers,
+} from './subjectResolvers';
+import {
+  Query as TopicQuery,
+  resolvers as topicResolvers,
+} from './topicResolvers';
 import {
   Query as TransformQuery,
   Mutations as TransformArticleMutations,
 } from './transformResolvers';
 import {
-  Query as ProgrammeQuery,
-  resolvers as ProgrammeResolvers,
-} from './programmeResolvers';
-
-import {
-  Query as ArenaQuery,
-  Mutations as ArenaMutations,
-  resolvers as ArenaResolvers,
-} from './arenaResolvers';
+  Query as UptimeQuery,
+  resolvers as uptimeResolvers,
+} from './uptimeResolvers';
 
 export const resolvers = {
   Query: {

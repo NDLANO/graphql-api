@@ -6,8 +6,8 @@
  *
  */
 
-import { NextFunction, Request, Response } from 'express';
 import bunyan from 'bunyan';
+import { NextFunction, Request, Response } from 'express';
 import { loggerStorage } from './logger';
 
 export function setupLogger(correlationId: string, next: NextFunction): void {

@@ -11,8 +11,8 @@ import {
   IFilmFrontPageData,
   ISubjectPageData,
 } from '@ndla/types-backend/frontpage-api';
-import { fetch, resolveJson } from '../utils/apiHelpers';
 import { fetchSimpleArticle } from './articleApi';
+import { fetch, resolveJson } from '../utils/apiHelpers';
 
 export interface IMovieMeta {
   title: string;

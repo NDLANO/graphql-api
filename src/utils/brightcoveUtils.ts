@@ -6,12 +6,12 @@
  *
  */
 
-import { BrightcoveCopyright } from '@ndla/types-embed';
 import {
   contributorGroups,
   contributorTypes,
   getLicenseByAbbreviation,
 } from '@ndla/licenses';
+import { BrightcoveCopyright } from '@ndla/types-embed';
 
 const getLicenseByNBTitle = (title?: string) => {
   switch (title?.replace(/\s/g, '').toLowerCase()) {

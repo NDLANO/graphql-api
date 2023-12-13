@@ -6,11 +6,11 @@
  *
  */
 
-import { transformArticle } from '../api/transformArticleApi';
 import {
   fetchResourceEmbed,
   fetchResourceEmbeds,
 } from '../api/resourceEmbedApi';
+import { transformArticle } from '../api/transformArticleApi';
 import {
   GQLMutationResolvers,
   GQLQueryResolvers,

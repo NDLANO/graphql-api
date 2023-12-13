@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -6,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
+// @ts-strict-ignore
 
 import cheerio from 'cheerio';
 import {
@@ -15,10 +16,7 @@ import {
   fetchLearningpath,
   fetchOembed,
 } from '../api';
-import {
-  getArticleIdFromUrn,
-  getLearningpathIdFromUrn,
-} from '../utils/articleHelpers';
+import { fetchNodeByContentUri } from '../api/taxonomyApi';
 import { ndlaUrl } from '../config';
 import {
   GQLArticle,
@@ -32,7 +30,10 @@ import {
   GQLTaxonomyContext,
   GQLVisualElementOembed,
 } from '../types/schema';
-import { fetchNodeByContentUri } from '../api/taxonomyApi';
+import {
+  getArticleIdFromUrn,
+  getLearningpathIdFromUrn,
+} from '../utils/articleHelpers';
 
 export const Query = {
   async articleResource(

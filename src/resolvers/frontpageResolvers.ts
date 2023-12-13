@@ -20,13 +20,13 @@ import {
   queryContexts,
   queryNodes,
 } from '../api';
-import { getArticleIdFromUrn } from '../utils/articleHelpers';
 import {
   GQLArticle,
   GQLMeta,
   GQLMetaImage,
   GQLResourceType,
 } from '../types/schema';
+import { getArticleIdFromUrn } from '../utils/articleHelpers';
 
 interface Id {
   id: number;

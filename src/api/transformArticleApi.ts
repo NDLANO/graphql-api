@@ -1,5 +1,4 @@
 /**
- *
  * Copyright (c) 2023-present, NDLA.
  *
  * This source code is licensed under the GPLv3 license found in the
@@ -7,13 +6,13 @@
  *
  */
 
-import { EmbedMetaData } from '@ndla/types-embed';
 import { load } from 'cheerio';
 import sortBy from 'lodash/sortBy';
+import { EmbedMetaData } from '@ndla/types-embed';
+import { transformEmbed } from './embedsApi';
 import { GQLVisualElement } from '../types/schema';
 import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
 import { toArticleMetaData } from '../utils/toArticleMetaData';
-import { transformEmbed } from './embedsApi';
 
 interface TransformArticleOptions {
   subject?: string;

@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -7,17 +6,19 @@
  *
  */
 
+// @ts-strict-ignore
+
 import { ISubjectPageData } from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
 import { fetchLK20CompetenceGoalSet } from '../api';
 
-import { filterMissingArticles } from '../utils/articleHelpers';
 import {
   GQLQuerySubjectArgs,
   GQLSubject,
   GQLSubjectLink,
   GQLTopic,
 } from '../types/schema';
+import { filterMissingArticles } from '../utils/articleHelpers';
 
 export const Query = {
   async subject(

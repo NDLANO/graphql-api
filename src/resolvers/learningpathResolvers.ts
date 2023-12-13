@@ -17,8 +17,8 @@ import {
   GQLQueryLearningpathArgs,
   GQLResource,
 } from '../types/schema';
-import { isNDLAEmbedUrl } from '../utils/articleHelpers';
 import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
+import { isNDLAEmbedUrl } from '../utils/articleHelpers';
 
 export const Query = {
   async learningpath(

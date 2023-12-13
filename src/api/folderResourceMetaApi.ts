@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2022-present, NDLA.
  *
@@ -7,7 +6,14 @@
  *
  */
 
+// @ts-strict-ignore
+
 import groupBy from 'lodash/groupBy';
+import { fetchAudio } from './audioApi';
+import { searchConcepts } from './conceptApi';
+import { fetchImage } from './imageApi';
+import { searchWithoutPagination } from './searchApi';
+import { fetchVideo } from './videoApi';
 import {
   GQLFolderResourceMeta,
   GQLFolderResourceMetaSearchInput,
@@ -16,11 +22,6 @@ import {
   GQLQueryFolderResourceMetaSearchArgs,
   GQLSearchResult,
 } from '../types/schema';
-import { fetchAudio } from './audioApi';
-import { searchConcepts } from './conceptApi';
-import { fetchImage } from './imageApi';
-import { searchWithoutPagination } from './searchApi';
-import { fetchVideo } from './videoApi';
 
 const articleResourceTypes = [
   'urn:resourcetype:subjectMaterial',

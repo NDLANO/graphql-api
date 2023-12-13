@@ -1,6 +1,14 @@
+/**
+ * Copyright (c) 2018-present, NDLA.
+ *
+ * This source code is licensed under the GPLv3 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
 import DataLoader from 'dataloader';
-import { RequestInit, RequestCache } from 'node-fetch';
 import { Request, Response } from 'express';
+import { RequestInit, RequestCache } from 'node-fetch';
 import {
   IFrontPage,
   ISubjectPageData,

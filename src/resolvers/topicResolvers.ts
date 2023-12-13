@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -6,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
+// @ts-strict-ignore
 
 import { Node } from '@ndla/types-taxonomy';
 import {
@@ -16,10 +17,6 @@ import {
   fetchOembed,
   queryNodes,
 } from '../api';
-import {
-  filterMissingArticles,
-  getArticleIdFromUrn,
-} from '../utils/articleHelpers';
 import { ndlaUrl } from '../config';
 import {
   GQLArticle,
@@ -34,6 +31,10 @@ import {
   GQLVisualElementOembed,
 } from '../types/schema';
 import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
+import {
+  filterMissingArticles,
+  getArticleIdFromUrn,
+} from '../utils/articleHelpers';
 
 export const Query = {
   async topic(

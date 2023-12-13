@@ -6,9 +6,9 @@
  *
  */
 
-import { makeExecutableSchema } from '@graphql-tools/schema';
-import { addMocksToSchema } from '@graphql-tools/mock';
 import { graphql } from 'graphql';
+import { addMocksToSchema } from '@graphql-tools/mock';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 import { typeDefs } from '../schema';
 

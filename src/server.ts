@@ -6,17 +6,15 @@
  *
  */
 
-import express, { json, Request, Response } from 'express';
 import compression from 'compression';
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
 import cors from 'cors';
+import express, { json, Request, Response } from 'express';
 
 import isString from 'lodash/isString';
-import { port } from './config';
-import getLogger from './utils/logger';
-import { typeDefs } from './schema';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
 import { getToken } from './auth';
+import { port } from './config';
 import {
   articlesLoader,
   subjectTopicsLoader,
@@ -29,7 +27,9 @@ import {
   subjectpageLoader,
 } from './loaders';
 import { resolvers } from './resolvers';
+import { typeDefs } from './schema';
 import correlationIdMiddleware from './utils/correlationIdMiddleware';
+import getLogger from './utils/logger';
 import loggerMiddleware from './utils/loggerMiddleware';
 
 const GRAPHQL_PORT = port;

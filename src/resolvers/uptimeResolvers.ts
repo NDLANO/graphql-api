@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2022-present, NDLA.
  *
@@ -6,6 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
+// @ts-strict-ignore
 
 import { fetchUptimeIssues } from '../api';
 import { fetchVersion } from '../api/taxonomyApi';

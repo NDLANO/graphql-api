@@ -1,11 +1,20 @@
+/**
+ * Copyright (c) 2022-present, NDLA.
+ *
+ * This source code is licensed under the GPLv3 license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
 // @ts-strict-ignore
+
+import DataLoader from 'dataloader';
 import {
   IFilmFrontPageData,
   IFrontPage,
   ISubjectPageData,
 } from '@ndla/types-backend/frontpage-api';
 import { Node } from '@ndla/types-taxonomy';
-import DataLoader from 'dataloader';
 import {
   GQLMeta,
   GQLReference,
