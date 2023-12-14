@@ -27,6 +27,7 @@ import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
 import { toArticleMetaData } from '../utils/toArticleMetaData';
 
 const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789');
+const playerId = getEnvironmentVariabel('BRIGHTCOVE_PLAYER_ID', 'default');
 
 const toEmbed = ({
   type,
@@ -46,7 +47,7 @@ const toEmbed = ({
       account: accountId,
       title: '',
       caption: '',
-      player: 'default',
+      player: playerId,
     };
   } else if (type === 'image') {
     return {
