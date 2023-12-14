@@ -27,7 +27,7 @@ import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
 import { toArticleMetaData } from '../utils/toArticleMetaData';
 
 const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789');
-const playerId = getEnvironmentVariabel('BRIGHTCOVE_PLAYER_ID', '123456789');
+const playerId = getEnvironmentVariabel('BRIGHTCOVE_PLAYER_ID', 'default');
 
 const toEmbed = ({
   type,
