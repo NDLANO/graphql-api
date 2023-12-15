@@ -167,7 +167,7 @@ async function fetchLK20CompetenceGoal(
   };
 }
 
-export async function fetchLK20CompetenceGoals(
+async function fetchLK20CompetenceGoals(
   codes: string[],
   language: string,
   context: Context,
@@ -183,13 +183,20 @@ export async function fetchLK20CompetenceGoalSet(
   code: string,
   context: Context,
 ): Promise<string[]> {
-  const response = await curriculumFetch(
-    `/grep/kl06/v201906/kompetansemaalsett-lk20/${code}`,
-    context,
-  );
-  const json: CompetenceGoalSet = await resolveJson(response, {});
-  const promises = json?.kompetansemaal?.map(km => km.kode) || [];
-  return Promise.all(promises);
+  try {
+    const response = await curriculumFetch(
+      `/grep/kl06/v201906/kompetansemaalsett-lk20/${code}`,
+      context,
+    );
+    const json: CompetenceGoalSet = await resolveJson(response, {});
+    return json?.kompetansemaal?.map(km => km.kode) || [];
+  } catch (reason) {
+    console.error(
+      `Something went wrong when fetching competence goal set, with params codes: '${code}', language: '${context.language}':\n`,
+      reason,
+    );
+    return [];
+  }
 }
 
 export async function fetchCoreElement(
@@ -228,7 +235,7 @@ export async function fetchCoreElements(
   );
 }
 
-export async function fetchGrepElement(
+async function fetchGrepElement(
   code: string,
   language: string,
   url: string,
