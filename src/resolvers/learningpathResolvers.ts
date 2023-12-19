@@ -7,10 +7,7 @@
  */
 
 import { fetchLearningpath, fetchNode, fetchOembed } from '../api';
-import { fetchConfig, fetchExamLockStatus } from '../api/learningpathApi';
 import {
-  GQLConfigMetaBoolean,
-  GQLConfigMetaStringList,
   GQLLearningpath,
   GQLLearningpathStep,
   GQLLearningpathStepOembed,
@@ -27,38 +24,6 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
-  },
-  async examLockStatus(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLConfigMetaBoolean> {
-    const config = await fetchExamLockStatus(context);
-    if (typeof config.value !== 'boolean') {
-      throw new Error('Invalid exam lock status');
-    }
-
-    return { key: config.key, value: config.value };
-  },
-  async aiEnabledOrgs(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLConfigMetaStringList> {
-    const config = await fetchConfig('AI_ENABLED_ORGS', context);
-    if (typeof config.value === 'boolean')
-      throw new Error('Invalid ai enabled orgs');
-    return { key: config.key, value: config.value };
-  },
-  async arenaEnabledOrgs(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLConfigMetaStringList> {
-    const config = await fetchConfig('ARENA_ENABLED_ORGS', context);
-    if (typeof config.value === 'boolean')
-      throw new Error('Invalid arena enabled orgs');
-    return { key: config.key, value: config.value };
   },
 };
 

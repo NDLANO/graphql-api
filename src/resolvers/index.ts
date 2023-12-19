@@ -41,6 +41,10 @@ import {
   resolvers as learningpathResolvers,
 } from './learningpathResolvers';
 import {
+  Query as MyNDLAQuery,
+  resolvers as myndlaResolvers,
+} from './myndlaResolvers';
+import {
   Query as PodcastQuery,
   resolvers as podcastResolvers,
 } from './podcastResolvers';
@@ -83,6 +87,7 @@ export const resolvers = {
     ...SearchQuery,
     ...CurriculumQuery,
     ...LearningpathQuery,
+    ...MyNDLAQuery,
     ...PodcastQuery,
     ...ConceptQuery,
     ...UptimeQuery,
@@ -105,6 +110,7 @@ export const resolvers = {
   ...resourceResolvers,
   ...searchResolvers,
   ...learningpathResolvers,
+  ...myndlaResolvers,
   ...curriculumResolvers,
   ...podcastResolvers,
   ...conceptResolvers,
