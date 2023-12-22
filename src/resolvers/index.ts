@@ -42,7 +42,7 @@ import {
 } from './learningpathResolvers';
 import {
   Query as MyNDLAQuery,
-  resolvers as myndlaResolvers,
+  resolvers as MyNDLAResolvers,
 } from './myndlaResolvers';
 import {
   Query as PodcastQuery,
@@ -110,7 +110,7 @@ export const resolvers = {
   ...resourceResolvers,
   ...searchResolvers,
   ...learningpathResolvers,
-  ...myndlaResolvers,
+  ...MyNDLAResolvers,
   ...curriculumResolvers,
   ...podcastResolvers,
   ...conceptResolvers,
