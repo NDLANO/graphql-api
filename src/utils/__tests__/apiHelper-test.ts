@@ -6,16 +6,16 @@
  *
  */
 
-import { licenseFixer } from '../apiHelpers';
+import { licenseFixer } from "../apiHelpers";
 
-test('license C converts to COPYRIGHTED', async () => {
-  expect(licenseFixer('C', '4.0')).toBe('COPYRIGHTED');
+test("license C converts to COPYRIGHTED", async () => {
+  expect(licenseFixer("C", "4.0")).toBe("COPYRIGHTED");
 });
 
-test('license PD converts to PD', async () => {
-  expect(licenseFixer('PD', '4.0')).toBe('PD');
+test("license PD converts to PD", async () => {
+  expect(licenseFixer("PD", "4.0")).toBe("PD");
 });
 
-test('license CC BY converts to CC-BY-4.0', async () => {
-  expect(licenseFixer('CC BY', '4.0')).toBe('CC-BY-4.0');
+test("license CC BY converts to CC-BY-4.0", async () => {
+  expect(licenseFixer("CC BY", "4.0")).toBe("CC-BY-4.0");
 });

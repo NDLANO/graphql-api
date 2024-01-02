@@ -6,8 +6,8 @@
  *
  */
 
-import { Cheerio, CheerioAPI } from 'cheerio';
-import { EmbedData } from '@ndla/types-embed';
+import { Cheerio, CheerioAPI } from "cheerio";
+import { EmbedData } from "@ndla/types-embed";
 
 export interface CheerioEmbed {
   embed: Cheerio<any>;
@@ -15,9 +15,9 @@ export interface CheerioEmbed {
 }
 
 export const getEmbedsFromContent = (html: CheerioAPI): CheerioEmbed[] => {
-  return html('ndlaembed')
+  return html("ndlaembed")
     .toArray()
-    .map(embed => ({
+    .map((embed) => ({
       embed: html(embed),
       data: html(embed).data() as EmbedData,
     }));

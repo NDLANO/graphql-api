@@ -6,16 +6,11 @@
  *
  */
 
-import he from 'he';
-import {
-  ndlaEnvironment,
-  uptimeOwner,
-  uptimeRepo,
-  uptimeToken,
-} from '../config';
-import { GQLUptimeAlert } from '../types/schema';
-import { fetch, resolveJson } from '../utils/apiHelpers';
-import parseMarkdown from '../utils/parseMarkdown';
+import he from "he";
+import { ndlaEnvironment, uptimeOwner, uptimeRepo, uptimeToken } from "../config";
+import { GQLUptimeAlert } from "../types/schema";
+import { fetch, resolveJson } from "../utils/apiHelpers";
+import parseMarkdown from "../utils/parseMarkdown";
 
 interface GithubLabel {
   name: string;
@@ -27,26 +22,22 @@ interface GithubIssue {
   labels?: GithubLabel[];
 }
 
-export async function fetchUptimeIssues(
-  context: ContextWithLoaders,
-): Promise<GQLUptimeAlert[]> {
+export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<GQLUptimeAlert[]> {
   const path = `/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenance,${ndlaEnvironment}`;
-  const githubAuth = uptimeToken
-    ? { Authorization: `Bearer ${uptimeToken}` }
-    : null;
+  const githubAuth = uptimeToken ? { Authorization: `Bearer ${uptimeToken}` } : null;
   const response = await fetch(path, context, {
     headers: { ...githubAuth },
     timeout: 3000,
   });
   const issues: GithubIssue[] = await resolveJson(response);
 
-  return issues.map(issue => {
+  return issues.map((issue) => {
     return {
       title: issue.title,
       number: issue.number,
-      closable: !issue.labels?.find(label => label.name === 'permanent'),
+      closable: !issue.labels?.find((label) => label.name === "permanent"),
       body: parseMarkdown({
-        markdown: he.decode(issue.body).replace(/<[^>]*>?/gm, ''),
+        markdown: he.decode(issue.body).replace(/<[^>]*>?/gm, ""),
       }),
     };
   });

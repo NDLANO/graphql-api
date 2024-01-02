@@ -6,8 +6,8 @@
  *
  */
 
-import { GraphQLError } from 'graphql';
-import he from 'he';
+import { GraphQLError } from "graphql";
+import he from "he";
 import {
   GQLArenaCategory,
   GQLArenaNotification,
@@ -26,8 +26,8 @@ import {
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
   GQLQueryArenaUserArgs,
-} from '../types/schema';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+} from "../types/schema";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
 const toArenaUser = (user: any): GQLArenaUser => ({
   id: user.uid,
@@ -52,8 +52,8 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
 
 const toTopic = (topic: any): GQLArenaTopic => {
   const crumbs = [
-    { type: 'category', id: topic.cid, name: topic.category.name },
-    { type: 'topic', id: topic.tid, name: topic.title },
+    { type: "category", id: topic.cid, name: topic.category.name },
+    { type: "topic", id: topic.tid, name: topic.title },
   ];
   return {
     id: topic.tid,
@@ -66,8 +66,8 @@ const toTopic = (topic: any): GQLArenaTopic => {
     posts: topic.posts
       ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
       : topic.mainPost
-      ? [toArenaPost(topic.mainPost, topic.mainPid)]
-      : [],
+        ? [toArenaPost(topic.mainPost, topic.mainPid)]
+        : [],
     breadcrumbs: crumbs,
     deleted: topic.deleted,
     isFollowing: topic.isFollowing,
@@ -108,33 +108,28 @@ const toNotification = (notification: any): GQLArenaNotification => ({
 
 export const fetchCsrfTokenForSession = async (
   context: Context,
-): Promise<{ cookie: string; 'x-csrf-token': string }> => {
+): Promise<{ cookie: string; "x-csrf-token": string }> => {
   const incomingCookie = context.req.headers.cookie;
-  const incomingCsrfToken = context.req.headers['x-csrf-token'];
-  if (incomingCookie !== undefined && typeof incomingCsrfToken === 'string') {
-    return { cookie: incomingCookie, 'x-csrf-token': incomingCsrfToken };
+  const incomingCsrfToken = context.req.headers["x-csrf-token"];
+  if (incomingCookie !== undefined && typeof incomingCsrfToken === "string") {
+    return { cookie: incomingCookie, "x-csrf-token": incomingCsrfToken };
   }
 
-  const response = await fetch('/groups/api/config', context);
+  const response = await fetch("/groups/api/config", context);
   const resolved: any = await resolveJson(response);
-  const responseCookie = response.headers.get('set-cookie');
+  const responseCookie = response.headers.get("set-cookie");
 
   if (!responseCookie)
-    throw new Error(
-      'Did not get set-cookie header from /groups/api/config endpoint to use together with csrf token.',
-    );
+    throw new Error("Did not get set-cookie header from /groups/api/config endpoint to use together with csrf token.");
 
   const token = resolved.csrf_token;
   return {
-    'x-csrf-token': token,
+    "x-csrf-token": token,
     cookie: responseCookie,
   };
 };
 
-export const fetchArenaUser = async (
-  { username }: GQLQueryArenaUserArgs,
-  context: Context,
-): Promise<GQLArenaUser> => {
+export const fetchArenaUser = async ({ username }: GQLQueryArenaUserArgs, context: Context): Promise<GQLArenaUser> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/user/username/${username}`,
@@ -145,12 +140,10 @@ export const fetchArenaUser = async (
   return toArenaUser(resolved);
 };
 
-export const fetchArenaCategories = async (
-  context: Context,
-): Promise<GQLArenaCategory[]> => {
+export const fetchArenaCategories = async (context: Context): Promise<GQLArenaCategory[]> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
-    '/groups/api/categories',
+    "/groups/api/categories",
     { ...context, shouldUseCache: false },
     { headers: csrfHeaders },
   );
@@ -199,19 +192,13 @@ export const markNotificationRead = async (tid: number, context: Context) => {
   await fetch(
     `/groups/api/v3/topics/${tid}/read`,
     { ...context, shouldUseCache: false },
-    { headers: csrfHeaders, method: 'PUT' },
+    { headers: csrfHeaders, method: "PUT" },
   );
 };
 
-export const fetchArenaRecentTopics = async (
-  context: Context,
-): Promise<GQLArenaTopic[]> => {
+export const fetchArenaRecentTopics = async (context: Context): Promise<GQLArenaTopic[]> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
-  const response = await fetch(
-    '/groups/api/recent',
-    { ...context, shouldUseCache: false },
-    { headers: csrfHeaders },
-  );
+  const response = await fetch("/groups/api/recent", { ...context, shouldUseCache: false }, { headers: csrfHeaders });
   const resolved = await resolveJson(response);
   return resolved.topics.map(toTopic);
 };
@@ -230,19 +217,15 @@ export const fetchArenaTopicsByUser = async (
   return resolved.topics.map(toTopic);
 };
 
-export const fetchArenaNotifications = async (
-  context: Context,
-): Promise<GQLArenaNotification[]> => {
+export const fetchArenaNotifications = async (context: Context): Promise<GQLArenaNotification[]> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
-    '/groups/api/notifications',
+    "/groups/api/notifications",
     { ...context, shouldUseCache: false },
     { headers: csrfHeaders },
   );
   const resolved = await resolveJson(response);
-  return resolved.notifications
-    .filter(({ type }: any) => type === 'new-reply')
-    .map(toNotification);
+  return resolved.notifications.filter(({ type }: any) => type === "new-reply").map(toNotification);
 };
 
 export const newTopic = async (
@@ -254,8 +237,8 @@ export const newTopic = async (
     `/groups/api/v3/topics`,
     { ...context, shouldUseCache: false },
     {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', ...csrfHeaders },
+      method: "POST",
+      headers: { "content-type": "application/json", ...csrfHeaders },
       body: JSON.stringify({
         cid: categoryId,
         title,
@@ -267,18 +250,15 @@ export const newTopic = async (
   return toTopic(resolved.response);
 };
 
-export const replyToTopic = async (
-  { topicId, content }: GQLMutationReplyToTopicArgs,
-  context: Context,
-) => {
+export const replyToTopic = async ({ topicId, content }: GQLMutationReplyToTopicArgs, context: Context) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/v3/topics/${topicId}`,
     { ...context, shouldUseCache: false },
     {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         ...csrfHeaders,
       },
       body: JSON.stringify({
@@ -290,18 +270,15 @@ export const replyToTopic = async (
   return toArenaPost(resolved.response, undefined);
 };
 
-export const deletePost = async (
-  { postId }: GQLMutationDeletePostArgs,
-  context: Context,
-) => {
+export const deletePost = async ({ postId }: GQLMutationDeletePostArgs, context: Context) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   await fetch(
     `/groups/api/v3/posts/${postId}/state`,
     { ...context, shouldUseCache: false },
     {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         ...csrfHeaders,
       },
     },
@@ -309,18 +286,15 @@ export const deletePost = async (
   return postId;
 };
 
-export const deleteTopic = async (
-  { topicId }: GQLMutationDeleteTopicArgs,
-  context: Context,
-) => {
+export const deleteTopic = async ({ topicId }: GQLMutationDeleteTopicArgs, context: Context) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   await fetch(
     `/groups/api/v3/topics/${topicId}/state`,
     { ...context, shouldUseCache: false },
     {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         ...csrfHeaders,
       },
     },
@@ -328,18 +302,15 @@ export const deleteTopic = async (
   return topicId;
 };
 
-export const updatePost = async (
-  { postId, content, title }: GQLMutationUpdatePostArgs,
-  context: Context,
-) => {
+export const updatePost = async ({ postId, content, title }: GQLMutationUpdatePostArgs, context: Context) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/v3/posts/${postId}`,
     { ...context, shouldUseCache: false },
     {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         ...csrfHeaders,
       },
       body: JSON.stringify({
@@ -352,18 +323,15 @@ export const updatePost = async (
   return toArenaPost(resolved.response);
 };
 
-export const newFlag = async (
-  { type, id, reason }: GQLMutationNewFlagArgs,
-  context: Context,
-): Promise<number> => {
+export const newFlag = async ({ type, id, reason }: GQLMutationNewFlagArgs, context: Context): Promise<number> => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/v3/flags`,
     { ...context, shouldUseCache: false },
     {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         ...csrfHeaders,
       },
       body: JSON.stringify({
@@ -391,9 +359,9 @@ export const subscribeToTopic = async (
     `/groups/api/v3/topics/${topicId}/follow`,
     { ...context, shouldUseCache: false },
     {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         ...csrfHeaders,
       },
     },
@@ -418,9 +386,9 @@ export const unsubscribeFromTopic = async (
     `/groups/api/v3/topics/${topicId}/follow`,
     { ...context, shouldUseCache: false },
     {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
         ...csrfHeaders,
       },
     },

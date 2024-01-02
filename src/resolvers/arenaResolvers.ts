@@ -23,7 +23,7 @@ import {
   subscribeToTopic,
   unsubscribeFromTopic,
   markNotificationRead,
-} from '../api/arenaApi';
+} from "../api/arenaApi";
 import {
   GQLArenaCategory,
   GQLArenaTopic,
@@ -42,30 +42,22 @@ import {
   GQLMutationDeletePostArgs,
   GQLMutationDeleteTopicArgs,
   GQLMutationUpdatePostArgs,
-} from '../types/schema';
+} from "../types/schema";
 
 export const Query: Pick<
   GQLQueryResolvers,
-  | 'arenaUser'
-  | 'arenaCategories'
-  | 'arenaCategory'
-  | 'arenaTopic'
-  | 'arenaRecentTopics'
-  | 'arenaTopicsByUser'
-  | 'arenaNotifications'
+  | "arenaUser"
+  | "arenaCategories"
+  | "arenaCategory"
+  | "arenaTopic"
+  | "arenaRecentTopics"
+  | "arenaTopicsByUser"
+  | "arenaNotifications"
 > = {
-  async arenaUser(
-    _: any,
-    params: GQLQueryArenaUserArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaUser> {
+  async arenaUser(_: any, params: GQLQueryArenaUserArgs, context: ContextWithLoaders): Promise<GQLArenaUser> {
     return fetchArenaUser(params, context);
   },
-  async arenaCategories(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaCategory[]> {
+  async arenaCategories(_: any, __: any, context: ContextWithLoaders): Promise<GQLArenaCategory[]> {
     return fetchArenaCategories(context);
   },
   async arenaCategory(
@@ -75,18 +67,10 @@ export const Query: Pick<
   ): Promise<GQLArenaCategory> {
     return fetchArenaCategory(params, context);
   },
-  async arenaTopic(
-    _: any,
-    params: GQLQueryArenaTopicArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaTopic> {
+  async arenaTopic(_: any, params: GQLQueryArenaTopicArgs, context: ContextWithLoaders): Promise<GQLArenaTopic> {
     return fetchArenaTopic(params, context);
   },
-  async arenaRecentTopics(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaTopic[]> {
+  async arenaRecentTopics(_: any, __: any, context: ContextWithLoaders): Promise<GQLArenaTopic[]> {
     return fetchArenaRecentTopics(context);
   },
   async arenaTopicsByUser(
@@ -96,26 +80,22 @@ export const Query: Pick<
   ): Promise<GQLArenaTopic[]> {
     return fetchArenaTopicsByUser(params, context);
   },
-  async arenaNotifications(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaNotification[]> {
+  async arenaNotifications(_: any, __: any, context: ContextWithLoaders): Promise<GQLArenaNotification[]> {
     return fetchArenaNotifications(context);
   },
 };
 
 export const Mutations: Pick<
   GQLMutationResolvers,
-  | 'newArenaTopic'
-  | 'replyToTopic'
-  | 'markNotificationAsRead'
-  | 'deletePost'
-  | 'deleteTopic'
-  | 'updatePost'
-  | 'newFlag'
-  | 'subscribeToTopic'
-  | 'unsubscribeFromTopic'
+  | "newArenaTopic"
+  | "replyToTopic"
+  | "markNotificationAsRead"
+  | "deletePost"
+  | "deleteTopic"
+  | "updatePost"
+  | "newFlag"
+  | "subscribeToTopic"
+  | "unsubscribeFromTopic"
 > = {
   async newArenaTopic(
     _: any,
@@ -124,70 +104,36 @@ export const Mutations: Pick<
   ): Promise<GQLArenaTopic> {
     return await newTopic(params, context);
   },
-  async replyToTopic(
-    _: any,
-    params: GQLMutationReplyToTopicArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaPost> {
+  async replyToTopic(_: any, params: GQLMutationReplyToTopicArgs, context: ContextWithLoaders): Promise<GQLArenaPost> {
     return await replyToTopic(params, context);
   },
-  async markNotificationAsRead(
-    _: any,
-    params: GQLMutationMarkNotificationAsReadArgs,
-    context: Context,
-  ) {
-    await Promise.all(
-      params?.topicIds?.map(topicId => markNotificationRead(topicId, context)),
-    );
+  async markNotificationAsRead(_: any, params: GQLMutationMarkNotificationAsReadArgs, context: Context) {
+    await Promise.all(params?.topicIds?.map((topicId) => markNotificationRead(topicId, context)));
     return params.topicIds;
   },
-  async deletePost(
-    _: any,
-    params: GQLMutationDeletePostArgs,
-    context: Context,
-  ) {
+  async deletePost(_: any, params: GQLMutationDeletePostArgs, context: Context) {
     return await deletePost(params, context);
   },
-  async deleteTopic(
-    _: any,
-    params: GQLMutationDeleteTopicArgs,
-    context: Context,
-  ) {
+  async deleteTopic(_: any, params: GQLMutationDeleteTopicArgs, context: Context) {
     return await deleteTopic(params, context);
   },
-  async updatePost(
-    _: any,
-    params: GQLMutationUpdatePostArgs,
-    context: Context,
-  ) {
+  async updatePost(_: any, params: GQLMutationUpdatePostArgs, context: Context) {
     return await updatePost(params, context);
   },
   async newFlag(_: any, params, context: ContextWithLoaders): Promise<number> {
     return newFlag(params, context);
   },
-  async subscribeToTopic(
-    _: any,
-    params,
-    context: ContextWithLoaders,
-  ): Promise<number> {
+  async subscribeToTopic(_: any, params, context: ContextWithLoaders): Promise<number> {
     return subscribeToTopic(params, context);
   },
-  async unsubscribeFromTopic(
-    _: any,
-    params,
-    context: ContextWithLoaders,
-  ): Promise<number> {
+  async unsubscribeFromTopic(_: any, params, context: ContextWithLoaders): Promise<number> {
     return unsubscribeFromTopic(params, context);
   },
 };
 
 export const resolvers = {
   ArenaPost: {
-    async user(
-      post: GQLArenaPost,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLArenaUser> {
+    async user(post: GQLArenaPost, _: any, context: ContextWithLoaders): Promise<GQLArenaUser> {
       return fetchArenaUser({ username: post.user.username }, context);
     },
   },

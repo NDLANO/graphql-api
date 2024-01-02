@@ -16,15 +16,10 @@ export {
   fetchCrossSubjectTopics,
   fetchLK20Curriculum,
   fetchLK20CompetenceGoalSet,
-} from './curriculumApi';
-export {
-  fetchFrontpage,
-  fetchSubjectPage,
-  fetchFilmFrontpage,
-  fetchMovieMeta,
-} from './frontpageApi';
-export { fetchArticle, fetchArticles } from './articleApi';
-export { fetchLearningpaths, fetchLearningpath } from './learningpathApi';
+} from "./curriculumApi";
+export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage, fetchMovieMeta } from "./frontpageApi";
+export { fetchArticle, fetchArticles } from "./articleApi";
+export { fetchLearningpaths, fetchLearningpath } from "./learningpathApi";
 export {
   fetchResourceTypes,
   fetchSubjectTopics,
@@ -36,13 +31,8 @@ export {
   fetchChildren,
   queryContexts,
   queryNodes,
-} from './taxonomyApi';
-export {
-  search,
-  groupSearch,
-  frontpageSearch,
-  searchWithoutPagination,
-} from './searchApi';
-export { fetchOembed } from './oembedApi';
-export { searchConcepts, fetchConcept, fetchListingPage } from './conceptApi';
-export { fetchUptimeIssues } from './uptimeApi';
+} from "./taxonomyApi";
+export { search, groupSearch, frontpageSearch, searchWithoutPagination } from "./searchApi";
+export { fetchOembed } from "./oembedApi";
+export { searchConcepts, fetchConcept, fetchListingPage } from "./conceptApi";
+export { fetchUptimeIssues } from "./uptimeApi";

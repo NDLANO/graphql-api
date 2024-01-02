@@ -6,8 +6,8 @@
  *
  */
 
-import { gql } from 'graphql-tag';
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import { gql } from "graphql-tag";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 export const typeDefs = gql`
   scalar StringRecord
@@ -310,11 +310,7 @@ export const typeDefs = gql`
     parents: [Topic!]
     meta: Meta
     learningpath: Learningpath
-    article(
-      subjectId: String
-      isOembed: String
-      convertEmbeds: Boolean
-    ): Article
+    article(subjectId: String, isOembed: String, convertEmbeds: Boolean): Article
     availability: String
   }
 
@@ -339,11 +335,7 @@ export const typeDefs = gql`
     url: String
     language: String
     meta: Meta
-    article(
-      subjectId: String
-      showVisualElement: String
-      convertEmbeds: Boolean
-    ): Article
+    article(subjectId: String, showVisualElement: String, convertEmbeds: Boolean): Article
     availability: String
     isPrimary: Boolean
     parent: String
@@ -1282,11 +1274,7 @@ export const typeDefs = gql`
     learningpath(pathId: String!): Learningpath
     programmes: [ProgrammePage!]
     programme(path: String): ProgrammePage
-    subjects(
-      metadataFilterKey: String
-      metadataFilterValue: String
-      filterVisible: Boolean
-    ): [Subject!]
+    subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: FrontpageMenu
@@ -1360,29 +1348,13 @@ export const typeDefs = gql`
     audio(id: Int!): Audio
     podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
-    podcastSeriesSearch(
-      page: Int!
-      pageSize: Int!
-      fallback: Boolean
-    ): PodcastSeriesSearch
+    podcastSeriesSearch(page: Int!, pageSize: Int!, fallback: Boolean): PodcastSeriesSearch
     alerts: [UptimeAlert]
     folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
-    folderResourceMeta(
-      resource: FolderResourceMetaSearchInput!
-    ): FolderResourceMeta
-    folderResourceMetaSearch(
-      resources: [FolderResourceMetaSearchInput!]!
-    ): [FolderResourceMeta!]!
-    folder(
-      id: String!
-      includeSubfolders: Boolean
-      includeResources: Boolean
-    ): Folder!
-    sharedFolder(
-      id: String!
-      includeSubfolders: Boolean
-      includeResources: Boolean
-    ): SharedFolder!
+    folderResourceMeta(resource: FolderResourceMetaSearchInput!): FolderResourceMeta
+    folderResourceMetaSearch(resources: [FolderResourceMetaSearchInput!]!): [FolderResourceMeta!]!
+    folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
+    sharedFolder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV2
@@ -1401,18 +1373,8 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    addFolder(
-      name: String!
-      parentId: String
-      status: String
-      description: String
-    ): Folder!
-    updateFolder(
-      id: String!
-      name: String
-      status: String
-      description: String
-    ): Folder!
+    addFolder(name: String!, parentId: String, status: String, description: String): Folder!
+    updateFolder(id: String!, name: String, status: String, description: String): Folder!
     deleteFolder(id: String!): String!
     addFolderResource(
       resourceId: String!
@@ -1424,10 +1386,7 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
-    updatePersonalData(
-      favoriteSubjects: [String]
-      shareName: Boolean
-    ): MyNdlaPersonalData!
+    updatePersonalData(favoriteSubjects: [String], shareName: Boolean): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
@@ -1441,11 +1400,7 @@ export const typeDefs = gql`
       absoluteUrl: Boolean
     ): String!
     markNotificationAsRead(topicIds: [Int!]!): [Int!]!
-    newArenaTopic(
-      categoryId: Int!
-      title: String!
-      content: String!
-    ): ArenaTopic!
+    newArenaTopic(categoryId: Int!, title: String!, content: String!): ArenaTopic!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
     updatePost(postId: Int!, content: String!, title: String): ArenaPost!
     deletePost(postId: Int!): Int!
@@ -1458,7 +1413,7 @@ export const typeDefs = gql`
 
 const schema = makeExecutableSchema({
   typeDefs,
-  resolverValidationOptions: { requireResolversForResolveType: 'ignore' },
+  resolverValidationOptions: { requireResolversForResolveType: "ignore" },
 });
 
 export default schema;

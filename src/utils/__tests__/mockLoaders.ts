@@ -8,20 +8,10 @@
 
 // @ts-strict-ignore
 
-import DataLoader from 'dataloader';
-import {
-  IFilmFrontPageData,
-  IFrontPage,
-  ISubjectPageData,
-} from '@ndla/types-backend/frontpage-api';
-import { Node } from '@ndla/types-taxonomy';
-import {
-  GQLMeta,
-  GQLReference,
-  GQLResourceTypeDefinition,
-  GQLSubject,
-  GQLTopic,
-} from '../../types/schema';
+import DataLoader from "dataloader";
+import { IFilmFrontPageData, IFrontPage, ISubjectPageData } from "@ndla/types-backend/frontpage-api";
+import { Node } from "@ndla/types-taxonomy";
+import { GQLMeta, GQLReference, GQLResourceTypeDefinition, GQLSubject, GQLTopic } from "../../types/schema";
 
 const mockFn = async <T>(mockData: T) => mockData;
 
@@ -34,20 +24,14 @@ export const mockLearningpathsLoader = (mockData: GQLMeta[] = []) => {
 };
 
 export const mockLk20CurriculumLoader = (mockData: GQLReference[] = []) => {
-  return new DataLoader<{ code: string; language: string }, GQLReference>(() =>
-    mockFn(mockData),
-  );
+  return new DataLoader<{ code: string; language: string }, GQLReference>(() => mockFn(mockData));
 };
 
-export const mockFrontpageLoader = (
-  mockData: IFrontPage[] = [mockFrontpageDefaultResponse],
-) => {
+export const mockFrontpageLoader = (mockData: IFrontPage[] = [mockFrontpageDefaultResponse]) => {
   return new DataLoader<string, IFrontPage>(() => mockFn(mockData));
 };
 
-export const mockFilmFrontpageLoader = (
-  mockData: IFilmFrontPageData[] = [mockFilmFrontPageDefaultResponse],
-) => {
+export const mockFilmFrontpageLoader = (mockData: IFilmFrontPageData[] = [mockFilmFrontPageDefaultResponse]) => {
   return new DataLoader<string, IFilmFrontPageData>(() => mockFn(mockData));
 };
 
@@ -75,24 +59,16 @@ export const mockSubjectLoader = (mockData: Node[] | null = null) => {
   });
 };
 
-export const mockSubjectpageLoader = (
-  mockData: ISubjectPageData[] | null = null,
-) => {
+export const mockSubjectpageLoader = (mockData: ISubjectPageData[] | null = null) => {
   return new DataLoader<string, ISubjectPageData>(() => mockFn(mockData));
 };
 
 export const mockSubjectTopicsLoader = (mockData: GQLTopic[] = []) => {
-  return new DataLoader<{ subjectId: string }, GQLTopic>(() =>
-    mockFn(mockData),
-  );
+  return new DataLoader<{ subjectId: string }, GQLTopic>(() => mockFn(mockData));
 };
 
-export const mockResourceTypesLoader = (
-  mockData: GQLResourceTypeDefinition[] = [],
-) => {
-  return new DataLoader<string, GQLResourceTypeDefinition>(() =>
-    mockFn(mockData),
-  );
+export const mockResourceTypesLoader = (mockData: GQLResourceTypeDefinition[] = []) => {
+  return new DataLoader<string, GQLResourceTypeDefinition>(() => mockFn(mockData));
 };
 
 export const mockFrontpageDefaultResponse: IFrontPage = {
@@ -101,7 +77,7 @@ export const mockFrontpageDefaultResponse: IFrontPage = {
 };
 
 export const mockFilmFrontPageDefaultResponse: IFilmFrontPageData = {
-  name: '',
+  name: "",
   about: [],
   movieThemes: [],
   slideShow: [],

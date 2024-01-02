@@ -6,13 +6,9 @@
  *
  */
 
-import {
-  IFrontPage,
-  IFilmFrontPageData,
-  ISubjectPageData,
-} from '@ndla/types-backend/frontpage-api';
-import { fetchSimpleArticle } from './articleApi';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+import { IFrontPage, IFilmFrontPageData, ISubjectPageData } from "@ndla/types-backend/frontpage-api";
+import { fetchSimpleArticle } from "./articleApi";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export interface IMovieMeta {
   title: string;
@@ -29,10 +25,7 @@ export async function fetchFrontpage(context: Context): Promise<IFrontPage> {
   return await resolveJson(response);
 }
 
-export async function fetchSubjectPage(
-  subjectPageId: number,
-  context: Context,
-): Promise<ISubjectPageData> {
+export async function fetchSubjectPage(subjectPageId: number, context: Context): Promise<ISubjectPageData> {
   const response = await fetch(
     `/frontpage-api/v1/subjectpage/${subjectPageId}?language=${context.language}&fallback=true`,
     context,
@@ -40,20 +33,13 @@ export async function fetchSubjectPage(
   return await resolveJson(response);
 }
 
-export async function fetchFilmFrontpage(
-  context: Context,
-): Promise<IFilmFrontPageData> {
+export async function fetchFilmFrontpage(context: Context): Promise<IFilmFrontPageData> {
   const response = await fetch(`/frontpage-api/v1/filmfrontpage`, context);
   return await resolveJson(response);
 }
 
-export async function fetchMovieMeta(
-  articleUrn: string,
-  context: Context,
-): Promise<IMovieMeta | null> {
-  const article = await fetchSimpleArticle(articleUrn, context).catch(
-    () => null,
-  );
+export async function fetchMovieMeta(articleUrn: string, context: Context): Promise<IMovieMeta | null> {
+  const article = await fetchSimpleArticle(articleUrn, context).catch(() => null);
 
   if (article) {
     return {

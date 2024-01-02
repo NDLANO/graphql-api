@@ -15,30 +15,21 @@ import {
   fetchCrossSubjectTopicsByCode,
   fetchSubjectTopics,
   searchConcepts,
-} from '../api';
-import { Concept } from '../api/conceptApi';
+} from "../api";
+import { Concept } from "../api/conceptApi";
 import {
   GQLArticle,
   GQLCompetenceGoal,
   GQLCoreElement,
   GQLCrossSubjectElement,
   GQLQueryArticleArgs,
-} from '../types/schema';
-import parseMarkdown from '../utils/parseMarkdown';
+} from "../types/schema";
+import parseMarkdown from "../utils/parseMarkdown";
 
 export const Query = {
   async article(
     _: any,
-    {
-      id,
-      subjectId,
-      isOembed,
-      path,
-      absoluteUrl,
-      draftConcept,
-      showVisualElement,
-      convertEmbeds,
-    }: GQLQueryArticleArgs,
+    { id, subjectId, isOembed, path, absoluteUrl, draftConcept, showVisualElement, convertEmbeds }: GQLQueryArticleArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArticle> {
     return fetchArticle(
@@ -59,24 +50,14 @@ export const Query = {
 
 export const resolvers = {
   Article: {
-    async competenceGoals(
-      article: GQLArticle,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLCompetenceGoal[]> {
+    async competenceGoals(article: GQLArticle, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
       const language =
-        article.supportedLanguages.find(lang => lang === context.language) ||
-        article.supportedLanguages[0];
+        article.supportedLanguages.find((lang) => lang === context.language) || article.supportedLanguages[0];
       return fetchCompetenceGoals(article.grepCodes, language, context);
     },
-    async coreElements(
-      article: GQLArticle,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLCoreElement[]> {
+    async coreElements(article: GQLArticle, _: any, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
       const language =
-        article.supportedLanguages.find(lang => lang === context.language) ||
-        article.supportedLanguages[0];
+        article.supportedLanguages.find((lang) => lang === context.language) || article.supportedLanguages[0];
       return fetchCoreElements(article.grepCodes, language, context);
     },
     async crossSubjectTopics(
@@ -84,44 +65,28 @@ export const resolvers = {
       args: { subjectId: string },
       context: ContextWithLoaders,
     ): Promise<GQLCrossSubjectElement[]> {
-      const crossSubjectCodes = article.grepCodes.filter(code =>
-        code.startsWith('TT'),
-      );
+      const crossSubjectCodes = article.grepCodes.filter((code) => code.startsWith("TT"));
       const language =
-        article.supportedLanguages.find(lang => lang === context.language) ||
-        article.supportedLanguages[0];
-      const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(
-        crossSubjectCodes,
-        language,
-        context,
-      );
+        article.supportedLanguages.find((lang) => lang === context.language) || article.supportedLanguages[0];
+      const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(crossSubjectCodes, language, context);
       const topics = await fetchSubjectTopics(args.subjectId, context);
-      return crossSubjectTopicInfo.map(crossSubjectTopic => ({
+      return crossSubjectTopicInfo.map((crossSubjectTopic) => ({
         title: crossSubjectTopic.title,
         code: crossSubjectTopic.code,
         id: crossSubjectTopic.id,
-        path: topics.find(
-          (topic: { name: string }) => topic.name === crossSubjectTopic.title,
-        )?.path,
+        path: topics.find((topic: { name: string }) => topic.name === crossSubjectTopic.title)?.path,
       }));
     },
-    async concepts(
-      article: GQLArticle,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<Concept[]> {
+    async concepts(article: GQLArticle, _: any, context: ContextWithLoaders): Promise<Concept[]> {
       if (article?.conceptIds && article.conceptIds.length > 0) {
-        const results = await searchConcepts(
-          { ids: article.conceptIds },
-          context,
-        );
+        const results = await searchConcepts({ ids: article.conceptIds }, context);
         return results.concepts;
       }
       return [];
     },
     introduction(article: GQLArticle): string {
       return parseMarkdown({
-        markdown: article.introduction ?? '',
+        markdown: article.introduction ?? "",
         inline: true,
       });
     },

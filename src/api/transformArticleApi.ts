@@ -6,13 +6,13 @@
  *
  */
 
-import { load } from 'cheerio';
-import sortBy from 'lodash/sortBy';
-import { EmbedMetaData } from '@ndla/types-embed';
-import { transformEmbed } from './embedsApi';
-import { GQLVisualElement } from '../types/schema';
-import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
-import { toArticleMetaData } from '../utils/toArticleMetaData';
+import { load } from "cheerio";
+import sortBy from "lodash/sortBy";
+import { EmbedMetaData } from "@ndla/types-embed";
+import { transformEmbed } from "./embedsApi";
+import { GQLVisualElement } from "../types/schema";
+import { getEmbedsFromContent } from "../utils/getEmbedsFromContent";
+import { toArticleMetaData } from "../utils/toArticleMetaData";
 
 interface TransformArticleOptions {
   subject?: string;
@@ -22,33 +22,30 @@ interface TransformArticleOptions {
   absoluteUrl?: boolean;
 }
 
-export const toVisualElement = (
-  meta: Extract<EmbedMetaData, { status: 'success' }>,
-): GQLVisualElement | undefined => {
+export const toVisualElement = (meta: Extract<EmbedMetaData, { status: "success" }>): GQLVisualElement | undefined => {
   switch (meta.resource) {
-    case 'brightcove': {
+    case "brightcove": {
       const { embedData, data } = meta;
       const src = `https://players.brightcove.net/${embedData.account}/${embedData.player}_default/index.html?videoId=${embedData.videoid}`;
       const download = sortBy(
-        data.sources.filter(src => src.container === 'MP4' && src.src),
-        src => src.size,
+        data.sources.filter((src) => src.container === "MP4" && src.src),
+        (src) => src.size,
       )?.[0]?.src;
       const source = sortBy(
-        data.sources.filter(s => s.width && s.height),
-        s => s.height,
+        data.sources.filter((s) => s.width && s.height),
+        (s) => s.height,
       )?.[0];
       return {
-        resource: 'brightcove',
+        resource: "brightcove",
         copyright: data.copyright,
         url: src,
-        title: data.name ?? '',
+        title: data.name ?? "",
         brightcove: {
           caption: embedData.caption,
           src,
           cover: data.images?.poster?.src,
-          description:
-            data.description ?? data['long_description'] ?? data.name,
-          uploadDate: data['published_at'] ?? undefined,
+          description: data.description ?? data["long_description"] ?? data.name,
+          uploadDate: data["published_at"] ?? undefined,
           iframe: {
             src,
             height: source?.height ?? 480,
@@ -58,25 +55,25 @@ export const toVisualElement = (
         },
       };
     }
-    case 'h5p':
+    case "h5p":
       return {
-        resource: 'h5p',
+        resource: "h5p",
         url: meta.data.h5pUrl,
         h5p: {
           src: meta.data.h5pUrl,
         },
       };
-    case 'external':
+    case "external":
       return {
         url: meta.embedData.url,
-        resource: 'oembed',
+        resource: "oembed",
         oembed: meta.data.oembed,
       };
 
-    case 'image': {
+    case "image": {
       const src = `/image/${meta.data.id}`;
       return {
-        resource: 'image',
+        resource: "image",
         url: src,
         title: meta.data.title.title,
         copyright: meta.data.copyright,
@@ -101,34 +98,28 @@ export const transformArticle = async (
   content: string,
   context: Context,
   visualElement: string | undefined,
-  {
-    subject,
-    previewH5p,
-    showVisualElement,
-    draftConcept,
-    absoluteUrl,
-  }: TransformArticleOptions,
+  { subject, previewH5p, showVisualElement, draftConcept, absoluteUrl }: TransformArticleOptions,
 ) => {
   const html = load(content, {
     xmlMode: false,
     decodeEntities: false,
   });
-  html('math').each((_, el) => {
+  html("math").each((_, el) => {
     html(el)
-      .attr('data-math', html(el).html() ?? '')
+      .attr("data-math", html(el).html() ?? "")
       .children()
-      .replaceWith('');
+      .replaceWith("");
   });
-  html('h2').each((_, el) => {
-    html(el).attr('data-text', html(el).text());
+  html("h2").each((_, el) => {
+    html(el).attr("data-text", html(el).text());
   });
-  html('details').each((_, el) => {
-    if (!el.children.some(c => c.type === 'tag' && c.name === 'summary')) {
-      html(el).prepend('<summary></summary>');
+  html("details").each((_, el) => {
+    if (!el.children.some((c) => c.type === "tag" && c.name === "summary")) {
+      html(el).prepend("<summary></summary>");
     }
   });
   if (showVisualElement && visualElement) {
-    html('body').prepend(`<section>${visualElement}</section>`);
+    html("body").prepend(`<section>${visualElement}</section>`);
   }
 
   const visEl =
@@ -139,14 +130,12 @@ export const transformArticle = async (
         })
       : undefined;
 
-  const embeds = visEl
-    ? getEmbedsFromContent(visEl).concat(getEmbedsFromContent(html))
-    : getEmbedsFromContent(html);
+  const embeds = visEl ? getEmbedsFromContent(visEl).concat(getEmbedsFromContent(html)) : getEmbedsFromContent(html);
 
   let footnoteCount = 0;
   const embedPromises = await Promise.all(
     embeds.map((embed, index) => {
-      if (embed.data.resource === 'footnote') {
+      if (embed.data.resource === "footnote") {
         footnoteCount += 1;
       }
       return transformEmbed(embed, context, index, footnoteCount, {
@@ -158,17 +147,12 @@ export const transformArticle = async (
     }),
   );
   const metaData = toArticleMetaData(embedPromises);
-  const visualElementCheerio = visEl?.('body') ?? embeds[0]?.embed;
+  const visualElementCheerio = visEl?.("body") ?? embeds[0]?.embed;
   const transformedVisEl = visualElementCheerio?.html();
-  const transformedContent = html('body').html();
-  const visualElementMeta =
-    visEl || (visualElement && showVisualElement)
-      ? embedPromises[0]
-      : undefined;
+  const transformedContent = html("body").html();
+  const visualElementMeta = visEl || (visualElement && showVisualElement) ? embedPromises[0] : undefined;
   const transformedVisualElement =
-    visualElementMeta?.status === 'success'
-      ? toVisualElement(visualElementMeta)
-      : undefined;
+    visualElementMeta?.status === "success" ? toVisualElement(visualElementMeta) : undefined;
 
   return {
     metaData,

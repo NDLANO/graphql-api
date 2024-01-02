@@ -8,15 +8,15 @@
 
 // @ts-strict-ignore
 
-import { fetchUptimeIssues } from '../api';
-import { fetchVersion } from '../api/taxonomyApi';
-import { GQLUptimeAlert } from '../types/schema';
+import { fetchUptimeIssues } from "../api";
+import { fetchVersion } from "../api/taxonomyApi";
+import { GQLUptimeAlert } from "../types/schema";
 
 const localizedVersionHashTitle = (name: string, language: string) => {
   switch (language) {
-    case 'nb':
+    case "nb":
       return `Du ser på en forhåndsvisning av versjonen "${name}"`;
-    case 'nn':
+    case "nn":
       return `Du ser på ei førehandsvising av versjonen "${name}"`;
     default:
       return `You are viewing a preview of the version "${name}"`;
@@ -24,18 +24,14 @@ const localizedVersionHashTitle = (name: string, language: string) => {
 };
 
 export const Query = {
-  async alerts(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLUptimeAlert[]> {
+  async alerts(_: any, __: any, context: ContextWithLoaders): Promise<GQLUptimeAlert[]> {
     if (context.versionHash) {
       const [version, uptimeIssues] = await Promise.all([
         fetchVersion(context.versionHash, context),
         fetchUptimeIssues(context),
       ]);
 
-      if (version?.versionType !== 'PUBLISHED') {
+      if (version?.versionType !== "PUBLISHED") {
         const versionTypeAlert: GQLUptimeAlert = {
           number: -1,
           closable: false,

@@ -6,19 +6,16 @@
  *
  */
 
-import {
-  GQLH5pElement,
-  GQLLearningpathStepOembed,
-  GQLVisualElementOembed,
-} from '../types/schema';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+import { GQLH5pElement, GQLLearningpathStepOembed, GQLVisualElementOembed } from "../types/schema";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
-export async function fetchOembed<
-  T extends GQLLearningpathStepOembed | GQLH5pElement | GQLVisualElementOembed
->(url: string, context: Context): Promise<T> {
+export async function fetchOembed<T extends GQLLearningpathStepOembed | GQLH5pElement | GQLVisualElementOembed>(
+  url: string,
+  context: Context,
+): Promise<T> {
   return await fetch(`/oembed-proxy/v1/oembed?url=${url}`, context)
-    .then(r => resolveJson(r))
-    .catch(e => {
+    .then((r) => resolveJson(r))
+    .catch((e) => {
       if (e.status === 404) {
         return null;
       } else throw e;

@@ -6,16 +6,16 @@
  *
  */
 
-import { graphql } from 'graphql';
-import { addMocksToSchema } from '@graphql-tools/mock';
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import { graphql } from "graphql";
+import { addMocksToSchema } from "@graphql-tools/mock";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
-import { typeDefs } from '../schema';
+import { typeDefs } from "../schema";
 
-test('can run query on schema', async () => {
+test("can run query on schema", async () => {
   const schema = makeExecutableSchema({
     typeDefs,
-    resolverValidationOptions: { requireResolversForResolveType: 'ignore' },
+    resolverValidationOptions: { requireResolversForResolveType: "ignore" },
   });
 
   const schemaWithMocks = addMocksToSchema({ schema });

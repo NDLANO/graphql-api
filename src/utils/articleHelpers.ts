@@ -6,75 +6,60 @@
  *
  */
 
-import { NodeChild } from '@ndla/types-taxonomy';
-import { GQLMeta, GQLTaxonomyEntity } from '../types/schema';
+import { NodeChild } from "@ndla/types-taxonomy";
+import { GQLMeta, GQLTaxonomyEntity } from "../types/schema";
 
 export function isNDLAEmbedUrl(url: string) {
   return /^https:\/(.*).ndla.no/.test(url) || /^http:\/\/localhost/.test(url);
 }
 
 export function getArticleIdFromUrn(urn: string): string {
-  return urn.replace('urn:article:', '');
+  return urn.replace("urn:article:", "");
 }
 
 export function getLearningpathIdFromUrn(urn: string): string {
-  return urn.replace('urn:learningpath:', '');
+  return urn.replace("urn:learningpath:", "");
 }
 
 export function stripUrn(str: string): string {
-  return str.replace('urn:', '');
+  return str.replace("urn:", "");
 }
 
-export function findPrimaryPath(
-  paths: string[],
-  subjectId: string,
-  topicId = '',
-): string | undefined {
+export function findPrimaryPath(paths: string[], subjectId: string, topicId = ""): string | undefined {
   return paths
-    .filter(path => path.startsWith(`/${stripUrn(subjectId)}/`))
-    .find(path => path.includes(`/${stripUrn(topicId)}`));
+    .filter((path) => path.startsWith(`/${stripUrn(subjectId)}/`))
+    .find((path) => path.includes(`/${stripUrn(topicId)}`));
 }
 
-export async function filterMissingArticles<
-  T extends GQLTaxonomyEntity | NodeChild
->(entities: T[], context: ContextWithLoaders): Promise<T[]> {
-  const visibleEntities = entities.filter(taxonomyEntity =>
+export async function filterMissingArticles<T extends GQLTaxonomyEntity | NodeChild>(
+  entities: T[],
+  context: ContextWithLoaders,
+): Promise<T[]> {
+  const visibleEntities = entities.filter((taxonomyEntity) =>
     taxonomyEntity.metadata ? taxonomyEntity.metadata.visible : true,
   );
 
-  const entitiesWithContentUri = visibleEntities.filter(
-    taxonomyEntity => !!taxonomyEntity.contentUri,
+  const entitiesWithContentUri = visibleEntities.filter((taxonomyEntity) => !!taxonomyEntity.contentUri);
+
+  const learningpathResources = entitiesWithContentUri.filter(
+    (taxonomyEntity) => taxonomyEntity.contentUri?.includes("urn:learningpath"),
   );
 
-  const learningpathResources = entitiesWithContentUri.filter(taxonomyEntity =>
-    taxonomyEntity.contentUri?.includes('urn:learningpath'),
-  );
-
-  const articleResources = entitiesWithContentUri.filter(taxonomyEntity =>
-    taxonomyEntity.contentUri?.includes('urn:article'),
+  const articleResources = entitiesWithContentUri.filter(
+    (taxonomyEntity) => taxonomyEntity.contentUri?.includes("urn:article"),
   );
 
   const articles = await context.loaders.articlesLoader.loadMany(
-    articleResources.map(taxonomyEntity =>
-      getArticleIdFromUrn(taxonomyEntity.contentUri ?? ''),
-    ),
+    articleResources.map((taxonomyEntity) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "")),
   );
-  const nonNullArticles = articles.filter(
-    (article): article is GQLMeta => !!article,
+  const nonNullArticles = articles.filter((article): article is GQLMeta => !!article);
+
+  const activeResources = articleResources.filter((taxonomyEntity) =>
+    nonNullArticles.find((article) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "") === `${article.id}`),
   );
 
-  const activeResources = articleResources.filter(taxonomyEntity =>
-    nonNullArticles.find(
-      article =>
-        getArticleIdFromUrn(taxonomyEntity.contentUri ?? '') ===
-        `${article.id}`,
-    ),
-  );
-
-  const withAvailabilityAndLanguage = activeResources.map(taxonomyEntity => {
-    const article = nonNullArticles.find(
-      a => getArticleIdFromUrn(taxonomyEntity.contentUri ?? '') === `${a.id}`,
-    );
+  const withAvailabilityAndLanguage = activeResources.map((taxonomyEntity) => {
+    const article = nonNullArticles.find((a) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "") === `${a.id}`);
     return {
       ...taxonomyEntity,
       availability: article?.availability,

@@ -9,10 +9,10 @@
 export const isoLanguageMapping: {
   [index: string]: string;
 } = {
-  en: 'eng',
-  nb: 'nob',
-  no: 'nob',
-  nn: 'nno',
-  se: 'sme',
-  sma: 'sma',
+  en: "eng",
+  nb: "nob",
+  no: "nob",
+  nn: "nno",
+  se: "sme",
+  sma: "sma",
 };

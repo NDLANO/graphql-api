@@ -6,8 +6,8 @@
  *
  */
 
-import { fetchLearningpath, fetchNode, fetchOembed } from '../api';
-import { fetchConfig, fetchExamLockStatus } from '../api/learningpathApi';
+import { fetchLearningpath, fetchNode, fetchOembed } from "../api";
+import { fetchConfig, fetchExamLockStatus } from "../api/learningpathApi";
 import {
   GQLConfigMetaBoolean,
   GQLConfigMetaStringList,
@@ -16,9 +16,9 @@ import {
   GQLLearningpathStepOembed,
   GQLQueryLearningpathArgs,
   GQLResource,
-} from '../types/schema';
-import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
-import { isNDLAEmbedUrl } from '../utils/articleHelpers';
+} from "../types/schema";
+import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { isNDLAEmbedUrl } from "../utils/articleHelpers";
 
 export const Query = {
   async learningpath(
@@ -28,44 +28,30 @@ export const Query = {
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
   },
-  async examLockStatus(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLConfigMetaBoolean> {
+  async examLockStatus(_: any, __: any, context: ContextWithLoaders): Promise<GQLConfigMetaBoolean> {
     const config = await fetchExamLockStatus(context);
-    if (typeof config.value !== 'boolean') {
-      throw new Error('Invalid exam lock status');
+    if (typeof config.value !== "boolean") {
+      throw new Error("Invalid exam lock status");
     }
 
     return { key: config.key, value: config.value };
   },
-  async aiEnabledOrgs(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLConfigMetaStringList> {
-    const config = await fetchConfig('AI_ENABLED_ORGS', context);
-    if (typeof config.value === 'boolean')
-      throw new Error('Invalid ai enabled orgs');
+  async aiEnabledOrgs(_: any, __: any, context: ContextWithLoaders): Promise<GQLConfigMetaStringList> {
+    const config = await fetchConfig("AI_ENABLED_ORGS", context);
+    if (typeof config.value === "boolean") throw new Error("Invalid ai enabled orgs");
     return { key: config.key, value: config.value };
   },
-  async arenaEnabledOrgs(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLConfigMetaStringList> {
-    const config = await fetchConfig('ARENA_ENABLED_ORGS', context);
-    if (typeof config.value === 'boolean')
-      throw new Error('Invalid arena enabled orgs');
+  async arenaEnabledOrgs(_: any, __: any, context: ContextWithLoaders): Promise<GQLConfigMetaStringList> {
+    const config = await fetchConfig("ARENA_ENABLED_ORGS", context);
+    if (typeof config.value === "boolean") throw new Error("Invalid arena enabled orgs");
     return { key: config.key, value: config.value };
   },
 };
 
 const buildOembedFromIframeUrl = (url: string): GQLLearningpathStepOembed => {
   return {
-    type: 'rich',
-    version: '1.0',
+    type: "rich",
+    version: "1.0",
     height: 800,
     width: 800,
     html: `<iframe src="${url}" frameborder="0" allowFullscreen="" />`,
@@ -82,21 +68,15 @@ export const resolvers = {
       if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
         return null;
       }
-      if (
-        learningpathStep.embedUrl &&
-        learningpathStep.embedUrl.embedType === 'iframe'
-      ) {
+      if (learningpathStep.embedUrl && learningpathStep.embedUrl.embedType === "iframe") {
         return buildOembedFromIframeUrl(learningpathStep.embedUrl.url);
       }
       if (
         learningpathStep.embedUrl &&
-        learningpathStep.embedUrl.embedType === 'oembed' &&
-        learningpathStep.embedUrl.url !== 'https://ndla.no'
+        learningpathStep.embedUrl.embedType === "oembed" &&
+        learningpathStep.embedUrl.url !== "https://ndla.no"
       ) {
-        return fetchOembed<GQLLearningpathStepOembed>(
-          learningpathStep.embedUrl.url,
-          context,
-        );
+        return fetchOembed<GQLLearningpathStepOembed>(learningpathStep.embedUrl.url, context);
       }
       return null;
     },
@@ -108,22 +88,16 @@ export const resolvers = {
       if (
         !learningpathStep.embedUrl ||
         !learningpathStep.embedUrl.url ||
-        (learningpathStep.embedUrl.embedType !== 'oembed' &&
-          learningpathStep.embedUrl.embedType !== 'iframe') ||
+        (learningpathStep.embedUrl.embedType !== "oembed" && learningpathStep.embedUrl.embedType !== "iframe") ||
         !isNDLAEmbedUrl(learningpathStep.embedUrl.url)
       ) {
         return null;
       }
 
-      const lastResourceMatch = learningpathStep.embedUrl.url
-        .match(/(resource:[:\da-fA-F-]+)/g)
-        ?.pop();
+      const lastResourceMatch = learningpathStep.embedUrl.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
 
       if (lastResourceMatch !== undefined) {
-        const resource = await fetchNode(
-          { id: `urn:${lastResourceMatch}` },
-          context,
-        );
+        const resource = await fetchNode({ id: `urn:${lastResourceMatch}` }, context);
         return nodeToTaxonomyEntity(resource, context);
       }
       return null;

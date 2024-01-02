@@ -6,88 +6,45 @@
  *
  */
 
-import {
-  IFrontPage,
-  ISubjectPageData,
-  IFilmFrontPageData,
-  IMovieTheme,
-} from '@ndla/types-backend/frontpage-api';
-import { TaxonomyContext } from '@ndla/types-taxonomy';
-import {
-  fetchArticle,
-  fetchFilmFrontpage,
-  fetchMovieMeta,
-  queryContexts,
-  queryNodes,
-} from '../api';
-import {
-  GQLArticle,
-  GQLMeta,
-  GQLMetaImage,
-  GQLResourceType,
-} from '../types/schema';
-import { getArticleIdFromUrn } from '../utils/articleHelpers';
+import { IFrontPage, ISubjectPageData, IFilmFrontPageData, IMovieTheme } from "@ndla/types-backend/frontpage-api";
+import { TaxonomyContext } from "@ndla/types-taxonomy";
+import { fetchArticle, fetchFilmFrontpage, fetchMovieMeta, queryContexts, queryNodes } from "../api";
+import { GQLArticle, GQLMeta, GQLMetaImage, GQLResourceType } from "../types/schema";
+import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 interface Id {
   id: number;
 }
 
 export const Query = {
-  async frontpage(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<IFrontPage> {
-    return context.loaders.frontpageLoader.load('frontpage');
+  async frontpage(_: any, __: any, context: ContextWithLoaders): Promise<IFrontPage> {
+    return context.loaders.frontpageLoader.load("frontpage");
   },
 
-  async subjectpage(
-    _: any,
-    { id }: Id,
-    context: ContextWithLoaders,
-  ): Promise<ISubjectPageData | null> {
+  async subjectpage(_: any, { id }: Id, context: ContextWithLoaders): Promise<ISubjectPageData | null> {
     return context.loaders.subjectpageLoader.load(`${id}`);
   },
 
-  async filmfrontpage(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<IFilmFrontPageData> {
+  async filmfrontpage(_: any, __: any, context: ContextWithLoaders): Promise<IFilmFrontPageData> {
     return fetchFilmFrontpage(context);
   },
 };
 
 export const resolvers = {
   FrontpageMenu: {
-    async article(
-      menu: IFrontPage,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLArticle> {
-      return fetchArticle(
-        { articleId: `${menu.articleId}`, convertEmbeds: true },
-        context,
-      );
+    async article(menu: IFrontPage, _: any, context: ContextWithLoaders): Promise<GQLArticle> {
+      return fetchArticle({ articleId: `${menu.articleId}`, convertEmbeds: true }, context);
     },
   },
 
   MovieTheme: {
-    async movies(
-      theme: IMovieTheme,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<string[]> {
+    async movies(theme: IMovieTheme, _: any, context: ContextWithLoaders): Promise<string[]> {
       const articles = await context.loaders.articlesLoader.loadMany(
-        theme.movies.map(movie => getArticleIdFromUrn(movie)),
+        theme.movies.map((movie) => getArticleIdFromUrn(movie)),
       );
-      const nonNullArticles = articles.filter(
-        (article): article is GQLMeta => !!article,
-      );
-      return theme.movies.filter(movie =>
-        nonNullArticles.find(
-          article => `${article.id}` === getArticleIdFromUrn(movie),
-        ),
+      const nonNullArticles = articles.filter((article): article is GQLMeta => !!article);
+      return theme.movies.filter((movie) =>
+        nonNullArticles.find((article) => `${article.id}` === getArticleIdFromUrn(movie)),
       );
     },
   },
@@ -96,59 +53,30 @@ export const resolvers = {
     async id(id: string) {
       return id;
     },
-    async title(
-      id: string,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<string> {
+    async title(id: string, _: any, context: ContextWithLoaders): Promise<string> {
       const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta?.title || '';
+      return movieMeta?.title || "";
     },
-    async metaImage(
-      id: string,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLMetaImage | undefined> {
+    async metaImage(id: string, _: any, context: ContextWithLoaders): Promise<GQLMetaImage | undefined> {
       const movieMeta = await fetchMovieMeta(id, context);
       return movieMeta?.metaImage;
     },
-    async metaDescription(
-      id: string,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<string> {
+    async metaDescription(id: string, _: any, context: ContextWithLoaders): Promise<string> {
       const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta?.metaDescription || '';
+      return movieMeta?.metaDescription || "";
     },
-    async path(
-      id: string,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<string> {
+    async path(id: string, _: any, context: ContextWithLoaders): Promise<string> {
       const contexts: TaxonomyContext[] = await queryContexts(id, context);
-      return (
-        contexts?.find(ctx => ctx.path.startsWith('/subject:20/'))?.path || ''
-      );
+      return contexts?.find((ctx) => ctx.path.startsWith("/subject:20/"))?.path || "";
     },
-    async resourceTypes(
-      id: string,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLResourceType[]> {
-      const nodes = await queryNodes(
-        { contentURI: id, language: context.language },
-        context,
-      );
+    async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
+      const nodes = await queryNodes({ contentURI: id, language: context.language }, context);
       return nodes[0]?.resourceTypes ?? [];
     },
   },
 
   FilmFrontpage: {
-    async article(
-      frontpage: IFilmFrontPageData,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLArticle | undefined> {
+    async article(frontpage: IFilmFrontPageData, _: any, context: ContextWithLoaders): Promise<GQLArticle | undefined> {
       if (frontpage.article) {
         return fetchArticle(
           {
