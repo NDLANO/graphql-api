@@ -31,6 +31,8 @@ import {
   ConceptVisualElementMeta,
   CampaignBlockMetaData,
   ConceptData,
+  RelatedContentData,
+  DisclaimerLink,
 } from '@ndla/types-embed';
 import { fetchSimpleArticle } from './articleApi';
 import { fetchAudioV2 } from './audioApi';
@@ -84,6 +86,52 @@ const fetchImageWrapper = async (
   };
 };
 
+// Some embeds have an uu-disclaimer with a linked article id.
+// This function fetches the article and node from taxonomy.
+const fetchDisclaimerLink = async (
+  articleId: number,
+  context: Context,
+): Promise<DisclaimerLink | undefined> => {
+  const result = await fetchArticleAndNode(articleId, context);
+  if (!result) {
+    return undefined;
+  }
+  const { article, resource } = result;
+  if (!article) {
+    return undefined;
+  }
+  if (resource) {
+    return {
+      text: article.title?.title || '',
+      href: resource.path,
+    };
+  } else {
+    return {
+      text: article.title?.title || '',
+      href: `/article/${articleId}`,
+    };
+  }
+};
+
+const fetchArticleAndNode = async (
+  articleId: string | number,
+  context: Context,
+): Promise<RelatedContentData | undefined> => {
+  try {
+    const [article, resources] = await Promise.all([
+      fetchSimpleArticle(`urn:article:${articleId}`, context),
+      queryNodes(
+        { contentURI: `urn:article:${articleId}`, language: context.language },
+        context,
+      ),
+    ]);
+    const resource = resources?.[0];
+    return { article, resource };
+  } catch (e) {
+    return undefined;
+  }
+};
+
 const imageMeta: Fetch<ImageMetaData> = async ({ embedData, context }) => {
   const res = await fetchImageV3(embedData.resourceId, context);
   return {
@@ -111,34 +159,50 @@ const audioMeta: Fetch<AudioMetaData> = async ({ embedData, context }) => {
 };
 
 const externalMeta: Fetch<OembedMetaData> = async ({ embedData, context }) => {
-  const [oembed, iframeImage] = await Promise.all([
+  const [oembed, iframeImage, disclaimerLink] = await Promise.all([
     fetchExternalOembed(embedData, context),
     embedData.imageid
       ? fetchImageWrapper(embedData.imageid, context)
       : Promise.resolve<undefined>(undefined),
+    embedData.disclaimerArticleId
+      ? fetchDisclaimerLink(embedData.disclaimerArticleId, context)
+      : Promise.resolve<undefined>(undefined),
   ]);
 
-  return { oembed, iframeImage };
+  return { oembed, iframeImage, disclaimerLink };
 };
 
 // This function will never end up in an error state. Image fetching
 // is already caught inside fetchImage, and the embed will still work
 // without the image. As such, we ignore it.
 const iframeMeta: Fetch<IframeMetaData> = async ({ embedData, context }) => {
-  const iframeImage = embedData.imageid
-    ? await fetchImageWrapper(embedData.imageid, context)
-    : await Promise.resolve<undefined>(undefined);
+  const [iframeImage, disclaimerLink] = await Promise.all([
+    embedData.imageid
+      ? await fetchImageWrapper(embedData.imageid, context)
+      : await Promise.resolve<undefined>(undefined),
+    embedData.disclaimerArticleId
+      ? fetchDisclaimerLink(embedData.disclaimerArticleId, context)
+      : Promise.resolve<undefined>(undefined),
+  ]);
 
-  return { iframeImage };
+  return { iframeImage, disclaimerLink };
 };
 
 const h5pMeta: Fetch<H5pMetaData> = async ({ embedData, context, opts }) => {
   const pathArr = embedData.path?.split('/') || [];
   const h5pId = pathArr[pathArr.length - 1];
-  const [oembedData, h5pLicenseInformation, h5pInfo] = await Promise.all([
+  const [
+    oembedData,
+    h5pLicenseInformation,
+    h5pInfo,
+    disclaimerLink,
+  ] = await Promise.all([
     fetchH5pOembed(embedData, context, !!opts.previewH5p),
     fetchH5pLicenseInformation(h5pId, context),
     fetchH5pInfo(h5pId, context),
+    embedData.disclaimerArticleId
+      ? fetchDisclaimerLink(embedData.disclaimerArticleId, context)
+      : Promise.resolve<undefined>(undefined),
   ]);
 
   return {
@@ -151,6 +215,7 @@ const h5pMeta: Fetch<H5pMetaData> = async ({ embedData, context, opts }) => {
     },
     h5pUrl: embedData.url,
     oembed: oembedData,
+    disclaimerLink,
   };
 };
 
@@ -183,9 +248,12 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({
   context,
 }) => {
   const { videoid, account } = embedData;
-  const [video, sources] = await Promise.all([
+  const [video, sources, disclaimerLink] = await Promise.all([
     fetchVideo(videoid, account, context),
     fetchVideoSources(videoid, account, context),
+    embedData.disclaimerArticleId
+      ? fetchDisclaimerLink(embedData.disclaimerArticleId, context)
+      : Promise.resolve<undefined>(undefined),
   ]);
 
   if (video.description) {
@@ -199,6 +267,7 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({
     ...video,
     copyright: getBrightcoveCopyright(video.custom_fields, context.language),
     sources,
+    disclaimerLink,
   };
 };
 
@@ -235,15 +304,7 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({
 }) => {
   const articleId = embedData.articleId;
   if (typeof articleId === 'string' || typeof articleId === 'number') {
-    const [article, resources] = await Promise.all([
-      fetchSimpleArticle(`urn:article:${articleId}`, context),
-      queryNodes(
-        { contentURI: `urn:article:${articleId}`, language: context.language },
-        context,
-      ),
-    ]);
-    const resource = resources?.[0];
-    return { article, resource };
+    return fetchArticleAndNode(articleId, context);
   } else {
     return undefined;
   }
