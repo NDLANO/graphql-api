@@ -60,6 +60,7 @@ const subscriptPlugin: TokenizerAndRendererExtension = {
 
 const marked = new Marked({
   async: false,
+  gfm: false,
   extensions: [subscriptPlugin, superscriptPlugin],
 });
 
