@@ -7,7 +7,6 @@
  */
 
 import {
-  IConfigMetaRestricted,
   ILearningPathV2,
   ISearchResultV2,
 } from '@ndla/types-backend/learningpath-api';
@@ -77,20 +76,3 @@ export async function fetchLearningpath(
     learningsteps,
   };
 }
-
-export const fetchConfig = async (
-  configKey: string,
-  context: Context,
-): Promise<IConfigMetaRestricted> => {
-  const response = await fetch(
-    `/learningpath-api/v1/config/${configKey}`,
-    context,
-  );
-  const config: IConfigMetaRestricted = await resolveJson(response);
-  return config;
-};
-
-export const fetchExamLockStatus = async (
-  context: Context,
-): Promise<IConfigMetaRestricted> =>
-  fetchConfig('MY_NDLA_WRITE_RESTRICTED', context);
