@@ -18,6 +18,7 @@ import {
 import { Query as FrontpageQuery, resolvers as frontpageResolvers } from "./frontpageResolvers";
 import { Query as ImageQuery, resolvers as ImageResolvers } from "./imageResolvers";
 import { Query as LearningpathQuery, resolvers as learningpathResolvers } from "./learningpathResolvers";
+import { Query as MyNDLAQuery, resolvers as MyNDLAResolvers } from "./myndlaResolvers";
 import { Query as PodcastQuery, resolvers as podcastResolvers } from "./podcastResolvers";
 import { Query as ProgrammeQuery, resolvers as ProgrammeResolvers } from "./programmeResolvers";
 import { Query as ResourceQuery, resolvers as resourceResolvers } from "./resourceResolvers";
@@ -37,6 +38,7 @@ export const resolvers = {
     ...SearchQuery,
     ...CurriculumQuery,
     ...LearningpathQuery,
+    ...MyNDLAQuery,
     ...PodcastQuery,
     ...ConceptQuery,
     ...UptimeQuery,
@@ -59,6 +61,7 @@ export const resolvers = {
   ...resourceResolvers,
   ...searchResolvers,
   ...learningpathResolvers,
+  ...MyNDLAResolvers,
   ...curriculumResolvers,
   ...podcastResolvers,
   ...conceptResolvers,

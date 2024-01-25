@@ -7,7 +7,7 @@
  */
 
 import qs from "query-string";
-import { IMyNDLAUser, IFolder, IFolderData, IResource } from "@ndla/types-backend/learningpath-api";
+import { IMyNDLAUser, IFolder, IFolderData, IResource } from "@ndla/types-backend/myndla-api";
 import {
   GQLMutationAddFolderArgs,
   GQLMutationAddFolderResourceArgs,
@@ -44,7 +44,7 @@ export async function fetchFolders(
     "include-resources": includeResources,
     "include-subfolders": includeSubfolders,
   });
-  const response = await fetch(`/learningpath-api/v1/folders${params}`, {
+  const response = await fetch(`/myndla-api/v1/folders${params}`, {
     ...context,
     shouldUseCache: false,
   });
@@ -57,7 +57,7 @@ export async function fetchFolder(
   context: Context,
 ): Promise<IFolderData> {
   const params = queryString({ includeResources, includeSubfolders });
-  const response = await fetch(`/learningpath-api/v1/folders/${id}${params}`, {
+  const response = await fetch(`/myndla-api/v1/folders/${id}${params}`, {
     ...context,
     shouldUseCache: false,
   });
@@ -69,7 +69,7 @@ export async function fetchSharedFolder(
   context: Context,
 ): Promise<IFolderData> {
   const params = queryString({ includeResources, includeSubfolders });
-  const response = await fetch(`/learningpath-api/v1/folders/shared/${id}${params}`, {
+  const response = await fetch(`/myndla-api/v1/folders/shared/${id}${params}`, {
     ...context,
     shouldUseCache: false,
   });
@@ -81,7 +81,7 @@ export async function fetchAllFolderResources(
   context: Context,
 ): Promise<IResource[]> {
   const params = queryString({ size });
-  const response = await fetch(`/learningpath-api/v1/folders/resources/${params}`, {
+  const response = await fetch(`/myndla-api/v1/folders/resources/${params}`, {
     ...context,
     shouldUseCache: false,
   });
@@ -93,7 +93,7 @@ export async function postFolder(
   { name, parentId, status, description }: GQLMutationAddFolderArgs,
   context: Context,
 ): Promise<IFolder> {
-  const response = await fetch(`/learningpath-api/v1/folders`, context, {
+  const response = await fetch(`/myndla-api/v1/folders`, context, {
     method: "POST",
     body: JSON.stringify({ name, parentId, status, description }),
   });
@@ -105,7 +105,7 @@ export async function patchFolder(
   { id, name, status, description }: GQLMutationUpdateFolderArgs,
   context: Context,
 ): Promise<IFolder> {
-  const response = await fetch(`/learningpath-api/v1/folders/${id}`, context, {
+  const response = await fetch(`/myndla-api/v1/folders/${id}`, context, {
     method: "PATCH",
     body: JSON.stringify({ name, status, description }),
   });
@@ -114,7 +114,7 @@ export async function patchFolder(
 }
 
 export async function deleteFolder({ id }: GQLMutationDeleteFolderArgs, context: Context): Promise<string> {
-  await fetch(`/learningpath-api/v1/folders/${id}`, context, {
+  await fetch(`/myndla-api/v1/folders/${id}`, context, {
     method: "DELETE",
   });
   return id;
@@ -124,7 +124,7 @@ export async function postFolderResource(
   { folderId, resourceType, path, tags, resourceId }: GQLMutationAddFolderResourceArgs,
   context: Context,
 ): Promise<IResource> {
-  const response = await fetch(`/learningpath-api/v1/folders/${folderId}/resources/`, context, {
+  const response = await fetch(`/myndla-api/v1/folders/${folderId}/resources/`, context, {
     method: "POST",
     body: JSON.stringify({ resourceType, path, tags, resourceId }),
   });
@@ -136,7 +136,7 @@ export async function patchFolderResource(
   { id, tags }: GQLMutationUpdateFolderResourceArgs,
   context: Context,
 ): Promise<IResource> {
-  const response = await fetch(`/learningpath-api/v1/folders/resources/${id}`, context, {
+  const response = await fetch(`/myndla-api/v1/folders/resources/${id}`, context, {
     method: "PATCH",
     body: JSON.stringify({ tags }),
   });
@@ -148,7 +148,7 @@ export async function deleteFolderResource(
   { folderId, resourceId }: GQLMutationDeleteFolderResourceArgs,
   context: Context,
 ): Promise<string> {
-  await fetch(`/learningpath-api/v1/folders/${folderId}/resources/${resourceId}`, context, {
+  await fetch(`/myndla-api/v1/folders/${folderId}/resources/${resourceId}`, context, {
     method: "DELETE",
   });
   return resourceId;
@@ -156,7 +156,7 @@ export async function deleteFolderResource(
 
 export async function deletePersonalData(context: Context): Promise<boolean> {
   try {
-    await fetch("/learningpath-api/v1/users/delete-personal-data/", context, {
+    await fetch("/myndla-api/v1/users/delete-personal-data/", context, {
       method: "DELETE",
     });
     return true;
@@ -167,7 +167,7 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
 
 export async function getPersonalData(context: Context): Promise<IMyNDLAUser | undefined> {
   try {
-    const response = await fetch(`/learningpath-api/v1/users/`, {
+    const response = await fetch(`/myndla-api/v1/users/`, {
       ...context,
       shouldUseCache: false,
     });
@@ -181,7 +181,7 @@ export async function patchPersonalData(
   userData: GQLMutationUpdatePersonalDataArgs,
   context: Context,
 ): Promise<IMyNDLAUser> {
-  const response = await fetch(`/learningpath-api/v1/users/`, context, {
+  const response = await fetch(`/myndla-api/v1/users/`, context, {
     method: "PATCH",
     body: JSON.stringify(userData),
   });
@@ -196,7 +196,7 @@ export async function sortFolders(
     "folder-id": parentId,
   });
 
-  const response = await fetch(`/learningpath-api/v1/folders/sort-subfolders${query}`, context, {
+  const response = await fetch(`/myndla-api/v1/folders/sort-subfolders${query}`, context, {
     method: "PUT",
     body: JSON.stringify({ sortedIds }),
   });
@@ -208,7 +208,7 @@ export async function sortResources(
   { parentId, sortedIds }: GQLMutationSortResourcesArgs,
   context: Context,
 ): Promise<GQLSortResult> {
-  const response = await fetch(`/learningpath-api/v1/folders/sort-resources/${parentId}`, context, {
+  const response = await fetch(`/myndla-api/v1/folders/sort-resources/${parentId}`, context, {
     method: "PUT",
     body: JSON.stringify({ sortedIds }),
   });
@@ -221,7 +221,7 @@ export async function updateFolderStatus(
   context: Context,
 ): Promise<string[]> {
   const params = queryString({ "folder-status": status });
-  const response = await fetch(`/learningpath-api/v1/folders/shared/${folderId}${params}`, context, {
+  const response = await fetch(`/myndla-api/v1/folders/shared/${folderId}${params}`, context, {
     method: "PATCH",
   });
 
@@ -233,6 +233,6 @@ export async function copySharedFolder(
   context: Context,
 ) {
   const params = queryString({ "destination-folder-id": destinationFolderId });
-  const response = await fetch(`/learningpath-api/v1/folders/clone/${folderId}${params}`, context, { method: "POST" });
+  const response = await fetch(`/myndla-api/v1/folders/clone/${folderId}${params}`, context, { method: "POST" });
   return await resolveJson(response);
 }

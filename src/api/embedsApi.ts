@@ -360,12 +360,17 @@ export const transformEmbed = async (
         opts,
       }).catch((_) => undefined);
       // If the concept does not exist and we are not requesting a standalone concept, remove it from the article.
-      if (!opts.standalone && !response) {
+      // This does not apply to inline concepts, as the underlying would should still be shown.
+      if (!opts.standalone && embedData.type !== "inline" && !response) {
         embed.embed.replaceWith("");
         return;
       }
-      meta = response;
       embedData.pageUrl = `/${embedData.resource}/${embedData.contentId}`;
+      // Throw a new error if the concept is inline. The embed will be converted to an error embed.
+      if (!response && embedData.type === "inline") {
+        throw new Error("Failed to fetch concept");
+      }
+      meta = response;
     } else if (embedData.resource === "concept-list") {
       meta = await conceptListMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "file") {
