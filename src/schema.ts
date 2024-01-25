@@ -1159,6 +1159,7 @@ export const typeDefs = gql`
     shareName: Boolean!
     organization: String!
     groups: [MyNdlaGroup!]!
+    arenaGroups: [String!]!
   }
 
   type ConfigMetaBoolean {
@@ -1243,6 +1244,100 @@ export const typeDefs = gql`
     breadcrumbs: [ArenaBreadcrumb!]!
     deleted: Boolean!
     isFollowing: Boolean
+  }
+
+  type ArenaCategoryV2 {
+    id: Int!
+    title: String!
+    description: String!
+    postCount: Int!
+    topicCount: Int!
+    topics: [ArenaTopicV2!]
+    isFollowing: Boolean!
+    visible: Boolean!
+  }
+
+  type ArenaTopicV2 {
+    id: Int!
+    title: String!
+    postCount: Int!
+    created: String!
+    updated: String!
+    categoryId: Int!
+    posts: PaginatedPosts
+    isFollowing: Boolean!
+  }
+
+  type PaginatedTopics {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    items: [ArenaTopicV2!]!
+  }
+
+  type PaginatedArenaUsers {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    items: [ArenaUserV2!]!
+  }
+
+  type PaginatedPosts {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    items: [ArenaPostV2!]!
+  }
+
+  type ArenaPostV2 {
+    id: Int!
+    content: String!
+    contentAsHTML: String
+    created: String!
+    updated: String!
+    owner: ArenaUserV2!
+    topicId: Int!
+    flags: [ArenaFlag!]
+  }
+
+  type ArenaFlag {
+    id: Int!
+    reason: String!
+    created: String!
+    resolved: String
+    isResolved: Boolean!
+    flagger: ArenaUserV2!
+  }
+
+  type ArenaUserV2 {
+    id: Int!
+    displayName: String!
+    username: String!
+    location: String!
+    groups: [String!]!
+  }
+
+  input ArenaUserV2Input {
+    favoriteSubjects: [String!]
+    arenaEnabled: Boolean
+    shareName: Boolean
+    arenaGroups: [String!]
+  }
+
+  type ArenaNewPostNotificationV2 {
+    id: Int!
+    topicId: Int!
+    isRead: Boolean!
+    topicTitle: String!
+    post: ArenaPostV2!
+    notificationTime: String!
+  }
+
+  type PaginatedArenaNewPostNotificationV2 {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    items: [ArenaNewPostNotificationV2!]!
   }
 
   type ArenaNotification {
@@ -1394,10 +1489,27 @@ export const typeDefs = gql`
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
     arenaUser(username: String!): ArenaUser
+    arenaAllFlags(page: Int, pageSize: Int): PaginatedPosts!
     arenaTopic(topicId: Int!, page: Int): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
     arenaNotifications: [ArenaNotification!]!
+    arenaCategoriesV2(filterFollowed: Boolean): [ArenaCategoryV2!]!
+    arenaCategoryV2(categoryId: Int!, page: Int, pageSize: Int): ArenaCategoryV2
+    arenaNotificationsV2(
+      page: Int
+      pageSize: Int
+    ): PaginatedArenaNewPostNotificationV2!
+    arenaRecentTopicsV2(page: Int, pageSize: Int): PaginatedTopics!
+    arenaTopicV2(topicId: Int!, page: Int, pageSize: Int): ArenaTopicV2
+    arenaTopicsByUserV2(
+      userId: Int!
+      page: Int
+      pageSize: Int
+    ): PaginatedTopics!
+    arenaUserV2(username: String!): ArenaUserV2
+    arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
+    listArenaUserV2(page: Int, pageSize: Int): PaginatedArenaUsers!
   }
 
   type Mutation {
@@ -1446,13 +1558,52 @@ export const typeDefs = gql`
       title: String!
       content: String!
     ): ArenaTopic!
+    newArenaCategory(
+      title: String!
+      description: String!
+      visible: Boolean!
+    ): ArenaCategoryV2!
+    updateArenaCategory(
+      categoryId: Int!
+      title: String!
+      description: String!
+      visible: Boolean!
+    ): ArenaCategoryV2!
+    newArenaTopicV2(
+      categoryId: Int!
+      title: String!
+      content: String!
+    ): ArenaTopicV2!
+    markNotificationsAsReadV2(notificationIds: [Int!]!): [Int!]!
+    markAllNotificationsAsRead: Boolean!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
+    replyToTopicV2(topicId: Int!, content: String!): ArenaPostV2!
     updatePost(postId: Int!, content: String!, title: String): ArenaPost!
+    updatePostV2(postId: Int!, content: String!): ArenaPostV2!
+    updateTopicV2(
+      topicId: Int!
+      title: String!
+      content: String!
+    ): ArenaTopicV2!
     deletePost(postId: Int!): Int!
+    deletePostV2(postId: Int!): Int!
     deleteTopic(topicId: Int!): Int!
+    deleteTopicV2(topicId: Int!): Int!
+    deleteCategory(categoryId: Int!): Int!
     newFlag(type: String!, id: Int!, reason: String!): Int!
+    newFlagV2(postId: Int!, reason: String!): Int!
+    resolveFlag(flagId: Int!): ArenaFlag!
     subscribeToTopic(topicId: Int!): Int!
+    followTopic(topicId: Int!): ArenaTopicV2!
+    followCategory(categoryId: Int!): ArenaCategoryV2!
+    unfollowTopic(topicId: Int!): ArenaTopicV2!
+    unfollowCategory(categoryId: Int!): ArenaCategoryV2!
     unsubscribeFromTopic(topicId: Int!): Int!
+    updateOtherArenaUser(
+      userId: Int!
+      data: ArenaUserV2Input!
+    ): MyNdlaPersonalData!
+    sortArenaCategories(sortedIds: [Int!]!): [ArenaCategoryV2!]!
   }
 `;
 
