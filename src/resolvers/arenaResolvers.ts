@@ -193,7 +193,7 @@ export const Query: Pick<
     params: GQLQueryListArenaUserV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLPaginatedArenaUsers> {
-    return myndla.fetchArenaUsers(params.page, params.pageSize, context);
+    return myndla.fetchArenaUsers(params.page, params.pageSize, params.query, params.filterTeachers, context);
   },
 };
 

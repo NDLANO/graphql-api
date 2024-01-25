@@ -1474,7 +1474,7 @@ export const typeDefs = gql`
     arenaTopicsByUserV2(userId: Int!, page: Int, pageSize: Int): PaginatedTopics!
     arenaUserV2(username: String!): ArenaUserV2
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
-    listArenaUserV2(page: Int, pageSize: Int): PaginatedArenaUsers!
+    listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
   }
 
   type Mutation {

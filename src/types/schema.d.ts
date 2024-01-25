@@ -1680,8 +1680,10 @@ export type GQLQueryLearningpathArgs = {
 
 
 export type GQLQueryListArenaUserV2Args = {
+  filterTeachers?: InputMaybe<Scalars['Boolean']>;
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
+  query?: InputMaybe<Scalars['String']>;
 };
 
 
