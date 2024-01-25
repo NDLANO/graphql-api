@@ -6,9 +6,9 @@
  *
  */
 
-import { load } from 'cheerio';
-import he from 'he';
-import { IImageMetaInformationV3 } from '@ndla/types-backend/image-api';
+import { load } from "cheerio";
+import he from "he";
+import { IImageMetaInformationV3 } from "@ndla/types-backend/image-api";
 import {
   AudioMetaData,
   ImageMetaData,
@@ -31,49 +31,37 @@ import {
   ConceptVisualElementMeta,
   CampaignBlockMetaData,
   ConceptData,
-} from '@ndla/types-embed';
-import { fetchSimpleArticle } from './articleApi';
-import { fetchAudioV2 } from './audioApi';
-import { fetchEmbedConcept, fetchEmbedConcepts } from './conceptApi';
-import { fetchExternalOembed } from './externalApi';
-import { checkIfFileExists } from './fileApi';
-import {
-  fetchH5pLicenseInformation,
-  fetchH5pOembed,
-  fetchH5pInfo,
-} from './h5pApi';
-import { fetchImageV3 } from './imageApi';
-import { queryNodes } from './taxonomyApi';
-import { fetchVideo, fetchVideoSources } from './videoApi';
-import { ndlaUrl } from '../config';
-import { getBrightcoveCopyright } from '../utils/brightcoveUtils';
-import {
-  CheerioEmbed,
-  getEmbedsFromContent,
-} from '../utils/getEmbedsFromContent';
-import highlightCode from '../utils/highlightCode';
-import parseMarkdown from '../utils/parseMarkdown';
+} from "@ndla/types-embed";
+import { fetchSimpleArticle } from "./articleApi";
+import { fetchAudioV2 } from "./audioApi";
+import { fetchEmbedConcept, fetchEmbedConcepts } from "./conceptApi";
+import { fetchExternalOembed } from "./externalApi";
+import { checkIfFileExists } from "./fileApi";
+import { fetchH5pLicenseInformation, fetchH5pOembed, fetchH5pInfo } from "./h5pApi";
+import { fetchImageV3 } from "./imageApi";
+import { queryNodes } from "./taxonomyApi";
+import { fetchVideo, fetchVideoSources } from "./videoApi";
+import { ndlaUrl } from "../config";
+import { getBrightcoveCopyright } from "../utils/brightcoveUtils";
+import { CheerioEmbed, getEmbedsFromContent } from "../utils/getEmbedsFromContent";
+import highlightCode from "../utils/highlightCode";
+import parseMarkdown from "../utils/parseMarkdown";
 
 type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
   params: {
-    embedData: T['embedData'];
+    embedData: T["embedData"];
     context: Context;
     index: number;
     opts: TransformOptions;
   } & ExtraData,
-) => Promise<
-  Extract<EmbedMetaData, { resource: T['resource']; status: 'success' }>['data']
->;
+) => Promise<Extract<EmbedMetaData, { resource: T["resource"]; status: "success" }>["data"]>;
 
 // Some embeds depend on fetching image information, but can function just fine without.
 // This function simply suppresses the error. Do not use it for fetching the actual imageMeta.
-const fetchImageWrapper = async (
-  id: string,
-  context: Context,
-): Promise<IImageMetaInformationV3> => {
+const fetchImageWrapper = async (id: string, context: Context): Promise<IImageMetaInformationV3> => {
   const image = await fetchImageV3(id, context);
   if (image === null) {
-    throw Error('Failed to fetch image');
+    throw Error("Failed to fetch image");
   }
   return {
     ...image,
@@ -113,9 +101,7 @@ const audioMeta: Fetch<AudioMetaData> = async ({ embedData, context }) => {
 const externalMeta: Fetch<OembedMetaData> = async ({ embedData, context }) => {
   const [oembed, iframeImage] = await Promise.all([
     fetchExternalOembed(embedData, context),
-    embedData.imageid
-      ? fetchImageWrapper(embedData.imageid, context)
-      : Promise.resolve<undefined>(undefined),
+    embedData.imageid ? fetchImageWrapper(embedData.imageid, context) : Promise.resolve<undefined>(undefined),
   ]);
 
   return { oembed, iframeImage };
@@ -133,7 +119,7 @@ const iframeMeta: Fetch<IframeMetaData> = async ({ embedData, context }) => {
 };
 
 const h5pMeta: Fetch<H5pMetaData> = async ({ embedData, context, opts }) => {
-  const pathArr = embedData.path?.split('/') || [];
+  const pathArr = embedData.path?.split("/") || [];
   const h5pId = pathArr[pathArr.length - 1];
   const [oembedData, h5pLicenseInformation, h5pInfo] = await Promise.all([
     fetchH5pOembed(embedData, context, !!opts.previewH5p),
@@ -146,7 +132,7 @@ const h5pMeta: Fetch<H5pMetaData> = async ({ embedData, context, opts }) => {
       h5p: {
         ...h5pLicenseInformation?.h5p,
         authors: h5pLicenseInformation?.h5p.authors ?? [],
-        title: h5pInfo?.title ?? '',
+        title: h5pInfo?.title ?? "",
       },
     },
     h5pUrl: embedData.url,
@@ -169,19 +155,13 @@ export interface TransformOptions {
   standalone?: boolean;
 }
 
-const footnoteMeta: Fetch<
-  FootnoteMetaData,
-  { footnoteCount: number }
-> = async ({ embedData, footnoteCount }) => {
-  const authors = embedData.authors.split(';');
+const footnoteMeta: Fetch<FootnoteMetaData, { footnoteCount: number }> = async ({ embedData, footnoteCount }) => {
+  const authors = embedData.authors.split(";");
   const year = embedData.year.toString();
   return { authors, year, entryNum: footnoteCount };
 };
 
-const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({
-  embedData,
-  context,
-}) => {
+const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({ embedData, context }) => {
   const { videoid, account } = embedData;
   const [video, sources] = await Promise.all([
     fetchVideo(videoid, account, context),
@@ -202,25 +182,15 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({
   };
 };
 
-const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({
-  embedData,
-  context,
-  opts,
-}) => {
-  const contentURI = `urn:${embedData.contentType ?? 'article'}:${
-    embedData.contentId
-  }`;
-  const host = opts.absoluteUrl ? ndlaUrl : '';
+const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context, opts }) => {
+  const contentURI = `urn:${embedData.contentType ?? "article"}:${embedData.contentId}`;
+  const host = opts.absoluteUrl ? ndlaUrl : "";
 
-  const contentType =
-    embedData.contentType === 'learningpath' ? 'learningpaths' : 'article';
+  const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
   let path = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
   const nodes = await queryNodes({ contentURI }, context);
-  const node = nodes.find(n => !!n.path);
-  const nodePath =
-    node?.paths?.find(
-      p => p.split('/')[1] === opts.subject?.replace('urn:', ''),
-    ) ?? node?.path;
+  const node = nodes.find((n) => !!n.path);
+  const nodePath = node?.paths?.find((p) => p.split("/")[1] === opts.subject?.replace("urn:", "")) ?? node?.path;
 
   if (nodePath) {
     path = `${host}/${context.language}${nodePath}`;
@@ -229,18 +199,12 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({
   return { path };
 };
 
-const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({
-  embedData,
-  context,
-}) => {
+const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, context }) => {
   const articleId = embedData.articleId;
-  if (typeof articleId === 'string' || typeof articleId === 'number') {
+  if (typeof articleId === "string" || typeof articleId === "number") {
     const [article, resources] = await Promise.all([
       fetchSimpleArticle(`urn:article:${articleId}`, context),
-      queryNodes(
-        { contentURI: `urn:article:${articleId}`, language: context.language },
-        context,
-      ),
+      queryNodes({ contentURI: `urn:article:${articleId}`, language: context.language }, context),
     ]);
     const resource = resources?.[0];
     return { article, resource };
@@ -268,50 +232,21 @@ const fetchConceptVisualElement = async (
   return res as ConceptVisualElementMeta;
 };
 
-const conceptMeta: Fetch<ConceptMetaData> = async ({
-  embedData,
-  index,
-  context,
-  opts,
-}) => {
-  const concept = await fetchEmbedConcept(
-    embedData.contentId,
-    context,
-    !!opts.draftConcept,
-  );
-  const visualElement = await fetchConceptVisualElement(
-    concept.visualElement?.visualElement,
-    context,
-    index,
-    opts,
-  );
+const conceptMeta: Fetch<ConceptMetaData> = async ({ embedData, index, context, opts }) => {
+  const concept = await fetchEmbedConcept(embedData.contentId, context, !!opts.draftConcept);
+  const visualElement = await fetchConceptVisualElement(concept.visualElement?.visualElement, context, index, opts);
   return {
     concept,
     visualElement,
   };
 };
 
-const conceptListMeta: Fetch<ConceptListMetaData> = async ({
-  embedData,
-  index,
-  context,
-  opts,
-}) => {
-  const conceptList = await fetchEmbedConcepts(
-    embedData.tag,
-    embedData.subjectId,
-    context,
-    !!opts.draftConcept,
-  );
+const conceptListMeta: Fetch<ConceptListMetaData> = async ({ embedData, index, context, opts }) => {
+  const conceptList = await fetchEmbedConcepts(embedData.tag, embedData.subjectId, context, !!opts.draftConcept);
 
   const concepts = await Promise.all(
-    conceptList.map(async concept => {
-      const visualElement = await fetchConceptVisualElement(
-        concept.visualElement?.visualElement,
-        context,
-        index,
-        opts,
-      );
+    conceptList.map(async (concept) => {
+      const visualElement = await fetchConceptVisualElement(concept.visualElement?.visualElement, context, index, opts);
       return {
         concept: {
           ...concept,
@@ -332,34 +267,22 @@ const fileListMeta: Fetch<FileMetaData> = async ({ embedData, context }) => {
   return { exists: response };
 };
 
-const blogPostMeta: Fetch<BlogPostMetaData> = async ({
-  embedData,
-  context,
-}) => {
+const blogPostMeta: Fetch<BlogPostMetaData> = async ({ embedData, context }) => {
   const metaImage = await fetchImageV3(embedData.imageId, context);
   return { metaImage };
 };
 
-const contactBlockMeta: Fetch<ContactBlockMetaData> = async ({
-  embedData,
-  context,
-}) => {
+const contactBlockMeta: Fetch<ContactBlockMetaData> = async ({ embedData, context }) => {
   const image = await fetchImageV3(embedData.imageId, context);
   return { image };
 };
 
-const keyFigureMeta: Fetch<KeyFigureMetaData> = async ({
-  embedData,
-  context,
-}) => {
+const keyFigureMeta: Fetch<KeyFigureMetaData> = async ({ embedData, context }) => {
   const metaImage = await fetchImageV3(embedData.imageId, context);
   return { metaImage };
 };
 
-const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({
-  embedData,
-  context,
-}) => {
+const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, context }) => {
   const image = embedData.imageId
     ? await fetchImageV3(embedData.imageId, context)
     : await Promise.resolve<undefined>(undefined);
@@ -374,16 +297,16 @@ export const transformEmbed = async (
   footnoteCount: number,
   opts: TransformOptions,
 ): Promise<EmbedMetaData | undefined> => {
-  if (embed.data.resource === 'nrk') {
-    embed.embed.replaceWith('');
+  if (embed.data.resource === "nrk") {
+    embed.embed.replaceWith("");
     return;
   }
 
-  let meta: Extract<EmbedMetaData, { status: 'success' }>['data'];
+  let meta: Extract<EmbedMetaData, { status: "success" }>["data"];
   const embedData: EmbedData = embed.data;
 
   try {
-    if (embedData.resource === 'image') {
+    if (embedData.resource === "image") {
       meta = await imageMeta({ embedData, context, index, opts });
       if (embedData.caption) {
         embedData.caption = parseMarkdown({
@@ -392,27 +315,22 @@ export const transformEmbed = async (
         });
       }
       embedData.pageUrl = `/${embedData.resource}/${embedData.resourceId}`;
-    } else if (embedData.resource === 'audio') {
+    } else if (embedData.resource === "audio") {
       meta = await audioMeta({ embedData, context, index, opts });
       embedData.pageUrl = `/${embedData.resource}/${embedData.resourceId}`;
-    } else if (embedData.resource === 'external') {
+    } else if (embedData.resource === "external") {
       meta = await externalMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'iframe') {
+    } else if (embedData.resource === "iframe") {
       meta = await iframeMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'h5p') {
-      const lang =
-        context.language === 'en'
-          ? 'en-gb'
-          : context.language === 'nn'
-          ? 'nn-no'
-          : 'nb-no';
+    } else if (embedData.resource === "h5p") {
+      const lang = context.language === "en" ? "en-gb" : context.language === "nn" ? "nn-no" : "nb-no";
       const cssUrl = `${ndlaUrl}/static/h5p-custom-css.css`;
       embedData.url = `${embedData.url}?locale=${lang}&cssUrl=${cssUrl}`;
       meta = await h5pMeta({ embedData, context, index, opts });
       embedData.pageUrl = `/${embedData.resource}${embedData.path}`;
-    } else if (embedData.resource === 'code-block') {
+    } else if (embedData.resource === "code-block") {
       meta = await codeMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'footnote') {
+    } else if (embedData.resource === "footnote") {
       meta = await footnoteMeta({
         embedData,
         context,
@@ -420,7 +338,7 @@ export const transformEmbed = async (
         opts,
         footnoteCount,
       });
-    } else if (embedData.resource === 'brightcove') {
+    } else if (embedData.resource === "brightcove") {
       meta = await brightcoveMeta({ embedData, context, index, opts });
       embedData.pageUrl = `/video/${embedData.videoid}`;
       if (embedData.caption?.length) {
@@ -429,43 +347,43 @@ export const transformEmbed = async (
           inline: true,
         });
       }
-    } else if (embedData.resource === 'content-link') {
+    } else if (embedData.resource === "content-link") {
       embedData.linkText = embed.embed.text() ?? embedData.linkText;
       meta = await contentLinkMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'related-content') {
+    } else if (embedData.resource === "related-content") {
       meta = await relatedContentMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'concept') {
+    } else if (embedData.resource === "concept") {
       const response: ConceptData | undefined = await conceptMeta({
         embedData,
         context,
         index,
         opts,
-      }).catch(_ => undefined);
+      }).catch((_) => undefined);
       // If the concept does not exist and we are not requesting a standalone concept, remove it from the article.
       // This does not apply to inline concepts, as the underlying would should still be shown.
-      if (!opts.standalone && embedData.type !== 'inline' && !response) {
-        embed.embed.replaceWith('');
+      if (!opts.standalone && embedData.type !== "inline" && !response) {
+        embed.embed.replaceWith("");
         return;
       }
       embedData.pageUrl = `/${embedData.resource}/${embedData.contentId}`;
       // Throw a new error if the concept is inline. The embed will be converted to an error embed.
-      if (!response && embedData.type === 'inline') {
-        throw new Error('Failed to fetch concept');
+      if (!response && embedData.type === "inline") {
+        throw new Error("Failed to fetch concept");
       }
       meta = response;
-    } else if (embedData.resource === 'concept-list') {
+    } else if (embedData.resource === "concept-list") {
       meta = await conceptListMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'file') {
+    } else if (embedData.resource === "file") {
       meta = await fileListMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'blog-post') {
+    } else if (embedData.resource === "blog-post") {
       meta = await blogPostMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'contact-block') {
+    } else if (embedData.resource === "contact-block") {
       meta = await contactBlockMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'key-figure') {
+    } else if (embedData.resource === "key-figure") {
       meta = await keyFigureMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'campaign-block') {
+    } else if (embedData.resource === "campaign-block") {
       meta = await campaignBlockMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === 'link-block') {
+    } else if (embedData.resource === "link-block") {
       meta = undefined;
     } else {
       return;
@@ -474,11 +392,11 @@ export const transformEmbed = async (
     const embedMeta = {
       resource: embedData.resource,
       embedData: embedData,
-      status: 'success',
+      status: "success",
       data: meta,
     } as EmbedMetaData;
 
-    embed.embed.attr('data-json', JSON.stringify(embedMeta));
+    embed.embed.attr("data-json", JSON.stringify(embedMeta));
     return embedMeta;
   } catch (e) {
     if (opts.shortCircuitOnError) {
@@ -487,11 +405,11 @@ export const transformEmbed = async (
     const embedMeta = {
       resource: embedData.resource,
       embedData: embedData,
-      status: 'error',
+      status: "error",
       message: `Failed to fetch data for embed of type ${embedData.resource} with index ${index}`,
     } as EmbedMetaData;
 
-    embed.embed.attr('data-json', JSON.stringify(embedMeta));
+    embed.embed.attr("data-json", JSON.stringify(embedMeta));
     return embedMeta;
   }
 };

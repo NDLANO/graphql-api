@@ -6,16 +6,14 @@
  *
  */
 
-import { Request } from 'express';
-import isString from 'lodash/isString';
+import { Request } from "express";
+import isString from "lodash/isString";
 
-export async function getToken(
-  request: Request,
-): Promise<AuthToken | undefined> {
+export async function getToken(request: Request): Promise<AuthToken | undefined> {
   const authorization = request.headers.authorization;
 
   if (isString(authorization)) {
-    return { access_token: authorization.replace('Bearer ', '') };
+    return { access_token: authorization.replace("Bearer ", "") };
   }
 
   return undefined;

@@ -6,22 +6,18 @@
  *
  */
 
-import { AsyncLocalStorage } from 'node:async_hooks';
-import { NextFunction, Request, Response } from 'express';
-import uuid from './uuid';
+import { AsyncLocalStorage } from "node:async_hooks";
+import { NextFunction, Request, Response } from "express";
+import uuid from "./uuid";
 
 const asyncLocalStorage = new AsyncLocalStorage<string>();
 
 const getAsString = (value: any): string => {
-  return typeof value === 'string' ? value : '';
+  return typeof value === "string" ? value : "";
 };
 
-const correlationIdMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
-  const fromReq = getAsString(req.headers['x-correlation-id']);
+const correlationIdMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+  const fromReq = getAsString(req.headers["x-correlation-id"]);
   const cid = fromReq ? fromReq : uuid();
 
   asyncLocalStorage.run(cid, () => {

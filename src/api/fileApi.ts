@@ -6,12 +6,9 @@
  *
  */
 
-import { fetch } from '../utils/apiHelpers';
+import { fetch } from "../utils/apiHelpers";
 
-export const checkIfFileExists = async (
-  fileUrl: string,
-  context: Context,
-): Promise<boolean> => {
-  const response = await fetch(fileUrl, context, { method: 'HEAD' });
+export const checkIfFileExists = async (fileUrl: string, context: Context): Promise<boolean> => {
+  const response = await fetch(fileUrl, context, { method: "HEAD" });
   return response.status === 200;
 };

@@ -6,7 +6,7 @@
  *
  */
 
-import queryString from 'query-string';
+import queryString from "query-string";
 import {
   IConfigMetaRestricted,
   ICategory,
@@ -27,34 +27,23 @@ import {
   IMyNDLAUser,
   IUpdatedMyNDLAUser,
   ArenaGroup,
-} from '@ndla/types-backend/myndla-api';
-import { GQLArenaUserV2Input } from '../types/schema';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+} from "@ndla/types-backend/myndla-api";
+import { GQLArenaUserV2Input } from "../types/schema";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
 const arenaBaseUrl = `/myndla-api/v1/arena`;
 
-export const fetchConfig = async (
-  configKey: string,
-  context: Context,
-): Promise<IConfigMetaRestricted> => {
+export const fetchConfig = async (configKey: string, context: Context): Promise<IConfigMetaRestricted> => {
   const response = await fetch(`/myndla-api/v1/config/${configKey}`, context);
   const config: IConfigMetaRestricted = await resolveJson(response);
   return config;
 };
 
-export const fetchExamLockStatus = async (
-  context: Context,
-): Promise<IConfigMetaRestricted> =>
-  fetchConfig('MY_NDLA_WRITE_RESTRICTED', context);
+export const fetchExamLockStatus = async (context: Context): Promise<IConfigMetaRestricted> =>
+  fetchConfig("MY_NDLA_WRITE_RESTRICTED", context);
 
-export const fetchCategories = async (
-  filterFollowed: boolean,
-  context: Context,
-): Promise<ICategory[]> => {
-  const response = await fetch(
-    `${arenaBaseUrl}/categories?followed=${filterFollowed}`,
-    context,
-  );
+export const fetchCategories = async (filterFollowed: boolean, context: Context): Promise<ICategory[]> => {
+  const response = await fetch(`${arenaBaseUrl}/categories?followed=${filterFollowed}`, context);
   return await resolveJson(response);
 };
 
@@ -64,22 +53,13 @@ export const fetchSingleCategory = async (
   pageSize: number | undefined,
   context: Context,
 ): Promise<ICategoryWithTopics> => {
-  const q = queryString.stringify({ page, 'page-size': pageSize });
-  const response = await fetch(
-    `${arenaBaseUrl}/categories/${categoryId}?${q}`,
-    context,
-  );
+  const q = queryString.stringify({ page, "page-size": pageSize });
+  const response = await fetch(`${arenaBaseUrl}/categories/${categoryId}?${q}`, context);
   return await resolveJson(response);
 };
 
-export const fetchTopics = async (
-  categoryId: number,
-  context: Context,
-): Promise<IPaginatedTopics> => {
-  const response = await fetch(
-    `${arenaBaseUrl}/categories/${categoryId}/topics`,
-    context,
-  );
+export const fetchTopics = async (categoryId: number, context: Context): Promise<IPaginatedTopics> => {
+  const response = await fetch(`${arenaBaseUrl}/categories/${categoryId}/topics`, context);
   return await resolveJson(response);
 };
 
@@ -89,11 +69,8 @@ export const fetchSingleTopic = async (
   pageSize: number | undefined,
   context: Context,
 ): Promise<ITopicWithPosts> => {
-  const q = queryString.stringify({ page, 'page-size': pageSize });
-  const response = await fetch(
-    `${arenaBaseUrl}/topics/${topicId}?${q}`,
-    context,
-  );
+  const q = queryString.stringify({ page, "page-size": pageSize });
+  const response = await fetch(`${arenaBaseUrl}/topics/${topicId}?${q}`, context);
   return await resolveJson(response);
 };
 
@@ -105,60 +82,29 @@ export const fetchRecentTopics = async (
 ): Promise<IPaginatedTopics> => {
   const query = queryString.stringify({
     page,
-    'page-size': pageSize,
-    'user-id': userId,
+    "page-size": pageSize,
+    "user-id": userId,
   });
-  const response = await fetch(
-    `${arenaBaseUrl}/topics/recent?${query}`,
-    context,
-  );
+  const response = await fetch(`${arenaBaseUrl}/topics/recent?${query}`, context);
   return await resolveJson(response);
 };
 
-export const followCategory = async (
-  categoryId: number,
-  context: Context,
-): Promise<ICategoryWithTopics> => {
-  const response = await fetch(
-    `${arenaBaseUrl}/categories/${categoryId}/follow`,
-    context,
-    { method: 'POST' },
-  );
+export const followCategory = async (categoryId: number, context: Context): Promise<ICategoryWithTopics> => {
+  const response = await fetch(`${arenaBaseUrl}/categories/${categoryId}/follow`, context, { method: "POST" });
   return await resolveJson(response);
 };
-export const unfollowCategory = async (
-  categoryId: number,
-  context: Context,
-): Promise<ICategoryWithTopics> => {
-  const response = await fetch(
-    `${arenaBaseUrl}/categories/${categoryId}/unfollow`,
-    context,
-    { method: 'POST' },
-  );
+export const unfollowCategory = async (categoryId: number, context: Context): Promise<ICategoryWithTopics> => {
+  const response = await fetch(`${arenaBaseUrl}/categories/${categoryId}/unfollow`, context, { method: "POST" });
   return await resolveJson(response);
 };
 
-export const followTopic = async (
-  topicId: number,
-  context: Context,
-): Promise<ITopicWithPosts> => {
-  const response = await fetch(
-    `${arenaBaseUrl}/topics/${topicId}/follow`,
-    context,
-    { method: 'POST' },
-  );
+export const followTopic = async (topicId: number, context: Context): Promise<ITopicWithPosts> => {
+  const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/follow`, context, { method: "POST" });
   return await resolveJson(response);
 };
 
-export const unfollowTopic = async (
-  topicId: number,
-  context: Context,
-): Promise<ITopicWithPosts> => {
-  const response = await fetch(
-    `${arenaBaseUrl}/topics/${topicId}/unfollow`,
-    context,
-    { method: 'POST' },
-  );
+export const unfollowTopic = async (topicId: number, context: Context): Promise<ITopicWithPosts> => {
+  const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/unfollow`, context, { method: "POST" });
   return await resolveJson(response);
 };
 
@@ -170,7 +116,7 @@ export const newCategory = async (
 ): Promise<ICategory> => {
   const body: INewCategory = { title, description, visible };
   const response = await fetch(`${arenaBaseUrl}/categories`, context, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(body),
   });
 
@@ -185,71 +131,49 @@ export const updateCategory = async (
   context: Context,
 ): Promise<ICategory> => {
   const body: INewCategory = { title, description, visible };
-  const response = await fetch(
-    `${arenaBaseUrl}/categories/${categoryId}`,
-    context,
-    {
-      method: 'PUT',
-      body: JSON.stringify(body),
-    },
-  );
+  const response = await fetch(`${arenaBaseUrl}/categories/${categoryId}`, context, {
+    method: "PUT",
+    body: JSON.stringify(body),
+  });
 
   return await resolveJson(response);
 };
 
-export const editTopic = async (
-  topicId: number,
-  title: string,
-  content: string,
-  context: Context,
-): Promise<ITopic> => {
+export const editTopic = async (topicId: number, title: string, content: string, context: Context): Promise<ITopic> => {
   const body: INewTopic = { title, initialPost: { content } };
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}`, context, {
-    method: 'PUT',
+    method: "PUT",
     body: JSON.stringify(body),
   });
   return await resolveJson(response);
 };
 
-export const editPost = async (
-  postId: number,
-  content: string,
-  context: Context,
-): Promise<IPost> => {
+export const editPost = async (postId: number, content: string, context: Context): Promise<IPost> => {
   const body: INewPost = { content };
   const response = await fetch(`${arenaBaseUrl}/posts/${postId}`, context, {
-    method: 'PUT',
+    method: "PUT",
     body: JSON.stringify(body),
   });
   return await resolveJson(response);
 };
 
-export const deleteCategory = async (
-  categoryId: number,
-  context: Context,
-): Promise<void> => {
+export const deleteCategory = async (categoryId: number, context: Context): Promise<void> => {
   await fetch(`${arenaBaseUrl}/categories/${categoryId}`, context, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   return;
 };
 
-export const deleteTopic = async (
-  topicId: number,
-  context: Context,
-): Promise<void> => {
+export const deleteTopic = async (topicId: number, context: Context): Promise<void> => {
   const resp = await fetch(`${arenaBaseUrl}/topics/${topicId}`, context, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   return;
 };
 
-export const deletePost = async (
-  postId: number,
-  context: Context,
-): Promise<void> => {
+export const deletePost = async (postId: number, context: Context): Promise<void> => {
   await fetch(`${arenaBaseUrl}/posts/${postId}`, context, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   return;
 };
@@ -265,55 +189,36 @@ export const createNewTopic = async (
     initialPost: { content },
   };
 
-  const response = await fetch(
-    `${arenaBaseUrl}/categories/${categoryId}/topics`,
-    context,
-    {
-      method: 'POST',
-      body: JSON.stringify(body),
-    },
-  );
+  const response = await fetch(`${arenaBaseUrl}/categories/${categoryId}/topics`, context, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
 
   return await resolveJson(response);
 };
 
-export const newPost = async (
-  topicId: number,
-  content: string,
-  context: Context,
-): Promise<IPost> => {
+export const newPost = async (topicId: number, content: string, context: Context): Promise<IPost> => {
   const body: INewPost = { content };
-  const response = await fetch(
-    `${arenaBaseUrl}/topics/${topicId}/posts`,
-    context,
-    {
-      method: 'POST',
-      body: JSON.stringify(body),
-    },
-  );
+  const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/posts`, context, {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
 
   return await resolveJson(response);
 };
 
-export const flagPost = async (
-  postId: number,
-  reason: string,
-  context: Context,
-): Promise<void> => {
+export const flagPost = async (postId: number, reason: string, context: Context): Promise<void> => {
   const body: INewFlag = { reason };
   await fetch(`${arenaBaseUrl}/posts/${postId}/flag`, context, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(body),
   });
   return;
 };
 
-export const resolveFlag = async (
-  flagId: number,
-  context: Context,
-): Promise<IFlag> => {
+export const resolveFlag = async (flagId: number, context: Context): Promise<IFlag> => {
   const response = await fetch(`${arenaBaseUrl}/flags/${flagId}`, context, {
-    method: 'PUT',
+    method: "PUT",
   });
   return await resolveJson(response);
 };
@@ -325,7 +230,7 @@ export const getFlags = async (
 ): Promise<IPaginatedPosts> => {
   const query = queryString.stringify({
     page,
-    'page-size': pageSize,
+    "page-size": pageSize,
   });
 
   const response = await fetch(`${arenaBaseUrl}/flags?${query}`, context);
@@ -339,52 +244,31 @@ export const getNotifications = async (
 ): Promise<IPaginatedNewPostNotifications> => {
   const query = queryString.stringify({
     page,
-    'page-size': pageSize,
+    "page-size": pageSize,
   });
-  const response = await fetch(
-    `${arenaBaseUrl}/notifications?${query}`,
-    context,
-  );
+  const response = await fetch(`${arenaBaseUrl}/notifications?${query}`, context);
   return await resolveJson(response);
 };
 
-export const markSingleNotificationAsRead = async (
-  notificationId: number,
-  context: Context,
-): Promise<void> => {
-  const response = await fetch(
-    `${arenaBaseUrl}/notifications/${notificationId}`,
-    context,
-    { method: 'POST' },
-  );
+export const markSingleNotificationAsRead = async (notificationId: number, context: Context): Promise<void> => {
+  const response = await fetch(`${arenaBaseUrl}/notifications/${notificationId}`, context, { method: "POST" });
   return await resolveJson(response);
 };
 
-export const markAllNotificationAsRead = async (
-  context: Context,
-): Promise<void> => {
+export const markAllNotificationAsRead = async (context: Context): Promise<void> => {
   await fetch(`${arenaBaseUrl}/notifications`, context, {
-    method: 'POST',
+    method: "POST",
   });
 };
 
-export const deleteSingleNotification = async (
-  notificationId: number,
-  context: Context,
-): Promise<void> => {
-  const response = await fetch(
-    `${arenaBaseUrl}/notifications/${notificationId}`,
-    context,
-    { method: 'DELETE' },
-  );
+export const deleteSingleNotification = async (notificationId: number, context: Context): Promise<void> => {
+  const response = await fetch(`${arenaBaseUrl}/notifications/${notificationId}`, context, { method: "DELETE" });
   return await resolveJson(response);
 };
 
-export const deleteAllNotifications = async (
-  context: Context,
-): Promise<void> => {
+export const deleteAllNotifications = async (context: Context): Promise<void> => {
   const response = await fetch(`${arenaBaseUrl}/notifications`, context, {
-    method: 'DELETE',
+    method: "DELETE",
   });
   return await resolveJson(response);
 };
@@ -394,18 +278,12 @@ export const getPostInContext = async (
   pageSize: number | undefined,
   context: Context,
 ): Promise<ITopicWithPosts> => {
-  const query = queryString.stringify({ 'page-size': pageSize });
-  const response = await fetch(
-    `${arenaBaseUrl}/posts/${postId}/topic?${query}`,
-    context,
-  );
+  const query = queryString.stringify({ "page-size": pageSize });
+  const response = await fetch(`${arenaBaseUrl}/posts/${postId}/topic?${query}`, context);
   return await resolveJson(response);
 };
 
-export const fetchArenaUser = async (
-  username: string,
-  context: Context,
-): Promise<IArenaUser> => {
+export const fetchArenaUser = async (username: string, context: Context): Promise<IArenaUser> => {
   const response = await fetch(`${arenaBaseUrl}/user/${username}`, context);
   return await resolveJson(response);
 };
@@ -416,26 +294,23 @@ export const fetchArenaUsers = async (
   context: Context,
 ): Promise<IPaginatedArenaUsers> => {
   const query = queryString.stringify({
-    'page-size': pageSize,
+    "page-size": pageSize,
     page,
   });
   const response = await fetch(`${arenaBaseUrl}/users?${query}`, context);
   return await resolveJson(response);
 };
 
-const VALID_ARENA_GROUPS: ArenaGroup[] = ['ADMIN'];
+const VALID_ARENA_GROUPS: ArenaGroup[] = ["ADMIN"];
 
 export const updateOtherUser = async (
   userId: number,
   data: GQLArenaUserV2Input,
   context: Context,
 ): Promise<IMyNDLAUser> => {
-  const arenaGroups = data.arenaGroups?.map(maybeGroup => {
-    if (VALID_ARENA_GROUPS.includes(maybeGroup as ArenaGroup))
-      return maybeGroup as ArenaGroup;
-    throw new Error(
-      `${maybeGroup} is not a valid arena group. Must be one of ${VALID_ARENA_GROUPS}`,
-    );
+  const arenaGroups = data.arenaGroups?.map((maybeGroup) => {
+    if (VALID_ARENA_GROUPS.includes(maybeGroup as ArenaGroup)) return maybeGroup as ArenaGroup;
+    throw new Error(`${maybeGroup} is not a valid arena group. Must be one of ${VALID_ARENA_GROUPS}`);
   });
 
   const body: IUpdatedMyNDLAUser = {
@@ -446,19 +321,16 @@ export const updateOtherUser = async (
   };
 
   const response = await fetch(`${arenaBaseUrl}/users/${userId}`, context, {
-    method: 'PATCH',
+    method: "PATCH",
     body: JSON.stringify(body),
   });
 
   return await resolveJson(response);
 };
 
-export const sortCategories = async (
-  sortedIds: number[],
-  context: Context,
-): Promise<ICategory[]> => {
+export const sortCategories = async (sortedIds: number[], context: Context): Promise<ICategory[]> => {
   const response = await fetch(`${arenaBaseUrl}/categories/sort`, context, {
-    method: 'PUT',
+    method: "PUT",
     body: JSON.stringify(sortedIds),
   });
   return await resolveJson(response);

@@ -6,14 +6,14 @@
  *
  */
 
-import { IArticleV2 } from '@ndla/types-backend/article-api';
-import { queryNodes } from './taxonomyApi';
-import { transformArticle } from './transformArticleApi';
-import { localConverter, ndlaUrl } from '../config';
-import { GQLArticle, GQLMeta } from '../types/schema';
-import { fetch, resolveJson } from '../utils/apiHelpers';
-import { getArticleIdFromUrn, findPrimaryPath } from '../utils/articleHelpers';
-import { parseVisualElement } from '../utils/visualelementHelpers';
+import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { queryNodes } from "./taxonomyApi";
+import { transformArticle } from "./transformArticleApi";
+import { localConverter, ndlaUrl } from "../config";
+import { GQLArticle, GQLMeta } from "../types/schema";
+import { fetch, resolveJson } from "../utils/apiHelpers";
+import { getArticleIdFromUrn, findPrimaryPath } from "../utils/articleHelpers";
+import { parseVisualElement } from "../utils/visualelementHelpers";
 
 interface ArticleParams {
   convertEmbeds?: boolean;
@@ -27,18 +27,13 @@ interface ArticleParams {
   absoluteUrl?: boolean;
 }
 
-const _fetchTransformedArticle = async (
-  params: ArticleParams,
-  context: Context,
-) => {
+const _fetchTransformedArticle = async (params: ArticleParams, context: Context) => {
   if (!params.convertEmbeds) {
-    const host = localConverter ? 'http://localhost:3100' : '';
-    const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : '';
-    const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : '';
-    const visualElementParam = params.showVisualElement
-      ? `&showVisualElement=${params.showVisualElement}`
-      : '';
-    const pathParam = params.path ? `&path=${params.path}` : '';
+    const host = localConverter ? "http://localhost:3100" : "";
+    const subjectParam = params.subjectId ? `&subject=${params.subjectId}` : "";
+    const oembedParam = params.isOembed ? `&isOembed=${params.isOembed}` : "";
+    const visualElementParam = params.showVisualElement ? `&showVisualElement=${params.showVisualElement}` : "";
+    const pathParam = params.path ? `&path=${params.path}` : "";
     const res = await fetch(
       `${host}/article-converter/json/${context.language}/${params.articleId}?1=1${subjectParam}${oembedParam}${pathParam}${visualElementParam}`,
       context,
@@ -47,10 +42,7 @@ const _fetchTransformedArticle = async (
     if (res.visualElement) {
       try {
         res.visualElement = {
-          ...(await parseVisualElement(
-            res.visualElement.visualElement,
-            context,
-          )),
+          ...(await parseVisualElement(res.visualElement.visualElement, context)),
           embed: res.visualElement.visualElement,
           language: res.visualElement.language,
         };
@@ -64,12 +56,7 @@ const _fetchTransformedArticle = async (
     const subject = params.subjectId;
     const previewH5p = params.previewH5p;
     const article = await fetchSimpleArticle(params.articleId, context);
-    const {
-      content,
-      metaData,
-      visualElement,
-      visualElementEmbed,
-    } = await transformArticle(
+    const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
       article.content.content,
       context,
       article.visualElement?.visualElement,
@@ -78,38 +65,30 @@ const _fetchTransformedArticle = async (
         draftConcept: params.draftConcept,
         previewH5p,
         absoluteUrl: params.absoluteUrl,
-        showVisualElement: params.showVisualElement === 'true',
+        showVisualElement: params.showVisualElement === "true",
       },
     );
     return {
       ...article,
-      introduction: article.introduction?.introduction ?? '',
+      introduction: article.introduction?.introduction ?? "",
       metaDescription: article.metaDescription.metaDescription,
       title: article.title.title,
       metaData,
       tags: article.tags.tags,
       visualElementEmbed,
-      content:
-        article.articleType === 'standard'
-          ? content
-          : content === '<section></section>'
-          ? ''
-          : content,
+      content: article.articleType === "standard" ? content : content === "<section></section>" ? "" : content,
       visualElement,
       language: article.content.language,
     };
   }
 };
 
-export async function fetchArticle(
-  params: ArticleParams,
-  context: Context,
-): Promise<GQLArticle> {
+export async function fetchArticle(params: ArticleParams, context: Context): Promise<GQLArticle> {
   const article = await _fetchTransformedArticle(params, context);
 
   const nullableRelatedContent = await Promise.all(
     article?.relatedContent?.map(async (rc: any) => {
-      if (typeof rc !== 'number') {
+      if (typeof rc !== "number") {
         return {
           title: rc.title,
           url: rc.url,
@@ -126,9 +105,7 @@ export async function fetchArticle(
         );
         const node = nodes?.[0];
         if (node) {
-          const primaryPath = params.subjectId
-            ? findPrimaryPath(node.paths, params.subjectId)
-            : undefined;
+          const primaryPath = params.subjectId ? findPrimaryPath(node.paths, params.subjectId) : undefined;
           const path = primaryPath ?? node.path;
           return {
             title: node.name,
@@ -136,7 +113,7 @@ export async function fetchArticle(
           };
         } else {
           return {
-            title: related.title.title ?? '',
+            title: related.title.title ?? "",
             url: `${ndlaUrl}/article/${related.id}`,
           };
         }
@@ -160,19 +137,16 @@ export async function fetchArticlesPage(
   page: number,
 ): Promise<IArticleV2[]> {
   return fetch(
-    `/article-api/v2/articles/ids?ids=${articleIds.join(',')}&language=${
+    `/article-api/v2/articles/ids?ids=${articleIds.join(",")}&language=${
       context.language
     }&page-size=${pageSize}&page=${page}&license=all&fallback=true`,
     context,
-  ).then(res => res.json());
+  ).then((res) => res.json());
 }
 
-export async function fetchArticles(
-  articleIds: string[],
-  context: Context,
-): Promise<(GQLMeta | null)[]> {
+export async function fetchArticles(articleIds: string[], context: Context): Promise<(GQLMeta | null)[]> {
   const pageSize = 100;
-  const ids = articleIds.filter(id => id && id !== 'undefined');
+  const ids = articleIds.filter((id) => id && id !== "undefined");
   const numberOfPages = Math.ceil(ids.length / pageSize);
 
   const requests = [];
@@ -186,7 +160,7 @@ export async function fetchArticles(
 
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
-  return articleIds.map<GQLMeta | null>(id => {
+  return articleIds.map<GQLMeta | null>((id) => {
     const article = articles.find((item: { id: number }) => {
       return item.id.toString() === id.toString();
     });
@@ -206,10 +180,7 @@ export async function fetchArticles(
   });
 }
 
-export async function fetchSimpleArticle(
-  articleUrn: string,
-  context: Context,
-): Promise<IArticleV2> {
+export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
     `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,

@@ -6,16 +6,16 @@
  *
  */
 
-import { fetchLearningpath, fetchNode, fetchOembed } from '../api';
+import { fetchLearningpath, fetchNode, fetchOembed } from "../api";
 import {
   GQLLearningpath,
   GQLLearningpathStep,
   GQLLearningpathStepOembed,
   GQLQueryLearningpathArgs,
   GQLResource,
-} from '../types/schema';
-import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
-import { isNDLAEmbedUrl } from '../utils/articleHelpers';
+} from "../types/schema";
+import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { isNDLAEmbedUrl } from "../utils/articleHelpers";
 
 export const Query = {
   async learningpath(
@@ -29,8 +29,8 @@ export const Query = {
 
 const buildOembedFromIframeUrl = (url: string): GQLLearningpathStepOembed => {
   return {
-    type: 'rich',
-    version: '1.0',
+    type: "rich",
+    version: "1.0",
     height: 800,
     width: 800,
     html: `<iframe src="${url}" frameborder="0" allowFullscreen="" />`,
@@ -47,21 +47,15 @@ export const resolvers = {
       if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
         return null;
       }
-      if (
-        learningpathStep.embedUrl &&
-        learningpathStep.embedUrl.embedType === 'iframe'
-      ) {
+      if (learningpathStep.embedUrl && learningpathStep.embedUrl.embedType === "iframe") {
         return buildOembedFromIframeUrl(learningpathStep.embedUrl.url);
       }
       if (
         learningpathStep.embedUrl &&
-        learningpathStep.embedUrl.embedType === 'oembed' &&
-        learningpathStep.embedUrl.url !== 'https://ndla.no'
+        learningpathStep.embedUrl.embedType === "oembed" &&
+        learningpathStep.embedUrl.url !== "https://ndla.no"
       ) {
-        return fetchOembed<GQLLearningpathStepOembed>(
-          learningpathStep.embedUrl.url,
-          context,
-        );
+        return fetchOembed<GQLLearningpathStepOembed>(learningpathStep.embedUrl.url, context);
       }
       return null;
     },
@@ -73,22 +67,16 @@ export const resolvers = {
       if (
         !learningpathStep.embedUrl ||
         !learningpathStep.embedUrl.url ||
-        (learningpathStep.embedUrl.embedType !== 'oembed' &&
-          learningpathStep.embedUrl.embedType !== 'iframe') ||
+        (learningpathStep.embedUrl.embedType !== "oembed" && learningpathStep.embedUrl.embedType !== "iframe") ||
         !isNDLAEmbedUrl(learningpathStep.embedUrl.url)
       ) {
         return null;
       }
 
-      const lastResourceMatch = learningpathStep.embedUrl.url
-        .match(/(resource:[:\da-fA-F-]+)/g)
-        ?.pop();
+      const lastResourceMatch = learningpathStep.embedUrl.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
 
       if (lastResourceMatch !== undefined) {
-        const resource = await fetchNode(
-          { id: `urn:${lastResourceMatch}` },
-          context,
-        );
+        const resource = await fetchNode({ id: `urn:${lastResourceMatch}` }, context);
         return nodeToTaxonomyEntity(resource, context);
       }
       return null;

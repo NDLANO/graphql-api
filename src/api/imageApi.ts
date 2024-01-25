@@ -6,21 +6,12 @@
  *
  */
 
-import {
-  IImageMetaInformationV2,
-  IImageMetaInformationV3,
-} from '@ndla/types-backend/image-api';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+import { IImageMetaInformationV2, IImageMetaInformationV3 } from "@ndla/types-backend/image-api";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
-export async function fetchImage(
-  imageId: string,
-  context: Context,
-): Promise<IImageMetaInformationV2 | null> {
-  const languageParam = context.language ? `?language=${context.language}` : '';
-  const response = await fetch(
-    `/image-api/v2/images/${imageId}${languageParam}`,
-    context,
-  );
+export async function fetchImage(imageId: string, context: Context): Promise<IImageMetaInformationV2 | null> {
+  const languageParam = context.language ? `?language=${context.language}` : "";
+  const response = await fetch(`/image-api/v2/images/${imageId}${languageParam}`, context);
   try {
     return await resolveJson(response);
   } catch (e) {
@@ -28,15 +19,9 @@ export async function fetchImage(
   }
 }
 
-export async function fetchImageV3(
-  imageId: string,
-  context: Context,
-): Promise<IImageMetaInformationV3> {
-  const languageParam = context.language ? `?language=${context.language}` : '';
-  const response = await fetch(
-    `/image-api/v3/images/${imageId}${languageParam}`,
-    context,
-  );
+export async function fetchImageV3(imageId: string, context: Context): Promise<IImageMetaInformationV3> {
+  const languageParam = context.language ? `?language=${context.language}` : "";
+  const response = await fetch(`/image-api/v3/images/${imageId}${languageParam}`, context);
   return await resolveJson(response);
 }
 

@@ -5,12 +5,12 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import cheerio from 'cheerio';
-import { fetch, resolveJson } from './apiHelpers';
-import { fetchH5pLicenseInformation, fetchH5pInfo } from '../api/h5pApi';
-import { convertToSimpleImage, fetchImage } from '../api/imageApi';
-import { fetchOembed } from '../api/oembedApi';
-import { localConverter } from '../config';
+import cheerio from "cheerio";
+import { fetch, resolveJson } from "./apiHelpers";
+import { fetchH5pLicenseInformation, fetchH5pInfo } from "../api/h5pApi";
+import { convertToSimpleImage, fetchImage } from "../api/imageApi";
+import { fetchOembed } from "../api/oembedApi";
+import { localConverter } from "../config";
 import {
   GQLBrightcoveLicense,
   GQLCopyright,
@@ -18,22 +18,20 @@ import {
   GQLImageLicense,
   GQLVisualElement,
   GQLVisualElementOembed,
-} from '../types/schema';
+} from "../types/schema";
 
 export async function fetchVisualElementLicense<T>(
   visualElement: string,
   resource: string,
   context: Context,
 ): Promise<T> {
-  const host = localConverter ? 'http://localhost:3100' : '';
+  const host = localConverter ? "http://localhost:3100" : "";
   const metaDataResponse = await fetch(
-    encodeURI(
-      `${host}/article-converter/json/${context.language}/meta-data?embed=${visualElement}`,
-    ),
+    encodeURI(`${host}/article-converter/json/${context.language}/meta-data?embed=${visualElement}`),
     context,
   );
   const metaData = await resolveJson(metaDataResponse);
-  return metaData.metaData[resource]?.[0] ?? '';
+  return metaData.metaData[resource]?.[0] ?? "";
 }
 
 export async function parseVisualElement(
@@ -41,16 +39,16 @@ export async function parseVisualElement(
   context: Context,
 ): Promise<GQLVisualElement | null> {
   const parsedElement = cheerio.load(visualElementEmbed);
-  const data: any = parsedElement('ndlaembed').data();
+  const data: any = parsedElement("ndlaembed").data();
 
   switch (data?.resource) {
-    case 'brightcove':
+    case "brightcove":
       return await parseBrightcoveFromEmbed(data, context, visualElementEmbed);
-    case 'h5p':
+    case "h5p":
       return await parseH5PFromEmbed(data, context);
-    case 'image':
+    case "image":
       return await parseImageFromEmbed(data, context, visualElementEmbed);
-    case 'external':
+    case "external":
       return await parseOembedFromEmbed(data, context);
     default:
       return {
@@ -74,11 +72,7 @@ const parseBrightcoveFromEmbed = async (
   context: Context,
   visualElementEmbed: string,
 ): Promise<GQLVisualElement> => {
-  const license = await fetchVisualElementLicense<GQLBrightcoveLicense>(
-    visualElementEmbed,
-    'brightcoves',
-    context,
-  );
+  const license = await fetchVisualElementLicense<GQLBrightcoveLicense>(visualElementEmbed, "brightcoves", context);
   return {
     url: `https://players.brightcove.net/${embedData.account}/${embedData.player}_default/index.html?videoId=${embedData.videoid}`,
     brightcove: {
@@ -92,7 +86,7 @@ const parseBrightcoveFromEmbed = async (
     },
     title: license.title,
     copyright: license.copyright,
-    resource: 'brightcove',
+    resource: "brightcove",
   };
 };
 
@@ -102,11 +96,8 @@ interface VisualElementH5P {
   url: string;
 }
 
-const parseH5PFromEmbed = async (
-  embedData: VisualElementH5P,
-  context: Context,
-): Promise<GQLVisualElement | null> => {
-  const pathArr = embedData.path?.split('/') || [];
+const parseH5PFromEmbed = async (embedData: VisualElementH5P, context: Context): Promise<GQLVisualElement | null> => {
+  const pathArr = embedData.path?.split("/") || [];
   const h5pId = pathArr[pathArr.length - 1];
   const [license, visualElementOembed, h5pInfo] = await Promise.all([
     fetchH5pLicenseInformation(h5pId, context),
@@ -118,13 +109,13 @@ const parseH5PFromEmbed = async (
   const copyright: GQLCopyright | undefined = license?.h5p.authors
     ? {
         creators:
-          license?.h5p.authors.map(creators => {
+          license?.h5p.authors.map((creators) => {
             return { type: creators.role, name: creators.name };
           }) ?? [],
         rightsholders: [],
         processors: [],
         license: {
-          license: '',
+          license: "",
         },
       }
     : undefined;
@@ -136,7 +127,7 @@ const parseH5PFromEmbed = async (
     },
     copyright: copyright,
     title: h5pInfo?.title,
-    resource: 'h5p',
+    resource: "h5p",
   };
 };
 
@@ -157,26 +148,22 @@ const parseImageFromEmbed = async (
 ): Promise<GQLVisualElement> => {
   const [image, license] = await Promise.all([
     fetchImage(embedData.resourceId, context),
-    fetchVisualElementLicense<GQLImageLicense>(
-      visualElementEmbed,
-      'images',
-      context,
-    ),
+    fetchVisualElementLicense<GQLImageLicense>(visualElementEmbed, "images", context),
   ]);
   const transformedImage = image && convertToSimpleImage(image);
 
   return {
     image: {
       ...embedData,
-      alt: embedData.alt || transformedImage?.altText || '',
-      src: license.src || transformedImage?.src || '',
-      altText: embedData.alt || transformedImage?.altText || '',
+      alt: embedData.alt || transformedImage?.altText || "",
+      src: license.src || transformedImage?.src || "",
+      altText: embedData.alt || transformedImage?.altText || "",
       caption: embedData.caption,
     },
     url: embedData.url,
     copyright: license.copyright,
     title: license.title || transformedImage?.title,
-    resource: 'image',
+    resource: "image",
   };
 };
 
@@ -188,14 +175,11 @@ const parseOembedFromEmbed = async (
   embedData: VisualElementOembed,
   context: Context,
 ): Promise<GQLVisualElement | null> => {
-  const visualElementOembed = await fetchOembed<GQLVisualElementOembed>(
-    embedData.url,
-    context,
-  );
+  const visualElementOembed = await fetchOembed<GQLVisualElementOembed>(embedData.url, context);
   if (!visualElementOembed) return null;
   return {
     url: embedData.url,
     oembed: visualElementOembed,
-    resource: 'oembed',
+    resource: "oembed",
   };
 };

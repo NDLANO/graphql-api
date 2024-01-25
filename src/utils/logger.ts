@@ -6,16 +6,16 @@
  *
  */
 
-import { AsyncLocalStorage } from 'node:async_hooks';
+import { AsyncLocalStorage } from "node:async_hooks";
 // eslint-disable-next-line import/no-duplicates
-import Logger from 'bunyan';
+import Logger from "bunyan";
 // eslint-disable-next-line import/no-duplicates
-import bunyan from 'bunyan';
-import 'source-map-support/register';
+import bunyan from "bunyan";
+import "source-map-support/register";
 
 export const loggerStorage = new AsyncLocalStorage<Logger>();
 
-const baseLogger = bunyan.createLogger({ name: 'ndla-graphql-api' });
+const baseLogger = bunyan.createLogger({ name: "ndla-graphql-api" });
 
 export function getLogger(): Logger {
   const storedLogger = loggerStorage.getStore();

@@ -23,8 +23,8 @@ import {
   subscribeToTopic,
   unsubscribeFromTopic,
   updatePost,
-} from '../api/arenaApi';
-import * as myndla from '../api/myndlaApi';
+} from "../api/arenaApi";
+import * as myndla from "../api/myndlaApi";
 import {
   GQLArenaCategory,
   GQLArenaCategoryV2,
@@ -80,49 +80,37 @@ import {
   GQLMyNdlaPersonalData,
   GQLMutationDeleteCategoryArgs,
   GQLMutationSortArenaCategoriesArgs,
-} from '../types/schema';
+} from "../types/schema";
 
-import parseMarkdown from '../utils/parseMarkdown';
+import parseMarkdown from "../utils/parseMarkdown";
 
 export const Query: Pick<
   GQLQueryResolvers,
-  | 'arenaUser'
-  | 'arenaCategories'
-  | 'arenaCategory'
-  | 'arenaTopic'
-  | 'arenaRecentTopics'
-  | 'arenaTopicsByUser'
-  | 'arenaNotifications'
-  | 'arenaCategoriesV2'
-  | 'arenaCategoryV2'
-  | 'arenaTopicV2'
-  | 'arenaTopicsByUserV2'
-  | 'arenaNotificationsV2'
-  | 'arenaUserV2'
-  | 'arenaRecentTopicsV2'
-  | 'arenaAllFlags'
-  | 'arenaPostInContext'
-  | 'listArenaUserV2'
+  | "arenaUser"
+  | "arenaCategories"
+  | "arenaCategory"
+  | "arenaTopic"
+  | "arenaRecentTopics"
+  | "arenaTopicsByUser"
+  | "arenaNotifications"
+  | "arenaCategoriesV2"
+  | "arenaCategoryV2"
+  | "arenaTopicV2"
+  | "arenaTopicsByUserV2"
+  | "arenaNotificationsV2"
+  | "arenaUserV2"
+  | "arenaRecentTopicsV2"
+  | "arenaAllFlags"
+  | "arenaPostInContext"
+  | "listArenaUserV2"
 > = {
-  async arenaUser(
-    _: any,
-    params: GQLQueryArenaUserArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaUser> {
+  async arenaUser(_: any, params: GQLQueryArenaUserArgs, context: ContextWithLoaders): Promise<GQLArenaUser> {
     return fetchArenaUser(params, context);
   },
-  async arenaUserV2(
-    _: any,
-    params: GQLQueryArenaUserV2Args,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaUserV2> {
+  async arenaUserV2(_: any, params: GQLQueryArenaUserV2Args, context: ContextWithLoaders): Promise<GQLArenaUserV2> {
     return await myndla.fetchArenaUser(params.username, context);
   },
-  async arenaCategories(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaCategory[]> {
+  async arenaCategories(_: any, __: any, context: ContextWithLoaders): Promise<GQLArenaCategory[]> {
     return fetchArenaCategories(context);
   },
   async arenaCategoriesV2(
@@ -137,48 +125,24 @@ export const Query: Pick<
     params: GQLQueryArenaCategoryV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLArenaCategoryV2> {
-    return myndla.fetchSingleCategory(
-      params.categoryId,
-      params.page,
-      params.pageSize,
-      context,
-    );
+    return myndla.fetchSingleCategory(params.categoryId, params.page, params.pageSize, context);
   },
-  async arenaTopicV2(
-    _: any,
-    params: GQLQueryArenaTopicV2Args,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaTopicV2> {
-    return myndla.fetchSingleTopic(
-      params.topicId,
-      params.page,
-      params.pageSize,
-      context,
-    );
+  async arenaTopicV2(_: any, params: GQLQueryArenaTopicV2Args, context: ContextWithLoaders): Promise<GQLArenaTopicV2> {
+    return myndla.fetchSingleTopic(params.topicId, params.page, params.pageSize, context);
   },
   async arenaTopicsByUserV2(
     _: any,
     params: GQLQueryArenaTopicsByUserV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLPaginatedTopics> {
-    return myndla.fetchRecentTopics(
-      params.page,
-      params.pageSize,
-      params.userId,
-      context,
-    );
+    return myndla.fetchRecentTopics(params.page, params.pageSize, params.userId, context);
   },
   async arenaRecentTopicsV2(
     _: any,
     params: GQLQueryArenaRecentTopicsV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLPaginatedTopics> {
-    return myndla.fetchRecentTopics(
-      params.page,
-      params.pageSize,
-      undefined,
-      context,
-    );
+    return myndla.fetchRecentTopics(params.page, params.pageSize, undefined, context);
   },
   async arenaNotificationsV2(
     _: any,
@@ -194,18 +158,10 @@ export const Query: Pick<
   ): Promise<GQLArenaCategory> {
     return fetchArenaCategory(params, context);
   },
-  async arenaTopic(
-    _: any,
-    params: GQLQueryArenaTopicArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaTopic> {
+  async arenaTopic(_: any, params: GQLQueryArenaTopicArgs, context: ContextWithLoaders): Promise<GQLArenaTopic> {
     return fetchArenaTopic(params, context);
   },
-  async arenaRecentTopics(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaTopic[]> {
+  async arenaRecentTopics(_: any, __: any, context: ContextWithLoaders): Promise<GQLArenaTopic[]> {
     return fetchArenaRecentTopics(context);
   },
   async arenaTopicsByUser(
@@ -215,11 +171,7 @@ export const Query: Pick<
   ): Promise<GQLArenaTopic[]> {
     return fetchArenaTopicsByUser(params, context);
   },
-  async arenaNotifications(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaNotification[]> {
+  async arenaNotifications(_: any, __: any, context: ContextWithLoaders): Promise<GQLArenaNotification[]> {
     return fetchArenaNotifications(context);
   },
   async arenaAllFlags(
@@ -247,58 +199,48 @@ export const Query: Pick<
 
 export const Mutations: Pick<
   GQLMutationResolvers,
-  | 'newArenaTopic'
-  | 'replyToTopic'
-  | 'markNotificationAsRead'
-  | 'deletePost'
-  | 'deleteTopic'
-  | 'updatePost'
-  | 'newFlag'
-  | 'subscribeToTopic'
-  | 'unsubscribeFromTopic'
-  | 'newArenaCategory'
-  | 'updateArenaCategory'
-  | 'newArenaTopicV2'
-  | 'replyToTopicV2'
-  | 'updateTopicV2'
-  | 'updatePostV2'
-  | 'deletePostV2'
-  | 'deleteTopicV2'
-  | 'newFlagV2'
-  | 'resolveFlag'
-  | 'followTopic'
-  | 'followCategory'
-  | 'unfollowTopic'
-  | 'unfollowCategory'
-  | 'markNotificationsAsReadV2'
-  | 'markAllNotificationsAsRead'
-  | 'updateOtherArenaUser'
-  | 'deleteCategory'
-  | 'sortArenaCategories'
+  | "newArenaTopic"
+  | "replyToTopic"
+  | "markNotificationAsRead"
+  | "deletePost"
+  | "deleteTopic"
+  | "updatePost"
+  | "newFlag"
+  | "subscribeToTopic"
+  | "unsubscribeFromTopic"
+  | "newArenaCategory"
+  | "updateArenaCategory"
+  | "newArenaTopicV2"
+  | "replyToTopicV2"
+  | "updateTopicV2"
+  | "updatePostV2"
+  | "deletePostV2"
+  | "deleteTopicV2"
+  | "newFlagV2"
+  | "resolveFlag"
+  | "followTopic"
+  | "followCategory"
+  | "unfollowTopic"
+  | "unfollowCategory"
+  | "markNotificationsAsReadV2"
+  | "markAllNotificationsAsRead"
+  | "updateOtherArenaUser"
+  | "deleteCategory"
+  | "sortArenaCategories"
 > = {
   async newArenaCategory(
     _: any,
     params: GQLMutationNewArenaCategoryArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArenaCategoryV2> {
-    return await myndla.newCategory(
-      params.title,
-      params.description,
-      params.visible,
-      context,
-    );
+    return await myndla.newCategory(params.title, params.description, params.visible, context);
   },
   async newArenaTopicV2(
     _: any,
     params: GQLMutationNewArenaTopicV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopicV2> {
-    return await myndla.createNewTopic(
-      params.categoryId,
-      params.title,
-      params.content,
-      context,
-    );
+    return await myndla.createNewTopic(params.categoryId, params.title, params.content, context);
   },
   async replyToTopicV2(
     _: any,
@@ -312,13 +254,7 @@ export const Mutations: Pick<
     params: GQLMutationUpdateArenaCategoryArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArenaCategoryV2> {
-    return await myndla.updateCategory(
-      params.categoryId,
-      params.title,
-      params.description,
-      params.visible,
-      context,
-    );
+    return await myndla.updateCategory(params.categoryId, params.title, params.description, params.visible, context);
   },
   async updatePostV2(
     _: any,
@@ -332,42 +268,21 @@ export const Mutations: Pick<
     params: GQLMutationUpdateTopicV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopicV2> {
-    return await myndla.editTopic(
-      params.topicId,
-      params.title,
-      params.content,
-      context,
-    );
+    return await myndla.editTopic(params.topicId, params.title, params.content, context);
   },
-  async deletePostV2(
-    _: any,
-    params: GQLMutationDeletePostV2Args,
-    context: ContextWithLoaders,
-  ): Promise<number> {
+  async deletePostV2(_: any, params: GQLMutationDeletePostV2Args, context: ContextWithLoaders): Promise<number> {
     await myndla.deletePost(params.postId, context);
     return params.postId;
   },
-  async deleteTopicV2(
-    _: any,
-    params: GQLMutationDeleteTopicV2Args,
-    context: ContextWithLoaders,
-  ): Promise<number> {
+  async deleteTopicV2(_: any, params: GQLMutationDeleteTopicV2Args, context: ContextWithLoaders): Promise<number> {
     await myndla.deleteTopic(params.topicId, context);
     return params.topicId;
   },
-  async newFlagV2(
-    _: any,
-    params: GQLMutationNewFlagV2Args,
-    context: ContextWithLoaders,
-  ): Promise<number> {
+  async newFlagV2(_: any, params: GQLMutationNewFlagV2Args, context: ContextWithLoaders): Promise<number> {
     await myndla.flagPost(params.postId, params.reason, context);
     return params.postId;
   },
-  async resolveFlag(
-    _: any,
-    params: GQLMutationResolveFlagArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaFlag> {
+  async resolveFlag(_: any, params: GQLMutationResolveFlagArgs, context: ContextWithLoaders): Promise<GQLArenaFlag> {
     return myndla.resolveFlag(params.flagId, context);
   },
   async markNotificationsAsReadV2(
@@ -375,26 +290,14 @@ export const Mutations: Pick<
     params: GQLMutationMarkNotificationsAsReadV2Args,
     context: ContextWithLoaders,
   ): Promise<number[]> {
-    await Promise.all(
-      params.notificationIds.map(id =>
-        myndla.markSingleNotificationAsRead(id, context),
-      ),
-    );
+    await Promise.all(params.notificationIds.map((id) => myndla.markSingleNotificationAsRead(id, context)));
     return params.notificationIds;
   },
-  async markAllNotificationsAsRead(
-    _: any,
-    __: any,
-    context: ContextWithLoaders,
-  ): Promise<boolean> {
+  async markAllNotificationsAsRead(_: any, __: any, context: ContextWithLoaders): Promise<boolean> {
     await myndla.markAllNotificationAsRead(context);
     return true;
   },
-  async followTopic(
-    _: any,
-    params: GQLMutationFollowTopicArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaTopicV2> {
+  async followTopic(_: any, params: GQLMutationFollowTopicArgs, context: ContextWithLoaders): Promise<GQLArenaTopicV2> {
     return myndla.followTopic(params.topicId, context);
   },
   async followCategory(
@@ -427,73 +330,35 @@ export const Mutations: Pick<
   ): Promise<GQLArenaTopic> {
     return await newTopic(params, context);
   },
-  async replyToTopic(
-    _: any,
-    params: GQLMutationReplyToTopicArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArenaPost> {
+  async replyToTopic(_: any, params: GQLMutationReplyToTopicArgs, context: ContextWithLoaders): Promise<GQLArenaPost> {
     return await replyToTopic(params, context);
   },
-  async markNotificationAsRead(
-    _: any,
-    params: GQLMutationMarkNotificationAsReadArgs,
-    context: Context,
-  ) {
-    await Promise.all(
-      params?.topicIds?.map(topicId => markNotificationRead(topicId, context)),
-    );
+  async markNotificationAsRead(_: any, params: GQLMutationMarkNotificationAsReadArgs, context: Context) {
+    await Promise.all(params?.topicIds?.map((topicId) => markNotificationRead(topicId, context)));
     return params.topicIds;
   },
-  async deletePost(
-    _: any,
-    params: GQLMutationDeletePostArgs,
-    context: Context,
-  ) {
+  async deletePost(_: any, params: GQLMutationDeletePostArgs, context: Context) {
     return await deletePost(params, context);
   },
-  async deleteTopic(
-    _: any,
-    params: GQLMutationDeleteTopicArgs,
-    context: Context,
-  ) {
+  async deleteTopic(_: any, params: GQLMutationDeleteTopicArgs, context: Context) {
     return await deleteTopic(params, context);
   },
-  async updatePost(
-    _: any,
-    params: GQLMutationUpdatePostArgs,
-    context: Context,
-  ) {
+  async updatePost(_: any, params: GQLMutationUpdatePostArgs, context: Context) {
     return await updatePost(params, context);
   },
   async newFlag(_: any, params, context: ContextWithLoaders): Promise<number> {
     return newFlag(params, context);
   },
-  async subscribeToTopic(
-    _: any,
-    params,
-    context: ContextWithLoaders,
-  ): Promise<number> {
+  async subscribeToTopic(_: any, params, context: ContextWithLoaders): Promise<number> {
     return subscribeToTopic(params, context);
   },
-  async unsubscribeFromTopic(
-    _: any,
-    params,
-    context: ContextWithLoaders,
-  ): Promise<number> {
+  async unsubscribeFromTopic(_: any, params, context: ContextWithLoaders): Promise<number> {
     return unsubscribeFromTopic(params, context);
   },
-  async updateOtherArenaUser(
-    _: any,
-    params,
-    context: ContextWithLoaders,
-  ): Promise<GQLMyNdlaPersonalData> {
+  async updateOtherArenaUser(_: any, params, context: ContextWithLoaders): Promise<GQLMyNdlaPersonalData> {
     return myndla.updateOtherUser(params.userId, params.data, context);
   },
-  async deleteCategory(
-    _: any,
-    params: GQLMutationDeleteCategoryArgs,
-    context: ContextWithLoaders,
-  ): Promise<number> {
+  async deleteCategory(_: any, params: GQLMutationDeleteCategoryArgs, context: ContextWithLoaders): Promise<number> {
     await myndla.deleteCategory(params.categoryId, context);
     return params.categoryId;
   },
@@ -508,20 +373,12 @@ export const Mutations: Pick<
 
 export const resolvers = {
   ArenaPostV2: {
-    async contentAsHTML(
-      post: GQLArenaPostV2,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<string> {
+    async contentAsHTML(post: GQLArenaPostV2, _: any, context: ContextWithLoaders): Promise<string> {
       return parseMarkdown({ markdown: post.content });
     },
   },
   ArenaPost: {
-    async user(
-      post: GQLArenaPost,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLArenaUser> {
+    async user(post: GQLArenaPost, _: any, context: ContextWithLoaders): Promise<GQLArenaUser> {
       return fetchArenaUser({ username: post.user.username }, context);
     },
   },

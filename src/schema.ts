@@ -6,8 +6,8 @@
  *
  */
 
-import { gql } from 'graphql-tag';
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import { gql } from "graphql-tag";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 export const typeDefs = gql`
   scalar StringRecord
@@ -310,11 +310,7 @@ export const typeDefs = gql`
     parents: [Topic!]
     meta: Meta
     learningpath: Learningpath
-    article(
-      subjectId: String
-      isOembed: String
-      convertEmbeds: Boolean
-    ): Article
+    article(subjectId: String, isOembed: String, convertEmbeds: Boolean): Article
     availability: String
   }
 
@@ -339,11 +335,7 @@ export const typeDefs = gql`
     url: String
     language: String
     meta: Meta
-    article(
-      subjectId: String
-      showVisualElement: String
-      convertEmbeds: Boolean
-    ): Article
+    article(subjectId: String, showVisualElement: String, convertEmbeds: Boolean): Article
     availability: String
     isPrimary: Boolean
     parent: String
@@ -1377,11 +1369,7 @@ export const typeDefs = gql`
     learningpath(pathId: String!): Learningpath
     programmes: [ProgrammePage!]
     programme(path: String): ProgrammePage
-    subjects(
-      metadataFilterKey: String
-      metadataFilterValue: String
-      filterVisible: Boolean
-    ): [Subject!]
+    subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: FrontpageMenu
@@ -1455,29 +1443,13 @@ export const typeDefs = gql`
     audio(id: Int!): Audio
     podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
-    podcastSeriesSearch(
-      page: Int!
-      pageSize: Int!
-      fallback: Boolean
-    ): PodcastSeriesSearch
+    podcastSeriesSearch(page: Int!, pageSize: Int!, fallback: Boolean): PodcastSeriesSearch
     alerts: [UptimeAlert]
     folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
-    folderResourceMeta(
-      resource: FolderResourceMetaSearchInput!
-    ): FolderResourceMeta
-    folderResourceMetaSearch(
-      resources: [FolderResourceMetaSearchInput!]!
-    ): [FolderResourceMeta!]!
-    folder(
-      id: String!
-      includeSubfolders: Boolean
-      includeResources: Boolean
-    ): Folder!
-    sharedFolder(
-      id: String!
-      includeSubfolders: Boolean
-      includeResources: Boolean
-    ): SharedFolder!
+    folderResourceMeta(resource: FolderResourceMetaSearchInput!): FolderResourceMeta
+    folderResourceMetaSearch(resources: [FolderResourceMetaSearchInput!]!): [FolderResourceMeta!]!
+    folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
+    sharedFolder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV2
@@ -1496,35 +1468,18 @@ export const typeDefs = gql`
     arenaNotifications: [ArenaNotification!]!
     arenaCategoriesV2(filterFollowed: Boolean): [ArenaCategoryV2!]!
     arenaCategoryV2(categoryId: Int!, page: Int, pageSize: Int): ArenaCategoryV2
-    arenaNotificationsV2(
-      page: Int
-      pageSize: Int
-    ): PaginatedArenaNewPostNotificationV2!
+    arenaNotificationsV2(page: Int, pageSize: Int): PaginatedArenaNewPostNotificationV2!
     arenaRecentTopicsV2(page: Int, pageSize: Int): PaginatedTopics!
     arenaTopicV2(topicId: Int!, page: Int, pageSize: Int): ArenaTopicV2
-    arenaTopicsByUserV2(
-      userId: Int!
-      page: Int
-      pageSize: Int
-    ): PaginatedTopics!
+    arenaTopicsByUserV2(userId: Int!, page: Int, pageSize: Int): PaginatedTopics!
     arenaUserV2(username: String!): ArenaUserV2
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
     listArenaUserV2(page: Int, pageSize: Int): PaginatedArenaUsers!
   }
 
   type Mutation {
-    addFolder(
-      name: String!
-      parentId: String
-      status: String
-      description: String
-    ): Folder!
-    updateFolder(
-      id: String!
-      name: String
-      status: String
-      description: String
-    ): Folder!
+    addFolder(name: String!, parentId: String, status: String, description: String): Folder!
+    updateFolder(id: String!, name: String, status: String, description: String): Folder!
     deleteFolder(id: String!): String!
     addFolderResource(
       resourceId: String!
@@ -1536,10 +1491,7 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
-    updatePersonalData(
-      favoriteSubjects: [String]
-      shareName: Boolean
-    ): MyNdlaPersonalData!
+    updatePersonalData(favoriteSubjects: [String], shareName: Boolean): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
@@ -1553,38 +1505,17 @@ export const typeDefs = gql`
       absoluteUrl: Boolean
     ): String!
     markNotificationAsRead(topicIds: [Int!]!): [Int!]!
-    newArenaTopic(
-      categoryId: Int!
-      title: String!
-      content: String!
-    ): ArenaTopic!
-    newArenaCategory(
-      title: String!
-      description: String!
-      visible: Boolean!
-    ): ArenaCategoryV2!
-    updateArenaCategory(
-      categoryId: Int!
-      title: String!
-      description: String!
-      visible: Boolean!
-    ): ArenaCategoryV2!
-    newArenaTopicV2(
-      categoryId: Int!
-      title: String!
-      content: String!
-    ): ArenaTopicV2!
+    newArenaTopic(categoryId: Int!, title: String!, content: String!): ArenaTopic!
+    newArenaCategory(title: String!, description: String!, visible: Boolean!): ArenaCategoryV2!
+    updateArenaCategory(categoryId: Int!, title: String!, description: String!, visible: Boolean!): ArenaCategoryV2!
+    newArenaTopicV2(categoryId: Int!, title: String!, content: String!): ArenaTopicV2!
     markNotificationsAsReadV2(notificationIds: [Int!]!): [Int!]!
     markAllNotificationsAsRead: Boolean!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
     replyToTopicV2(topicId: Int!, content: String!): ArenaPostV2!
     updatePost(postId: Int!, content: String!, title: String): ArenaPost!
     updatePostV2(postId: Int!, content: String!): ArenaPostV2!
-    updateTopicV2(
-      topicId: Int!
-      title: String!
-      content: String!
-    ): ArenaTopicV2!
+    updateTopicV2(topicId: Int!, title: String!, content: String!): ArenaTopicV2!
     deletePost(postId: Int!): Int!
     deletePostV2(postId: Int!): Int!
     deleteTopic(topicId: Int!): Int!
@@ -1599,17 +1530,14 @@ export const typeDefs = gql`
     unfollowTopic(topicId: Int!): ArenaTopicV2!
     unfollowCategory(categoryId: Int!): ArenaCategoryV2!
     unsubscribeFromTopic(topicId: Int!): Int!
-    updateOtherArenaUser(
-      userId: Int!
-      data: ArenaUserV2Input!
-    ): MyNdlaPersonalData!
+    updateOtherArenaUser(userId: Int!, data: ArenaUserV2Input!): MyNdlaPersonalData!
     sortArenaCategories(sortedIds: [Int!]!): [ArenaCategoryV2!]!
   }
 `;
 
 const schema = makeExecutableSchema({
   typeDefs,
-  resolverValidationOptions: { requireResolversForResolveType: 'ignore' },
+  resolverValidationOptions: { requireResolversForResolveType: "ignore" },
 });
 
 export default schema;

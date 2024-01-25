@@ -8,12 +8,12 @@
 
 // @ts-strict-ignore
 
-import groupBy from 'lodash/groupBy';
-import { fetchAudio } from './audioApi';
-import { searchConcepts } from './conceptApi';
-import { fetchImage } from './imageApi';
-import { searchWithoutPagination } from './searchApi';
-import { fetchVideo } from './videoApi';
+import groupBy from "lodash/groupBy";
+import { fetchAudio } from "./audioApi";
+import { searchConcepts } from "./conceptApi";
+import { fetchImage } from "./imageApi";
+import { searchWithoutPagination } from "./searchApi";
+import { fetchVideo } from "./videoApi";
 import {
   GQLFolderResourceMeta,
   GQLFolderResourceMetaSearchInput,
@@ -21,32 +21,23 @@ import {
   GQLQueryFolderResourceMetaArgs,
   GQLQueryFolderResourceMetaSearchArgs,
   GQLSearchResult,
-} from '../types/schema';
+} from "../types/schema";
 
 const articleResourceTypes = [
-  'urn:resourcetype:subjectMaterial',
-  'urn:resourcetype:tasksAndActivities',
-  'urn:resourcetype:reviewResource',
-  'urn:resourcetype:SourceMaterial',
-  'urn:resourcetype:externalResource',
+  "urn:resourcetype:subjectMaterial",
+  "urn:resourcetype:tasksAndActivities",
+  "urn:resourcetype:reviewResource",
+  "urn:resourcetype:SourceMaterial",
+  "urn:resourcetype:externalResource",
 ];
 
-const learningpathResourceTypes = ['urn:resourcetype:learningPath'];
+const learningpathResourceTypes = ["urn:resourcetype:learningPath"];
 
-type MetaType =
-  | 'article'
-  | 'learningpath'
-  | 'multidisciplinary'
-  | 'concept'
-  | 'image'
-  | 'audio'
-  | 'video';
+type MetaType = "article" | "learningpath" | "multidisciplinary" | "concept" | "image" | "audio" | "video";
 
-const findResourceTypes = (
-  result: GQLSearchResult,
-): GQLFolderResourceResourceType[] => {
+const findResourceTypes = (result: GQLSearchResult): GQLFolderResourceResourceType[] => {
   const context = result.contexts?.[0];
-  const resourceTypes = context?.resourceTypes.map(t => ({
+  const resourceTypes = context?.resourceTypes.map((t) => ({
     id: t.id,
     name: t.name,
     language: t.language,
@@ -64,14 +55,14 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
     const res = await searchWithoutPagination(
       {
         language: context.language,
-        fallback: 'true',
+        fallback: "true",
         // @ts-ignore ids are not parameterized correctly
-        ids: resources.map(r => r.id).join(','),
-        subjects: 'urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7',
+        ids: resources.map((r) => r.id).join(","),
+        subjects: "urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7",
       },
       context,
     );
-    return res.results.map(r => ({
+    return res.results.map((r) => ({
       id: r.id.toString(),
       title: r.title,
       type,
@@ -80,9 +71,7 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
       resourceTypes: findResourceTypes(r),
     }));
   } catch (e) {
-    console.error(
-      `Failed to fetch multidisciplinary topic metas with parameters ${resources}`,
-    );
+    console.error(`Failed to fetch multidisciplinary topic metas with parameters ${resources}`);
     return [];
   }
 };
@@ -98,15 +87,15 @@ const fetchAndTransformArticleMeta = async (
     const res = await searchWithoutPagination(
       {
         language: context.language,
-        fallback: 'true',
+        fallback: "true",
         // @ts-ignore ids are not parameterized correctly
-        ids: resources.map(r => r.id).join(','),
-        resourceTypes: resourceTypes.join(','),
+        ids: resources.map((r) => r.id).join(","),
+        resourceTypes: resourceTypes.join(","),
       },
       context,
     );
 
-    return res.results.map(r => ({
+    return res.results.map((r) => ({
       id: r.id.toString(),
       title: r.title,
       type,
@@ -115,9 +104,7 @@ const fetchAndTransformArticleMeta = async (
       resourceTypes: findResourceTypes(r),
     }));
   } catch (e) {
-    console.error(
-      `Failed to fetch article metas with parameters ${resources} and resource types ${resourceTypes}`,
-    );
+    console.error(`Failed to fetch article metas with parameters ${resources} and resource types ${resourceTypes}`);
     return [];
   }
 };
@@ -126,40 +113,26 @@ export const fetchFolderResourceMeta = async (
   { resource }: GQLQueryFolderResourceMetaArgs,
   context: ContextWithLoaders,
 ): Promise<GQLFolderResourceMeta> => {
-  if (resource.resourceType === 'article') {
-    const res = await fetchAndTransformArticleMeta(
-      [resource],
-      context,
-      'article',
-      articleResourceTypes,
-    );
+  if (resource.resourceType === "article") {
+    const res = await fetchAndTransformArticleMeta([resource], context, "article", articleResourceTypes);
     return res[0];
-  } else if (resource.resourceType === 'learningpath') {
-    const res = await fetchAndTransformArticleMeta(
-      [resource],
-      context,
-      'learningpath',
-      learningpathResourceTypes,
-    );
+  } else if (resource.resourceType === "learningpath") {
+    const res = await fetchAndTransformArticleMeta([resource], context, "learningpath", learningpathResourceTypes);
     return res[0];
-  } else if (resource.resourceType === 'multidisciplinary') {
-    const res = await fetchAndTransformMultidisciplinaryTopicMeta(
-      [resource],
-      context,
-      'multidisciplinary',
-    );
+  } else if (resource.resourceType === "multidisciplinary") {
+    const res = await fetchAndTransformMultidisciplinaryTopicMeta([resource], context, "multidisciplinary");
     return res[0];
-  } else if (resource.resourceType === 'image') {
-    const res = await fetchImageMeta([resource], context, 'image');
+  } else if (resource.resourceType === "image") {
+    const res = await fetchImageMeta([resource], context, "image");
     return res[0];
-  } else if (resource.resourceType === 'audio') {
-    const res = await fetchAudios([resource], context, 'audio');
+  } else if (resource.resourceType === "audio") {
+    const res = await fetchAudios([resource], context, "audio");
     return res[0];
-  } else if (resource.resourceType === 'concept') {
-    const res = await fetchConceptsMeta([resource], context, 'concept');
+  } else if (resource.resourceType === "concept") {
+    const res = await fetchConceptsMeta([resource], context, "concept");
     return res[0];
-  } else if (resource.resourceType === 'video') {
-    const res = await fetchBrightcoves([resource], context, 'video');
+  } else if (resource.resourceType === "video") {
+    const res = await fetchBrightcoves([resource], context, "video");
     return res[0];
   }
 };
@@ -170,18 +143,16 @@ export const fetchImageMeta = async (
   type: MetaType,
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
-  const images = await Promise.all(
-    resources.map(async r => await fetchImage(r.id, context)),
-  );
+  const images = await Promise.all(resources.map(async (r) => await fetchImage(r.id, context)));
 
-  return images.map(img => ({
-    description: img.caption.caption ?? '',
+  return images.map((img) => ({
+    description: img.caption.caption ?? "",
     id: img.id,
     metaImage: {
       url: img.imageUrl,
-      alt: img.alttext.alttext ?? '',
+      alt: img.alttext.alttext ?? "",
     },
-    resourceTypes: [{ id: 'image', name: 'image' }],
+    resourceTypes: [{ id: "image", name: "image" }],
     title: img.title.title,
     type,
   }));
@@ -193,12 +164,10 @@ const fetchAudios = async (
   type: MetaType,
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
-  const audios = await Promise.all(
-    resources.map(r => fetchAudio(context, r.id)),
-  );
+  const audios = await Promise.all(resources.map((r) => fetchAudio(context, r.id)));
 
-  return audios.map(audio => ({
-    description: audio.podcastMeta?.introduction ?? '',
+  return audios.map((audio) => ({
+    description: audio.podcastMeta?.introduction ?? "",
     id: audio.id.toString(),
     metaImage: audio.podcastMeta
       ? {
@@ -207,7 +176,7 @@ const fetchAudios = async (
         }
       : undefined,
     title: audio.title.title,
-    resourceTypes: [{ id: 'audio', name: 'audio' }],
+    resourceTypes: [{ id: "audio", name: "audio" }],
     type,
   }));
 };
@@ -218,20 +187,18 @@ const fetchBrightcoves = async (
   type: MetaType,
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
-  const brightcoves = await Promise.all(
-    resources.map(r => fetchVideo(r.id.toString(), undefined, context)),
-  );
+  const brightcoves = await Promise.all(resources.map((r) => fetchVideo(r.id.toString(), undefined, context)));
 
-  return brightcoves.map(video => ({
-    description: video.description ?? '',
+  return brightcoves.map((video) => ({
+    description: video.description ?? "",
     id: video.id,
     metaImage: video.images?.poster?.src
       ? {
           url: video.images.poster.src,
-          alt: '',
+          alt: "",
         }
       : undefined,
-    resourceTypes: [{ id: 'video', name: 'video' }],
+    resourceTypes: [{ id: "video", name: "video" }],
     title: video.name,
     type,
   }));
@@ -242,17 +209,17 @@ const fetchConceptsMeta = async (
   context: ContextWithLoaders,
   type: MetaType,
 ): Promise<GQLFolderResourceMeta[]> => {
-  const ids = resources?.map(r => parseInt(r.id))?.filter(id => !!id);
+  const ids = resources?.map((r) => parseInt(r.id))?.filter((id) => !!id);
   if (!ids?.length) return [];
 
   const { concepts } = await searchConcepts({ ids }, context);
 
-  return concepts.map(c => ({
+  return concepts.map((c) => ({
     id: c.id.toString(),
     description: c.content,
     metaImage: c.metaImage,
     title: c.title,
-    resourceTypes: [{ id: 'concept', name: 'concept' }],
+    resourceTypes: [{ id: "concept", name: "concept" }],
     type,
   }));
 };
@@ -261,39 +228,29 @@ export const fetchFolderResourcesMetaData = async (
   { resources }: GQLQueryFolderResourceMetaSearchArgs,
   context: ContextWithLoaders,
 ): Promise<GQLFolderResourceMeta[]> => {
-  const {
-    article,
-    learningpath,
-    multidisciplinary,
-    concept,
-    image,
-    audio,
-    video,
-  } = groupBy(resources, r => r.resourceType);
-  const articleMeta = fetchAndTransformArticleMeta(
-    article,
-    context,
-    'article',
-    articleResourceTypes,
+  const { article, learningpath, multidisciplinary, concept, image, audio, video } = groupBy(
+    resources,
+    (r) => r.resourceType,
   );
+  const articleMeta = fetchAndTransformArticleMeta(article, context, "article", articleResourceTypes);
   const learningpathMeta = fetchAndTransformArticleMeta(
     learningpath,
     context,
-    'learningpath',
+    "learningpath",
     learningpathResourceTypes,
   );
 
   const multidisciplinaryMeta = fetchAndTransformMultidisciplinaryTopicMeta(
     multidisciplinary,
     context,
-    'multidisciplinary',
+    "multidisciplinary",
   );
 
-  const imageMeta = fetchImageMeta(image, context, 'image');
+  const imageMeta = fetchImageMeta(image, context, "image");
 
-  const conceptMeta = fetchConceptsMeta(concept, context, 'concept');
-  const audioMeta = fetchAudios(audio, context, 'audio');
-  const videoMeta = fetchBrightcoves(video, context, 'video');
+  const conceptMeta = fetchConceptsMeta(concept, context, "concept");
+  const audioMeta = fetchAudios(audio, context, "audio");
+  const videoMeta = fetchBrightcoves(video, context, "video");
 
   const results = await Promise.all([
     articleMeta,
