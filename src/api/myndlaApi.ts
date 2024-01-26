@@ -291,9 +291,13 @@ export const fetchArenaUser = async (username: string, context: Context): Promis
 export const fetchArenaUsers = async (
   page: number | undefined,
   pageSize: number | undefined,
+  searchQuery: string | undefined,
+  filterTeachers: boolean | undefined,
   context: Context,
 ): Promise<IPaginatedArenaUsers> => {
   const query = queryString.stringify({
+    query: searchQuery,
+    "filter-teachers": filterTeachers,
     "page-size": pageSize,
     page,
   });
