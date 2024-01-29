@@ -1287,7 +1287,7 @@ export const typeDefs = gql`
     contentAsHTML: String
     created: String!
     updated: String!
-    owner: ArenaUserV2!
+    owner: ArenaUserV2
     topicId: Int!
     flags: [ArenaFlag!]
   }
@@ -1298,7 +1298,7 @@ export const typeDefs = gql`
     created: String!
     resolved: String
     isResolved: Boolean!
-    flagger: ArenaUserV2!
+    flagger: ArenaUserV2
   }
 
   type ArenaUserV2 {

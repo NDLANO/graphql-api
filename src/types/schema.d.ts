@@ -58,7 +58,7 @@ export type GQLArenaCategoryV2 = {
 export type GQLArenaFlag = {
   __typename?: 'ArenaFlag';
   created: Scalars['String'];
-  flagger: GQLArenaUserV2;
+  flagger?: Maybe<GQLArenaUserV2>;
   id: Scalars['Int'];
   isResolved: Scalars['Boolean'];
   reason: Scalars['String'];
@@ -113,7 +113,7 @@ export type GQLArenaPostV2 = {
   created: Scalars['String'];
   flags?: Maybe<Array<GQLArenaFlag>>;
   id: Scalars['Int'];
-  owner: GQLArenaUserV2;
+  owner?: Maybe<GQLArenaUserV2>;
   topicId: Scalars['Int'];
   updated: Scalars['String'];
 };
@@ -2647,7 +2647,7 @@ export type GQLArenaCategoryV2Resolvers<ContextType = any, ParentType extends GQ
 
 export type GQLArenaFlagResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaFlag'] = GQLResolversParentTypes['ArenaFlag']> = {
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  flagger?: Resolver<GQLResolversTypes['ArenaUserV2'], ParentType, ContextType>;
+  flagger?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isResolved?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   reason?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2702,7 +2702,7 @@ export type GQLArenaPostV2Resolvers<ContextType = any, ParentType extends GQLRes
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   flags?: Resolver<Maybe<Array<GQLResolversTypes['ArenaFlag']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  owner?: Resolver<GQLResolversTypes['ArenaUserV2'], ParentType, ContextType>;
+  owner?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
