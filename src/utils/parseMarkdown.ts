@@ -69,7 +69,9 @@ interface ParseOptions {
 }
 
 const parseMarkdown = ({ markdown, inline }: ParseOptions) => {
-  const html = (inline ? marked.parseInline(markdown.trim()) : marked.parse(markdown.trim())) as string;
+  const html = (
+    inline ? marked.parseInline(markdown.trim(), { breaks: true }) : marked.parse(markdown.trim())
+  ) as string;
   const sanitizedHtml = sanitizeHtml(html);
   return sanitizedHtml;
 };
