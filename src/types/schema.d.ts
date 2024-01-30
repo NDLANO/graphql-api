@@ -635,6 +635,7 @@ export type GQLFrontpageMenu = {
   __typename?: 'FrontpageMenu';
   article: GQLArticle;
   articleId: Scalars['Int'];
+  hideLevel?: Maybe<Scalars['Boolean']>;
   menu?: Maybe<Array<Maybe<GQLFrontpageMenu>>>;
 };
 
@@ -3207,6 +3208,7 @@ export type GQLFrontPageResourcesResolvers<ContextType = any, ParentType extends
 export type GQLFrontpageMenuResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FrontpageMenu'] = GQLResolversParentTypes['FrontpageMenu']> = {
   article?: Resolver<GQLResolversTypes['Article'], ParentType, ContextType>;
   articleId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  hideLevel?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   menu?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['FrontpageMenu']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
