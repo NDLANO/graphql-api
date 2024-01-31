@@ -6,7 +6,13 @@
  *
  */
 
-import { IFrontPage, ISubjectPageData, IFilmFrontPageData, IMovieTheme, IMenu } from "@ndla/types-backend/frontpage-api";
+import {
+  IFrontPage,
+  ISubjectPageData,
+  IFilmFrontPageData,
+  IMovieTheme,
+  IMenu,
+} from "@ndla/types-backend/frontpage-api";
 import { TaxonomyContext } from "@ndla/types-taxonomy";
 import { fetchArticle, fetchFilmFrontpage, fetchMovieMeta, queryContexts, queryNodes } from "../api";
 import { GQLArticle, GQLMeta, GQLMetaImage, GQLResourceType } from "../types/schema";
@@ -35,8 +41,11 @@ export const resolvers = {
     async article(menu: IFrontPage, _: any, context: ContextWithLoaders): Promise<GQLArticle> {
       return fetchArticle({ articleId: `${menu.articleId}`, convertEmbeds: true }, context);
     },
-     async hideLevel(menu: IFrontPage | IMenu, _: any, context: ContextWithLoaders): Promise<boolean> {
-      return "hideLevel" in menu?  menu.hideLevel : false;
+    async hideLevel(menu: IFrontPage | IMenu, _: any, context: ContextWithLoaders): Promise<boolean> {
+      if ("hideLevel" in menu) {
+        return menu.hideLevel;
+      }
+      return false;
     },
   },
 
