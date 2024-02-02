@@ -126,6 +126,7 @@ export type GQLArenaTopic = {
   id: Scalars['Int'];
   isFollowing?: Maybe<Scalars['Boolean']>;
   locked: Scalars['Boolean'];
+  pinned: Scalars['Boolean'];
   postCount: Scalars['Int'];
   posts: Array<GQLArenaPost>;
   slug: Scalars['String'];
@@ -2721,6 +2722,7 @@ export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLReso
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isFollowing?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   locked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  pinned?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   postCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   posts?: Resolver<Array<GQLResolversTypes['ArenaPost']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

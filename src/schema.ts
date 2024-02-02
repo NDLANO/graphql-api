@@ -1231,6 +1231,7 @@ export const typeDefs = gql`
     slug: String!
     postCount: Int!
     locked: Boolean!
+    pinned: Boolean!
     timestamp: String!
     posts: [ArenaPost!]!
     breadcrumbs: [ArenaBreadcrumb!]!
