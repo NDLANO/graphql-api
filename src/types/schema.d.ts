@@ -139,6 +139,8 @@ export type GQLArenaTopicV2 = {
   created: Scalars['String'];
   id: Scalars['Int'];
   isFollowing: Scalars['Boolean'];
+  isLocked: Scalars['Boolean'];
+  isPinned: Scalars['Boolean'];
   postCount: Scalars['Int'];
   posts?: Maybe<GQLPaginatedPosts>;
   title: Scalars['String'];
@@ -1108,6 +1110,8 @@ export type GQLMutationNewArenaTopicArgs = {
 export type GQLMutationNewArenaTopicV2Args = {
   categoryId: Scalars['Int'];
   content: Scalars['String'];
+  isLocked?: InputMaybe<Scalars['Boolean']>;
+  isPinned?: InputMaybe<Scalars['Boolean']>;
   title: Scalars['String'];
 };
 
@@ -1244,6 +1248,8 @@ export type GQLMutationUpdatePostV2Args = {
 
 export type GQLMutationUpdateTopicV2Args = {
   content: Scalars['String'];
+  isLocked?: InputMaybe<Scalars['Boolean']>;
+  isPinned?: InputMaybe<Scalars['Boolean']>;
   title: Scalars['String'];
   topicId: Scalars['Int'];
 };
@@ -2728,6 +2734,8 @@ export type GQLArenaTopicV2Resolvers<ContextType = any, ParentType extends GQLRe
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isFollowing?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  isPinned?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   postCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   posts?: Resolver<Maybe<GQLResolversTypes['PaginatedPosts']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
