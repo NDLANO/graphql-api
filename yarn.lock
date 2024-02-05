@@ -2061,31 +2061,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/licenses@npm:^7.2.2":
-  version: 7.2.2
-  resolution: "@ndla/licenses@npm:7.2.2"
-  checksum: 10c0/792ebb53183ec566113d403cdc62c5e38c1d41b86f30982b0994c36510a3b723ca47b47085b52d0d39b4ebcc58dc90ccb438c6e175fbc6a28b21ce305aab0625
+"@ndla/licenses@npm:^7.2.5":
+  version: 7.2.5
+  resolution: "@ndla/licenses@npm:7.2.5"
+  checksum: 10c0/424b74d443f2b565cfa242f52422aafd358d5437856cc8aad67898b470d8e780a20f9bdbfaa209e8e432c0f20bdbcd202fd57369fba25afa2ef81090618aed8c
   languageName: node
   linkType: hard
 
-"@ndla/types-backend@npm:^0.2.42":
-  version: 0.2.42
-  resolution: "@ndla/types-backend@npm:0.2.42"
-  checksum: 10c0/79cd727bd102fc0eee9b89d86640f0b09f0c61ccbff90d1074177e071771f814937f226344b06501a6250e1bc3f6eb5dc5bbc3998f2d07f0528db05a1d4cd9b8
+"@ndla/types-backend@npm:^0.2.48":
+  version: 0.2.48
+  resolution: "@ndla/types-backend@npm:0.2.48"
+  checksum: 10c0/fad7377b46ae3878db8770e4541e5ba4d798357b73ad4123329b5e95e8e0bd75753bd572cf040cefe4d62ab7a18a71e719f0f684a82e0b106d61d17e949e7563
   languageName: node
   linkType: hard
 
-"@ndla/types-embed@npm:^4.0.7":
-  version: 4.0.7
-  resolution: "@ndla/types-embed@npm:4.0.7"
-  checksum: 10c0/07dcb269854429c64ff6ed32f8b9732a1d8f9b6c3500897a46327f9c9ef7e25bce90b55dae30bc5299f5f2a6bc830a607e7f9791522cd6d558b8706e3d9cf397
+"@ndla/types-embed@npm:^4.0.14":
+  version: 4.0.14
+  resolution: "@ndla/types-embed@npm:4.0.14"
+  checksum: 10c0/2be7ac0a97ae31d788197b40a5202c1091693ab162de5aab61c3fe48e4bd291a6c491f194ff4e2f38f57a0fc046d74d5720e9e955c23787b3ae7d693b25c7acb
   languageName: node
   linkType: hard
 
-"@ndla/types-taxonomy@npm:^1.0.21":
-  version: 1.0.21
-  resolution: "@ndla/types-taxonomy@npm:1.0.21"
-  checksum: 10c0/ce7e1a710f5ccc63659937fd43ca493dc61a7a6307e02b30b7ba966c837a34e45b80d9de70b621a568195c2bffeb2fccccdee2e2b2f6d2634922ca4d1d76d65f
+"@ndla/types-taxonomy@npm:^1.0.22":
+  version: 1.0.22
+  resolution: "@ndla/types-taxonomy@npm:1.0.22"
+  checksum: 10c0/13d3b71a3d9633e5f3e39f968079d56a7462a9a3ab09d294442e33e07b4d0e5d4b6f85dab9d2379fbba9a0706a38ed548518e1e5c93b4cf64d946ef8129a975e
   languageName: node
   linkType: hard
 
@@ -8844,10 +8844,10 @@ __metadata:
     "@graphql-tools/mock": "npm:^8.7.10"
     "@graphql-tools/schema": "npm:^9.0.8"
     "@jest-mock/express": "npm:^2.0.2"
-    "@ndla/licenses": "npm:^7.2.2"
-    "@ndla/types-backend": "npm:^0.2.42"
-    "@ndla/types-embed": "npm:^4.0.7"
-    "@ndla/types-taxonomy": "npm:^1.0.21"
+    "@ndla/licenses": "npm:^7.2.5"
+    "@ndla/types-backend": "npm:^0.2.48"
+    "@ndla/types-embed": "npm:^4.0.14"
+    "@ndla/types-taxonomy": "npm:^1.0.22"
     "@types/bunyan": "npm:^1.8.5"
     "@types/compression": "npm:^1.7.2"
     "@types/cors": "npm:^2.8.4"
