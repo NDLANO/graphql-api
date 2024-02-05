@@ -240,7 +240,14 @@ export const Mutations: Pick<
     params: GQLMutationNewArenaTopicV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopicV2> {
-    return await myndla.createNewTopic(params.categoryId, params.title, params.content, context);
+    return await myndla.createNewTopic(
+      params.categoryId,
+      params.title,
+      params.content,
+      params.isPinned,
+      params.isLocked,
+      context,
+    );
   },
   async replyToTopicV2(
     _: any,
@@ -268,7 +275,14 @@ export const Mutations: Pick<
     params: GQLMutationUpdateTopicV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLArenaTopicV2> {
-    return await myndla.editTopic(params.topicId, params.title, params.content, context);
+    return await myndla.editTopic(
+      params.topicId,
+      params.title,
+      params.content,
+      params.isPinned,
+      params.isLocked,
+      context,
+    );
   },
   async deletePostV2(_: any, params: GQLMutationDeletePostV2Args, context: ContextWithLoaders): Promise<number> {
     await myndla.deletePost(params.postId, context);
