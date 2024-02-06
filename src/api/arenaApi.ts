@@ -63,6 +63,7 @@ const toTopic = (topic: any): GQLArenaTopic => {
     postCount: topic.postcount,
     timestamp: topic.timestampISO,
     locked: topic.locked === 1,
+    pinned: topic.pinned === 1,
     posts: topic.posts
       ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
       : topic.mainPost

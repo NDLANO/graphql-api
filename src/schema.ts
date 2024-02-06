@@ -1232,6 +1232,7 @@ export const typeDefs = gql`
     slug: String!
     postCount: Int!
     locked: Boolean!
+    pinned: Boolean!
     timestamp: String!
     posts: [ArenaPost!]!
     breadcrumbs: [ArenaBreadcrumb!]!
@@ -1259,6 +1260,8 @@ export const typeDefs = gql`
     categoryId: Int!
     posts: PaginatedPosts
     isFollowing: Boolean!
+    isPinned: Boolean!
+    isLocked: Boolean!
   }
 
   type PaginatedTopics {
@@ -1288,7 +1291,7 @@ export const typeDefs = gql`
     contentAsHTML: String
     created: String!
     updated: String!
-    owner: ArenaUserV2!
+    owner: ArenaUserV2
     topicId: Int!
     flags: [ArenaFlag!]
   }
@@ -1299,7 +1302,7 @@ export const typeDefs = gql`
     created: String!
     resolved: String
     isResolved: Boolean!
-    flagger: ArenaUserV2!
+    flagger: ArenaUserV2
   }
 
   type ArenaUserV2 {
@@ -1509,14 +1512,20 @@ export const typeDefs = gql`
     newArenaTopic(categoryId: Int!, title: String!, content: String!): ArenaTopic!
     newArenaCategory(title: String!, description: String!, visible: Boolean!): ArenaCategoryV2!
     updateArenaCategory(categoryId: Int!, title: String!, description: String!, visible: Boolean!): ArenaCategoryV2!
-    newArenaTopicV2(categoryId: Int!, title: String!, content: String!): ArenaTopicV2!
+    newArenaTopicV2(
+      categoryId: Int!
+      title: String!
+      content: String!
+      isLocked: Boolean
+      isPinned: Boolean
+    ): ArenaTopicV2!
     markNotificationsAsReadV2(notificationIds: [Int!]!): [Int!]!
     markAllNotificationsAsRead: Boolean!
     replyToTopic(topicId: Int!, content: String!): ArenaPost!
     replyToTopicV2(topicId: Int!, content: String!): ArenaPostV2!
     updatePost(postId: Int!, content: String!, title: String): ArenaPost!
     updatePostV2(postId: Int!, content: String!): ArenaPostV2!
-    updateTopicV2(topicId: Int!, title: String!, content: String!): ArenaTopicV2!
+    updateTopicV2(topicId: Int!, title: String!, content: String!, isLocked: Boolean, isPinned: Boolean): ArenaTopicV2!
     deletePost(postId: Int!): Int!
     deletePostV2(postId: Int!): Int!
     deleteTopic(topicId: Int!): Int!

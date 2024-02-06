@@ -58,7 +58,7 @@ export type GQLArenaCategoryV2 = {
 export type GQLArenaFlag = {
   __typename?: 'ArenaFlag';
   created: Scalars['String'];
-  flagger: GQLArenaUserV2;
+  flagger?: Maybe<GQLArenaUserV2>;
   id: Scalars['Int'];
   isResolved: Scalars['Boolean'];
   reason: Scalars['String'];
@@ -113,7 +113,7 @@ export type GQLArenaPostV2 = {
   created: Scalars['String'];
   flags?: Maybe<Array<GQLArenaFlag>>;
   id: Scalars['Int'];
-  owner: GQLArenaUserV2;
+  owner?: Maybe<GQLArenaUserV2>;
   topicId: Scalars['Int'];
   updated: Scalars['String'];
 };
@@ -126,6 +126,7 @@ export type GQLArenaTopic = {
   id: Scalars['Int'];
   isFollowing?: Maybe<Scalars['Boolean']>;
   locked: Scalars['Boolean'];
+  pinned: Scalars['Boolean'];
   postCount: Scalars['Int'];
   posts: Array<GQLArenaPost>;
   slug: Scalars['String'];
@@ -139,6 +140,8 @@ export type GQLArenaTopicV2 = {
   created: Scalars['String'];
   id: Scalars['Int'];
   isFollowing: Scalars['Boolean'];
+  isLocked: Scalars['Boolean'];
+  isPinned: Scalars['Boolean'];
   postCount: Scalars['Int'];
   posts?: Maybe<GQLPaginatedPosts>;
   title: Scalars['String'];
@@ -1109,6 +1112,8 @@ export type GQLMutationNewArenaTopicArgs = {
 export type GQLMutationNewArenaTopicV2Args = {
   categoryId: Scalars['Int'];
   content: Scalars['String'];
+  isLocked?: InputMaybe<Scalars['Boolean']>;
+  isPinned?: InputMaybe<Scalars['Boolean']>;
   title: Scalars['String'];
 };
 
@@ -1245,6 +1250,8 @@ export type GQLMutationUpdatePostV2Args = {
 
 export type GQLMutationUpdateTopicV2Args = {
   content: Scalars['String'];
+  isLocked?: InputMaybe<Scalars['Boolean']>;
+  isPinned?: InputMaybe<Scalars['Boolean']>;
   title: Scalars['String'];
   topicId: Scalars['Int'];
 };
@@ -2648,7 +2655,7 @@ export type GQLArenaCategoryV2Resolvers<ContextType = any, ParentType extends GQ
 
 export type GQLArenaFlagResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaFlag'] = GQLResolversParentTypes['ArenaFlag']> = {
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  flagger?: Resolver<GQLResolversTypes['ArenaUserV2'], ParentType, ContextType>;
+  flagger?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isResolved?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   reason?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2703,7 +2710,7 @@ export type GQLArenaPostV2Resolvers<ContextType = any, ParentType extends GQLRes
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   flags?: Resolver<Maybe<Array<GQLResolversTypes['ArenaFlag']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  owner?: Resolver<GQLResolversTypes['ArenaUserV2'], ParentType, ContextType>;
+  owner?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2716,6 +2723,7 @@ export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLReso
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isFollowing?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   locked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  pinned?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   postCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   posts?: Resolver<Array<GQLResolversTypes['ArenaPost']>, ParentType, ContextType>;
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2729,6 +2737,8 @@ export type GQLArenaTopicV2Resolvers<ContextType = any, ParentType extends GQLRe
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isFollowing?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  isLocked?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  isPinned?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   postCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   posts?: Resolver<Maybe<GQLResolversTypes['PaginatedPosts']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

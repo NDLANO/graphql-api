@@ -33,7 +33,7 @@
     "@apollo/server": "^4.9.3",
     "@graphql-tools/mock": "^8.7.10",
     "@graphql-tools/schema": "^9.0.8",
-    "@ndla/licenses": "^7.2.2",
+    "@ndla/licenses": "^7.2.5",
     "bunyan": "^1.8.12",
     "cheerio": "^1.0.0-rc.12",
     "compression": "^1.7.4",
@@ -60,9 +60,9 @@
     "@graphql-codegen/typescript-resolvers": "^2.7.6",
     "@graphql-eslint/eslint-plugin": "^3.12.0",
     "@jest-mock/express": "^2.0.2",
-    "@ndla/types-backend": "^0.2.43",
-    "@ndla/types-embed": "^4.0.7",
-    "@ndla/types-taxonomy": "^1.0.21",
+    "@ndla/types-backend": "^0.2.48",
+    "@ndla/types-embed": "^4.0.14",
+    "@ndla/types-taxonomy": "^1.0.22",
     "@types/bunyan": "^1.8.5",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",
@@ -94,5 +94,5 @@
     "typescript": "^5.2.2",
     "typescript-strict-plugin": "^2.2.1"
   },
-  "packageManager": "yarn@4.0.2"
+  "packageManager": "yarn@4.1.0"
 }

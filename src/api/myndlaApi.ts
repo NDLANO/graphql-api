@@ -139,8 +139,20 @@ export const updateCategory = async (
   return await resolveJson(response);
 };
 
-export const editTopic = async (topicId: number, title: string, content: string, context: Context): Promise<ITopic> => {
-  const body: INewTopic = { title, initialPost: { content } };
+export const editTopic = async (
+  topicId: number,
+  title: string,
+  content: string,
+  isPinned: boolean | undefined,
+  isLocked: boolean | undefined,
+  context: Context,
+): Promise<ITopic> => {
+  const body: INewTopic = {
+    title,
+    initialPost: { content },
+    isPinned: isPinned ?? false,
+    isLocked: isLocked ?? false,
+  };
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}`, context, {
     method: "PUT",
     body: JSON.stringify(body),
@@ -182,11 +194,15 @@ export const createNewTopic = async (
   categoryId: number,
   title: string,
   content: string,
+  isPinned: boolean | undefined,
+  isLocked: boolean | undefined,
   context: Context,
 ): Promise<ITopic> => {
   const body: INewTopic = {
     title,
     initialPost: { content },
+    isPinned: isPinned ?? false,
+    isLocked: isLocked ?? false,
   };
 
   const response = await fetch(`${arenaBaseUrl}/categories/${categoryId}/topics`, context, {
