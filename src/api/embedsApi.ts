@@ -291,10 +291,12 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, cont
   return { image };
 };
 
-const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, context}) => {
-  const article = embedData.articleId ? await fetchSimpleArticle(`urn:article:${embedData.articleId}`, context) : undefined;
-  return article ? { disclaimerLink: { text: article.title.title, href: `/article/${article.id}`}} : {} ;
-}; 
+const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, context }) => {
+  const article = embedData.articleId
+    ? await fetchSimpleArticle(`urn:article:${embedData.articleId}`, context)
+    : undefined;
+  return article ? { disclaimerLink: { text: article.title.title, href: `/article/${article.id}` } } : undefined;
+};
 
 export const transformEmbed = async (
   embed: CheerioEmbed,
