@@ -31,6 +31,7 @@ import {
   ConceptVisualElementMeta,
   CampaignBlockMetaData,
   ConceptData,
+  UuDisclaimerMetaData,
 } from "@ndla/types-embed";
 import { fetchSimpleArticle } from "./articleApi";
 import { fetchAudioV2 } from "./audioApi";
@@ -290,6 +291,13 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, cont
   return { image };
 };
 
+const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, context }) => {
+  const article = embedData.articleId
+    ? await fetchSimpleArticle(`urn:article:${embedData.articleId}`, context)
+    : undefined;
+  return article ? { disclaimerLink: { text: article.title.title, href: `/article/${article.id}` } } : {};
+};
+
 export const transformEmbed = async (
   embed: CheerioEmbed,
   context: Context,
@@ -385,6 +393,8 @@ export const transformEmbed = async (
       meta = await campaignBlockMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "link-block") {
       meta = undefined;
+    } else if (embedData.resource === "uu-disclaimer") {
+      meta = await uuDisclaimerMeta({ embedData, context, index, opts });
     } else {
       return;
     }
