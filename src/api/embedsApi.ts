@@ -295,7 +295,7 @@ const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, contex
   const article = embedData.articleId
     ? await fetchSimpleArticle(`urn:article:${embedData.articleId}`, context)
     : undefined;
-  return article ? { disclaimerLink: { text: article.title.title, href: `/article/${article.id}` } } : undefined;
+  return article ? { disclaimerLink: { text: article.title.title, href: `/article/${article.id}` } } : {};
 };
 
 export const transformEmbed = async (
