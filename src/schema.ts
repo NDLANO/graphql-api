@@ -501,6 +501,7 @@ export const typeDefs = gql`
     id: Int!
     revision: Int!
     title: String!
+    htmlTitle: String!
     slug: String
     introduction: String
     content: String!
