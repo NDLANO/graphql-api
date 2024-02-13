@@ -84,12 +84,6 @@ export const resolvers = {
       }
       return [];
     },
-    htmlTitle(article: GQLArticle): string {
-      return parseMarkdown({
-        markdown: article.htmlTitle ?? "",
-        inline: true,
-      });
-    },
     introduction(article: GQLArticle): string {
       return parseMarkdown({
         markdown: article.introduction ?? "",
