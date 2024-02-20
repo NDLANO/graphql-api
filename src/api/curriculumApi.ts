@@ -105,7 +105,7 @@ function htmlToText(html: string) {
 function filterTextsForLanguage(texts: Text[], language: string) {
   const isoCode = isoLanguageMapping[language] || "default";
   const text = texts.find((t) => t.spraak === isoCode) || texts.find((t) => t.spraak === "default");
-  return text.verdi;
+  return text?.verdi ?? "";
 }
 
 export async function fetchCompetenceGoals(
