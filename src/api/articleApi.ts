@@ -70,7 +70,8 @@ const _fetchTransformedArticle = async (params: ArticleParams, context: Context)
     );
     return {
       ...article,
-      introduction: article.introduction?.htmlIntroduction ?? "",
+      introduction: article.introduction?.introduction ?? "",
+      htmlIntroduction: article.introduction?.htmlIntroduction ?? "",
       metaDescription: article.metaDescription.metaDescription,
       title: article.title.title,
       htmlTitle: article.title.htmlTitle,
@@ -170,7 +171,8 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
         id: article.id,
         title: article.title.title,
         htmlTitle: article.title.htmlTitle,
-        introduction: article.introduction?.htmlIntroduction,
+        introduction: article.introduction?.introduction,
+        htmlIntroduction: article.introduction?.htmlIntroduction,
         metaDescription: article.metaDescription?.metaDescription,
         lastUpdated: article.updated,
         metaImage: article.metaImage,

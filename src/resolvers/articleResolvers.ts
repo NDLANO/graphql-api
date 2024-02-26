@@ -86,7 +86,7 @@ export const resolvers = {
     },
     introduction(article: GQLArticle): string {
       return parseMarkdown({
-        markdown: article.introduction ?? "",
+        markdown: article.htmlIntroduction ?? "",
         inline: true,
       });
     },
