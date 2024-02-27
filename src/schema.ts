@@ -196,7 +196,9 @@ export const typeDefs = gql`
   type Meta {
     id: Int!
     title: String!
+    htmlTitle: String!
     introduction: String
+    htmlIntroduction: String
     metaDescription: String
     metaImage: MetaImage
     lastUpdated: String
@@ -501,8 +503,10 @@ export const typeDefs = gql`
     id: Int!
     revision: Int!
     title: String!
+    htmlTitle: String!
     slug: String
     introduction: String
+    htmlIntroduction: String
     content: String!
     created: String!
     updated: String!

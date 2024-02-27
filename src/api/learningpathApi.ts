@@ -28,6 +28,7 @@ export async function fetchLearningpaths(learningpathIds: string[], context: Con
       return {
         id: learningpath.id,
         title: learningpath.title.title,
+        htmlTitle: learningpath.title.title,
         introduction: learningpath.introduction.introduction,
         metaDescription: learningpath.description.description,
         lastUpdated: learningpath.lastUpdated,

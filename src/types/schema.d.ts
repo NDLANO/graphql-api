@@ -188,6 +188,8 @@ export type GQLArticle = {
   created: Scalars['String'];
   crossSubjectTopics?: Maybe<Array<GQLCrossSubjectElement>>;
   grepCodes?: Maybe<Array<Scalars['String']>>;
+  htmlIntroduction?: Maybe<Scalars['String']>;
+  htmlTitle: Scalars['String'];
   id: Scalars['Int'];
   introduction?: Maybe<Scalars['String']>;
   language: Scalars['String'];
@@ -920,6 +922,8 @@ export type GQLManuscript = {
 export type GQLMeta = {
   __typename?: 'Meta';
   availability?: Maybe<Scalars['String']>;
+  htmlIntroduction?: Maybe<Scalars['String']>;
+  htmlTitle: Scalars['String'];
   id: Scalars['Int'];
   introduction?: Maybe<Scalars['String']>;
   language?: Maybe<Scalars['String']>;
@@ -2777,6 +2781,8 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   crossSubjectTopics?: Resolver<Maybe<Array<GQLResolversTypes['CrossSubjectElement']>>, ParentType, ContextType, Partial<GQLArticleCrossSubjectTopicsArgs>>;
   grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  htmlIntroduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3499,6 +3505,8 @@ export type GQLManuscriptResolvers<ContextType = any, ParentType extends GQLReso
 
 export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Meta'] = GQLResolversParentTypes['Meta']> = {
   availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  htmlIntroduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
