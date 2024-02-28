@@ -42,7 +42,7 @@ export const resolvers = {
       return fetchArticle({ articleId: `${menu.articleId}`, convertEmbeds: true }, context);
     },
     async hideLevel(menu: IFrontPage | IMenu, _: any, context: ContextWithLoaders): Promise<boolean> {
-return "hideLevel" in menu ? menu.hideLevel : false;
+      return "hideLevel" in menu ? menu.hideLevel : false;
     },
   },
 
