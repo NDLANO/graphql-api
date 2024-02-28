@@ -586,6 +586,7 @@ export const typeDefs = gql`
     articleId: Int!
     article: Article!
     menu: [FrontpageMenu]
+    hideLevel: Boolean
   }
 
   type SubjectPageVisualElement {
