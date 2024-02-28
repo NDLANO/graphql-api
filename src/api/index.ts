@@ -6,6 +6,8 @@
  *
  */
 
+export { fetchArticle, fetchArticles } from "./articleApi";
+export { searchConcepts, fetchConcept, fetchListingPage } from "./conceptApi";
 export {
   fetchCompetenceGoals,
   fetchCompetenceSet,
@@ -17,9 +19,11 @@ export {
   fetchLK20Curriculum,
   fetchLK20CompetenceGoalSet,
 } from "./curriculumApi";
+export { fetchImage, fetchImageV3 } from "./imageApi";
 export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage, fetchMovieMeta } from "./frontpageApi";
-export { fetchArticle, fetchArticles } from "./articleApi";
 export { fetchLearningpaths, fetchLearningpath } from "./learningpathApi";
+export { fetchOembed } from "./oembedApi";
+export { search, groupSearch, frontpageSearch, searchWithoutPagination } from "./searchApi";
 export {
   fetchResourceTypes,
   fetchSubjectTopics,
@@ -32,7 +36,4 @@ export {
   queryContexts,
   queryNodes,
 } from "./taxonomyApi";
-export { search, groupSearch, frontpageSearch, searchWithoutPagination } from "./searchApi";
-export { fetchOembed } from "./oembedApi";
-export { searchConcepts, fetchConcept, fetchListingPage } from "./conceptApi";
 export { fetchUptimeIssues } from "./uptimeApi";

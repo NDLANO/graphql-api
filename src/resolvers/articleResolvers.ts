@@ -13,6 +13,7 @@ import {
   fetchCompetenceGoals,
   fetchCoreElements,
   fetchCrossSubjectTopicsByCode,
+  fetchImageV3,
   fetchSubjectTopics,
   searchConcepts,
 } from "../api";
@@ -22,6 +23,7 @@ import {
   GQLCompetenceGoal,
   GQLCoreElement,
   GQLCrossSubjectElement,
+  GQLMetaImage,
   GQLQueryArticleArgs,
 } from "../types/schema";
 import parseMarkdown from "../utils/parseMarkdown";
@@ -84,9 +86,19 @@ export const resolvers = {
       }
       return [];
     },
+    async metaImage(article: GQLArticle, _: any, context: ContextWithLoaders): Promise<GQLMetaImage> {
+      if (article.metaImage) {
+        const imageId = article.metaImage.url.split("/").pop() ?? "";
+        const image = await fetchImageV3(imageId, context);
+        return {
+          ...article.metaImage,
+          url: image.image.imageUrl,
+        };
+      }
+    },
     introduction(article: GQLArticle): string {
       return parseMarkdown({
-        markdown: article.introduction ?? "",
+        markdown: article.htmlIntroduction ?? "",
         inline: true,
       });
     },
