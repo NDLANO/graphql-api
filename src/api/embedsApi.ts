@@ -395,6 +395,8 @@ export const transformEmbed = async (
       meta = undefined;
     } else if (embedData.resource === "uu-disclaimer") {
       meta = await uuDisclaimerMeta({ embedData, context, index, opts });
+    } else if (embedData.resource === "copyright") {
+      meta = undefined;
     } else {
       return;
     }
