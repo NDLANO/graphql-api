@@ -18,6 +18,7 @@ import {
   GQLBrightcoveLicense,
   GQLConceptLicense,
   GQLCopyright,
+  GQLFragmentLicense,
   GQLFootNote,
   GQLGlossLicense,
   GQLH5pLicense,
@@ -166,6 +167,13 @@ const conceptMetaData = (
   }
 };
 
+const fragmentMetaData = ({ embedData }: Success<"copyright">, acc: MetaData) => {
+  acc["fragments"] = acc["fragments"].concat({
+    title: embedData.title,
+    copyright: embedData.copyright,
+  });
+};
+
 interface MetaData {
   footnotes: GQLFootNote[];
   images: GQLImageLicense[];
@@ -175,6 +183,7 @@ interface MetaData {
   h5ps: GQLH5pLicense[];
   concepts: GQLConceptLicense[];
   glosses: GQLGlossLicense[];
+  fragments: GQLFragmentLicense[];
 }
 
 export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<GQLArticleMetaData, "__typename"> => {
@@ -225,6 +234,9 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
             imageMetaData(curr.data.metaImage, acc);
           }
           break;
+        case "copyright":
+          fragmentMetaData(curr, acc);
+          break;
       }
       return acc;
     },
@@ -237,6 +249,7 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
       h5ps: [],
       concepts: [],
       glosses: [],
+      fragments: [],
     },
   );
 };

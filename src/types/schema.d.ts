@@ -629,6 +629,12 @@ export type GQLFootNote = {
   year: Scalars['String'];
 };
 
+export type GQLFragmentLicense = {
+  __typename?: 'FragmentLicense';
+  copyright: GQLCopyright;
+  title?: Maybe<Scalars['String']>;
+};
+
 export type GQLFrontPageResources = {
   __typename?: 'FrontPageResources';
   results: Array<GQLFrontpageSearchResult>;
@@ -2354,6 +2360,7 @@ export type GQLResolversTypes = {
   FolderResourceMetaSearchInput: GQLFolderResourceMetaSearchInput;
   FolderResourceResourceType: ResolverTypeWrapper<GQLFolderResourceResourceType>;
   FootNote: ResolverTypeWrapper<GQLFootNote>;
+  FragmentLicense: ResolverTypeWrapper<GQLFragmentLicense>;
   FrontPageResources: ResolverTypeWrapper<GQLFrontPageResources>;
   FrontpageMenu: ResolverTypeWrapper<GQLFrontpageMenu>;
   FrontpageSearch: ResolverTypeWrapper<GQLFrontpageSearch>;
@@ -2517,6 +2524,7 @@ export type GQLResolversParentTypes = {
   FolderResourceMetaSearchInput: GQLFolderResourceMetaSearchInput;
   FolderResourceResourceType: GQLFolderResourceResourceType;
   FootNote: GQLFootNote;
+  FragmentLicense: GQLFragmentLicense;
   FrontPageResources: GQLFrontPageResources;
   FrontpageMenu: GQLFrontpageMenu;
   FrontpageSearch: GQLFrontpageSearch;
@@ -3211,6 +3219,12 @@ export type GQLFootNoteResolvers<ContextType = any, ParentType extends GQLResolv
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   year?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLFragmentLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FragmentLicense'] = GQLResolversParentTypes['FragmentLicense']> = {
+  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
+  title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4262,6 +4276,7 @@ export type GQLResolvers<ContextType = any> = {
   FolderResourceMeta?: GQLFolderResourceMetaResolvers<ContextType>;
   FolderResourceResourceType?: GQLFolderResourceResourceTypeResolvers<ContextType>;
   FootNote?: GQLFootNoteResolvers<ContextType>;
+  FragmentLicense?: GQLFragmentLicenseResolvers<ContextType>;
   FrontPageResources?: GQLFrontPageResourcesResolvers<ContextType>;
   FrontpageMenu?: GQLFrontpageMenuResolvers<ContextType>;
   FrontpageSearch?: GQLFrontpageSearchResolvers<ContextType>;

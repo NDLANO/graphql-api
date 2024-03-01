@@ -482,6 +482,11 @@ export const typeDefs = gql`
     copyright: ConceptCopyright
   }
 
+  type FragmentLicense {
+    title: String
+    copyright: Copyright!
+  }
+
   type ArticleMetaData {
     footnotes: [FootNote!]
     images: [ImageLicense!]
@@ -491,6 +496,7 @@ export const typeDefs = gql`
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
     glosses: [GlossLicense!]
+    fragments: [FragmentLicense!]
     copyText: String
   }
 
