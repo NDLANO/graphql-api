@@ -238,6 +238,7 @@ export type GQLArticleMetaData = {
   h5ps?: Maybe<Array<GQLH5pLicense>>;
   images?: Maybe<Array<GQLImageLicense>>;
   podcasts?: Maybe<Array<GQLPodcastLicense>>;
+  textblocks?: Maybe<Array<GQLTextblockLicense>>;
 };
 
 export type GQLArticleRequiredLibrary = {
@@ -627,12 +628,6 @@ export type GQLFootNote = {
   title: Scalars['String'];
   url?: Maybe<Scalars['String']>;
   year: Scalars['String'];
-};
-
-export type GQLFragmentLicense = {
-  __typename?: 'FragmentLicense';
-  copyright: GQLCopyright;
-  title?: Maybe<Scalars['String']>;
 };
 
 export type GQLFrontPageResources = {
@@ -2118,6 +2113,12 @@ export type GQLTaxonomyMetadata = {
   visible: Scalars['Boolean'];
 };
 
+export type GQLTextblockLicense = {
+  __typename?: 'TextblockLicense';
+  copyright: GQLCopyright;
+  title?: Maybe<Scalars['String']>;
+};
+
 export type GQLTitle = {
   __typename?: 'Title';
   language: Scalars['String'];
@@ -2360,7 +2361,6 @@ export type GQLResolversTypes = {
   FolderResourceMetaSearchInput: GQLFolderResourceMetaSearchInput;
   FolderResourceResourceType: ResolverTypeWrapper<GQLFolderResourceResourceType>;
   FootNote: ResolverTypeWrapper<GQLFootNote>;
-  FragmentLicense: ResolverTypeWrapper<GQLFragmentLicense>;
   FrontPageResources: ResolverTypeWrapper<GQLFrontPageResources>;
   FrontpageMenu: ResolverTypeWrapper<GQLFrontpageMenu>;
   FrontpageSearch: ResolverTypeWrapper<GQLFrontpageSearch>;
@@ -2449,6 +2449,7 @@ export type GQLResolversTypes = {
   TaxonomyContext: ResolverTypeWrapper<GQLTaxonomyContext>;
   TaxonomyEntity: GQLResolversTypes['Resource'] | GQLResolversTypes['Subject'] | GQLResolversTypes['Topic'];
   TaxonomyMetadata: ResolverTypeWrapper<GQLTaxonomyMetadata>;
+  TextblockLicense: ResolverTypeWrapper<GQLTextblockLicense>;
   Title: ResolverTypeWrapper<GQLTitle>;
   Topic: ResolverTypeWrapper<GQLTopic>;
   Transcription: ResolverTypeWrapper<GQLTranscription>;
@@ -2524,7 +2525,6 @@ export type GQLResolversParentTypes = {
   FolderResourceMetaSearchInput: GQLFolderResourceMetaSearchInput;
   FolderResourceResourceType: GQLFolderResourceResourceType;
   FootNote: GQLFootNote;
-  FragmentLicense: GQLFragmentLicense;
   FrontPageResources: GQLFrontPageResources;
   FrontpageMenu: GQLFrontpageMenu;
   FrontpageSearch: GQLFrontpageSearch;
@@ -2613,6 +2613,7 @@ export type GQLResolversParentTypes = {
   TaxonomyContext: GQLTaxonomyContext;
   TaxonomyEntity: GQLResolversParentTypes['Resource'] | GQLResolversParentTypes['Subject'] | GQLResolversParentTypes['Topic'];
   TaxonomyMetadata: GQLTaxonomyMetadata;
+  TextblockLicense: GQLTextblockLicense;
   Title: GQLTitle;
   Topic: GQLTopic;
   Transcription: GQLTranscription;
@@ -2835,6 +2836,7 @@ export type GQLArticleMetaDataResolvers<ContextType = any, ParentType extends GQ
   h5ps?: Resolver<Maybe<Array<GQLResolversTypes['H5pLicense']>>, ParentType, ContextType>;
   images?: Resolver<Maybe<Array<GQLResolversTypes['ImageLicense']>>, ParentType, ContextType>;
   podcasts?: Resolver<Maybe<Array<GQLResolversTypes['PodcastLicense']>>, ParentType, ContextType>;
+  textblocks?: Resolver<Maybe<Array<GQLResolversTypes['TextblockLicense']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3219,12 +3221,6 @@ export type GQLFootNoteResolvers<ContextType = any, ParentType extends GQLResolv
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   year?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLFragmentLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FragmentLicense'] = GQLResolversParentTypes['FragmentLicense']> = {
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
-  title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4122,6 +4118,12 @@ export type GQLTaxonomyMetadataResolvers<ContextType = any, ParentType extends G
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLTextblockLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TextblockLicense'] = GQLResolversParentTypes['TextblockLicense']> = {
+  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
+  title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLTitleResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Title'] = GQLResolversParentTypes['Title']> = {
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -4276,7 +4278,6 @@ export type GQLResolvers<ContextType = any> = {
   FolderResourceMeta?: GQLFolderResourceMetaResolvers<ContextType>;
   FolderResourceResourceType?: GQLFolderResourceResourceTypeResolvers<ContextType>;
   FootNote?: GQLFootNoteResolvers<ContextType>;
-  FragmentLicense?: GQLFragmentLicenseResolvers<ContextType>;
   FrontPageResources?: GQLFrontPageResourcesResolvers<ContextType>;
   FrontpageMenu?: GQLFrontpageMenuResolvers<ContextType>;
   FrontpageSearch?: GQLFrontpageSearchResolvers<ContextType>;
@@ -4362,6 +4363,7 @@ export type GQLResolvers<ContextType = any> = {
   TaxonomyContext?: GQLTaxonomyContextResolvers<ContextType>;
   TaxonomyEntity?: GQLTaxonomyEntityResolvers<ContextType>;
   TaxonomyMetadata?: GQLTaxonomyMetadataResolvers<ContextType>;
+  TextblockLicense?: GQLTextblockLicenseResolvers<ContextType>;
   Title?: GQLTitleResolvers<ContextType>;
   Topic?: GQLTopicResolvers<ContextType>;
   Transcription?: GQLTranscriptionResolvers<ContextType>;

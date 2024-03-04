@@ -482,7 +482,7 @@ export const typeDefs = gql`
     copyright: ConceptCopyright
   }
 
-  type FragmentLicense {
+  type TextblockLicense {
     title: String
     copyright: Copyright!
   }
@@ -496,7 +496,7 @@ export const typeDefs = gql`
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
     glosses: [GlossLicense!]
-    fragments: [FragmentLicense!]
+    textblocks: [TextblockLicense!]
     copyText: String
   }
 
