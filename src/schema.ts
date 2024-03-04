@@ -314,6 +314,8 @@ export const typeDefs = gql`
     learningpath: Learningpath
     article(subjectId: String, isOembed: String, convertEmbeds: Boolean): Article
     availability: String
+    parentTopics(onlyDirectParent: Boolean): [Topic!]
+    subject: Subject
   }
 
   type TaxonomyContext {
@@ -1360,6 +1362,7 @@ export const typeDefs = gql`
 
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
+    resourceByPath(path: String!): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
     article(
       id: String!

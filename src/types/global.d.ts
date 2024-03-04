@@ -11,7 +11,7 @@ import { Request, Response } from "express";
 import { RequestInit, RequestCache } from "node-fetch";
 import { IFrontPage, ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
-import { GQLMeta, GQLReference, GQLSubject } from "./schema";
+import { GQLMeta, GQLReference, GQLSubject, GQLTopic } from "./schema";
 
 declare global {
   interface AuthToken {
@@ -22,6 +22,7 @@ declare global {
 
   interface Loaders {
     articlesLoader: DataLoader<string, GQLMeta | null>;
+    nodeLoader: DataLoader<string, GQLTopic | null>;
     learningpathsLoader: DataLoader<string, any>;
     subjectTopicsLoader: DataLoader<{ subjectId: string }, any>;
     subjectsLoader: DataLoader<

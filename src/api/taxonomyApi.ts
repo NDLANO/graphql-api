@@ -176,3 +176,8 @@ export const queryNodes = async (params: NodeQueryParams, context: Context): Pro
   const res = await fetch(`/${context.taxonomyUrl}/v1/nodes?${qs.stringify(params)}`, context);
   return await resolveJson(res);
 };
+
+export const queryByPath = async (path: string, context: Context): Promise<TaxonomyContext[]> => {
+  const res = await fetch(`/${context.taxonomyUrl}/v1/queries/path?path=${path}`, context);
+  return await resolveJson(res);
+};
