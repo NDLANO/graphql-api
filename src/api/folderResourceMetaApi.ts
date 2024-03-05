@@ -28,7 +28,7 @@ const articleResourceTypes = [
   "urn:resourcetype:tasksAndActivities",
   "urn:resourcetype:reviewResource",
   "urn:resourcetype:SourceMaterial",
-  "urn:resourcetype:externalResource",
+  "urn:resourcetype:concept",
 ];
 
 const learningpathResourceTypes = ["urn:resourcetype:learningPath"];
