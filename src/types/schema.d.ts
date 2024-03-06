@@ -630,34 +630,12 @@ export type GQLFootNote = {
   year: Scalars['String'];
 };
 
-export type GQLFrontPageResources = {
-  __typename?: 'FrontPageResources';
-  results: Array<GQLFrontpageSearchResult>;
-  suggestions: Array<GQLSuggestionResult>;
-  totalCount: Scalars['Int'];
-};
-
 export type GQLFrontpageMenu = {
   __typename?: 'FrontpageMenu';
   article: GQLArticle;
   articleId: Scalars['Int'];
   hideLevel?: Maybe<Scalars['Boolean']>;
   menu?: Maybe<Array<Maybe<GQLFrontpageMenu>>>;
-};
-
-export type GQLFrontpageSearch = {
-  __typename?: 'FrontpageSearch';
-  learningResources: GQLFrontPageResources;
-  topicResources: GQLFrontPageResources;
-};
-
-export type GQLFrontpageSearchResult = {
-  __typename?: 'FrontpageSearchResult';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  path: Scalars['String'];
-  resourceTypes: Array<GQLSearchContextResourceTypes>;
-  subject: Scalars['String'];
 };
 
 export type GQLGloss = {
@@ -1463,7 +1441,6 @@ export type GQLQuery = {
   folderResourceMetaSearch: Array<GQLFolderResourceMeta>;
   folders: Array<GQLFolder>;
   frontpage?: Maybe<GQLFrontpageMenu>;
-  frontpageSearch?: Maybe<GQLFrontpageSearch>;
   groupSearch?: Maybe<Array<GQLGroupSearch>>;
   image?: Maybe<GQLImageMetaInformationV2>;
   learningpath?: Maybe<GQLLearningpath>;
@@ -1658,11 +1635,6 @@ export type GQLQueryFolderResourceMetaSearchArgs = {
 export type GQLQueryFoldersArgs = {
   includeResources?: InputMaybe<Scalars['Boolean']>;
   includeSubfolders?: InputMaybe<Scalars['Boolean']>;
-};
-
-
-export type GQLQueryFrontpageSearchArgs = {
-  query?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1921,12 +1893,10 @@ export type GQLSearchContext = {
   breadcrumbs: Array<Scalars['String']>;
   contextId: Scalars['String'];
   contextType: Scalars['String'];
-  id: Scalars['String'];
   isActive: Scalars['Boolean'];
   isPrimary: Scalars['Boolean'];
   isVisible: Scalars['Boolean'];
   language: Scalars['String'];
-  learningResourceType: Scalars['String'];
   parentIds: Array<Scalars['String']>;
   path: Scalars['String'];
   publicId: Scalars['String'];
@@ -1935,15 +1905,6 @@ export type GQLSearchContext = {
   resourceTypes: Array<GQLSearchContextResourceTypes>;
   root: Scalars['String'];
   rootId: Scalars['String'];
-  subject: Scalars['String'];
-  subjectId: Scalars['String'];
-};
-
-export type GQLSearchContextFilter = {
-  __typename?: 'SearchContextFilter';
-  id: Scalars['String'];
-  name: Scalars['String'];
-  relevance: Scalars['String'];
 };
 
 export type GQLSearchContextResourceTypes = {
@@ -2361,10 +2322,7 @@ export type GQLResolversTypes = {
   FolderResourceMetaSearchInput: GQLFolderResourceMetaSearchInput;
   FolderResourceResourceType: ResolverTypeWrapper<GQLFolderResourceResourceType>;
   FootNote: ResolverTypeWrapper<GQLFootNote>;
-  FrontPageResources: ResolverTypeWrapper<GQLFrontPageResources>;
   FrontpageMenu: ResolverTypeWrapper<GQLFrontpageMenu>;
-  FrontpageSearch: ResolverTypeWrapper<GQLFrontpageSearch>;
-  FrontpageSearchResult: ResolverTypeWrapper<GQLFrontpageSearchResult>;
   Gloss: ResolverTypeWrapper<GQLGloss>;
   GlossLicense: ResolverTypeWrapper<GQLGlossLicense>;
   Grade: ResolverTypeWrapper<GQLGrade>;
@@ -2428,7 +2386,6 @@ export type GQLResolversTypes = {
   ResourceTypeDefinition: ResolverTypeWrapper<GQLResourceTypeDefinition>;
   Search: ResolverTypeWrapper<GQLSearch>;
   SearchContext: ResolverTypeWrapper<GQLSearchContext>;
-  SearchContextFilter: ResolverTypeWrapper<GQLSearchContextFilter>;
   SearchContextResourceTypes: ResolverTypeWrapper<GQLSearchContextResourceTypes>;
   SearchResult: GQLResolversTypes['ArticleSearchResult'] | GQLResolversTypes['LearningpathSearchResult'];
   SearchSuggestion: ResolverTypeWrapper<GQLSearchSuggestion>;
@@ -2525,10 +2482,7 @@ export type GQLResolversParentTypes = {
   FolderResourceMetaSearchInput: GQLFolderResourceMetaSearchInput;
   FolderResourceResourceType: GQLFolderResourceResourceType;
   FootNote: GQLFootNote;
-  FrontPageResources: GQLFrontPageResources;
   FrontpageMenu: GQLFrontpageMenu;
-  FrontpageSearch: GQLFrontpageSearch;
-  FrontpageSearchResult: GQLFrontpageSearchResult;
   Gloss: GQLGloss;
   GlossLicense: GQLGlossLicense;
   Grade: GQLGrade;
@@ -2592,7 +2546,6 @@ export type GQLResolversParentTypes = {
   ResourceTypeDefinition: GQLResourceTypeDefinition;
   Search: GQLSearch;
   SearchContext: GQLSearchContext;
-  SearchContextFilter: GQLSearchContextFilter;
   SearchContextResourceTypes: GQLSearchContextResourceTypes;
   SearchResult: GQLResolversParentTypes['ArticleSearchResult'] | GQLResolversParentTypes['LearningpathSearchResult'];
   SearchSuggestion: GQLSearchSuggestion;
@@ -3224,33 +3177,11 @@ export type GQLFootNoteResolvers<ContextType = any, ParentType extends GQLResolv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLFrontPageResourcesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FrontPageResources'] = GQLResolversParentTypes['FrontPageResources']> = {
-  results?: Resolver<Array<GQLResolversTypes['FrontpageSearchResult']>, ParentType, ContextType>;
-  suggestions?: Resolver<Array<GQLResolversTypes['SuggestionResult']>, ParentType, ContextType>;
-  totalCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLFrontpageMenuResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FrontpageMenu'] = GQLResolversParentTypes['FrontpageMenu']> = {
   article?: Resolver<GQLResolversTypes['Article'], ParentType, ContextType>;
   articleId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   hideLevel?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   menu?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['FrontpageMenu']>>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLFrontpageSearchResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FrontpageSearch'] = GQLResolversParentTypes['FrontpageSearch']> = {
-  learningResources?: Resolver<GQLResolversTypes['FrontPageResources'], ParentType, ContextType>;
-  topicResources?: Resolver<GQLResolversTypes['FrontPageResources'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLFrontpageSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FrontpageSearchResult'] = GQLResolversParentTypes['FrontpageSearchResult']> = {
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  resourceTypes?: Resolver<Array<GQLResolversTypes['SearchContextResourceTypes']>, ParentType, ContextType>;
-  subject?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3815,7 +3746,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   folderResourceMetaSearch?: Resolver<Array<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaSearchArgs, 'resources'>>;
   folders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType, Partial<GQLQueryFoldersArgs>>;
   frontpage?: Resolver<Maybe<GQLResolversTypes['FrontpageMenu']>, ParentType, ContextType>;
-  frontpageSearch?: Resolver<Maybe<GQLResolversTypes['FrontpageSearch']>, ParentType, ContextType, Partial<GQLQueryFrontpageSearchArgs>>;
   groupSearch?: Resolver<Maybe<Array<GQLResolversTypes['GroupSearch']>>, ParentType, ContextType, Partial<GQLQueryGroupSearchArgs>>;
   image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV2']>, ParentType, ContextType, RequireFields<GQLQueryImageArgs, 'id'>>;
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
@@ -3924,12 +3854,10 @@ export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLR
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   contextType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   isActive?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   isPrimary?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   isVisible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  learningResourceType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   publicId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3938,15 +3866,6 @@ export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLR
   resourceTypes?: Resolver<Array<GQLResolversTypes['SearchContextResourceTypes']>, ParentType, ContextType>;
   root?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   rootId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  subject?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  subjectId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLSearchContextFilterResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchContextFilter'] = GQLResolversParentTypes['SearchContextFilter']> = {
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  relevance?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4278,10 +4197,7 @@ export type GQLResolvers<ContextType = any> = {
   FolderResourceMeta?: GQLFolderResourceMetaResolvers<ContextType>;
   FolderResourceResourceType?: GQLFolderResourceResourceTypeResolvers<ContextType>;
   FootNote?: GQLFootNoteResolvers<ContextType>;
-  FrontPageResources?: GQLFrontPageResourcesResolvers<ContextType>;
   FrontpageMenu?: GQLFrontpageMenuResolvers<ContextType>;
-  FrontpageSearch?: GQLFrontpageSearchResolvers<ContextType>;
-  FrontpageSearchResult?: GQLFrontpageSearchResultResolvers<ContextType>;
   Gloss?: GQLGlossResolvers<ContextType>;
   GlossLicense?: GQLGlossLicenseResolvers<ContextType>;
   Grade?: GQLGradeResolvers<ContextType>;
@@ -4343,7 +4259,6 @@ export type GQLResolvers<ContextType = any> = {
   ResourceTypeDefinition?: GQLResourceTypeDefinitionResolvers<ContextType>;
   Search?: GQLSearchResolvers<ContextType>;
   SearchContext?: GQLSearchContextResolvers<ContextType>;
-  SearchContextFilter?: GQLSearchContextFilterResolvers<ContextType>;
   SearchContextResourceTypes?: GQLSearchContextResourceTypesResolvers<ContextType>;
   SearchResult?: GQLSearchResultResolvers<ContextType>;
   SearchSuggestion?: GQLSearchSuggestionResolvers<ContextType>;

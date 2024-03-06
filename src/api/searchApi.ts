@@ -7,16 +7,9 @@
  */
 
 import queryString from "query-string";
-import {
-  IApiTaxonomyContext,
-  IGroupSearchResult,
-  IMultiSearchResult,
-  IMultiSearchSummary,
-} from "@ndla/types-backend/search-api";
+import { IApiTaxonomyContext, IGroupSearchResult, IMultiSearchSummary } from "@ndla/types-backend/search-api";
 import { searchConcepts } from "./conceptApi";
 import {
-  GQLFrontpageSearch,
-  GQLFrontpageSearchResult,
   GQLGroupSearch,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
@@ -93,36 +86,6 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
   }));
 }
 
-export async function frontpageSearch(searchQuery: GQLQuerySearchArgs, context: Context): Promise<GQLFrontpageSearch> {
-  const topicQuery = {
-    ...searchQuery,
-    "filter-inactive": true,
-    "context-types": "topic-article",
-  };
-  const resourceQuery = {
-    ...searchQuery,
-    "filter-inactive": true,
-    "context-types": "standard",
-  };
-  const [topicReponse, resourceResponse] = await Promise.all([
-    fetch(`/search-api/v1/search/?${queryString.stringify(topicQuery)}`, context, { cache: "no-store" }),
-    fetch(`/search-api/v1/search/?${queryString.stringify(resourceQuery)}`, context, { cache: "no-store" }),
-  ]);
-
-  const topicJson: IMultiSearchResult = await resolveJson(topicReponse);
-  const resourceJson: IMultiSearchResult = await resolveJson(resourceResponse);
-  return {
-    topicResources: {
-      ...topicJson,
-      results: expandResourcesFromAllContexts(topicJson.results),
-    },
-    learningResources: {
-      ...resourceJson,
-      results: expandResourcesFromAllContexts(resourceJson.results),
-    },
-  };
-}
-
 const queryOnGivenPage = (searchQuery: GQLQuerySearchWithoutPaginationArgs, page: string, context: Context) =>
   fetch(
     `/search-api/v1/search/?${queryString.stringify({
@@ -175,11 +138,3 @@ const fixContext = (contexts: IApiTaxonomyContext[] | undefined) =>
     ...context,
     path: context.path.includes("/resource/") ? `${context.path}/` : context.path,
   }));
-
-const expandResourcesFromAllContexts = (resourceResult: IMultiSearchSummary[]) =>
-  resourceResult.reduce<GQLFrontpageSearchResult[]>((allResults, resource) => {
-    resource.contexts.forEach((ctx) => {
-      allResults.push({ ...ctx, name: resource.title.title });
-    });
-    return allResults;
-  }, []);
