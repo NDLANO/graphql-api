@@ -758,27 +758,15 @@ export const typeDefs = gql`
     contexts: [SearchContext!]!
   }
 
-  type FrontpageSearchResult {
-    id: String!
-    name: String!
-    resourceTypes: [SearchContextResourceTypes!]!
-    subject: String!
-    path: String!
-  }
-
   type SearchContext {
     breadcrumbs: [String!]!
     contextType: String!
-    learningResourceType: String!
     resourceTypes: [SearchContextResourceTypes!]!
-    subject: String!
     root: String!
-    subjectId: String!
     rootId: String!
     relevance: String!
     relevanceId: String!
     path: String!
-    id: String!
     publicId: String!
     parentIds: [String!]!
     language: String!
@@ -792,12 +780,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     language: String!
-  }
-
-  type SearchContextFilter {
-    id: String!
-    name: String!
-    relevance: String!
   }
 
   type VisualElementOembed {
@@ -977,17 +959,6 @@ export const typeDefs = gql`
     totalCount: Int!
     page: Int
     pageSize: Int!
-  }
-
-  type FrontPageResources {
-    results: [FrontpageSearchResult!]!
-    totalCount: Int!
-    suggestions: [SuggestionResult!]!
-  }
-
-  type FrontpageSearch {
-    topicResources: FrontPageResources!
-    learningResources: FrontPageResources!
   }
 
   type UptimeAlert {
@@ -1439,7 +1410,6 @@ export const typeDefs = gql`
       fallback: Boolean
       conceptType: String
     ): ConceptResult
-    frontpageSearch(query: String): FrontpageSearch
     searchWithoutPagination(
       query: String
       contextTypes: String

@@ -23,7 +23,7 @@ export { fetchImage, fetchImageV3 } from "./imageApi";
 export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage, fetchMovieMeta } from "./frontpageApi";
 export { fetchLearningpaths, fetchLearningpath } from "./learningpathApi";
 export { fetchOembed } from "./oembedApi";
-export { search, groupSearch, frontpageSearch, searchWithoutPagination } from "./searchApi";
+export { search, groupSearch, searchWithoutPagination } from "./searchApi";
 export {
   fetchResourceTypes,
   fetchSubjectTopics,
