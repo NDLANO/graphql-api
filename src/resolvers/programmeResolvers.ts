@@ -49,7 +49,7 @@ export const Query = {
       throw Error("Tried to fetch programme with invalid path");
     }
     const contextId = path.split("__")[1];
-    const node = await queryNodes({ contextId, language: context.language }, context);
+    const node = await queryNodes({ contextId, language: context.language, nodeType: "PROGRAMME" }, context);
     return nodeToProgramme(node[0], context.language);
   },
 };
