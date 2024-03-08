@@ -706,8 +706,8 @@ export const typeDefs = gql`
     url: String!
     contentUri: String
     metaDescription: String
-    desktopImage: MetaImage
-    mobileImage: MetaImage
+    desktopImage: String
+    mobileImage: String
     grades: [Grade!]
   }
 

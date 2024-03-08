@@ -8,14 +8,7 @@
 
 import { Node } from "@ndla/types-taxonomy";
 import { fetchChildren, queryNodes } from "../api/taxonomyApi";
-import {
-  GQLCategory,
-  GQLGrade,
-  GQLMetaImage,
-  GQLProgrammePage,
-  GQLQueryProgrammeArgs,
-  GQLSubject,
-} from "../types/schema";
+import { GQLCategory, GQLGrade, GQLProgrammePage, GQLQueryProgrammeArgs, GQLSubject } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 
 const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
@@ -37,7 +30,7 @@ export const Query = {
         nodeType: "PROGRAMME",
         isRoot: true,
         language: context.language,
-        includeContexts: true,
+        includeContexts: false,
         isVisible: true,
       },
       context,
@@ -68,41 +61,23 @@ export const resolvers = {
         return subjectpage?.metaDescription;
       }
     },
-    async desktopImage(
-      programme: GQLProgrammePage,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLMetaImage | undefined> {
+    async desktopImage(programme: GQLProgrammePage, __: any, context: ContextWithLoaders): Promise<string | undefined> {
       if (programme.contentUri?.startsWith("urn:frontpage")) {
-        if (programme.contentUri?.startsWith("urn:frontpage")) {
-          const subjectpage = await context.loaders.subjectpageLoader.load(
-            programme.contentUri.replace("urn:frontpage:", ""),
-          );
-          if (subjectpage) {
-            return {
-              url: subjectpage.banner.desktopUrl,
-              alt: "",
-            };
-          }
+        const subjectpage = await context.loaders.subjectpageLoader.load(
+          programme.contentUri.replace("urn:frontpage:", ""),
+        );
+        if (subjectpage) {
+          return subjectpage.banner.desktopUrl;
         }
       }
     },
-    async mobileImage(
-      programme: GQLProgrammePage,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLMetaImage | undefined> {
+    async mobileImage(programme: GQLProgrammePage, __: any, context: ContextWithLoaders): Promise<string | undefined> {
       if (programme.contentUri?.startsWith("urn:frontpage")) {
-        if (programme.contentUri?.startsWith("urn:frontpage")) {
-          const subjectpage = await context.loaders.subjectpageLoader.load(
-            programme.contentUri.replace("urn:frontpage:", ""),
-          );
-          if (subjectpage) {
-            return {
-              url: subjectpage.banner.mobileUrl || subjectpage.banner.desktopUrl,
-              alt: "",
-            };
-          }
+        const subjectpage = await context.loaders.subjectpageLoader.load(
+          programme.contentUri.replace("urn:frontpage:", ""),
+        );
+        if (subjectpage) {
+          return subjectpage.banner.mobileUrl || subjectpage.banner.desktopUrl;
         }
       }
     },

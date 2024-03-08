@@ -1394,11 +1394,11 @@ export type GQLPodcastSeriesWithEpisodes = GQLPodcastSeriesBase & {
 export type GQLProgrammePage = {
   __typename?: 'ProgrammePage';
   contentUri?: Maybe<Scalars['String']>;
-  desktopImage?: Maybe<GQLMetaImage>;
+  desktopImage?: Maybe<Scalars['String']>;
   grades?: Maybe<Array<GQLGrade>>;
   id: Scalars['String'];
   metaDescription?: Maybe<Scalars['String']>;
-  mobileImage?: Maybe<GQLMetaImage>;
+  mobileImage?: Maybe<Scalars['String']>;
   title: GQLTitle;
   url: Scalars['String'];
 };
@@ -3699,11 +3699,11 @@ export type GQLPodcastSeriesWithEpisodesResolvers<ContextType = any, ParentType 
 
 export type GQLProgrammePageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ProgrammePage'] = GQLResolversParentTypes['ProgrammePage']> = {
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  desktopImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  desktopImage?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   grades?: Resolver<Maybe<Array<GQLResolversTypes['Grade']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  mobileImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  mobileImage?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
