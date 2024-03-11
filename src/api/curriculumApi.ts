@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import he from "he";
 import { Response } from "node-fetch";
 import { GQLCompetenceGoal, GQLCoreElement, GQLElement, GQLReference } from "../types/schema";
@@ -209,7 +207,11 @@ async function fetchGrepElement(
   };
 }
 
-async function fetchCoreElementReference(code: string, language: string, context: Context): Promise<GQLReference> {
+async function fetchCoreElementReference(
+  code: string,
+  language: string | undefined,
+  context: Context,
+): Promise<GQLReference> {
   return fetchGrepElement(code, language, "/grep/kl06/v201906/kjerneelementer-lk20/", context);
 }
 
@@ -218,17 +220,25 @@ export async function fetchCoreElementReferences(
   language: string | undefined,
   context: Context,
 ): Promise<GQLElement[]> {
-  return Promise.all(
+  const fetched = await Promise.all(
     codes.map(async (code) => {
-      return {
-        reference: await fetchCoreElementReference(code.reference.code, language, context),
-        explanation: code.explanation,
-      };
+      if (code.reference.code) {
+        return {
+          reference: await fetchCoreElementReference(code.reference.code, language, context),
+          explanation: code.explanation,
+        };
+      }
     }),
   );
+
+  return fetched.filter((f): f is GQLElement => !!f);
 }
 
-async function fetchCrossSubjectTopic(code: string, language: string, context: Context): Promise<GQLReference> {
+async function fetchCrossSubjectTopic(
+  code: string,
+  language: string | undefined,
+  context: Context,
+): Promise<GQLReference> {
   return fetchGrepElement(code, language, "/grep/kl06/v201906/tverrfaglige-temaer-lk20/", context);
 }
 
@@ -258,14 +268,16 @@ export async function fetchCrossSubjectTopics(
   language: string | undefined,
   context: Context,
 ): Promise<GQLElement[]> {
-  return Promise.all(
+  const fetched = await Promise.all(
     codes.map(async (code) => {
-      return {
-        reference: await fetchCrossSubjectTopic(code.reference.code, language, context),
-        explanation: code.explanation,
-      };
+      if (code.reference.code)
+        return {
+          reference: await fetchCrossSubjectTopic(code.reference.code, language, context),
+          explanation: code.explanation,
+        };
     }),
   );
+  return fetched.filter((f): f is GQLElement => !!f);
 }
 
 export async function fetchCompetenceSet(
