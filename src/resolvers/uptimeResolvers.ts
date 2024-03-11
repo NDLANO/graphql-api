@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import { fetchUptimeIssues } from "../api";
 import { fetchVersion } from "../api/taxonomyApi";
 import { GQLUptimeAlert } from "../types/schema";
@@ -24,7 +22,7 @@ const localizedVersionHashTitle = (name: string, language: string) => {
 };
 
 export const Query = {
-  async alerts(_: any, __: any, context: ContextWithLoaders): Promise<GQLUptimeAlert[]> {
+  async alerts(_: any, __: any, context: ContextWithLoaders): Promise<GQLUptimeAlert[] | undefined> {
     if (context.versionHash) {
       const [version, uptimeIssues] = await Promise.all([
         fetchVersion(context.versionHash, context),
@@ -35,7 +33,7 @@ export const Query = {
         const versionTypeAlert: GQLUptimeAlert = {
           number: -1,
           closable: false,
-          title: localizedVersionHashTitle(version.name, context.language),
+          title: localizedVersionHashTitle(version?.name ?? "", context.language),
         };
         return uptimeIssues.concat(versionTypeAlert);
       }
