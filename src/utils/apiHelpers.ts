@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
 import { Node } from "@ndla/types-taxonomy";
@@ -40,12 +38,9 @@ async function fetchHelper(path: string, context: Context, options?: RequestOpti
   });
 
   const accessTokenAuth = context.token ? { Authorization: `Bearer ${context.token.access_token}` } : null;
-
   const feideAuthorization = context.feideAuthorization ? { feideAuthorization: context.feideAuthorization } : null;
-
   const versionHash = context.versionHash ? { versionhash: context.versionHash } : null;
-
-  const cacheHeaders = !context.shouldUseCache ? { "Cache-Control": "no-cache" } : {};
+  const cacheHeaders = !context.shouldUseCache ? { "Cache-Control": "no-cache" } : null;
 
   const headers = {
     ...feideAuthorization,
