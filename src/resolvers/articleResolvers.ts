@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import cheerio from "cheerio";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import {
@@ -51,22 +49,25 @@ export const resolvers = {
   Article: {
     async competenceGoals(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
       const language =
-        article.supportedLanguages.find((lang) => lang === context.language) || article.supportedLanguages[0];
-      return fetchCompetenceGoals(article.grepCodes, language, context);
+        (article.supportedLanguages?.find((lang) => lang === context.language) || article.supportedLanguages?.[0]) ??
+        context.language;
+      return fetchCompetenceGoals(article.grepCodes ?? [], language, context);
     },
     async coreElements(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
       const language =
-        article.supportedLanguages.find((lang) => lang === context.language) || article.supportedLanguages[0];
-      return fetchCoreElements(article.grepCodes, language, context);
+        (article.supportedLanguages?.find((lang) => lang === context.language) || article.supportedLanguages?.[0]) ??
+        context.language;
+      return fetchCoreElements(article.grepCodes ?? [], language, context);
     },
     async crossSubjectTopics(
       article: IArticleV2,
       args: { subjectId: string },
       context: ContextWithLoaders,
     ): Promise<GQLCrossSubjectElement[]> {
-      const crossSubjectCodes = article.grepCodes.filter((code) => code.startsWith("TT"));
+      const crossSubjectCodes = article.grepCodes?.filter((code) => code.startsWith("TT")) ?? [];
       const language =
-        article.supportedLanguages.find((lang) => lang === context.language) || article.supportedLanguages[0];
+        (article.supportedLanguages?.find((lang) => lang === context.language) || article.supportedLanguages?.[0]) ??
+        context.language;
       const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(crossSubjectCodes, language, context);
       const topics = await fetchSubjectTopics(args.subjectId, context);
       return crossSubjectTopicInfo.map((crossSubjectTopic) => ({
