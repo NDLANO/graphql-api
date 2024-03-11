@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import { searchConcepts, fetchConcept, fetchListingPage, fetchArticles } from "../api";
 import { Concept, ConceptResult } from "../api/conceptApi";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
@@ -71,10 +69,11 @@ export const resolvers = {
       if (!articleIds || articleIds.length === 0) {
         return [];
       }
-      return await fetchArticles(
+      const fetched = await fetchArticles(
         articleIds.map((id) => `${id}`),
         context,
       );
+      return fetched.filter((article): article is GQLMeta => article !== null);
     },
   },
 };
