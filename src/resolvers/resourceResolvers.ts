@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath } from "../api";
 import { fetchNodeByContentUri } from "../api/taxonomyApi";
@@ -85,7 +83,7 @@ export const Query = {
 
 export const resolvers = {
   ResourceTypeDefinition: {
-    async subtypes(resourceType: GQLResourceTypeDefinition): Promise<GQLResourceTypeDefinition[]> {
+    async subtypes(resourceType: GQLResourceTypeDefinition): Promise<GQLResourceTypeDefinition[] | undefined> {
       return resourceType.subtypes;
     },
   },
@@ -98,7 +96,7 @@ export const resolvers = {
       }
       return defaultAvailability;
     },
-    async meta(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<GQLMeta> {
+    async meta(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
       if (resource.contentUri?.startsWith("urn:learningpath")) {
         return context.loaders.learningpathsLoader.load(resource.contentUri.replace("urn:learningpath:", ""));
       } else if (resource.contentUri?.startsWith("urn:article")) {
@@ -106,7 +104,7 @@ export const resolvers = {
       }
       throw Object.assign(new Error("Missing contentUri for resource with id: " + resource.id), { status: 404 });
     },
-    async learningpath(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<GQLLearningpath> {
+    async learningpath(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<GQLLearningpath | null> {
       if (resource.contentUri?.startsWith("urn:learningpath")) {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
         return fetchLearningpath(learningpathId, context);
