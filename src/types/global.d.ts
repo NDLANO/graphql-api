@@ -27,7 +27,7 @@ declare global {
     subjectsLoader: DataLoader<
       {
         metadataFilter?: { key: string; value?: string };
-        filterVisible: boolean;
+        filterVisible?: boolean;
       },
       { subjects: GQLSubject[] }
     >;
