@@ -191,7 +191,12 @@ export async function fetchCoreElements(
   );
 }
 
-async function fetchGrepElement(code: string, language: string, url: string, context: Context): Promise<GQLReference> {
+async function fetchGrepElement(
+  code: string,
+  language: string | undefined,
+  url: string,
+  context: Context,
+): Promise<GQLReference> {
   const lang = language || context.language;
   const response = await curriculumFetch(`${url}${code}`, context);
   const json: GrepElement = await resolveJson(response, {});
@@ -210,7 +215,7 @@ async function fetchCoreElementReference(code: string, language: string, context
 
 export async function fetchCoreElementReferences(
   codes: GQLElement[],
-  language: string,
+  language: string | undefined,
   context: Context,
 ): Promise<GQLElement[]> {
   return Promise.all(
@@ -250,7 +255,7 @@ export async function fetchCrossSubjectTopicsByCode(
 
 export async function fetchCrossSubjectTopics(
   codes: GQLElement[],
-  language: string,
+  language: string | undefined,
   context: Context,
 ): Promise<GQLElement[]> {
   return Promise.all(
@@ -263,10 +268,18 @@ export async function fetchCrossSubjectTopics(
   );
 }
 
-export async function fetchCompetenceSet(code: string, language: string, context: Context): Promise<GQLReference> {
+export async function fetchCompetenceSet(
+  code: string,
+  language: string | undefined,
+  context: Context,
+): Promise<GQLReference> {
   return fetchGrepElement(code, language, "/grep/kl06/v201906/kompetansemaalsett-lk20/", context);
 }
 
-export async function fetchLK20Curriculum(code: string, language: string, context: Context): Promise<GQLReference> {
+export async function fetchLK20Curriculum(
+  code: string,
+  language: string | undefined,
+  context: Context,
+): Promise<GQLReference> {
   return fetchGrepElement(code, language, "/grep/kl06/v201906/laereplaner-lk20/", context);
 }
