@@ -22,7 +22,7 @@ const localizedVersionHashTitle = (name: string, language: string) => {
 };
 
 export const Query = {
-  async alerts(_: any, __: any, context: ContextWithLoaders): Promise<GQLUptimeAlert[] | undefined> {
+  async alerts(_: any, __: any, context: ContextWithLoaders): Promise<GQLUptimeAlert[]> {
     if (context.versionHash) {
       const [version, uptimeIssues] = await Promise.all([
         fetchVersion(context.versionHash, context),
@@ -36,7 +36,7 @@ export const Query = {
           title: localizedVersionHashTitle(version?.name ?? "", context.language),
         };
         return uptimeIssues.concat(versionTypeAlert);
-      }
+      } else return [];
     } else return await fetchUptimeIssues(context);
   },
 };
