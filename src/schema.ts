@@ -312,8 +312,9 @@ export const typeDefs = gql`
     parents: [Topic!]
     meta: Meta
     learningpath: Learningpath
-    article(subjectId: String, isOembed: String, convertEmbeds: Boolean): Article
+    article: Article
     availability: String
+    oembed: String
   }
 
   type TaxonomyContext {
@@ -337,7 +338,7 @@ export const typeDefs = gql`
     url: String
     language: String
     meta: Meta
-    article(subjectId: String, showVisualElement: String, convertEmbeds: Boolean): Article
+    article: Article
     availability: String
     isPrimary: Boolean
     parent: String
@@ -347,6 +348,7 @@ export const typeDefs = gql`
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
+    oembed: String
   }
 
   type License {
@@ -517,13 +519,11 @@ export const typeDefs = gql`
     created: String!
     updated: String!
     published: String!
-    visualElement: VisualElement
     metaImage: MetaImage
     metaDescription: String!
     articleType: String!
     oldNdlaUrl: String
     requiredLibraries: [ArticleRequiredLibrary!]
-    metaData: ArticleMetaData
     supportedLanguages: [String!]
     copyright: Copyright!
     tags: [String!]
@@ -531,14 +531,30 @@ export const typeDefs = gql`
     competenceGoals: [CompetenceGoal!]
     coreElements: [CoreElement!]
     crossSubjectTopics(subjectId: String): [CrossSubjectElement!]
-    oembed: String
     conceptIds: [Int!]
     concepts: [Concept!]
-    relatedContent: [RelatedContent!]
+    relatedContent(subjectId: String): [RelatedContent!]
     availability: String
     revisionDate: String
-    visualElementEmbed: ResourceEmbed
     language: String!
+    transformedContent(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
+  }
+
+  input TransformedArticleContentInput {
+    subjectId: String
+    isOembed: String
+    showVisualElement: String
+    path: String
+    previewH5p: Boolean
+    draftConcept: Boolean
+    absoluteUrl: Boolean
+  }
+
+  type TransformedArticleContent {
+    content: String!
+    visualElement: VisualElement
+    metaData: ArticleMetaData
+    visualElementEmbed: ResourceEmbed
   }
 
   type EmbedVisualelement {
@@ -1338,16 +1354,7 @@ export const typeDefs = gql`
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
-    article(
-      id: String!
-      subjectId: String
-      isOembed: String
-      draftConcept: Boolean
-      absoluteUrl: Boolean
-      path: String
-      showVisualElement: String
-      convertEmbeds: Boolean
-    ): Article
+    article(id: String!): Article
     subject(id: String!): Subject
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
