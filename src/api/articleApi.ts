@@ -123,7 +123,7 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
 
   const requests = [];
   if (numberOfPages) {
-    for (let i = 0; i <= numberOfPages; i += 1) {
+    for (let i = 0; i < numberOfPages; i += 1) {
       requests.push(fetchArticlesPage(ids, context, pageSize, i));
     }
   }
