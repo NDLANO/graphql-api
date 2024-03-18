@@ -9,7 +9,8 @@
 // @ts-strict-ignore
 
 import cheerio from "cheerio";
-import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath, fetchOembed } from "../api";
+import { Node } from "@ndla/types-taxonomy";
+import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath, fetchOembed, queryNodes } from "../api";
 import { fetchNodeByContentUri } from "../api/taxonomyApi";
 import { ndlaUrl } from "../config";
 import {
@@ -18,10 +19,13 @@ import {
   GQLMeta,
   GQLQueryArticleResourceArgs,
   GQLQueryResourceArgs,
+  GQLQueryResourceByPathArgs,
   GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
+  GQLSubject,
   GQLTaxonomyContext,
+  GQLTopic,
   GQLVisualElementOembed,
 } from "../types/schema";
 import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
@@ -84,6 +88,40 @@ export const Query = {
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
     return fetchResourceTypes<GQLResourceType>(context);
   },
+  async resourceByPath(
+    _: any,
+    { path }: GQLQueryResourceByPathArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLResource> {
+    if (!path || !path.includes("__")) {
+      throw Error("Tried to fetch resource with invalid path");
+    }
+
+    const contextId = path.split("__")[1];
+    const node = await queryNodes({ contextId, language: context.language, includeContexts: true }, context);
+    const resource = node[0];
+    const matchingContext = resource.contexts.find(
+      (c) => c.contextId === contextId && c.isVisible && !c.rootId.startsWith("urn:programme"),
+    );
+
+    if (!matchingContext) {
+      throw Error("No matching context found for resource with path: " + path);
+    }
+
+    const contextPath = matchingContext?.path || resource.path;
+    const rank = matchingContext?.rank;
+    const relevanceId = matchingContext?.relevanceId || "urn:relevance:core";
+    const breadcrumbs = matchingContext.breadcrumbs[context.language] || matchingContext.breadcrumbs["nb"] || [];
+    const contexts: GQLTaxonomyContext[] = [
+      {
+        path: matchingContext.path,
+        parentIds: matchingContext.parentIds,
+        breadcrumbs,
+      },
+    ];
+
+    return { ...resource, contexts, path: contextPath, rank, relevanceId, parents: [] };
+  },
 };
 
 export const resolvers = {
@@ -93,6 +131,28 @@ export const resolvers = {
     },
   },
   Resource: {
+    async parentTopics(
+      resource: GQLResource,
+      args: { onlyDirectParent: boolean },
+      context: ContextWithLoaders,
+    ): Promise<GQLTopic[]> {
+      const allParentIds = resource.contexts?.[0].parentIds;
+      const ids = (args.onlyDirectParent ? allParentIds.slice(-1) : allParentIds).filter(
+        (id) => !!id && id.startsWith("urn:topic"),
+      );
+
+      return (
+        await Promise.all(
+          ids.map(async (parentId) => {
+            return context.loaders.nodeLoader.load(parentId);
+          }),
+        )
+      ).filter((x) => !!x);
+    },
+    async subject(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<Node | null> {
+      const subjectId = resource.contexts?.[0]?.parentIds?.find((id) => id.startsWith("urn:subject:"));
+      return context.loaders.subjectLoader.load({ id: subjectId });
+    },
     async availability(resource: GQLResource, _: any, context: ContextWithLoaders) {
       const defaultAvailability = "everyone";
       if (resource.contentUri?.startsWith("urn:article")) {

@@ -21,7 +21,15 @@ import {
   fetchLK20Curriculum,
   fetchSubjectPage,
 } from "./api";
-import { GQLMeta, GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import {
+  GQLMeta,
+  GQLReference,
+  GQLResourceTypeDefinition,
+  GQLSubject,
+  GQLTaxonomyEntity,
+  GQLTopic,
+} from "./types/schema";
+import { nodeToTaxonomyEntity } from "./utils/apiHelpers";
 
 export function articlesLoader(context: Context): DataLoader<string, GQLMeta | null> {
   return new DataLoader(
@@ -30,6 +38,17 @@ export function articlesLoader(context: Context): DataLoader<string, GQLMeta | n
     },
     { maxBatchSize: 100 },
   );
+}
+
+export function nodeLoader(context: Context): DataLoader<string, GQLTopic | null> {
+  return new DataLoader(async (nodeIds) => {
+    return Promise.all(
+      nodeIds.map(async (nodeId) => {
+        const node = await fetchNode({ id: nodeId }, context);
+        return nodeToTaxonomyEntity(node, context);
+      }),
+    );
+  });
 }
 
 export function learningpathsLoader(context: Context): DataLoader<string, GQLMeta | null> {
