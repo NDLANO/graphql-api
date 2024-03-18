@@ -134,7 +134,7 @@ const conceptMetaData = (
     id: concept.id.toString(),
     title: concept.title.title,
     copyright: concept.copyright,
-    src: `${ndlaUrl}/concept/${concept.id}`,
+    src: `${ndlaUrl}/embed-iframe/concept/${concept.id}`,
     content: concept.content?.htmlContent ?? "",
     metaImageUrl: concept.metaImage?.url,
   };
