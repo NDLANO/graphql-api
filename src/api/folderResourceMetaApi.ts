@@ -11,6 +11,7 @@
 import groupBy from "lodash/groupBy";
 import { fetchAudio } from "./audioApi";
 import { searchConcepts } from "./conceptApi";
+import { fetchFolder } from "./folderApi";
 import { fetchImage } from "./imageApi";
 import { searchWithoutPagination } from "./searchApi";
 import { fetchVideo } from "./videoApi";
@@ -33,7 +34,7 @@ const articleResourceTypes = [
 
 const learningpathResourceTypes = ["urn:resourcetype:learningPath"];
 
-type MetaType = "article" | "learningpath" | "multidisciplinary" | "concept" | "image" | "audio" | "video";
+type MetaType = "article" | "learningpath" | "multidisciplinary" | "concept" | "image" | "audio" | "video" | "folder";
 
 const findResourceTypes = (result: GQLSearchResult): GQLFolderResourceResourceType[] => {
   const context = result.contexts?.[0];
@@ -134,7 +135,26 @@ export const fetchFolderResourceMeta = async (
   } else if (resource.resourceType === "video") {
     const res = await fetchBrightcoves([resource], context, "video");
     return res[0];
+  } else if (resource.resourceType === "folder") {
+    const res = await fetchFolderMeta([resource], context, "folder");
+    return res[0];
   }
+};
+
+export const fetchFolderMeta = async (
+  resources: GQLFolderResourceMetaSearchInput[] | undefined,
+  context: ContextWithLoaders,
+  type: MetaType,
+): Promise<GQLFolderResourceMeta[]> => {
+  const folders = await Promise.all(resources.map(async (r) => await fetchFolder({ id: r.id }, context)));
+
+  return folders.map((f) => ({
+    description: f.description ?? "",
+    id: f.id,
+    resourceTypes: [{ id: "folder", name: "folder" }],
+    title: f.name,
+    type,
+  }));
 };
 
 export const fetchImageMeta = async (
