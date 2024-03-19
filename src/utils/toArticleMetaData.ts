@@ -11,7 +11,7 @@ import { IConcept, IConceptSummary } from "@ndla/types-backend/concept-api";
 import { IImageMetaInformationV3 } from "@ndla/types-backend/image-api";
 import { ConceptVisualElementMeta, EmbedMetaData } from "@ndla/types-embed";
 import { licenseFixer, roleMapper } from "./apiHelpers";
-import { listingUrl } from "../config";
+import { ndlaUrl } from "../config";
 import {
   GQLArticleMetaData,
   GQLAudioLicense,
@@ -134,8 +134,8 @@ const conceptMetaData = (
     id: concept.id.toString(),
     title: concept.title.title,
     copyright: concept.copyright,
-    src: `${listingUrl}/concepts/${concept.id}`,
-    content: concept.content?.content ?? "",
+    src: `${ndlaUrl}/embed-iframe/concept/${concept.id}`,
+    content: concept.content?.htmlContent ?? "",
     metaImageUrl: concept.metaImage?.url,
   };
   if (concept.conceptType === "gloss") {
