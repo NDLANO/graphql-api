@@ -248,7 +248,7 @@ export const fetchFolderResourcesMetaData = async (
   { resources }: GQLQueryFolderResourceMetaSearchArgs,
   context: ContextWithLoaders,
 ): Promise<GQLFolderResourceMeta[]> => {
-  const { article, learningpath, multidisciplinary, concept, image, audio, video } = groupBy(
+  const { article, learningpath, multidisciplinary, concept, image, audio, video, folder } = groupBy(
     resources,
     (r) => r.resourceType,
   );
@@ -271,6 +271,7 @@ export const fetchFolderResourcesMetaData = async (
   const conceptMeta = fetchConceptsMeta(concept, context, "concept");
   const audioMeta = fetchAudios(audio, context, "audio");
   const videoMeta = fetchBrightcoves(video, context, "video");
+  const folderMeta = fetchFolderMeta(folder, context, "folder");
 
   const results = await Promise.all([
     articleMeta,
@@ -280,6 +281,7 @@ export const fetchFolderResourcesMetaData = async (
     imageMeta,
     audioMeta,
     videoMeta,
+    folderMeta,
   ]);
   return results.flat();
 };
