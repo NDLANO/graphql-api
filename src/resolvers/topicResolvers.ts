@@ -10,8 +10,7 @@
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchArticle, fetchNode, fetchNodeResources, fetchChildren, fetchOembed, queryNodes } from "../api";
-import { ndlaUrl } from "../config";
+import { fetchArticle, fetchNode, fetchNodeResources, fetchChildren, queryNodes } from "../api";
 import {
   GQLMeta,
   GQLQueryTopicArgs,
@@ -20,7 +19,6 @@ import {
   GQLTopic,
   GQLTopicCoreResourcesArgs,
   GQLTopicSupplementaryResourcesArgs,
-  GQLVisualElementOembed,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 import { filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
@@ -61,15 +59,6 @@ export const resolvers = {
     async availability(topic: Node, _: any, context: ContextWithLoaders) {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       return article.availability;
-    },
-    async oembed(topic: Node, _: any, context: ContextWithLoaders): Promise<string | undefined> {
-      if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
-        const articleId = getArticleIdFromUrn(topic.contentUri);
-        const path = topic.path || `/article/${articleId}`;
-        return fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}${path}`, context).then(
-          (oembed) => oembed.html?.split('"')[3],
-        );
-      }
     },
     async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
       if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {

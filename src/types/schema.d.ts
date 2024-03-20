@@ -195,6 +195,7 @@ export type GQLArticle = {
   language: Scalars['String'];
   metaDescription: Scalars['String'];
   metaImage?: Maybe<GQLMetaImage>;
+  oembed?: Maybe<Scalars['String']>;
   oldNdlaUrl?: Maybe<Scalars['String']>;
   published: Scalars['String'];
   relatedContent?: Maybe<Array<GQLRelatedContent>>;
@@ -1817,7 +1818,6 @@ export type GQLResource = GQLTaxonomyEntity & GQLWithArticle & {
   meta?: Maybe<GQLMeta>;
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String'];
-  oembed?: Maybe<Scalars['String']>;
   parents?: Maybe<Array<GQLTopic>>;
   path: Scalars['String'];
   paths: Array<Scalars['String']>;
@@ -2095,7 +2095,6 @@ export type GQLTopic = GQLTaxonomyEntity & GQLWithArticle & {
   meta?: Maybe<GQLMeta>;
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String'];
-  oembed?: Maybe<Scalars['String']>;
   parent?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['String']>;
   path: Scalars['String'];
@@ -2761,6 +2760,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  oembed?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   oldNdlaUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   published?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   relatedContent?: Resolver<Maybe<Array<GQLResolversTypes['RelatedContent']>>, ParentType, ContextType, Partial<GQLArticleRelatedContentArgs>>;
@@ -3803,7 +3803,6 @@ export type GQLResourceResolvers<ContextType = any, ParentType extends GQLResolv
   meta?: Resolver<Maybe<GQLResolversTypes['Meta']>, ParentType, ContextType>;
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  oembed?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   parents?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   paths?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -4071,7 +4070,6 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
   meta?: Resolver<Maybe<GQLResolversTypes['Meta']>, ParentType, ContextType>;
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  oembed?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   parent?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

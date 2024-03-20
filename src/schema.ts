@@ -314,7 +314,6 @@ export const typeDefs = gql`
     learningpath: Learningpath
     article: Article
     availability: String
-    oembed: String
   }
 
   type TaxonomyContext {
@@ -348,7 +347,6 @@ export const typeDefs = gql`
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
-    oembed: String
   }
 
   type License {
@@ -538,6 +536,7 @@ export const typeDefs = gql`
     revisionDate: String
     language: String!
     transformedContent(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
+    oembed: String
   }
 
   input TransformedArticleContentInput {

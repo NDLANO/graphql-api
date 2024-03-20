@@ -8,9 +8,11 @@
 
 // @ts-strict-ignore
 
+import cheerio from "cheerio";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import {
   fetchArticle,
+  fetchOembed,
   fetchCompetenceGoals,
   fetchCoreElements,
   fetchCrossSubjectTopicsByCode,
@@ -20,6 +22,7 @@ import {
 } from "../api";
 import { fetchTransformedContent, fetchRelatedContent } from "../api/articleApi";
 import { Concept } from "../api/conceptApi";
+import { ndlaUrl } from "../config";
 import {
   GQLCompetenceGoal,
   GQLCoreElement,
@@ -29,6 +32,7 @@ import {
   GQLTransformedArticleContent,
   GQLArticleTransformedContentArgs,
   GQLRelatedContent,
+  GQLVisualElementOembed,
 } from "../types/schema";
 import parseMarkdown from "../utils/parseMarkdown";
 
@@ -78,6 +82,12 @@ export const resolvers = {
         return results.concepts;
       }
       return [];
+    },
+    async oembed(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<string | undefined> {
+      return fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}/article/${article.id}`, context).then((oembed) => {
+        const parsed = cheerio.load(oembed.html);
+        return parsed("iframe").attr("src");
+      });
     },
     async metaImage(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLMetaImage | undefined> {
       if (article.metaImage) {

@@ -8,11 +8,9 @@
 
 // @ts-strict-ignore
 
-import cheerio from "cheerio";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath, fetchOembed } from "../api";
+import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath } from "../api";
 import { fetchNodeByContentUri } from "../api/taxonomyApi";
-import { ndlaUrl } from "../config";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -22,7 +20,6 @@ import {
   GQLResourceType,
   GQLResourceTypeDefinition,
   GQLTaxonomyContext,
-  GQLVisualElementOembed,
 } from "../types/schema";
 import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
@@ -119,13 +116,6 @@ export const resolvers = {
       }
       throw Object.assign(new Error("Missing learningpath contentUri for resource with id: " + resource.id), {
         status: 404,
-      });
-    },
-    async oembed(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<string | undefined> {
-      if (!resource.contentUri?.startsWith("urn:article")) return undefined;
-      return fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}${resource.path}`, context).then((oembed) => {
-        const parsed = cheerio.load(oembed.html);
-        return parsed("iframe").attr("src");
       });
     },
     async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
