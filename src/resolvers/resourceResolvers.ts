@@ -8,12 +8,10 @@
 
 // @ts-strict-ignore
 
-import cheerio from "cheerio";
-import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath, fetchOembed } from "../api";
+import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath } from "../api";
 import { fetchNodeByContentUri } from "../api/taxonomyApi";
-import { ndlaUrl } from "../config";
 import {
-  GQLArticle,
   GQLLearningpath,
   GQLMeta,
   GQLQueryArticleResourceArgs,
@@ -22,7 +20,6 @@ import {
   GQLResourceType,
   GQLResourceTypeDefinition,
   GQLTaxonomyContext,
-  GQLVisualElementOembed,
 } from "../types/schema";
 import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
@@ -121,36 +118,10 @@ export const resolvers = {
         status: 404,
       });
     },
-    async article(
-      resource: GQLResource,
-      args: {
-        subjectId?: string;
-        isOembed?: string;
-        convertEmbeds?: boolean;
-      },
-      context: ContextWithLoaders,
-    ): Promise<GQLArticle> {
+    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
       if (resource.contentUri?.startsWith("urn:article")) {
         const articleId = getArticleIdFromUrn(resource.contentUri);
-        return Promise.resolve(
-          fetchArticle(
-            {
-              articleId,
-              subjectId: args.subjectId,
-              isOembed: args.isOembed,
-              path: resource.path,
-              convertEmbeds: args.convertEmbeds,
-            },
-            context,
-          ).then((article) => {
-            return Object.assign({}, article, {
-              oembed: fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}${resource.path}`, context).then((oembed) => {
-                const parsed = cheerio.load(oembed.html);
-                return parsed("iframe").attr("src");
-              }),
-            });
-          }),
-        );
+        return fetchArticle({ articleId }, context);
       }
       if (resource.contentUri?.startsWith("urn:learningpath")) {
         return null;

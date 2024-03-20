@@ -8,20 +8,17 @@
 
 // @ts-strict-ignore
 
+import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchArticle, fetchNode, fetchNodeResources, fetchChildren, fetchOembed, queryNodes } from "../api";
-import { ndlaUrl } from "../config";
+import { fetchArticle, fetchNode, fetchNodeResources, fetchChildren, queryNodes } from "../api";
 import {
-  GQLArticle,
   GQLMeta,
   GQLQueryTopicArgs,
   GQLQueryTopicsArgs,
   GQLResource,
   GQLTopic,
-  GQLTopicArticleArgs,
   GQLTopicCoreResourcesArgs,
   GQLTopicSupplementaryResourcesArgs,
-  GQLVisualElementOembed,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 import { filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
@@ -59,32 +56,14 @@ export const Query = {
 
 export const resolvers = {
   Topic: {
-    async availability(topic: Node, _: GQLTopicArticleArgs, context: ContextWithLoaders) {
+    async availability(topic: Node, _: any, context: ContextWithLoaders) {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       return article.availability;
     },
-    async article(topic: Node, args: GQLTopicArticleArgs, context: ContextWithLoaders): Promise<GQLArticle> {
+    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
       if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
         const articleId = getArticleIdFromUrn(topic.contentUri);
-        return Promise.resolve(
-          fetchArticle(
-            {
-              articleId,
-              subjectId: args.subjectId,
-              showVisualElement: args.showVisualElement,
-              convertEmbeds: args.convertEmbeds,
-              path: topic.path,
-            },
-            context,
-          ).then((article) => {
-            const path = topic.path || `/article/${articleId}`;
-            return Object.assign({}, article, {
-              oembed: fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}${path}`, context).then(
-                (oembed) => oembed.html.split('"')[3],
-              ),
-            });
-          }),
-        );
+        return fetchArticle({ articleId }, context);
       }
       throw Object.assign(new Error("Missing article contentUri for topic with id: " + topic.id), { status: 404 });
     },

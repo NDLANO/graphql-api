@@ -193,7 +193,6 @@ export type GQLArticle = {
   id: Scalars['Int'];
   introduction?: Maybe<Scalars['String']>;
   language: Scalars['String'];
-  metaData?: Maybe<GQLArticleMetaData>;
   metaDescription: Scalars['String'];
   metaImage?: Maybe<GQLMetaImage>;
   oembed?: Maybe<Scalars['String']>;
@@ -207,14 +206,23 @@ export type GQLArticle = {
   supportedLanguages?: Maybe<Array<Scalars['String']>>;
   tags?: Maybe<Array<Scalars['String']>>;
   title: Scalars['String'];
+  transformedContent: GQLTransformedArticleContent;
   updated: Scalars['String'];
-  visualElement?: Maybe<GQLVisualElement>;
-  visualElementEmbed?: Maybe<GQLResourceEmbed>;
 };
 
 
 export type GQLArticleCrossSubjectTopicsArgs = {
   subjectId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLArticleRelatedContentArgs = {
+  subjectId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLArticleTransformedContentArgs = {
+  transformArgs?: InputMaybe<GQLTransformedArticleContentInput>;
 };
 
 export type GQLArticleFolderResourceMeta = GQLFolderResourceMeta & {
@@ -1550,14 +1558,7 @@ export type GQLQueryArenaUserV2Args = {
 
 
 export type GQLQueryArticleArgs = {
-  absoluteUrl?: InputMaybe<Scalars['Boolean']>;
-  convertEmbeds?: InputMaybe<Scalars['Boolean']>;
-  draftConcept?: InputMaybe<Scalars['Boolean']>;
   id: Scalars['String'];
-  isOembed?: InputMaybe<Scalars['String']>;
-  path?: InputMaybe<Scalars['String']>;
-  showVisualElement?: InputMaybe<Scalars['String']>;
-  subjectId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1825,13 +1826,6 @@ export type GQLResource = GQLTaxonomyEntity & GQLWithArticle & {
   resourceTypes?: Maybe<Array<GQLResourceType>>;
   supportedLanguages: Array<Scalars['String']>;
   url?: Maybe<Scalars['String']>;
-};
-
-
-export type GQLResourceArticleArgs = {
-  convertEmbeds?: InputMaybe<Scalars['Boolean']>;
-  isOembed?: InputMaybe<Scalars['String']>;
-  subjectId?: InputMaybe<Scalars['String']>;
 };
 
 export type GQLResourceEmbed = {
@@ -2115,13 +2109,6 @@ export type GQLTopic = GQLTaxonomyEntity & GQLWithArticle & {
 };
 
 
-export type GQLTopicArticleArgs = {
-  convertEmbeds?: InputMaybe<Scalars['Boolean']>;
-  showVisualElement?: InputMaybe<Scalars['String']>;
-  subjectId?: InputMaybe<Scalars['String']>;
-};
-
-
 export type GQLTopicCoreResourcesArgs = {
   subjectId?: InputMaybe<Scalars['String']>;
 };
@@ -2135,6 +2122,24 @@ export type GQLTranscription = {
   __typename?: 'Transcription';
   pinyin?: Maybe<Scalars['String']>;
   traditional?: Maybe<Scalars['String']>;
+};
+
+export type GQLTransformedArticleContent = {
+  __typename?: 'TransformedArticleContent';
+  content: Scalars['String'];
+  metaData?: Maybe<GQLArticleMetaData>;
+  visualElement?: Maybe<GQLVisualElement>;
+  visualElementEmbed?: Maybe<GQLResourceEmbed>;
+};
+
+export type GQLTransformedArticleContentInput = {
+  absoluteUrl?: InputMaybe<Scalars['Boolean']>;
+  draftConcept?: InputMaybe<Scalars['Boolean']>;
+  isOembed?: InputMaybe<Scalars['String']>;
+  path?: InputMaybe<Scalars['String']>;
+  previewH5p?: InputMaybe<Scalars['Boolean']>;
+  showVisualElement?: InputMaybe<Scalars['String']>;
+  subjectId?: InputMaybe<Scalars['String']>;
 };
 
 export type GQLUpdatedFolder = {
@@ -2410,6 +2415,8 @@ export type GQLResolversTypes = {
   Title: ResolverTypeWrapper<GQLTitle>;
   Topic: ResolverTypeWrapper<GQLTopic>;
   Transcription: ResolverTypeWrapper<GQLTranscription>;
+  TransformedArticleContent: ResolverTypeWrapper<GQLTransformedArticleContent>;
+  TransformedArticleContentInput: GQLTransformedArticleContentInput;
   UpdatedFolder: ResolverTypeWrapper<GQLUpdatedFolder>;
   UpdatedFolderResource: ResolverTypeWrapper<GQLUpdatedFolderResource>;
   UptimeAlert: ResolverTypeWrapper<GQLUptimeAlert>;
@@ -2570,6 +2577,8 @@ export type GQLResolversParentTypes = {
   Title: GQLTitle;
   Topic: GQLTopic;
   Transcription: GQLTranscription;
+  TransformedArticleContent: GQLTransformedArticleContent;
+  TransformedArticleContentInput: GQLTransformedArticleContentInput;
   UpdatedFolder: GQLUpdatedFolder;
   UpdatedFolderResource: GQLUpdatedFolderResource;
   UptimeAlert: GQLUptimeAlert;
@@ -2749,13 +2758,12 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaData?: Resolver<Maybe<GQLResolversTypes['ArticleMetaData']>, ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   oembed?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   oldNdlaUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   published?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  relatedContent?: Resolver<Maybe<Array<GQLResolversTypes['RelatedContent']>>, ParentType, ContextType>;
+  relatedContent?: Resolver<Maybe<Array<GQLResolversTypes['RelatedContent']>>, ParentType, ContextType, Partial<GQLArticleRelatedContentArgs>>;
   requiredLibraries?: Resolver<Maybe<Array<GQLResolversTypes['ArticleRequiredLibrary']>>, ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   revisionDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -2763,9 +2771,8 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  transformedContent?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedContentArgs>>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;
-  visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3785,7 +3792,7 @@ export type GQLRelatedContentResolvers<ContextType = any, ParentType extends GQL
 };
 
 export type GQLResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Resource'] = GQLResolversParentTypes['Resource']> = {
-  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, Partial<GQLResourceArticleArgs>>;
+  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
   availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -4051,7 +4058,7 @@ export type GQLTitleResolvers<ContextType = any, ParentType extends GQLResolvers
 
 export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Topic'] = GQLResolversParentTypes['Topic']> = {
   alternateTopics?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType>;
-  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, Partial<GQLTopicArticleArgs>>;
+  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
   availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -4080,6 +4087,14 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
 export type GQLTranscriptionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Transcription'] = GQLResolversParentTypes['Transcription']> = {
   pinyin?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   traditional?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLTransformedArticleContentResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TransformedArticleContent'] = GQLResolversParentTypes['TransformedArticleContent']> = {
+  content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaData?: Resolver<Maybe<GQLResolversTypes['ArticleMetaData']>, ParentType, ContextType>;
+  visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;
+  visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4282,6 +4297,7 @@ export type GQLResolvers<ContextType = any> = {
   Title?: GQLTitleResolvers<ContextType>;
   Topic?: GQLTopicResolvers<ContextType>;
   Transcription?: GQLTranscriptionResolvers<ContextType>;
+  TransformedArticleContent?: GQLTransformedArticleContentResolvers<ContextType>;
   UpdatedFolder?: GQLUpdatedFolderResolvers<ContextType>;
   UpdatedFolderResource?: GQLUpdatedFolderResourceResolvers<ContextType>;
   UptimeAlert?: GQLUptimeAlertResolvers<ContextType>;
