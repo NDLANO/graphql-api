@@ -20,8 +20,8 @@ const mockContext = () => {
     shouldUseCache: false,
     language: "nb",
     taxonomyUrl: "http://ndla-api",
-    req: getMockReq(),
-    res,
+    req: getMockReq() as any,
+    res: res as any,
   };
 };
 

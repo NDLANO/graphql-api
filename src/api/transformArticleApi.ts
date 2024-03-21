@@ -158,10 +158,12 @@ export const transformArticle = async (
     metaData,
     content: transformedContent,
     visualElement: transformedVisualElement,
-    visualElementEmbed: !!transformedVisEl &&
-      !!visualElementMeta && {
-        content: transformedVisEl,
-        meta: toArticleMetaData([visualElementMeta]),
-      },
+    visualElementEmbed:
+      !!transformedVisEl && !!visualElementMeta
+        ? {
+            content: transformedVisEl,
+            meta: toArticleMetaData([visualElementMeta]),
+          }
+        : undefined,
   };
 };

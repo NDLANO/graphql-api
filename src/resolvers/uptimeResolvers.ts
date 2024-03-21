@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import { fetchUptimeIssues } from "../api";
 import { fetchVersion } from "../api/taxonomyApi";
 import { GQLUptimeAlert } from "../types/schema";
@@ -35,10 +33,10 @@ export const Query = {
         const versionTypeAlert: GQLUptimeAlert = {
           number: -1,
           closable: false,
-          title: localizedVersionHashTitle(version.name, context.language),
+          title: localizedVersionHashTitle(version?.name ?? "", context.language),
         };
         return uptimeIssues.concat(versionTypeAlert);
-      }
+      } else return [];
     } else return await fetchUptimeIssues(context);
   },
 };

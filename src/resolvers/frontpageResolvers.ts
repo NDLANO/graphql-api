@@ -6,6 +6,7 @@
  *
  */
 
+import { IArticleV2 } from "@ndla/types-backend/article-api";
 import {
   IFrontPage,
   ISubjectPageData,
@@ -38,8 +39,8 @@ export const Query = {
 
 export const resolvers = {
   FrontpageMenu: {
-    async article(menu: IFrontPage, _: any, context: ContextWithLoaders): Promise<GQLArticle> {
-      return fetchArticle({ articleId: `${menu.articleId}`, convertEmbeds: true }, context);
+    async article(menu: IFrontPage, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
+      return fetchArticle({ articleId: `${menu.articleId}` }, context);
     },
     async hideLevel(menu: IFrontPage | IMenu, _: any, context: ContextWithLoaders): Promise<boolean> {
       return "hideLevel" in menu ? menu.hideLevel : false;
@@ -85,12 +86,11 @@ export const resolvers = {
   },
 
   FilmFrontpage: {
-    async article(frontpage: IFilmFrontPageData, _: any, context: ContextWithLoaders): Promise<GQLArticle | undefined> {
+    async article(frontpage: IFilmFrontPageData, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
       if (frontpage.article) {
         return fetchArticle(
           {
             articleId: `${getArticleIdFromUrn(frontpage.article)}`,
-            convertEmbeds: true,
           },
           context,
         );

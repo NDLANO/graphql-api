@@ -6,9 +6,9 @@
  *
  */
 
-// @ts-strict-ignore
-
 import groupBy from "lodash/groupBy";
+import { IAudioMetaInformation } from "@ndla/types-backend/audio-api";
+import { IImageMetaInformationV2 } from "@ndla/types-backend/image-api";
 import { fetchAudio } from "./audioApi";
 import { searchConcepts } from "./conceptApi";
 import { fetchFolder } from "./folderApi";
@@ -139,6 +139,7 @@ export const fetchFolderResourceMeta = async (
     const res = await fetchFolderMeta([resource], context, "folder");
     return res[0];
   }
+  throw Error(`Resource type '${resource.resourceType}' not supported`);
 };
 
 export const fetchFolderMeta = async (
@@ -165,8 +166,9 @@ export const fetchImageMeta = async (
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   const images = await Promise.all(resources.map(async (r) => await fetchImage(r.id, context)));
+  const imagesFiltered = images.filter((i): i is IImageMetaInformationV2 => !!i);
 
-  return images.map((img) => ({
+  return imagesFiltered.map((img) => ({
     description: img.caption.caption ?? "",
     id: img.id,
     metaImage: {
@@ -186,8 +188,9 @@ const fetchAudios = async (
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   const audios = await Promise.all(resources.map((r) => fetchAudio(context, r.id)));
+  const audiosFiltered = audios.filter((a): a is IAudioMetaInformation => !!a);
 
-  return audios.map((audio) => ({
+  return audiosFiltered.map((audio) => ({
     description: audio.podcastMeta?.introduction ?? "",
     id: audio.id.toString(),
     metaImage: audio.podcastMeta
@@ -220,7 +223,7 @@ const fetchBrightcoves = async (
         }
       : undefined,
     resourceTypes: [{ id: "video", name: "video" }],
-    title: video.name,
+    title: video.name ?? "",
     type,
   }));
 };

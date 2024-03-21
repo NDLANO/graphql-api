@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import { performance } from "perf_hooks";
 import nodeFetch, { Response, Request, RequestInit } from "node-fetch";
 import { IKeyValueCache, setHeaderIfShouldNotCache } from "../cache";
@@ -52,7 +50,7 @@ export default function createFetch(options: { cache: IKeyValueCache; disableCac
     return { response, shouldCache };
   }
 
-  function cachedResponse(url: string, data: string): Response {
+  function cachedResponse(url: string, data: string | undefined): Response | null {
     if (!data) return null;
 
     const parsed = JSON.parse(data);

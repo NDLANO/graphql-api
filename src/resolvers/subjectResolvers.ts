@@ -6,8 +6,6 @@
  *
  */
 
-// @ts-strict-ignore
-
 import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchLK20CompetenceGoalSet } from "../api";
@@ -41,7 +39,7 @@ export const Query = {
 
     const loaderParams = {
       ...metaDataFilter,
-      filterVisible: input.filterVisible,
+      filterVisible: input?.filterVisible,
     };
 
     return context.loaders.subjectsLoader.load(loaderParams).then((s) => s.subjects);
@@ -72,7 +70,7 @@ export const resolvers = {
       subject: GQLSubject,
       __: any,
       context: ContextWithLoaders,
-    ): Promise<ISubjectPageData | undefined> {
+    ): Promise<ISubjectPageData | null | undefined> {
       if (subject.contentUri?.startsWith("urn:frontpage")) {
         return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
       }
