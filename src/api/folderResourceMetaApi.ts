@@ -146,6 +146,7 @@ export const fetchFolderMeta = async (
   context: ContextWithLoaders,
   type: MetaType,
 ): Promise<GQLFolderResourceMeta[]> => {
+  if (!resources?.length) return [];
   const folders = await Promise.all(resources.map(async (r) => await fetchFolder({ id: r.id }, context)));
 
   return folders.map((f) => ({

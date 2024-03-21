@@ -2068,10 +2068,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-backend@npm:^0.2.59":
-  version: 0.2.59
-  resolution: "@ndla/types-backend@npm:0.2.59"
-  checksum: 10c0/aaa17f98848016a2af2a90cf36becd474fdd5209323680ae5745d3eab7627776a438f8a6face508f41715c54e0f6b6981993ad9d8224959a4afb78f93976bea7
+"@ndla/types-backend@npm:^0.2.67":
+  version: 0.2.67
+  resolution: "@ndla/types-backend@npm:0.2.67"
+  checksum: 10c0/72a561117ee2a0f568e5dcc890f3b91be6b285f599ea45d61c5c63c9ba133ce3668b5609ad91fcc4c67c1e58e4a1d5562fd8bcef0a18e640cf18b1c75915525c
   languageName: node
   linkType: hard
 
@@ -8845,7 +8845,7 @@ __metadata:
     "@graphql-tools/schema": "npm:^9.0.8"
     "@jest-mock/express": "npm:^2.0.2"
     "@ndla/licenses": "npm:^7.2.5"
-    "@ndla/types-backend": "npm:^0.2.59"
+    "@ndla/types-backend": "npm:^0.2.67"
     "@ndla/types-embed": "npm:^4.1.0"
     "@ndla/types-taxonomy": "npm:^1.0.22"
     "@types/bunyan": "npm:^1.8.5"
