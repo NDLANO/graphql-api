@@ -116,7 +116,7 @@ export const resolvers = {
         status: 404,
       });
     },
-    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
+    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<IArticleV2 | null> {
       if (resource.contentUri?.startsWith("urn:article")) {
         const articleId = getArticleIdFromUrn(resource.contentUri);
         return fetchArticle({ articleId }, context);

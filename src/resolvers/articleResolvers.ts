@@ -88,10 +88,10 @@ export const resolvers = {
       return [];
     },
     async oembed(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<string | undefined> {
-      return fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}/article/${article.id}`, context).then((oembed) => {
-        const parsed = cheerio.load(oembed.html);
-        return parsed("iframe").attr("src");
-      });
+      const oembed = await fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}/article/${article.id}`, context);
+      if (oembed.html === undefined) return undefined;
+      const parsed = cheerio.load(oembed.html);
+      return parsed("iframe").attr("src");
     },
     async metaImage(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLMetaImage | undefined> {
       if (article.metaImage) {
