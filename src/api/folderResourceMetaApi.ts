@@ -112,28 +112,28 @@ const fetchAndTransformArticleMeta = async (
 export const fetchFolderResourceMeta = async (
   { resource }: GQLQueryFolderResourceMetaArgs,
   context: ContextWithLoaders,
-): Promise<GQLFolderResourceMeta> => {
+): Promise<GQLFolderResourceMeta | null> => {
   if (resource.resourceType === "article") {
     const res = await fetchAndTransformArticleMeta([resource], context, "article", articleResourceTypes);
-    return res[0];
+    return res[0] ?? null;
   } else if (resource.resourceType === "learningpath") {
     const res = await fetchAndTransformArticleMeta([resource], context, "learningpath", learningpathResourceTypes);
-    return res[0];
+    return res[0] ?? null;
   } else if (resource.resourceType === "multidisciplinary") {
     const res = await fetchAndTransformMultidisciplinaryTopicMeta([resource], context, "multidisciplinary");
-    return res[0];
+    return res[0] ?? null;
   } else if (resource.resourceType === "image") {
     const res = await fetchImageMeta([resource], context, "image");
-    return res[0];
+    return res[0] ?? null;
   } else if (resource.resourceType === "audio") {
     const res = await fetchAudios([resource], context, "audio");
-    return res[0];
+    return res[0] ?? null;
   } else if (resource.resourceType === "concept") {
     const res = await fetchConceptsMeta([resource], context, "concept");
-    return res[0];
+    return res[0] ?? null;
   } else if (resource.resourceType === "video") {
     const res = await fetchBrightcoves([resource], context, "video");
-    return res[0];
+    return res[0] ?? null;
   }
   throw Error(`Resource type '${resource.resourceType}' not supported`);
 };

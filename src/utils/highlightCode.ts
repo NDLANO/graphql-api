@@ -34,7 +34,7 @@ import "prismjs/components/prism-vhdl";
 import "prismjs/components/prism-bash";
 
 const highlightCode = (code: string, language: string) => {
-  const highlighted = Prism.highlight(code, Prism.languages[language], language);
+  const highlighted = Prism.highlight(code, Prism.languages[language]!, language);
   return highlighted;
 };
 

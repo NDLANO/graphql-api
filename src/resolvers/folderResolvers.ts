@@ -89,7 +89,8 @@ export const Query: Pick<
     params: GQLQueryFolderResourceMetaArgs,
     context: ContextWithLoaders,
   ): Promise<GQLFolderResourceMeta> {
-    return fetchFolderResourceMeta(params, context);
+    //@ts-ignore This refuses to acknowledge that null is a valid return value. It is.
+    return await fetchFolderResourceMeta(params, context);
   },
   async personalData(_: any, __: any, context: ContextWithLoaders): Promise<GQLMyNdlaPersonalData> {
     return getPersonalData(context) as unknown as GQLMyNdlaPersonalData;
