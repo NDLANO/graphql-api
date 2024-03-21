@@ -27,7 +27,7 @@ declare global {
     subjectsLoader: DataLoader<
       {
         metadataFilter?: { key: string; value?: string };
-        filterVisible: boolean;
+        filterVisible?: boolean;
       },
       { subjects: GQLSubject[] }
     >;
@@ -40,7 +40,7 @@ declare global {
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPage>;
     subjectpageLoader: DataLoader<string, ISubjectPageData | null>;
-    lk20CurriculumLoader: DataLoader<{ code: string; language: string }, GQLReference | undefined>;
+    lk20CurriculumLoader: DataLoader<{ code: string; language: string | undefined }, GQLReference | undefined>;
   }
 
   interface Context {

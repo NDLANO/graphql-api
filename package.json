@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "build": "yarn build-ts",
-    "build-ts": "tsc && tsc-strict",
+    "build-ts": "tsc",
     "ncc": "ncc build src/server.ts -o build",
     "check-all": "yarn lint && yarn build-ts && yarn test",
     "lint": "yarn lint-prettier && yarn lint-es",
@@ -91,8 +91,7 @@
     "prettier": "^3.1.0",
     "ts-jest": "^29.0.1",
     "ts-node": "^7.0.1",
-    "typescript": "^5.2.2",
-    "typescript-strict-plugin": "^2.2.1"
+    "typescript": "^5.2.2"
   },
   "packageManager": "yarn@4.1.0"
 }
