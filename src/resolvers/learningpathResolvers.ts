@@ -47,7 +47,7 @@ export const resolvers = {
       if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
         return null;
       }
-      if (learningpathStep.embedUrl && learningpathStep.embedUrl.embedType === "iframe") {
+      if (learningpathStep.embedUrl && learningpathStep.embedUrl.embedType.toLowerCase() === "iframe") {
         return buildOembedFromIframeUrl(learningpathStep.embedUrl.url);
       }
       if (
@@ -67,7 +67,8 @@ export const resolvers = {
       if (
         !learningpathStep.embedUrl ||
         !learningpathStep.embedUrl.url ||
-        (learningpathStep.embedUrl.embedType !== "oembed" && learningpathStep.embedUrl.embedType !== "iframe") ||
+        (learningpathStep.embedUrl.embedType.toLowerCase() !== "oembed" &&
+          learningpathStep.embedUrl.embedType.toLowerCase() !== "iframe") ||
         !isNDLAEmbedUrl(learningpathStep.embedUrl.url)
       ) {
         return null;

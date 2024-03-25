@@ -119,7 +119,7 @@ export const resolvers = {
     async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<IArticleV2 | null> {
       if (resource.contentUri?.startsWith("urn:article")) {
         const articleId = getArticleIdFromUrn(resource.contentUri);
-        return fetchArticle({ articleId }, context);
+        return await fetchArticle({ articleId }, context);
       }
       if (resource.contentUri?.startsWith("urn:learningpath")) {
         return null;
