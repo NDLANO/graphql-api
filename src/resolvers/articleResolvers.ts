@@ -94,14 +94,13 @@ export const resolvers = {
       return parsed("iframe").attr("src");
     },
     async metaImage(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLMetaImage | undefined> {
-      if (article.metaImage) {
-        const imageId = article.metaImage.url.split("/").pop() ?? "";
-        const image = await fetchImageV3(imageId, context);
-        return {
-          ...article.metaImage,
-          url: image.image.imageUrl,
-        };
-      }
+      if (!article.metaImage) return undefined;
+      const imageId = article.metaImage.url.split("/").pop() ?? "";
+      const image = await fetchImageV3(imageId, context);
+      return {
+        ...article.metaImage,
+        url: image.image.imageUrl,
+      };
     },
     introduction(article: IArticleV2): string {
       return parseMarkdown({

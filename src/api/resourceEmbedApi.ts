@@ -113,6 +113,9 @@ export const fetchResourceEmbed = async (
     decodeEntities: false,
   });
   const embeds = getEmbedsFromContent(html)[0];
+  if (!embeds) {
+    throw new Error("No embeds found");
+  }
   const embedPromise = await transformEmbed(embeds, context, 0, 0, {
     shortCircuitOnError: true,
     standalone: true,

@@ -66,14 +66,9 @@ export const resolvers = {
       });
       return filterMissingArticles(topics, context);
     },
-    async subjectpage(
-      subject: GQLSubject,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<ISubjectPageData | null | undefined> {
-      if (subject.contentUri?.startsWith("urn:frontpage")) {
-        return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
-      }
+    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageData | null> {
+      if (!subject.contentUri?.startsWith("urn:frontpage")) return null;
+      return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
     },
     async grepCodes(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<string[]> {
       if (subject.metadata?.grepCodes) {

@@ -157,7 +157,7 @@ export function licenseFixer(lic: string, licVer: string) {
 
 export const nodeToTaxonomyEntity = (node: Node, context: Context): GQLTaxonomyEntity => {
   const contexts: GQLTaxonomyContext[] = node.contexts.map((c) => {
-    const breadcrumbs = c.breadcrumbs[context.language];
+    const breadcrumbs = c.breadcrumbs[context.language] ?? [];
     return {
       path: c.path,
       parentIds: c.parentIds,

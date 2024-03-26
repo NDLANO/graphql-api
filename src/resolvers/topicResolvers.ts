@@ -55,10 +55,9 @@ export const Query = {
 export const resolvers = {
   Topic: {
     async availability(topic: Node, _: any, context: ContextWithLoaders) {
-      if (topic.contentUri) {
-        const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
-        return article?.availability;
-      }
+      if (!topic.contentUri) return undefined;
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
+      return article?.availability;
     },
     async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
       if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
@@ -67,10 +66,9 @@ export const resolvers = {
       }
       throw Object.assign(new Error("Missing article contentUri for topic with id: " + topic.id), { status: 404 });
     },
-    async meta(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLMeta | undefined | null> {
-      if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
-        return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
-      }
+    async meta(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
+      if (!topic.contentUri?.startsWith("urn:article")) return null;
+      return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
     },
     async coreResources(
       topic: Node,

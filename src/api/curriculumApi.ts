@@ -222,12 +222,11 @@ export async function fetchCoreElementReferences(
 ): Promise<GQLElement[]> {
   const fetched = await Promise.all(
     codes.map(async (code) => {
-      if (code.reference.code) {
-        return {
-          reference: await fetchCoreElementReference(code.reference.code, language, context),
-          explanation: code.explanation,
-        };
-      }
+      if (!code.reference.code) return undefined;
+      return {
+        reference: await fetchCoreElementReference(code.reference.code, language, context),
+        explanation: code.explanation,
+      };
     }),
   );
 
@@ -270,11 +269,11 @@ export async function fetchCrossSubjectTopics(
 ): Promise<GQLElement[]> {
   const fetched = await Promise.all(
     codes.map(async (code) => {
-      if (code.reference.code)
-        return {
-          reference: await fetchCrossSubjectTopic(code.reference.code, language, context),
-          explanation: code.explanation,
-        };
+      if (!code.reference.code) return undefined;
+      return {
+        reference: await fetchCrossSubjectTopic(code.reference.code, language, context),
+        explanation: code.explanation,
+      };
     }),
   );
   return fetched.filter((f): f is GQLElement => !!f);

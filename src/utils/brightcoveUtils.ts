@@ -55,30 +55,29 @@ interface Author {
   type: string;
 }
 
-export const getContributorGroups = (fields: Record<string, string>) => {
-  const parseContributorsString = (contributorString: string) => {
-    const contributorFields = contributorString.split(/: */);
-    if (contributorFields.length !== 2) return { type: "", name: contributorFields[0] };
-    const [type, name] = contributorFields;
-    const contributorType = Object.keys(contributorTypes.nb).find(
-      (key) => contributorTypes.nb[key] === mapContributorType(type?.trim()),
-    );
-    return { type: contributorType || "", name };
-  };
+interface CopyrightType {
+  creators: Author[];
+  processors: Author[];
+  rightsholders: Author[];
+}
 
+const parseContributorsString = (contributorString: string): Author => {
+  const contributorFields = contributorString.split(/: */);
+  if (contributorFields.length !== 2) return { type: "", name: contributorFields[0] ?? "" };
+  const [type, name] = contributorFields;
+  const contributorType = Object.keys(contributorTypes.nb ?? {}).find(
+    (key) => contributorTypes.nb![key] === mapContributorType(type!.trim()),
+  );
+  return { type: contributorType || "", name: name! };
+};
+
+export const getContributorGroups = (fields: Record<string, string>) => {
   const licenseInfoKeys = Object.keys(fields).filter((key) => key.startsWith("licenseinfo"));
 
-  const contributors = licenseInfoKeys.map((key) => parseContributorsString(fields[key]));
+  const contributors = licenseInfoKeys.map((key) => parseContributorsString(fields[key] ?? ""));
 
-  return contributors.reduce(
-    (
-      groups: {
-        creators: Author[];
-        processors: Author[];
-        rightsholders: Author[];
-      },
-      contributor,
-    ) => {
+  return contributors.reduce<CopyrightType>(
+    (groups, contributor) => {
       const objectKeys = Object.keys(contributorGroups) as Array<keyof typeof contributorGroups>;
       const group = objectKeys.find((key) => {
         return contributorGroups[key].find((type) => type === contributor.type);

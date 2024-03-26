@@ -44,7 +44,7 @@ function getAcceptLanguage(request: Request): string {
   const language = request.headers["accept-language"];
 
   if (isString(language)) {
-    return language.split("-")[0];
+    return language.split("-")[0] ?? "nb";
   }
   return "nb";
 }

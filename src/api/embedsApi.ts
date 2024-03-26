@@ -226,6 +226,7 @@ const fetchConceptVisualElement = async (
     decodeEntities: false,
   });
   const embed = getEmbedsFromContent(html)[0];
+  if (!embed) return undefined;
   const res = await transformEmbed(embed, context, index + 0.1, 0, {
     ...opts,
     shortCircuitOnError: false,
