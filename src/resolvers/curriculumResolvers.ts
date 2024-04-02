@@ -42,41 +42,35 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLReference | undefined> {
-      if (competenceGoal.curriculumCode)
-        return context.loaders.lk20CurriculumLoader.load({
-          code: competenceGoal.curriculumCode,
-          language: competenceGoal.language,
-        });
+      if (!competenceGoal.curriculumCode) return undefined;
+      return context.loaders.lk20CurriculumLoader.load({
+        code: competenceGoal.curriculumCode,
+        language: competenceGoal.language,
+      });
     },
     async competenceGoalSet(
       competenceGoal: GQLCompetenceGoal,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLReference | undefined> {
-      if (competenceGoal.competenceGoalSetCode) {
-        return fetchCompetenceSet(competenceGoal.competenceGoalSetCode, competenceGoal.language, context);
-      }
-      return undefined;
+      if (!competenceGoal.competenceGoalSetCode) return undefined;
+      return fetchCompetenceSet(competenceGoal.competenceGoalSetCode, competenceGoal.language, context);
     },
     async crossSubjectTopics(
       competenceGoal: GQLCompetenceGoal,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLElement[] | undefined> {
-      if (competenceGoal.crossSubjectTopicsCodes) {
-        return fetchCrossSubjectTopics(competenceGoal.crossSubjectTopicsCodes, competenceGoal.language, context);
-      }
-      return undefined;
+      if (!competenceGoal.crossSubjectTopicsCodes) return undefined;
+      return fetchCrossSubjectTopics(competenceGoal.crossSubjectTopicsCodes, competenceGoal.language, context);
     },
     async coreElements(
       competenceGoal: GQLCompetenceGoal,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLElement[] | undefined> {
-      if (competenceGoal.coreElementsCodes) {
-        return fetchCoreElementReferences(competenceGoal.coreElementsCodes, competenceGoal.language, context);
-      }
-      return undefined;
+      if (!competenceGoal.coreElementsCodes) return undefined;
+      return fetchCoreElementReferences(competenceGoal.coreElementsCodes, competenceGoal.language, context);
     },
   },
   CoreElement: {
@@ -85,13 +79,11 @@ export const resolvers = {
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLReference | undefined> {
-      if (coreElement.curriculumCode) {
-        return context.loaders.lk20CurriculumLoader.load({
-          code: coreElement.curriculumCode,
-          language: coreElement.language,
-        });
-      }
-      return undefined;
+      if (!coreElement.curriculumCode) return undefined;
+      return context.loaders.lk20CurriculumLoader.load({
+        code: coreElement.curriculumCode,
+        language: coreElement.language,
+      });
     },
   },
 };

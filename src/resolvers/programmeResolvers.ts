@@ -50,6 +50,9 @@ export const Query = {
     }
     const contextId = path.split("__")[1];
     const node = await queryNodes({ contextId, language: context.language }, context);
+    if (!node[0]) {
+      throw new Error(`Failed to find a programme with contextId ${contextId}`);
+    }
     return nodeToProgramme(node[0], context.language);
   },
 };
@@ -61,50 +64,41 @@ export const resolvers = {
       __: any,
       context: ContextWithLoaders,
     ): Promise<String | undefined> {
-      if (programme.contentUri?.startsWith("urn:frontpage")) {
-        const subjectpage = await context.loaders.subjectpageLoader.load(
-          programme.contentUri.replace("urn:frontpage:", ""),
-        );
-        return subjectpage?.metaDescription;
-      }
+      if (!programme.contentUri?.startsWith("urn:frontpage")) return undefined;
+      const subjectpage = await context.loaders.subjectpageLoader.load(
+        programme.contentUri.replace("urn:frontpage:", ""),
+      );
+      return subjectpage?.metaDescription;
     },
     async desktopImage(
       programme: GQLProgrammePage,
       __: any,
       context: ContextWithLoaders,
     ): Promise<GQLMetaImage | undefined> {
-      if (programme.contentUri?.startsWith("urn:frontpage")) {
-        if (programme.contentUri?.startsWith("urn:frontpage")) {
-          const subjectpage = await context.loaders.subjectpageLoader.load(
-            programme.contentUri.replace("urn:frontpage:", ""),
-          );
-          if (subjectpage) {
-            return {
-              url: subjectpage.banner.desktopUrl,
-              alt: "",
-            };
-          }
-        }
-      }
+      if (!programme.contentUri?.startsWith("urn:frontpage")) return undefined;
+      const subjectpage = await context.loaders.subjectpageLoader.load(
+        programme.contentUri.replace("urn:frontpage:", ""),
+      );
+      if (!subjectpage) return undefined;
+      return {
+        url: subjectpage.banner.desktopUrl,
+        alt: "",
+      };
     },
     async mobileImage(
       programme: GQLProgrammePage,
       __: any,
       context: ContextWithLoaders,
     ): Promise<GQLMetaImage | undefined> {
-      if (programme.contentUri?.startsWith("urn:frontpage")) {
-        if (programme.contentUri?.startsWith("urn:frontpage")) {
-          const subjectpage = await context.loaders.subjectpageLoader.load(
-            programme.contentUri.replace("urn:frontpage:", ""),
-          );
-          if (subjectpage) {
-            return {
-              url: subjectpage.banner.mobileUrl || subjectpage.banner.desktopUrl,
-              alt: "",
-            };
-          }
-        }
-      }
+      if (!programme.contentUri?.startsWith("urn:frontpage")) return undefined;
+      const subjectpage = await context.loaders.subjectpageLoader.load(
+        programme.contentUri.replace("urn:frontpage:", ""),
+      );
+      if (!subjectpage) return undefined;
+      return {
+        url: subjectpage.banner.mobileUrl || subjectpage.banner.desktopUrl,
+        alt: "",
+      };
     },
     async grades(programme: GQLProgrammePage, __: any, context: ContextWithLoaders): Promise<GQLGrade[]> {
       const children = await fetchChildren({ id: programme.id, nodeType: "PROGRAMME" }, context);
@@ -142,7 +136,7 @@ export const resolvers = {
       const children = await fetchChildren({ id: category.id, nodeType: "SUBJECT" }, context);
       const nodes = children.map((child) => {
         const context = child.contexts.find((c) => c.path.startsWith("/subject")) || child.contexts[0];
-        const path = context.path;
+        const path = context?.path ?? child.path;
         return { ...child, path };
       });
       return nodes.map((node) => nodeToTaxonomyEntity(node, context));
