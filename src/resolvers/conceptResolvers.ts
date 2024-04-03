@@ -89,7 +89,7 @@ export const resolvers = {
     },
   },
   ConceptResult: {
-    subjects: (conceptResult: IConceptSearchResult, _: any, __: ContextWithLoaders): IConceptSummary[] => {
+    concepts: (conceptResult: IConceptSearchResult, _: any, __: ContextWithLoaders): IConceptSummary[] => {
       return conceptResult.results;
     },
   },
