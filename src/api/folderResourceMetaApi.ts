@@ -236,13 +236,13 @@ const fetchConceptsMeta = async (
   const ids = resources?.map((r) => parseInt(r.id))?.filter((id) => !!id);
   if (!ids?.length) return [];
 
-  const { concepts } = await searchConcepts({ ids }, context);
+  const { results } = await searchConcepts({ ids }, context);
 
-  return concepts.map((c) => ({
+  return results.map((c) => ({
     id: c.id.toString(),
-    description: c.content,
+    description: c.content.content,
     metaImage: c.metaImage,
-    title: c.title,
+    title: c.title.title,
     resourceTypes: [{ id: "concept", name: "concept" }],
     type,
   }));

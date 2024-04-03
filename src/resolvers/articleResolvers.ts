@@ -8,6 +8,7 @@
 
 import cheerio from "cheerio";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { IConceptSummary } from "@ndla/types-backend/concept-api";
 import {
   fetchArticle,
   fetchOembed,
@@ -19,7 +20,6 @@ import {
   searchConcepts,
 } from "../api";
 import { fetchTransformedContent, fetchRelatedContent } from "../api/articleApi";
-import { Concept } from "../api/conceptApi";
 import { ndlaUrl } from "../config";
 import {
   GQLCompetenceGoal,
@@ -80,10 +80,10 @@ export const resolvers = {
         path: topics.find((topic: { name: string }) => topic.name === crossSubjectTopic.title)?.path,
       }));
     },
-    async concepts(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<Concept[]> {
+    async concepts(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<IConceptSummary[]> {
       if (article?.conceptIds && article.conceptIds.length > 0) {
         const results = await searchConcepts({ ids: article.conceptIds }, context);
-        return results.concepts;
+        return results.results;
       }
       return [];
     },

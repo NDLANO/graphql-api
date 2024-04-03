@@ -6,38 +6,11 @@
  *
  */
 
-import uniq from "lodash/uniq";
 import queryString from "query-string";
 import { IConceptSearchResult, IConcept, IConceptSummary } from "@ndla/types-backend/concept-api";
 import { fetchSubject } from "./taxonomyApi";
 import { GQLListingPage, GQLSubject } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
-import parseMarkdown from "../utils/parseMarkdown";
-
-export interface ConceptResult {
-  totalCount: number;
-  page?: number;
-  pageSize: number;
-  language: string;
-  concepts: Concept[];
-}
-
-export interface Concept {
-  id: number;
-  title: string;
-  content: string;
-  created: string;
-  tags: string[];
-  articleIds: number[];
-  subjectIds: string[];
-  copyright?: IConcept["copyright"];
-  source?: string;
-  metaImage?: IConcept["metaImage"];
-  visualElement?: IConcept["visualElement"];
-  supportedLanguages: string[];
-  glossData?: IConcept["glossData"];
-  conceptType: IConcept["conceptType"];
-}
 
 export async function searchConcepts(
   params: {
@@ -53,7 +26,7 @@ export async function searchConcepts(
     conceptType?: string;
   },
   context: Context,
-): Promise<ConceptResult> {
+): Promise<IConceptSearchResult> {
   const idsString = params.ids?.join(",");
   const query = {
     query: params.query,
@@ -70,48 +43,14 @@ export async function searchConcepts(
   };
   const response = await fetch(`/concept-api/v1/concepts?${queryString.stringify(query)}`, context);
   const conceptResult: IConceptSearchResult = await resolveJson(response);
-  return {
-    totalCount: conceptResult.totalCount,
-    page: conceptResult.page,
-    pageSize: conceptResult.pageSize,
-    language: conceptResult.language,
-    concepts: conceptResult.results.map((res) => ({
-      id: res.id,
-      created: res.created,
-      articleIds: res.articleIds,
-      title: res.title.title,
-      content: res.content.content,
-      tags: res.tags?.tags || [],
-      subjectIds: res.subjectIds || [],
-      metaImage: res.metaImage,
-      copyright: res.copyright,
-      visualElement: res.visualElement,
-      supportedLanguages: res.supportedLanguages,
-      conceptType: res.conceptType,
-    })),
-  };
+  return conceptResult;
 }
 
-export async function fetchConcept(id: string | number, context: Context): Promise<Concept | undefined> {
+export async function fetchConcept(id: string | number, context: Context): Promise<IConcept | undefined> {
   const response = await fetch(`/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`, context);
   try {
     const concept: IConcept = await resolveJson(response);
-    return {
-      id: concept.id,
-      title: concept.title.title,
-      content: concept.content?.content ?? "",
-      created: concept.created,
-      tags: concept.tags?.tags ?? [],
-      articleIds: concept.articleIds,
-      subjectIds: concept.subjectIds ?? [],
-      copyright: concept.copyright,
-      source: concept.source,
-      metaImage: concept.metaImage,
-      visualElement: concept.visualElement,
-      supportedLanguages: concept.supportedLanguages,
-      conceptType: concept.conceptType,
-      glossData: concept.glossData,
-    };
+    return concept;
   } catch (e) {
     return undefined;
   }
@@ -153,7 +92,7 @@ const getTags = (tags: string[] | TagType[]) => {
   if (isStringArray(tags)) {
     return tags;
   } else if (tags.length > 0) {
-    return uniq(tags.flatMap((t) => t.tags));
+    return Array.from(new Set(tags.flatMap((t) => t.tags)));
   }
   return [];
 };
@@ -163,15 +102,6 @@ export const fetchEmbedConcept = async (id: string, context: Context, draftConce
   const url = `/concept-api/v1/${endpoint}/${id}?language=${context.language}&fallback=true`;
   const res = await fetch(url, context);
   const resolved: IConcept = await resolveJson(res);
-  if (resolved.content) {
-    return {
-      ...resolved,
-      content: {
-        ...resolved.content,
-        content: parseMarkdown({ markdown: resolved.content.content }),
-      },
-    };
-  }
   return resolved;
 };
 
