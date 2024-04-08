@@ -6,9 +6,10 @@
  *
  */
 
-import { fetchLearningpath, fetchNode, fetchOembed } from "../api";
+import { fetchImageV3, fetchLearningpath, fetchNode, fetchOembed } from "../api";
 import {
   GQLLearningpath,
+  GQLLearningpathCoverphoto,
   GQLLearningpathStep,
   GQLLearningpathStepOembed,
   GQLQueryLearningpathArgs,
@@ -38,6 +39,21 @@ const buildOembedFromIframeUrl = (url: string): GQLLearningpathStepOembed => {
 };
 
 export const resolvers = {
+  Learningpath: {
+    async coverphoto(
+      learningpath: GQLLearningpath,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLLearningpathCoverphoto | undefined> {
+      if (!learningpath.coverphoto) return undefined;
+      const imageId = learningpath.coverphoto?.metaUrl.split("/").pop() ?? "";
+      const image = await fetchImageV3(imageId, context);
+      return {
+        ...learningpath.coverphoto,
+        url: image.image.imageUrl,
+      };
+    },
+  },
   LearningpathStep: {
     async oembed(
       learningpathStep: GQLLearningpathStep,
