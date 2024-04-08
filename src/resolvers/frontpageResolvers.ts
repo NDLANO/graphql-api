@@ -16,7 +16,7 @@ import {
 } from "@ndla/types-backend/frontpage-api";
 import { TaxonomyContext } from "@ndla/types-taxonomy";
 import { fetchArticle, fetchFilmFrontpage, fetchMovieMeta, queryContexts, queryNodes } from "../api";
-import { GQLArticle, GQLMeta, GQLMetaImage, GQLResourceType } from "../types/schema";
+import { GQLMeta, GQLMetaImage, GQLResourceType } from "../types/schema";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 interface Id {
@@ -77,7 +77,7 @@ export const resolvers = {
     },
     async path(id: string, _: any, context: ContextWithLoaders): Promise<string> {
       const contexts: TaxonomyContext[] = await queryContexts(id, context);
-      return contexts?.find((ctx) => ctx.path.startsWith("/subject:20/"))?.path || "";
+      return contexts?.find((ctx) => ctx.rootId === "urn:subject:20")?.path || "";
     },
     async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
       const nodes = await queryNodes({ contentURI: id, language: context.language }, context);
