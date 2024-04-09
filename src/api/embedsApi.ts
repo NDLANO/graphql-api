@@ -189,9 +189,13 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
 
   const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
   let path = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
-  const nodes = await queryNodes({ contentURI, language: context.language }, context);
+  const nodes = await queryNodes(
+    { contentURI, language: context.language, includeContexts: true, filterProgrammes: true },
+    context,
+  );
   const node = nodes.find((n) => !!n.path);
-  const nodePath = node?.paths?.find((p) => p.split("/")[1] === opts.subject?.replace("urn:", "")) ?? node?.path;
+  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
+  const nodePath = ctx?.path ?? node?.path;
 
   if (nodePath) {
     path = `${host}/${context.language}${nodePath}`;
@@ -309,7 +313,7 @@ const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, contex
       context,
     ),
   ]);
-  const node = nodes[0];
+  const node = nodes.find((n) => !!n.path);
   const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
   return ctx
     ? { disclaimerLink: { text: node?.name ?? "", href: `${host}${ctx.path}` } }
