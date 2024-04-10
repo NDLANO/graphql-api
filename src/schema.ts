@@ -1360,7 +1360,7 @@ export const typeDefs = gql`
     learningpath(pathId: String!): Learningpath
     programmes: [ProgrammePage!]
     programme(path: String): ProgrammePage
-    subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean): [Subject!]
+    subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean, ids: [String!]): [Subject!]
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String, filterVisible: Boolean): [Topic!]
     frontpage: FrontpageMenu
