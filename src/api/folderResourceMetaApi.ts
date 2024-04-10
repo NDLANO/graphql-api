@@ -74,12 +74,15 @@ const fetchAndTransformArticleMeta = async (
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   try {
+    const typeFilter =
+      type === "article" ? { articleTypes: "standard,topic-article" } : { contextTypes: "learningpath" };
     const res = await searchWithoutPagination(
       {
         language: context.language,
         fallback: "true",
         // @ts-ignore ids are not parameterized correctly
         ids: resources.map((r) => r.id).join(","),
+        ...typeFilter,
       },
       context,
     );
