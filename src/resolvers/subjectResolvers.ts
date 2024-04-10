@@ -9,7 +9,6 @@
 import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchLK20CompetenceGoalSet } from "../api";
-
 import { GQLQuerySubjectArgs, GQLSubject, GQLSubjectLink, GQLTopic } from "../types/schema";
 import { filterMissingArticles } from "../utils/articleHelpers";
 
@@ -24,6 +23,7 @@ export const Query = {
           metadataFilterKey?: string;
           metadataFilterValue?: string;
           filterVisible?: boolean;
+          ids?: string[];
         }
       | undefined,
     context: ContextWithLoaders,
@@ -40,6 +40,7 @@ export const Query = {
     const loaderParams = {
       ...metaDataFilter,
       filterVisible: input?.filterVisible,
+      ids: input?.ids,
     };
 
     return context.loaders.subjectsLoader.load(loaderParams).then((s) => s.subjects);

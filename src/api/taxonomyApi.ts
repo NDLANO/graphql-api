@@ -26,13 +26,18 @@ export async function fetchResourceTypes<T extends GQLResourceType | GQLResource
   return resolveJson(response);
 }
 
-export async function fetchSubjects(
-  context: Context,
+interface GetSubjectsParams {
   metadataFilter?: {
-    key: string;
+    key?: string;
     value?: string;
-  },
-  isVisible?: boolean,
+  };
+  isVisible?: boolean;
+  ids?: string[];
+}
+
+export async function fetchSubjects(
+  { metadataFilter, isVisible, ids }: GetSubjectsParams,
+  context: Context,
 ): Promise<GQLSubject[]> {
   const query = qs.stringify({
     language: context.language,
@@ -42,6 +47,7 @@ export async function fetchSubjects(
     includeContexts: true,
     filterProgrammes: true,
     isVisible,
+    ids: ids?.join(","),
   });
   const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
   return resolveJson(response);

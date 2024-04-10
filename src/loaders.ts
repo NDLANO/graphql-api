@@ -103,14 +103,17 @@ export function subjectLoader(context: Context): DataLoader<{ id?: string }, Nod
 export function subjectsLoader(
   context: Context,
 ): DataLoader<
-  { metadataFilter?: { key: string; value?: string }; filterVisible?: boolean },
+  { metadataFilter?: { key: string; value?: string }; filterVisible?: boolean; ids?: string[] },
   { subjects: GQLSubject[] }
 > {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
         inputs.map(async (input) => {
-          const subjects = await fetchSubjects(context, input.metadataFilter, input.filterVisible ? true : undefined);
+          const subjects = await fetchSubjects(
+            { metadataFilter: input.metadataFilter, isVisible: input.filterVisible, ids: input.ids },
+            context,
+          );
           return { subjects };
         }),
       );
