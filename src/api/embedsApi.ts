@@ -189,9 +189,13 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
 
   const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
   let path = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
-  const nodes = await queryNodes({ contentURI }, context);
+  const nodes = await queryNodes(
+    { contentURI, language: context.language, includeContexts: true, filterProgrammes: true },
+    context,
+  );
   const node = nodes.find((n) => !!n.path);
-  const nodePath = node?.paths?.find((p) => p.split("/")[1] === opts.subject?.replace("urn:", "")) ?? node?.path;
+  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
+  const nodePath = ctx?.path ?? node?.path;
 
   if (nodePath) {
     path = `${host}/${context.language}${nodePath}`;
@@ -292,11 +296,28 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, cont
   return { image };
 };
 
-const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, context }) => {
-  const article = embedData.articleId
-    ? await fetchSimpleArticle(`urn:article:${embedData.articleId}`, context)
-    : undefined;
-  return article ? { disclaimerLink: { text: article.title.title, href: `/article/${article.id}` } } : {};
+const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, context, opts }) => {
+  const host = opts.absoluteUrl ? ndlaUrl : "";
+  if (!embedData.articleId) {
+    return {};
+  }
+  const [article, nodes] = await Promise.all([
+    fetchSimpleArticle(`urn:article:${embedData.articleId}`, context),
+    queryNodes(
+      {
+        contentURI: `urn:article:${embedData.articleId}`,
+        language: context.language,
+        includeContexts: true,
+        filterProgrammes: true,
+      },
+      context,
+    ),
+  ]);
+  const node = nodes.find((n) => !!n.path);
+  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
+  return ctx
+    ? { disclaimerLink: { text: node?.name ?? "", href: `${host}${ctx.path}` } }
+    : { disclaimerLink: { text: article.title.title, href: `${host}/article/${article.id}` } };
 };
 
 export const transformEmbed = async (
