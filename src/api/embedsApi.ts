@@ -306,8 +306,12 @@ export const transformEmbed = async (
   footnoteCount: number,
   opts: TransformOptions,
 ): Promise<EmbedMetaData | undefined> => {
-  if (embed.data.resource === "nrk") {
+  if (embed.data.resource === "nrk" || (embed.data.resource === "comment" && embed.data.type === "block")) {
     embed.embed.replaceWith("");
+    return;
+  }
+  if (embed.data.resource === "comment" && embed.data.type === "inline") {
+    embed.embed.replaceWith(embed.embed.html() ?? "");
     return;
   }
 
