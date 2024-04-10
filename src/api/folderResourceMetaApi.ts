@@ -49,6 +49,7 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
         fallback: "true",
         // @ts-ignore ids are not parameterized correctly
         ids: resources.map((r) => r.id).join(","),
+        contextTypes: "topic-article",
         subjects: "urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7",
       },
       context,
@@ -67,10 +68,10 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
   }
 };
 
-const fetchAndTransformArticleMeta = async (
+const fetchAndTransformResourceMeta = async (
   resources: GQLFolderResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
-  type: MetaType,
+  type: "article" | "learningpath",
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   try {
@@ -106,10 +107,10 @@ export const fetchFolderResourceMeta = async (
   context: ContextWithLoaders,
 ): Promise<GQLFolderResourceMeta | null> => {
   if (resource.resourceType === "article") {
-    const res = await fetchAndTransformArticleMeta([resource], context, "article");
+    const res = await fetchAndTransformResourceMeta([resource], context, "article");
     return res[0] ?? null;
   } else if (resource.resourceType === "learningpath") {
-    const res = await fetchAndTransformArticleMeta([resource], context, "learningpath");
+    const res = await fetchAndTransformResourceMeta([resource], context, "learningpath");
     return res[0] ?? null;
   } else if (resource.resourceType === "multidisciplinary") {
     const res = await fetchAndTransformMultidisciplinaryTopicMeta([resource], context, "multidisciplinary");
@@ -247,8 +248,8 @@ export const fetchFolderResourcesMetaData = async (
     resources,
     (r) => r.resourceType,
   );
-  const articleMeta = fetchAndTransformArticleMeta(article, context, "article");
-  const learningpathMeta = fetchAndTransformArticleMeta(learningpath, context, "learningpath");
+  const articleMeta = fetchAndTransformResourceMeta(article, context, "article");
+  const learningpathMeta = fetchAndTransformResourceMeta(learningpath, context, "learningpath");
 
   const multidisciplinaryMeta = fetchAndTransformMultidisciplinaryTopicMeta(
     multidisciplinary,
