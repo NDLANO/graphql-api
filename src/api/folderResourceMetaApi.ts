@@ -24,16 +24,6 @@ import {
   GQLSearchResult,
 } from "../types/schema";
 
-const articleResourceTypes = [
-  "urn:resourcetype:subjectMaterial",
-  "urn:resourcetype:tasksAndActivities",
-  "urn:resourcetype:reviewResource",
-  "urn:resourcetype:SourceMaterial",
-  "urn:resourcetype:concept",
-];
-
-const learningpathResourceTypes = ["urn:resourcetype:learningPath"];
-
 type MetaType = "article" | "learningpath" | "multidisciplinary" | "concept" | "image" | "audio" | "video" | "folder";
 
 const findResourceTypes = (result: GQLSearchResult): GQLFolderResourceResourceType[] => {
@@ -59,6 +49,7 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
         fallback: "true",
         // @ts-ignore ids are not parameterized correctly
         ids: resources.map((r) => r.id).join(","),
+        contextTypes: "topic-article",
         subjects: "urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7",
       },
       context,
@@ -77,21 +68,22 @@ const fetchAndTransformMultidisciplinaryTopicMeta = async (
   }
 };
 
-const fetchAndTransformArticleMeta = async (
+const fetchAndTransformResourceMeta = async (
   resources: GQLFolderResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
-  type: MetaType,
-  resourceTypes: string[],
+  type: "article" | "learningpath",
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   try {
+    const typeFilter =
+      type === "article" ? { articleTypes: "standard,topic-article" } : { contextTypes: "learningpath" };
     const res = await searchWithoutPagination(
       {
         language: context.language,
         fallback: "true",
         // @ts-ignore ids are not parameterized correctly
         ids: resources.map((r) => r.id).join(","),
-        resourceTypes: resourceTypes.join(","),
+        ...typeFilter,
       },
       context,
     );
@@ -105,7 +97,7 @@ const fetchAndTransformArticleMeta = async (
       resourceTypes: findResourceTypes(r),
     }));
   } catch (e) {
-    console.error(`Failed to fetch article metas with parameters ${resources} and resource types ${resourceTypes}`);
+    console.error(`Failed to fetch article metas with parameters ${resources}`);
     return [];
   }
 };
@@ -115,10 +107,10 @@ export const fetchFolderResourceMeta = async (
   context: ContextWithLoaders,
 ): Promise<GQLFolderResourceMeta | null> => {
   if (resource.resourceType === "article") {
-    const res = await fetchAndTransformArticleMeta([resource], context, "article", articleResourceTypes);
+    const res = await fetchAndTransformResourceMeta([resource], context, "article");
     return res[0] ?? null;
   } else if (resource.resourceType === "learningpath") {
-    const res = await fetchAndTransformArticleMeta([resource], context, "learningpath", learningpathResourceTypes);
+    const res = await fetchAndTransformResourceMeta([resource], context, "learningpath");
     return res[0] ?? null;
   } else if (resource.resourceType === "multidisciplinary") {
     const res = await fetchAndTransformMultidisciplinaryTopicMeta([resource], context, "multidisciplinary");
@@ -256,13 +248,8 @@ export const fetchFolderResourcesMetaData = async (
     resources,
     (r) => r.resourceType,
   );
-  const articleMeta = fetchAndTransformArticleMeta(article, context, "article", articleResourceTypes);
-  const learningpathMeta = fetchAndTransformArticleMeta(
-    learningpath,
-    context,
-    "learningpath",
-    learningpathResourceTypes,
-  );
+  const articleMeta = fetchAndTransformResourceMeta(article, context, "article");
+  const learningpathMeta = fetchAndTransformResourceMeta(learningpath, context, "learningpath");
 
   const multidisciplinaryMeta = fetchAndTransformMultidisciplinaryTopicMeta(
     multidisciplinary,
