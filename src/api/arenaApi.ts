@@ -53,8 +53,8 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
 
 const toTopic = (topic: any): GQLArenaTopic => {
   const crumbs = [
-    { type: "category", id: topic.cid, name: topic.category.name },
-    { type: "topic", id: topic.tid, name: topic.title },
+    { type: "category", id: topic.cid, name: he.decode(topic.category.name) },
+    { type: "topic", id: topic.tid, name: he.decode(topic.title) },
   ];
   return {
     id: topic.tid,
@@ -78,11 +78,11 @@ const toTopic = (topic: any): GQLArenaTopic => {
 
 const toCategoryBreadcrumbs = (category: any, parentBreadcrumbs?: GQLCategoryBreadcrumb[]): GQLCategoryBreadcrumb[] => {
   if (parentBreadcrumbs !== undefined) {
-    return [...parentBreadcrumbs, { id: category.cid, title: category.name }];
+    return [...parentBreadcrumbs, { id: category.cid, title: he.decode(category.name) }];
   }
 
   const categoryCrumbs = category.breadcrumbs?.filter((breadcrumb: any) => !!breadcrumb.cid);
-  return categoryCrumbs?.map((bc: any) => ({ id: bc.cid, title: bc.text })) ?? [];
+  return categoryCrumbs?.map((bc: any) => ({ id: bc.cid, title: he.decode(bc.text) })) ?? [];
 };
 
 const toCategory = (category: any, parentBreadcrumbs?: GQLCategoryBreadcrumb[]): GQLArenaCategory => {
