@@ -44,7 +44,11 @@ export const Query = {
     );
     return nodes.sort((a, b) => a.name.localeCompare(b.name)).map((node) => nodeToProgramme(node, context.language));
   },
-  async programme(_: any, { path, contextId }: GQLQueryProgrammeArgs, context: ContextWithLoaders): Promise<GQLProgrammePage> {
+  async programme(
+    _: any,
+    { path, contextId }: GQLQueryProgrammeArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLProgrammePage> {
     if (path && !path.includes("__")) {
       throw Error("Tried to fetch programme with invalid path");
     }
