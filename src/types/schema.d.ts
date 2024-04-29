@@ -1698,6 +1698,7 @@ export type GQLQueryPodcastSeriesSearchArgs = {
 
 
 export type GQLQueryProgrammeArgs = {
+  contextId?: InputMaybe<Scalars['String']>;
   path?: InputMaybe<Scalars['String']>;
 };
 
