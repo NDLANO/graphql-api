@@ -40,6 +40,7 @@
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
     "express": "^4.18.2",
+    "express-prom-bundle": "^7.0.0",
     "graphql": "^16.8.1",
     "graphql-scalars": "^1.20.0",
     "graphql-tag": "^2.12.6",
@@ -49,6 +50,7 @@
     "marked": "^9.1.0",
     "node-fetch": "2.6.7",
     "prismjs": "^1.29.0",
+    "prom-client": "^15.1.2",
     "query-string": "^6.2.0",
     "sanitize-html": "^2.11.0"
   },
