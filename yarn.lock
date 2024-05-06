@@ -2069,9 +2069,9 @@ __metadata:
   linkType: hard
 
 "@ndla/types-backend@npm:^0.2.67":
-  version: 0.2.71
-  resolution: "@ndla/types-backend@npm:0.2.71"
-  checksum: 10c0/404ea50f6f36bb951d9bc1c3d1aa901891fb2aee83d734144fe1e470a2dd0b7e6cf61475c0842238d0b35311dc4419b7909475276d980e280d1981ad585090a4
+  version: 0.2.75
+  resolution: "@ndla/types-backend@npm:0.2.75"
+  checksum: 10c0/12dde8b0a5d49af713179cc7ce34434ce828ac8487443e58a53f61087ae50e4891a8a78cfc93a3be18b1f9d5015f3bd49bdf9a27e3b6b2c39b84bb05d5cafbc7
   languageName: node
   linkType: hard
 

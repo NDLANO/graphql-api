@@ -1350,6 +1350,11 @@ export const typeDefs = gql`
     subject: String!
   }
 
+  type UserFolder {
+    folders: [Folder!]!
+    sharedFolders: [Folder!]!
+  }
+
   type Query {
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
@@ -1435,7 +1440,7 @@ export const typeDefs = gql`
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
     podcastSeriesSearch(page: Int!, pageSize: Int!, fallback: Boolean): PodcastSeriesSearch
     alerts: [UptimeAlert]
-    folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
+    folders(includeSubfolders: Boolean, includeResources: Boolean): UserFolder!
     folderResourceMeta(resource: FolderResourceMetaSearchInput!): FolderResourceMeta
     folderResourceMetaSearch(resources: [FolderResourceMetaSearchInput!]!): [FolderResourceMeta!]!
     folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
@@ -1528,6 +1533,8 @@ export const typeDefs = gql`
     unsubscribeFromTopic(topicId: Int!): Int!
     updateOtherArenaUser(userId: Int!, data: ArenaUserV2Input!): MyNdlaPersonalData!
     sortArenaCategories(sortedIds: [Int!]!): [ArenaCategoryV2!]!
+    saveSharedFolder(folderId: String!): Int!
+    deleteSharedFolder(folderId: String!): Int!
   }
 `;
 

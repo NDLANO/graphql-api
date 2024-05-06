@@ -7,7 +7,7 @@
  */
 
 import qs from "query-string";
-import { IMyNDLAUser, IFolder, IFolderData, IResource } from "@ndla/types-backend/myndla-api";
+import { IMyNDLAUser, IFolder, IFolderData, IResource, IUserFolder } from "@ndla/types-backend/myndla-api";
 import {
   GQLMutationAddFolderArgs,
   GQLMutationAddFolderResourceArgs,
@@ -39,7 +39,7 @@ export const queryString = (params: QueryParamsType) => {
 export async function fetchFolders(
   { includeResources, includeSubfolders }: GQLQueryFoldersArgs,
   context: Context,
-): Promise<IFolder[]> {
+): Promise<IUserFolder> {
   const params = queryString({
     "include-resources": includeResources,
     "include-subfolders": includeSubfolders,
@@ -48,7 +48,7 @@ export async function fetchFolders(
     ...context,
     shouldUseCache: false,
   });
-  const resolved: IFolder[] = await resolveJson(response);
+  const resolved = await resolveJson(response);
   return resolved;
 }
 
@@ -234,5 +234,15 @@ export async function copySharedFolder(
 ) {
   const params = queryString({ "destination-folder-id": destinationFolderId });
   const response = await fetch(`/myndla-api/v1/folders/clone/${folderId}${params}`, context, { method: "POST" });
+  return await resolveJson(response);
+}
+
+export async function saveSharedFolder({ folderId }: GQLMutationCopySharedFolderArgs, context: Context) {
+  const response = await fetch(`/myndla-api/v1/folders/shared/${folderId}/save`, context, { method: "POST" });
+  return await resolveJson(response);
+}
+
+export async function deleteSharedFolder({ folderId }: GQLMutationCopySharedFolderArgs, context: Context) {
+  const response = await fetch(`/myndla-api/v1/folders/shared/${folderId}/save`, context, { method: "DELETE" });
   return await resolveJson(response);
 }
