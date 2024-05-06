@@ -233,7 +233,7 @@ export const Mutations: Pick<
     params: GQLMutationNewArenaCategoryArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArenaCategoryV2> {
-    return await myndla.newCategory(params.title, params.description, params.visible, context);
+    return await myndla.newCategory(params.title, params.description, params.visible, params.parentCategoryId, context);
   },
   async newArenaTopicV2(
     _: any,
@@ -261,7 +261,14 @@ export const Mutations: Pick<
     params: GQLMutationUpdateArenaCategoryArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArenaCategoryV2> {
-    return await myndla.updateCategory(params.categoryId, params.title, params.description, params.visible, context);
+    return await myndla.updateCategory(
+      params.categoryId,
+      params.title,
+      params.description,
+      params.visible,
+      params.parentCategoryId,
+      context,
+    );
   },
   async updatePostV2(
     _: any,
@@ -381,7 +388,7 @@ export const Mutations: Pick<
     params: GQLMutationSortArenaCategoriesArgs,
     context: ContextWithLoaders,
   ): Promise<GQLArenaCategoryV2[]> {
-    return myndla.sortCategories(params.sortedIds, context);
+    return myndla.sortCategories(params.parentId, params.sortedIds, context);
   },
 };
 

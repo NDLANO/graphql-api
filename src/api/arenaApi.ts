@@ -14,6 +14,7 @@ import {
   GQLArenaPost,
   GQLArenaTopic,
   GQLArenaUser,
+  GQLCategoryBreadcrumb,
   GQLMutationDeletePostArgs,
   GQLMutationDeleteTopicArgs,
   GQLMutationNewArenaTopicArgs,
@@ -52,8 +53,8 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
 
 const toTopic = (topic: any): GQLArenaTopic => {
   const crumbs = [
-    { type: "category", id: topic.cid, name: topic.category.name },
-    { type: "topic", id: topic.tid, name: topic.title },
+    { type: "category", id: topic.cid, name: he.decode(topic.category.name) },
+    { type: "topic", id: topic.tid, name: he.decode(topic.title) },
   ];
   return {
     id: topic.tid,
@@ -75,7 +76,17 @@ const toTopic = (topic: any): GQLArenaTopic => {
   };
 };
 
-const toCategory = (category: any): GQLArenaCategory => {
+const toCategoryBreadcrumbs = (category: any, parentBreadcrumbs?: GQLCategoryBreadcrumb[]): GQLCategoryBreadcrumb[] => {
+  if (parentBreadcrumbs !== undefined) {
+    return [...parentBreadcrumbs, { id: category.cid, title: he.decode(category.name) }];
+  }
+
+  const categoryCrumbs = category.breadcrumbs?.filter((breadcrumb: any) => !!breadcrumb.cid);
+  return categoryCrumbs?.map((bc: any) => ({ id: bc.cid, title: he.decode(bc.text) })) ?? [];
+};
+
+const toCategory = (category: any, parentBreadcrumbs?: GQLCategoryBreadcrumb[]): GQLArenaCategory => {
+  const breadcrumbs = toCategoryBreadcrumbs(category, parentBreadcrumbs);
   return {
     id: category.cid,
     description: category.description,
@@ -86,6 +97,9 @@ const toCategory = (category: any): GQLArenaCategory => {
     postCount: category.post_count,
     disabled: category.disabled === 1,
     topics: category.topics?.map(toTopic),
+    breadcrumbs,
+    parentCategoryId: category?.parent?.cid,
+    children: category.children?.map((child: any) => toCategory(child, breadcrumbs)),
   };
 };
 
@@ -149,7 +163,7 @@ export const fetchArenaCategories = async (context: Context): Promise<GQLArenaCa
     { headers: csrfHeaders },
   );
   const resolved: any = await resolveJson(response);
-  return resolved.categories.map(toCategory);
+  return resolved.categories.map((c: any) => toCategory(c));
 };
 
 export const fetchArenaCategory = async (

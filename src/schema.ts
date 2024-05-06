@@ -1192,6 +1192,9 @@ export const typeDefs = gql`
     postCount: Int!
     disabled: Boolean!
     topics: [ArenaTopic!]
+    breadcrumbs: [CategoryBreadcrumb!]!
+    parentCategoryId: Int
+    children: [ArenaCategory!]
   }
 
   type ArenaUser {
@@ -1236,15 +1239,50 @@ export const typeDefs = gql`
     isFollowing: Boolean
   }
 
-  type ArenaCategoryV2 {
+  type CategoryBreadcrumb {
+    id: Int!
+    title: String!
+  }
+
+  interface ArenaCategoryV2Base {
+    id: Int!
+    title: String!
+    description: String!
+    postCount: Int!
+    topicCount: Int!
+    isFollowing: Boolean!
+    visible: Boolean!
+    parentCategoryId: Int
+    breadcrumbs: [CategoryBreadcrumb!]!
+  }
+
+  type TopiclessArenaCategoryV2 implements ArenaCategoryV2Base {
+    id: Int!
+    title: String!
+    description: String!
+    postCount: Int!
+    topicCount: Int!
+    isFollowing: Boolean!
+    visible: Boolean!
+    categoryCount: Int
+    subcategories: [TopiclessArenaCategoryV2!]
+    parentCategoryId: Int
+    breadcrumbs: [CategoryBreadcrumb!]!
+  }
+
+  type ArenaCategoryV2 implements ArenaCategoryV2Base {
     id: Int!
     title: String!
     description: String!
     postCount: Int!
     topicCount: Int!
     topics: [ArenaTopicV2!]
+    categoryCount: Int
+    subcategories: [TopiclessArenaCategoryV2!]
     isFollowing: Boolean!
     visible: Boolean!
+    parentCategoryId: Int
+    breadcrumbs: [CategoryBreadcrumb!]!
   }
 
   type ArenaTopicV2 {
@@ -1496,8 +1534,14 @@ export const typeDefs = gql`
     ): String!
     markNotificationAsRead(topicIds: [Int!]!): [Int!]!
     newArenaTopic(categoryId: Int!, title: String!, content: String!): ArenaTopic!
-    newArenaCategory(title: String!, description: String!, visible: Boolean!): ArenaCategoryV2!
-    updateArenaCategory(categoryId: Int!, title: String!, description: String!, visible: Boolean!): ArenaCategoryV2!
+    newArenaCategory(title: String!, description: String!, visible: Boolean!, parentCategoryId: Int): ArenaCategoryV2!
+    updateArenaCategory(
+      categoryId: Int!
+      title: String!
+      description: String!
+      visible: Boolean!
+      parentCategoryId: Int
+    ): ArenaCategoryV2!
     newArenaTopicV2(
       categoryId: Int!
       title: String!
@@ -1527,7 +1571,7 @@ export const typeDefs = gql`
     unfollowCategory(categoryId: Int!): ArenaCategoryV2!
     unsubscribeFromTopic(topicId: Int!): Int!
     updateOtherArenaUser(userId: Int!, data: ArenaUserV2Input!): MyNdlaPersonalData!
-    sortArenaCategories(sortedIds: [Int!]!): [ArenaCategoryV2!]!
+    sortArenaCategories(sortedIds: [Int!]!, parentId: Int): [ArenaCategoryV2!]!
   }
 `;
 

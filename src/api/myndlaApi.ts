@@ -112,9 +112,10 @@ export const newCategory = async (
   title: string,
   description: string,
   visible: boolean,
+  parentCategoryId: number | undefined,
   context: Context,
 ): Promise<ICategory> => {
-  const body: INewCategory = { title, description, visible };
+  const body: INewCategory = { title, description, visible, parentCategoryId };
   const response = await fetch(`${arenaBaseUrl}/categories`, context, {
     method: "POST",
     body: JSON.stringify(body),
@@ -128,9 +129,10 @@ export const updateCategory = async (
   title: string,
   description: string,
   visible: boolean,
+  parentCategoryId: number | undefined,
   context: Context,
 ): Promise<ICategory> => {
-  const body: INewCategory = { title, description, visible };
+  const body: INewCategory = { title, description, visible, parentCategoryId };
   const response = await fetch(`${arenaBaseUrl}/categories/${categoryId}`, context, {
     method: "PUT",
     body: JSON.stringify(body),
@@ -348,8 +350,13 @@ export const updateOtherUser = async (
   return await resolveJson(response);
 };
 
-export const sortCategories = async (sortedIds: number[], context: Context): Promise<ICategory[]> => {
-  const response = await fetch(`${arenaBaseUrl}/categories/sort`, context, {
+export const sortCategories = async (
+  parentId: number | undefined,
+  sortedIds: number[],
+  context: Context,
+): Promise<ICategory[]> => {
+  const query = queryString.stringify({ "category-parent-id": parentId });
+  const response = await fetch(`${arenaBaseUrl}/categories/sort?${query}`, context, {
     method: "PUT",
     body: JSON.stringify(sortedIds),
   });
