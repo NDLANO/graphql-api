@@ -9,7 +9,13 @@
 import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchLK20CompetenceGoalSet } from "../api";
-import { GQLQuerySubjectArgs, GQLSubject, GQLSubjectLink, GQLTopic } from "../types/schema";
+import {
+  GQLQuerySubjectArgs,
+  GQLQuerySubjectCollectionArgs,
+  GQLSubject,
+  GQLSubjectLink,
+  GQLTopic,
+} from "../types/schema";
 import { filterMissingArticles } from "../utils/articleHelpers";
 
 export const Query = {
@@ -44,6 +50,15 @@ export const Query = {
     };
 
     return context.loaders.subjectsLoader.load(loaderParams).then((s) => s.subjects);
+  },
+  async subjectCollection(
+    _: any,
+    { language }: GQLQuerySubjectCollectionArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLSubject[]> {
+    return await context.loaders.subjectsLoader
+      .load({ metadataFilter: { key: "language", value: language } })
+      .then((s) => s.subjects);
   },
 };
 
