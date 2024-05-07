@@ -1503,6 +1503,7 @@ export const typeDefs = gql`
     arenaUserV2(username: String!): ArenaUserV2
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
     listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
+    subjectCollection(language: String!): [Subject!]
   }
 
   type Mutation {
