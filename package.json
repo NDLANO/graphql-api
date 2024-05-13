@@ -27,7 +27,7 @@
     "@types/serve-static": "1.13.10"
   },
   "engines": {
-    "node": ">=20.9.0"
+    "node": ">=20.13.0"
   },
   "dependencies": {
     "@apollo/server": "^4.9.3",
@@ -76,7 +76,7 @@
     "@types/jest": "^29.0.2",
     "@types/lodash": "^4.14.118",
     "@types/lru-cache": "^4.1.1",
-    "@types/node": "^20.9.0",
+    "@types/node": "^20.12.11",
     "@types/node-fetch": "^2.1.2",
     "@types/prismjs": "^1.26.0",
     "@types/query-string": "^6.1.1",
