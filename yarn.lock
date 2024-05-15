@@ -2651,12 +2651,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/sanitize-html@npm:^2.9.1":
-  version: 2.9.1
-  resolution: "@types/sanitize-html@npm:2.9.1"
+"@types/sanitize-html@npm:^2.11.0":
+  version: 2.11.0
+  resolution: "@types/sanitize-html@npm:2.11.0"
   dependencies:
     htmlparser2: "npm:^8.0.0"
-  checksum: 10c0/d07fe7086463251a62f40d16fcb5c61200c42e1bf213c3e7f2f4e71636ef8689f43cd0569c418ffe9cf8860456070c07cf581cfa84c05f25031d6a4be6487856
+  checksum: 10c0/6b559184b4c9d86f7ad067288c59f7fd1d88aa4832e627f5c2174c99aafe697583cde0d0c279ab8cb92993b84eb7e7658508c3454e4d8b455cc4adcee758183e
   languageName: node
   linkType: hard
 
@@ -8789,7 +8789,7 @@ __metadata:
     "@types/node-fetch": "npm:^2.1.2"
     "@types/prismjs": "npm:^1.26.0"
     "@types/query-string": "npm:^6.1.1"
-    "@types/sanitize-html": "npm:^2.9.1"
+    "@types/sanitize-html": "npm:^2.11.0"
     "@types/serve-static": "npm:1.13.10"
     "@vercel/ncc": "npm:^0.34.0"
     bunyan: "npm:^1.8.12"
@@ -8818,7 +8818,7 @@ __metadata:
     prismjs: "npm:^1.29.0"
     prom-client: "npm:^15.1.2"
     query-string: "npm:^6.2.0"
-    sanitize-html: "npm:^2.11.0"
+    sanitize-html: "npm:^2.13.0"
     ts-jest: "npm:^29.0.1"
     ts-node: "npm:^7.0.1"
     typescript: "npm:^5.2.2"
@@ -10268,9 +10268,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sanitize-html@npm:^2.11.0":
-  version: 2.11.0
-  resolution: "sanitize-html@npm:2.11.0"
+"sanitize-html@npm:^2.13.0":
+  version: 2.13.0
+  resolution: "sanitize-html@npm:2.13.0"
   dependencies:
     deepmerge: "npm:^4.2.2"
     escape-string-regexp: "npm:^4.0.0"
@@ -10278,7 +10278,7 @@ __metadata:
     is-plain-object: "npm:^5.0.0"
     parse-srcset: "npm:^1.0.2"
     postcss: "npm:^8.3.11"
-  checksum: 10c0/863dcce83c4631fcb5519fd0739ed9e93adcce8dd89e5a738823c309c68686048b0f4e30e07bae0de67ea72b567ee9c908af756ba22fcfcb8fd1fa2c69ca3e0d
+  checksum: 10c0/2a83f7dae19ba60c25b928708538e53bc9b6278e04a6107e162369d9ae06c0ac5f5a7236d24b38a716b19c67bfac137daf4645be145800c199533db7da40ca0d
   languageName: node
   linkType: hard
 

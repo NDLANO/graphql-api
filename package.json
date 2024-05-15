@@ -52,7 +52,7 @@
     "prismjs": "^1.29.0",
     "prom-client": "^15.1.2",
     "query-string": "^6.2.0",
-    "sanitize-html": "^2.11.0"
+    "sanitize-html": "^2.13.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.13.11",
@@ -80,7 +80,7 @@
     "@types/node-fetch": "^2.1.2",
     "@types/prismjs": "^1.26.0",
     "@types/query-string": "^6.1.1",
-    "@types/sanitize-html": "^2.9.1",
+    "@types/sanitize-html": "^2.11.0",
     "@types/serve-static": "1.13.10",
     "@vercel/ncc": "^0.34.0",
     "chalk": "^2.4.1",
