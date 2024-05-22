@@ -6,7 +6,7 @@
  *
  */
 
-import { IFolderData, IResource } from "@ndla/types-backend/myndla-api";
+import { IFolderData, IResource, IUserFolder } from "@ndla/types-backend/myndla-api";
 import {
   deleteFolder,
   deleteFolderResource,
@@ -25,6 +25,8 @@ import {
   sortResources,
   patchFolderResource,
   copySharedFolder,
+  saveSharedFolder,
+  deleteSharedFolder,
 } from "../api/folderApi";
 import { fetchFolderResourceMeta, fetchFolderResourcesMetaData } from "../api/folderResourceMetaApi";
 import {
@@ -49,6 +51,8 @@ import {
   GQLQueryResolvers,
   GQLQuerySharedFolderArgs,
   GQLMutationCopySharedFolderArgs,
+  GQLMutationSaveSharedFolderArgs,
+  GQLMutationDeleteSharedFolderArgs,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -61,7 +65,7 @@ export const Query: Pick<
   | "folderResourceMeta"
   | "personalData"
 > = {
-  async folders(_: any, params: GQLQueryFoldersArgs, context: ContextWithLoaders): Promise<IFolderData[]> {
+  async folders(_: any, params: GQLQueryFoldersArgs, context: ContextWithLoaders): Promise<IUserFolder> {
     return fetchFolders(params, context);
   },
   async folder(_: any, params: GQLQueryFolderArgs, context: ContextWithLoaders): Promise<IFolderData> {
@@ -129,6 +133,8 @@ export const Mutations: Pick<
   | "updatePersonalData"
   | "updateFolderStatus"
   | "copySharedFolder"
+  | "saveSharedFolder"
+  | "deleteSharedFolder"
 > = {
   async addFolder(_: any, params: GQLMutationAddFolderArgs, context: ContextWithLoaders): Promise<IFolderData> {
     return postFolder(params, context);
@@ -177,5 +183,11 @@ export const Mutations: Pick<
   },
   async copySharedFolder(_: any, params: GQLMutationCopySharedFolderArgs, context: ContextWithLoaders) {
     return copySharedFolder(params, context);
+  },
+  async saveSharedFolder(_: any, params: GQLMutationSaveSharedFolderArgs, context: ContextWithLoaders) {
+    return saveSharedFolder(params, context);
+  },
+  async deleteSharedFolder(_: any, params: GQLMutationDeleteSharedFolderArgs, context: ContextWithLoaders) {
+    return deleteSharedFolder(params, context);
   },
 };

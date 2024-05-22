@@ -997,6 +997,7 @@ export type GQLMutation = {
   deletePersonalData: Scalars['Boolean'];
   deletePost: Scalars['Int'];
   deletePostV2: Scalars['Int'];
+  deleteSharedFolder: Scalars['Int'];
   deleteTopic: Scalars['Int'];
   deleteTopicV2: Scalars['Int'];
   followCategory: GQLArenaCategoryV2;
@@ -1012,6 +1013,7 @@ export type GQLMutation = {
   replyToTopic: GQLArenaPost;
   replyToTopicV2: GQLArenaPostV2;
   resolveFlag: GQLArenaFlag;
+  saveSharedFolder: Scalars['Int'];
   sortArenaCategories: Array<GQLArenaCategoryV2>;
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
@@ -1078,6 +1080,11 @@ export type GQLMutationDeletePostArgs = {
 
 export type GQLMutationDeletePostV2Args = {
   postId: Scalars['Int'];
+};
+
+
+export type GQLMutationDeleteSharedFolderArgs = {
+  folderId: Scalars['String'];
 };
 
 
@@ -1162,6 +1169,11 @@ export type GQLMutationReplyToTopicV2Args = {
 
 export type GQLMutationResolveFlagArgs = {
   flagId: Scalars['Int'];
+};
+
+
+export type GQLMutationSaveSharedFolderArgs = {
+  folderId: Scalars['String'];
 };
 
 
@@ -1475,7 +1487,7 @@ export type GQLQuery = {
   folder: GQLFolder;
   folderResourceMeta?: Maybe<GQLFolderResourceMeta>;
   folderResourceMetaSearch: Array<GQLFolderResourceMeta>;
-  folders: Array<GQLFolder>;
+  folders: GQLUserFolder;
   frontpage?: Maybe<GQLFrontpageMenu>;
   groupSearch?: Maybe<Array<GQLGroupSearch>>;
   image?: Maybe<GQLImageMetaInformationV2>;
@@ -2212,6 +2224,12 @@ export type GQLUptimeAlert = {
   title: Scalars['String'];
 };
 
+export type GQLUserFolder = {
+  __typename?: 'UserFolder';
+  folders: Array<GQLFolder>;
+  sharedFolders: Array<GQLFolder>;
+};
+
 export type GQLVideoFolderResourceMeta = GQLFolderResourceMeta & {
   __typename?: 'VideoFolderResourceMeta';
   description: Scalars['String'];
@@ -2474,6 +2492,7 @@ export type GQLResolversTypes = {
   UpdatedFolder: ResolverTypeWrapper<GQLUpdatedFolder>;
   UpdatedFolderResource: ResolverTypeWrapper<GQLUpdatedFolderResource>;
   UptimeAlert: ResolverTypeWrapper<GQLUptimeAlert>;
+  UserFolder: ResolverTypeWrapper<GQLUserFolder>;
   VideoFolderResourceMeta: ResolverTypeWrapper<GQLVideoFolderResourceMeta>;
   VisualElement: ResolverTypeWrapper<GQLVisualElement>;
   VisualElementOembed: ResolverTypeWrapper<GQLVisualElementOembed>;
@@ -2639,6 +2658,7 @@ export type GQLResolversParentTypes = {
   UpdatedFolder: GQLUpdatedFolder;
   UpdatedFolderResource: GQLUpdatedFolderResource;
   UptimeAlert: GQLUptimeAlert;
+  UserFolder: GQLUserFolder;
   VideoFolderResourceMeta: GQLVideoFolderResourceMeta;
   VisualElement: GQLVisualElement;
   VisualElementOembed: GQLVisualElementOembed;
@@ -3600,6 +3620,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   deletePost?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostArgs, 'postId'>>;
   deletePostV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostV2Args, 'postId'>>;
+  deleteSharedFolder?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteSharedFolderArgs, 'folderId'>>;
   deleteTopic?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteTopicArgs, 'topicId'>>;
   deleteTopicV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteTopicV2Args, 'topicId'>>;
   followCategory?: Resolver<GQLResolversTypes['ArenaCategoryV2'], ParentType, ContextType, RequireFields<GQLMutationFollowCategoryArgs, 'categoryId'>>;
@@ -3615,6 +3636,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
   replyToTopicV2?: Resolver<GQLResolversTypes['ArenaPostV2'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicV2Args, 'content' | 'topicId'>>;
   resolveFlag?: Resolver<GQLResolversTypes['ArenaFlag'], ParentType, ContextType, RequireFields<GQLMutationResolveFlagArgs, 'flagId'>>;
+  saveSharedFolder?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationSaveSharedFolderArgs, 'folderId'>>;
   sortArenaCategories?: Resolver<Array<GQLResolversTypes['ArenaCategoryV2']>, ParentType, ContextType, RequireFields<GQLMutationSortArenaCategoriesArgs, 'sortedIds'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
@@ -3834,7 +3856,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   folder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLQueryFolderArgs, 'id'>>;
   folderResourceMeta?: Resolver<Maybe<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaArgs, 'resource'>>;
   folderResourceMetaSearch?: Resolver<Array<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaSearchArgs, 'resources'>>;
-  folders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType, Partial<GQLQueryFoldersArgs>>;
+  folders?: Resolver<GQLResolversTypes['UserFolder'], ParentType, ContextType, Partial<GQLQueryFoldersArgs>>;
   frontpage?: Resolver<Maybe<GQLResolversTypes['FrontpageMenu']>, ParentType, ContextType>;
   groupSearch?: Resolver<Maybe<Array<GQLResolversTypes['GroupSearch']>>, ParentType, ContextType, Partial<GQLQueryGroupSearchArgs>>;
   image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV2']>, ParentType, ContextType, RequireFields<GQLQueryImageArgs, 'id'>>;
@@ -4216,6 +4238,12 @@ export type GQLUptimeAlertResolvers<ContextType = any, ParentType extends GQLRes
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLUserFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UserFolder'] = GQLResolversParentTypes['UserFolder']> = {
+  folders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType>;
+  sharedFolders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLVideoFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['VideoFolderResourceMeta'] = GQLResolversParentTypes['VideoFolderResourceMeta']> = {
   description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -4403,6 +4431,7 @@ export type GQLResolvers<ContextType = any> = {
   UpdatedFolder?: GQLUpdatedFolderResolvers<ContextType>;
   UpdatedFolderResource?: GQLUpdatedFolderResourceResolvers<ContextType>;
   UptimeAlert?: GQLUptimeAlertResolvers<ContextType>;
+  UserFolder?: GQLUserFolderResolvers<ContextType>;
   VideoFolderResourceMeta?: GQLVideoFolderResourceMetaResolvers<ContextType>;
   VisualElement?: GQLVisualElementResolvers<ContextType>;
   VisualElementOembed?: GQLVisualElementOembedResolvers<ContextType>;
