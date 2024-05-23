@@ -997,7 +997,7 @@ export type GQLMutation = {
   deletePersonalData: Scalars['Boolean'];
   deletePost: Scalars['Int'];
   deletePostV2: Scalars['Int'];
-  deleteSharedFolder: Scalars['Int'];
+  deleteSharedFolder: Scalars['String'];
   deleteTopic: Scalars['Int'];
   deleteTopicV2: Scalars['Int'];
   followCategory: GQLArenaCategoryV2;
@@ -1013,7 +1013,7 @@ export type GQLMutation = {
   replyToTopic: GQLArenaPost;
   replyToTopicV2: GQLArenaPostV2;
   resolveFlag: GQLArenaFlag;
-  saveSharedFolder: Scalars['Int'];
+  saveSharedFolder: Scalars['String'];
   sortArenaCategories: Array<GQLArenaCategoryV2>;
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
@@ -3620,7 +3620,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   deletePost?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostArgs, 'postId'>>;
   deletePostV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostV2Args, 'postId'>>;
-  deleteSharedFolder?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteSharedFolderArgs, 'folderId'>>;
+  deleteSharedFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteSharedFolderArgs, 'folderId'>>;
   deleteTopic?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteTopicArgs, 'topicId'>>;
   deleteTopicV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteTopicV2Args, 'topicId'>>;
   followCategory?: Resolver<GQLResolversTypes['ArenaCategoryV2'], ParentType, ContextType, RequireFields<GQLMutationFollowCategoryArgs, 'categoryId'>>;
@@ -3636,7 +3636,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
   replyToTopicV2?: Resolver<GQLResolversTypes['ArenaPostV2'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicV2Args, 'content' | 'topicId'>>;
   resolveFlag?: Resolver<GQLResolversTypes['ArenaFlag'], ParentType, ContextType, RequireFields<GQLMutationResolveFlagArgs, 'flagId'>>;
-  saveSharedFolder?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationSaveSharedFolderArgs, 'folderId'>>;
+  saveSharedFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationSaveSharedFolderArgs, 'folderId'>>;
   sortArenaCategories?: Resolver<Array<GQLResolversTypes['ArenaCategoryV2']>, ParentType, ContextType, RequireFields<GQLMutationSortArenaCategoriesArgs, 'sortedIds'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
