@@ -39,7 +39,7 @@ const app = express();
 
 const metricsMiddleware = promBundle({
   includeMethod: true,
-  includePath: true,
+  includePath: false,
   excludeRoutes: ["/health"],
 });
 
