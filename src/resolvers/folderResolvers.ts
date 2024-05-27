@@ -25,8 +25,8 @@ import {
   sortResources,
   patchFolderResource,
   copySharedFolder,
-  saveSharedFolder,
-  deleteSharedFolder,
+  favoriteSharedFolder,
+  unFavoriteSharedFolder,
 } from "../api/folderApi";
 import { fetchFolderResourceMeta, fetchFolderResourcesMetaData } from "../api/folderResourceMetaApi";
 import {
@@ -51,8 +51,8 @@ import {
   GQLQueryResolvers,
   GQLQuerySharedFolderArgs,
   GQLMutationCopySharedFolderArgs,
-  GQLMutationSaveSharedFolderArgs,
-  GQLMutationDeleteSharedFolderArgs,
+  GQLMutationFavoriteSharedFolderArgs,
+  GQLMutationUnFavoriteSharedFolderArgs,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -133,8 +133,8 @@ export const Mutations: Pick<
   | "updatePersonalData"
   | "updateFolderStatus"
   | "copySharedFolder"
-  | "saveSharedFolder"
-  | "deleteSharedFolder"
+  | "favoriteSharedFolder"
+  | "unFavoriteSharedFolder"
 > = {
   async addFolder(_: any, params: GQLMutationAddFolderArgs, context: ContextWithLoaders): Promise<IFolderData> {
     return postFolder(params, context);
@@ -184,10 +184,10 @@ export const Mutations: Pick<
   async copySharedFolder(_: any, params: GQLMutationCopySharedFolderArgs, context: ContextWithLoaders) {
     return copySharedFolder(params, context);
   },
-  async saveSharedFolder(_: any, params: GQLMutationSaveSharedFolderArgs, context: ContextWithLoaders) {
-    return saveSharedFolder(params, context);
+  async favoriteSharedFolder(_: any, params: GQLMutationFavoriteSharedFolderArgs, context: ContextWithLoaders) {
+    return favoriteSharedFolder(params, context);
   },
-  async deleteSharedFolder(_: any, params: GQLMutationDeleteSharedFolderArgs, context: ContextWithLoaders) {
-    return deleteSharedFolder(params, context);
+  async unFavoriteSharedFolder(_: any, params: GQLMutationUnFavoriteSharedFolderArgs, context: ContextWithLoaders) {
+    return unFavoriteSharedFolder(params, context);
   },
 };
