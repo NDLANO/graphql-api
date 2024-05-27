@@ -14,8 +14,10 @@ import {
   GQLMutationCopySharedFolderArgs,
   GQLMutationDeleteFolderArgs,
   GQLMutationDeleteFolderResourceArgs,
+  GQLMutationFavoriteSharedFolderArgs,
   GQLMutationSortFoldersArgs,
   GQLMutationSortResourcesArgs,
+  GQLMutationUnFavoriteSharedFolderArgs,
   GQLMutationUpdateFolderArgs,
   GQLMutationUpdateFolderResourceArgs,
   GQLMutationUpdateFolderStatusArgs,
@@ -237,12 +239,20 @@ export async function copySharedFolder(
   return await resolveJson(response);
 }
 
-export async function saveSharedFolder({ folderId }: GQLMutationCopySharedFolderArgs, context: Context) {
+export async function favoriteSharedFolder(
+  { folderId }: GQLMutationFavoriteSharedFolderArgs,
+  context: Context,
+): Promise<string> {
   const response = await fetch(`/myndla-api/v1/folders/shared/${folderId}/save`, context, { method: "POST" });
-  return await resolveJson(response);
+  await resolveNothingFromStatus(response);
+  return folderId;
 }
 
-export async function deleteSharedFolder({ folderId }: GQLMutationCopySharedFolderArgs, context: Context) {
+export async function unFavoriteSharedFolder(
+  { folderId }: GQLMutationUnFavoriteSharedFolderArgs,
+  context: Context,
+): Promise<string> {
   const response = await fetch(`/myndla-api/v1/folders/shared/${folderId}/save`, context, { method: "DELETE" });
-  return await resolveJson(response);
+  await resolveNothingFromStatus(response);
+  return folderId;
 }

@@ -1577,8 +1577,8 @@ export const typeDefs = gql`
     unfollowCategory(categoryId: Int!): ArenaCategoryV2!
     unsubscribeFromTopic(topicId: Int!): Int!
     updateOtherArenaUser(userId: Int!, data: ArenaUserV2Input!): MyNdlaPersonalData!
-    saveSharedFolder(folderId: String!): Int!
-    deleteSharedFolder(folderId: String!): Int!
+    favoriteSharedFolder(folderId: String!): String!
+    unFavoriteSharedFolder(folderId: String!): String!
     sortArenaCategories(sortedIds: [Int!]!, parentId: Int): [ArenaCategoryV2!]!
   }
 `;
