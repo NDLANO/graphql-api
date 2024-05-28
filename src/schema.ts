@@ -320,6 +320,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     path: String!
     parentIds: [String!]!
+    url: String
   }
 
   type Topic implements TaxonomyEntity & WithArticle {

@@ -69,9 +69,10 @@ export const Query = {
     const contexts: GQLTaxonomyContext[] = visibleCtx.map((c) => {
       const breadcrumbs = c.breadcrumbs[context.language] || c.breadcrumbs["nb"] || [];
       return {
-        path: c.path,
-        parentIds: c.parentIds,
         breadcrumbs,
+        parentIds: c.parentIds,
+        path: c.path,
+        url: c.url,
       };
     });
     return { ...resource, contexts, path, rank, relevanceId, parents: [] };

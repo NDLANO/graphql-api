@@ -2091,6 +2091,7 @@ export type GQLTaxonomyContext = {
   breadcrumbs: Array<Scalars['String']>;
   parentIds: Array<Scalars['String']>;
   path: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLTaxonomyEntity = {
@@ -4123,6 +4124,7 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
