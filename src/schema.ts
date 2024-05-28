@@ -790,6 +790,7 @@ export const typeDefs = gql`
     isActive: Boolean!
     isVisible: Boolean!
     contextId: String!
+    url: String
   }
 
   type SearchContextResourceTypes {

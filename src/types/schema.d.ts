@@ -1947,6 +1947,7 @@ export type GQLSearchContext = {
   resourceTypes: Array<GQLSearchContextResourceTypes>;
   root: Scalars['String'];
   rootId: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLSearchContextResourceTypes = {
@@ -3980,6 +3981,7 @@ export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLR
   resourceTypes?: Resolver<Array<GQLResolversTypes['SearchContextResourceTypes']>, ParentType, ContextType>;
   root?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   rootId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
