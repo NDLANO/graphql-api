@@ -2227,7 +2227,7 @@ export type GQLUptimeAlert = {
 export type GQLUserFolder = {
   __typename?: 'UserFolder';
   folders: Array<GQLFolder>;
-  sharedFolders: Array<GQLFolder>;
+  sharedFolders: Array<GQLSharedFolder>;
 };
 
 export type GQLVideoFolderResourceMeta = GQLFolderResourceMeta & {
@@ -4240,7 +4240,7 @@ export type GQLUptimeAlertResolvers<ContextType = any, ParentType extends GQLRes
 
 export type GQLUserFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UserFolder'] = GQLResolversParentTypes['UserFolder']> = {
   folders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType>;
-  sharedFolders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType>;
+  sharedFolders?: Resolver<Array<GQLResolversTypes['SharedFolder']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

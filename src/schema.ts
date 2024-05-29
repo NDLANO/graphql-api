@@ -1390,7 +1390,7 @@ export const typeDefs = gql`
 
   type UserFolder {
     folders: [Folder!]!
-    sharedFolders: [Folder!]!
+    sharedFolders: [SharedFolder!]!
   }
 
   type Query {
