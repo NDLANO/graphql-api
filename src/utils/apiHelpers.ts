@@ -159,9 +159,10 @@ export const nodeToTaxonomyEntity = (node: Node, context: Context): GQLTaxonomyE
   const contexts: GQLTaxonomyContext[] = node.contexts.map((c) => {
     const breadcrumbs = c.breadcrumbs[context.language] ?? [];
     return {
-      path: c.path,
-      parentIds: c.parentIds,
       breadcrumbs,
+      parentIds: c.parentIds,
+      path: c.path,
+      url: c.url,
     };
   });
   return { ...node, contexts };

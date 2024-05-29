@@ -1947,6 +1947,7 @@ export type GQLSearchContext = {
   resourceTypes: Array<GQLSearchContextResourceTypes>;
   root: Scalars['String'];
   rootId: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLSearchContextResourceTypes = {
@@ -2091,6 +2092,7 @@ export type GQLTaxonomyContext = {
   breadcrumbs: Array<Scalars['String']>;
   parentIds: Array<Scalars['String']>;
   path: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLTaxonomyEntity = {
@@ -3979,6 +3981,7 @@ export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLR
   resourceTypes?: Resolver<Array<GQLResolversTypes['SearchContextResourceTypes']>, ParentType, ContextType>;
   root?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   rootId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4123,6 +4126,7 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

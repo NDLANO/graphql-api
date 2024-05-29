@@ -320,6 +320,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     path: String!
     parentIds: [String!]!
+    url: String
   }
 
   type Topic implements TaxonomyEntity & WithArticle {
@@ -789,6 +790,7 @@ export const typeDefs = gql`
     isActive: Boolean!
     isVisible: Boolean!
     contextId: String!
+    url: String
   }
 
   type SearchContextResourceTypes {
