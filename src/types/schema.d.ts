@@ -2090,6 +2090,8 @@ export type GQLTags = {
 export type GQLTaxonomyContext = {
   __typename?: 'TaxonomyContext';
   breadcrumbs: Array<Scalars['String']>;
+  contextId: Scalars['String'];
+  contextType?: Maybe<Scalars['String']>;
   parentIds: Array<Scalars['String']>;
   path: Scalars['String'];
   url?: Maybe<Scalars['String']>;
@@ -4124,6 +4126,8 @@ export type GQLTagsResolvers<ContextType = any, ParentType extends GQLResolversP
 
 export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyContext'] = GQLResolversParentTypes['TaxonomyContext']> = {
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  contextType?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
