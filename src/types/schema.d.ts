@@ -1903,12 +1903,6 @@ export type GQLResourceType = {
   __typename?: 'ResourceType';
   id: Scalars['String'];
   name: Scalars['String'];
-  resources?: Maybe<Array<GQLResource>>;
-};
-
-
-export type GQLResourceTypeResourcesArgs = {
-  topicId: Scalars['String'];
 };
 
 export type GQLResourceTypeDefinition = {
@@ -2094,6 +2088,7 @@ export type GQLTaxonomyContext = {
   contextType?: Maybe<Scalars['String']>;
   parentIds: Array<Scalars['String']>;
   path: Scalars['String'];
+  resourceTypes?: Maybe<Array<GQLResourceType>>;
   url?: Maybe<Scalars['String']>;
 };
 
@@ -3944,7 +3939,6 @@ export type GQLResourceMetaDataResolvers<ContextType = any, ParentType extends G
 export type GQLResourceTypeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceType'] = GQLResolversParentTypes['ResourceType']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  resources?: Resolver<Maybe<Array<GQLResolversTypes['Resource']>>, ParentType, ContextType, RequireFields<GQLResourceTypeResourcesArgs, 'topicId'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4130,6 +4124,7 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   contextType?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

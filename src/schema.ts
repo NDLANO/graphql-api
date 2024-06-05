@@ -185,7 +185,6 @@ export const typeDefs = gql`
   type ResourceType {
     id: String!
     name: String!
-    resources(topicId: String!): [Resource!]
   }
 
   type MetaImage {
@@ -322,6 +321,7 @@ export const typeDefs = gql`
     contextType: String
     path: String!
     parentIds: [String!]!
+    resourceTypes: [ResourceType!]
     url: String
   }
 

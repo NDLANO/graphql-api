@@ -17,8 +17,8 @@ import {
   GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
-  GQLTaxonomyContext,
 } from "../types/schema";
+import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
@@ -35,20 +35,11 @@ export const Query = {
     if (!resource) return null;
 
     const visibleCtx = resource.contexts.filter((c) => c.isVisible);
-
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context);
     return {
-      ...resource,
-      path: resource.path,
+      ...entity,
       rank: visibleCtx?.[0]?.rank,
       relevanceId: visibleCtx?.[0]?.relevanceId || "urn:relevance:core",
-      contexts: visibleCtx.map((ctx) => {
-        const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs["nb"] || [];
-        return {
-          path: ctx.path,
-          parentIds: ctx.parentIds,
-          breadcrumbs,
-        };
-      }),
     };
   },
   async resource(
@@ -66,16 +57,8 @@ export const Query = {
     const path = topicCtx?.[0]?.path || resource.path;
     const rank = topicCtx?.[0]?.rank;
     const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
-    const contexts: GQLTaxonomyContext[] = visibleCtx.map((c) => {
-      const breadcrumbs = c.breadcrumbs[context.language] || c.breadcrumbs["nb"] || [];
-      return {
-        breadcrumbs,
-        parentIds: c.parentIds,
-        path: c.path,
-        url: c.url,
-      };
-    });
-    return { ...resource, contexts, path, rank, relevanceId, parents: [] };
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context);
+    return { ...entity, path, rank, relevanceId, parents: [] };
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
     return fetchResourceTypes<GQLResourceType>(context);

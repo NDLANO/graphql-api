@@ -155,14 +155,19 @@ export function licenseFixer(lic: string, licVer: string) {
   return `${lic.replace(" ", "-")}-${licVer}`;
 }
 
-export const nodeToTaxonomyEntity = (node: Node, context: Context): GQLTaxonomyEntity => {
-  const contexts: GQLTaxonomyContext[] = node.contexts.map((c) => {
-    const breadcrumbs = c.breadcrumbs[context.language] ?? [];
+export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): GQLTaxonomyEntity => {
+  const contexts: GQLTaxonomyContext[] = node.contexts.map((ctx) => {
+    const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs["nb"] || [];
+    const resourceTypes = ctx.resourceTypes.map((rt) => {
+      return {
+        ...rt,
+        name: rt.name[context.language] || rt.name["nb"] || "",
+      };
+    });
     return {
+      ...ctx,
+      resourceTypes,
       breadcrumbs,
-      parentIds: c.parentIds,
-      path: c.path,
-      url: c.url,
     };
   });
   return { ...node, contexts };
