@@ -15,10 +15,12 @@ import {
   GQLArenaTopic,
   GQLArenaUser,
   GQLCategoryBreadcrumb,
+  GQLMutationAddPostUpvoteArgs,
   GQLMutationDeletePostArgs,
   GQLMutationDeleteTopicArgs,
   GQLMutationNewArenaTopicArgs,
   GQLMutationNewFlagArgs,
+  GQLMutationRemovePostUpvoteArgs,
   GQLMutationReplyToTopicArgs,
   GQLMutationSubscribeToTopicArgs,
   GQLMutationUnsubscribeFromTopicArgs,
@@ -49,6 +51,8 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   user: toArenaUser(post.user),
   deleted: post.deleted,
   flagId: post.flagId,
+  upvotes: post.upvotes,
+  upvoted: post.upvoted,
 });
 
 const toTopic = (topic: any): GQLArenaTopic => {
@@ -285,7 +289,7 @@ export const replyToTopic = async ({ topicId, content }: GQLMutationReplyToTopic
   return toArenaPost(resolved.response, undefined);
 };
 
-export const addPostUpvote = async ({ postId }: { postId: number }, context: Context) => {
+export const addPostUpvote = async ({ postId }: GQLMutationAddPostUpvoteArgs, context: Context) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   await fetch(
     `/groups/api/v3/posts/${postId}/vote`,
@@ -302,7 +306,7 @@ export const addPostUpvote = async ({ postId }: { postId: number }, context: Con
   return postId;
 };
 
-export const removePostUpvote = async ({ postId }: { postId: number }, context: Context) => {
+export const removePostUpvote = async ({ postId }: GQLMutationRemovePostUpvoteArgs, context: Context) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   await fetch(
     `/groups/api/v3/posts/${postId}/vote`,

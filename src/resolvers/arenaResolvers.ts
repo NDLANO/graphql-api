@@ -7,6 +7,7 @@
  */
 
 import {
+  addPostUpvote,
   deletePost,
   deleteTopic,
   fetchArenaCategories,
@@ -19,6 +20,7 @@ import {
   markNotificationRead,
   newFlag,
   newTopic,
+  removePostUpvote,
   replyToTopic,
   subscribeToTopic,
   unsubscribeFromTopic,
@@ -36,6 +38,7 @@ import {
   GQLArenaTopic,
   GQLArenaTopicV2,
   GQLArenaUser,
+  GQLMutationAddPostUpvoteArgs,
   GQLMutationDeletePostArgs,
   GQLMutationDeletePostV2Args,
   GQLMutationDeleteTopicArgs,
@@ -48,6 +51,7 @@ import {
   GQLMutationNewArenaTopicArgs,
   GQLMutationNewArenaTopicV2Args,
   GQLMutationNewFlagV2Args,
+  GQLMutationRemovePostUpvoteArgs,
   GQLMutationReplyToTopicArgs,
   GQLMutationReplyToTopicV2Args,
   GQLMutationResolveFlagArgs,
@@ -227,6 +231,8 @@ export const Mutations: Pick<
   | "updateOtherArenaUser"
   | "deleteCategory"
   | "sortArenaCategories"
+  | "addPostUpvote"
+  | "removePostUpvote"
 > = {
   async newArenaCategory(
     _: any,
@@ -389,6 +395,16 @@ export const Mutations: Pick<
     context: ContextWithLoaders,
   ): Promise<GQLArenaCategoryV2[]> {
     return myndla.sortCategories(params.parentId, params.sortedIds, context);
+  },
+  async addPostUpvote(_: any, params: GQLMutationAddPostUpvoteArgs, context: ContextWithLoaders): Promise<number> {
+    return addPostUpvote(params, context);
+  },
+  async removePostUpvote(
+    _: any,
+    params: GQLMutationRemovePostUpvoteArgs,
+    context: ContextWithLoaders,
+  ): Promise<number> {
+    return removePostUpvote(params, context);
   },
 };
 
