@@ -285,6 +285,39 @@ export const replyToTopic = async ({ topicId, content }: GQLMutationReplyToTopic
   return toArenaPost(resolved.response, undefined);
 };
 
+export const addPostUpvote = async ({ postId }: { postId: number }, context: Context) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  await fetch(
+    `/groups/api/v3/posts/${postId}/vote`,
+    { ...context, shouldUseCache: false },
+    {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        ...csrfHeaders,
+      },
+      body: JSON.stringify({ delta: 1 }),
+    },
+  );
+  return postId;
+};
+
+export const removePostUpvote = async ({ postId }: { postId: number }, context: Context) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  await fetch(
+    `/groups/api/v3/posts/${postId}/vote`,
+    { ...context, shouldUseCache: false },
+    {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        ...csrfHeaders,
+      },
+    },
+  );
+  return postId;
+};
+
 export const deletePost = async ({ postId }: GQLMutationDeletePostArgs, context: Context) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   await fetch(
