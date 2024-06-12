@@ -2086,6 +2086,7 @@ export type GQLTaxonomyContext = {
   breadcrumbs: Array<Scalars['String']>;
   contextId: Scalars['String'];
   contextType?: Maybe<Scalars['String']>;
+  parentContextIds: Array<Scalars['String']>;
   parentIds: Array<Scalars['String']>;
   path: Scalars['String'];
   resourceTypes?: Maybe<Array<GQLResourceType>>;
@@ -4122,6 +4123,7 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   contextType?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  parentContextIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;

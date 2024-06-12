@@ -321,6 +321,7 @@ export const typeDefs = gql`
     contextType: String
     path: String!
     parentIds: [String!]!
+    parentContextIds: [String!]!
     resourceTypes: [ResourceType!]
     url: String
   }
