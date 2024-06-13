@@ -1859,6 +1859,7 @@ export type GQLResource = GQLTaxonomyEntity & GQLWithArticle & {
   availability?: Maybe<Scalars['String']>;
   breadcrumbs: Array<Scalars['String']>;
   contentUri?: Maybe<Scalars['String']>;
+  contextId?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
   id: Scalars['String'];
   language?: Maybe<Scalars['String']>;
@@ -2001,6 +2002,7 @@ export type GQLSubject = GQLTaxonomyEntity & {
   allTopics?: Maybe<Array<GQLTopic>>;
   breadcrumbs: Array<Scalars['String']>;
   contentUri?: Maybe<Scalars['String']>;
+  contextId?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
   grepCodes?: Maybe<Array<Scalars['String']>>;
   id: Scalars['String'];
@@ -2086,6 +2088,7 @@ export type GQLTaxonomyContext = {
   breadcrumbs: Array<Scalars['String']>;
   contextId: Scalars['String'];
   contextType?: Maybe<Scalars['String']>;
+  crumbs?: Maybe<Array<Maybe<GQLTaxonomyCrumb>>>;
   parentContextIds: Array<Scalars['String']>;
   parentIds: Array<Scalars['String']>;
   path: Scalars['String'];
@@ -2093,9 +2096,19 @@ export type GQLTaxonomyContext = {
   url?: Maybe<Scalars['String']>;
 };
 
+export type GQLTaxonomyCrumb = {
+  __typename?: 'TaxonomyCrumb';
+  contextId: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  path: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type GQLTaxonomyEntity = {
   breadcrumbs: Array<Scalars['String']>;
   contentUri?: Maybe<Scalars['String']>;
+  contextId?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
   id: Scalars['String'];
   language?: Maybe<Scalars['String']>;
@@ -2135,6 +2148,7 @@ export type GQLTopic = GQLTaxonomyEntity & GQLWithArticle & {
   availability?: Maybe<Scalars['String']>;
   breadcrumbs: Array<Scalars['String']>;
   contentUri?: Maybe<Scalars['String']>;
+  contextId?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
   coreResources?: Maybe<Array<GQLResource>>;
   id: Scalars['String'];
@@ -2480,6 +2494,7 @@ export type GQLResolversTypes = {
   SuggestionResult: ResolverTypeWrapper<GQLSuggestionResult>;
   Tags: ResolverTypeWrapper<GQLTags>;
   TaxonomyContext: ResolverTypeWrapper<GQLTaxonomyContext>;
+  TaxonomyCrumb: ResolverTypeWrapper<GQLTaxonomyCrumb>;
   TaxonomyEntity: GQLResolversTypes['Resource'] | GQLResolversTypes['Subject'] | GQLResolversTypes['Topic'];
   TaxonomyMetadata: ResolverTypeWrapper<GQLTaxonomyMetadata>;
   TextblockLicense: ResolverTypeWrapper<GQLTextblockLicense>;
@@ -2646,6 +2661,7 @@ export type GQLResolversParentTypes = {
   SuggestionResult: GQLSuggestionResult;
   Tags: GQLTags;
   TaxonomyContext: GQLTaxonomyContext;
+  TaxonomyCrumb: GQLTaxonomyCrumb;
   TaxonomyEntity: GQLResolversParentTypes['Resource'] | GQLResolversParentTypes['Subject'] | GQLResolversParentTypes['Topic'];
   TaxonomyMetadata: GQLTaxonomyMetadata;
   TextblockLicense: GQLTextblockLicense;
@@ -3902,6 +3918,7 @@ export type GQLResourceResolvers<ContextType = any, ParentType extends GQLResolv
   availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  contextId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -4043,6 +4060,7 @@ export type GQLSubjectResolvers<ContextType = any, ParentType extends GQLResolve
   allTopics?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  contextId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
   grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -4123,6 +4141,7 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   contextType?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  crumbs?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['TaxonomyCrumb']>>>, ParentType, ContextType>;
   parentContextIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -4131,10 +4150,20 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLTaxonomyCrumbResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyCrumb'] = GQLResolversParentTypes['TaxonomyCrumb']> = {
+  contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLTaxonomyEntityResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyEntity'] = GQLResolversParentTypes['TaxonomyEntity']> = {
   __resolveType: TypeResolveFn<'Resource' | 'Subject' | 'Topic', ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  contextId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -4173,6 +4202,7 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
   availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  contextId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
   coreResources?: Resolver<Maybe<Array<GQLResolversTypes['Resource']>>, ParentType, ContextType, Partial<GQLTopicCoreResourcesArgs>>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -4425,6 +4455,7 @@ export type GQLResolvers<ContextType = any> = {
   SuggestionResult?: GQLSuggestionResultResolvers<ContextType>;
   Tags?: GQLTagsResolvers<ContextType>;
   TaxonomyContext?: GQLTaxonomyContextResolvers<ContextType>;
+  TaxonomyCrumb?: GQLTaxonomyCrumbResolvers<ContextType>;
   TaxonomyEntity?: GQLTaxonomyEntityResolvers<ContextType>;
   TaxonomyMetadata?: GQLTaxonomyMetadataResolvers<ContextType>;
   TextblockLicense?: GQLTextblockLicenseResolvers<ContextType>;

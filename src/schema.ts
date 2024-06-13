@@ -280,6 +280,7 @@ export const typeDefs = gql`
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
+    contextId: String
     contexts: [TaxonomyContext!]!
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
@@ -302,6 +303,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
@@ -315,6 +317,14 @@ export const typeDefs = gql`
     availability: String
   }
 
+  type TaxonomyCrumb {
+    id: String!
+    contextId: String!
+    name: String!
+    path: String!
+    url: String!
+  }
+
   type TaxonomyContext {
     breadcrumbs: [String!]!
     contextId: String!
@@ -322,6 +332,7 @@ export const typeDefs = gql`
     path: String!
     parentIds: [String!]!
     parentContextIds: [String!]!
+    crumbs: [TaxonomyCrumb]
     resourceTypes: [ResourceType!]
     url: String
   }
@@ -335,6 +346,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
@@ -708,6 +720,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]

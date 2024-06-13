@@ -7,6 +7,7 @@
  */
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { Node } from "@ndla/types-taxonomy";
 import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath } from "../api";
 import { fetchNodeByContentUri } from "../api/taxonomyApi";
 import {
@@ -17,6 +18,7 @@ import {
   GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
+  GQLTaxonomyContext,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
@@ -35,7 +37,7 @@ export const Query = {
     if (!resource) return null;
 
     const visibleCtx = resource.contexts.filter((c) => c.isVisible);
-    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context);
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language);
     return {
       ...entity,
       rank: visibleCtx?.[0]?.rank,
@@ -57,7 +59,7 @@ export const Query = {
     const path = topicCtx?.[0]?.path || resource.path;
     const rank = topicCtx?.[0]?.rank;
     const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
-    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context);
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language);
     return { ...entity, path, rank, relevanceId, parents: [] };
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
@@ -111,6 +113,34 @@ export const resolvers = {
       throw Object.assign(new Error("Missing article contentUri for resource with id: " + resource.id), {
         status: 404,
       });
+    },
+  },
+  TaxonomyContext: {
+    async crumbs(
+      taxonomyContext: GQLTaxonomyContext,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLTaxonomyContext> {
+      const parentNodes = await context.loaders.nodeLoader.loadMany(
+        taxonomyContext.parentContextIds.map((contextId) => ({ contextId })),
+      );
+      const crumbs = parentNodes
+        .filter((node) => node.length > 0)
+        .map((node) => {
+          const parent = node[0] as unknown as Node;
+          const entity = nodeToTaxonomyEntity(parent, context.language);
+          return {
+            id: entity.id,
+            contextId: entity.contextId ?? "",
+            name: entity.name,
+            path: entity.path,
+            url: entity.url || entity.path,
+          };
+        });
+      return {
+        ...taxonomyContext,
+        crumbs,
+      };
     },
   },
 };

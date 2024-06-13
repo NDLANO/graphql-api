@@ -20,6 +20,7 @@ import {
   fetchFilmFrontpage,
   fetchLK20Curriculum,
   fetchSubjectPage,
+  queryNodes,
 } from "./api";
 import { GQLMeta, GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
 
@@ -119,6 +120,22 @@ export function subjectsLoader(
       );
     },
     { cacheKeyFn: (key) => key },
+  );
+}
+
+export function nodeLoader(context: Context): DataLoader<{ contextId?: string }, Node[]> {
+  return new DataLoader(
+    async (inputs) => {
+      return Promise.all(
+        inputs.map((input) => {
+          if (!input.contextId) {
+            throw Error("Tried to get node with bad or empty contextId");
+          }
+          return queryNodes({ contextId: input.contextId, includeContexts: true, filterProgrammes: true }, context);
+        }),
+      );
+    },
+    { cacheKeyFn: (key) => JSON.stringify(key) },
   );
 }
 
