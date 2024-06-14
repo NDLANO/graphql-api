@@ -328,12 +328,9 @@ export const typeDefs = gql`
   type TaxonomyContext {
     breadcrumbs: [String!]!
     contextId: String!
-    contextType: String
     path: String!
     parentIds: [String!]!
-    parentContextIds: [String!]!
     crumbs: [TaxonomyCrumb]
-    resourceTypes: [ResourceType!]
     url: String
   }
 

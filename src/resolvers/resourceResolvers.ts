@@ -7,7 +7,7 @@
  */
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { Node } from "@ndla/types-taxonomy";
+import { Node, TaxonomyContext } from "@ndla/types-taxonomy";
 import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath } from "../api";
 import { fetchNodeByContentUri } from "../api/taxonomyApi";
 import {
@@ -18,7 +18,6 @@ import {
   GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
-  GQLTaxonomyContext,
   GQLTaxonomyCrumb,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
@@ -41,6 +40,7 @@ export const Query = {
     const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language);
     return {
       ...entity,
+      contextId: visibleCtx?.[0]?.contextId,
       rank: visibleCtx?.[0]?.rank,
       relevanceId: visibleCtx?.[0]?.relevanceId || "urn:relevance:core",
     };
@@ -119,7 +119,7 @@ export const resolvers = {
   },
   TaxonomyContext: {
     async crumbs(
-      taxonomyContext: GQLTaxonomyContext,
+      taxonomyContext: TaxonomyContext,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLTaxonomyCrumb[]> {
