@@ -118,18 +118,14 @@ export const resolvers = {
     },
   },
   TaxonomyContext: {
-    async crumbs(
-      taxonomyContext: TaxonomyContext,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLTaxonomyCrumb[]> {
+    async crumbs(taxonomyContext: TaxonomyContext, _: any, context: ContextWithLoaders): Promise<GQLTaxonomyCrumb[]> {
       const parentNodes = await context.loaders.nodeLoader.loadMany(
         taxonomyContext.parentContextIds.map((contextId) => ({ contextId })),
       );
       const crumbs = parentNodes
         .filter((node) => node.length > 0)
         .map((node) => {
-          const parent = node[0] as unknown as Node;
+          const parent = node[0]!;
           const entity = nodeToTaxonomyEntity(parent, context.language);
           return {
             id: entity.id,
