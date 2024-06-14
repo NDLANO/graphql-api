@@ -137,8 +137,6 @@ export type GQLArenaPostV2 = {
   owner?: Maybe<GQLArenaUserV2>;
   topicId: Scalars['Int'];
   updated: Scalars['String'];
-  upvoted?: Maybe<Scalars['Boolean']>;
-  upvotes?: Maybe<Scalars['Int']>;
 };
 
 export type GQLArenaTopic = {
@@ -2805,8 +2803,6 @@ export type GQLArenaPostV2Resolvers<ContextType = any, ParentType extends GQLRes
   owner?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  upvoted?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
-  upvotes?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

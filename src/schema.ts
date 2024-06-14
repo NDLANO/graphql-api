@@ -1332,8 +1332,6 @@ export const typeDefs = gql`
     owner: ArenaUserV2
     topicId: Int!
     flags: [ArenaFlag!]
-    upvotes: Int
-    upvoted: Boolean
   }
 
   type ArenaFlag {

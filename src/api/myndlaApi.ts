@@ -18,6 +18,8 @@ import {
   INewCategory,
   INewPost,
   INewFlag,
+  IPaginatedPosts,
+  IPaginatedNewPostNotifications,
   IArenaUser,
   IPost,
   IFlag,
@@ -26,13 +28,7 @@ import {
   IUpdatedMyNDLAUser,
   ArenaGroup,
 } from "@ndla/types-backend/myndla-api";
-import {
-  GQLArenaPostV2,
-  GQLArenaTopicV2,
-  GQLArenaUserV2Input,
-  GQLPaginatedArenaNewPostNotificationV2,
-  GQLPaginatedPosts,
-} from "../types/schema";
+import { GQLArenaUserV2Input } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 const arenaBaseUrl = `/myndla-api/v1/arena`;
@@ -72,7 +68,7 @@ export const fetchSingleTopic = async (
   page: number | undefined,
   pageSize: number | undefined,
   context: Context,
-): Promise<GQLArenaTopicV2> => {
+): Promise<ITopicWithPosts> => {
   const q = queryString.stringify({ page, "page-size": pageSize });
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}?${q}`, context);
   return await resolveJson(response);
@@ -102,12 +98,12 @@ export const unfollowCategory = async (categoryId: number, context: Context): Pr
   return await resolveJson(response);
 };
 
-export const followTopic = async (topicId: number, context: Context): Promise<GQLArenaTopicV2> => {
+export const followTopic = async (topicId: number, context: Context): Promise<ITopicWithPosts> => {
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/follow`, context, { method: "POST" });
   return await resolveJson(response);
 };
 
-export const unfollowTopic = async (topicId: number, context: Context): Promise<GQLArenaTopicV2> => {
+export const unfollowTopic = async (topicId: number, context: Context): Promise<ITopicWithPosts> => {
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/unfollow`, context, { method: "POST" });
   return await resolveJson(response);
 };
@@ -166,7 +162,7 @@ export const editTopic = async (
   return await resolveJson(response);
 };
 
-export const editPost = async (postId: number, content: string, context: Context): Promise<GQLArenaPostV2> => {
+export const editPost = async (postId: number, content: string, context: Context): Promise<IPost> => {
   const body: INewPost = { content };
   const response = await fetch(`${arenaBaseUrl}/posts/${postId}`, context, {
     method: "PUT",
@@ -219,7 +215,7 @@ export const createNewTopic = async (
   return await resolveJson(response);
 };
 
-export const newPost = async (topicId: number, content: string, context: Context): Promise<GQLArenaPostV2> => {
+export const newPost = async (topicId: number, content: string, context: Context): Promise<IPost> => {
   const body: INewPost = { content };
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/posts`, context, {
     method: "POST",
@@ -249,7 +245,7 @@ export const getFlags = async (
   page: number | undefined,
   pageSize: number | undefined,
   context: Context,
-): Promise<GQLPaginatedPosts> => {
+): Promise<IPaginatedPosts> => {
   const query = queryString.stringify({
     page,
     "page-size": pageSize,
@@ -263,7 +259,7 @@ export const getNotifications = async (
   page: number | undefined,
   pageSize: number | undefined,
   context: Context,
-): Promise<GQLPaginatedArenaNewPostNotificationV2> => {
+): Promise<IPaginatedNewPostNotifications> => {
   const query = queryString.stringify({
     page,
     "page-size": pageSize,
@@ -299,7 +295,7 @@ export const getPostInContext = async (
   postId: number,
   pageSize: number | undefined,
   context: Context,
-): Promise<GQLArenaTopicV2> => {
+): Promise<ITopicWithPosts> => {
   const query = queryString.stringify({ "page-size": pageSize });
   const response = await fetch(`${arenaBaseUrl}/posts/${postId}/topic?${query}`, context);
   return await resolveJson(response);
