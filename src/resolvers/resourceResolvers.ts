@@ -19,6 +19,7 @@ import {
   GQLResourceType,
   GQLResourceTypeDefinition,
   GQLTaxonomyContext,
+  GQLTaxonomyCrumb,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
@@ -58,9 +59,10 @@ export const Query = {
 
     const path = topicCtx?.[0]?.path || resource.path;
     const rank = topicCtx?.[0]?.rank;
+    const contextId = topicCtx?.[0]?.contextId;
     const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
     const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language);
-    return { ...entity, path, rank, relevanceId, parents: [] };
+    return { ...entity, contextId, path, rank, relevanceId, parents: [] };
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
     return fetchResourceTypes<GQLResourceType>(context);
@@ -120,7 +122,7 @@ export const resolvers = {
       taxonomyContext: GQLTaxonomyContext,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLTaxonomyContext> {
+    ): Promise<GQLTaxonomyCrumb[]> {
       const parentNodes = await context.loaders.nodeLoader.loadMany(
         taxonomyContext.parentContextIds.map((contextId) => ({ contextId })),
       );
@@ -135,12 +137,9 @@ export const resolvers = {
             name: entity.name,
             path: entity.path,
             url: entity.url || entity.path,
-          };
+          } as GQLTaxonomyCrumb;
         });
-      return {
-        ...taxonomyContext,
-        crumbs,
-      };
+      return crumbs;
     },
   },
 };

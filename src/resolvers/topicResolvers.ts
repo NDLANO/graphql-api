@@ -41,6 +41,7 @@ export const Query = {
       {
         contentURI: contentUri,
         includeContexts: true,
+        filterProgrammes: true,
         language: context.language,
       },
       context,
@@ -133,34 +134,6 @@ export const resolvers = {
         return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context.language));
       }
       return;
-    },
-  },
-  TaxonomyContext: {
-    async crumbs(
-      taxonomyContext: GQLTaxonomyContext,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLTaxonomyContext> {
-      const parentNodes = await context.loaders.nodeLoader.loadMany(
-        taxonomyContext.parentContextIds.map((contextId) => ({ contextId })),
-      );
-      const crumbs = parentNodes
-        .filter((node) => node.length > 0)
-        .map((node) => {
-          const parent = node[0] as unknown as Node;
-          const entity = nodeToTaxonomyEntity(parent, context.language);
-          return {
-            id: entity.id,
-            contextId: entity.contextId ?? "",
-            name: entity.name,
-            path: entity.path,
-            url: entity.url || entity.path,
-          };
-        });
-      return {
-        ...taxonomyContext,
-        crumbs,
-      };
     },
   },
 };
