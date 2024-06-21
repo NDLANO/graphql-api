@@ -49,7 +49,37 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   user: toArenaUser(post.user),
   deleted: post.deleted,
   flagId: post.flagId,
+  toPid: post.toPid,
+  replies: [],
 });
+
+const createPostTree = (posts: GQLArenaPost[]): GQLArenaPost[] => {
+  const allPostsMap: Record<number, GQLArenaPost> = {};
+  const rootPostsMap: Record<number, Omit<GQLArenaPost, "toPid">> = {};
+
+  // Create a map of posts using their IDs as keys
+  posts.forEach((post) => {
+    allPostsMap[post.id] = post;
+    if (!post.toPid) {
+      rootPostsMap[post.id] = post;
+    }
+  });
+  const findParentPost = (post: GQLArenaPost): GQLArenaPost => {
+    if (post.toPid && allPostsMap[post.toPid]) {
+      return findParentPost(allPostsMap[post.toPid]!);
+    } else {
+      return post;
+    }
+  };
+  // Append posts into their parent post
+  posts.forEach((post) => {
+    const rootPost = findParentPost(post);
+    if (post.id !== rootPost.id) {
+      rootPostsMap[rootPost.id]!.replies.push(post);
+    }
+  });
+  return Object.values(rootPostsMap);
+};
 
 const toTopic = (topic: any): GQLArenaTopic => {
   const crumbs = [
@@ -66,7 +96,7 @@ const toTopic = (topic: any): GQLArenaTopic => {
     locked: topic.locked === 1,
     pinned: topic.pinned === 1,
     posts: topic.posts
-      ? topic.posts.map((post: any) => toArenaPost(post, topic.mainPid))
+      ? createPostTree(topic.posts.map((post: any) => toArenaPost(post, topic.mainPid)))
       : topic.mainPost
         ? [toArenaPost(topic.mainPost, topic.mainPid)]
         : [],
@@ -265,7 +295,7 @@ export const newTopic = async (
   return toTopic(resolved.response);
 };
 
-export const replyToTopic = async ({ topicId, content }: GQLMutationReplyToTopicArgs, context: Context) => {
+export const replyToTopic = async ({ topicId, content, postId }: GQLMutationReplyToTopicArgs, context: Context) => {
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/v3/topics/${topicId}`,
@@ -278,6 +308,7 @@ export const replyToTopic = async ({ topicId, content }: GQLMutationReplyToTopic
       },
       body: JSON.stringify({
         content,
+        toPid: postId,
       }),
     },
   );

@@ -254,7 +254,7 @@ export const Mutations: Pick<
     params: GQLMutationReplyToTopicV2Args,
     context: ContextWithLoaders,
   ): Promise<GQLArenaPostV2> {
-    return await myndla.newPost(params.topicId, params.content, context);
+    return await myndla.newPost(params.topicId, params.content, context, params.postId);
   },
   async updateArenaCategory(
     _: any,
