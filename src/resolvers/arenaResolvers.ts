@@ -232,7 +232,9 @@ export const Mutations: Pick<
   | "deleteCategory"
   | "sortArenaCategories"
   | "addPostUpvote"
+  | "addPostUpvoteV2"
   | "removePostUpvote"
+  | "removePostUpvoteV2"
 > = {
   async newArenaCategory(
     _: any,
@@ -399,12 +401,24 @@ export const Mutations: Pick<
   async addPostUpvote(_: any, params: GQLMutationAddPostUpvoteArgs, context: ContextWithLoaders): Promise<number> {
     return addPostUpvote(params, context);
   },
+  async addPostUpvoteV2(_: any, params: GQLMutationAddPostUpvoteArgs, context: ContextWithLoaders): Promise<number> {
+    const response = myndla.addPostUpvote(params.postId, context);
+    return (await response).id;
+  },
   async removePostUpvote(
     _: any,
     params: GQLMutationRemovePostUpvoteArgs,
     context: ContextWithLoaders,
   ): Promise<number> {
     return removePostUpvote(params, context);
+  },
+  async removePostUpvoteV2(
+    _: any,
+    params: GQLMutationRemovePostUpvoteArgs,
+    context: ContextWithLoaders,
+  ): Promise<number> {
+    const response = myndla.removePostUpvote(params.postId, context);
+    return (await response).id;
   },
 };
 

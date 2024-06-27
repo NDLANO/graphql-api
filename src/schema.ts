@@ -1587,7 +1587,9 @@ export const typeDefs = gql`
     unFavoriteSharedFolder(folderId: String!): String!
     sortArenaCategories(sortedIds: [Int!]!, parentId: Int): [ArenaCategoryV2!]!
     addPostUpvote(postId: Int!): Int!
+    addPostUpvoteV2(postId: Int!): Int!
     removePostUpvote(postId: Int!): Int!
+    removePostUpvoteV2(postId: Int!): Int!
   }
 `;
 
