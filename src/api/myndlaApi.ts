@@ -225,8 +225,13 @@ export const createNewTopic = async (
   return await resolveJson(response);
 };
 
-export const newPost = async (topicId: number, content: string, context: Context): Promise<IPost> => {
-  const body: INewPost = { content };
+export const newPost = async (
+  topicId: number,
+  content: string,
+  context: Context,
+  toPostId?: number,
+): Promise<IPost> => {
+  const body: INewPost = { content, toPostId };
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/posts`, context, {
     method: "POST",
     body: JSON.stringify(body),

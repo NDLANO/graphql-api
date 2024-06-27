@@ -120,7 +120,9 @@ export type GQLArenaPost = {
   flagId?: Maybe<Scalars['Int']>;
   id: Scalars['Int'];
   isMainPost: Scalars['Boolean'];
+  replies: Array<GQLArenaPost>;
   timestamp: Scalars['String'];
+  toPid?: Maybe<Scalars['Int']>;
   topicId: Scalars['Int'];
   upvoted: Scalars['Boolean'];
   upvotes: Scalars['Int'];
@@ -135,6 +137,7 @@ export type GQLArenaPostV2 = {
   flags?: Maybe<Array<GQLArenaFlag>>;
   id: Scalars['Int'];
   owner?: Maybe<GQLArenaUserV2>;
+  replies: Array<GQLArenaPostV2>;
   topicId: Scalars['Int'];
   updated: Scalars['String'];
   upvoted: Scalars['Boolean'];
@@ -1185,12 +1188,14 @@ export type GQLMutationRemovePostUpvoteV2Args = {
 
 export type GQLMutationReplyToTopicArgs = {
   content: Scalars['String'];
+  postId?: InputMaybe<Scalars['Int']>;
   topicId: Scalars['Int'];
 };
 
 
 export type GQLMutationReplyToTopicV2Args = {
   content: Scalars['String'];
+  postId?: InputMaybe<Scalars['Int']>;
   topicId: Scalars['Int'];
 };
 
@@ -2800,7 +2805,9 @@ export type GQLArenaPostResolvers<ContextType = any, ParentType extends GQLResol
   flagId?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isMainPost?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  replies?: Resolver<Array<GQLResolversTypes['ArenaPost']>, ParentType, ContextType>;
   timestamp?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  toPid?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   upvoted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   upvotes?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -2815,6 +2822,7 @@ export type GQLArenaPostV2Resolvers<ContextType = any, ParentType extends GQLRes
   flags?: Resolver<Maybe<Array<GQLResolversTypes['ArenaFlag']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   owner?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType>;
+  replies?: Resolver<Array<GQLResolversTypes['ArenaPostV2']>, ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   upvoted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
