@@ -1218,6 +1218,8 @@ export const typeDefs = gql`
     user: ArenaUser!
     deleted: Boolean!
     flagId: Int
+    upvotes: Int!
+    upvoted: Boolean!
   }
 
   type ArenaBreadcrumb {
@@ -1330,6 +1332,8 @@ export const typeDefs = gql`
     owner: ArenaUserV2
     topicId: Int!
     flags: [ArenaFlag!]
+    upvotes: Int!
+    upvoted: Boolean!
   }
 
   type ArenaFlag {
@@ -1582,6 +1586,10 @@ export const typeDefs = gql`
     favoriteSharedFolder(folderId: String!): String!
     unFavoriteSharedFolder(folderId: String!): String!
     sortArenaCategories(sortedIds: [Int!]!, parentId: Int): [ArenaCategoryV2!]!
+    addPostUpvote(postId: Int!): Int!
+    addPostUpvoteV2(postId: Int!): Int!
+    removePostUpvote(postId: Int!): Int!
+    removePostUpvoteV2(postId: Int!): Int!
   }
 `;
 

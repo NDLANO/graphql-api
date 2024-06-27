@@ -15,10 +15,12 @@ import {
   GQLArenaTopic,
   GQLArenaUser,
   GQLCategoryBreadcrumb,
+  GQLMutationAddPostUpvoteArgs,
   GQLMutationDeletePostArgs,
   GQLMutationDeleteTopicArgs,
   GQLMutationNewArenaTopicArgs,
   GQLMutationNewFlagArgs,
+  GQLMutationRemovePostUpvoteArgs,
   GQLMutationReplyToTopicArgs,
   GQLMutationSubscribeToTopicArgs,
   GQLMutationUnsubscribeFromTopicArgs,
@@ -49,6 +51,8 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   user: toArenaUser(post.user),
   deleted: post.deleted,
   flagId: post.flagId,
+  upvotes: post.upvotes,
+  upvoted: post.upvoted,
 });
 
 const toTopic = (topic: any): GQLArenaTopic => {
@@ -283,6 +287,39 @@ export const replyToTopic = async ({ topicId, content }: GQLMutationReplyToTopic
   );
   const resolved = await resolveJson(response);
   return toArenaPost(resolved.response, undefined);
+};
+
+export const addPostUpvote = async ({ postId }: GQLMutationAddPostUpvoteArgs, context: Context) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  await fetch(
+    `/groups/api/v3/posts/${postId}/vote`,
+    { ...context, shouldUseCache: false },
+    {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+        ...csrfHeaders,
+      },
+      body: JSON.stringify({ delta: 1 }),
+    },
+  );
+  return postId;
+};
+
+export const removePostUpvote = async ({ postId }: GQLMutationRemovePostUpvoteArgs, context: Context) => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  await fetch(
+    `/groups/api/v3/posts/${postId}/vote`,
+    { ...context, shouldUseCache: false },
+    {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        ...csrfHeaders,
+      },
+    },
+  );
+  return postId;
 };
 
 export const deletePost = async ({ postId }: GQLMutationDeletePostArgs, context: Context) => {
