@@ -28,50 +28,10 @@ import {
   IUpdatedMyNDLAUser,
   ArenaGroup,
 } from "@ndla/types-backend/myndla-api";
-import {
-  GQLArenaPostV2,
-  GQLArenaTopicV2,
-  GQLArenaUserV2Input,
-  GQLPaginatedArenaNewPostNotificationV2,
-  GQLPaginatedPosts,
-} from "../types/schema";
+import { GQLArenaUserV2Input } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 const arenaBaseUrl = `/myndla-api/v1/arena`;
-
-const convertPost = (post: IPost): GQLArenaPostV2 => {
-  return { ...post, upvotes: undefined, upvoted: undefined } as GQLArenaPostV2;
-};
-
-const convertTopicWithPost = (topic: ITopicWithPosts): GQLArenaTopicV2 => {
-  return {
-    ...topic,
-    posts: convertPaginatedPosts(topic.posts),
-  } as GQLArenaTopicV2;
-};
-
-const convertPaginatedPosts = (paginatedPosts: IPaginatedPosts): GQLPaginatedPosts => {
-  return {
-    ...paginatedPosts,
-    items: paginatedPosts.items.map((item) => {
-      return convertPost(item);
-    }),
-  } as GQLPaginatedPosts;
-};
-
-const convertPaginatedNewPostNotifications = (
-  paginatedNotifications: IPaginatedNewPostNotifications,
-): GQLPaginatedArenaNewPostNotificationV2 => {
-  return {
-    ...paginatedNotifications,
-    items: paginatedNotifications.items.map((item) => {
-      return {
-        ...item,
-        post: convertPost(item.post),
-      };
-    }),
-  } as GQLPaginatedArenaNewPostNotificationV2;
-};
 
 export const fetchConfig = async (configKey: string, context: Context): Promise<IConfigMetaRestricted> => {
   const response = await fetch(`/myndla-api/v1/config/${configKey}`, context);
@@ -108,11 +68,10 @@ export const fetchSingleTopic = async (
   page: number | undefined,
   pageSize: number | undefined,
   context: Context,
-): Promise<GQLArenaTopicV2> => {
+): Promise<ITopicWithPosts> => {
   const q = queryString.stringify({ page, "page-size": pageSize });
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}?${q}`, context);
-  const resolved = await resolveJson(response);
-  return convertTopicWithPost(resolved);
+  return await resolveJson(response);
 };
 
 export const fetchRecentTopics = async (
@@ -139,16 +98,14 @@ export const unfollowCategory = async (categoryId: number, context: Context): Pr
   return await resolveJson(response);
 };
 
-export const followTopic = async (topicId: number, context: Context): Promise<GQLArenaTopicV2> => {
+export const followTopic = async (topicId: number, context: Context): Promise<ITopicWithPosts> => {
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/follow`, context, { method: "POST" });
-  const resolved = await resolveJson(response);
-  return convertTopicWithPost(resolved);
+  return await resolveJson(response);
 };
 
-export const unfollowTopic = async (topicId: number, context: Context): Promise<GQLArenaTopicV2> => {
+export const unfollowTopic = async (topicId: number, context: Context): Promise<ITopicWithPosts> => {
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/unfollow`, context, { method: "POST" });
-  const resolved = await resolveJson(response);
-  return convertTopicWithPost(resolved);
+  return await resolveJson(response);
 };
 
 export const newCategory = async (
@@ -205,14 +162,13 @@ export const editTopic = async (
   return await resolveJson(response);
 };
 
-export const editPost = async (postId: number, content: string, context: Context): Promise<GQLArenaPostV2> => {
+export const editPost = async (postId: number, content: string, context: Context): Promise<IPost> => {
   const body: INewPost = { content };
   const response = await fetch(`${arenaBaseUrl}/posts/${postId}`, context, {
     method: "PUT",
     body: JSON.stringify(body),
   });
-  const resolved = await resolveJson(response);
-  return convertPost(resolved);
+  return await resolveJson(response);
 };
 
 export const deleteCategory = async (categoryId: number, context: Context): Promise<void> => {
@@ -259,14 +215,14 @@ export const createNewTopic = async (
   return await resolveJson(response);
 };
 
-export const newPost = async (topicId: number, content: string, context: Context): Promise<GQLArenaPostV2> => {
+export const newPost = async (topicId: number, content: string, context: Context): Promise<IPost> => {
   const body: INewPost = { content };
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/posts`, context, {
     method: "POST",
     body: JSON.stringify(body),
   });
-  const resolved = await resolveJson(response);
-  return convertPost(resolved);
+
+  return await resolveJson(response);
 };
 
 export const flagPost = async (postId: number, reason: string, context: Context): Promise<void> => {
@@ -289,29 +245,27 @@ export const getFlags = async (
   page: number | undefined,
   pageSize: number | undefined,
   context: Context,
-): Promise<GQLPaginatedPosts> => {
+): Promise<IPaginatedPosts> => {
   const query = queryString.stringify({
     page,
     "page-size": pageSize,
   });
 
   const response = await fetch(`${arenaBaseUrl}/flags?${query}`, context);
-  const resolved = await resolveJson(response);
-  return convertPaginatedPosts(resolved);
+  return await resolveJson(response);
 };
 
 export const getNotifications = async (
   page: number | undefined,
   pageSize: number | undefined,
   context: Context,
-): Promise<GQLPaginatedArenaNewPostNotificationV2> => {
+): Promise<IPaginatedNewPostNotifications> => {
   const query = queryString.stringify({
     page,
     "page-size": pageSize,
   });
   const response = await fetch(`${arenaBaseUrl}/notifications?${query}`, context);
-  const resolved = await resolveJson(response);
-  return convertPaginatedNewPostNotifications(resolved);
+  return await resolveJson(response);
 };
 
 export const markSingleNotificationAsRead = async (notificationId: number, context: Context): Promise<void> => {
@@ -341,11 +295,10 @@ export const getPostInContext = async (
   postId: number,
   pageSize: number | undefined,
   context: Context,
-): Promise<GQLArenaTopicV2> => {
+): Promise<ITopicWithPosts> => {
   const query = queryString.stringify({ "page-size": pageSize });
   const response = await fetch(`${arenaBaseUrl}/posts/${postId}/topic?${query}`, context);
-  const resolved = await resolveJson(response);
-  return convertTopicWithPost(resolved);
+  return await resolveJson(response);
 };
 
 export const fetchArenaUser = async (username: string, context: Context): Promise<IArenaUser> => {
