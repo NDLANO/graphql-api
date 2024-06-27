@@ -124,6 +124,8 @@ export type GQLArenaPost = {
   timestamp: Scalars['String'];
   toPid?: Maybe<Scalars['Int']>;
   topicId: Scalars['Int'];
+  upvoted: Scalars['Boolean'];
+  upvotes: Scalars['Int'];
   user: GQLArenaUser;
 };
 
@@ -138,6 +140,8 @@ export type GQLArenaPostV2 = {
   replies: Array<GQLArenaPostV2>;
   topicId: Scalars['Int'];
   updated: Scalars['String'];
+  upvoted: Scalars['Boolean'];
+  upvotes: Scalars['Int'];
 };
 
 export type GQLArenaTopic = {
@@ -993,6 +997,8 @@ export type GQLMutation = {
   __typename?: 'Mutation';
   addFolder: GQLFolder;
   addFolderResource: GQLFolderResource;
+  addPostUpvote: Scalars['Int'];
+  addPostUpvoteV2: Scalars['Int'];
   copySharedFolder: GQLFolder;
   deleteCategory: Scalars['Int'];
   deleteFolder: Scalars['String'];
@@ -1013,6 +1019,8 @@ export type GQLMutation = {
   newArenaTopicV2: GQLArenaTopicV2;
   newFlag: Scalars['Int'];
   newFlagV2: Scalars['Int'];
+  removePostUpvote: Scalars['Int'];
+  removePostUpvoteV2: Scalars['Int'];
   replyToTopic: GQLArenaPost;
   replyToTopicV2: GQLArenaPostV2;
   resolveFlag: GQLArenaFlag;
@@ -1051,6 +1059,16 @@ export type GQLMutationAddFolderResourceArgs = {
   resourceId: Scalars['String'];
   resourceType: Scalars['String'];
   tags?: InputMaybe<Array<Scalars['String']>>;
+};
+
+
+export type GQLMutationAddPostUpvoteArgs = {
+  postId: Scalars['Int'];
+};
+
+
+export type GQLMutationAddPostUpvoteV2Args = {
+  postId: Scalars['Int'];
 };
 
 
@@ -1155,6 +1173,16 @@ export type GQLMutationNewFlagArgs = {
 export type GQLMutationNewFlagV2Args = {
   postId: Scalars['Int'];
   reason: Scalars['String'];
+};
+
+
+export type GQLMutationRemovePostUpvoteArgs = {
+  postId: Scalars['Int'];
+};
+
+
+export type GQLMutationRemovePostUpvoteV2Args = {
+  postId: Scalars['Int'];
 };
 
 
@@ -2781,6 +2809,8 @@ export type GQLArenaPostResolvers<ContextType = any, ParentType extends GQLResol
   timestamp?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   toPid?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  upvoted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  upvotes?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   user?: Resolver<GQLResolversTypes['ArenaUser'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2795,6 +2825,8 @@ export type GQLArenaPostV2Resolvers<ContextType = any, ParentType extends GQLRes
   replies?: Resolver<Array<GQLResolversTypes['ArenaPostV2']>, ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  upvoted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  upvotes?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3623,6 +3655,8 @@ export type GQLMovieThemeResolvers<ContextType = any, ParentType extends GQLReso
 export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation']> = {
   addFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationAddFolderArgs, 'name'>>;
   addFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationAddFolderResourceArgs, 'folderId' | 'path' | 'resourceId' | 'resourceType'>>;
+  addPostUpvote?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationAddPostUpvoteArgs, 'postId'>>;
+  addPostUpvoteV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationAddPostUpvoteV2Args, 'postId'>>;
   copySharedFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationCopySharedFolderArgs, 'folderId'>>;
   deleteCategory?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteCategoryArgs, 'categoryId'>>;
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
@@ -3643,6 +3677,8 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   newArenaTopicV2?: Resolver<GQLResolversTypes['ArenaTopicV2'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicV2Args, 'categoryId' | 'content' | 'title'>>;
   newFlag?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagArgs, 'id' | 'reason' | 'type'>>;
   newFlagV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagV2Args, 'postId' | 'reason'>>;
+  removePostUpvote?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteArgs, 'postId'>>;
+  removePostUpvoteV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteV2Args, 'postId'>>;
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
   replyToTopicV2?: Resolver<GQLResolversTypes['ArenaPostV2'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicV2Args, 'content' | 'topicId'>>;
   resolveFlag?: Resolver<GQLResolversTypes['ArenaFlag'], ParentType, ContextType, RequireFields<GQLMutationResolveFlagArgs, 'flagId'>>;

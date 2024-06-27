@@ -108,6 +108,16 @@ export const unfollowTopic = async (topicId: number, context: Context): Promise<
   return await resolveJson(response);
 };
 
+export const addPostUpvote = async (postId: number, context: Context): Promise<IPost> => {
+  const response = await fetch(`${arenaBaseUrl}/posts/${postId}/upvote`, context, { method: "PUT" });
+  return await resolveJson(response);
+};
+
+export const removePostUpvote = async (postId: number, context: Context): Promise<IPost> => {
+  const response = await fetch(`${arenaBaseUrl}/posts/${postId}/upvote`, context, { method: "DELETE" });
+  return await resolveJson(response);
+};
+
 export const newCategory = async (
   title: string,
   description: string,
