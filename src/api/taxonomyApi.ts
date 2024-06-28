@@ -8,7 +8,7 @@
 
 import { Response } from "node-fetch";
 import qs from "query-string";
-import { Node, NodeChild, NodeType, TaxonomyContext, Version } from "@ndla/types-taxonomy";
+import { Node, NodeChild, NodeType, TaxonomyContext, Version, SearchResult } from "@ndla/types-taxonomy";
 import { GQLResourceType, GQLResourceTypeDefinition, GQLSubject, GQLTopic } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
@@ -101,6 +101,18 @@ export async function fetchNode(params: { id: string }, context: Context): Promi
     language: context.language,
   });
   const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${id}?${query}`, context);
+  return await resolveJson(response);
+}
+
+export async function searchNodes(params: { contentUris: string[] }, context: Context): Promise<SearchResult<Node>> {
+  const { contentUris } = params;
+  const query = qs.stringify({
+    language: context.language,
+    contentUris: contentUris.join(","),
+    includeContexts: true,
+    filterProgrammes: true,
+  });
+  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/search?${query}`, context);
   return await resolveJson(response);
 }
 

@@ -1231,6 +1231,10 @@ export const typeDefs = gql`
     user: ArenaUser!
     deleted: Boolean!
     flagId: Int
+    toPid: Int
+    replies: [ArenaPost!]!
+    upvotes: Int!
+    upvoted: Boolean!
   }
 
   type ArenaBreadcrumb {
@@ -1343,6 +1347,9 @@ export const typeDefs = gql`
     owner: ArenaUserV2
     topicId: Int!
     flags: [ArenaFlag!]
+    replies: [ArenaPostV2!]!
+    upvotes: Int!
+    upvoted: Boolean!
   }
 
   type ArenaFlag {
@@ -1572,8 +1579,8 @@ export const typeDefs = gql`
     ): ArenaTopicV2!
     markNotificationsAsReadV2(notificationIds: [Int!]!): [Int!]!
     markAllNotificationsAsRead: Boolean!
-    replyToTopic(topicId: Int!, content: String!): ArenaPost!
-    replyToTopicV2(topicId: Int!, content: String!): ArenaPostV2!
+    replyToTopic(topicId: Int!, content: String!, postId: Int): ArenaPost!
+    replyToTopicV2(topicId: Int!, content: String!, postId: Int): ArenaPostV2!
     updatePost(postId: Int!, content: String!, title: String): ArenaPost!
     updatePostV2(postId: Int!, content: String!): ArenaPostV2!
     updateTopicV2(topicId: Int!, title: String!, content: String!, isLocked: Boolean, isPinned: Boolean): ArenaTopicV2!
@@ -1595,6 +1602,10 @@ export const typeDefs = gql`
     favoriteSharedFolder(folderId: String!): String!
     unFavoriteSharedFolder(folderId: String!): String!
     sortArenaCategories(sortedIds: [Int!]!, parentId: Int): [ArenaCategoryV2!]!
+    addPostUpvote(postId: Int!): Int!
+    addPostUpvoteV2(postId: Int!): Int!
+    removePostUpvote(postId: Int!): Int!
+    removePostUpvoteV2(postId: Int!): Int!
   }
 `;
 

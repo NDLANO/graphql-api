@@ -9,11 +9,14 @@
 import groupBy from "lodash/groupBy";
 import { IAudioMetaInformation } from "@ndla/types-backend/audio-api";
 import { IImageMetaInformationV2 } from "@ndla/types-backend/image-api";
+import { Node } from "@ndla/types-taxonomy";
+import { fetchArticles } from "./articleApi";
 import { fetchAudio } from "./audioApi";
 import { searchConcepts } from "./conceptApi";
 import { fetchFolder } from "./folderApi";
 import { fetchImage } from "./imageApi";
-import { searchWithoutPagination } from "./searchApi";
+import { fetchLearningpaths } from "./learningpathApi";
+import { searchNodes } from "./taxonomyApi";
 import { fetchVideo } from "./videoApi";
 import {
   GQLFolderResourceMeta,
@@ -26,76 +29,42 @@ import {
 
 type MetaType = "article" | "learningpath" | "multidisciplinary" | "concept" | "image" | "audio" | "video" | "folder";
 
-const findResourceTypes = (result: GQLSearchResult): GQLFolderResourceResourceType[] => {
-  const context = result.contexts?.[0];
-  const resourceTypes = context?.resourceTypes.map((t) => ({
+const findResourceTypes = (result: Node | undefined, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
+  const ctx = result?.contexts?.[0];
+  const resourceTypes = ctx?.resourceTypes.map((t) => ({
     id: t.id,
-    name: t.name,
-    language: t.language,
+    name: t.name[context.language] || t.name["nb"] || "",
+    language: context.language,
   }));
   return resourceTypes ?? [];
-};
-
-const fetchAndTransformMultidisciplinaryTopicMeta = async (
-  resources: GQLFolderResourceMetaSearchInput[] | undefined,
-  context: ContextWithLoaders,
-  type: MetaType,
-) => {
-  if (!resources?.length) return [];
-  try {
-    const res = await searchWithoutPagination(
-      {
-        language: context.language,
-        fallback: "true",
-        // @ts-ignore ids are not parameterized correctly
-        ids: resources.map((r) => r.id).join(","),
-        contextTypes: "topic-article",
-        subjects: "urn:subject:d1fe9d0a-a54d-49db-a4c2-fd5463a7c9e7",
-      },
-      context,
-    );
-    return res.results.map((r) => ({
-      id: r.id.toString(),
-      title: r.title,
-      type,
-      description: r.metaDescription,
-      metaImage: r.metaImage,
-      resourceTypes: findResourceTypes(r),
-    }));
-  } catch (e) {
-    console.error(`Failed to fetch multidisciplinary topic metas with parameters ${resources}`);
-    return [];
-  }
 };
 
 const fetchAndTransformResourceMeta = async (
   resources: GQLFolderResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
-  type: "article" | "learningpath",
+  type: "article" | "multidisciplinary" | "learningpath",
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   try {
-    const typeFilter =
-      type === "article" ? { articleTypes: "standard,topic-article" } : { contextTypes: "learningpath" };
-    const res = await searchWithoutPagination(
-      {
-        language: context.language,
-        fallback: "true",
-        // @ts-ignore ids are not parameterized correctly
-        ids: resources.map((r) => r.id).join(","),
-        ...typeFilter,
-      },
-      context,
-    );
-
-    return res.results.map((r) => ({
-      id: r.id.toString(),
-      title: r.title,
-      type,
-      description: r.metaDescription,
-      metaImage: r.metaImage,
-      resourceTypes: findResourceTypes(r),
-    }));
+    const nodeType = type === "learningpath" ? type : "article";
+    const fetchFn = nodeType === "learningpath" ? fetchLearningpaths : fetchArticles;
+    const ids = resources.map((r) => r.id);
+    const [nodes, elements] = await Promise.all([
+      searchNodes({ contentUris: ids.map((r) => `urn:${nodeType}:${r}`) }, context),
+      fetchFn(ids, context),
+    ]);
+    return ids.map((id) => {
+      const node = nodes.results.find((n) => n.contentUri === `urn:${nodeType}:${id}`);
+      const element = elements.find((e) => e?.id === Number(id));
+      return {
+        id,
+        title: element?.title ?? "",
+        type,
+        description: element?.metaDescription ?? "",
+        metaImage: element?.metaImage,
+        resourceTypes: findResourceTypes(node, context),
+      };
+    });
   } catch (e) {
     console.error(`Failed to fetch article metas with parameters ${resources}`);
     return [];
@@ -113,7 +82,7 @@ export const fetchFolderResourceMeta = async (
     const res = await fetchAndTransformResourceMeta([resource], context, "learningpath");
     return res[0] ?? null;
   } else if (resource.resourceType === "multidisciplinary") {
-    const res = await fetchAndTransformMultidisciplinaryTopicMeta([resource], context, "multidisciplinary");
+    const res = await fetchAndTransformResourceMeta([resource], context, "multidisciplinary");
     return res[0] ?? null;
   } else if (resource.resourceType === "image") {
     const res = await fetchImageMeta([resource], context, "image");
@@ -251,11 +220,7 @@ export const fetchFolderResourcesMetaData = async (
   const articleMeta = fetchAndTransformResourceMeta(article, context, "article");
   const learningpathMeta = fetchAndTransformResourceMeta(learningpath, context, "learningpath");
 
-  const multidisciplinaryMeta = fetchAndTransformMultidisciplinaryTopicMeta(
-    multidisciplinary,
-    context,
-    "multidisciplinary",
-  );
+  const multidisciplinaryMeta = fetchAndTransformResourceMeta(multidisciplinary, context, "multidisciplinary");
 
   const imageMeta = fetchImageMeta(image, context, "image");
 

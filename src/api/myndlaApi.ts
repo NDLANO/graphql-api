@@ -108,6 +108,16 @@ export const unfollowTopic = async (topicId: number, context: Context): Promise<
   return await resolveJson(response);
 };
 
+export const addPostUpvote = async (postId: number, context: Context): Promise<IPost> => {
+  const response = await fetch(`${arenaBaseUrl}/posts/${postId}/upvote`, context, { method: "PUT" });
+  return await resolveJson(response);
+};
+
+export const removePostUpvote = async (postId: number, context: Context): Promise<IPost> => {
+  const response = await fetch(`${arenaBaseUrl}/posts/${postId}/upvote`, context, { method: "DELETE" });
+  return await resolveJson(response);
+};
+
 export const newCategory = async (
   title: string,
   description: string,
@@ -215,8 +225,13 @@ export const createNewTopic = async (
   return await resolveJson(response);
 };
 
-export const newPost = async (topicId: number, content: string, context: Context): Promise<IPost> => {
-  const body: INewPost = { content };
+export const newPost = async (
+  topicId: number,
+  content: string,
+  context: Context,
+  toPostId?: number,
+): Promise<IPost> => {
+  const body: INewPost = { content, toPostId };
   const response = await fetch(`${arenaBaseUrl}/topics/${topicId}/posts`, context, {
     method: "POST",
     body: JSON.stringify(body),
