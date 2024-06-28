@@ -17,7 +17,7 @@
     "prettier": "prettier --write \"src/**/*.ts\"",
     "format": "prettier --write \"src/**/*.ts\"",
     "generate-schema-types": "graphql-codegen --config local-codegen.yml && prettier --write src/types/schema.d.ts src/schema.ts",
-    "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"nodemon --inspect=9228 build/server.js | bunyan\"",
+    "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"nodemon --inspect=9228 build/server.js\"",
     "start-with-local-converter": "LOCAL_CONVERTER=true yarn start",
     "start-prod": "NODE_ENV=production node ./build/server.js",
     "test": "jest",
@@ -34,7 +34,6 @@
     "@graphql-tools/mock": "^8.7.10",
     "@graphql-tools/schema": "^9.0.8",
     "@ndla/licenses": "^7.2.5",
-    "bunyan": "^1.8.15",
     "cheerio": "^1.0.0-rc.12",
     "compression": "^1.7.4",
     "dataloader": "^1.4.0",
@@ -52,7 +51,8 @@
     "prismjs": "^1.29.0",
     "prom-client": "^15.1.2",
     "query-string": "^6.2.0",
-    "sanitize-html": "^2.13.0"
+    "sanitize-html": "^2.13.0",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.13.11",
@@ -65,7 +65,6 @@
     "@ndla/types-backend": "^0.2.89",
     "@ndla/types-embed": "^4.1.4",
     "@ndla/types-taxonomy": "^1.0.22",
-    "@types/bunyan": "^1.8.11",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",
     "@types/dotenv": "^6.1.0",

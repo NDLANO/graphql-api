@@ -28,4 +28,4 @@ COPY --from=builder /home/app/graphql-api/build/index.js index.js
 
 ENV NODE_ENV=production
 
-CMD ["node", "index.js", "'|'", "bunyan"]
+CMD ["node", "index.js"]
