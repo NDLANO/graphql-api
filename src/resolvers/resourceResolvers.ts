@@ -7,6 +7,7 @@
  */
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { Node, TaxonomyContext } from "@ndla/types-taxonomy";
 import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath } from "../api";
 import { fetchNodeByContentUri } from "../api/taxonomyApi";
 import {
@@ -17,8 +18,9 @@ import {
   GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
-  GQLTaxonomyContext,
+  GQLTaxonomyCrumb,
 } from "../types/schema";
+import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
@@ -35,20 +37,12 @@ export const Query = {
     if (!resource) return null;
 
     const visibleCtx = resource.contexts.filter((c) => c.isVisible);
-
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language);
     return {
-      ...resource,
-      path: resource.path,
+      ...entity,
+      contextId: visibleCtx?.[0]?.contextId,
       rank: visibleCtx?.[0]?.rank,
       relevanceId: visibleCtx?.[0]?.relevanceId || "urn:relevance:core",
-      contexts: visibleCtx.map((ctx) => {
-        const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs["nb"] || [];
-        return {
-          path: ctx.path,
-          parentIds: ctx.parentIds,
-          breadcrumbs,
-        };
-      }),
     };
   },
   async resource(
@@ -65,17 +59,10 @@ export const Query = {
 
     const path = topicCtx?.[0]?.path || resource.path;
     const rank = topicCtx?.[0]?.rank;
+    const contextId = topicCtx?.[0]?.contextId;
     const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
-    const contexts: GQLTaxonomyContext[] = visibleCtx.map((c) => {
-      const breadcrumbs = c.breadcrumbs[context.language] || c.breadcrumbs["nb"] || [];
-      return {
-        breadcrumbs,
-        parentIds: c.parentIds,
-        path: c.path,
-        url: c.url,
-      };
-    });
-    return { ...resource, contexts, path, rank, relevanceId, parents: [] };
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language);
+    return { ...entity, contextId, path, rank, relevanceId, parents: [] };
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
     return fetchResourceTypes<GQLResourceType>(context);
@@ -128,6 +115,27 @@ export const resolvers = {
       throw Object.assign(new Error("Missing article contentUri for resource with id: " + resource.id), {
         status: 404,
       });
+    },
+  },
+  TaxonomyContext: {
+    async crumbs(taxonomyContext: TaxonomyContext, _: any, context: ContextWithLoaders): Promise<GQLTaxonomyCrumb[]> {
+      const parentNodes = await context.loaders.nodeLoader.loadMany(
+        taxonomyContext.parentContextIds.map((contextId) => ({ contextId })),
+      );
+      const crumbs = parentNodes
+        .filter((node) => node.length > 0)
+        .map((node) => {
+          const parent = node[0]!;
+          const entity = nodeToTaxonomyEntity(parent, context.language);
+          return {
+            id: entity.id,
+            contextId: entity.contextId ?? "",
+            name: entity.name,
+            path: entity.path,
+            url: entity.url || entity.path,
+          } as GQLTaxonomyCrumb;
+        });
+      return crumbs;
     },
   },
 };

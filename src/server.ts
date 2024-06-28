@@ -26,6 +26,7 @@ import {
   lk20CurriculumLoader,
   subjectLoader,
   subjectpageLoader,
+  nodeLoader,
 } from "./loaders";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
@@ -117,6 +118,7 @@ async function getContext({ req, res }: { req: Request; res: Response }): Promis
       subjectTopicsLoader: subjectTopicsLoader(defaultContext),
       learningpathsLoader: learningpathsLoader(defaultContext),
       resourceTypesLoader: resourceTypesLoader(defaultContext),
+      nodeLoader: nodeLoader(defaultContext),
       subjectsLoader: subjectsLoader(defaultContext),
       subjectLoader: subjectLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),

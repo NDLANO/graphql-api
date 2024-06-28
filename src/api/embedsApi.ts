@@ -382,7 +382,6 @@ export const transformEmbed = async (
         });
       }
     } else if (embedData.resource === "content-link") {
-      embedData.linkText = embed.embed.text() ?? embedData.linkText;
       meta = await contentLinkMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "related-content") {
       meta = await relatedContentMeta({ embedData, context, index, opts });

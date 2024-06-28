@@ -37,6 +37,12 @@ declare global {
       },
       Node
     >;
+    nodeLoader: DataLoader<
+      {
+        contextId?: string;
+      },
+      Node[]
+    >;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPage>;
     subjectpageLoader: DataLoader<string, ISubjectPageData | null>;

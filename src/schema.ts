@@ -185,7 +185,6 @@ export const typeDefs = gql`
   type ResourceType {
     id: String!
     name: String!
-    resources(topicId: String!): [Resource!]
   }
 
   type MetaImage {
@@ -281,6 +280,7 @@ export const typeDefs = gql`
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
+    contextId: String
     contexts: [TaxonomyContext!]!
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
@@ -303,6 +303,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
@@ -316,10 +317,20 @@ export const typeDefs = gql`
     availability: String
   }
 
+  type TaxonomyCrumb {
+    id: String!
+    contextId: String!
+    name: String!
+    path: String!
+    url: String!
+  }
+
   type TaxonomyContext {
     breadcrumbs: [String!]!
+    contextId: String!
     path: String!
     parentIds: [String!]!
+    crumbs: [TaxonomyCrumb]
     url: String
   }
 
@@ -332,6 +343,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
@@ -705,6 +717,7 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
