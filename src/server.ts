@@ -135,13 +135,16 @@ async function startApolloServer() {
     resolvers,
     introspection: true,
     allowBatchedHttpRequests: true,
+    includeStacktraceInErrorResponses: true,
     formatError(err: any) {
       getLogger().error(err);
+      // Remove stack traces from client response
+      const extensions = err?.extensions ? { ...err?.extensions, stacktrace: undefined } : err?.extensions;
       return {
         message: err.message,
         locations: err.locations,
         path: err.path,
-        extensions: err?.extensions,
+        extensions,
       };
     },
   });
