@@ -54,7 +54,7 @@ const toArenaPost = (post: any, mainPid?: any): GQLArenaPost => ({
   toPid: post.toPid,
   replies: [],
   upvotes: post.upvotes,
-  upvoted: post.upvoted,
+  upvoted: post.upvoted ?? false,
 });
 
 const createPostTree = (posts: GQLArenaPost[]): GQLArenaPost[] => {
