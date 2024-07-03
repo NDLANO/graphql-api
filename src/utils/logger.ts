@@ -12,8 +12,14 @@ import "source-map-support/register";
 
 export const loggerStorage = new AsyncLocalStorage<Logger>();
 
-const developmentErrFormat = format.printf(({ level, message, stack, requestPath, timestamp }) => {
-  const stackString = stack ? `\n${stack}` : "";
+const getStackString = (stack: string | null | undefined, extensions?: { stacktrace: string[] }) => {
+  if (stack) return `\n${stack}`;
+  if (extensions && extensions.stacktrace) return `\n${extensions.stacktrace.join("\n")}`;
+  return "";
+};
+
+const developmentErrFormat = format.printf(({ level, message, stack, requestPath, timestamp, extensions }) => {
+  const stackString = getStackString(stack, extensions);
   const requestPathStr = requestPath ? `${requestPath} ` : "";
   return `${timestamp} [${level}] ${requestPathStr}${message}${stackString}`;
 });
