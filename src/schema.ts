@@ -185,7 +185,6 @@ export const typeDefs = gql`
   type ResourceType {
     id: String!
     name: String!
-    resources(topicId: String!): [Resource!]
   }
 
   type MetaImage {
@@ -341,10 +340,8 @@ export const typeDefs = gql`
     article: Article
     availability: String
     isPrimary: Boolean
-    parent: String
     parentId: String
     subtopics: [Topic!]
-    pathTopics: [[Topic!]!]
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]

@@ -40,6 +40,7 @@ export const Query = {
       {
         contentURI: contentUri,
         includeContexts: true,
+        filterProgrammes: true,
         language: context.language,
       },
       context,
@@ -104,16 +105,6 @@ export const resolvers = {
       const subtopics = await fetchChildren({ id: topic.id, nodeType: "TOPIC" }, context);
       const filtered = await filterMissingArticles(subtopics, context);
       return filtered.map((f) => nodeToTaxonomyEntity(f, context));
-    },
-    async pathTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<Node[][]> {
-      return await Promise.all(
-        topic.contexts.map(async (ctx) => {
-          const parents = await Promise.all(
-            ctx.parentIds.map(async (parentId) => fetchNode({ id: parentId }, context)),
-          );
-          return parents.filter((p) => p.nodeType === "TOPIC");
-        }),
-      );
     },
     async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
       const { contentUri, id, path } = topic;

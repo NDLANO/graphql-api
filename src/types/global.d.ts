@@ -28,14 +28,24 @@ declare global {
       {
         metadataFilter?: { key: string; value?: string };
         filterVisible?: boolean;
+        ids?: string[];
       },
       { subjects: GQLSubject[] }
     >;
-    subjectLoader: DataLoader<
+    nodeLoader: DataLoader<
       {
         id?: string;
       },
       Node
+    >;
+    nodesLoader: DataLoader<
+      {
+        contextId?: string;
+        metadataFilter?: { key: string; value?: string };
+        filterVisible?: boolean;
+        ids?: string[];
+      },
+      Node[]
     >;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPage>;

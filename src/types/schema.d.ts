@@ -1936,12 +1936,6 @@ export type GQLResourceType = {
   __typename?: 'ResourceType';
   id: Scalars['String'];
   name: Scalars['String'];
-  resources?: Maybe<Array<GQLResource>>;
-};
-
-
-export type GQLResourceTypeResourcesArgs = {
-  topicId: Scalars['String'];
 };
 
 export type GQLResourceTypeDefinition = {
@@ -2178,10 +2172,8 @@ export type GQLTopic = GQLTaxonomyEntity & GQLWithArticle & {
   meta?: Maybe<GQLMeta>;
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String'];
-  parent?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['String']>;
   path: Scalars['String'];
-  pathTopics?: Maybe<Array<Array<GQLTopic>>>;
   paths: Array<Scalars['String']>;
   relevanceId?: Maybe<Scalars['String']>;
   resourceTypes?: Maybe<Array<GQLResourceType>>;
@@ -3986,7 +3978,6 @@ export type GQLResourceMetaDataResolvers<ContextType = any, ParentType extends G
 export type GQLResourceTypeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceType'] = GQLResolversParentTypes['ResourceType']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  resources?: Resolver<Maybe<Array<GQLResolversTypes['Resource']>>, ParentType, ContextType, RequireFields<GQLResourceTypeResourcesArgs, 'topicId'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4224,10 +4215,8 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
   meta?: Resolver<Maybe<GQLResolversTypes['Meta']>, ParentType, ContextType>;
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  parent?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  pathTopics?: Resolver<Maybe<Array<Array<GQLResolversTypes['Topic']>>>, ParentType, ContextType>;
   paths?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
