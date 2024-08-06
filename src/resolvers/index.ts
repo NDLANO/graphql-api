@@ -24,6 +24,7 @@ import { Query as ProgrammeQuery, resolvers as ProgrammeResolvers } from "./prog
 import { Query as ResourceQuery, resolvers as resourceResolvers } from "./resourceResolvers";
 import { Query as SearchQuery, resolvers as searchResolvers } from "./searchResolvers";
 import { Query as SubjectQuery, resolvers as subjectResolvers } from "./subjectResolvers";
+import { Query as TaxonomyQuery, resolvers as taxonomyResolvers } from "./taxonomyResolvers";
 import { Query as TopicQuery, resolvers as topicResolvers } from "./topicResolvers";
 import { Query as TransformQuery, Mutations as TransformArticleMutations } from "./transformResolvers";
 import { Query as UptimeQuery, resolvers as uptimeResolvers } from "./uptimeResolvers";
@@ -34,6 +35,7 @@ export const resolvers = {
     ...SubjectQuery,
     ...FrontpageQuery,
     ...ResourceQuery,
+    ...TaxonomyQuery,
     ...ArticleQuery,
     ...SearchQuery,
     ...CurriculumQuery,
@@ -59,6 +61,7 @@ export const resolvers = {
   ...topicResolvers,
   ...frontpageResolvers,
   ...resourceResolvers,
+  ...taxonomyResolvers,
   ...searchResolvers,
   ...learningpathResolvers,
   ...MyNDLAResolvers,

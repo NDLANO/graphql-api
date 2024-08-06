@@ -8,7 +8,7 @@
 
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
-import { Node } from "@ndla/types-taxonomy";
+import { Node, TaxonomyContext } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
 import { apiUrl } from "../config";
@@ -155,15 +155,23 @@ export function licenseFixer(lic: string, licVer: string) {
   return `${lic.replace(" ", "-")}-${licVer}`;
 }
 
-export const nodeToTaxonomyEntity = (node: Node, context: Context): GQLTaxonomyEntity => {
-  const contexts: GQLTaxonomyContext[] = node.contexts.map((c) => {
-    const breadcrumbs = c.breadcrumbs[context.language] ?? [];
-    return {
-      breadcrumbs,
-      parentIds: c.parentIds,
-      path: c.path,
-      url: c.url,
-    };
-  });
-  return { ...node, contexts };
+export const nodeToTaxonomyEntity = (node: Node, language: string, contextId?: string): GQLTaxonomyEntity => {
+  const filtered = contextId ? node.contexts.filter((ctx) => ctx.contextId === contextId) : node.contexts;
+  const contexts: GQLTaxonomyContext[] = filtered.map((ctx) => toGQLTaxonomyContext(ctx, node.name, language));
+  const context = contexts.find((c) => c.contextId === node.contextId); // Api returns the contextId of the selected context.
+  const url = node.url || node.path; // Ensure url is always set.
+  return { ...node, url, context, contexts };
+};
+
+const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, language: string): GQLTaxonomyContext => {
+  const breadcrumbs = ctx.breadcrumbs[language] || ctx.breadcrumbs["nb"] || [];
+  const relevance = ctx.relevance[language] || ctx.relevance["nb"] || "";
+  const url = ctx.url || ctx.path;
+  return {
+    ...ctx,
+    url,
+    name,
+    breadcrumbs,
+    relevance,
+  };
 };

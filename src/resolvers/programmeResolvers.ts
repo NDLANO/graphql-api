@@ -143,7 +143,7 @@ export const resolvers = {
         const path = context?.path ?? child.path;
         return { ...child, path };
       });
-      return nodes.map((node) => nodeToTaxonomyEntity(node, context));
+      return nodes.map((node) => nodeToTaxonomyEntity(node, context.language));
     },
   },
 };
