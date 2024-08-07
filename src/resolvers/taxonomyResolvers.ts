@@ -45,7 +45,7 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLNode | undefined> {
     if (rootId) {
-      const children = await fetchChildren({ id: rootId, recursive: true }, context);
+      const children = await fetchChildren({ id: rootId, nodeType: "TOPIC", recursive: true }, context);
       const node = children.find((child) => child.id === id);
       if (node) return nodeToTaxonomyEntity(node, context.language);
     }
@@ -58,7 +58,7 @@ export const Query = {
       throw new Error(`No node found with contextId: ${contextId}`);
     }
     const entities = nodes.map((node) => nodeToTaxonomyEntity(node, context.language, contextId));
-    return entities.find((e) => e.contextId === contextId);
+    return entities[0];
   },
   async nodes(
     _: any,
@@ -88,20 +88,20 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLNode> {
     const resource = await fetchNode({ id }, context);
-    const visibleCtx = resource.contexts
-      .filter((c) => c.isVisible)
-      .filter((c) => !c.rootId.startsWith("urn:programme"));
-    const subjectCtx = rootId ? visibleCtx.filter((c) => c.rootId === rootId) : visibleCtx;
-    const topicCtx = parentId ? subjectCtx.filter((c) => c.parentIds.includes(parentId)) : subjectCtx;
+    const visibleContexts = resource.contexts.filter((c) => c.isVisible && !c.rootId.startsWith("urn:programme"));
+    // A resource can have several context in one subject. rootId and parentId helps picking the right one.
+    const rootContexts = rootId ? visibleContexts.filter((c) => c.rootId === rootId) : visibleContexts;
+    const parentContexts = parentId ? rootContexts.filter((c) => c.parentIds.includes(parentId)) : rootContexts;
 
-    const path = topicCtx?.[0]?.path || resource.path;
-    const rank = topicCtx?.[0]?.rank;
-    const contextId = topicCtx?.[0]?.contextId;
-    const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
-    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language, contextId);
+    const selectedCtx = parentContexts?.[0];
+    const path = selectedCtx?.path || resource.path;
+    const rank = selectedCtx?.rank;
+    const contextId = selectedCtx?.contextId;
+    const relevanceId = selectedCtx?.relevanceId;
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleContexts }, context.language, contextId);
     return { ...entity, contextId, path, rank, relevanceId };
   },
-  async nodeCollection(
+  async nodeByLanguageMeta(
     _: any,
     { language }: GQLQueryNodeCollectionArgs,
     context: ContextWithLoaders,
@@ -109,25 +109,28 @@ export const Query = {
     const nodes = await context.loaders.nodesLoader.load({ metadataFilter: { key: "language", value: language } });
     return nodes.map((node) => nodeToTaxonomyEntity(node, context.language));
   },
-  async articleNode(
+  async nodeByArticleId(
     _: any,
     { articleId, nodeId }: GQLQueryArticleNodeArgs,
     context: ContextWithLoaders,
   ): Promise<GQLNode | null> {
-    const node = articleId
-      ? await fetchNodeByContentUri(`urn:article:${articleId}`, context)
-      : nodeId
-        ? await fetchNode({ id: nodeId }, context)
-        : null;
+    let node = null;
+    if (articleId) {
+      node = await fetchNodeByContentUri(`urn:article:${articleId}`, context);
+    }
+    if (nodeId) {
+      node = await fetchNode({ id: nodeId }, context);
+    }
     if (!node) return null;
 
     const visibleCtx = node.contexts.filter((c) => c.isVisible);
+    const selectedCtx = visibleCtx?.[0];
     const entity = nodeToTaxonomyEntity({ ...node, contexts: visibleCtx }, context.language);
     return {
       ...entity,
-      contextId: visibleCtx?.[0]?.contextId,
-      rank: visibleCtx?.[0]?.rank,
-      relevanceId: visibleCtx?.[0]?.relevanceId || "urn:relevance:core",
+      contextId: selectedCtx?.contextId,
+      rank: selectedCtx?.rank,
+      relevanceId: selectedCtx?.relevanceId,
     };
   },
 };
@@ -160,12 +163,7 @@ export const resolvers = {
         const articleId = getArticleIdFromUrn(node.contentUri);
         return fetchArticle({ articleId }, context);
       }
-      if (node.contentUri?.startsWith("urn:learningpath")) {
-        return null;
-      }
-      throw Object.assign(new Error("Not a valid contentUri: " + node.contentUri), {
-        status: 404,
-      });
+      return null;
     },
     async availability(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders) {
       if (!node.contentUri) return undefined;
@@ -177,12 +175,7 @@ export const resolvers = {
         const learningpathId = getLearningpathIdFromUrn(node.contentUri);
         return fetchLearningpath(learningpathId, context);
       }
-      if (node.contentUri?.startsWith("urn:article")) {
-        return null;
-      }
-      throw Object.assign(new Error("Not a valid contentUri: " + node.contentUri), {
-        status: 404,
-      });
+      return null;
     },
     async children(
       node: GQLTaxonomyEntity,
@@ -207,36 +200,6 @@ export const resolvers = {
       }
       return [];
     },
-    async coreResources(
-      node: GQLTaxonomyEntity,
-      args: GQLNodeCoreResourcesArgs,
-      context: ContextWithLoaders,
-    ): Promise<GQLNode[]> {
-      const topicResources = await fetchNodeResources(
-        {
-          id: node.id,
-          relevance: "urn:relevance:core",
-        },
-        context,
-      );
-      const filtered = await filterMissingArticles(topicResources, context);
-      return filtered.map((f) => nodeToTaxonomyEntity(f, context.language));
-    },
-    async supplementaryResources(
-      topic: GQLTaxonomyEntity,
-      args: GQLNodeSupplementaryResourcesArgs,
-      context: ContextWithLoaders,
-    ): Promise<GQLNode[]> {
-      const topicResources = await fetchNodeResources(
-        {
-          id: topic.id,
-          relevance: "urn:relevance:supplementary",
-        },
-        context,
-      );
-      const filtered = await filterMissingArticles(topicResources, context);
-      return filtered.map((f) => nodeToTaxonomyEntity(f, context.language));
-    },
     async alternateNodes(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLNode[] | undefined> {
       const { contentUri, id, path } = node;
       if (!path) {
@@ -248,9 +211,9 @@ export const resolvers = {
           },
           context,
         );
-        const theVisibleOthers = nodes
-          .filter((node) => node.id !== id)
-          .filter((node) => node.contexts.find((context) => context.isVisible));
+        const theVisibleOthers = nodes.filter(
+          (node) => node.id !== id && node.contexts.find((context) => context.isVisible),
+        );
         return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context.language));
       }
       return;

@@ -1371,7 +1371,6 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   context?: Maybe<GQLTaxonomyContext>;
   contextId?: Maybe<Scalars['String']>;
   contexts: Array<GQLTaxonomyContext>;
-  coreResources?: Maybe<Array<GQLNode>>;
   grepCodes?: Maybe<Array<Scalars['String']>>;
   id: Scalars['String'];
   language?: Maybe<Scalars['String']>;
@@ -1387,7 +1386,6 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   relevanceId?: Maybe<Scalars['String']>;
   resourceTypes?: Maybe<Array<GQLResourceType>>;
   subjectpage?: Maybe<GQLSubjectPage>;
-  supplementaryResources?: Maybe<Array<GQLNode>>;
   supportedLanguages: Array<Scalars['String']>;
   url: Scalars['String'];
 };
@@ -1396,16 +1394,6 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
 export type GQLNodeChildrenArgs = {
   nodeType?: InputMaybe<GQLNodeType>;
   recursive?: InputMaybe<Scalars['Boolean']>;
-};
-
-
-export type GQLNodeCoreResourcesArgs = {
-  rootId?: InputMaybe<Scalars['String']>;
-};
-
-
-export type GQLNodeSupplementaryResourcesArgs = {
-  rootId?: InputMaybe<Scalars['String']>;
 };
 
 export enum GQLNodeType {
@@ -1559,7 +1547,6 @@ export type GQLQuery = {
   arenaUser?: Maybe<GQLArenaUser>;
   arenaUserV2?: Maybe<GQLArenaUserV2>;
   article?: Maybe<GQLArticle>;
-  articleNode?: Maybe<GQLNode>;
   articleResource?: Maybe<GQLResource>;
   audio?: Maybe<GQLAudio>;
   competenceGoal?: Maybe<GQLCompetenceGoal>;
@@ -1581,7 +1568,8 @@ export type GQLQuery = {
   listArenaUserV2: GQLPaginatedArenaUsers;
   listingPage?: Maybe<GQLListingPage>;
   node?: Maybe<GQLNode>;
-  nodeCollection?: Maybe<Array<GQLNode>>;
+  nodeByArticleId?: Maybe<GQLNode>;
+  nodeByLanguageMeta?: Maybe<Array<GQLNode>>;
   nodeResource?: Maybe<GQLNode>;
   nodes?: Maybe<Array<GQLNode>>;
   personalData?: Maybe<GQLMyNdlaPersonalData>;
@@ -1690,12 +1678,6 @@ export type GQLQueryArenaUserV2Args = {
 
 export type GQLQueryArticleArgs = {
   id: Scalars['String'];
-};
-
-
-export type GQLQueryArticleNodeArgs = {
-  articleId?: InputMaybe<Scalars['String']>;
-  nodeId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1822,7 +1804,13 @@ export type GQLQueryNodeArgs = {
 };
 
 
-export type GQLQueryNodeCollectionArgs = {
+export type GQLQueryNodeByArticleIdArgs = {
+  articleId?: InputMaybe<Scalars['String']>;
+  nodeId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLQueryNodeByLanguageMetaArgs = {
   language: Scalars['String'];
 };
 
@@ -3875,7 +3863,6 @@ export type GQLNodeResolvers<ContextType = any, ParentType extends GQLResolversP
   context?: Resolver<Maybe<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
   contextId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
-  coreResources?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, Partial<GQLNodeCoreResourcesArgs>>;
   grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3891,7 +3878,6 @@ export type GQLNodeResolvers<ContextType = any, ParentType extends GQLResolversP
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType>;
-  supplementaryResources?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, Partial<GQLNodeSupplementaryResourcesArgs>>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4040,7 +4026,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   arenaUser?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserArgs, 'username'>>;
   arenaUserV2?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserV2Args, 'username'>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
-  articleNode?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryArticleNodeArgs>>;
   articleResource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLQueryArticleResourceArgs>>;
   audio?: Resolver<Maybe<GQLResolversTypes['Audio']>, ParentType, ContextType, RequireFields<GQLQueryAudioArgs, 'id'>>;
   competenceGoal?: Resolver<Maybe<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, RequireFields<GQLQueryCompetenceGoalArgs, 'code'>>;
@@ -4062,7 +4047,8 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   listArenaUserV2?: Resolver<GQLResolversTypes['PaginatedArenaUsers'], ParentType, ContextType, Partial<GQLQueryListArenaUserV2Args>>;
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
   node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeArgs>>;
-  nodeCollection?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, RequireFields<GQLQueryNodeCollectionArgs, 'language'>>;
+  nodeByArticleId?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeByArticleIdArgs>>;
+  nodeByLanguageMeta?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, RequireFields<GQLQueryNodeByLanguageMetaArgs, 'language'>>;
   nodeResource?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, RequireFields<GQLQueryNodeResourceArgs, 'id'>>;
   nodes?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, Partial<GQLQueryNodesArgs>>;
   personalData?: Resolver<Maybe<GQLResolversTypes['MyNdlaPersonalData']>, ParentType, ContextType>;

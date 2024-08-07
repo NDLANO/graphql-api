@@ -334,8 +334,6 @@ export const typeDefs = gql`
     rank: Int
     parentId: String
     children(recursive: Boolean, nodeType: NodeType): [Node!]
-    coreResources(rootId: String): [Node!]
-    supplementaryResources(rootId: String): [Node!]
     alternateNodes: [Node!]
     meta: Meta
     article: Article
@@ -1478,8 +1476,8 @@ export const typeDefs = gql`
       filterVisible: Boolean
       ids: [String!]
     ): [Node!]
-    articleNode(articleId: String, nodeId: String): Node
-    nodeCollection(language: String!): [Node!]
+    nodeByArticleId(articleId: String, nodeId: String): Node
+    nodeByLanguageMeta(language: String!): [Node!]
     nodeResource(id: String!, rootId: String, parentId: String): Node
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
