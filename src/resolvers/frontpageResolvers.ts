@@ -79,6 +79,10 @@ export const resolvers = {
       const contexts: TaxonomyContext[] = await queryContexts(id, context);
       return contexts?.find((ctx) => ctx.rootId === "urn:subject:20")?.path || "";
     },
+    async url(id: string, _: any, context: ContextWithLoaders): Promise<string> {
+      const contexts: TaxonomyContext[] = await queryContexts(id, context);
+      return contexts?.find((ctx) => ctx.rootId === "urn:subject:20")?.url || "";
+    },
     async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
       const nodes = await queryNodes({ contentURI: id, language: context.language }, context);
       return nodes[0]?.resourceTypes ?? [];

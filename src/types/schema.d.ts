@@ -967,6 +967,7 @@ export type GQLMovie = {
   path: Scalars['String'];
   resourceTypes: Array<GQLResourceType>;
   title: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type GQLMovieMeta = {
@@ -974,12 +975,6 @@ export type GQLMovieMeta = {
   metaDescription?: Maybe<Scalars['String']>;
   metaImage?: Maybe<GQLMetaImage>;
   title: Scalars['String'];
-};
-
-export type GQLMoviePath = {
-  __typename?: 'MoviePath';
-  path?: Maybe<Scalars['String']>;
-  paths?: Maybe<Array<Scalars['String']>>;
 };
 
 export type GQLMovieResourceTypes = {
@@ -2587,7 +2582,6 @@ export type GQLResolversTypes = {
   MetaImage: ResolverTypeWrapper<GQLMetaImage>;
   Movie: ResolverTypeWrapper<GQLMovie>;
   MovieMeta: ResolverTypeWrapper<GQLMovieMeta>;
-  MoviePath: ResolverTypeWrapper<GQLMoviePath>;
   MovieResourceTypes: ResolverTypeWrapper<GQLMovieResourceTypes>;
   MovieTheme: ResolverTypeWrapper<GQLMovieTheme>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -2757,7 +2751,6 @@ export type GQLResolversParentTypes = {
   MetaImage: GQLMetaImage;
   Movie: GQLMovie;
   MovieMeta: GQLMovieMeta;
-  MoviePath: GQLMoviePath;
   MovieResourceTypes: GQLMovieResourceTypes;
   MovieTheme: GQLMovieTheme;
   Mutation: {};
@@ -3755,6 +3748,7 @@ export type GQLMovieResolvers<ContextType = any, ParentType extends GQLResolvers
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   resourceTypes?: Resolver<Array<GQLResolversTypes['ResourceType']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3762,12 +3756,6 @@ export type GQLMovieMetaResolvers<ContextType = any, ParentType extends GQLResol
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLMoviePathResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MoviePath'] = GQLResolversParentTypes['MoviePath']> = {
-  path?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  paths?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4620,7 +4608,6 @@ export type GQLResolvers<ContextType = any> = {
   MetaImage?: GQLMetaImageResolvers<ContextType>;
   Movie?: GQLMovieResolvers<ContextType>;
   MovieMeta?: GQLMovieMetaResolvers<ContextType>;
-  MoviePath?: GQLMoviePathResolvers<ContextType>;
   MovieResourceTypes?: GQLMovieResourceTypesResolvers<ContextType>;
   MovieTheme?: GQLMovieThemeResolvers<ContextType>;
   Mutation?: GQLMutationResolvers<ContextType>;

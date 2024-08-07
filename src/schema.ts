@@ -747,17 +747,13 @@ export const typeDefs = gql`
     metaDescription: String!
     resourceTypes: [ResourceType!]!
     path: String!
+    url: String!
   }
 
   type MovieMeta {
     title: String!
     metaImage: MetaImage
     metaDescription: String
-  }
-
-  type MoviePath {
-    path: String
-    paths: [String!]
   }
 
   type MovieResourceTypes {
