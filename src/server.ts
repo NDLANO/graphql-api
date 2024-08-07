@@ -15,7 +15,7 @@ import isString from "lodash/isString";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { getToken } from "./auth";
-import { port } from "./config";
+import { defaultLanguage, port } from "./config";
 import {
   articlesLoader,
   subjectTopicsLoader,
@@ -54,9 +54,9 @@ function getAcceptLanguage(request: Request): string {
   const language = request.headers["accept-language"];
 
   if (isString(language)) {
-    return language.split("-")[0] ?? "nb";
+    return language.split("-")[0] ?? defaultLanguage;
   }
-  return "nb";
+  return defaultLanguage;
 }
 
 function getHeaderString(request: Request, name: string): string | undefined {

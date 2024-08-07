@@ -18,6 +18,7 @@ import { fetchImage } from "./imageApi";
 import { fetchLearningpaths } from "./learningpathApi";
 import { searchNodes } from "./taxonomyApi";
 import { fetchVideo } from "./videoApi";
+import { defaultLanguage } from "../config";
 import {
   GQLFolderResourceMeta,
   GQLFolderResourceMetaSearchInput,
@@ -33,7 +34,7 @@ const findResourceTypes = (result: Node | undefined, context: ContextWithLoaders
   const ctx = result?.contexts?.[0];
   const resourceTypes = ctx?.resourceTypes.map((t) => ({
     id: t.id,
-    name: t.name[context.language] || t.name["nb"] || "",
+    name: t.name[context.language] || t.name[defaultLanguage] || "",
     language: context.language,
   }));
   return resourceTypes ?? [];

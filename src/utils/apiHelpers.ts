@@ -11,7 +11,7 @@ import { Response } from "node-fetch";
 import { Node, TaxonomyContext } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
-import { apiUrl } from "../config";
+import { apiUrl, defaultLanguage } from "../config";
 import { GQLTaxonomyEntity, GQLTaxonomyContext } from "../types/schema";
 
 const apiBaseUrl = (() => {
@@ -164,8 +164,8 @@ export const nodeToTaxonomyEntity = (node: Node, language: string, contextId?: s
 };
 
 const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, language: string): GQLTaxonomyContext => {
-  const breadcrumbs = ctx.breadcrumbs[language] || ctx.breadcrumbs["nb"] || [];
-  const relevance = ctx.relevance[language] || ctx.relevance["nb"] || "";
+  const breadcrumbs = ctx.breadcrumbs[language] || ctx.breadcrumbs[defaultLanguage] || [];
+  const relevance = ctx.relevance[language] || ctx.relevance[defaultLanguage] || "";
   const url = ctx.url || ctx.path;
   return {
     ...ctx,
