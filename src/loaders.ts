@@ -20,6 +20,7 @@ import {
   fetchFilmFrontpage,
   fetchLK20Curriculum,
   fetchSubjectPage,
+  queryNodes,
 } from "./api";
 import { GQLMeta, GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
 
@@ -84,13 +85,13 @@ export function subjectpageLoader(context: Context): DataLoader<string, ISubject
   });
 }
 
-export function subjectLoader(context: Context): DataLoader<{ id?: string }, Node> {
+export function nodeLoader(context: Context): DataLoader<{ id?: string }, Node> {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
         inputs.map((input) => {
           if (!input.id) {
-            throw Error("Tried to get subject with bad or empty id");
+            throw Error("Tried to get node with bad or empty id");
           }
           return fetchNode({ id: input.id }, context);
         }),
@@ -119,6 +120,35 @@ export function subjectsLoader(
       );
     },
     { cacheKeyFn: (key) => key },
+  );
+}
+
+export function nodesLoader(
+  context: Context,
+): DataLoader<{ contextId?: string; key?: string; value?: string; filterVisible?: boolean; ids?: string[] }, Node[]> {
+  return new DataLoader(
+    async (inputs) => {
+      return Promise.all(
+        inputs.map((input) => {
+          if (!input) {
+            throw Error("Tried to get node with no params");
+          }
+          return queryNodes(
+            {
+              contextId: input.contextId,
+              key: input.key,
+              value: input.value,
+              ids: input.ids,
+              isVisible: input.filterVisible,
+              includeContexts: true,
+              filterProgrammes: true,
+            },
+            context,
+          );
+        }),
+      );
+    },
+    { cacheKeyFn: (key) => JSON.stringify(key) },
   );
 }
 

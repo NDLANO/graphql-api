@@ -60,6 +60,7 @@ export const h5pHostUrl = () => {
   }
 };
 
+export const defaultLanguage = getEnvironmentVariabel("DEFAULT_LANGUAGE", "nb");
 export const port = getEnvironmentVariabel("PORT", "4000");
 export const apiUrl = getEnvironmentVariabel("API_URL", ndlaApiUrl());
 export const localConverter = getEnvironmentVariabel("LOCAL_CONVERTER", false);

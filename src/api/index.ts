@@ -30,6 +30,7 @@ export {
   fetchSubjects,
   fetchSubject,
   fetchNode,
+  fetchNodeByContentUri,
   fetchNodeResources,
   fetchTopics,
   fetchChildren,

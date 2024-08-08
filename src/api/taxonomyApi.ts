@@ -185,6 +185,7 @@ interface NodeQueryParams {
   isContext?: boolean;
   key?: string;
   value?: string;
+  ids?: string[];
   isVisible?: boolean;
   includeContexts?: boolean;
   filterProgrammes?: boolean;

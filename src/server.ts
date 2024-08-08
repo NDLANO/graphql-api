@@ -15,7 +15,7 @@ import isString from "lodash/isString";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { getToken } from "./auth";
-import { port } from "./config";
+import { defaultLanguage, port } from "./config";
 import {
   articlesLoader,
   subjectTopicsLoader,
@@ -24,8 +24,9 @@ import {
   subjectsLoader,
   frontpageLoader,
   lk20CurriculumLoader,
-  subjectLoader,
   subjectpageLoader,
+  nodeLoader,
+  nodesLoader,
 } from "./loaders";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
@@ -53,9 +54,9 @@ function getAcceptLanguage(request: Request): string {
   const language = request.headers["accept-language"];
 
   if (isString(language)) {
-    return language.split("-")[0] ?? "nb";
+    return language.split("-")[0] ?? defaultLanguage;
   }
-  return "nb";
+  return defaultLanguage;
 }
 
 function getHeaderString(request: Request, name: string): string | undefined {
@@ -117,8 +118,9 @@ async function getContext({ req, res }: { req: Request; res: Response }): Promis
       subjectTopicsLoader: subjectTopicsLoader(defaultContext),
       learningpathsLoader: learningpathsLoader(defaultContext),
       resourceTypesLoader: resourceTypesLoader(defaultContext),
+      nodeLoader: nodeLoader(defaultContext),
+      nodesLoader: nodesLoader(defaultContext),
       subjectsLoader: subjectsLoader(defaultContext),
-      subjectLoader: subjectLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
       subjectpageLoader: subjectpageLoader(defaultContext),
       lk20CurriculumLoader: lk20CurriculumLoader(defaultContext),
