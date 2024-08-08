@@ -23,11 +23,9 @@ import {
   GQLLearningpath,
   GQLNode,
   GQLNodeChildrenArgs,
-  GQLNodeCoreResourcesArgs,
-  GQLNodeSupplementaryResourcesArgs,
-  GQLQueryArticleNodeArgs,
   GQLQueryNodeArgs,
-  GQLQueryNodeCollectionArgs,
+  GQLQueryNodeByArticleIdArgs,
+  GQLQueryNodeByLanguageMetaArgs,
   GQLQueryNodeResourceArgs,
   GQLQueryNodesArgs,
   GQLTaxonomyContext,
@@ -62,12 +60,13 @@ export const Query = {
   },
   async nodes(
     _: any,
-    { contentUri, filterVisible, metadataFilterKey, metadataFilterValue, ids }: GQLQueryNodesArgs,
+    { nodeType, contentUri, filterVisible, metadataFilterKey, metadataFilterValue, ids }: GQLQueryNodesArgs,
     context: ContextWithLoaders,
   ): Promise<GQLNode[]> {
     const nodes = await queryNodes(
       {
         contentURI: contentUri,
+        nodeType: nodeType,
         key: metadataFilterKey,
         value: metadataFilterValue,
         ids: ids,
@@ -103,7 +102,7 @@ export const Query = {
   },
   async nodeByLanguageMeta(
     _: any,
-    { language }: GQLQueryNodeCollectionArgs,
+    { language }: GQLQueryNodeByLanguageMetaArgs,
     context: ContextWithLoaders,
   ): Promise<GQLNode[]> {
     const nodes = await context.loaders.nodesLoader.load({ metadataFilter: { key: "language", value: language } });
@@ -111,7 +110,7 @@ export const Query = {
   },
   async nodeByArticleId(
     _: any,
-    { articleId, nodeId }: GQLQueryArticleNodeArgs,
+    { articleId, nodeId }: GQLQueryNodeByArticleIdArgs,
     context: ContextWithLoaders,
   ): Promise<GQLNode | null> {
     let node = null;

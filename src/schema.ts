@@ -1470,6 +1470,7 @@ export const typeDefs = gql`
   type Query {
     node(id: String, rootId: String, contextId: String): Node
     nodes(
+      nodeType: NodeType
       contentUri: String
       metadataFilterKey: String
       metadataFilterValue: String

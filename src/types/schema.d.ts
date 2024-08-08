@@ -1828,6 +1828,7 @@ export type GQLQueryNodesArgs = {
   ids?: InputMaybe<Array<Scalars['String']>>;
   metadataFilterKey?: InputMaybe<Scalars['String']>;
   metadataFilterValue?: InputMaybe<Scalars['String']>;
+  nodeType?: InputMaybe<GQLNodeType>;
 };
 
 
