@@ -25,7 +25,6 @@ import {
   GQLNodeChildrenArgs,
   GQLQueryNodeArgs,
   GQLQueryNodeByArticleIdArgs,
-  GQLQueryNodeByLanguageMetaArgs,
   GQLQueryNodeResourceArgs,
   GQLQueryNodesArgs,
   GQLTaxonomyContext,
@@ -99,14 +98,6 @@ export const Query = {
     const relevanceId = selectedCtx?.relevanceId;
     const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleContexts }, context.language, contextId);
     return { ...entity, contextId, path, rank, relevanceId };
-  },
-  async nodeByLanguageMeta(
-    _: any,
-    { language }: GQLQueryNodeByLanguageMetaArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLNode[]> {
-    const nodes = await context.loaders.nodesLoader.load({ metadataFilter: { key: "language", value: language } });
-    return nodes.map((node) => nodeToTaxonomyEntity(node, context.language));
   },
   async nodeByArticleId(
     _: any,

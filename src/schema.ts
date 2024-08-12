@@ -1478,7 +1478,6 @@ export const typeDefs = gql`
       ids: [String!]
     ): [Node!]
     nodeByArticleId(articleId: String, nodeId: String): Node
-    nodeByLanguageMeta(language: String!): [Node!]
     nodeResource(id: String!, rootId: String, parentId: String): Node
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource

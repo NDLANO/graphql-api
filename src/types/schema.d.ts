@@ -1569,7 +1569,6 @@ export type GQLQuery = {
   listingPage?: Maybe<GQLListingPage>;
   node?: Maybe<GQLNode>;
   nodeByArticleId?: Maybe<GQLNode>;
-  nodeByLanguageMeta?: Maybe<Array<GQLNode>>;
   nodeResource?: Maybe<GQLNode>;
   nodes?: Maybe<Array<GQLNode>>;
   personalData?: Maybe<GQLMyNdlaPersonalData>;
@@ -1807,11 +1806,6 @@ export type GQLQueryNodeArgs = {
 export type GQLQueryNodeByArticleIdArgs = {
   articleId?: InputMaybe<Scalars['String']>;
   nodeId?: InputMaybe<Scalars['String']>;
-};
-
-
-export type GQLQueryNodeByLanguageMetaArgs = {
-  language: Scalars['String'];
 };
 
 
@@ -4049,7 +4043,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
   node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeArgs>>;
   nodeByArticleId?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeByArticleIdArgs>>;
-  nodeByLanguageMeta?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, RequireFields<GQLQueryNodeByLanguageMetaArgs, 'language'>>;
   nodeResource?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, RequireFields<GQLQueryNodeResourceArgs, 'id'>>;
   nodes?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, Partial<GQLQueryNodesArgs>>;
   personalData?: Resolver<Maybe<GQLResolversTypes['MyNdlaPersonalData']>, ParentType, ContextType>;
