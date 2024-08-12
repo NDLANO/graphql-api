@@ -14,43 +14,49 @@ import { Node } from "@ndla/types-taxonomy";
 import { GQLMeta, GQLReference, GQLSubject } from "./schema";
 
 declare global {
-  interface AuthToken {
-    access_token: string;
-    expires_in?: number;
-    token_type?: string;
+  interface SubjectTopicsLoaderParams {
+    subjectId: string;
+  }
+
+  interface SubjectsLoaderParams {
+    metadataFilter?: { key: string; value?: string };
+    filterVisible?: boolean;
+    ids?: string[];
+  }
+
+  interface NodeLoaderParams {
+    id?: string;
+  }
+
+  interface NodesLoaderParams {
+    contextId?: string;
+    metadataFilter?: { key: string; value?: string };
+    filterVisible?: boolean;
+    ids?: string[];
+  }
+
+  interface CurriculumLoaderParams {
+    code: string;
+    language: string | undefined;
   }
 
   interface Loaders {
     articlesLoader: DataLoader<string, GQLMeta | null>;
     learningpathsLoader: DataLoader<string, any>;
-    subjectTopicsLoader: DataLoader<{ subjectId: string }, any>;
-    subjectsLoader: DataLoader<
-      {
-        metadataFilter?: { key: string; value?: string };
-        filterVisible?: boolean;
-        ids?: string[];
-      },
-      { subjects: GQLSubject[] }
-    >;
-    nodeLoader: DataLoader<
-      {
-        id?: string;
-      },
-      Node
-    >;
-    nodesLoader: DataLoader<
-      {
-        contextId?: string;
-        metadataFilter?: { key: string; value?: string };
-        filterVisible?: boolean;
-        ids?: string[];
-      },
-      Node[]
-    >;
+    subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
+    subjectsLoader: DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }>;
+    nodeLoader: DataLoader<NodeLoaderParams, Node>;
+    nodesLoader: DataLoader<NodesLoaderParams, Node[]>;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPage>;
     subjectpageLoader: DataLoader<string, ISubjectPageData | null>;
-    lk20CurriculumLoader: DataLoader<{ code: string; language: string | undefined }, GQLReference | undefined>;
+    lk20CurriculumLoader: DataLoader<CurriculumLoaderParams, GQLReference | undefined>;
+  }
+
+  interface AuthToken {
+    access_token: string;
+    expires_in?: number;
+    token_type?: string;
   }
 
   interface Context {

@@ -39,12 +39,7 @@ export function learningpathsLoader(context: Context): DataLoader<string, GQLMet
   });
 }
 
-interface LK20Curriculum {
-  code: string;
-  language: string;
-}
-
-export function lk20CurriculumLoader(context: Context): DataLoader<LK20Curriculum, GQLReference | undefined> {
+export function lk20CurriculumLoader(context: Context): DataLoader<CurriculumLoaderParams, GQLReference | undefined> {
   return new DataLoader(async (ids) => {
     const uniqueCurriculumIds = Array.from(new Set(ids));
     const responses = await Promise.all(
@@ -85,7 +80,7 @@ export function subjectpageLoader(context: Context): DataLoader<string, ISubject
   });
 }
 
-export function nodeLoader(context: Context): DataLoader<{ id?: string }, Node> {
+export function nodeLoader(context: Context): DataLoader<NodeLoaderParams, Node> {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
@@ -101,12 +96,34 @@ export function nodeLoader(context: Context): DataLoader<{ id?: string }, Node> 
   );
 }
 
-export function subjectsLoader(
-  context: Context,
-): DataLoader<
-  { metadataFilter?: { key: string; value?: string }; filterVisible?: boolean; ids?: string[] },
-  { subjects: GQLSubject[] }
-> {
+export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Node[]> {
+  return new DataLoader(
+    async (inputs) => {
+      return Promise.all(
+        inputs.map((input) => {
+          if (!input) {
+            throw Error("Tried to get node with no params");
+          }
+          return queryNodes(
+            {
+              contextId: input.contextId,
+              key: input.metadataFilter?.key,
+              value: input.metadataFilter?.value,
+              ids: input.ids,
+              isVisible: input.filterVisible,
+              includeContexts: true,
+              filterProgrammes: true,
+            },
+            context,
+          );
+        }),
+      );
+    },
+    { cacheKeyFn: (key) => JSON.stringify(key) },
+  );
+}
+
+export function subjectsLoader(context: Context): DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }> {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
@@ -123,46 +140,13 @@ export function subjectsLoader(
   );
 }
 
-export function nodesLoader(
-  context: Context,
-): DataLoader<{ contextId?: string; key?: string; value?: string; filterVisible?: boolean; ids?: string[] }, Node[]> {
-  return new DataLoader(
-    async (inputs) => {
-      return Promise.all(
-        inputs.map((input) => {
-          if (!input) {
-            throw Error("Tried to get node with no params");
-          }
-          return queryNodes(
-            {
-              contextId: input.contextId,
-              key: input.key,
-              value: input.value,
-              ids: input.ids,
-              isVisible: input.filterVisible,
-              includeContexts: true,
-              filterProgrammes: true,
-            },
-            context,
-          );
-        }),
-      );
-    },
-    { cacheKeyFn: (key) => JSON.stringify(key) },
-  );
-}
-
-interface IInput {
-  subjectId: string;
-}
-
-export function subjectTopicsLoader(context: Context): DataLoader<IInput, any> {
+export function subjectTopicsLoader(context: Context): DataLoader<SubjectTopicsLoaderParams, any> {
   return new DataLoader(
     async (ids) => {
       return ids.map(async ({ subjectId }) => fetchSubjectTopics(subjectId, context));
     },
     {
-      cacheKeyFn: (key: IInput) => JSON.stringify(key),
+      cacheKeyFn: (key: SubjectTopicsLoaderParams) => JSON.stringify(key),
     },
   );
 }
