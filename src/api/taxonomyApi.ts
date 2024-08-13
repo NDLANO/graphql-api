@@ -95,10 +95,17 @@ export async function fetchNodeByContentUri(contentUri: string, context: Context
   return resolved[0];
 }
 
-export async function fetchNode(params: { id: string }, context: Context): Promise<Node> {
-  const { id } = params;
+export async function fetchNode(
+  params: { id: string; rootId?: string; parentId?: string },
+  context: Context,
+): Promise<Node> {
+  const { id, rootId, parentId } = params;
   const query = qs.stringify({
     language: context.language,
+    inludeContexts: true,
+    filterProgrammes: true,
+    rootId,
+    parentId,
   });
   const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${id}?${query}`, context);
   return await resolveJson(response);

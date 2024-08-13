@@ -25,7 +25,6 @@ import {
   GQLNodeChildrenArgs,
   GQLQueryNodeArgs,
   GQLQueryNodeByArticleIdArgs,
-  GQLQueryNodeResourceArgs,
   GQLQueryNodesArgs,
   GQLTaxonomyContext,
   GQLTaxonomyCrumb,
@@ -35,22 +34,32 @@ import {
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
+const pickContextValues = (node: Node, language: string, rootId?: string, parentId?: string) => {
+  const visibleContexts = node.contexts.filter((c) => c.isVisible && !c.rootId.startsWith("urn:programme"));
+  // A resource can have several context in one subject. rootId and parentId helps picking the right one.
+  const rootContexts = rootId ? visibleContexts.filter((c) => c.rootId === rootId) : visibleContexts;
+  const parentContexts = parentId ? rootContexts.filter((c) => c.parentIds.includes(parentId)) : rootContexts;
+
+  const selectedCtx = parentContexts?.[0];
+  const path = selectedCtx?.path || node.path;
+  const rank = selectedCtx?.rank;
+  const contextId = selectedCtx?.contextId;
+  const relevanceId = selectedCtx?.relevanceId;
+  const entity = nodeToTaxonomyEntity({ ...node, contexts: visibleContexts }, language);
+  return { ...entity, contextId, path, rank, relevanceId };
+};
+
 export const Query = {
   async node(
     _: any,
-    { id, rootId, contextId }: GQLQueryNodeArgs,
+    { id, rootId, parentId, contextId }: GQLQueryNodeArgs,
     context: ContextWithLoaders,
   ): Promise<GQLNode | undefined> {
-    if (rootId) {
-      const children = await fetchChildren({ id: rootId, nodeType: "TOPIC", recursive: true }, context);
-      const node = children.find((child) => child.id === id);
-      if (node) return nodeToTaxonomyEntity(node, context.language);
-    }
     if (id) {
-      const node = await context.loaders.nodeLoader.load({ id });
-      return nodeToTaxonomyEntity(node, context.language);
+      const node = await context.loaders.nodeLoader.load({ id, rootId, parentId });
+      return pickContextValues(node, context.language, rootId, parentId);
     }
-    const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: false }, context);
+    const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: true }, context);
     if (nodes.length === 0) {
       throw new Error(`No node found with contextId: ${contextId}`);
     }
@@ -80,25 +89,6 @@ export const Query = {
       return nodeToTaxonomyEntity(node, context.language);
     });
   },
-  async nodeResource(
-    _: any,
-    { id, rootId, parentId }: GQLQueryNodeResourceArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLNode> {
-    const resource = await fetchNode({ id }, context);
-    const visibleContexts = resource.contexts.filter((c) => c.isVisible && !c.rootId.startsWith("urn:programme"));
-    // A resource can have several context in one subject. rootId and parentId helps picking the right one.
-    const rootContexts = rootId ? visibleContexts.filter((c) => c.rootId === rootId) : visibleContexts;
-    const parentContexts = parentId ? rootContexts.filter((c) => c.parentIds.includes(parentId)) : rootContexts;
-
-    const selectedCtx = parentContexts?.[0];
-    const path = selectedCtx?.path || resource.path;
-    const rank = selectedCtx?.rank;
-    const contextId = selectedCtx?.contextId;
-    const relevanceId = selectedCtx?.relevanceId;
-    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleContexts }, context.language, contextId);
-    return { ...entity, contextId, path, rank, relevanceId };
-  },
   async nodeByArticleId(
     _: any,
     { articleId, nodeId }: GQLQueryNodeByArticleIdArgs,
@@ -112,16 +102,7 @@ export const Query = {
       node = await fetchNode({ id: nodeId }, context);
     }
     if (!node) return null;
-
-    const visibleCtx = node.contexts.filter((c) => c.isVisible);
-    const selectedCtx = visibleCtx?.[0];
-    const entity = nodeToTaxonomyEntity({ ...node, contexts: visibleCtx }, context.language);
-    return {
-      ...entity,
-      contextId: selectedCtx?.contextId,
-      rank: selectedCtx?.rank,
-      relevanceId: selectedCtx?.relevanceId,
-    };
+    return pickContextValues(node, context.language);
   },
 };
 

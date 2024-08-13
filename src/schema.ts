@@ -1468,7 +1468,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    node(id: String, rootId: String, contextId: String): Node
+    node(id: String, rootId: String, parentId: String, contextId: String): Node
     nodes(
       nodeType: NodeType
       contentUri: String
@@ -1478,7 +1478,6 @@ export const typeDefs = gql`
       ids: [String!]
     ): [Node!]
     nodeByArticleId(articleId: String, nodeId: String): Node
-    nodeResource(id: String!, rootId: String, parentId: String): Node
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
     article(id: String!): Article

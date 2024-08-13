@@ -26,6 +26,8 @@ declare global {
 
   interface NodeLoaderParams {
     id?: string;
+    rootId?: string;
+    parentId?: string;
   }
 
   interface NodesLoaderParams {

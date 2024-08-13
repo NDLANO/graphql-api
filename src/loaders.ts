@@ -88,7 +88,7 @@ export function nodeLoader(context: Context): DataLoader<NodeLoaderParams, Node>
           if (!input.id) {
             throw Error("Tried to get node with bad or empty id");
           }
-          return fetchNode({ id: input.id }, context);
+          return fetchNode({ id: input.id, rootId: input.rootId, parentId: input.parentId }, context);
         }),
       );
     },
