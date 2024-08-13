@@ -72,7 +72,7 @@ export const resolvers = {
         return filterMissingArticles(topics, context);
       }
       return filterMissingArticles(
-        topics.filter((topic: GQLTopic) => topic.parent === subject.id),
+        topics.filter((topic: GQLTopic) => topic.parentId === subject.id),
         context,
       );
     },
