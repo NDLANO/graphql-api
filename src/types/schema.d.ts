@@ -2132,6 +2132,7 @@ export type GQLSubjectLink = {
   __typename?: 'SubjectLink';
   name?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLSubjectPage = {
@@ -4243,6 +4244,7 @@ export type GQLSubjectResolvers<ContextType = any, ParentType extends GQLResolve
 export type GQLSubjectLinkResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectLink'] = GQLResolversParentTypes['SubjectLink']> = {
   name?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

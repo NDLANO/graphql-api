@@ -711,6 +711,7 @@ export const typeDefs = gql`
   type SubjectLink {
     name: String
     path: String
+    url: String
   }
 
   type FilmPageAbout {
