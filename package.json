@@ -64,7 +64,7 @@
     "@jest-mock/express": "^2.0.2",
     "@ndla/types-backend": "^0.2.89",
     "@ndla/types-embed": "^4.1.8",
-    "@ndla/types-taxonomy": "^1.0.26",
+    "@ndla/types-taxonomy": "^1.0.27",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",
     "@types/dotenv": "^6.1.0",
