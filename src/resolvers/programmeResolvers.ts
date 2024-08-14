@@ -50,9 +50,15 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLProgrammePage> {
     if (path && !path.includes("__")) {
-      throw Error("Tried to fetch programme with invalid path");
+      throw new Error("Tried to fetch programme with invalid path");
     }
+
     const id = path?.split("__")[1] || contextId;
+
+    if (!id) {
+      throw new Error(`Failed to find a programme with contextId ${contextId}`);
+    }
+
     const node = await queryNodes({ contextId: id, language: context.language }, context);
     if (!node[0]) {
       throw new Error(`Failed to find a programme with contextId ${contextId}`);

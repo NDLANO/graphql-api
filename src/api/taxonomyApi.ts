@@ -176,19 +176,21 @@ export async function fetchVersion(hash: string, context: Context): Promise<Vers
   return json?.[0];
 }
 
-interface NodeQueryParams {
-  contentURI?: string;
-  contextId?: string;
-  nodeType?: NodeType;
+interface NodeQueryParamsBase {
   language?: string;
   isRoot?: boolean;
   isContext?: boolean;
-  key?: string;
   value?: string;
   isVisible?: boolean;
   includeContexts?: boolean;
   filterProgrammes?: boolean;
 }
+
+type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
+  { [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>> }[Keys];
+
+type NodeQueryParams = NodeQueryParamsBase &
+  RequireAtLeastOne<{ contextId?: string; contentURI?: string; key?: string; nodeType?: NodeType }>;
 
 export const queryNodes = async (params: NodeQueryParams, context: Context): Promise<Node[]> => {
   const res = await fetch(`/${context.taxonomyUrl}/v1/nodes?${qs.stringify(params)}`, context);
