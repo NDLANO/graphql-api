@@ -107,8 +107,6 @@ export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Nod
           return queryNodes(
             {
               contextId: input.contextId,
-              key: input.metadataFilter?.key,
-              value: input.metadataFilter?.value,
               ids: input.ids,
               isVisible: input.filterVisible,
               includeContexts: true,

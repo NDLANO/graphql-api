@@ -59,31 +59,35 @@ export const Query = {
       const node = await context.loaders.nodeLoader.load({ id, rootId, parentId });
       return pickContextValues(node, context.language, rootId, parentId);
     }
-    const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: true }, context);
-    if (nodes.length === 0) {
-      throw new Error(`No node found with contextId: ${contextId}`);
+    if (contextId) {
+      const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: true }, context);
+      if (nodes.length === 0) {
+        throw new Error(`No node found with contextId: ${contextId}`);
+      }
+      const entities = nodes.map((node) => nodeToTaxonomyEntity(node, context.language, contextId));
+      return entities[0];
     }
-    const entities = nodes.map((node) => nodeToTaxonomyEntity(node, context.language, contextId));
-    return entities[0];
+    throw new Error("Missing id or contextId");
   },
   async nodes(
     _: any,
     { nodeType, contentUri, filterVisible, metadataFilterKey, metadataFilterValue, ids }: GQLQueryNodesArgs,
     context: ContextWithLoaders,
   ): Promise<GQLNode[]> {
-    const nodes = await queryNodes(
-      {
-        contentURI: contentUri,
-        nodeType: nodeType,
-        key: metadataFilterKey,
-        value: metadataFilterValue,
-        ids: ids,
-        includeContexts: true,
-        filterProgrammes: true,
-        language: context.language,
-      },
-      context,
-    );
+    const params = {
+      ids: ids,
+      includeContexts: true,
+      filterProgrammes: true,
+      language: context.language,
+    };
+    const nodes: Node[] = [];
+    if (contentUri) {
+      nodes.concat(await queryNodes({ contentURI: contentUri, ...params }, context));
+    } else if (nodeType) {
+      nodes.concat(await queryNodes({ nodeType: nodeType, ...params }, context));
+    } else if (metadataFilterKey) {
+      nodes.concat(await queryNodes({ key: metadataFilterKey, value: metadataFilterValue, ...params }, context));
+    }
     const filtered = filterVisible ? nodes.filter((node) => node.contexts.find((context) => context.isVisible)) : nodes;
     return filtered.map((node) => {
       return nodeToTaxonomyEntity(node, context.language);
@@ -173,7 +177,7 @@ export const resolvers = {
     },
     async alternateNodes(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLNode[] | undefined> {
       const { contentUri, id, path } = node;
-      if (!path) {
+      if (!path && contentUri) {
         const nodes = await queryNodes(
           {
             contentURI: contentUri,

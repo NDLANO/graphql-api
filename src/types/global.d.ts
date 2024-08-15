@@ -31,8 +31,7 @@ declare global {
   }
 
   interface NodesLoaderParams {
-    contextId?: string;
-    metadataFilter?: { key: string; value?: string };
+    contextId: string;
     filterVisible?: boolean;
     ids?: string[];
   }
