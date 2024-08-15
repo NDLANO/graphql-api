@@ -1414,7 +1414,7 @@ export const typeDefs = gql`
     programme(path: String, contextId: String): ProgrammePage
     subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean, ids: [String!]): [Subject!]
     topic(id: String!, subjectId: String): Topic
-    topics(contentUri: String, filterVisible: Boolean): [Topic!]
+    topics(contentUri: String!, filterVisible: Boolean): [Topic!]
     frontpage: FrontpageMenu
     competenceGoals(codes: [String], language: String): [CompetenceGoal!]
     competenceGoal(code: String!, language: String): CompetenceGoal

@@ -117,7 +117,7 @@ export const resolvers = {
     },
     async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
       const { contentUri, id, path } = topic;
-      if (!path) {
+      if (!path && contentUri) {
         const nodes = await queryNodes(
           {
             contentURI: contentUri,
