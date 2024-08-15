@@ -6,6 +6,7 @@
  *
  */
 
+import { toUnicode } from "node:punycode";
 import { load } from "cheerio";
 import he from "he";
 import { IImageMetaInformationV3 } from "@ndla/types-backend/image-api";
@@ -47,6 +48,8 @@ import { getBrightcoveCopyright } from "../utils/brightcoveUtils";
 import { CheerioEmbed, getEmbedsFromContent } from "../utils/getEmbedsFromContent";
 import highlightCode from "../utils/highlightCode";
 import parseMarkdown from "../utils/parseMarkdown";
+
+const URL_DOMAIN_REGEX = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n]+)/im;
 
 type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
   params: {
@@ -382,10 +385,13 @@ export const transformEmbed = async (
         });
       }
     } else if (embedData.resource === "content-link") {
-      embedData.linkText = embed.embed.text() ?? embedData.linkText;
       meta = await contentLinkMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "related-content") {
       meta = await relatedContentMeta({ embedData, context, index, opts });
+      const match = embedData.url?.match(URL_DOMAIN_REGEX)?.[1] || embedData.url;
+      if (match) {
+        embedData.urlDomain = toUnicode(match);
+      }
     } else if (embedData.resource === "concept") {
       const response: ConceptData | undefined = await conceptMeta({
         embedData,
