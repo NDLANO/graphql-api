@@ -1936,7 +1936,7 @@ export type GQLQueryTopicArgs = {
 
 
 export type GQLQueryTopicsArgs = {
-  contentUri?: InputMaybe<Scalars['String']>;
+  contentUri: Scalars['String'];
   filterVisible?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -4056,7 +4056,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType, RequireFields<GQLQuerySubjectpageArgs, 'id'>>;
   subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType, Partial<GQLQuerySubjectsArgs>>;
   topic?: Resolver<Maybe<GQLResolversTypes['Topic']>, ParentType, ContextType, RequireFields<GQLQueryTopicArgs, 'id'>>;
-  topics?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType, Partial<GQLQueryTopicsArgs>>;
+  topics?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType, RequireFields<GQLQueryTopicsArgs, 'contentUri'>>;
 };
 
 export type GQLReferenceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Reference'] = GQLResolversParentTypes['Reference']> = {
