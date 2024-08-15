@@ -185,6 +185,18 @@ export const fetchArenaUser = async ({ username }: GQLQueryArenaUserArgs, contex
     { ...context, shouldUseCache: false },
     { headers: csrfHeaders },
   );
+
+  if (response.status === 404) {
+    return {
+      id: -1,
+      displayName: "",
+      username: "",
+      profilePicture: "",
+      slug: "",
+      location: "",
+      groupTitleArray: [],
+    };
+  }
   const resolved: any = await resolveJson(response);
   return toArenaUser(resolved);
 };
