@@ -435,8 +435,9 @@ export const resolvers = {
     },
   },
   ArenaPost: {
-    async user(post: GQLArenaPost, _: any, context: ContextWithLoaders): Promise<GQLArenaUser> {
-      return fetchArenaUserById({ id: post.user.id }, context);
+    async user(post: GQLArenaPost, _: any, context: ContextWithLoaders): Promise<GQLArenaUser | undefined> {
+      if (!post?.user?.id) return undefined;
+      return fetchArenaUserById({ id: post?.user?.id }, context);
     },
   },
 };

@@ -126,7 +126,7 @@ export type GQLArenaPost = {
   topicId: Scalars['Int'];
   upvoted: Scalars['Boolean'];
   upvotes: Scalars['Int'];
-  user: GQLArenaUser;
+  user?: Maybe<GQLArenaUser>;
 };
 
 export type GQLArenaPostV2 = {
@@ -2817,7 +2817,7 @@ export type GQLArenaPostResolvers<ContextType = any, ParentType extends GQLResol
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   upvoted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   upvotes?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  user?: Resolver<GQLResolversTypes['ArenaUser'], ParentType, ContextType>;
+  user?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

@@ -1215,7 +1215,7 @@ export const typeDefs = gql`
     content: String!
     timestamp: String!
     isMainPost: Boolean!
-    user: ArenaUser!
+    user: ArenaUser
     deleted: Boolean!
     flagId: Int
     toPid: Int
