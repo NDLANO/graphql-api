@@ -1505,6 +1505,7 @@ export type GQLQuery = {
   arenaTopicsByUser: Array<GQLArenaTopic>;
   arenaTopicsByUserV2: GQLPaginatedTopics;
   arenaUser?: Maybe<GQLArenaUser>;
+  arenaUserById?: Maybe<GQLArenaUser>;
   arenaUserV2?: Maybe<GQLArenaUserV2>;
   article?: Maybe<GQLArticle>;
   articleResource?: Maybe<GQLResource>;
@@ -1623,6 +1624,11 @@ export type GQLQueryArenaTopicsByUserV2Args = {
 
 export type GQLQueryArenaUserArgs = {
   username: Scalars['String'];
+};
+
+
+export type GQLQueryArenaUserByIdArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -3887,6 +3893,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   arenaTopicsByUser?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicsByUserArgs, 'userSlug'>>;
   arenaTopicsByUserV2?: Resolver<GQLResolversTypes['PaginatedTopics'], ParentType, ContextType, RequireFields<GQLQueryArenaTopicsByUserV2Args, 'userId'>>;
   arenaUser?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserArgs, 'username'>>;
+  arenaUserById?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserByIdArgs, 'id'>>;
   arenaUserV2?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserV2Args, 'username'>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
   articleResource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLQueryArticleResourceArgs>>;
