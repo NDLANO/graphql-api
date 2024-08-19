@@ -17,6 +17,7 @@ import {
   fetchArenaTopic,
   fetchArenaTopicsByUser,
   fetchArenaUser,
+  fetchArenaUserById,
   markNotificationRead,
   newFlag,
   newTopic,
@@ -84,6 +85,7 @@ import {
   GQLMyNdlaPersonalData,
   GQLMutationDeleteCategoryArgs,
   GQLMutationSortArenaCategoriesArgs,
+  GQLQueryArenaUserByIdArgs,
 } from "../types/schema";
 
 import parseMarkdown from "../utils/parseMarkdown";
@@ -103,6 +105,7 @@ export const Query: Pick<
   | "arenaTopicsByUserV2"
   | "arenaNotificationsV2"
   | "arenaUserV2"
+  | "arenaUserById"
   | "arenaRecentTopicsV2"
   | "arenaAllFlags"
   | "arenaPostInContext"
@@ -110,6 +113,9 @@ export const Query: Pick<
 > = {
   async arenaUser(_: any, params: GQLQueryArenaUserArgs, context: ContextWithLoaders): Promise<GQLArenaUser> {
     return fetchArenaUser(params, context);
+  },
+  async arenaUserById(_: any, params: GQLQueryArenaUserByIdArgs, context: ContextWithLoaders): Promise<GQLArenaUser> {
+    return fetchArenaUserById(params, context);
   },
   async arenaUserV2(_: any, params: GQLQueryArenaUserV2Args, context: ContextWithLoaders): Promise<GQLArenaUserV2> {
     return await myndla.fetchArenaUser(params.username, context);
@@ -429,8 +435,9 @@ export const resolvers = {
     },
   },
   ArenaPost: {
-    async user(post: GQLArenaPost, _: any, context: ContextWithLoaders): Promise<GQLArenaUser> {
-      return fetchArenaUser({ username: post.user.username }, context);
+    async user(post: GQLArenaPost, _: any, context: ContextWithLoaders): Promise<GQLArenaUser | undefined> {
+      if (!post?.user?.id) return undefined;
+      return fetchArenaUserById({ id: post?.user?.id }, context);
     },
   },
 };
