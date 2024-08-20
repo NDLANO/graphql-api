@@ -29,6 +29,7 @@ import {
   GQLQueryArenaTopicArgs,
   GQLQueryArenaTopicsByUserArgs,
   GQLQueryArenaUserArgs,
+  GQLQueryArenaUserByIdArgs,
 } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
@@ -182,6 +183,20 @@ export const fetchArenaUser = async ({ username }: GQLQueryArenaUserArgs, contex
   const csrfHeaders = await fetchCsrfTokenForSession(context);
   const response = await fetch(
     `/groups/api/user/username/${username}`,
+    { ...context, shouldUseCache: false },
+    { headers: csrfHeaders },
+  );
+  const resolved: any = await resolveJson(response);
+  return toArenaUser(resolved);
+};
+
+export const fetchArenaUserById = async (
+  { id }: GQLQueryArenaUserByIdArgs,
+  context: Context,
+): Promise<GQLArenaUser> => {
+  const csrfHeaders = await fetchCsrfTokenForSession(context);
+  const response = await fetch(
+    `/groups/api/user/uid/${id}`,
     { ...context, shouldUseCache: false },
     { headers: csrfHeaders },
   );

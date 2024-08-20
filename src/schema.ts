@@ -1281,7 +1281,7 @@ export const typeDefs = gql`
     content: String!
     timestamp: String!
     isMainPost: Boolean!
-    user: ArenaUser!
+    user: ArenaUser
     deleted: Boolean!
     flagId: Int
     toPid: Int
@@ -1579,6 +1579,7 @@ export const typeDefs = gql`
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
     arenaUser(username: String!): ArenaUser
+    arenaUserById(id: Int!): ArenaUser
     arenaAllFlags(page: Int, pageSize: Int): PaginatedPosts!
     arenaTopic(topicId: Int!, page: Int): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!

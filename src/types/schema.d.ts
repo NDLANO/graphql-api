@@ -126,7 +126,7 @@ export type GQLArenaPost = {
   topicId: Scalars['Int'];
   upvoted: Scalars['Boolean'];
   upvotes: Scalars['Int'];
-  user: GQLArenaUser;
+  user?: Maybe<GQLArenaUser>;
 };
 
 export type GQLArenaPostV2 = {
@@ -1545,6 +1545,7 @@ export type GQLQuery = {
   arenaTopicsByUser: Array<GQLArenaTopic>;
   arenaTopicsByUserV2: GQLPaginatedTopics;
   arenaUser?: Maybe<GQLArenaUser>;
+  arenaUserById?: Maybe<GQLArenaUser>;
   arenaUserV2?: Maybe<GQLArenaUserV2>;
   article?: Maybe<GQLArticle>;
   articleResource?: Maybe<GQLResource>;
@@ -1666,6 +1667,11 @@ export type GQLQueryArenaTopicsByUserV2Args = {
 
 export type GQLQueryArenaUserArgs = {
   username: Scalars['String'];
+};
+
+
+export type GQLQueryArenaUserByIdArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -2911,7 +2917,7 @@ export type GQLArenaPostResolvers<ContextType = any, ParentType extends GQLResol
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   upvoted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   upvotes?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  user?: Resolver<GQLResolversTypes['ArenaUser'], ParentType, ContextType>;
+  user?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4013,6 +4019,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   arenaTopicsByUser?: Resolver<Array<GQLResolversTypes['ArenaTopic']>, ParentType, ContextType, RequireFields<GQLQueryArenaTopicsByUserArgs, 'userSlug'>>;
   arenaTopicsByUserV2?: Resolver<GQLResolversTypes['PaginatedTopics'], ParentType, ContextType, RequireFields<GQLQueryArenaTopicsByUserV2Args, 'userId'>>;
   arenaUser?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserArgs, 'username'>>;
+  arenaUserById?: Resolver<Maybe<GQLResolversTypes['ArenaUser']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserByIdArgs, 'id'>>;
   arenaUserV2?: Resolver<Maybe<GQLResolversTypes['ArenaUserV2']>, ParentType, ContextType, RequireFields<GQLQueryArenaUserV2Args, 'username'>>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
   articleResource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLQueryArticleResourceArgs>>;
