@@ -101,8 +101,7 @@ export const Query = {
     let node = null;
     if (articleId) {
       node = await fetchNodeByContentUri(`urn:article:${articleId}`, context);
-    }
-    if (nodeId) {
+    } else if (nodeId) {
       node = await fetchNode({ id: nodeId }, context);
     }
     if (!node) return null;
@@ -135,8 +134,7 @@ export const resolvers = {
   Node: {
     async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2 | null> {
       if (node.contentUri?.startsWith("urn:article")) {
-        const articleId = getArticleIdFromUrn(node.contentUri);
-        return fetchArticle({ articleId }, context);
+        return context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
       }
       return null;
     },

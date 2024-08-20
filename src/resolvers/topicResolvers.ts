@@ -20,7 +20,7 @@ import {
   GQLTopicSupplementaryResourcesArgs,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
-import { filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
+import { articleToMeta, filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async topic(_: any, { id, subjectId }: GQLQueryTopicArgs, context: ContextWithLoaders): Promise<GQLTopic> {
@@ -70,7 +70,8 @@ export const resolvers = {
     },
     async meta(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
       if (!topic.contentUri?.startsWith("urn:article")) return null;
-      return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
+      return article ? articleToMeta(article) : null;
     },
     async coreResources(
       topic: Node,

@@ -9,6 +9,7 @@
 import DataLoader from "dataloader";
 import { Request, Response } from "express";
 import { RequestInit, RequestCache } from "node-fetch";
+import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { IFrontPage, ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import { GQLMeta, GQLReference, GQLSubject } from "./schema";
@@ -42,7 +43,7 @@ declare global {
   }
 
   interface Loaders {
-    articlesLoader: DataLoader<string, GQLMeta | null>;
+    articlesLoader: DataLoader<string, IArticleV2 | null>;
     learningpathsLoader: DataLoader<string, any>;
     subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
     subjectsLoader: DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }>;

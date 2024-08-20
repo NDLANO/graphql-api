@@ -19,7 +19,7 @@ import {
   GQLResourceTypeDefinition,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
-import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
+import { articleToMeta, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async articleResource(
@@ -86,7 +86,8 @@ export const resolvers = {
       if (resource.contentUri?.startsWith("urn:learningpath")) {
         return context.loaders.learningpathsLoader.load(resource.contentUri.replace("urn:learningpath:", ""));
       } else if (resource.contentUri?.startsWith("urn:article")) {
-        return context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));
+        const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));
+        return article ? articleToMeta(article) : null;
       }
       throw Object.assign(new Error("Missing contentUri for resource with id: " + resource.id), { status: 404 });
     },

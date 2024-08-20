@@ -6,6 +6,7 @@
  *
  */
 
+import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { IConcept, IConceptSearchResult, IConceptSummary } from "@ndla/types-backend/concept-api";
 import { searchConcepts, fetchConcept, fetchListingPage, fetchArticles } from "../api";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
@@ -18,6 +19,7 @@ import {
   GQLQueryListingPageArgs,
   GQLVisualElement,
 } from "../types/schema";
+import { articleToMeta } from "../utils/articleHelpers";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
 export const Query = {
@@ -73,7 +75,7 @@ export const resolvers = {
         articleIds.map((id) => `${id}`),
         context,
       );
-      return fetched.filter((article): article is GQLMeta => article !== null);
+      return fetched.filter((article): article is IArticleV2 => article !== null).map(articleToMeta);
     },
     title(concept: IConcept, _: any, __: ContextWithLoaders): string {
       return concept.title.title;

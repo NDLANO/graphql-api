@@ -52,7 +52,7 @@ export const resolvers = {
       const articles = await context.loaders.articlesLoader.loadMany(
         theme.movies.map((movie) => getArticleIdFromUrn(movie)),
       );
-      const nonNullArticles = articles.filter((article): article is GQLMeta => !!article);
+      const nonNullArticles = articles.filter((article): article is IArticleV2 => !!article);
       return theme.movies.filter((movie) =>
         nonNullArticles.find((article) => `${article.id}` === getArticleIdFromUrn(movie)),
       );

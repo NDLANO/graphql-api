@@ -7,6 +7,7 @@
  */
 
 import DataLoader from "dataloader";
+import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { IFilmFrontPageData, IFrontPage, ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
@@ -24,7 +25,7 @@ import {
 } from "./api";
 import { GQLMeta, GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
 
-export function articlesLoader(context: Context): DataLoader<string, GQLMeta | null> {
+export function articlesLoader(context: Context): DataLoader<string, IArticleV2 | null> {
   return new DataLoader(
     async (articleIds) => {
       return fetchArticles(articleIds, context);
