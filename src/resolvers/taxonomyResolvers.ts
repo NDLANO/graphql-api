@@ -64,8 +64,8 @@ export const Query = {
       if (nodes.length === 0) {
         throw new Error(`No node found with contextId: ${contextId}`);
       }
-      const entities = nodes.map((node) => nodeToTaxonomyEntity(node, context.language, contextId));
-      return entities[0];
+      const node = nodes[0];
+      return node ? nodeToTaxonomyEntity(node, context.language, contextId) : undefined;
     }
     throw new Error("Missing id or contextId");
   },
