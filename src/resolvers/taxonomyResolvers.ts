@@ -77,6 +77,8 @@ export const Query = {
     const params = {
       ids: ids,
       includeContexts: true,
+      key: metadataFilterKey,
+      value: metadataFilterValue,
       filterProgrammes: true,
       language: context.language,
     };
@@ -85,8 +87,6 @@ export const Query = {
       nodes.concat(await queryNodes({ contentURI: contentUri, ...params }, context));
     } else if (nodeType) {
       nodes.concat(await queryNodes({ nodeType: nodeType, ...params }, context));
-    } else if (metadataFilterKey) {
-      nodes.concat(await queryNodes({ key: metadataFilterKey, value: metadataFilterValue, ...params }, context));
     }
     const filtered = filterVisible ? nodes.filter((node) => node.contexts.find((context) => context.isVisible)) : nodes;
     return filtered.map((node) => {

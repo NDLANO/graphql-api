@@ -7,8 +7,7 @@
  */
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath } from "../api";
-import { fetchNodeByContentUri, queryNodes } from "../api/taxonomyApi";
+import { fetchArticle, fetchLearningpath, fetchNode, fetchNodeByContentUri, fetchResourceTypes } from "../api";
 import {
   GQLLearningpath,
   GQLMeta,
