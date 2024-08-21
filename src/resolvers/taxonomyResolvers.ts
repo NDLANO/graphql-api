@@ -82,11 +82,11 @@ export const Query = {
       filterProgrammes: true,
       language: context.language,
     };
-    const nodes: Node[] = [];
+    let nodes: Node[] = [];
     if (contentUri) {
-      nodes.concat(await queryNodes({ contentURI: contentUri, ...params }, context));
+      nodes = await queryNodes({ contentURI: contentUri, ...params }, context);
     } else if (nodeType) {
-      nodes.concat(await queryNodes({ nodeType: nodeType, ...params }, context));
+      nodes = await queryNodes({ nodeType: nodeType, ...params }, context);
     }
     const filtered = filterVisible ? nodes.filter((node) => node.contexts.find((context) => context.isVisible)) : nodes;
     return filtered.map((node) => {
