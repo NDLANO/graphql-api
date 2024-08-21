@@ -21,6 +21,7 @@ import {
 } from "../api";
 import {
   GQLLearningpath,
+  GQLMeta,
   GQLNode,
   GQLNodeChildrenArgs,
   GQLQueryNodeArgs,
@@ -32,7 +33,12 @@ import {
   GQLWithArticle,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
-import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
+import {
+  articleToMeta,
+  filterMissingArticles,
+  getArticleIdFromUrn,
+  getLearningpathIdFromUrn,
+} from "../utils/articleHelpers";
 
 const pickContextValues = (node: Node, language: string, rootId?: string, parentId?: string) => {
   const visibleContexts = node.contexts.filter((c) => c.isVisible && !c.rootId.startsWith("urn:programme"));
@@ -149,6 +155,11 @@ export const resolvers = {
         return fetchLearningpath(learningpathId, context);
       }
       return null;
+    },
+    async meta(node: Node, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
+      if (!node.contentUri?.startsWith("urn:article")) return null;
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
+      return article ? articleToMeta(article) : null;
     },
     async children(
       node: GQLTaxonomyEntity,
