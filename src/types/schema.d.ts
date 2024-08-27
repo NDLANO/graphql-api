@@ -44,6 +44,7 @@ export type GQLArenaCategory = {
   slug: Scalars['String'];
   topicCount: Scalars['Int'];
   topics?: Maybe<Array<GQLArenaTopic>>;
+  voteCount?: Maybe<Scalars['Int']>;
 };
 
 export type GQLArenaCategoryV2 = GQLArenaCategoryV2Base & {
@@ -2734,6 +2735,7 @@ export type GQLArenaCategoryResolvers<ContextType = any, ParentType extends GQLR
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   topicCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   topics?: Resolver<Maybe<Array<GQLResolversTypes['ArenaTopic']>>, ParentType, ContextType>;
+  voteCount?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

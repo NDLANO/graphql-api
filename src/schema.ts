@@ -1192,6 +1192,7 @@ export const typeDefs = gql`
     slug: String!
     topicCount: Int!
     postCount: Int!
+    voteCount: Int
     disabled: Boolean!
     topics: [ArenaTopic!]
     breadcrumbs: [CategoryBreadcrumb!]!

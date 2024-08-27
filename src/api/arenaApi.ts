@@ -130,6 +130,7 @@ const toCategory = (category: any, parentBreadcrumbs?: GQLCategoryBreadcrumb[]):
     slug: category.slug,
     topicCount: category.topic_count,
     postCount: category.post_count,
+    voteCount: category.topics?.reduce((acc: number, topic: any) => acc + topic.votes, 0) ?? undefined,
     disabled: category.disabled === 1,
     topics: category.topics?.map(toTopic),
     breadcrumbs,
