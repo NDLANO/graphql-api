@@ -377,15 +377,15 @@ export const typeDefs = gql`
   }
 
   type TaxonomyContext {
-    breadcrumbs: [String!]!
     contextId: String!
+    breadcrumbs: [String!]!
     name: String!
     path: String!
+    url: String!
     parentIds: [String!]!
     rootId: String!
     relevance: String!
-    crumbs: [TaxonomyCrumb!]
-    url: String!
+    parents: [TaxonomyCrumb!]
   }
 
   type Topic implements TaxonomyEntity & WithArticle & TaxBase {

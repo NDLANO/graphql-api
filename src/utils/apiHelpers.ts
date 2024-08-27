@@ -8,11 +8,11 @@
 
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
-import { Node, TaxonomyContext } from "@ndla/types-taxonomy";
+import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
 import { apiUrl, defaultLanguage } from "../config";
-import { GQLTaxonomyEntity, GQLTaxonomyContext } from "../types/schema";
+import { GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb } from "../types/schema";
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
@@ -167,11 +167,20 @@ const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, language: stri
   const breadcrumbs = ctx.breadcrumbs[language] || ctx.breadcrumbs[defaultLanguage] || [];
   const relevance = ctx.relevance[language] || ctx.relevance[defaultLanguage] || "";
   const url = ctx.url || ctx.path;
+  const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, language));
   return {
     ...ctx,
     url,
     name,
     breadcrumbs,
     relevance,
+    parents,
+  };
+};
+
+const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, language: string): GQLTaxonomyCrumb => {
+  return {
+    ...crumb,
+    name: crumb.name[language] || crumb.name[defaultLanguage] || "",
   };
 };

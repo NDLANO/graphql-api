@@ -14,7 +14,6 @@ import {
   GQLQueryTopicArgs,
   GQLQueryTopicsArgs,
   GQLResource,
-  GQLTaxonomyContext,
   GQLTopic,
   GQLTopicCoreResourcesArgs,
   GQLTopicSupplementaryResourcesArgs,

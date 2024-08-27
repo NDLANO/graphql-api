@@ -10,13 +10,11 @@ import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node, TaxonomyContext } from "@ndla/types-taxonomy";
 import {
-  fetchArticle,
   fetchChildren,
   fetchLK20CompetenceGoalSet,
   fetchLearningpath,
   fetchNode,
   fetchNodeByContentUri,
-  fetchNodeResources,
   queryNodes,
 } from "../api";
 import {
@@ -27,10 +25,7 @@ import {
   GQLQueryNodeArgs,
   GQLQueryNodeByArticleIdArgs,
   GQLQueryNodesArgs,
-  GQLTaxonomyContext,
-  GQLTaxonomyCrumb,
   GQLTaxonomyEntity,
-  GQLWithArticle,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 import {
@@ -116,27 +111,6 @@ export const Query = {
 };
 
 export const resolvers = {
-  TaxonomyContext: {
-    async crumbs(taxonomyContext: TaxonomyContext, _: any, context: ContextWithLoaders): Promise<GQLTaxonomyCrumb[]> {
-      const parentNodes = await context.loaders.nodesLoader.loadMany(
-        taxonomyContext.parentContextIds.map((contextId) => ({ contextId })),
-      );
-      const crumbs = parentNodes
-        .filter((nodes) => nodes.length > 0)
-        .map((nodes) => {
-          const parent = nodes[0]!;
-          const entity = nodeToTaxonomyEntity(parent, context.language);
-          return {
-            id: entity.id,
-            contextId: entity.contextId ?? "",
-            name: entity.name,
-            path: entity.path,
-            url: entity.url || entity.path,
-          } as GQLTaxonomyCrumb;
-        });
-      return crumbs;
-    },
-  },
   Node: {
     async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2 | null> {
       if (node.contentUri?.startsWith("urn:article")) {

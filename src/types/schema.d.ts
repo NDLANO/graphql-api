@@ -2205,9 +2205,9 @@ export type GQLTaxonomyContext = {
   __typename?: 'TaxonomyContext';
   breadcrumbs: Array<Scalars['String']>;
   contextId: Scalars['String'];
-  crumbs?: Maybe<Array<GQLTaxonomyCrumb>>;
   name: Scalars['String'];
   parentIds: Array<Scalars['String']>;
+  parents?: Maybe<Array<GQLTaxonomyCrumb>>;
   path: Scalars['String'];
   relevance: Scalars['String'];
   rootId: Scalars['String'];
@@ -4319,9 +4319,9 @@ export type GQLTaxBaseResolvers<ContextType = any, ParentType extends GQLResolve
 export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyContext'] = GQLResolversParentTypes['TaxonomyContext']> = {
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  crumbs?: Resolver<Maybe<Array<GQLResolversTypes['TaxonomyCrumb']>>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  parents?: Resolver<Maybe<Array<GQLResolversTypes['TaxonomyCrumb']>>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   relevance?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   rootId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
