@@ -97,6 +97,7 @@ const toTopic = (topic: any): GQLArenaTopic => {
     title: he.decode(topic.title),
     slug: topic.slug,
     postCount: topic.postcount,
+    voteCount: topic.votes,
     timestamp: topic.timestampISO,
     locked: topic.locked === 1,
     pinned: topic.pinned === 1,

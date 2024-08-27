@@ -1237,6 +1237,7 @@ export const typeDefs = gql`
     title: String!
     slug: String!
     postCount: Int!
+    voteCount: Int!
     locked: Boolean!
     pinned: Boolean!
     timestamp: String!

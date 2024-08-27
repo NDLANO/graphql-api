@@ -159,6 +159,7 @@ export type GQLArenaTopic = {
   slug: Scalars['String'];
   timestamp: Scalars['String'];
   title: Scalars['String'];
+  voteCount: Scalars['Int'];
 };
 
 export type GQLArenaTopicV2 = {
@@ -2851,6 +2852,7 @@ export type GQLArenaTopicResolvers<ContextType = any, ParentType extends GQLReso
   slug?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   timestamp?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  voteCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
