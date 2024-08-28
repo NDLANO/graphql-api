@@ -61,6 +61,7 @@ export type GQLArenaCategoryV2 = GQLArenaCategoryV2Base & {
   topicCount: Scalars['Int'];
   topics?: Maybe<Array<GQLArenaTopicV2>>;
   visible: Scalars['Boolean'];
+  voteCount?: Maybe<Scalars['Int']>;
 };
 
 export type GQLArenaCategoryV2Base = {
@@ -73,6 +74,7 @@ export type GQLArenaCategoryV2Base = {
   title: Scalars['String'];
   topicCount: Scalars['Int'];
   visible: Scalars['Boolean'];
+  voteCount?: Maybe<Scalars['Int']>;
 };
 
 export type GQLArenaFlag = {
@@ -174,6 +176,7 @@ export type GQLArenaTopicV2 = {
   posts?: Maybe<GQLPaginatedPosts>;
   title: Scalars['String'];
   updated: Scalars['String'];
+  voteCount: Scalars['Int'];
 };
 
 export type GQLArenaUser = {
@@ -2222,6 +2225,7 @@ export type GQLTopiclessArenaCategoryV2 = GQLArenaCategoryV2Base & {
   title: Scalars['String'];
   topicCount: Scalars['Int'];
   visible: Scalars['Boolean'];
+  voteCount?: Maybe<Scalars['Int']>;
 };
 
 export type GQLTranscription = {
@@ -2753,6 +2757,7 @@ export type GQLArenaCategoryV2Resolvers<ContextType = any, ParentType extends GQ
   topicCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   topics?: Resolver<Maybe<Array<GQLResolversTypes['ArenaTopicV2']>>, ParentType, ContextType>;
   visible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  voteCount?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2767,6 +2772,7 @@ export type GQLArenaCategoryV2BaseResolvers<ContextType = any, ParentType extend
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   topicCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   visible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  voteCount?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
 };
 
 export type GQLArenaFlagResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArenaFlag'] = GQLResolversParentTypes['ArenaFlag']> = {
@@ -2867,6 +2873,7 @@ export type GQLArenaTopicV2Resolvers<ContextType = any, ParentType extends GQLRe
   posts?: Resolver<Maybe<GQLResolversTypes['PaginatedPosts']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  voteCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4261,6 +4268,7 @@ export type GQLTopiclessArenaCategoryV2Resolvers<ContextType = any, ParentType e
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   topicCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   visible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  voteCount?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
