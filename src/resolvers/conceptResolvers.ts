@@ -75,7 +75,7 @@ export const resolvers = {
         articleIds.map((id) => `${id}`),
         context,
       );
-      return fetched.filter((article): article is IArticleV2 => article !== null).map(articleToMeta);
+      return fetched.filter((article): article is IArticleV2 => !!article).map(articleToMeta);
     },
     title(concept: IConcept, _: any, __: ContextWithLoaders): string {
       return concept.title.title;

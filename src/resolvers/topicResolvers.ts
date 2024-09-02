@@ -26,10 +26,10 @@ export const Query = {
     if (subjectId) {
       const children = await fetchChildren({ id: subjectId, nodeType: "TOPIC", recursive: true }, context);
       const node = children.find((child) => child.id === id);
-      if (node) return nodeToTaxonomyEntity(node, context.language);
+      if (node) return nodeToTaxonomyEntity(node, context);
     }
     const node = await fetchNode({ id }, context);
-    return nodeToTaxonomyEntity(node, context.language);
+    return nodeToTaxonomyEntity(node, context);
   },
   async topics(
     _: any,
@@ -39,16 +39,15 @@ export const Query = {
     const nodes = await queryNodes(
       {
         contentURI: contentUri,
+        isVisible: filterVisible,
         includeContexts: true,
         filterProgrammes: true,
         language: context.language,
       },
       context,
     );
-    const filtered = filterVisible ? nodes.filter((node) => node.contexts.find((context) => context.isVisible)) : nodes;
-
-    return filtered.map((node) => {
-      return nodeToTaxonomyEntity(node, context.language);
+    return nodes.map((node) => {
+      return nodeToTaxonomyEntity(node, context);
     });
   },
 };
@@ -85,7 +84,7 @@ export const resolvers = {
         context,
       );
       const filtered = await filterMissingArticles(topicResources, context);
-      return filtered.map((f) => nodeToTaxonomyEntity(f, context.language));
+      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
     async supplementaryResources(
       topic: Node,
@@ -100,12 +99,12 @@ export const resolvers = {
         context,
       );
       const filtered = await filterMissingArticles(topicResources, context);
-      return filtered.map((f) => nodeToTaxonomyEntity(f, context.language));
+      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
     async subtopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[]> {
       const subtopics = await fetchChildren({ id: topic.id, nodeType: "TOPIC" }, context);
       const filtered = await filterMissingArticles(subtopics, context);
-      return filtered.map((f) => nodeToTaxonomyEntity(f, context.language));
+      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
     async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
       const { contentUri, id, path } = topic;
@@ -121,7 +120,7 @@ export const resolvers = {
         const theVisibleOthers = nodes
           .filter((node) => node.id !== id)
           .filter((node) => node.contexts.find((context) => context.isVisible));
-        return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context.language));
+        return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context));
       }
       return;
     },

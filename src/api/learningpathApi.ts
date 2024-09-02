@@ -10,7 +10,10 @@ import { ILearningPathV2, ISearchResultV2 } from "@ndla/types-backend/learningpa
 import { GQLLearningpath, GQLMeta } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
-export async function fetchLearningpaths(learningpathIds: string[], context: Context): Promise<Array<GQLMeta | null>> {
+export async function fetchLearningpaths(
+  learningpathIds: string[],
+  context: Context,
+): Promise<Array<GQLMeta | undefined>> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/?language=${context.language}&fallback=true&ids=${learningpathIds.join(",")}`,
     context,
@@ -40,7 +43,7 @@ export async function fetchLearningpaths(learningpathIds: string[], context: Con
           : undefined,
       };
     }
-    return null;
+    return undefined;
   });
 }
 

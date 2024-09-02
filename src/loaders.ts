@@ -25,7 +25,7 @@ import {
 } from "./api";
 import { GQLMeta, GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
 
-export function articlesLoader(context: Context): DataLoader<string, IArticleV2 | null> {
+export function articlesLoader(context: Context): DataLoader<string, IArticleV2 | undefined> {
   return new DataLoader(
     async (articleIds) => {
       return fetchArticles(articleIds, context);
@@ -34,7 +34,7 @@ export function articlesLoader(context: Context): DataLoader<string, IArticleV2 
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<string, GQLMeta | null> {
+export function learningpathsLoader(context: Context): DataLoader<string, GQLMeta | undefined> {
   return new DataLoader(async (learningpathIds) => {
     return fetchLearningpaths(learningpathIds, context);
   });

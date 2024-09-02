@@ -150,7 +150,7 @@ export const resolvers = {
         const url = context?.url ?? child.url;
         return { ...child, path, url };
       });
-      return nodes.map((node) => nodeToTaxonomyEntity(node, context.language));
+      return nodes.map((node) => nodeToTaxonomyEntity(node, context));
     },
   },
 };

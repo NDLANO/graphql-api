@@ -35,8 +35,8 @@ import {
   getLearningpathIdFromUrn,
 } from "../utils/articleHelpers";
 
-const pickContextValues = (node: Node, language: string, rootId?: string, parentId?: string) => {
-  const visibleContexts = node.contexts.filter((c) => c.isVisible && !c.rootId.startsWith("urn:programme"));
+const pickContextValues = (node: Node, context: ContextWithLoaders, rootId?: string, parentId?: string) => {
+  const visibleContexts = node.contexts.filter((c) => c.isVisible);
   // A resource can have several context in one subject. rootId and parentId helps picking the right one.
   const rootContexts = rootId ? visibleContexts.filter((c) => c.rootId === rootId) : visibleContexts;
   const parentContexts = parentId ? rootContexts.filter((c) => c.parentIds.includes(parentId)) : rootContexts;
@@ -46,7 +46,7 @@ const pickContextValues = (node: Node, language: string, rootId?: string, parent
   const rank = selectedCtx?.rank;
   const contextId = selectedCtx?.contextId;
   const relevanceId = selectedCtx?.relevanceId;
-  const entity = nodeToTaxonomyEntity({ ...node, contexts: visibleContexts }, language);
+  const entity = nodeToTaxonomyEntity({ ...node, contexts: visibleContexts }, context);
   return { ...entity, contextId, path, rank, relevanceId };
 };
 
@@ -58,7 +58,7 @@ export const Query = {
   ): Promise<GQLNode | undefined> {
     if (id) {
       const node = await context.loaders.nodeLoader.load({ id, rootId, parentId });
-      return pickContextValues(node, context.language, rootId, parentId);
+      return nodeToTaxonomyEntity(node, context);
     }
     if (contextId) {
       const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: true }, context);
@@ -66,7 +66,7 @@ export const Query = {
         throw new Error(`No node found with contextId: ${contextId}`);
       }
       const node = nodes[0];
-      return node ? nodeToTaxonomyEntity(node, context.language, contextId) : undefined;
+      return node ? nodeToTaxonomyEntity(node, context, contextId) : undefined;
     }
     throw new Error("Missing id or contextId");
   },
@@ -77,9 +77,10 @@ export const Query = {
   ): Promise<GQLNode[]> {
     const params = {
       ids: ids,
-      includeContexts: true,
       key: metadataFilterKey,
       value: metadataFilterValue,
+      isVisible: filterVisible,
+      includeContexts: true,
       filterProgrammes: true,
       language: context.language,
     };
@@ -89,9 +90,8 @@ export const Query = {
     } else if (nodeType) {
       nodes = await queryNodes({ nodeType: nodeType, ...params }, context);
     }
-    const filtered = filterVisible ? nodes.filter((node) => node.contexts.find((context) => context.isVisible)) : nodes;
-    return filtered.map((node) => {
-      return nodeToTaxonomyEntity(node, context.language);
+    return nodes.map((node) => {
+      return nodeToTaxonomyEntity(node, context);
     });
   },
   async nodeByArticleId(
@@ -106,17 +106,17 @@ export const Query = {
       node = await fetchNode({ id: nodeId }, context);
     }
     if (!node) return null;
-    return pickContextValues(node, context.language);
+    return pickContextValues(node, context);
   },
 };
 
 export const resolvers = {
   Node: {
-    async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2 | null> {
+    async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
       if (node.contentUri?.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
       }
-      return null;
+      return undefined;
     },
     async availability(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders) {
       if (!node.contentUri) return undefined;
@@ -144,7 +144,7 @@ export const resolvers = {
         { id: node.id, recursive: args.recursive, nodeType: args.nodeType },
         context,
       );
-      const entities = children.map((node) => nodeToTaxonomyEntity(node, context.language));
+      const entities = children.map((node) => nodeToTaxonomyEntity(node, context));
       return filterMissingArticles(entities, context);
     },
     async subjectpage(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<ISubjectPageData | null> {
@@ -172,7 +172,7 @@ export const resolvers = {
         const theVisibleOthers = nodes.filter(
           (node) => node.id !== id && node.contexts.find((context) => context.isVisible),
         );
-        return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context.language));
+        return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context));
       }
       return;
     },

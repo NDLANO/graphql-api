@@ -155,19 +155,23 @@ export function licenseFixer(lic: string, licVer: string) {
   return `${lic.replace(" ", "-")}-${licVer}`;
 }
 
-export const nodeToTaxonomyEntity = (node: Node, language: string, contextId?: string): GQLTaxonomyEntity => {
+export const nodeToTaxonomyEntity = (
+  node: Node,
+  context: ContextWithLoaders,
+  contextId?: string,
+): GQLTaxonomyEntity => {
   const filtered = contextId ? node.contexts.filter((ctx) => ctx.contextId === contextId) : node.contexts;
-  const contexts: GQLTaxonomyContext[] = filtered.map((ctx) => toGQLTaxonomyContext(ctx, node.name, language));
-  const context = node.context ? toGQLTaxonomyContext(node.context, node.name, language) : undefined;
+  const contexts: GQLTaxonomyContext[] = filtered.map((ctx) => toGQLTaxonomyContext(ctx, node.name, context));
+  const mainContext = node.context ? toGQLTaxonomyContext(node.context, node.name, context) : undefined;
   const url = node.url || node.path; // Ensure url is always set.
-  return { ...node, url, context, contexts };
+  return { ...node, url, context: mainContext, contexts };
 };
 
-const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, language: string): GQLTaxonomyContext => {
-  const breadcrumbs = ctx.breadcrumbs[language] || ctx.breadcrumbs[defaultLanguage] || [];
-  const relevance = ctx.relevance[language] || ctx.relevance[defaultLanguage] || "";
+const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: ContextWithLoaders): GQLTaxonomyContext => {
+  const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || [];
+  const relevance = ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || "";
   const url = ctx.url || ctx.path;
-  const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, language));
+  const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, context));
   return {
     ...ctx,
     url,
@@ -178,9 +182,9 @@ const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, language: stri
   };
 };
 
-const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, language: string): GQLTaxonomyCrumb => {
+const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, context: ContextWithLoaders): GQLTaxonomyCrumb => {
   return {
     ...crumb,
-    name: crumb.name[language] || crumb.name[defaultLanguage] || "",
+    name: crumb.name[context.language] || crumb.name[defaultLanguage] || "",
   };
 };

@@ -1392,17 +1392,9 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
 
 
 export type GQLNodeChildrenArgs = {
-  nodeType?: InputMaybe<GQLNodeType>;
+  nodeType?: InputMaybe<Scalars['String']>;
   recursive?: InputMaybe<Scalars['Boolean']>;
 };
-
-export enum GQLNodeType {
-  Node = 'NODE',
-  Programme = 'PROGRAMME',
-  Resource = 'RESOURCE',
-  Subject = 'SUBJECT',
-  Topic = 'TOPIC'
-}
 
 export type GQLOwner = {
   __typename?: 'Owner';
@@ -1821,7 +1813,7 @@ export type GQLQueryNodesArgs = {
   ids?: InputMaybe<Array<Scalars['String']>>;
   metadataFilterKey?: InputMaybe<Scalars['String']>;
   metadataFilterValue?: InputMaybe<Scalars['String']>;
-  nodeType?: InputMaybe<GQLNodeType>;
+  nodeType?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2574,7 +2566,6 @@ export type GQLResolversTypes = {
   NewFolder: ResolverTypeWrapper<GQLNewFolder>;
   NewFolderResource: ResolverTypeWrapper<GQLNewFolderResource>;
   Node: ResolverTypeWrapper<GQLNode>;
-  NodeType: GQLNodeType;
   Owner: ResolverTypeWrapper<GQLOwner>;
   PaginatedArenaNewPostNotificationV2: ResolverTypeWrapper<GQLPaginatedArenaNewPostNotificationV2>;
   PaginatedArenaUsers: ResolverTypeWrapper<GQLPaginatedArenaUsers>;

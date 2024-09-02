@@ -47,12 +47,12 @@ const fetchResourceMeta = async (
   type: "article" | "learningpath",
   ids: string[],
   context: ContextWithLoaders,
-): Promise<Array<GQLMeta | null>> => {
+): Promise<Array<GQLMeta | undefined>> => {
   if (type === "learningpath") {
     return await fetchLearningpaths(ids, context);
   } else {
     const articles = await fetchArticles(ids, context);
-    return articles.filter((a): a is IArticleV2 => a !== null).map(articleToMeta);
+    return articles.filter((article): article is IArticleV2 => !!article).map(articleToMeta);
   }
 };
 

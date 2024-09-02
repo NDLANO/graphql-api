@@ -116,7 +116,7 @@ export async function fetchArticlesPage(
   ).then((res) => res.json());
 }
 
-export async function fetchArticles(articleIds: string[], context: Context): Promise<(IArticleV2 | null)[]> {
+export async function fetchArticles(articleIds: string[], context: Context): Promise<(IArticleV2 | undefined)[]> {
   const pageSize = 100;
   const ids = articleIds.filter((id) => id && id !== "undefined");
   const numberOfPages = Math.ceil(ids.length / pageSize);
@@ -132,12 +132,7 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
 
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
-  return articleIds.map<IArticleV2 | null>((id) => {
-    const article = articles.find((article) => {
-      return article.id.toString() === id.toString();
-    });
-    return article ? article : null;
-  });
+  return articleIds.map((id) => articles.find((article) => article.id.toString() === id.toString()));
 }
 
 export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2> {

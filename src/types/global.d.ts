@@ -43,7 +43,7 @@ declare global {
   }
 
   interface Loaders {
-    articlesLoader: DataLoader<string, IArticleV2 | null>;
+    articlesLoader: DataLoader<string, IArticleV2 | undefined>;
     learningpathsLoader: DataLoader<string, any>;
     subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
     subjectsLoader: DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }>;

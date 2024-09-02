@@ -126,7 +126,7 @@ export async function searchNodes(params: { contentUris: string[] }, context: Co
 export async function fetchChildren(
   params: {
     id: string;
-    nodeType?: NodeType;
+    nodeType?: string;
     recursive?: boolean;
   },
   context: Context,
@@ -199,7 +199,7 @@ type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyo
   { [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>> }[Keys];
 
 type NodeQueryParams = NodeQueryParamsBase &
-  RequireAtLeastOne<{ contextId?: string; contentURI?: string; nodeType?: NodeType }>;
+  RequireAtLeastOne<{ contextId?: string; contentURI?: string; nodeType?: string }>;
 
 export const queryNodes = async (params: NodeQueryParams, context: Context): Promise<Node[]> => {
   const res = await fetch(`/${context.taxonomyUrl}/v1/nodes?${qs.stringify(params)}`, context);

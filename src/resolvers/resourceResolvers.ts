@@ -34,7 +34,7 @@ export const Query = {
     if (!resource) return null;
 
     const visibleCtx = resource.contexts.filter((c) => c.isVisible);
-    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language);
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context);
     return {
       ...entity,
       contextId: visibleCtx?.[0]?.contextId,
@@ -58,7 +58,7 @@ export const Query = {
     const rank = topicCtx?.[0]?.rank;
     const contextId = topicCtx?.[0]?.contextId;
     const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
-    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context.language, contextId);
+    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context, contextId);
     return { ...entity, contextId, path, rank, relevanceId, parents: [] };
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {

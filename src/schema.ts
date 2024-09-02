@@ -305,14 +305,6 @@ export const typeDefs = gql`
     meta: Meta
   }
 
-  enum NodeType {
-    NODE
-    PROGRAMME
-    RESOURCE
-    SUBJECT
-    TOPIC
-  }
-
   type Node implements TaxonomyEntity & WithArticle & TaxBase {
     id: String!
     name: String!
@@ -333,7 +325,7 @@ export const typeDefs = gql`
     connectionId: String
     rank: Int
     parentId: String
-    children(recursive: Boolean, nodeType: NodeType): [Node!]
+    children(recursive: Boolean, nodeType: String): [Node!]
     alternateNodes: [Node!]
     meta: Meta
     article: Article
@@ -1471,7 +1463,7 @@ export const typeDefs = gql`
   type Query {
     node(id: String, rootId: String, parentId: String, contextId: String): Node
     nodes(
-      nodeType: NodeType
+      nodeType: String
       contentUri: String
       metadataFilterKey: String
       metadataFilterValue: String
