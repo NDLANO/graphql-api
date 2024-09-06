@@ -323,6 +323,31 @@ const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, contex
     : { disclaimerLink: { text: article.title.title, href: `${host}/article/${article.id}` } };
 };
 
+const endsWithPunctuationRegex = /[.!?]$/;
+export const parseCaption = (caption: string): string => {
+  const htmlCaption = parseMarkdown({ markdown: caption, inline: true });
+
+  const parsedCaption = load(
+    htmlCaption,
+    {
+      xmlMode: false,
+      decodeEntities: false,
+    },
+    false,
+  );
+
+  const lastTextNode = parsedCaption.root().contents().last();
+
+  const lastText = lastTextNode.text();
+  if (endsWithPunctuationRegex.test(parsedCaption.text().trimEnd())) return htmlCaption;
+  const newText = `${lastText}.`;
+
+  if (lastTextNode?.[0]?.type === "text") lastTextNode.replaceWith(newText);
+  else lastTextNode.text(newText);
+
+  return parsedCaption.html();
+};
+
 export const transformEmbed = async (
   embed: CheerioEmbed,
   context: Context,
@@ -346,10 +371,7 @@ export const transformEmbed = async (
     if (embedData.resource === "image") {
       meta = await imageMeta({ embedData, context, index, opts });
       if (embedData.caption) {
-        embedData.caption = parseMarkdown({
-          markdown: embedData.caption,
-          inline: true,
-        });
+        embedData.caption = parseCaption(embedData.caption);
       }
       embedData.pageUrl = `/${embedData.resource}/${embedData.resourceId}`;
     } else if (embedData.resource === "audio") {
@@ -378,11 +400,8 @@ export const transformEmbed = async (
     } else if (embedData.resource === "brightcove") {
       meta = await brightcoveMeta({ embedData, context, index, opts });
       embedData.pageUrl = `/video/${embedData.videoid}`;
-      if (embedData.caption?.length) {
-        embedData.caption = parseMarkdown({
-          markdown: embedData.caption,
-          inline: true,
-        });
+      if (embedData.caption) {
+        embedData.caption = parseCaption(embedData.caption);
       }
     } else if (embedData.resource === "content-link") {
       meta = await contentLinkMeta({ embedData, context, index, opts });
