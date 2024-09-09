@@ -71,7 +71,7 @@ const fetchImageWrapper = async (id: string, context: Context): Promise<IImageMe
     ...image,
     caption: {
       ...image.caption,
-      caption: parseMarkdown({ markdown: image.caption.caption, inline: true }),
+      caption: parseCaption(image.caption.caption),
     },
   };
 };
@@ -82,7 +82,7 @@ const imageMeta: Fetch<ImageMetaData> = async ({ embedData, context }) => {
     ...res,
     caption: {
       ...res.caption,
-      caption: parseMarkdown({ markdown: res.caption.caption, inline: true }),
+      caption: parseCaption(res.caption.caption),
     },
   };
 };
