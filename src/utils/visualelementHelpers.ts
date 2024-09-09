@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import cheerio from "cheerio";
+import { load } from "cheerio";
 import { fetch, resolveJson } from "./apiHelpers";
 import { fetchH5pLicenseInformation, fetchH5pInfo } from "../api/h5pApi";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
@@ -38,7 +38,7 @@ export async function parseVisualElement(
   visualElementEmbed: string,
   context: Context,
 ): Promise<GQLVisualElement | null> {
-  const parsedElement = cheerio.load(visualElementEmbed);
+  const parsedElement = load(visualElementEmbed);
   const data: any = parsedElement("ndlaembed").data();
 
   switch (data?.resource) {

@@ -50,7 +50,7 @@ export const resolvers = {
       const image = await fetchImageV3(imageId, context);
       return {
         ...learningpath.coverphoto,
-        url: image.image.imageUrl,
+        url: image.image?.imageUrl,
       };
     },
   },
