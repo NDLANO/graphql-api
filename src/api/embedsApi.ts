@@ -340,7 +340,7 @@ export const parseCaption = (caption: string): string => {
 
   const lastText = lastTextNode.text();
   if (endsWithPunctuationRegex.test(parsedCaption.text().trimEnd())) return htmlCaption;
-  const newText = `${lastText}.`;
+  const newText = `${lastText.trimEnd()}.`;
 
   if (lastTextNode?.[0]?.type === "text") lastTextNode.replaceWith(newText);
   else lastTextNode.text(newText);

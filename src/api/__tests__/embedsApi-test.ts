@@ -27,6 +27,14 @@ test("that punctuation is added to captions when missing with html in the middle
   expect(result).toBe("Dette er en sterk <strong>apekatt</strong> din luring.");
 });
 
+test("that punctuation is added to captions when space at the end", async () => {
+  const result = parseCaption("Dette er en sterk <strong>apekatt</strong> din luring ");
+  expect(result).toBe("Dette er en sterk <strong>apekatt</strong> din luring.");
+
+  const result2 = parseCaption("Dette er en sterk <strong>apekatt </strong> ");
+  expect(result2).toBe("Dette er en sterk <strong>apekatt.</strong>");
+});
+
 test("that punctuation is not added to captions when missing", async () => {
   const result1 = parseCaption("Dette er en sterk <strong>apekatt.</strong>");
   expect(result1).toBe("Dette er en sterk <strong>apekatt.</strong>");
