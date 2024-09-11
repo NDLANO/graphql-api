@@ -1192,6 +1192,7 @@ export const typeDefs = gql`
     slug: String!
     topicCount: Int!
     postCount: Int!
+    voteCount: Int
     disabled: Boolean!
     topics: [ArenaTopic!]
     breadcrumbs: [CategoryBreadcrumb!]!
@@ -1236,6 +1237,7 @@ export const typeDefs = gql`
     title: String!
     slug: String!
     postCount: Int!
+    voteCount: Int!
     locked: Boolean!
     pinned: Boolean!
     timestamp: String!
@@ -1256,6 +1258,7 @@ export const typeDefs = gql`
     description: String!
     postCount: Int!
     topicCount: Int!
+    voteCount: Int
     isFollowing: Boolean!
     visible: Boolean!
     parentCategoryId: Int
@@ -1268,6 +1271,7 @@ export const typeDefs = gql`
     description: String!
     postCount: Int!
     topicCount: Int!
+    voteCount: Int
     isFollowing: Boolean!
     visible: Boolean!
     categoryCount: Int
@@ -1282,6 +1286,7 @@ export const typeDefs = gql`
     description: String!
     postCount: Int!
     topicCount: Int!
+    voteCount: Int
     topics: [ArenaTopicV2!]
     categoryCount: Int
     subcategories: [TopiclessArenaCategoryV2!]
@@ -1295,6 +1300,7 @@ export const typeDefs = gql`
     id: Int!
     title: String!
     postCount: Int!
+    voteCount: Int!
     created: String!
     updated: String!
     categoryId: Int!
