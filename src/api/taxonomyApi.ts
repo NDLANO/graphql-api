@@ -102,6 +102,7 @@ export async function fetchNode(
   const { id, rootId, parentId } = params;
   const query = qs.stringify({
     language: context.language,
+    isVisible: true,
     inludeContexts: true,
     filterProgrammes: true,
     rootId,
@@ -116,6 +117,7 @@ export async function searchNodes(params: { contentUris: string[] }, context: Co
   const query = qs.stringify({
     language: context.language,
     contentUris: contentUris.join(","),
+    isVisible: true,
     includeContexts: true,
     filterProgrammes: true,
   });
@@ -135,6 +137,7 @@ export async function fetchChildren(
   const query = qs.stringify({
     nodeType,
     recursive,
+    isVisible: true,
     includeContexts: true,
     filterProgrammes: true,
     language: context.language,
@@ -152,6 +155,7 @@ export async function fetchNodeResources(params: FetchNodeResourcesParams, conte
   const query = qs.stringify({
     language: context.language,
     relevance: relevance,
+    isVisible: true,
     includeContexts: true,
     filterProgrammes: true,
   });

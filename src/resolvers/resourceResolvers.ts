@@ -48,17 +48,14 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLResource> {
     const resource = await fetchNode({ id }, context);
-    const visibleCtx = resource.contexts
-      .filter((c) => c.isVisible)
-      .filter((c) => !c.rootId.startsWith("urn:programme"));
-    const subjectCtx = subjectId ? visibleCtx.filter((c) => c.rootId === subjectId) : visibleCtx;
+    const subjectCtx = subjectId ? resource.contexts.filter((c) => c.rootId === subjectId) : resource.contexts;
     const topicCtx = topicId ? subjectCtx.filter((c) => c.parentIds.includes(topicId)) : subjectCtx;
 
     const path = topicCtx?.[0]?.path || resource.path;
     const rank = topicCtx?.[0]?.rank;
     const contextId = topicCtx?.[0]?.contextId;
     const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
-    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context, contextId);
+    const entity = nodeToTaxonomyEntity(resource, context, contextId);
     return { ...entity, contextId, path, rank, relevanceId, parents: [] };
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {

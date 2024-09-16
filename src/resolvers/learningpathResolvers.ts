@@ -93,7 +93,7 @@ export const resolvers = {
 
       if (lastResourceMatch !== undefined) {
         const resource = await fetchNode({ id: `urn:${lastResourceMatch}` }, context);
-        return nodeToTaxonomyEntity(resource, context.language);
+        return nodeToTaxonomyEntity(resource, context);
       }
       return null;
     },

@@ -36,9 +36,8 @@ import {
 } from "../utils/articleHelpers";
 
 const pickContextValues = (node: Node, context: ContextWithLoaders, rootId?: string, parentId?: string) => {
-  const visibleContexts = node.contexts.filter((c) => c.isVisible);
   // A resource can have several context in one subject. rootId and parentId helps picking the right one.
-  const rootContexts = rootId ? visibleContexts.filter((c) => c.rootId === rootId) : visibleContexts;
+  const rootContexts = rootId ? node.contexts.filter((c) => c.rootId === rootId) : node.contexts;
   const parentContexts = parentId ? rootContexts.filter((c) => c.parentIds.includes(parentId)) : rootContexts;
 
   const selectedCtx = parentContexts?.[0];
@@ -46,7 +45,7 @@ const pickContextValues = (node: Node, context: ContextWithLoaders, rootId?: str
   const rank = selectedCtx?.rank;
   const contextId = selectedCtx?.contextId;
   const relevanceId = selectedCtx?.relevanceId;
-  const entity = nodeToTaxonomyEntity({ ...node, contexts: visibleContexts }, context);
+  const entity = nodeToTaxonomyEntity(node, context);
   return { ...entity, contextId, path, rank, relevanceId };
 };
 

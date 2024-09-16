@@ -145,6 +145,7 @@ export const resolvers = {
     async subjects(category: GQLCategory, __: any, context: ContextWithLoaders): Promise<GQLSubject[]> {
       const children = await fetchChildren({ id: category.id, nodeType: "SUBJECT" }, context);
       const nodes = children.map((child) => {
+        // Pick the context that is the subjects own root contex.
         const context = child.contexts.find((c) => c.rootId === child.id) || child.contexts[0];
         const path = context?.path ?? child.path;
         const url = context?.url ?? child.url;
