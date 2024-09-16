@@ -6,7 +6,7 @@
  *
  */
 
-import cheerio from "cheerio";
+import { load } from "cheerio";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { IConceptSummary } from "@ndla/types-backend/concept-api";
 import {
@@ -90,7 +90,7 @@ export const resolvers = {
     async oembed(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<string | undefined> {
       const oembed = await fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}/article/${article.id}`, context);
       if (oembed.html === undefined) return undefined;
-      const parsed = cheerio.load(oembed.html);
+      const parsed = load(oembed.html);
       return parsed("iframe").attr("src");
     },
     async metaImage(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLMetaImage | undefined> {
@@ -99,7 +99,7 @@ export const resolvers = {
       const image = await fetchImageV3(imageId, context);
       return {
         ...article.metaImage,
-        url: image.image.imageUrl,
+        url: image.image?.imageUrl,
       };
     },
     introduction(article: IArticleV2): string {

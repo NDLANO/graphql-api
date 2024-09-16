@@ -7,6 +7,7 @@
  */
 
 import { AsyncLocalStorage } from "node:async_hooks";
+import { GraphQLFormattedError } from "graphql/error/GraphQLError";
 import { createLogger, transports, format, Logger } from "winston";
 import "source-map-support/register";
 
@@ -46,5 +47,35 @@ export function getLogger(): Logger {
 
   return storedLogger;
 }
+
+export type LogLevel = "error" | "warn" | "info";
+const getLogLevelFromStatusCode = (statusCode: number): LogLevel => {
+  if ([401, 403, 404, 410].includes(statusCode)) return "info";
+  if (statusCode < 500) return "warn";
+  return "error";
+};
+
+const getLoglevelFromError = (err: GraphQLFormattedError): LogLevel => {
+  if (err.extensions && "status" in err.extensions && typeof err.extensions.status === "number") {
+    return getLogLevelFromStatusCode(err.extensions.status);
+  }
+  return "error";
+};
+
+export const logError = (err: GraphQLFormattedError) => {
+  const logLevel = getLoglevelFromError(err);
+
+  switch (logLevel) {
+    case "info":
+      getLogger().info(err);
+      break;
+    case "warn":
+      getLogger().warn(err);
+      break;
+    case "error":
+      getLogger().error(err);
+      break;
+  }
+};
 
 export default getLogger;

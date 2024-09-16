@@ -31,7 +31,7 @@ import {
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
 import correlationIdMiddleware from "./utils/correlationIdMiddleware";
-import getLogger from "./utils/logger";
+import { logError } from "./utils/logger";
 import loggerMiddleware from "./utils/loggerMiddleware";
 
 const GRAPHQL_PORT = port;
@@ -131,6 +131,7 @@ async function getContext({ req, res }: { req: Request; res: Response }): Promis
 app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({ status: 200, text: "Health check ok" });
 });
+
 async function startApolloServer() {
   const server = new ApolloServer({
     typeDefs,
@@ -138,8 +139,8 @@ async function startApolloServer() {
     introspection: true,
     allowBatchedHttpRequests: true,
     includeStacktraceInErrorResponses: true,
-    formatError(err: any) {
-      getLogger().error(err);
+    formatError(err) {
+      logError(err);
       // Remove stack traces from client response
       const extensions = err?.extensions ? { ...err?.extensions, stacktrace: undefined } : err?.extensions;
       return {
