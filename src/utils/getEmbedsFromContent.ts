@@ -23,7 +23,7 @@ export const getEmbedsFromContent = (html: CheerioAPI): CheerioEmbed[] => {
       // Seeing as article-converter expects to only receive strings for embed data, we need to convert all numbers to strings (again).
       data: Object.entries(html(embed).data()).reduce((acc, [key, value]) => {
         //@ts-ignore
-        acc[key] = typeof value === "number" ? `${value}` : value;
+        acc[key] = typeof value === "number" || typeof value === "boolean" ? `${value}` : value;
         return acc;
       }, {}) as EmbedData,
     }));
