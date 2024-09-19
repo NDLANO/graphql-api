@@ -89,6 +89,7 @@ export async function fetchNodeByContentUri(contentUri: string, context: Context
     language: context.language,
     includeContexts: true,
     filterProgrammes: true,
+    isVisible: true,
   });
   const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
   const resolved: Node[] = await resolveJson(response);

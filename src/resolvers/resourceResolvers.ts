@@ -33,13 +33,12 @@ export const Query = {
         : null;
     if (!resource) return null;
 
-    const visibleCtx = resource.contexts.filter((c) => c.isVisible);
-    const entity = nodeToTaxonomyEntity({ ...resource, contexts: visibleCtx }, context);
+    const entity = nodeToTaxonomyEntity(resource, context);
     return {
       ...entity,
-      contextId: visibleCtx?.[0]?.contextId,
-      rank: visibleCtx?.[0]?.rank,
-      relevanceId: visibleCtx?.[0]?.relevanceId || "urn:relevance:core",
+      contextId: resource.context?.contextId,
+      rank: resource.context?.rank,
+      relevanceId: resource.context?.relevanceId || "urn:relevance:core",
     };
   },
   async resource(
@@ -47,14 +46,12 @@ export const Query = {
     { id, subjectId, topicId }: GQLQueryResourceArgs,
     context: ContextWithLoaders,
   ): Promise<GQLResource> {
-    const resource = await fetchNode({ id }, context);
-    const subjectCtx = subjectId ? resource.contexts.filter((c) => c.rootId === subjectId) : resource.contexts;
-    const topicCtx = topicId ? subjectCtx.filter((c) => c.parentIds.includes(topicId)) : subjectCtx;
+    const resource = await fetchNode({ id, rootId: subjectId, parentId: topicId }, context);
 
-    const path = topicCtx?.[0]?.path || resource.path;
-    const rank = topicCtx?.[0]?.rank;
-    const contextId = topicCtx?.[0]?.contextId;
-    const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
+    const path = resource?.context?.path || resource.path;
+    const rank = resource?.context?.rank;
+    const contextId = resource?.context?.contextId || resource.contextId;
+    const relevanceId = resource?.context?.relevanceId || "urn:relevance:core";
     const entity = nodeToTaxonomyEntity(resource, context, contextId);
     return { ...entity, contextId, path, rank, relevanceId, parents: [] };
   },
