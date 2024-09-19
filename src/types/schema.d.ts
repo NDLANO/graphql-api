@@ -910,6 +910,12 @@ export type GQLLearningpathStep = {
   type: Scalars['String'];
 };
 
+
+export type GQLLearningpathStepResourceArgs = {
+  parentId?: InputMaybe<Scalars['String']>;
+  rootId?: InputMaybe<Scalars['String']>;
+};
+
 export type GQLLearningpathStepEmbedUrl = {
   __typename?: 'LearningpathStepEmbedUrl';
   embedType: Scalars['String'];
@@ -3661,7 +3667,7 @@ export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends G
   license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   oembed?: Resolver<Maybe<GQLResolversTypes['LearningpathStepOembed']>, ParentType, ContextType>;
-  resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType>;
+  resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLLearningpathStepResourceArgs>>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   seqNo?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   showTitle?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
