@@ -155,13 +155,8 @@ export function licenseFixer(lic: string, licVer: string) {
   return `${lic.replace(" ", "-")}-${licVer}`;
 }
 
-export const nodeToTaxonomyEntity = (
-  node: Node,
-  context: ContextWithLoaders,
-  contextId?: string,
-): GQLTaxonomyEntity => {
-  const filtered = contextId ? node.contexts.filter((ctx) => ctx.contextId === contextId) : node.contexts;
-  const contexts: GQLTaxonomyContext[] = filtered.map((ctx) => toGQLTaxonomyContext(ctx, node.name, context));
+export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): GQLTaxonomyEntity => {
+  const contexts: GQLTaxonomyContext[] = node.contexts.map((ctx) => toGQLTaxonomyContext(ctx, node.name, context));
   const mainContext = node.context ? toGQLTaxonomyContext(node.context, node.name, context) : undefined;
   const url = node.url || node.path; // Ensure url is always set.
   return { ...node, url, context: mainContext, contexts };

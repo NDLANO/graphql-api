@@ -35,20 +35,6 @@ import {
   getLearningpathIdFromUrn,
 } from "../utils/articleHelpers";
 
-const pickContextValues = (node: Node, context: ContextWithLoaders, rootId?: string, parentId?: string) => {
-  // A resource can have several context in one subject. rootId and parentId helps picking the right one.
-  const rootContexts = rootId ? node.contexts.filter((c) => c.rootId === rootId) : node.contexts;
-  const parentContexts = parentId ? rootContexts.filter((c) => c.parentIds.includes(parentId)) : rootContexts;
-
-  const selectedCtx = parentContexts?.[0];
-  const path = selectedCtx?.path || node.path;
-  const rank = selectedCtx?.rank;
-  const contextId = selectedCtx?.contextId;
-  const relevanceId = selectedCtx?.relevanceId;
-  const entity = nodeToTaxonomyEntity(node, context);
-  return { ...entity, contextId, path, rank, relevanceId };
-};
-
 export const Query = {
   async node(
     _: any,
@@ -65,7 +51,7 @@ export const Query = {
         throw new Error(`No node found with contextId: ${contextId}`);
       }
       const node = nodes[0];
-      return node ? nodeToTaxonomyEntity(node, context, contextId) : undefined;
+      return node ? nodeToTaxonomyEntity(node, context) : undefined;
     }
     throw new Error("Missing id or contextId");
   },
@@ -105,7 +91,7 @@ export const Query = {
       node = await fetchNode({ id: nodeId }, context);
     }
     if (!node) return null;
-    return pickContextValues(node, context);
+    return nodeToTaxonomyEntity(node, context);
   },
 };
 
@@ -164,14 +150,12 @@ export const resolvers = {
           {
             contentURI: contentUri,
             includeContexts: true,
+            isVisible: true,
             language: context.language,
           },
           context,
         );
-        const theVisibleOthers = nodes.filter(
-          (node) => node.id !== id && node.contexts.find((context) => context.isVisible),
-        );
-        return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context));
+        return nodes.map((node) => nodeToTaxonomyEntity(node, context));
       }
       return;
     },

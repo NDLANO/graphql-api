@@ -33,13 +33,7 @@ export const Query = {
         : null;
     if (!resource) return null;
 
-    const entity = nodeToTaxonomyEntity(resource, context);
-    return {
-      ...entity,
-      contextId: resource.context?.contextId,
-      rank: resource.context?.rank,
-      relevanceId: resource.context?.relevanceId || "urn:relevance:core",
-    };
+    return nodeToTaxonomyEntity(resource, context);
   },
   async resource(
     _: any,
@@ -48,12 +42,7 @@ export const Query = {
   ): Promise<GQLResource> {
     const resource = await fetchNode({ id, rootId: subjectId, parentId: topicId }, context);
 
-    const path = resource?.context?.path || resource.path;
-    const rank = resource?.context?.rank;
-    const contextId = resource?.context?.contextId || resource.contextId;
-    const relevanceId = resource?.context?.relevanceId || "urn:relevance:core";
-    const entity = nodeToTaxonomyEntity(resource, context, contextId);
-    return { ...entity, contextId, path, rank, relevanceId, parents: [] };
+    return nodeToTaxonomyEntity(resource, context);
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
     return fetchResourceTypes<GQLResourceType>(context);

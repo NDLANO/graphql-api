@@ -113,14 +113,12 @@ export const resolvers = {
           {
             contentURI: contentUri,
             includeContexts: true,
+            isVisible: true,
             language: context.language,
           },
           context,
         );
-        const theVisibleOthers = nodes
-          .filter((node) => node.id !== id)
-          .filter((node) => node.contexts.find((context) => context.isVisible));
-        return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context));
+        return nodes.map((node) => nodeToTaxonomyEntity(node, context));
       }
       return;
     },
