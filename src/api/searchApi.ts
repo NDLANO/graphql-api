@@ -64,14 +64,17 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
   return json.map((result: IGroupSearchResult) => ({
     ...result,
     resources: result.results.map((contentTypeResult) => {
-      const path =
-        contentTypeResult.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary))
-          ?.path ?? contentTypeResult.paths?.[0];
+      const searchCtx = contentTypeResult.contexts.find((c) =>
+        subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary,
+      );
+      const path = searchCtx?.path ?? contentTypeResult.paths?.[0];
+      const url = searchCtx?.url ?? contentTypeResult.paths?.[0];
 
       const isLearningpath = contentTypeResult.learningResourceType === "learningpath";
       return {
         ...contentTypeResult,
         path: path || (isLearningpath ? `/learningpaths/${contentTypeResult.id}` : `/article/${contentTypeResult.id}`),
+        url: url,
         name: contentTypeResult.title.title,
         ingress: contentTypeResult.metaDescription.metaDescription,
         contexts: contentTypeResult.contexts,
