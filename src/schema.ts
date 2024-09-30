@@ -277,7 +277,7 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
@@ -298,7 +298,7 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
@@ -320,14 +320,14 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     path: String!
     parentIds: [String!]!
-    url: String
+    url: String!
   }
 
   type Topic implements TaxonomyEntity & WithArticle {
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
@@ -700,7 +700,7 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
@@ -719,7 +719,7 @@ export const typeDefs = gql`
   type ProgrammePage {
     id: String!
     title: Title!
-    url: String!
+    url: String
     contentUri: String
     metaDescription: String
     desktopImage: MetaImage
@@ -730,7 +730,7 @@ export const typeDefs = gql`
   type Grade {
     id: String!
     title: Title!
-    url: String!
+    url: String
     categories: [Category!]
   }
 
@@ -790,7 +790,7 @@ export const typeDefs = gql`
     isActive: Boolean!
     isVisible: Boolean!
     contextId: String!
-    url: String
+    url: String!
   }
 
   type SearchContextResourceTypes {
