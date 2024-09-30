@@ -131,13 +131,5 @@ export async function searchWithoutPagination(
 const transformResult = (result: IMultiSearchSummary) => ({
   ...result,
   title: result.title.title,
-  contexts: fixContext(result.contexts),
   metaDescription: result.metaDescription?.metaDescription,
-  metaImage: result.metaImage,
 });
-
-const fixContext = (contexts: IApiTaxonomyContext[] | undefined) =>
-  contexts?.map((context) => ({
-    ...context,
-    path: context.path.includes("/resource/") ? `${context.path}/` : context.path,
-  }));
