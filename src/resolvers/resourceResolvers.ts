@@ -45,6 +45,7 @@ export const Query = {
         const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs["nb"] || [];
         return {
           path: ctx.path,
+          url: ctx.url,
           parentIds: ctx.parentIds,
           breadcrumbs,
         };
