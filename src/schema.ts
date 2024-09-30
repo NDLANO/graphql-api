@@ -1376,6 +1376,7 @@ export const typeDefs = gql`
     topicTitle: String!
     post: ArenaPostV2!
     notificationTime: String!
+    type: String
   }
 
   type PaginatedArenaNewPostNotificationV2 {
@@ -1400,7 +1401,7 @@ export const typeDefs = gql`
     notificationId: String!
     topicTitle: String!
     type: String!
-    subject: String!
+    subject: String
   }
 
   type UserFolder {

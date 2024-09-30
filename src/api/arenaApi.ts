@@ -291,7 +291,7 @@ export const fetchArenaNotifications = async (context: Context): Promise<GQLAren
     { headers: csrfHeaders },
   );
   const resolved = await resolveJson(response);
-  return resolved.notifications.filter(({ type }: any) => type === "new-reply").map(toNotification);
+  return resolved.notifications.map(toNotification);
 };
 
 export const newTopic = async (

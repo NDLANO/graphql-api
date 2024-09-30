@@ -95,6 +95,7 @@ export type GQLArenaNewPostNotificationV2 = {
   post: GQLArenaPostV2;
   topicId: Scalars['Int'];
   topicTitle: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
 };
 
 export type GQLArenaNotification = {
@@ -109,7 +110,7 @@ export type GQLArenaNotification = {
   postId: Scalars['Int'];
   read: Scalars['Boolean'];
   readClass: Scalars['String'];
-  subject: Scalars['String'];
+  subject?: Maybe<Scalars['String']>;
   topicId: Scalars['Int'];
   topicTitle: Scalars['String'];
   type: Scalars['String'];
@@ -2792,6 +2793,7 @@ export type GQLArenaNewPostNotificationV2Resolvers<ContextType = any, ParentType
   post?: Resolver<GQLResolversTypes['ArenaPostV2'], ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   topicTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2806,7 +2808,7 @@ export type GQLArenaNotificationResolvers<ContextType = any, ParentType extends 
   postId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   read?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   readClass?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  subject?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  subject?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   topicId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   topicTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
