@@ -158,8 +158,7 @@ export function licenseFixer(lic: string, licVer: string) {
 export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): GQLTaxonomyEntity => {
   const contexts: GQLTaxonomyContext[] = node.contexts.map((ctx) => toGQLTaxonomyContext(ctx, node.name, context));
   const mainContext = node.context ? toGQLTaxonomyContext(node.context, node.name, context) : undefined;
-  const url = node.url || node.path; // Ensure url is always set.
-  return { ...node, url, context: mainContext, contexts };
+  return { ...node, context: mainContext, contexts };
 };
 
 const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: ContextWithLoaders): GQLTaxonomyContext => {

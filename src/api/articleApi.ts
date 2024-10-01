@@ -30,7 +30,6 @@ export const fetchTransformedContent = async (
 ): Promise<GQLTransformedArticleContent> => {
   const params = _params.transformArgs ?? {};
   const subject = params.subjectId;
-  const previewH5p = params.previewH5p;
   const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
     article.content.content,
     context,
@@ -38,9 +37,10 @@ export const fetchTransformedContent = async (
     {
       subject,
       draftConcept: params.draftConcept,
-      previewH5p,
+      previewH5p: params.previewH5p,
       absoluteUrl: params.absoluteUrl,
       showVisualElement: params.showVisualElement === "true",
+      prettyUrl: params.prettyUrl,
     },
   );
 

@@ -1238,6 +1238,7 @@ export type GQLMutationTransformArticleContentArgs = {
   absoluteUrl?: InputMaybe<Scalars['Boolean']>;
   content: Scalars['String'];
   draftConcept?: InputMaybe<Scalars['Boolean']>;
+  prettyUrl?: InputMaybe<Scalars['Boolean']>;
   previewH5p?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   visualElement?: InputMaybe<Scalars['String']>;
@@ -1391,14 +1392,14 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   name: Scalars['String'];
   nodeType: Scalars['String'];
   parentId?: Maybe<Scalars['String']>;
-  path: Scalars['String'];
+  path?: Maybe<Scalars['String']>;
   paths: Array<Scalars['String']>;
   rank?: Maybe<Scalars['Int']>;
   relevanceId?: Maybe<Scalars['String']>;
   resourceTypes?: Maybe<Array<GQLResourceType>>;
   subjectpage?: Maybe<GQLSubjectPage>;
   supportedLanguages: Array<Scalars['String']>;
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 
@@ -1985,7 +1986,7 @@ export type GQLResource = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   relevanceId?: Maybe<Scalars['String']>;
   resourceTypes?: Maybe<Array<GQLResourceType>>;
   supportedLanguages: Array<Scalars['String']>;
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLResourceEmbed = {
@@ -2129,7 +2130,7 @@ export type GQLSubject = GQLTaxBase & GQLTaxonomyEntity & {
   subjectpage?: Maybe<GQLSubjectPage>;
   supportedLanguages: Array<Scalars['String']>;
   topics?: Maybe<Array<GQLTopic>>;
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 
@@ -2200,8 +2201,8 @@ export type GQLTags = {
 export type GQLTaxBase = {
   id: Scalars['String'];
   name: Scalars['String'];
-  path: Scalars['String'];
-  url: Scalars['String'];
+  path?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLTaxonomyContext = {
@@ -2242,7 +2243,7 @@ export type GQLTaxonomyEntity = {
   relevanceId?: Maybe<Scalars['String']>;
   resourceTypes?: Maybe<Array<GQLResourceType>>;
   supportedLanguages: Array<Scalars['String']>;
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLTaxonomyMetadata = {
@@ -2290,7 +2291,7 @@ export type GQLTopic = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   subtopics?: Maybe<Array<GQLTopic>>;
   supplementaryResources?: Maybe<Array<GQLResource>>;
   supportedLanguages: Array<Scalars['String']>;
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 
@@ -2338,6 +2339,7 @@ export type GQLTransformedArticleContentInput = {
   draftConcept?: InputMaybe<Scalars['Boolean']>;
   isOembed?: InputMaybe<Scalars['String']>;
   path?: InputMaybe<Scalars['String']>;
+  prettyUrl?: InputMaybe<Scalars['Boolean']>;
   previewH5p?: InputMaybe<Scalars['Boolean']>;
   showVisualElement?: InputMaybe<Scalars['String']>;
   subjectId?: InputMaybe<Scalars['String']>;
@@ -3875,14 +3877,14 @@ export type GQLNodeResolvers<ContextType = any, ParentType extends GQLResolversP
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   nodeType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  path?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   paths?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   rank?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4109,7 +4111,7 @@ export type GQLResourceResolvers<ContextType = any, ParentType extends GQLResolv
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4252,7 +4254,7 @@ export type GQLSubjectResolvers<ContextType = any, ParentType extends GQLResolve
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   topics?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType, Partial<GQLSubjectTopicsArgs>>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4320,8 +4322,8 @@ export type GQLTaxBaseResolvers<ContextType = any, ParentType extends GQLResolve
   __resolveType: TypeResolveFn<'Node' | 'Resource' | 'Subject' | 'TaxonomyCrumb' | 'Topic', ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  path?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyContext'] = GQLResolversParentTypes['TaxonomyContext']> = {
@@ -4363,7 +4365,7 @@ export type GQLTaxonomyEntityResolvers<ContextType = any, ParentType extends GQL
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type GQLTaxonomyMetadataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyMetadata'] = GQLResolversParentTypes['TaxonomyMetadata']> = {
@@ -4410,7 +4412,7 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
   subtopics?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType>;
   supplementaryResources?: Resolver<Maybe<Array<GQLResolversTypes['Resource']>>, ParentType, ContextType, Partial<GQLTopicSupplementaryResourcesArgs>>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

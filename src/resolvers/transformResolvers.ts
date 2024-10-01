@@ -37,7 +37,15 @@ export const Query: Pick<GQLQueryResolvers, "resourceEmbed" | "resourceEmbeds"> 
 export const Mutations: Pick<GQLMutationResolvers, "transformArticleContent"> = {
   async transformArticleContent(
     _: any,
-    { content, visualElement, absoluteUrl, previewH5p, subject, draftConcept }: GQLMutationTransformArticleContentArgs,
+    {
+      content,
+      visualElement,
+      absoluteUrl,
+      previewH5p,
+      subject,
+      draftConcept,
+      prettyUrl,
+    }: GQLMutationTransformArticleContentArgs,
     context: ContextWithLoaders,
   ): Promise<string> {
     const data = await transformArticle(content, context, visualElement ?? "", {
@@ -45,6 +53,7 @@ export const Mutations: Pick<GQLMutationResolvers, "transformArticleContent"> = 
       absoluteUrl,
       previewH5p,
       draftConcept,
+      prettyUrl,
       showVisualElement: !!visualElement,
     });
     return data.content ?? "";

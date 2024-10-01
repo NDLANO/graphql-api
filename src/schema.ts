@@ -275,8 +275,8 @@ export const typeDefs = gql`
   interface TaxBase {
     id: String!
     name: String!
-    path: String!
-    url: String!
+    path: String
+    url: String
   }
 
   interface TaxonomyEntity {
@@ -293,7 +293,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
-    url: String!
+    url: String
     language: String
     nodeType: String!
   }
@@ -309,7 +309,7 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
@@ -319,7 +319,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
-    url: String!
+    url: String
     language: String
     nodeType: String!
     connectionId: String
@@ -349,7 +349,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
-    url: String!
+    url: String
     language: String
     nodeType: String!
     rank: Int
@@ -394,7 +394,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
-    url: String!
+    url: String
     language: String
     nodeType: String!
     meta: Meta
@@ -606,6 +606,7 @@ export const typeDefs = gql`
     previewH5p: Boolean
     draftConcept: Boolean
     absoluteUrl: Boolean
+    prettyUrl: Boolean
   }
 
   type TransformedArticleContent {
@@ -765,7 +766,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
-    url: String!
+    url: String
     language: String
     nodeType: String!
     subjectpage: SubjectPage
@@ -1621,6 +1622,7 @@ export const typeDefs = gql`
       previewH5p: Boolean
       draftConcept: Boolean
       absoluteUrl: Boolean
+      prettyUrl: Boolean
     ): String!
     markNotificationAsRead(topicIds: [Int!]!): [Int!]!
     newArenaTopic(categoryId: Int!, title: String!, content: String!): ArenaTopic!
