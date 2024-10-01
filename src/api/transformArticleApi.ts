@@ -20,6 +20,7 @@ interface TransformArticleOptions {
   showVisualElement?: boolean;
   draftConcept?: boolean;
   absoluteUrl?: boolean;
+  prettyUrl?: boolean;
 }
 
 export const toVisualElement = (meta: Extract<EmbedMetaData, { status: "success" }>): GQLVisualElement | undefined => {
@@ -98,7 +99,7 @@ export const transformArticle = async (
   content: string,
   context: Context,
   visualElement: string | undefined,
-  { subject, previewH5p, showVisualElement, draftConcept, absoluteUrl }: TransformArticleOptions,
+  { subject, previewH5p, showVisualElement, draftConcept, absoluteUrl, prettyUrl }: TransformArticleOptions,
 ) => {
   const html = load(content, {
     xmlMode: false,
@@ -143,6 +144,7 @@ export const transformArticle = async (
         previewH5p,
         draftConcept,
         absoluteUrl,
+        prettyUrl,
       });
     }),
   );

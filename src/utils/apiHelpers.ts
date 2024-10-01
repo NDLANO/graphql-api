@@ -8,11 +8,11 @@
 
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
-import { Node } from "@ndla/types-taxonomy";
+import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
-import { apiUrl } from "../config";
-import { GQLTaxonomyEntity, GQLTaxonomyContext } from "../types/schema";
+import { apiUrl, defaultLanguage } from "../config";
+import { GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb } from "../types/schema";
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
@@ -155,15 +155,30 @@ export function licenseFixer(lic: string, licVer: string) {
   return `${lic.replace(" ", "-")}-${licVer}`;
 }
 
-export const nodeToTaxonomyEntity = (node: Node, context: Context): GQLTaxonomyEntity => {
-  const contexts: GQLTaxonomyContext[] = node.contexts.map((c) => {
-    const breadcrumbs = c.breadcrumbs[context.language] ?? [];
-    return {
-      breadcrumbs,
-      parentIds: c.parentIds,
-      path: c.path,
-      url: c.url,
-    };
-  });
-  return { ...node, contexts };
+export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): GQLTaxonomyEntity => {
+  const contexts: GQLTaxonomyContext[] = node.contexts.map((ctx) => toGQLTaxonomyContext(ctx, node.name, context));
+  const mainContext = node.context ? toGQLTaxonomyContext(node.context, node.name, context) : undefined;
+  return { ...node, context: mainContext, contexts };
+};
+
+const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: ContextWithLoaders): GQLTaxonomyContext => {
+  const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || [];
+  const relevance = ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || "";
+  const url = ctx.url || ctx.path;
+  const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, context));
+  return {
+    ...ctx,
+    url,
+    name,
+    breadcrumbs,
+    relevance,
+    parents,
+  };
+};
+
+const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, context: ContextWithLoaders): GQLTaxonomyCrumb => {
+  return {
+    ...crumb,
+    name: crumb.name[context.language] || crumb.name[defaultLanguage] || "",
+  };
 };

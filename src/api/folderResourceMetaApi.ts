@@ -7,6 +7,7 @@
  */
 
 import groupBy from "lodash/groupBy";
+import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { IAudioMetaInformation } from "@ndla/types-backend/audio-api";
 import { IImageMetaInformationV2 } from "@ndla/types-backend/image-api";
 import { Node } from "@ndla/types-taxonomy";
@@ -18,14 +19,17 @@ import { fetchImage } from "./imageApi";
 import { fetchLearningpaths } from "./learningpathApi";
 import { searchNodes } from "./taxonomyApi";
 import { fetchVideo } from "./videoApi";
+import { defaultLanguage } from "../config";
 import {
   GQLFolderResourceMeta,
   GQLFolderResourceMetaSearchInput,
   GQLFolderResourceResourceType,
+  GQLMeta,
   GQLQueryFolderResourceMetaArgs,
   GQLQueryFolderResourceMetaSearchArgs,
   GQLSearchResult,
 } from "../types/schema";
+import { articleToMeta } from "../utils/articleHelpers";
 
 type MetaType = "article" | "learningpath" | "multidisciplinary" | "concept" | "image" | "audio" | "video" | "folder";
 
@@ -33,10 +37,23 @@ const findResourceTypes = (result: Node | undefined, context: ContextWithLoaders
   const ctx = result?.contexts?.[0];
   const resourceTypes = ctx?.resourceTypes.map((t) => ({
     id: t.id,
-    name: t.name[context.language] || t.name["nb"] || "",
+    name: t.name[context.language] || t.name[defaultLanguage] || "",
     language: context.language,
   }));
   return resourceTypes ?? [];
+};
+
+const fetchResourceMeta = async (
+  type: "article" | "learningpath",
+  ids: string[],
+  context: ContextWithLoaders,
+): Promise<Array<GQLMeta | undefined>> => {
+  if (type === "learningpath") {
+    return await fetchLearningpaths(ids, context);
+  } else {
+    const articles = await fetchArticles(ids, context);
+    return articles.filter((article): article is IArticleV2 => !!article).map(articleToMeta);
+  }
 };
 
 const fetchAndTransformResourceMeta = async (
@@ -47,11 +64,10 @@ const fetchAndTransformResourceMeta = async (
   if (!resources?.length) return [];
   try {
     const nodeType = type === "learningpath" ? type : "article";
-    const fetchFn = nodeType === "learningpath" ? fetchLearningpaths : fetchArticles;
     const ids = resources.map((r) => r.id);
     const [nodes, elements] = await Promise.all([
       searchNodes({ contentUris: ids.map((r) => `urn:${nodeType}:${r}`) }, context),
-      fetchFn(ids, context),
+      fetchResourceMeta(nodeType, ids, context),
     ]);
     return ids.map((id) => {
       const node = nodes.results.find((n) => n.contentUri === `urn:${nodeType}:${id}`);

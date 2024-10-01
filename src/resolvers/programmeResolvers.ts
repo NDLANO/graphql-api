@@ -145,9 +145,11 @@ export const resolvers = {
     async subjects(category: GQLCategory, __: any, context: ContextWithLoaders): Promise<GQLSubject[]> {
       const children = await fetchChildren({ id: category.id, nodeType: "SUBJECT" }, context);
       const nodes = children.map((child) => {
-        const context = child.contexts.find((c) => c.path.startsWith("/subject")) || child.contexts[0];
+        // Pick the context that is the subjects own root context to avoid getting paths starting with /programme:
+        const context = child.contexts.find((c) => c.rootId === child.id) || child.contexts[0];
         const path = context?.path ?? child.path;
-        return { ...child, path };
+        const url = context?.url ?? child.url;
+        return { ...child, path, url };
       });
       return nodes.map((node) => nodeToTaxonomyEntity(node, context));
     },

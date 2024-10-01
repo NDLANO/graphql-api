@@ -12,6 +12,7 @@ import {
   GQLLearningpathCoverphoto,
   GQLLearningpathStep,
   GQLLearningpathStepOembed,
+  GQLLearningpathStepResourceArgs,
   GQLQueryLearningpathArgs,
   GQLResource,
 } from "../types/schema";
@@ -77,7 +78,7 @@ export const resolvers = {
     },
     async resource(
       learningpathStep: GQLLearningpathStep,
-      _: any,
+      { rootId, parentId }: GQLLearningpathStepResourceArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource | null> {
       if (
@@ -92,7 +93,7 @@ export const resolvers = {
       const lastResourceMatch = learningpathStep.embedUrl.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
 
       if (lastResourceMatch !== undefined) {
-        const resource = await fetchNode({ id: `urn:${lastResourceMatch}` }, context);
+        const resource = await fetchNode({ id: `urn:${lastResourceMatch}`, rootId, parentId }, context);
         return nodeToTaxonomyEntity(resource, context);
       }
       return null;

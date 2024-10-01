@@ -7,8 +7,7 @@
  */
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { fetchNode, fetchResourceTypes, fetchArticle, fetchLearningpath } from "../api";
-import { fetchNodeByContentUri } from "../api/taxonomyApi";
+import { fetchArticle, fetchLearningpath, fetchNode, fetchNodeByContentUri, fetchResourceTypes } from "../api";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -17,9 +16,9 @@ import {
   GQLResource,
   GQLResourceType,
   GQLResourceTypeDefinition,
-  GQLTaxonomyContext,
 } from "../types/schema";
-import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
+import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { articleToMeta, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async articleResource(
@@ -34,49 +33,16 @@ export const Query = {
         : null;
     if (!resource) return null;
 
-    const visibleCtx = resource.contexts.filter((c) => c.isVisible);
-
-    return {
-      ...resource,
-      path: resource.path,
-      rank: visibleCtx?.[0]?.rank,
-      relevanceId: visibleCtx?.[0]?.relevanceId || "urn:relevance:core",
-      contexts: visibleCtx.map((ctx) => {
-        const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs["nb"] || [];
-        return {
-          path: ctx.path,
-          url: ctx.url,
-          parentIds: ctx.parentIds,
-          breadcrumbs,
-        };
-      }),
-    };
+    return nodeToTaxonomyEntity(resource, context);
   },
   async resource(
     _: any,
     { id, subjectId, topicId }: GQLQueryResourceArgs,
     context: ContextWithLoaders,
   ): Promise<GQLResource> {
-    const resource = await fetchNode({ id }, context);
-    const visibleCtx = resource.contexts
-      .filter((c) => c.isVisible)
-      .filter((c) => !c.rootId.startsWith("urn:programme"));
-    const subjectCtx = subjectId ? visibleCtx.filter((c) => c.rootId === subjectId) : visibleCtx;
-    const topicCtx = topicId ? subjectCtx.filter((c) => c.parentIds.includes(topicId)) : subjectCtx;
+    const resource = await fetchNode({ id, rootId: subjectId, parentId: topicId }, context);
 
-    const path = topicCtx?.[0]?.path || resource.path;
-    const rank = topicCtx?.[0]?.rank;
-    const relevanceId = topicCtx?.[0]?.relevanceId || "urn:relevance:core";
-    const contexts: GQLTaxonomyContext[] = visibleCtx.map((c) => {
-      const breadcrumbs = c.breadcrumbs[context.language] || c.breadcrumbs["nb"] || [];
-      return {
-        breadcrumbs,
-        parentIds: c.parentIds,
-        path: c.path,
-        url: c.url,
-      };
-    });
-    return { ...resource, contexts, path, rank, relevanceId, parents: [] };
+    return nodeToTaxonomyEntity(resource, context);
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
     return fetchResourceTypes<GQLResourceType>(context);
@@ -102,7 +68,8 @@ export const resolvers = {
       if (resource.contentUri?.startsWith("urn:learningpath")) {
         return context.loaders.learningpathsLoader.load(resource.contentUri.replace("urn:learningpath:", ""));
       } else if (resource.contentUri?.startsWith("urn:article")) {
-        return context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));
+        const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));
+        return article ? articleToMeta(article) : null;
       }
       throw Object.assign(new Error("Missing contentUri for resource with id: " + resource.id), { status: 404 });
     },

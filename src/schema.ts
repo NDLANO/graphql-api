@@ -185,7 +185,6 @@ export const typeDefs = gql`
   type ResourceType {
     id: String!
     name: String!
-    resources(topicId: String!): [Resource!]
   }
 
   type MetaImage {
@@ -232,7 +231,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     type: String!
     article: Article
-    resource: Resource
+    resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
     oembed: LearningpathStepOembed
   }
@@ -273,6 +272,13 @@ export const typeDefs = gql`
     customFields: StringRecord!
   }
 
+  interface TaxBase {
+    id: String!
+    name: String!
+    path: String
+    url: String
+  }
+
   interface TaxonomyEntity {
     id: String!
     name: String!
@@ -281,20 +287,55 @@ export const typeDefs = gql`
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
+    contextId: String
     contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
     language: String
+    nodeType: String!
   }
 
   interface WithArticle {
-    meta: Meta
+    contentUri: String
+    article: Article
     availability: String
+    meta: Meta
   }
 
-  type Resource implements TaxonomyEntity & WithArticle {
+  type Node implements TaxonomyEntity & WithArticle & TaxBase {
+    id: String!
+    name: String!
+    contentUri: String
+    path: String
+    paths: [String!]!
+    metadata: TaxonomyMetadata!
+    relevanceId: String
+    contextId: String
+    contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
+    breadcrumbs: [String!]!
+    supportedLanguages: [String!]!
+    resourceTypes: [ResourceType!]
+    url: String
+    language: String
+    nodeType: String!
+    connectionId: String
+    rank: Int
+    parentId: String
+    children(recursive: Boolean, nodeType: String): [Node!]
+    alternateNodes: [Node!]
+    meta: Meta
+    article: Article
+    availability: String
+    learningpath: Learningpath
+    subjectpage: SubjectPage
+    grepCodes: [String!]
+  }
+
+  type Resource implements TaxonomyEntity & WithArticle & TaxBase {
     id: String!
     name: String!
     contentUri: String
@@ -303,11 +344,14 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
     language: String
+    nodeType: String!
     rank: Int
     parents: [Topic!]
     meta: Meta
@@ -316,14 +360,27 @@ export const typeDefs = gql`
     availability: String
   }
 
-  type TaxonomyContext {
-    breadcrumbs: [String!]!
+  type TaxonomyCrumb implements TaxBase {
+    id: String!
+    contextId: String!
+    name: String!
     path: String!
-    parentIds: [String!]!
     url: String!
   }
 
-  type Topic implements TaxonomyEntity & WithArticle {
+  type TaxonomyContext {
+    contextId: String!
+    breadcrumbs: [String!]!
+    name: String!
+    path: String!
+    url: String!
+    parentIds: [String!]!
+    rootId: String!
+    relevance: String!
+    parents: [TaxonomyCrumb!]
+  }
+
+  type Topic implements TaxonomyEntity & WithArticle & TaxBase {
     id: String!
     name: String!
     contentUri: String
@@ -332,19 +389,20 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
     language: String
+    nodeType: String!
     meta: Meta
     article: Article
     availability: String
     isPrimary: Boolean
-    parent: String
     parentId: String
     subtopics: [Topic!]
-    pathTopics: [[Topic!]!]
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
@@ -548,6 +606,7 @@ export const typeDefs = gql`
     previewH5p: Boolean
     draftConcept: Boolean
     absoluteUrl: Boolean
+    prettyUrl: Boolean
   }
 
   type TransformedArticleContent {
@@ -645,6 +704,7 @@ export const typeDefs = gql`
   type SubjectLink {
     name: String
     path: String
+    url: String
   }
 
   type FilmPageAbout {
@@ -679,6 +739,7 @@ export const typeDefs = gql`
     metaDescription: String!
     resourceTypes: [ResourceType!]!
     path: String!
+    url: String!
   }
 
   type MovieMeta {
@@ -687,16 +748,11 @@ export const typeDefs = gql`
     metaDescription: String
   }
 
-  type MoviePath {
-    path: String
-    paths: [String!]
-  }
-
   type MovieResourceTypes {
     resourceTypes: [ResourceType!]
   }
 
-  type Subject implements TaxonomyEntity {
+  type Subject implements TaxonomyEntity & TaxBase {
     id: String!
     name: String!
     contentUri: String
@@ -705,11 +761,14 @@ export const typeDefs = gql`
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
     language: String
+    nodeType: String!
     subjectpage: SubjectPage
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
@@ -1409,6 +1468,16 @@ export const typeDefs = gql`
   }
 
   type Query {
+    node(id: String, rootId: String, parentId: String, contextId: String): Node
+    nodes(
+      nodeType: String
+      contentUri: String
+      metadataFilterKey: String
+      metadataFilterValue: String
+      filterVisible: Boolean
+      ids: [String!]
+    ): [Node!]
+    nodeByArticleId(articleId: String, nodeId: String): Node
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
     article(id: String!): Article
@@ -1553,6 +1622,7 @@ export const typeDefs = gql`
       previewH5p: Boolean
       draftConcept: Boolean
       absoluteUrl: Boolean
+      prettyUrl: Boolean
     ): String!
     markNotificationAsRead(topicIds: [Int!]!): [Int!]!
     newArenaTopic(categoryId: Int!, title: String!, content: String!): ArenaTopic!

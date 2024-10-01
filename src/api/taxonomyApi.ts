@@ -89,16 +89,25 @@ export async function fetchNodeByContentUri(contentUri: string, context: Context
     language: context.language,
     includeContexts: true,
     filterProgrammes: true,
+    isVisible: true,
   });
   const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
   const resolved: Node[] = await resolveJson(response);
   return resolved[0];
 }
 
-export async function fetchNode(params: { id: string }, context: Context): Promise<Node> {
-  const { id } = params;
+export async function fetchNode(
+  params: { id: string; rootId?: string; parentId?: string },
+  context: Context,
+): Promise<Node> {
+  const { id, rootId, parentId } = params;
   const query = qs.stringify({
     language: context.language,
+    isVisible: true,
+    inludeContexts: true,
+    filterProgrammes: true,
+    rootId,
+    parentId,
   });
   const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${id}?${query}`, context);
   return await resolveJson(response);
@@ -109,6 +118,7 @@ export async function searchNodes(params: { contentUris: string[] }, context: Co
   const query = qs.stringify({
     language: context.language,
     contentUris: contentUris.join(","),
+    isVisible: true,
     includeContexts: true,
     filterProgrammes: true,
   });
@@ -119,7 +129,7 @@ export async function searchNodes(params: { contentUris: string[] }, context: Co
 export async function fetchChildren(
   params: {
     id: string;
-    nodeType?: NodeType;
+    nodeType?: string;
     recursive?: boolean;
   },
   context: Context,
@@ -128,6 +138,7 @@ export async function fetchChildren(
   const query = qs.stringify({
     nodeType,
     recursive,
+    isVisible: true,
     includeContexts: true,
     filterProgrammes: true,
     language: context.language,
@@ -145,6 +156,7 @@ export async function fetchNodeResources(params: FetchNodeResourcesParams, conte
   const query = qs.stringify({
     language: context.language,
     relevance: relevance,
+    isVisible: true,
     includeContexts: true,
     filterProgrammes: true,
   });
@@ -180,7 +192,11 @@ interface NodeQueryParamsBase {
   language?: string;
   isRoot?: boolean;
   isContext?: boolean;
+  key?: string;
   value?: string;
+  ids?: string[];
+  rootId?: string;
+  parentId?: string;
   isVisible?: boolean;
   includeContexts?: boolean;
   filterProgrammes?: boolean;
@@ -190,7 +206,7 @@ type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyo
   { [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>> }[Keys];
 
 type NodeQueryParams = NodeQueryParamsBase &
-  RequireAtLeastOne<{ contextId?: string; contentURI?: string; key?: string; nodeType?: NodeType }>;
+  RequireAtLeastOne<{ contextId?: string; contentURI?: string; nodeType?: string }>;
 
 export const queryNodes = async (params: NodeQueryParams, context: Context): Promise<Node[]> => {
   const res = await fetch(`/${context.taxonomyUrl}/v1/nodes?${qs.stringify(params)}`, context);

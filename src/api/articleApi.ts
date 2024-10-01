@@ -30,7 +30,6 @@ export const fetchTransformedContent = async (
 ): Promise<GQLTransformedArticleContent> => {
   const params = _params.transformArgs ?? {};
   const subject = params.subjectId;
-  const previewH5p = params.previewH5p;
   const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
     article.content.content,
     context,
@@ -38,9 +37,10 @@ export const fetchTransformedContent = async (
     {
       subject,
       draftConcept: params.draftConcept,
-      previewH5p,
+      previewH5p: params.previewH5p,
       absoluteUrl: params.absoluteUrl,
       showVisualElement: params.showVisualElement === "true",
+      prettyUrl: params.prettyUrl,
     },
   );
 
@@ -116,7 +116,7 @@ export async function fetchArticlesPage(
   ).then((res) => res.json());
 }
 
-export async function fetchArticles(articleIds: string[], context: Context): Promise<(GQLMeta | null)[]> {
+export async function fetchArticles(articleIds: string[], context: Context): Promise<(IArticleV2 | undefined)[]> {
   const pageSize = 100;
   const ids = articleIds.filter((id) => id && id !== "undefined");
   const numberOfPages = Math.ceil(ids.length / pageSize);
@@ -132,26 +132,7 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
 
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
-  return articleIds.map<GQLMeta | null>((id) => {
-    const article = articles.find((item: { id: number }) => {
-      return item.id.toString() === id.toString();
-    });
-    if (article) {
-      return {
-        id: article.id,
-        title: article.title.title,
-        htmlTitle: article.title.htmlTitle,
-        introduction: article.introduction?.introduction,
-        htmlIntroduction: article.introduction?.htmlIntroduction,
-        metaDescription: article.metaDescription?.metaDescription,
-        lastUpdated: article.updated,
-        metaImage: article.metaImage,
-        availability: article.availability,
-        language: article.content.language,
-      };
-    }
-    return null;
-  });
+  return articleIds.map((id) => articles.find((article) => article.id.toString() === id.toString()));
 }
 
 export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2> {

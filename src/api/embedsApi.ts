@@ -154,6 +154,7 @@ export interface TransformOptions {
   draftConcept?: boolean;
   previewH5p?: boolean;
   absoluteUrl?: boolean;
+  prettyUrl?: boolean;
   subject?: string;
   shortCircuitOnError?: boolean;
   standalone?: boolean;
@@ -192,6 +193,7 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
 
   const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
   let path = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
+  let url = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
   const nodes = await queryNodes(
     { contentURI, language: context.language, includeContexts: true, filterProgrammes: true },
     context,
@@ -199,22 +201,44 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   const node = nodes.find((n) => !!n.path);
   const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
   const nodePath = ctx?.path ?? node?.path;
+  const nodeUrl = ctx?.url ?? node?.url;
 
   if (nodePath) {
     path = `${host}/${context.language}${nodePath}`;
+  }
+  if (nodeUrl) {
+    url = `${host}/${context.language}${nodeUrl}`;
+  }
+
+  if (opts.prettyUrl) {
+    return { path: url };
   }
 
   return { path };
 };
 
-const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, context }) => {
+const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, context, opts }) => {
   const articleId = embedData.articleId;
   if (typeof articleId === "string" || typeof articleId === "number") {
     const [article, resources] = await Promise.all([
       fetchSimpleArticle(`urn:article:${articleId}`, context),
-      queryNodes({ contentURI: `urn:article:${articleId}`, language: context.language }, context),
+      queryNodes(
+        {
+          contentURI: `urn:article:${articleId}`,
+          language: context.language,
+          filterProgrammes: true,
+          isVisible: true,
+          rootId: opts.subject,
+        },
+        context,
+      ),
     ]);
-    const resource = resources?.[0];
+    let resource = resources?.[0];
+    if (resource && opts.prettyUrl) {
+      const path = resource?.url;
+      // TODO: for now, trick RelatedContentEmbed to use provided path
+      resource = { ...resource, path, paths: [] };
+    }
     return { article, resource };
   } else {
     return undefined;

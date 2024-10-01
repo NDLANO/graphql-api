@@ -52,7 +52,7 @@ export const resolvers = {
       const articles = await context.loaders.articlesLoader.loadMany(
         theme.movies.map((movie) => getArticleIdFromUrn(movie)),
       );
-      const nonNullArticles = articles.filter((article): article is GQLMeta => !!article);
+      const nonNullArticles = articles.filter((article): article is IArticleV2 => !!article);
       return theme.movies.filter((movie) =>
         nonNullArticles.find((article) => `${article.id}` === getArticleIdFromUrn(movie)),
       );
@@ -78,6 +78,10 @@ export const resolvers = {
     async path(id: string, _: any, context: ContextWithLoaders): Promise<string> {
       const contexts: TaxonomyContext[] = await queryContexts(id, context);
       return contexts?.find((ctx) => ctx.rootId === "urn:subject:20")?.path || "";
+    },
+    async url(id: string, _: any, context: ContextWithLoaders): Promise<string> {
+      const contexts: TaxonomyContext[] = await queryContexts(id, context);
+      return contexts?.find((ctx) => ctx.rootId === "urn:subject:20")?.url || "";
     },
     async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
       const nodes = await queryNodes({ contentURI: id, language: context.language }, context);

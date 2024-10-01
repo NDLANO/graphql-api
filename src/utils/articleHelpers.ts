@@ -6,6 +6,7 @@
  *
  */
 
+import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { NodeChild } from "@ndla/types-taxonomy";
 import { GQLMeta, GQLTaxonomyEntity } from "../types/schema";
 
@@ -52,7 +53,7 @@ export async function filterMissingArticles<T extends GQLTaxonomyEntity | NodeCh
   const articles = await context.loaders.articlesLoader.loadMany(
     articleResources.map((taxonomyEntity) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "")),
   );
-  const nonNullArticles = articles.filter((article): article is GQLMeta => !!article);
+  const nonNullArticles = articles.filter((article): article is IArticleV2 => !!article);
 
   const activeResources = articleResources.filter((taxonomyEntity) =>
     nonNullArticles.find((article) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "") === `${article.id}`),
@@ -63,9 +64,24 @@ export async function filterMissingArticles<T extends GQLTaxonomyEntity | NodeCh
     return {
       ...taxonomyEntity,
       availability: article?.availability,
-      language: article?.language ?? taxonomyEntity.language,
+      language: article?.content.language ?? taxonomyEntity.language,
     };
   });
 
   return [...learningpathResources, ...withAvailabilityAndLanguage];
+}
+
+export function articleToMeta(article: IArticleV2): GQLMeta {
+  return {
+    id: article.id,
+    title: article.title.title,
+    htmlTitle: article.title.htmlTitle,
+    introduction: article.introduction?.introduction,
+    htmlIntroduction: article.introduction?.htmlIntroduction,
+    metaDescription: article.metaDescription?.metaDescription,
+    lastUpdated: article.updated,
+    metaImage: article.metaImage,
+    availability: article.availability,
+    language: article.content.language,
+  };
 }

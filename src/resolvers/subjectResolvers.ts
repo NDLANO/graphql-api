@@ -20,7 +20,7 @@ import { filterMissingArticles } from "../utils/articleHelpers";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
-    return await context.loaders.subjectLoader.load({ id });
+    return await context.loaders.nodeLoader.load({ id });
   },
   async subjects(
     _: any,
@@ -96,21 +96,21 @@ export const resolvers = {
   },
   SubjectPage: {
     async connectedTo(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.subjectLoader.loadMany(
+      return await context.loaders.nodeLoader.loadMany(
         subjectpage.connectedTo.map((id) => {
           return { id };
         }),
       );
     },
     async buildsOn(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.subjectLoader.loadMany(
+      return await context.loaders.nodeLoader.loadMany(
         subjectpage.buildsOn.map((id) => {
           return { id };
         }),
       );
     },
     async leadsTo(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.subjectLoader.loadMany(
+      return await context.loaders.nodeLoader.loadMany(
         subjectpage.leadsTo.map((id) => {
           return { id };
         }),

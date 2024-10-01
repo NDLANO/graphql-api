@@ -7,6 +7,7 @@
  */
 
 import DataLoader from "dataloader";
+import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { IFilmFrontPageData, IFrontPage, ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
@@ -20,10 +21,11 @@ import {
   fetchFilmFrontpage,
   fetchLK20Curriculum,
   fetchSubjectPage,
+  queryNodes,
 } from "./api";
 import { GQLMeta, GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
 
-export function articlesLoader(context: Context): DataLoader<string, GQLMeta | null> {
+export function articlesLoader(context: Context): DataLoader<string, IArticleV2 | undefined> {
   return new DataLoader(
     async (articleIds) => {
       return fetchArticles(articleIds, context);
@@ -32,18 +34,13 @@ export function articlesLoader(context: Context): DataLoader<string, GQLMeta | n
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<string, GQLMeta | null> {
+export function learningpathsLoader(context: Context): DataLoader<string, GQLMeta | undefined> {
   return new DataLoader(async (learningpathIds) => {
     return fetchLearningpaths(learningpathIds, context);
   });
 }
 
-interface LK20Curriculum {
-  code: string;
-  language: string;
-}
-
-export function lk20CurriculumLoader(context: Context): DataLoader<LK20Curriculum, GQLReference | undefined> {
+export function lk20CurriculumLoader(context: Context): DataLoader<CurriculumLoaderParams, GQLReference | undefined> {
   return new DataLoader(async (ids) => {
     const uniqueCurriculumIds = Array.from(new Set(ids));
     const responses = await Promise.all(
@@ -84,15 +81,15 @@ export function subjectpageLoader(context: Context): DataLoader<string, ISubject
   });
 }
 
-export function subjectLoader(context: Context): DataLoader<{ id?: string }, Node> {
+export function nodeLoader(context: Context): DataLoader<NodeLoaderParams, Node> {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
         inputs.map((input) => {
           if (!input.id) {
-            throw Error("Tried to get subject with bad or empty id");
+            throw Error("Tried to get node with bad or empty id");
           }
-          return fetchNode({ id: input.id }, context);
+          return fetchNode({ id: input.id, rootId: input.rootId, parentId: input.parentId }, context);
         }),
       );
     },
@@ -100,12 +97,32 @@ export function subjectLoader(context: Context): DataLoader<{ id?: string }, Nod
   );
 }
 
-export function subjectsLoader(
-  context: Context,
-): DataLoader<
-  { metadataFilter?: { key: string; value?: string }; filterVisible?: boolean; ids?: string[] },
-  { subjects: GQLSubject[] }
-> {
+export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Node[]> {
+  return new DataLoader(
+    async (inputs) => {
+      return Promise.all(
+        inputs.map((input) => {
+          if (!input) {
+            throw Error("Tried to get node with no params");
+          }
+          return queryNodes(
+            {
+              contextId: input.contextId,
+              ids: input.ids,
+              isVisible: input.filterVisible,
+              includeContexts: true,
+              filterProgrammes: true,
+            },
+            context,
+          );
+        }),
+      );
+    },
+    { cacheKeyFn: (key) => JSON.stringify(key) },
+  );
+}
+
+export function subjectsLoader(context: Context): DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }> {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
@@ -122,17 +139,13 @@ export function subjectsLoader(
   );
 }
 
-interface IInput {
-  subjectId: string;
-}
-
-export function subjectTopicsLoader(context: Context): DataLoader<IInput, any> {
+export function subjectTopicsLoader(context: Context): DataLoader<SubjectTopicsLoaderParams, any> {
   return new DataLoader(
     async (ids) => {
       return ids.map(async ({ subjectId }) => fetchSubjectTopics(subjectId, context));
     },
     {
-      cacheKeyFn: (key: IInput) => JSON.stringify(key),
+      cacheKeyFn: (key: SubjectTopicsLoaderParams) => JSON.stringify(key),
     },
   );
 }

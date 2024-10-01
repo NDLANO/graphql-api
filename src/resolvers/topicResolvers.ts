@@ -19,7 +19,7 @@ import {
   GQLTopicSupplementaryResourcesArgs,
 } from "../types/schema";
 import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
-import { filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
+import { articleToMeta, filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async topic(_: any, { id, subjectId }: GQLQueryTopicArgs, context: ContextWithLoaders): Promise<GQLTopic> {
@@ -39,14 +39,14 @@ export const Query = {
     const nodes = await queryNodes(
       {
         contentURI: contentUri,
+        isVisible: filterVisible,
         includeContexts: true,
+        filterProgrammes: true,
         language: context.language,
       },
       context,
     );
-    const filtered = filterVisible ? nodes.filter((node) => node.contexts.find((context) => context.isVisible)) : nodes;
-
-    return filtered.map((node) => {
+    return nodes.map((node) => {
       return nodeToTaxonomyEntity(node, context);
     });
   },
@@ -68,7 +68,8 @@ export const resolvers = {
     },
     async meta(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
       if (!topic.contentUri?.startsWith("urn:article")) return null;
-      return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
+      return article ? articleToMeta(article) : null;
     },
     async coreResources(
       topic: Node,
@@ -105,16 +106,6 @@ export const resolvers = {
       const filtered = await filterMissingArticles(subtopics, context);
       return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
-    async pathTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<Node[][]> {
-      return await Promise.all(
-        topic.contexts.map(async (ctx) => {
-          const parents = await Promise.all(
-            ctx.parentIds.map(async (parentId) => fetchNode({ id: parentId }, context)),
-          );
-          return parents.filter((p) => p.nodeType === "TOPIC");
-        }),
-      );
-    },
     async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
       const { contentUri, id, path } = topic;
       if (!path && contentUri) {
@@ -122,14 +113,12 @@ export const resolvers = {
           {
             contentURI: contentUri,
             includeContexts: true,
+            isVisible: true,
             language: context.language,
           },
           context,
         );
-        const theVisibleOthers = nodes
-          .filter((node) => node.id !== id)
-          .filter((node) => node.contexts.find((context) => context.isVisible));
-        return theVisibleOthers.map((node) => nodeToTaxonomyEntity(node, context));
+        return nodes.map((node) => nodeToTaxonomyEntity(node, context));
       }
       return;
     },
