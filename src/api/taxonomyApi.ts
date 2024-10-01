@@ -195,6 +195,8 @@ interface NodeQueryParamsBase {
   key?: string;
   value?: string;
   ids?: string[];
+  rootId?: string;
+  parentId?: string;
   isVisible?: boolean;
   includeContexts?: boolean;
   filterProgrammes?: boolean;

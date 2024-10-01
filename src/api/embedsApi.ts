@@ -222,12 +222,22 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
   if (typeof articleId === "string" || typeof articleId === "number") {
     const [article, resources] = await Promise.all([
       fetchSimpleArticle(`urn:article:${articleId}`, context),
-      queryNodes({ contentURI: `urn:article:${articleId}`, language: context.language }, context),
+      queryNodes(
+        {
+          contentURI: `urn:article:${articleId}`,
+          language: context.language,
+          filterProgrammes: true,
+          isVisible: true,
+          rootId: opts.subject,
+        },
+        context,
+      ),
     ]);
     let resource = resources?.[0];
-    if (resource) {
-      const path = opts.prettyUrl ? resource?.url : resource?.path;
-      resource = { ...resource, path };
+    if (resource && opts.prettyUrl) {
+      const path = resource?.url;
+      // TODO: for now, trick RelatedContentEmbed to use provided path
+      resource = { ...resource, path, paths: [] };
     }
     return { article, resource };
   } else {
