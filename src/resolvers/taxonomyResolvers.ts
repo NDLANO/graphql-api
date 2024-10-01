@@ -10,6 +10,7 @@ import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node, TaxonomyContext } from "@ndla/types-taxonomy";
 import {
+  fetchArticle,
   fetchChildren,
   fetchLK20CompetenceGoalSet,
   fetchLearningpath,
@@ -99,7 +100,8 @@ export const resolvers = {
   Node: {
     async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
       if (node.contentUri?.startsWith("urn:article")) {
-        return context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
+        const articleId = getArticleIdFromUrn(node.contentUri);
+        return fetchArticle({ articleId }, context);
       }
       return undefined;
     },
