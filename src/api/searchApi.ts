@@ -7,7 +7,7 @@
  */
 
 import queryString from "query-string";
-import { IApiTaxonomyContext, IGroupSearchResult, IMultiSearchSummary } from "@ndla/types-backend/search-api";
+import { IGroupSearchResult, IMultiSearchSummary } from "@ndla/types-backend/search-api";
 import { searchConcepts } from "./conceptApi";
 import {
   GQLGroupSearch,

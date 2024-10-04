@@ -9,7 +9,6 @@
 import compression from "compression";
 import cors from "cors";
 import express, { json, Request, Response } from "express";
-
 import promBundle from "express-prom-bundle";
 import isString from "lodash/isString";
 import { ApolloServer } from "@apollo/server";
