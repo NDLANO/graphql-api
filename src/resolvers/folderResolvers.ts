@@ -27,6 +27,7 @@ import {
   copySharedFolder,
   favoriteSharedFolder,
   unFavoriteSharedFolder,
+  sortSavedSharedFolders,
 } from "../api/folderApi";
 import { fetchFolderResourceMeta, fetchFolderResourcesMetaData } from "../api/folderResourceMetaApi";
 import {
@@ -53,6 +54,7 @@ import {
   GQLMutationCopySharedFolderArgs,
   GQLMutationFavoriteSharedFolderArgs,
   GQLMutationUnFavoriteSharedFolderArgs,
+  GQLMutationSortSavedSharedFoldersArgs,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -130,6 +132,7 @@ export const Mutations: Pick<
   | "deletePersonalData"
   | "sortFolders"
   | "sortResources"
+  | "sortSavedSharedFolders"
   | "updatePersonalData"
   | "updateFolderStatus"
   | "copySharedFolder"
@@ -177,6 +180,9 @@ export const Mutations: Pick<
   },
   async sortResources(_: any, params: GQLMutationSortResourcesArgs, context: ContextWithLoaders) {
     return sortResources(params, context);
+  },
+  async sortSavedSharedFolders(_: any, params: GQLMutationSortSavedSharedFoldersArgs, context: ContextWithLoaders) {
+    return sortSavedSharedFolders(params, context);
   },
   async updateFolderStatus(_: any, params: GQLMutationUpdateFolderStatusArgs, context: ContextWithLoaders) {
     return updateFolderStatus(params, context);

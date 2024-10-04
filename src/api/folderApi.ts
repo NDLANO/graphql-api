@@ -17,6 +17,7 @@ import {
   GQLMutationFavoriteSharedFolderArgs,
   GQLMutationSortFoldersArgs,
   GQLMutationSortResourcesArgs,
+  GQLMutationSortSavedSharedFoldersArgs,
   GQLMutationUnFavoriteSharedFolderArgs,
   GQLMutationUpdateFolderArgs,
   GQLMutationUpdateFolderResourceArgs,
@@ -216,6 +217,18 @@ export async function sortResources(
   });
   await resolveNothingFromStatus(response);
   return { parentId, sortedIds };
+}
+
+export async function sortSavedSharedFolders(
+  { sortedIds }: GQLMutationSortSavedSharedFoldersArgs,
+  context: Context,
+): Promise<GQLSortResult> {
+  const response = await fetch(`/myndla-api/v1/folders/sort-saved/`, context, {
+    method: "PUT",
+    body: JSON.stringify({ sortedIds }),
+  });
+  await resolveNothingFromStatus(response);
+  return { sortedIds };
 }
 
 export async function updateFolderStatus(

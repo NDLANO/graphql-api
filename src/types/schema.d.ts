@@ -1033,6 +1033,7 @@ export type GQLMutation = {
   sortArenaCategories: Array<GQLArenaCategoryV2>;
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
+  sortSavedSharedFolders: GQLSortResult;
   subscribeToTopic: Scalars['Int'];
   transformArticleContent: Scalars['String'];
   unFavoriteSharedFolder: Scalars['String'];
@@ -1225,6 +1226,11 @@ export type GQLMutationSortFoldersArgs = {
 
 export type GQLMutationSortResourcesArgs = {
   parentId: Scalars['String'];
+  sortedIds: Array<Scalars['String']>;
+};
+
+
+export type GQLMutationSortSavedSharedFoldersArgs = {
   sortedIds: Array<Scalars['String']>;
 };
 
@@ -3796,6 +3802,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   sortArenaCategories?: Resolver<Array<GQLResolversTypes['ArenaCategoryV2']>, ParentType, ContextType, RequireFields<GQLMutationSortArenaCategoriesArgs, 'sortedIds'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
+  sortSavedSharedFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortSavedSharedFoldersArgs, 'sortedIds'>>;
   subscribeToTopic?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationSubscribeToTopicArgs, 'topicId'>>;
   transformArticleContent?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationTransformArticleContentArgs, 'content'>>;
   unFavoriteSharedFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationUnFavoriteSharedFolderArgs, 'folderId'>>;

@@ -1613,6 +1613,7 @@ export const typeDefs = gql`
     updatePersonalData(favoriteSubjects: [String], shareName: Boolean): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
+    sortSavedSharedFolders(sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
     copySharedFolder(folderId: String!, destinationFolderId: String): Folder!
     transformArticleContent(
