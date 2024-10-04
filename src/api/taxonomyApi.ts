@@ -8,7 +8,7 @@
 
 import { Response } from "node-fetch";
 import qs from "query-string";
-import { Node, NodeChild, NodeType, TaxonomyContext, Version, SearchResult } from "@ndla/types-taxonomy";
+import { Node, NodeChild, TaxonomyContext, Version, SearchResult } from "@ndla/types-taxonomy";
 import { GQLResourceType, GQLResourceTypeDefinition, GQLSubject, GQLTopic } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 

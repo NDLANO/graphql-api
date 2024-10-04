@@ -16,7 +16,7 @@ import {
 } from "@ndla/types-backend/frontpage-api";
 import { TaxonomyContext } from "@ndla/types-taxonomy";
 import { fetchArticle, fetchFilmFrontpage, fetchMovieMeta, queryContexts, queryNodes } from "../api";
-import { GQLMeta, GQLMetaImage, GQLResourceType } from "../types/schema";
+import { GQLMetaImage, GQLResourceType } from "../types/schema";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 interface Id {

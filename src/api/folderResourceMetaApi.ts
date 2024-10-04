@@ -27,7 +27,6 @@ import {
   GQLMeta,
   GQLQueryFolderResourceMetaArgs,
   GQLQueryFolderResourceMetaSearchArgs,
-  GQLSearchResult,
 } from "../types/schema";
 import { articleToMeta } from "../utils/articleHelpers";
 

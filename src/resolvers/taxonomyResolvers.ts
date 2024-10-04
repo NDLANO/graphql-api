@@ -8,7 +8,7 @@
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
-import { Node, TaxonomyContext } from "@ndla/types-taxonomy";
+import { Node } from "@ndla/types-taxonomy";
 import {
   fetchArticle,
   fetchChildren,
