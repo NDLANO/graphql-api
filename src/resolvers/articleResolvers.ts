@@ -32,7 +32,6 @@ import {
   GQLRelatedContent,
   GQLVisualElementOembed,
 } from "../types/schema";
-import parseMarkdown from "../utils/parseMarkdown";
 
 export const Query = {
   async article(_: any, { id }: GQLQueryArticleArgs, context: ContextWithLoaders): Promise<IArticleV2> {
@@ -103,10 +102,7 @@ export const resolvers = {
       };
     },
     introduction(article: IArticleV2): string {
-      return parseMarkdown({
-        markdown: article.introduction?.htmlIntroduction ?? "",
-        inline: true,
-      });
+      return article.introduction?.introduction ?? "";
     },
     htmlIntroduction(article: IArticleV2): string {
       return article.introduction?.htmlIntroduction ?? "";

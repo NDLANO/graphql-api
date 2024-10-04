@@ -91,11 +91,6 @@ const audioMeta: Fetch<AudioMetaData> = async ({ embedData, context }) => {
   const audio = await fetchAudioV2(context, embedData.resourceId);
   const coverPhotoId = audio.podcastMeta?.coverPhoto?.id;
   let imageMeta: IImageMetaInformationV3 | undefined;
-  if (audio.manuscript) {
-    audio.manuscript.manuscript = parseMarkdown({
-      markdown: audio.manuscript.manuscript,
-    });
-  }
   if (coverPhotoId) {
     imageMeta = await fetchImageWrapper(coverPhotoId, context);
   }
