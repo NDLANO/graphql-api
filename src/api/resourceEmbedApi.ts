@@ -6,6 +6,7 @@
  *
  */
 
+import { load } from "cheerio";
 import {
   AudioEmbedData,
   BrightcoveEmbedData,
@@ -13,20 +14,20 @@ import {
   EmbedData,
   H5pEmbedData,
   ImageEmbedData,
-} from '@ndla/types-embed';
-import { load } from 'cheerio';
-import { getEnvironmentVariabel, h5pHostUrl } from '../config';
+} from "@ndla/types-embed";
+import { transformEmbed } from "./embedsApi";
+import { getEnvironmentVariabel, h5pHostUrl } from "../config";
 import {
   GQLQueryResourceEmbedArgs,
   GQLQueryResourceEmbedsArgs,
   GQLResourceEmbed,
   GQLResourceEmbedInput,
-} from '../types/schema';
-import { getEmbedsFromContent } from '../utils/getEmbedsFromContent';
-import { toArticleMetaData } from '../utils/toArticleMetaData';
-import { transformEmbed } from './embedsApi';
+} from "../types/schema";
+import { getEmbedsFromContent } from "../utils/getEmbedsFromContent";
+import { toArticleMetaData } from "../utils/toArticleMetaData";
 
-const accountId = getEnvironmentVariabel('BRIGHTCOVE_ACCOUNT_ID', '123456789');
+const accountId = getEnvironmentVariabel("BRIGHTCOVE_ACCOUNT_ID", "123456789");
+const playerId = getEnvironmentVariabel("BRIGHTCOVE_PLAYER_ID", "default");
 
 const toEmbed = ({
   type,
@@ -39,40 +40,40 @@ const toEmbed = ({
   | ConceptEmbedData
   | H5pEmbedData
   | null => {
-  if (type === 'video') {
+  if (type === "video") {
     return {
-      resource: 'brightcove',
+      resource: "brightcove",
       videoid: id,
       account: accountId,
-      title: '',
-      caption: '',
-      player: 'default',
+      title: "",
+      caption: "",
+      player: playerId,
     };
-  } else if (type === 'image') {
+  } else if (type === "image") {
     return {
-      resource: 'image',
+      resource: "image",
       resourceId: id,
-      alt: '',
+      alt: "",
     };
-  } else if (type === 'audio') {
+  } else if (type === "audio") {
     return {
-      resource: 'audio',
+      resource: "audio",
       resourceId: id,
-      type: 'audio',
-      url: '',
+      type: "audio",
+      url: "",
     };
-  } else if (type === 'h5p') {
+  } else if (type === "h5p") {
     return {
-      resource: 'h5p',
+      resource: "h5p",
       path: `/resource/${id}`,
       url: `${h5pHostUrl()}/resource/${id}`,
     };
-  } else if (type === 'concept') {
+  } else if (type === "concept") {
     return {
-      resource: 'concept',
+      resource: "concept",
       contentId: id,
-      type: (conceptType ?? 'notion') as 'block' | 'inline' | 'notion',
-      linkText: '',
+      type: (conceptType ?? "notion") as "block" | "inline" | "notion",
+      linkText: "",
     };
   } else {
     return null;
@@ -84,9 +85,9 @@ const attributeRegex = /[A-Z]/g;
 export const toEmbedHtml = (data: EmbedData): string => {
   const entries = Object.entries(data ?? {});
   const dataSet = entries.reduce<string>((acc, [key, value]) => {
-    const newKey = key.replace(attributeRegex, m => `-${m.toLowerCase()}`);
+    const newKey = key.replace(attributeRegex, (m) => `-${m.toLowerCase()}`);
     return acc.concat(`data-${newKey}="${value.toString()}" `);
-  }, '');
+  }, "");
 
   return `<ndlaembed ${dataSet}></ndlaembed>`;
 };
@@ -101,7 +102,7 @@ export const fetchResourceEmbed = async (
 ): Promise<GQLResourceEmbed> => {
   const embed = toEmbed(params);
   if (!embed) {
-    throw new Error('Unsupported embed');
+    throw new Error("Unsupported embed");
   }
 
   const embedHtml = toEmbedHtml(embed);
@@ -112,26 +113,25 @@ export const fetchResourceEmbed = async (
     decodeEntities: false,
   });
   const embeds = getEmbedsFromContent(html)[0];
+  if (!embeds) {
+    throw new Error("No embeds found");
+  }
   const embedPromise = await transformEmbed(embeds, context, 0, 0, {
     shortCircuitOnError: true,
+    standalone: true,
   });
 
   const metadata = toArticleMetaData([embedPromise]);
 
   return {
     meta: metadata,
-    content: html('body').html() ?? '',
+    content: html("body").html() ?? "",
   };
 };
 
-export const fetchResourceEmbeds = async (
-  { resources }: GQLQueryResourceEmbedsArgs,
-  context: ContextWithLoaders,
-) => {
-  const embeds = resources
-    .map(params => toEmbed(params))
-    .filter(embed => !!embed);
-  const content = embeds.map(embed => toEmbedHtml(embed!)).join('');
+export const fetchResourceEmbeds = async ({ resources }: GQLQueryResourceEmbedsArgs, context: ContextWithLoaders) => {
+  const embeds = resources.map((params) => toEmbed(params)).filter((embed) => !!embed);
+  const content = embeds.map((embed) => toEmbedHtml(embed!)).join("");
   const bodyString = toHtml(content);
   const html = load(bodyString, {
     xmlMode: false,
@@ -143,6 +143,7 @@ export const fetchResourceEmbeds = async (
     embedsFromContent.map((embed, index) =>
       transformEmbed(embed, context, index, 0, {
         shortCircuitOnError: true,
+        standalone: true,
       }),
     ),
   );
@@ -151,6 +152,6 @@ export const fetchResourceEmbeds = async (
 
   return {
     meta: metadata,
-    content: html('body').html() ?? '',
+    content: html("body").html() ?? "",
   };
 };

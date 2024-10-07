@@ -6,7 +6,7 @@
  *
  */
 
-import queryString from 'query-string';
+import queryString from "query-string";
 import {
   H5pEmbedData,
   H5pPreviewResponse,
@@ -14,35 +14,29 @@ import {
   H5pOembedData,
   OembedProxyData,
   H5pInfo,
-} from '@ndla/types-embed';
-import { h5pHostUrl } from '../config';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+} from "@ndla/types-embed";
+import { h5pHostUrl } from "../config";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
-const fetchPreviewOembed = async (
-  embed: H5pEmbedData,
-  context: Context,
-): Promise<H5pPreviewResponse> => {
+const fetchPreviewOembed = async (embed: H5pEmbedData, context: Context): Promise<H5pPreviewResponse> => {
   const url = `${h5pHostUrl()}/oembed/preview?${queryString.stringify({
     url: embed.url,
   })}`;
   const res = await fetch(url, context).then(resolveJson);
 
   return {
-    type: 'preview',
+    type: "preview",
     ...res,
   };
 };
 
-const fetchOembed = async (
-  embed: H5pEmbedData,
-  context: Context,
-): Promise<OembedProxyData> => {
+const fetchOembed = async (embed: H5pEmbedData, context: Context): Promise<OembedProxyData> => {
   const params = queryString.stringify({ url: embed.url });
   const url = `/oembed-proxy/v1/oembed?${params}`;
   const res = await fetch(url, context).then(resolveJson);
   return {
     ...res,
-    type: 'proxy',
+    type: "proxy",
   };
 };
 
@@ -73,10 +67,7 @@ export const fetchH5pLicenseInformation = async (
   }
 };
 
-export const fetchH5pInfo = async (
-  id: string | undefined,
-  context: Context,
-): Promise<H5pInfo | undefined> => {
+export const fetchH5pInfo = async (id: string | undefined, context: Context): Promise<H5pInfo | undefined> => {
   if (!id) return undefined;
   const infoUrl = `${h5pHostUrl()}/v1/resource/${id}/info`;
   try {

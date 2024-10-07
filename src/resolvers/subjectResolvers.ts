@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -7,20 +6,21 @@
  *
  */
 
-import { ISubjectPageData } from '@ndla/types-backend/frontpage-api';
-import { Node } from '@ndla/types-taxonomy';
-import { fetchLK20CompetenceGoalSet } from '../api';
-
-import { filterMissingArticles } from '../utils/articleHelpers';
-import { GQLQuerySubjectArgs, GQLSubject, GQLTopic } from '../types/schema';
+import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
+import { Node } from "@ndla/types-taxonomy";
+import { fetchLK20CompetenceGoalSet } from "../api";
+import {
+  GQLQuerySubjectArgs,
+  GQLQuerySubjectCollectionArgs,
+  GQLSubject,
+  GQLSubjectLink,
+  GQLTopic,
+} from "../types/schema";
+import { filterMissingArticles } from "../utils/articleHelpers";
 
 export const Query = {
-  async subject(
-    _: any,
-    { id }: GQLQuerySubjectArgs,
-    context: ContextWithLoaders,
-  ): Promise<Node> {
-    return await context.loaders.subjectLoader.load({ id });
+  async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
+    return await context.loaders.nodeLoader.load({ id });
   },
   async subjects(
     _: any,
@@ -29,6 +29,7 @@ export const Query = {
           metadataFilterKey?: string;
           metadataFilterValue?: string;
           filterVisible?: boolean;
+          ids?: string[];
         }
       | undefined,
     context: ContextWithLoaders,
@@ -44,22 +45,26 @@ export const Query = {
 
     const loaderParams = {
       ...metaDataFilter,
-      filterVisible: input.filterVisible,
+      filterVisible: input?.filterVisible,
+      ids: input?.ids,
     };
 
-    return context.loaders.subjectsLoader
-      .load(loaderParams)
-      .then(s => s.subjects);
+    return context.loaders.subjectsLoader.load(loaderParams).then((s) => s.subjects);
+  },
+  async subjectCollection(
+    _: any,
+    { language }: GQLQuerySubjectCollectionArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLSubject[]> {
+    return await context.loaders.subjectsLoader
+      .load({ metadataFilter: { key: "language", value: language } })
+      .then((s) => s.subjects);
   },
 };
 
 export const resolvers = {
   Subject: {
-    async topics(
-      subject: GQLSubject,
-      args: { all: boolean },
-      context: ContextWithLoaders,
-    ): Promise<GQLTopic[]> {
+    async topics(subject: GQLSubject, args: { all: boolean }, context: ContextWithLoaders): Promise<GQLTopic[]> {
       const topics = await context.loaders.subjectTopicsLoader.load({
         subjectId: subject.id,
       });
@@ -67,7 +72,7 @@ export const resolvers = {
         return filterMissingArticles(topics, context);
       }
       return filterMissingArticles(
-        topics.filter((topic: GQLTopic) => topic.parent === subject.id),
+        topics.filter((topic: GQLTopic) => topic.parentId === subject.id),
         context,
       );
     },
@@ -77,27 +82,39 @@ export const resolvers = {
       });
       return filterMissingArticles(topics, context);
     },
-    async subjectpage(
-      subject: GQLSubject,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<ISubjectPageData | undefined> {
-      if (subject.contentUri?.startsWith('urn:frontpage')) {
-        return context.loaders.subjectpageLoader.load(
-          subject.contentUri.replace('urn:frontpage:', ''),
-        );
-      }
+    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageData | null> {
+      if (!subject.contentUri?.startsWith("urn:frontpage")) return null;
+      return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
     },
-    async grepCodes(
-      subject: GQLSubject,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<string[]> {
+    async grepCodes(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<string[]> {
       if (subject.metadata?.grepCodes) {
-        const code = subject.metadata?.grepCodes?.find(c => c.startsWith('KV'));
+        const code = subject.metadata?.grepCodes?.find((c) => c.startsWith("KV"));
         return code ? fetchLK20CompetenceGoalSet(code, context) : [];
       }
       return [];
+    },
+  },
+  SubjectPage: {
+    async connectedTo(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+      return await context.loaders.nodeLoader.loadMany(
+        subjectpage.connectedTo.map((id) => {
+          return { id };
+        }),
+      );
+    },
+    async buildsOn(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+      return await context.loaders.nodeLoader.loadMany(
+        subjectpage.buildsOn.map((id) => {
+          return { id };
+        }),
+      );
+    },
+    async leadsTo(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+      return await context.loaders.nodeLoader.loadMany(
+        subjectpage.leadsTo.map((id) => {
+          return { id };
+        }),
+      );
     },
   },
 };

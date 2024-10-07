@@ -1,5 +1,4 @@
 /**
- *
  * Copyright (c) 2023-present, NDLA.
  *
  * This source code is licensed under the GPLv3 license found in the
@@ -7,14 +6,11 @@
  *
  */
 
-import queryString from 'query-string';
-import { OembedEmbedData, OembedProxyData } from '@ndla/types-embed';
-import { fetch, resolveJson } from '../utils/apiHelpers';
+import queryString from "query-string";
+import { OembedEmbedData, OembedProxyData } from "@ndla/types-embed";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
-export const fetchExternalOembed = async (
-  embed: OembedEmbedData,
-  context: Context,
-): Promise<OembedProxyData> => {
+export const fetchExternalOembed = async (embed: OembedEmbedData, context: Context): Promise<OembedProxyData> => {
   const url = `/oembed-proxy/v1/oembed?${queryString.stringify({
     url: embed.url,
   })}`;

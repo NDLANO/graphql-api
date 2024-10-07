@@ -5,8 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import createLRUCache from 'lru-cache';
-import { Response } from 'node-fetch';
+import createLRUCache from "lru-cache";
+import { Response } from "node-fetch";
 
 export interface IKeyValueCache {
   get(key: string): Promise<string | undefined>;
@@ -38,30 +38,23 @@ export const createCache = (
   };
 };
 
-const cacheControlValues = ['no-store', 'private', 'no-cache']; // In order of strictness
-const getCacheStrictness = (
-  cacheControlValue: string | number | string[] | undefined,
-): number => {
-  return cacheControlValues.findIndex(header => cacheControlValue === header);
+const cacheControlValues = ["no-store", "private", "no-cache"]; // In order of strictness
+const getCacheStrictness = (cacheControlValue: string | number | string[] | undefined): number => {
+  return cacheControlValues.findIndex((header) => cacheControlValue === header);
 };
 
 /** Returns `true` if the response can be cached, and `false` if the result shouldn't be cached. */
-export const setHeaderIfShouldNotCache = (
-  response: Response,
-  context: Context,
-): boolean => {
+export const setHeaderIfShouldNotCache = (response: Response, context: Context): boolean => {
   const { res } = context;
 
-  const cacheControlResponse = response.headers
-    .get('cache-control')
-    ?.toLowerCase();
+  const cacheControlResponse = response.headers.get("cache-control")?.toLowerCase();
 
-  const presetHeader = res.getHeader('cache-control');
+  const presetHeader = res.getHeader("cache-control");
   const presetStrictness = getCacheStrictness(presetHeader);
   const newStrictness = getCacheStrictness(cacheControlResponse);
 
   if (presetStrictness < newStrictness && cacheControlResponse) {
-    res.setHeader('cache-control', cacheControlResponse);
+    res.setHeader("cache-control", cacheControlResponse);
   }
 
   return newStrictness === -1;

@@ -6,26 +6,14 @@
  *
  */
 
-import { NextFunction, Request, Response } from 'express';
-import bunyan from 'bunyan';
-import { loggerStorage } from './logger';
+import { NextFunction, Request, Response } from "express";
+import { buildLogger, loggerStorage } from "./logger";
 
-export function setupLogger(correlationId: string, next: NextFunction): void {
-  loggerStorage.run(
-    bunyan.createLogger({
-      name: 'ndla-graphql-api',
-      correlationId,
-    }),
-    next,
-    'route',
-  );
+export function setupLogger(correlationID: string, next: NextFunction): void {
+  loggerStorage.run(buildLogger({ correlationID }), next, "route");
 }
 
-const loggerMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
+const loggerMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const cid = res.locals.correlationId as string;
   setupLogger(cid, next);
 };

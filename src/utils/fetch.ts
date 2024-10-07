@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2018-present, NDLA.
  *
@@ -7,27 +6,18 @@
  *
  */
 
-import nodeFetch, { Response, Request, RequestInit } from 'node-fetch';
-import { performance } from 'perf_hooks';
-import { IKeyValueCache, setHeaderIfShouldNotCache } from '../cache';
-import getLogger from '../utils/logger';
+import { performance } from "perf_hooks";
+import nodeFetch, { Response, Request, RequestInit } from "node-fetch";
+import { IKeyValueCache, setHeaderIfShouldNotCache } from "../cache";
+import getLogger from "../utils/logger";
 
-function getCacheKey(
-  url: string,
-  { versionHash }: Context,
-  { useTaxonomyCache }: RequestOptions,
-): string {
-  if (useTaxonomyCache && versionHash && versionHash !== 'default')
-    return `${url}_${versionHash}`;
+function getCacheKey(url: string, { versionHash }: Context, { useTaxonomyCache }: RequestOptions): string {
+  if (useTaxonomyCache && versionHash && versionHash !== "default") return `${url}_${versionHash}`;
   return url;
 }
 
-export default function createFetch(options: {
-  cache: IKeyValueCache;
-  disableCache: boolean;
-  context: Context;
-}) {
-  if (!options || !options.cache) throw Error('cache is a required option');
+export default function createFetch(options: { cache: IKeyValueCache; disableCache: boolean; context: Context }) {
+  if (!options || !options.cache) throw Error("cache is a required option");
 
   const { cache } = options;
 
@@ -41,7 +31,7 @@ export default function createFetch(options: {
 
     const headers = {
       ...init?.headers,
-      'x-correlation-id': ctx.res.locals.correlationId,
+      "x-correlation-id": ctx.res.locals.correlationId,
     };
 
     const requestInit = { ...init, headers };
@@ -60,7 +50,7 @@ export default function createFetch(options: {
     return { response, shouldCache };
   }
 
-  function cachedResponse(url: string, data: string): Response {
+  function cachedResponse(url: string, data: string | undefined): Response | null {
     if (!data) return null;
 
     const parsed = JSON.parse(data);
@@ -72,11 +62,7 @@ export default function createFetch(options: {
     });
   }
 
-  async function cachingFetch(
-    url: string,
-    ctx: Context,
-    reqOptions: RequestOptions,
-  ) {
+  async function cachingFetch(url: string, ctx: Context, reqOptions: RequestOptions) {
     const { response, shouldCache } = await pureFetch(url, ctx, reqOptions);
 
     if (response.status === 200) {
@@ -103,18 +89,14 @@ export default function createFetch(options: {
     return response;
   }
 
-  return async function cachedFetch(
-    url: string,
-    ctx: Context,
-    reqOptions: RequestOptions = {},
-  ): Promise<Response> {
+  return async function cachedFetch(url: string, ctx: Context, reqOptions: RequestOptions = {}): Promise<Response> {
     const isCachable =
-      (reqOptions.method === undefined || reqOptions.method === 'GET') &&
-      reqOptions.cache !== 'no-store' &&
-      reqOptions.cache !== 'reload';
+      (reqOptions.method === undefined || reqOptions.method === "GET") &&
+      reqOptions.cache !== "no-store" &&
+      reqOptions.cache !== "reload";
 
     if (!isCachable || options.disableCache === true) {
-      return pureFetch(url, ctx, reqOptions).then(r => r.response);
+      return pureFetch(url, ctx, reqOptions).then((r) => r.response);
     }
     const cacheKey = getCacheKey(url, ctx, reqOptions);
     const data = await cache.get(cacheKey);

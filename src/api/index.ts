@@ -6,6 +6,8 @@
  *
  */
 
+export { fetchArticle, fetchArticles } from "./articleApi";
+export { searchConcepts, fetchConcept, fetchListingPage } from "./conceptApi";
 export {
   fetchCompetenceGoals,
   fetchCompetenceSet,
@@ -16,33 +18,23 @@ export {
   fetchCrossSubjectTopics,
   fetchLK20Curriculum,
   fetchLK20CompetenceGoalSet,
-} from './curriculumApi';
-export {
-  fetchFrontpage,
-  fetchSubjectPage,
-  fetchFilmFrontpage,
-  fetchMovieMeta,
-} from './frontpageApi';
-export { fetchArticle, fetchArticles } from './articleApi';
-export { fetchLearningpaths, fetchLearningpath } from './learningpathApi';
+} from "./curriculumApi";
+export { fetchImage, fetchImageV3 } from "./imageApi";
+export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage } from "./frontpageApi";
+export { fetchLearningpaths, fetchLearningpath } from "./learningpathApi";
+export { fetchOembed } from "./oembedApi";
+export { search, groupSearch, searchWithoutPagination } from "./searchApi";
 export {
   fetchResourceTypes,
   fetchSubjectTopics,
   fetchSubjects,
   fetchSubject,
   fetchNode,
+  fetchNodeByContentUri,
   fetchNodeResources,
   fetchTopics,
   fetchChildren,
   queryContexts,
   queryNodes,
-} from './taxonomyApi';
-export {
-  search,
-  groupSearch,
-  frontpageSearch,
-  searchWithoutPagination,
-} from './searchApi';
-export { fetchOembed } from './oembedApi';
-export { searchConcepts, fetchConcept, fetchListingPage } from './conceptApi';
-export { fetchUptimeIssues } from './uptimeApi';
+} from "./taxonomyApi";
+export { fetchUptimeIssues } from "./uptimeApi";

@@ -6,42 +6,21 @@
  *
  */
 
+import { search, groupSearch, searchWithoutPagination } from "../api";
 import {
-  search,
-  groupSearch,
-  frontpageSearch,
-  searchWithoutPagination,
-} from '../api';
-import {
-  GQLFrontpageSearch,
   GQLGroupSearch,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
   GQLSearch,
   GQLSearchWithoutPagination,
-} from '../types/schema';
+} from "../types/schema";
 
 export const Query = {
-  async search(
-    _: any,
-    searchQuery: GQLQuerySearchArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLSearch> {
+  async search(_: any, searchQuery: GQLQuerySearchArgs, context: ContextWithLoaders): Promise<GQLSearch> {
     return search(searchQuery, context);
   },
-  async groupSearch(
-    _: any,
-    searchQuery: GQLQuerySearchArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLGroupSearch> {
+  async groupSearch(_: any, searchQuery: GQLQuerySearchArgs, context: ContextWithLoaders): Promise<GQLGroupSearch> {
     return groupSearch(searchQuery, context);
-  },
-  async frontpageSearch(
-    _: any,
-    searchQuery: GQLQuerySearchArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLFrontpageSearch> {
-    return frontpageSearch(searchQuery, context);
   },
   async searchWithoutPagination(
     _: any,

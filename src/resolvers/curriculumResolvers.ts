@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -13,13 +12,8 @@ import {
   fetchCoreElements,
   fetchCoreElementReferences,
   fetchCrossSubjectTopics,
-} from '../api';
-import {
-  GQLCompetenceGoal,
-  GQLCoreElement,
-  GQLElement,
-  GQLReference,
-} from '../types/schema';
+} from "../api";
+import { GQLCompetenceGoal, GQLCoreElement, GQLElement, GQLReference } from "../types/schema";
 
 export const Query = {
   async competenceGoals(
@@ -27,7 +21,7 @@ export const Query = {
     { codes, language }: { codes: string[]; language?: string },
     context: ContextWithLoaders,
   ): Promise<GQLCompetenceGoal[]> {
-    return fetchCompetenceGoals(codes, language, context);
+    return fetchCompetenceGoals(codes, language ?? context.language, context);
   },
   async coreElements(
     _: any,
@@ -35,8 +29,9 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLCoreElement[]> {
     if (codes?.length) {
-      return fetchCoreElements(codes, language, context);
+      return fetchCoreElements(codes, language ?? context.language, context);
     }
+    return [];
   },
 };
 
@@ -46,7 +41,8 @@ export const resolvers = {
       competenceGoal: GQLCompetenceGoal,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLReference> {
+    ): Promise<GQLReference | undefined> {
+      if (!competenceGoal.curriculumCode) return undefined;
       return context.loaders.lk20CurriculumLoader.load({
         code: competenceGoal.curriculumCode,
         language: competenceGoal.language,
@@ -56,43 +52,25 @@ export const resolvers = {
       competenceGoal: GQLCompetenceGoal,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLReference> {
-      if (competenceGoal.competenceGoalSetCode) {
-        return fetchCompetenceSet(
-          competenceGoal.competenceGoalSetCode,
-          competenceGoal.language,
-          context,
-        );
-      }
-      return undefined;
+    ): Promise<GQLReference | undefined> {
+      if (!competenceGoal.competenceGoalSetCode) return undefined;
+      return fetchCompetenceSet(competenceGoal.competenceGoalSetCode, competenceGoal.language, context);
     },
     async crossSubjectTopics(
       competenceGoal: GQLCompetenceGoal,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLElement[]> {
-      if (competenceGoal.crossSubjectTopicsCodes) {
-        return fetchCrossSubjectTopics(
-          competenceGoal.crossSubjectTopicsCodes,
-          competenceGoal.language,
-          context,
-        );
-      }
-      return undefined;
+    ): Promise<GQLElement[] | undefined> {
+      if (!competenceGoal.crossSubjectTopicsCodes) return undefined;
+      return fetchCrossSubjectTopics(competenceGoal.crossSubjectTopicsCodes, competenceGoal.language, context);
     },
     async coreElements(
       competenceGoal: GQLCompetenceGoal,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLElement[]> {
-      if (competenceGoal.coreElementsCodes) {
-        return fetchCoreElementReferences(
-          competenceGoal.coreElementsCodes,
-          competenceGoal.language,
-          context,
-        );
-      }
-      return undefined;
+    ): Promise<GQLElement[] | undefined> {
+      if (!competenceGoal.coreElementsCodes) return undefined;
+      return fetchCoreElementReferences(competenceGoal.coreElementsCodes, competenceGoal.language, context);
     },
   },
   CoreElement: {
@@ -100,14 +78,12 @@ export const resolvers = {
       coreElement: GQLCoreElement,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLReference> {
-      if (coreElement.curriculumCode) {
-        return context.loaders.lk20CurriculumLoader.load({
-          code: coreElement.curriculumCode,
-          language: coreElement.language,
-        });
-      }
-      return undefined;
+    ): Promise<GQLReference | undefined> {
+      if (!coreElement.curriculumCode) return undefined;
+      return context.loaders.lk20CurriculumLoader.load({
+        code: coreElement.curriculumCode,
+        language: coreElement.language,
+      });
     },
   },
 };

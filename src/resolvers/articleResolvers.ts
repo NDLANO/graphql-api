@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -7,49 +6,38 @@
  *
  */
 
+import { load } from "cheerio";
+import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { IConceptSummary } from "@ndla/types-backend/concept-api";
 import {
   fetchArticle,
+  fetchOembed,
   fetchCompetenceGoals,
   fetchCoreElements,
   fetchCrossSubjectTopicsByCode,
+  fetchImageV3,
   fetchSubjectTopics,
   searchConcepts,
-} from '../api';
-import { Concept } from '../api/conceptApi';
+} from "../api";
+import { fetchTransformedContent, fetchRelatedContent } from "../api/articleApi";
+import { ndlaUrl } from "../config";
 import {
-  GQLArticle,
   GQLCompetenceGoal,
   GQLCoreElement,
   GQLCrossSubjectElement,
+  GQLMetaImage,
   GQLQueryArticleArgs,
-} from '../types/schema';
-import parseMarkdown from '../utils/parseMarkdown';
+  GQLTransformedArticleContent,
+  GQLArticleTransformedContentArgs,
+  GQLRelatedContent,
+  GQLVisualElementOembed,
+} from "../types/schema";
 
 export const Query = {
-  async article(
-    _: any,
-    {
-      id,
-      subjectId,
-      isOembed,
-      path,
-      absoluteUrl,
-      draftConcept,
-      showVisualElement,
-      convertEmbeds,
-    }: GQLQueryArticleArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLArticle> {
+  async article(_: any, { id }: GQLQueryArticleArgs, context: ContextWithLoaders): Promise<IArticleV2> {
     return fetchArticle(
       {
         articleId: id,
-        subjectId,
-        absoluteUrl,
-        draftConcept,
-        isOembed,
-        path,
-        showVisualElement,
-        convertEmbeds,
       },
       context,
     );
@@ -58,68 +46,95 @@ export const Query = {
 
 export const resolvers = {
   Article: {
-    async competenceGoals(
-      article: GQLArticle,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLCompetenceGoal[]> {
+    async competenceGoals(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
       const language =
-        article.supportedLanguages.find(lang => lang === context.language) ||
-        article.supportedLanguages[0];
-      return fetchCompetenceGoals(article.grepCodes, language, context);
+        article.supportedLanguages?.find((lang) => lang === context.language) ??
+        article.supportedLanguages?.[0] ??
+        context.language;
+      return fetchCompetenceGoals(article.grepCodes ?? [], language, context);
     },
-    async coreElements(
-      article: GQLArticle,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLCoreElement[]> {
+    async coreElements(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
       const language =
-        article.supportedLanguages.find(lang => lang === context.language) ||
-        article.supportedLanguages[0];
-      return fetchCoreElements(article.grepCodes, language, context);
+        article.supportedLanguages?.find((lang) => lang === context.language) ??
+        article.supportedLanguages?.[0] ??
+        context.language;
+      return fetchCoreElements(article.grepCodes ?? [], language, context);
     },
     async crossSubjectTopics(
-      article: GQLArticle,
+      article: IArticleV2,
       args: { subjectId: string },
       context: ContextWithLoaders,
     ): Promise<GQLCrossSubjectElement[]> {
-      const crossSubjectCodes = article.grepCodes.filter(code =>
-        code.startsWith('TT'),
-      );
+      const crossSubjectCodes = article.grepCodes?.filter((code) => code.startsWith("TT")) ?? [];
       const language =
-        article.supportedLanguages.find(lang => lang === context.language) ||
-        article.supportedLanguages[0];
-      const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(
-        crossSubjectCodes,
-        language,
-        context,
-      );
+        article.supportedLanguages?.find((lang) => lang === context.language) ??
+        article.supportedLanguages?.[0] ??
+        context.language;
+      const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(crossSubjectCodes, language, context);
       const topics = await fetchSubjectTopics(args.subjectId, context);
-      return crossSubjectTopicInfo.map(crossSubjectTopic => ({
+      return crossSubjectTopicInfo.map((crossSubjectTopic) => ({
         title: crossSubjectTopic.title,
         code: crossSubjectTopic.code,
         id: crossSubjectTopic.id,
-        path: topics.find(
-          (topic: { name: string }) => topic.name === crossSubjectTopic.title,
-        )?.path,
+        path: topics.find((topic: { name: string }) => topic.name === crossSubjectTopic.title)?.path,
       }));
     },
-    async concepts(
-      article: GQLArticle,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<Concept[]> {
+    async concepts(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<IConceptSummary[]> {
       if (article?.conceptIds && article.conceptIds.length > 0) {
-        const results = await searchConcepts(
-          { ids: article.conceptIds },
-          context,
-        );
-        return results.concepts;
+        const results = await searchConcepts({ ids: article.conceptIds }, context);
+        return results.results;
       }
       return [];
     },
-    introduction(article: GQLArticle): string {
-      return parseMarkdown({ markdown: article.introduction ?? '' });
+    async oembed(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<string | undefined> {
+      const oembed = await fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}/article/${article.id}`, context);
+      if (oembed.html === undefined) return undefined;
+      const parsed = load(oembed.html);
+      return parsed("iframe").attr("src");
+    },
+    async metaImage(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLMetaImage | undefined> {
+      if (!article.metaImage) return undefined;
+      const imageId = article.metaImage.url.split("/").pop() ?? "";
+      const image = await fetchImageV3(imageId, context);
+      return {
+        ...article.metaImage,
+        url: image.image?.imageUrl,
+      };
+    },
+    introduction(article: IArticleV2): string {
+      return article.introduction?.introduction ?? "";
+    },
+    htmlIntroduction(article: IArticleV2): string {
+      return article.introduction?.htmlIntroduction ?? "";
+    },
+    metaDescription(article: IArticleV2): string {
+      return article.metaDescription.metaDescription;
+    },
+    title(article: IArticleV2): string {
+      return article.title.title;
+    },
+    htmlTitle(article: IArticleV2): string {
+      return article.title.htmlTitle;
+    },
+    tags(article: IArticleV2): string[] {
+      return article.tags.tags;
+    },
+    language(article: IArticleV2): string {
+      return article.content.language;
+    },
+    async transformedContent(
+      article: IArticleV2,
+      args: GQLArticleTransformedContentArgs,
+      context: ContextWithLoaders,
+    ): Promise<GQLTransformedArticleContent> {
+      return fetchTransformedContent(article, args, context);
+    },
+    async relatedContent(
+      article: IArticleV2,
+      args: { subjectId?: string },
+      context: ContextWithLoaders,
+    ): Promise<GQLRelatedContent[]> {
+      return fetchRelatedContent(article, args, context);
     },
   },
 };

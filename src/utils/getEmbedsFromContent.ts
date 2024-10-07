@@ -6,8 +6,8 @@
  *
  */
 
-import { Cheerio, CheerioAPI } from 'cheerio';
-import { EmbedData } from '@ndla/types-embed';
+import { Cheerio, CheerioAPI } from "cheerio";
+import { EmbedData } from "@ndla/types-embed";
 
 export interface CheerioEmbed {
   embed: Cheerio<any>;
@@ -15,10 +15,16 @@ export interface CheerioEmbed {
 }
 
 export const getEmbedsFromContent = (html: CheerioAPI): CheerioEmbed[] => {
-  return html('ndlaembed')
+  return html("ndlaembed")
     .toArray()
-    .map(embed => ({
+    .map((embed) => ({
       embed: html(embed),
-      data: html(embed).data() as EmbedData,
+      // Cheerio automatically converts number-like strings to numbers, which in turn can break html-react-parser.
+      // Seeing as article-converter expects to only receive strings for embed data, we need to convert all numbers to strings (again).
+      data: Object.entries(html(embed).data()).reduce((acc, [key, value]) => {
+        //@ts-ignore
+        acc[key] = typeof value === "number" || typeof value === "boolean" ? `${value}` : value;
+        return acc;
+      }, {}) as EmbedData,
     }));
 };

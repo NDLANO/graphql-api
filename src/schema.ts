@@ -6,8 +6,8 @@
  *
  */
 
-import { gql } from 'graphql-tag';
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import { gql } from "graphql-tag";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 export const typeDefs = gql`
   scalar StringRecord
@@ -185,7 +185,6 @@ export const typeDefs = gql`
   type ResourceType {
     id: String!
     name: String!
-    resources(topicId: String!): [Resource!]
   }
 
   type MetaImage {
@@ -196,11 +195,14 @@ export const typeDefs = gql`
   type Meta {
     id: Int!
     title: String!
+    htmlTitle: String!
     introduction: String
+    htmlIntroduction: String
     metaDescription: String
     metaImage: MetaImage
     lastUpdated: String
     availability: String
+    language: String
   }
 
   type LearningpathStepEmbedUrl {
@@ -229,7 +231,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     type: String!
     article: Article
-    resource: Resource
+    resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
     oembed: LearningpathStepOembed
   }
@@ -270,82 +272,137 @@ export const typeDefs = gql`
     customFields: StringRecord!
   }
 
+  interface TaxBase {
+    id: String!
+    name: String!
+    path: String
+    url: String
+  }
+
   interface TaxonomyEntity {
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
+    contextId: String
     contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    language: String
+    nodeType: String!
   }
 
   interface WithArticle {
-    meta: Meta
+    contentUri: String
+    article: Article
     availability: String
+    meta: Meta
   }
 
-  type Resource implements TaxonomyEntity & WithArticle {
+  type Node implements TaxonomyEntity & WithArticle & TaxBase {
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
+    contextId: String
     contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    language: String
+    nodeType: String!
+    connectionId: String
+    rank: Int
+    parentId: String
+    children(recursive: Boolean, nodeType: String): [Node!]
+    alternateNodes: [Node!]
+    meta: Meta
+    article: Article
+    availability: String
+    learningpath: Learningpath
+    subjectpage: SubjectPage
+    grepCodes: [String!]
+  }
+
+  type Resource implements TaxonomyEntity & WithArticle & TaxBase {
+    id: String!
+    name: String!
+    contentUri: String
+    path: String
+    paths: [String!]!
+    metadata: TaxonomyMetadata!
+    relevanceId: String
+    contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
+    contextId: String
+    breadcrumbs: [String!]!
+    supportedLanguages: [String!]!
+    resourceTypes: [ResourceType!]
+    url: String
+    language: String
+    nodeType: String!
     rank: Int
     parents: [Topic!]
     meta: Meta
     learningpath: Learningpath
-    article(
-      subjectId: String
-      isOembed: String
-      convertEmbeds: Boolean
-    ): Article
+    article: Article
     availability: String
   }
 
-  type TaxonomyContext {
-    breadcrumbs: [String!]!
+  type TaxonomyCrumb implements TaxBase {
+    id: String!
+    contextId: String!
+    name: String!
     path: String!
-    parentIds: [String!]!
+    url: String!
   }
 
-  type Topic implements TaxonomyEntity & WithArticle {
+  type TaxonomyContext {
+    contextId: String!
+    breadcrumbs: [String!]!
+    name: String!
+    path: String!
+    url: String!
+    parentIds: [String!]!
+    rootId: String!
+    relevance: String!
+    parents: [TaxonomyCrumb!]
+  }
+
+  type Topic implements TaxonomyEntity & WithArticle & TaxBase {
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    language: String
+    nodeType: String!
     meta: Meta
-    article(
-      subjectId: String
-      showVisualElement: String
-      convertEmbeds: Boolean
-    ): Article
+    article: Article
     availability: String
     isPrimary: Boolean
-    parent: String
     parentId: String
     subtopics: [Topic!]
-    pathTopics: [[Topic!]!]
     coreResources(subjectId: String): [Resource!]
     supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
@@ -475,6 +532,20 @@ export const typeDefs = gql`
     copyright: ConceptCopyright
   }
 
+  type GlossLicense {
+    id: String!
+    title: String!
+    src: String
+    content: String
+    metaImageUrl: String
+    copyright: ConceptCopyright
+  }
+
+  type TextblockLicense {
+    title: String
+    copyright: Copyright!
+  }
+
   type ArticleMetaData {
     footnotes: [FootNote!]
     images: [ImageLicense!]
@@ -483,6 +554,8 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
+    glosses: [GlossLicense!]
+    textblocks: [TextblockLicense!]
     copyText: String
   }
 
@@ -495,19 +568,19 @@ export const typeDefs = gql`
     id: Int!
     revision: Int!
     title: String!
+    htmlTitle: String!
     slug: String
     introduction: String
+    htmlIntroduction: String
     content: String!
     created: String!
     updated: String!
     published: String!
-    visualElement: VisualElement
     metaImage: MetaImage
     metaDescription: String!
     articleType: String!
     oldNdlaUrl: String
     requiredLibraries: [ArticleRequiredLibrary!]
-    metaData: ArticleMetaData
     supportedLanguages: [String!]
     copyright: Copyright!
     tags: [String!]
@@ -515,14 +588,32 @@ export const typeDefs = gql`
     competenceGoals: [CompetenceGoal!]
     coreElements: [CoreElement!]
     crossSubjectTopics(subjectId: String): [CrossSubjectElement!]
-    oembed: String
     conceptIds: [Int!]
     concepts: [Concept!]
-    relatedContent: [RelatedContent!]
+    relatedContent(subjectId: String): [RelatedContent!]
     availability: String
     revisionDate: String
-    visualElementEmbed: ResourceEmbed
     language: String!
+    transformedContent(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
+    oembed: String
+  }
+
+  input TransformedArticleContentInput {
+    subjectId: String
+    isOembed: String
+    showVisualElement: String
+    path: String
+    previewH5p: Boolean
+    draftConcept: Boolean
+    absoluteUrl: Boolean
+    prettyUrl: Boolean
+  }
+
+  type TransformedArticleContent {
+    content: String!
+    visualElement: VisualElement
+    metaData: ArticleMetaData
+    visualElementEmbed: ResourceEmbed
   }
 
   type EmbedVisualelement {
@@ -576,6 +667,7 @@ export const typeDefs = gql`
     articleId: Int!
     article: Article!
     menu: [FrontpageMenu]
+    hideLevel: Boolean
   }
 
   type SubjectPageVisualElement {
@@ -604,6 +696,15 @@ export const typeDefs = gql`
     about: SubjectPageAbout
     metaDescription: String
     supportedLanguages: [String!]!
+    connectedTo: [SubjectLink]!
+    buildsOn: [SubjectLink]!
+    leadsTo: [SubjectLink]!
+  }
+
+  type SubjectLink {
+    name: String
+    path: String
+    url: String
   }
 
   type FilmPageAbout {
@@ -618,6 +719,7 @@ export const typeDefs = gql`
     about: [FilmPageAbout!]!
     movieThemes: [MovieTheme!]!
     slideShow: [Movie!]!
+    article: Article
   }
 
   type MovieTheme {
@@ -637,6 +739,7 @@ export const typeDefs = gql`
     metaDescription: String!
     resourceTypes: [ResourceType!]!
     path: String!
+    url: String!
   }
 
   type MovieMeta {
@@ -645,28 +748,27 @@ export const typeDefs = gql`
     metaDescription: String
   }
 
-  type MoviePath {
-    path: String
-    paths: [String!]
-  }
-
   type MovieResourceTypes {
     resourceTypes: [ResourceType!]
   }
 
-  type Subject implements TaxonomyEntity {
+  type Subject implements TaxonomyEntity & TaxBase {
     id: String!
     name: String!
     contentUri: String
-    path: String!
+    path: String
     paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
+    context: TaxonomyContext
+    contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    language: String
+    nodeType: String!
     subjectpage: SubjectPage
     topics(all: Boolean): [Topic!]
     allTopics: [Topic!]
@@ -676,7 +778,7 @@ export const typeDefs = gql`
   type ProgrammePage {
     id: String!
     title: Title!
-    url: String!
+    url: String
     contentUri: String
     metaDescription: String
     desktopImage: MetaImage
@@ -687,7 +789,7 @@ export const typeDefs = gql`
   type Grade {
     id: String!
     title: Title!
-    url: String!
+    url: String
     categories: [Category!]
   }
 
@@ -731,26 +833,15 @@ export const typeDefs = gql`
     contexts: [SearchContext!]!
   }
 
-  type FrontpageSearchResult {
-    id: String!
-    name: String!
-    resourceTypes: [SearchContextResourceTypes!]!
-    subject: String!
-    path: String!
-  }
-
   type SearchContext {
     breadcrumbs: [String!]!
     contextType: String!
-    learningResourceType: String!
     resourceTypes: [SearchContextResourceTypes!]!
-    subject: String!
     root: String!
-    subjectId: String!
     rootId: String!
     relevance: String!
+    relevanceId: String!
     path: String!
-    id: String!
     publicId: String!
     parentIds: [String!]!
     language: String!
@@ -758,18 +849,13 @@ export const typeDefs = gql`
     isActive: Boolean!
     isVisible: Boolean!
     contextId: String!
+    url: String!
   }
 
   type SearchContextResourceTypes {
     id: String!
     name: String!
     language: String!
-  }
-
-  type SearchContextFilter {
-    id: String!
-    name: String!
-    relevance: String!
   }
 
   type VisualElementOembed {
@@ -951,17 +1037,6 @@ export const typeDefs = gql`
     pageSize: Int!
   }
 
-  type FrontPageResources {
-    results: [FrontpageSearchResult!]!
-    totalCount: Int!
-    suggestions: [SuggestionResult!]!
-  }
-
-  type FrontpageSearch {
-    topicResources: FrontPageResources!
-    learningResources: FrontPageResources!
-  }
-
   type UptimeAlert {
     title: String!
     body: String
@@ -985,6 +1060,11 @@ export const typeDefs = gql`
     resources: [FolderResource!]!
     created: String!
     updated: String!
+    owner: Owner
+  }
+
+  type Owner {
+    name: String!
   }
 
   type SharedFolder {
@@ -998,6 +1078,7 @@ export const typeDefs = gql`
     resources: [FolderResource!]!
     created: String!
     updated: String!
+    owner: Owner
   }
 
   type FolderResource {
@@ -1109,15 +1190,36 @@ export const typeDefs = gql`
     parentId: String
   }
 
-  type MyNdlaPersonalData {
-    id: Int!
-    favoriteSubjects: [String!]!
-    role: String!
+  type MyNdlaGroup {
+    id: String!
+    displayName: String!
+    isPrimarySchool: Boolean!
+    parentId: String
   }
 
-  type ConfigMetaRestricted {
+  type MyNdlaPersonalData {
+    id: Int!
+    feideId: String!
+    username: String!
+    email: String!
+    displayName: String!
+    favoriteSubjects: [String!]!
+    role: String!
+    arenaEnabled: Boolean!
+    shareName: Boolean!
+    organization: String!
+    groups: [MyNdlaGroup!]!
+    arenaGroups: [String!]!
+  }
+
+  type ConfigMetaBoolean {
     key: String!
-    value: String!
+    value: Boolean!
+  }
+
+  type ConfigMetaStringList {
+    key: String!
+    value: [String!]!
   }
 
   type ResourceMetaData {
@@ -1127,6 +1229,7 @@ export const typeDefs = gql`
     brightcoves: [BrightcoveLicense!]
     h5ps: [H5pLicense!]
     concepts: [ConceptLicense!]
+    glosses: [GlossLicense!]
   }
 
   type ResourceEmbed {
@@ -1148,15 +1251,22 @@ export const typeDefs = gql`
     slug: String!
     topicCount: Int!
     postCount: Int!
+    voteCount: Int
     disabled: Boolean!
     topics: [ArenaTopic!]
+    breadcrumbs: [CategoryBreadcrumb!]!
+    parentCategoryId: Int
+    children: [ArenaCategory!]
   }
 
   type ArenaUser {
     id: Int!
     displayName: String!
+    username: String!
     profilePicture: String
     slug: String!
+    groupTitleArray: [String!]
+    location: String
   }
 
   type ArenaPost {
@@ -1165,7 +1275,13 @@ export const typeDefs = gql`
     content: String!
     timestamp: String!
     isMainPost: Boolean!
-    user: ArenaUser!
+    user: ArenaUser
+    deleted: Boolean!
+    flagId: Int
+    toPid: Int
+    replies: [ArenaPost!]!
+    upvotes: Int!
+    upvoted: Boolean!
   }
 
   type ArenaBreadcrumb {
@@ -1180,37 +1296,200 @@ export const typeDefs = gql`
     title: String!
     slug: String!
     postCount: Int!
+    voteCount: Int!
     locked: Boolean!
+    pinned: Boolean!
     timestamp: String!
     posts: [ArenaPost!]!
     breadcrumbs: [ArenaBreadcrumb!]!
+    deleted: Boolean!
+    isFollowing: Boolean
+  }
+
+  type CategoryBreadcrumb {
+    id: Int!
+    title: String!
+  }
+
+  interface ArenaCategoryV2Base {
+    id: Int!
+    title: String!
+    description: String!
+    postCount: Int!
+    topicCount: Int!
+    voteCount: Int
+    isFollowing: Boolean!
+    visible: Boolean!
+    parentCategoryId: Int
+    breadcrumbs: [CategoryBreadcrumb!]!
+  }
+
+  type TopiclessArenaCategoryV2 implements ArenaCategoryV2Base {
+    id: Int!
+    title: String!
+    description: String!
+    postCount: Int!
+    topicCount: Int!
+    voteCount: Int
+    isFollowing: Boolean!
+    visible: Boolean!
+    categoryCount: Int
+    subcategories: [TopiclessArenaCategoryV2!]
+    parentCategoryId: Int
+    breadcrumbs: [CategoryBreadcrumb!]!
+  }
+
+  type ArenaCategoryV2 implements ArenaCategoryV2Base {
+    id: Int!
+    title: String!
+    description: String!
+    postCount: Int!
+    topicCount: Int!
+    voteCount: Int
+    topics: [ArenaTopicV2!]
+    categoryCount: Int
+    subcategories: [TopiclessArenaCategoryV2!]
+    isFollowing: Boolean!
+    visible: Boolean!
+    parentCategoryId: Int
+    breadcrumbs: [CategoryBreadcrumb!]!
+  }
+
+  type ArenaTopicV2 {
+    id: Int!
+    title: String!
+    postCount: Int!
+    voteCount: Int!
+    created: String!
+    updated: String!
+    categoryId: Int!
+    posts: PaginatedPosts
+    isFollowing: Boolean!
+    isPinned: Boolean!
+    isLocked: Boolean!
+  }
+
+  type PaginatedTopics {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    items: [ArenaTopicV2!]!
+  }
+
+  type PaginatedArenaUsers {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    items: [ArenaUserV2!]!
+  }
+
+  type PaginatedPosts {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    items: [ArenaPostV2!]!
+  }
+
+  type ArenaPostV2 {
+    id: Int!
+    content: String!
+    contentAsHTML: String
+    created: String!
+    updated: String!
+    owner: ArenaUserV2
+    topicId: Int!
+    flags: [ArenaFlag!]
+    replies: [ArenaPostV2!]!
+    upvotes: Int!
+    upvoted: Boolean!
+  }
+
+  type ArenaFlag {
+    id: Int!
+    reason: String!
+    created: String!
+    resolved: String
+    isResolved: Boolean!
+    flagger: ArenaUserV2
+  }
+
+  type ArenaUserV2 {
+    id: Int!
+    displayName: String!
+    username: String!
+    location: String!
+    groups: [String!]!
+  }
+
+  input ArenaUserV2Input {
+    favoriteSubjects: [String!]
+    arenaEnabled: Boolean
+    shareName: Boolean
+    arenaGroups: [String!]
+  }
+
+  type ArenaNewPostNotificationV2 {
+    id: Int!
+    topicId: Int!
+    isRead: Boolean!
+    topicTitle: String!
+    post: ArenaPostV2!
+    notificationTime: String!
+  }
+
+  type PaginatedArenaNewPostNotificationV2 {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    items: [ArenaNewPostNotificationV2!]!
+  }
+
+  type ArenaNotification {
+    bodyShort: String!
+    path: String!
+    from: Int!
+    importance: Int!
+    datetimeISO: String!
+    read: Boolean!
+    user: ArenaUser!
+    image: String
+    readClass: String!
+    postId: Int!
+    topicId: Int!
+    notificationId: String!
+    topicTitle: String!
+    type: String!
+    subject: String!
+  }
+
+  type UserFolder {
+    folders: [Folder!]!
+    sharedFolders: [SharedFolder!]!
   }
 
   type Query {
+    node(id: String, rootId: String, parentId: String, contextId: String): Node
+    nodes(
+      nodeType: String
+      contentUri: String
+      metadataFilterKey: String
+      metadataFilterValue: String
+      filterVisible: Boolean
+      ids: [String!]
+    ): [Node!]
+    nodeByArticleId(articleId: String, nodeId: String): Node
     resource(id: String!, subjectId: String, topicId: String): Resource
-    article(
-      id: String!
-      subjectId: String
-      isOembed: String
-      draftConcept: Boolean
-      absoluteUrl: Boolean
-      path: String
-      showVisualElement: String
-      convertEmbeds: Boolean
-    ): Article
+    articleResource(articleId: String, taxonomyId: String): Resource
+    article(id: String!): Article
     subject(id: String!): Subject
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
     programmes: [ProgrammePage!]
-    programme(path: String): ProgrammePage
-    subjects(
-      metadataFilterKey: String
-      metadataFilterValue: String
-      filterVisible: Boolean
-    ): [Subject!]
+    programme(path: String, contextId: String): ProgrammePage
+    subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean, ids: [String!]): [Subject!]
     topic(id: String!, subjectId: String): Topic
-    topics(contentUri: String, filterVisible: Boolean): [Topic!]
+    topics(contentUri: String!, filterVisible: Boolean): [Topic!]
     frontpage: FrontpageMenu
     competenceGoals(codes: [String], language: String): [CompetenceGoal!]
     competenceGoal(code: String!, language: String): CompetenceGoal
@@ -1264,7 +1543,6 @@ export const typeDefs = gql`
       fallback: Boolean
       conceptType: String
     ): ConceptResult
-    frontpageSearch(query: String): FrontpageSearch
     searchWithoutPagination(
       query: String
       contextTypes: String
@@ -1282,55 +1560,45 @@ export const typeDefs = gql`
     audio(id: Int!): Audio
     podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
-    podcastSeriesSearch(
-      page: Int!
-      pageSize: Int!
-      fallback: Boolean
-    ): PodcastSeriesSearch
+    podcastSeriesSearch(page: Int!, pageSize: Int!, fallback: Boolean): PodcastSeriesSearch
     alerts: [UptimeAlert]
-    folders(includeSubfolders: Boolean, includeResources: Boolean): [Folder!]!
-    folderResourceMeta(
-      resource: FolderResourceMetaSearchInput!
-    ): FolderResourceMeta
-    folderResourceMetaSearch(
-      resources: [FolderResourceMetaSearchInput!]!
-    ): [FolderResourceMeta!]!
-    folder(
-      id: String!
-      includeSubfolders: Boolean
-      includeResources: Boolean
-    ): Folder!
-    sharedFolder(
-      id: String!
-      includeSubfolders: Boolean
-      includeResources: Boolean
-    ): SharedFolder!
+    folders(includeSubfolders: Boolean, includeResources: Boolean): UserFolder!
+    folderResourceMeta(resource: FolderResourceMetaSearchInput!): FolderResourceMeta
+    folderResourceMetaSearch(resources: [FolderResourceMetaSearchInput!]!): [FolderResourceMeta!]!
+    folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
+    sharedFolder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
-    personalData: MyNdlaPersonalData!
+    personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV2
-    examLockStatus: ConfigMetaRestricted!
+    examLockStatus: ConfigMetaBoolean!
+    aiEnabledOrgs: ConfigMetaStringList
+    arenaEnabledOrgs: ConfigMetaStringList
     resourceEmbed(id: String!, type: String!): ResourceEmbed!
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
     arenaCategories: [ArenaCategory!]!
     arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
-    arenaTopic(topicId: Int!, page: Int!): ArenaTopic
+    arenaUser(username: String!): ArenaUser
+    arenaUserById(id: Int!): ArenaUser
+    arenaAllFlags(page: Int, pageSize: Int): PaginatedPosts!
+    arenaTopic(topicId: Int!, page: Int): ArenaTopic
     arenaRecentTopics: [ArenaTopic!]!
     arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
+    arenaNotifications: [ArenaNotification!]!
+    arenaCategoriesV2(filterFollowed: Boolean): [ArenaCategoryV2!]!
+    arenaCategoryV2(categoryId: Int!, page: Int, pageSize: Int): ArenaCategoryV2
+    arenaNotificationsV2(page: Int, pageSize: Int): PaginatedArenaNewPostNotificationV2!
+    arenaRecentTopicsV2(page: Int, pageSize: Int): PaginatedTopics!
+    arenaTopicV2(topicId: Int!, page: Int, pageSize: Int): ArenaTopicV2
+    arenaTopicsByUserV2(userId: Int!, page: Int, pageSize: Int): PaginatedTopics!
+    arenaUserV2(username: String!): ArenaUserV2
+    arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
+    listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
+    subjectCollection(language: String!): [Subject!]
   }
 
   type Mutation {
-    addFolder(
-      name: String!
-      parentId: String
-      status: String
-      description: String
-    ): Folder!
-    updateFolder(
-      id: String!
-      name: String
-      status: String
-      description: String
-    ): Folder!
+    addFolder(name: String!, parentId: String, status: String, description: String): Folder!
+    updateFolder(id: String!, name: String, status: String, description: String): Folder!
     deleteFolder(id: String!): String!
     addFolderResource(
       resourceId: String!
@@ -1342,9 +1610,10 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
-    updatePersonalData(favoriteSubjects: [String!]!): MyNdlaPersonalData!
+    updatePersonalData(favoriteSubjects: [String], shareName: Boolean): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
+    sortSavedSharedFolders(sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
     copySharedFolder(folderId: String!, destinationFolderId: String): Folder!
     transformArticleContent(
@@ -1354,13 +1623,60 @@ export const typeDefs = gql`
       previewH5p: Boolean
       draftConcept: Boolean
       absoluteUrl: Boolean
+      prettyUrl: Boolean
     ): String!
+    markNotificationAsRead(topicIds: [Int!]!): [Int!]!
+    newArenaTopic(categoryId: Int!, title: String!, content: String!): ArenaTopic!
+    newArenaCategory(title: String!, description: String!, visible: Boolean!, parentCategoryId: Int): ArenaCategoryV2!
+    updateArenaCategory(
+      categoryId: Int!
+      title: String!
+      description: String!
+      visible: Boolean!
+      parentCategoryId: Int
+    ): ArenaCategoryV2!
+    newArenaTopicV2(
+      categoryId: Int!
+      title: String!
+      content: String!
+      isLocked: Boolean
+      isPinned: Boolean
+    ): ArenaTopicV2!
+    markNotificationsAsReadV2(notificationIds: [Int!]!): [Int!]!
+    markAllNotificationsAsRead: Boolean!
+    replyToTopic(topicId: Int!, content: String!, postId: Int): ArenaPost!
+    replyToTopicV2(topicId: Int!, content: String!, postId: Int): ArenaPostV2!
+    updatePost(postId: Int!, content: String!, title: String): ArenaPost!
+    updatePostV2(postId: Int!, content: String!): ArenaPostV2!
+    updateTopicV2(topicId: Int!, title: String!, content: String!, isLocked: Boolean, isPinned: Boolean): ArenaTopicV2!
+    deletePost(postId: Int!): Int!
+    deletePostV2(postId: Int!): Int!
+    deleteTopic(topicId: Int!): Int!
+    deleteTopicV2(topicId: Int!): Int!
+    deleteCategory(categoryId: Int!): Int!
+    newFlag(type: String!, id: Int!, reason: String!): Int!
+    newFlagV2(postId: Int!, reason: String!): Int!
+    resolveFlag(flagId: Int!): ArenaFlag!
+    subscribeToTopic(topicId: Int!): Int!
+    followTopic(topicId: Int!): ArenaTopicV2!
+    followCategory(categoryId: Int!): ArenaCategoryV2!
+    unfollowTopic(topicId: Int!): ArenaTopicV2!
+    unfollowCategory(categoryId: Int!): ArenaCategoryV2!
+    unsubscribeFromTopic(topicId: Int!): Int!
+    updateOtherArenaUser(userId: Int!, data: ArenaUserV2Input!): MyNdlaPersonalData!
+    favoriteSharedFolder(folderId: String!): String!
+    unFavoriteSharedFolder(folderId: String!): String!
+    sortArenaCategories(sortedIds: [Int!]!, parentId: Int): [ArenaCategoryV2!]!
+    addPostUpvote(postId: Int!): Int!
+    addPostUpvoteV2(postId: Int!): Int!
+    removePostUpvote(postId: Int!): Int!
+    removePostUpvoteV2(postId: Int!): Int!
   }
 `;
 
 const schema = makeExecutableSchema({
   typeDefs,
-  resolverValidationOptions: { requireResolversForResolveType: 'ignore' },
+  resolverValidationOptions: { requireResolversForResolveType: "ignore" },
 });
 
 export default schema;

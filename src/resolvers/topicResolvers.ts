@@ -1,4 +1,3 @@
-// @ts-strict-ignore
 /**
  * Copyright (c) 2019-present, NDLA.
  *
@@ -7,47 +6,27 @@
  *
  */
 
-import { Node } from '@ndla/types-taxonomy';
+import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { Node } from "@ndla/types-taxonomy";
+import { fetchNode, fetchNodeResources, fetchChildren, queryNodes } from "../api";
 import {
-  fetchArticle,
-  fetchNode,
-  fetchNodeResources,
-  fetchChildren,
-  fetchOembed,
-  queryNodes,
-} from '../api';
-import {
-  filterMissingArticles,
-  getArticleIdFromUrn,
-} from '../utils/articleHelpers';
-import { ndlaUrl } from '../config';
-import {
-  GQLArticle,
   GQLMeta,
   GQLQueryTopicArgs,
   GQLQueryTopicsArgs,
   GQLResource,
   GQLTopic,
-  GQLTopicArticleArgs,
   GQLTopicCoreResourcesArgs,
   GQLTopicSupplementaryResourcesArgs,
-  GQLVisualElementOembed,
-} from '../types/schema';
-import { nodeToTaxonomyEntity } from '../utils/apiHelpers';
+} from "../types/schema";
+import { articleToMeta, nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
-  async topic(
-    _: any,
-    { id, subjectId }: GQLQueryTopicArgs,
-    context: ContextWithLoaders,
-  ): Promise<GQLTopic> {
+  async topic(_: any, { id, subjectId }: GQLQueryTopicArgs, context: ContextWithLoaders): Promise<GQLTopic> {
     if (subjectId) {
-      const children = await fetchChildren(
-        { id: subjectId, nodeType: 'TOPIC', recursive: true },
-        context,
-      );
-      const node = children.find(child => child.id === id);
-      return nodeToTaxonomyEntity(node, context);
+      const children = await fetchChildren({ id: subjectId, nodeType: "TOPIC", recursive: true }, context);
+      const node = children.find((child) => child.id === id);
+      if (node) return nodeToTaxonomyEntity(node, context);
     }
     const node = await fetchNode({ id }, context);
     return nodeToTaxonomyEntity(node, context);
@@ -60,16 +39,14 @@ export const Query = {
     const nodes = await queryNodes(
       {
         contentURI: contentUri,
+        isVisible: filterVisible,
         includeContexts: true,
+        filterProgrammes: true,
         language: context.language,
       },
       context,
     );
-    const filtered = filterVisible
-      ? nodes.filter(node => node.contexts.find(context => context.isVisible))
-      : nodes;
-
-    return filtered.map(node => {
+    return nodes.map((node) => {
       return nodeToTaxonomyEntity(node, context);
     });
   },
@@ -77,59 +54,21 @@ export const Query = {
 
 export const resolvers = {
   Topic: {
-    async availability(
-      topic: Node,
-      _: GQLTopicArticleArgs,
-      context: ContextWithLoaders,
-    ) {
-      const article = await context.loaders.articlesLoader.load(
-        getArticleIdFromUrn(topic.contentUri),
-      );
-      return article.availability;
+    async availability(topic: Node, _: any, context: ContextWithLoaders) {
+      if (!topic.contentUri) return undefined;
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
+      return article?.availability;
     },
-    async article(
-      topic: Node,
-      args: GQLTopicArticleArgs,
-      context: ContextWithLoaders,
-    ): Promise<GQLArticle> {
-      if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        const articleId = getArticleIdFromUrn(topic.contentUri);
-        return Promise.resolve(
-          fetchArticle(
-            {
-              articleId,
-              subjectId: args.subjectId,
-              showVisualElement: args.showVisualElement,
-              convertEmbeds: args.convertEmbeds,
-              path: topic.path,
-            },
-            context,
-          ).then(article => {
-            const path = topic.path || `/article/${articleId}`;
-            return Object.assign({}, article, {
-              oembed: fetchOembed<GQLVisualElementOembed>(
-                `${ndlaUrl}${path}`,
-                context,
-              ).then(oembed => oembed.html.split('"')[3]),
-            });
-          }),
-        );
+    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
+      if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
+        return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       }
-      throw Object.assign(
-        new Error('Missing article contentUri for topic with id: ' + topic.id),
-        { status: 404 },
-      );
+      throw Object.assign(new Error("Missing article contentUri for topic with id: " + topic.id), { status: 404 });
     },
-    async meta(
-      topic: Node,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLMeta> {
-      if (topic.contentUri && topic.contentUri.startsWith('urn:article')) {
-        return context.loaders.articlesLoader.load(
-          getArticleIdFromUrn(topic.contentUri),
-        );
-      }
+    async meta(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
+      if (!topic.contentUri?.startsWith("urn:article")) return null;
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
+      return article ? articleToMeta(article) : null;
     },
     async coreResources(
       topic: Node,
@@ -139,12 +78,12 @@ export const resolvers = {
       const topicResources = await fetchNodeResources(
         {
           id: topic.id,
-          relevance: 'urn:relevance:core',
+          relevance: "urn:relevance:core",
         },
         context,
       );
       const filtered = await filterMissingArticles(topicResources, context);
-      return filtered.map(f => nodeToTaxonomyEntity(f, context));
+      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
     async supplementaryResources(
       topic: Node,
@@ -154,62 +93,31 @@ export const resolvers = {
       const topicResources = await fetchNodeResources(
         {
           id: topic.id,
-          relevance: 'urn:relevance:supplementary',
+          relevance: "urn:relevance:supplementary",
         },
         context,
       );
       const filtered = await filterMissingArticles(topicResources, context);
-      return filtered.map(f => nodeToTaxonomyEntity(f, context));
+      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
-    async subtopics(
-      topic: Node,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLTopic[]> {
-      const subtopics = await fetchChildren(
-        { id: topic.id, nodeType: 'TOPIC' },
-        context,
-      );
+    async subtopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[]> {
+      const subtopics = await fetchChildren({ id: topic.id, nodeType: "TOPIC" }, context);
       const filtered = await filterMissingArticles(subtopics, context);
-      return filtered.map(f => nodeToTaxonomyEntity(f, context));
+      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
-    async pathTopics(
-      topic: Node,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<Node[][]> {
-      return await Promise.all(
-        topic.contexts.map(async ctx => {
-          const parents = await Promise.all(
-            ctx.parentIds.map(async parentId =>
-              fetchNode({ id: parentId }, context),
-            ),
-          );
-          return parents.filter(p => p.nodeType === 'TOPIC');
-        }),
-      );
-    },
-    async alternateTopics(
-      topic: Node,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLTopic[]> {
+    async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
       const { contentUri, id, path } = topic;
-      if (!path) {
+      if (!path && contentUri) {
         const nodes = await queryNodes(
           {
             contentURI: contentUri,
             includeContexts: true,
+            isVisible: true,
             language: context.language,
           },
           context,
         );
-        const theVisibleOthers = nodes
-          .filter(node => node.id !== id)
-          .filter(node => node.contexts.find(context => context.isVisible));
-        return theVisibleOthers.map(node =>
-          nodeToTaxonomyEntity(node, context),
-        );
+        return nodes.map((node) => nodeToTaxonomyEntity(node, context));
       }
       return;
     },

@@ -6,11 +6,8 @@
  *
  */
 
-import { transformArticle } from '../api/transformArticleApi';
-import {
-  fetchResourceEmbed,
-  fetchResourceEmbeds,
-} from '../api/resourceEmbedApi';
+import { fetchResourceEmbed, fetchResourceEmbeds } from "../api/resourceEmbedApi";
+import { transformArticle } from "../api/transformArticleApi";
 import {
   GQLMutationResolvers,
   GQLQueryResolvers,
@@ -18,12 +15,9 @@ import {
   GQLQueryResourceEmbedArgs,
   GQLResourceEmbed,
   GQLQueryResourceEmbedsArgs,
-} from '../types/schema';
+} from "../types/schema";
 
-export const Query: Pick<
-  GQLQueryResolvers,
-  'resourceEmbed' | 'resourceEmbeds'
-> = {
+export const Query: Pick<GQLQueryResolvers, "resourceEmbed" | "resourceEmbeds"> = {
   async resourceEmbed(
     _: any,
     params: GQLQueryResourceEmbedArgs,
@@ -40,10 +34,7 @@ export const Query: Pick<
   },
 };
 
-export const Mutations: Pick<
-  GQLMutationResolvers,
-  'transformArticleContent'
-> = {
+export const Mutations: Pick<GQLMutationResolvers, "transformArticleContent"> = {
   async transformArticleContent(
     _: any,
     {
@@ -53,16 +44,18 @@ export const Mutations: Pick<
       previewH5p,
       subject,
       draftConcept,
+      prettyUrl,
     }: GQLMutationTransformArticleContentArgs,
     context: ContextWithLoaders,
   ): Promise<string> {
-    const data = await transformArticle(content, context, visualElement ?? '', {
+    const data = await transformArticle(content, context, visualElement ?? "", {
       subject,
       absoluteUrl,
       previewH5p,
       draftConcept,
+      prettyUrl,
       showVisualElement: !!visualElement,
     });
-    return data.content ?? '';
+    return data.content ?? "";
   },
 };
