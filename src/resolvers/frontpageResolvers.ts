@@ -15,7 +15,7 @@ import {
   IMenu,
 } from "@ndla/types-backend/frontpage-api";
 import { TaxonomyContext } from "@ndla/types-taxonomy";
-import { fetchArticle, fetchFilmFrontpage, fetchMovieMeta, queryContexts, queryNodes } from "../api";
+import { fetchArticle, fetchFilmFrontpage, queryContexts, queryNodes } from "../api";
 import { GQLMetaImage, GQLResourceType } from "../types/schema";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
@@ -64,27 +64,27 @@ export const resolvers = {
       return id;
     },
     async title(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta?.title || "";
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(id));
+      return article?.title.title || "";
     },
     async metaImage(id: string, _: any, context: ContextWithLoaders): Promise<GQLMetaImage | undefined> {
-      const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta?.metaImage;
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(id));
+      return article?.metaImage;
     },
     async metaDescription(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const movieMeta = await fetchMovieMeta(id, context);
-      return movieMeta?.metaDescription || "";
+      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(id));
+      return article?.metaDescription.metaDescription || "";
     },
     async path(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const contexts: TaxonomyContext[] = await queryContexts(id, context);
-      return contexts?.find((ctx) => ctx.rootId === "urn:subject:20")?.path || "";
+      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
+      return nodes[0]?.path || "";
     },
     async url(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const contexts: TaxonomyContext[] = await queryContexts(id, context);
-      return contexts?.find((ctx) => ctx.rootId === "urn:subject:20")?.url || "";
+      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
+      return nodes[0]?.url || "";
     },
     async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
-      const nodes = await queryNodes({ contentURI: id, language: context.language }, context);
+      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
       return nodes[0]?.resourceTypes ?? [];
     },
   },

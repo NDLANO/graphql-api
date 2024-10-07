@@ -105,16 +105,18 @@ export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Nod
           if (!input) {
             throw Error("Tried to get node with no params");
           }
-          return queryNodes(
-            {
-              contextId: input.contextId,
-              ids: input.ids,
-              isVisible: input.filterVisible,
-              includeContexts: true,
-              filterProgrammes: true,
-            },
-            context,
-          );
+          const params = {
+            isVisible: input.filterVisible,
+            rootId: input.rootId,
+            includeContexts: true,
+            filterProgrammes: true,
+          };
+          if (input.contextId) {
+            return queryNodes({ ...params, contextId: input.contextId }, context);
+          } else if (input.contentURI) {
+            return queryNodes({ ...params, contentURI: input.contentURI }, context);
+          }
+          throw Error("Tried to get node with insufficient params");
         }),
       );
     },
