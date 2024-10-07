@@ -99,6 +99,7 @@ export const resolvers = {
       return {
         ...article.metaImage,
         url: image.image?.imageUrl,
+        copyright: image.copyright,
       };
     },
     introduction(article: IArticleV2): string {

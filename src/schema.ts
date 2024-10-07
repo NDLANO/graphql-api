@@ -564,6 +564,12 @@ export const typeDefs = gql`
     url: String!
   }
 
+  type MetaImageWithCopyright {
+    alt: String!
+    url: String!
+    copyright: Copyright!
+  }
+
   type Article {
     id: Int!
     revision: Int!
@@ -576,7 +582,7 @@ export const typeDefs = gql`
     created: String!
     updated: String!
     published: String!
-    metaImage: MetaImage
+    metaImage: MetaImageWithCopyright
     metaDescription: String!
     articleType: String!
     oldNdlaUrl: String

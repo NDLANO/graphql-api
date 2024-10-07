@@ -225,7 +225,7 @@ export type GQLArticle = {
   introduction?: Maybe<Scalars['String']>;
   language: Scalars['String'];
   metaDescription: Scalars['String'];
-  metaImage?: Maybe<GQLMetaImage>;
+  metaImage?: Maybe<GQLMetaImageWithCopyright>;
   oembed?: Maybe<Scalars['String']>;
   oldNdlaUrl?: Maybe<Scalars['String']>;
   published: Scalars['String'];
@@ -967,6 +967,13 @@ export type GQLMeta = {
 export type GQLMetaImage = {
   __typename?: 'MetaImage';
   alt: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type GQLMetaImageWithCopyright = {
+  __typename?: 'MetaImageWithCopyright';
+  alt: Scalars['String'];
+  copyright: GQLCopyright;
   url: Scalars['String'];
 };
 
@@ -2481,6 +2488,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
+
 /** Mapping between all available schema types and the resolvers types */
 export type GQLResolversTypes = {
   AggregationResult: ResolverTypeWrapper<GQLAggregationResult>;
@@ -2575,6 +2584,7 @@ export type GQLResolversTypes = {
   Manuscript: ResolverTypeWrapper<GQLManuscript>;
   Meta: ResolverTypeWrapper<GQLMeta>;
   MetaImage: ResolverTypeWrapper<GQLMetaImage>;
+  MetaImageWithCopyright: ResolverTypeWrapper<GQLMetaImageWithCopyright>;
   Movie: ResolverTypeWrapper<GQLMovie>;
   MovieMeta: ResolverTypeWrapper<GQLMovieMeta>;
   MovieResourceTypes: ResolverTypeWrapper<GQLMovieResourceTypes>;
@@ -2743,6 +2753,7 @@ export type GQLResolversParentTypes = {
   Manuscript: GQLManuscript;
   Meta: GQLMeta;
   MetaImage: GQLMetaImage;
+  MetaImageWithCopyright: GQLMetaImageWithCopyright;
   Movie: GQLMovie;
   MovieMeta: GQLMovieMeta;
   MovieResourceTypes: GQLMovieResourceTypes;
@@ -3020,7 +3031,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImageWithCopyright']>, ParentType, ContextType>;
   oembed?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   oldNdlaUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   published?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3736,6 +3747,13 @@ export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversP
 
 export type GQLMetaImageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MetaImage'] = GQLResolversParentTypes['MetaImage']> = {
   alt?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMetaImageWithCopyrightResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MetaImageWithCopyright'] = GQLResolversParentTypes['MetaImageWithCopyright']> = {
+  alt?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -4605,6 +4623,7 @@ export type GQLResolvers<ContextType = any> = {
   Manuscript?: GQLManuscriptResolvers<ContextType>;
   Meta?: GQLMetaResolvers<ContextType>;
   MetaImage?: GQLMetaImageResolvers<ContextType>;
+  MetaImageWithCopyright?: GQLMetaImageWithCopyrightResolvers<ContextType>;
   Movie?: GQLMovieResolvers<ContextType>;
   MovieMeta?: GQLMovieMetaResolvers<ContextType>;
   MovieResourceTypes?: GQLMovieResourceTypesResolvers<ContextType>;

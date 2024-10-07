@@ -10,12 +10,7 @@ import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { queryNodes } from "./taxonomyApi";
 import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
-import {
-  GQLArticleTransformedContentArgs,
-  GQLMeta,
-  GQLRelatedContent,
-  GQLTransformedArticleContent,
-} from "../types/schema";
+import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 import { getArticleIdFromUrn, findPrimaryPath } from "../utils/articleHelpers";
 
