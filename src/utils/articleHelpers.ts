@@ -70,18 +70,3 @@ export async function filterMissingArticles<T extends GQLTaxonomyEntity | NodeCh
 
   return [...learningpathResources, ...withAvailabilityAndLanguage];
 }
-
-export function articleToMeta(article: IArticleV2): GQLMeta {
-  return {
-    id: article.id,
-    title: article.title.title,
-    htmlTitle: article.title.htmlTitle,
-    introduction: article.introduction?.introduction,
-    htmlIntroduction: article.introduction?.htmlIntroduction,
-    metaDescription: article.metaDescription?.metaDescription,
-    lastUpdated: article.updated,
-    metaImage: article.metaImage,
-    availability: article.availability,
-    language: article.content.language,
-  };
-}

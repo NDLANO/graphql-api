@@ -7,7 +7,7 @@
  */
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { fetchArticle, fetchLearningpath, fetchNode, fetchNodeByContentUri, fetchResourceTypes } from "../api";
+import { fetchLearningpath, fetchNode, fetchNodeByContentUri, fetchResourceTypes } from "../api";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -17,8 +17,8 @@ import {
   GQLResourceType,
   GQLResourceTypeDefinition,
 } from "../types/schema";
-import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
-import { articleToMeta, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
+import { articleToMeta, learningpathToMeta, nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async articleResource(
@@ -66,7 +66,10 @@ export const resolvers = {
     },
     async meta(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
       if (resource.contentUri?.startsWith("urn:learningpath")) {
-        return context.loaders.learningpathsLoader.load(resource.contentUri.replace("urn:learningpath:", ""));
+        const learningpath = await context.loaders.learningpathsLoader.load(
+          resource.contentUri.replace("urn:learningpath:", ""),
+        );
+        return learningpath ? learningpathToMeta(learningpath) : null;
       } else if (resource.contentUri?.startsWith("urn:article")) {
         const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));
         return article ? articleToMeta(article) : null;
@@ -85,13 +88,12 @@ export const resolvers = {
         status: 404,
       });
     },
-    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<IArticleV2 | null> {
+    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
       if (resource.contentUri?.startsWith("urn:article")) {
-        const articleId = getArticleIdFromUrn(resource.contentUri);
-        return fetchArticle({ articleId }, context);
+        return context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));
       }
       if (resource.contentUri?.startsWith("urn:learningpath")) {
-        return null;
+        return undefined;
       }
       throw Object.assign(new Error("Missing article contentUri for resource with id: " + resource.id), {
         status: 404,

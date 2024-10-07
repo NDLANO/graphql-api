@@ -9,6 +9,7 @@
 import DataLoader from "dataloader";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { IFilmFrontPageData, IFrontPage, ISubjectPageData } from "@ndla/types-backend/frontpage-api";
+import { ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
   fetchArticles,
@@ -34,7 +35,7 @@ export function articlesLoader(context: Context): DataLoader<string, IArticleV2 
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<string, GQLMeta | undefined> {
+export function learningpathsLoader(context: Context): DataLoader<string, ILearningPathSummaryV2 | undefined> {
   return new DataLoader(async (learningpathIds) => {
     return fetchLearningpaths(learningpathIds, context);
   });

@@ -8,7 +8,7 @@
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchArticle, fetchNode, fetchNodeResources, fetchChildren, queryNodes } from "../api";
+import { fetchNode, fetchNodeResources, fetchChildren, queryNodes } from "../api";
 import {
   GQLMeta,
   GQLQueryTopicArgs,
@@ -18,8 +18,8 @@ import {
   GQLTopicCoreResourcesArgs,
   GQLTopicSupplementaryResourcesArgs,
 } from "../types/schema";
-import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
-import { articleToMeta, filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
+import { articleToMeta, nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async topic(_: any, { id, subjectId }: GQLQueryTopicArgs, context: ContextWithLoaders): Promise<GQLTopic> {
@@ -59,10 +59,9 @@ export const resolvers = {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       return article?.availability;
     },
-    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
+    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
       if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
-        const articleId = getArticleIdFromUrn(topic.contentUri);
-        return fetchArticle({ articleId }, context);
+        return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       }
       throw Object.assign(new Error("Missing article contentUri for topic with id: " + topic.id), { status: 404 });
     },

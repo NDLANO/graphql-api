@@ -10,7 +10,6 @@ import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
-  fetchArticle,
   fetchChildren,
   fetchLK20CompetenceGoalSet,
   fetchLearningpath,
@@ -28,13 +27,8 @@ import {
   GQLQueryNodesArgs,
   GQLTaxonomyEntity,
 } from "../types/schema";
-import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
-import {
-  articleToMeta,
-  filterMissingArticles,
-  getArticleIdFromUrn,
-  getLearningpathIdFromUrn,
-} from "../utils/articleHelpers";
+import { articleToMeta, nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async node(
@@ -100,8 +94,7 @@ export const resolvers = {
   Node: {
     async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
       if (node.contentUri?.startsWith("urn:article")) {
-        const articleId = getArticleIdFromUrn(node.contentUri);
-        return fetchArticle({ articleId }, context);
+        return context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
       }
       return undefined;
     },

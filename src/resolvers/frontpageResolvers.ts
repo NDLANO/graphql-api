@@ -15,7 +15,7 @@ import {
   IMenu,
 } from "@ndla/types-backend/frontpage-api";
 import { TaxonomyContext } from "@ndla/types-taxonomy";
-import { fetchArticle, fetchFilmFrontpage, queryContexts, queryNodes } from "../api";
+import { fetchFilmFrontpage, queryContexts, queryNodes } from "../api";
 import { GQLMetaImage, GQLResourceType } from "../types/schema";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
@@ -39,8 +39,8 @@ export const Query = {
 
 export const resolvers = {
   FrontpageMenu: {
-    async article(menu: IFrontPage, _: any, context: ContextWithLoaders): Promise<IArticleV2> {
-      return fetchArticle({ articleId: `${menu.articleId}` }, context);
+    async article(menu: IFrontPage, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
+      return context.loaders.articlesLoader.load(`${menu.articleId}`);
     },
     async hideLevel(menu: IFrontPage | IMenu, _: any, context: ContextWithLoaders): Promise<boolean> {
       return "hideLevel" in menu ? menu.hideLevel ?? false : false;
@@ -92,12 +92,7 @@ export const resolvers = {
   FilmFrontpage: {
     async article(frontpage: IFilmFrontPageData, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
       if (frontpage.article) {
-        return fetchArticle(
-          {
-            articleId: `${getArticleIdFromUrn(frontpage.article)}`,
-          },
-          context,
-        );
+        return context.loaders.articlesLoader.load(getArticleIdFromUrn(frontpage.article));
       }
       return undefined;
     },

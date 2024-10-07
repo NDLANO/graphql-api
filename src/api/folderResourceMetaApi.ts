@@ -10,13 +10,12 @@ import groupBy from "lodash/groupBy";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { IAudioMetaInformation } from "@ndla/types-backend/audio-api";
 import { IImageMetaInformationV2 } from "@ndla/types-backend/image-api";
+import { ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchArticles } from "./articleApi";
 import { fetchAudio } from "./audioApi";
 import { searchConcepts } from "./conceptApi";
 import { fetchFolder } from "./folderApi";
 import { fetchImage } from "./imageApi";
-import { fetchLearningpaths } from "./learningpathApi";
 import { searchNodes } from "./taxonomyApi";
 import { fetchVideo } from "./videoApi";
 import { defaultLanguage } from "../config";
@@ -28,7 +27,7 @@ import {
   GQLQueryFolderResourceMetaArgs,
   GQLQueryFolderResourceMetaSearchArgs,
 } from "../types/schema";
-import { articleToMeta } from "../utils/articleHelpers";
+import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
 
 type MetaType = "article" | "learningpath" | "multidisciplinary" | "concept" | "image" | "audio" | "video" | "folder";
 
@@ -48,9 +47,12 @@ const fetchResourceMeta = async (
   context: ContextWithLoaders,
 ): Promise<Array<GQLMeta | undefined>> => {
   if (type === "learningpath") {
-    return await fetchLearningpaths(ids, context);
+    const learningpaths = await context.loaders.learningpathsLoader.loadMany(ids);
+    return learningpaths
+      .filter((learningpath): learningpath is ILearningPathSummaryV2 => !!learningpath)
+      .map(learningpathToMeta);
   } else {
-    const articles = await fetchArticles(ids, context);
+    const articles = await context.loaders.articlesLoader.loadMany(ids);
     return articles.filter((article): article is IArticleV2 => !!article).map(articleToMeta);
   }
 };
