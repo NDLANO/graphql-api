@@ -8,11 +8,13 @@
 
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
+import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
 import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
 import { apiUrl, defaultLanguage } from "../config";
-import { GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb } from "../types/schema";
+import { GQLMeta, GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb } from "../types/schema";
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
@@ -153,6 +155,38 @@ export function licenseFixer(lic: string, licVer: string) {
     return lic.replace(" ", "-");
   }
   return `${lic.replace(" ", "-")}-${licVer}`;
+}
+
+export function articleToMeta(article: IArticleV2): GQLMeta {
+  return {
+    id: article.id,
+    title: article.title.title,
+    htmlTitle: article.title.htmlTitle,
+    introduction: article.introduction?.introduction,
+    htmlIntroduction: article.introduction?.htmlIntroduction,
+    metaDescription: article.metaDescription?.metaDescription,
+    lastUpdated: article.updated,
+    metaImage: article.metaImage,
+    availability: article.availability,
+    language: article.content.language,
+  };
+}
+
+export function learningpathToMeta(learningpath: ILearningPathSummaryV2): GQLMeta {
+  return {
+    id: learningpath.id,
+    title: learningpath.title.title,
+    htmlTitle: learningpath.title.title,
+    introduction: learningpath.introduction.introduction,
+    metaDescription: learningpath.description.description,
+    lastUpdated: learningpath.lastUpdated,
+    metaImage: learningpath.coverPhotoUrl
+      ? {
+          url: learningpath.coverPhotoUrl,
+          alt: learningpath.introduction.introduction,
+        }
+      : undefined,
+  };
 }
 
 export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): GQLTaxonomyEntity => {

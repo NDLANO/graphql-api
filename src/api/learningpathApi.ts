@@ -6,14 +6,14 @@
  *
  */
 
-import { ILearningPathV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2, ILearningPathSummaryV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
 import { GQLLearningpath, GQLMeta } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
   learningpathIds: string[],
   context: Context,
-): Promise<Array<GQLMeta | undefined>> {
+): Promise<Array<ILearningPathSummaryV2 | undefined>> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/?language=${context.language}&fallback=true&ids=${learningpathIds.join(",")}`,
     context,
@@ -26,24 +26,7 @@ export async function fetchLearningpaths(
     const learningpath = json.results.find((item) => {
       return item.id.toString() === id;
     });
-
-    if (learningpath) {
-      return {
-        id: learningpath.id,
-        title: learningpath.title.title,
-        htmlTitle: learningpath.title.title,
-        introduction: learningpath.introduction.introduction,
-        metaDescription: learningpath.description.description,
-        lastUpdated: learningpath.lastUpdated,
-        metaImage: learningpath.coverPhotoUrl
-          ? {
-              url: learningpath.coverPhotoUrl,
-              alt: learningpath.introduction.introduction,
-            }
-          : undefined,
-      };
-    }
-    return undefined;
+    return learningpath;
   });
 }
 
