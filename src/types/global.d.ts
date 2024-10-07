@@ -32,9 +32,10 @@ declare global {
   }
 
   interface NodesLoaderParams {
-    contextId: string;
+    contextId?: string;
+    contentURI?: string;
+    rootId?: string;
     filterVisible?: boolean;
-    ids?: string[];
   }
 
   interface CurriculumLoaderParams {

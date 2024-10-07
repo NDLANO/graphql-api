@@ -20,7 +20,7 @@ export {
   fetchLK20CompetenceGoalSet,
 } from "./curriculumApi";
 export { fetchImage, fetchImageV3 } from "./imageApi";
-export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage, fetchMovieMeta } from "./frontpageApi";
+export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage } from "./frontpageApi";
 export { fetchLearningpaths, fetchLearningpath } from "./learningpathApi";
 export { fetchOembed } from "./oembedApi";
 export { search, groupSearch, searchWithoutPagination } from "./searchApi";

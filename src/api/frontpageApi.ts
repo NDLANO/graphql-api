@@ -37,16 +37,3 @@ export async function fetchFilmFrontpage(context: Context): Promise<IFilmFrontPa
   const response = await fetch(`/frontpage-api/v1/filmfrontpage`, context);
   return await resolveJson(response);
 }
-
-export async function fetchMovieMeta(articleUrn: string, context: Context): Promise<IMovieMeta | null> {
-  const article = await fetchSimpleArticle(articleUrn, context).catch(() => null);
-
-  if (article) {
-    return {
-      title: article.title.title,
-      metaDescription: article.metaDescription?.metaDescription,
-      metaImage: article.metaImage,
-    };
-  }
-  return null;
-}
