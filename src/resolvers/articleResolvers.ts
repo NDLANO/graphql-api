@@ -31,6 +31,7 @@ import {
   GQLArticleTransformedContentArgs,
   GQLRelatedContent,
   GQLVisualElementOembed,
+  GQLMetaImageWithCopyright,
 } from "../types/schema";
 
 export const Query = {
@@ -92,7 +93,11 @@ export const resolvers = {
       const parsed = load(oembed.html);
       return parsed("iframe").attr("src");
     },
-    async metaImage(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<GQLMetaImage | undefined> {
+    async metaImage(
+      article: IArticleV2,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLMetaImageWithCopyright | undefined> {
       if (!article.metaImage) return undefined;
       const imageId = article.metaImage.url.split("/").pop() ?? "";
       const image = await fetchImageV3(imageId, context);
