@@ -229,7 +229,7 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
           }
           break;
         case "key-figure":
-        case "blog-post":
+        case "pitch":
           if (curr.data.metaImage) {
             imageMetaData(curr.data.metaImage, acc);
           }

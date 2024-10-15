@@ -25,7 +25,7 @@ import {
   ConceptMetaData,
   ConceptListMetaData,
   FileMetaData,
-  BlogPostMetaData,
+  PitchMetaData,
   ContactBlockMetaData,
   KeyFigureMetaData,
   EmbedData,
@@ -295,7 +295,7 @@ const fileListMeta: Fetch<FileMetaData> = async ({ embedData, context }) => {
   return { exists: response };
 };
 
-const blogPostMeta: Fetch<BlogPostMetaData> = async ({ embedData, context }) => {
+const pitchMeta: Fetch<PitchMetaData> = async ({ embedData, context }) => {
   const metaImage = await fetchImageV3(embedData.imageId, context);
   return { metaImage };
 };
@@ -453,8 +453,8 @@ export const transformEmbed = async (
       meta = await conceptListMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "file") {
       meta = await fileListMeta({ embedData, context, index, opts });
-    } else if (embedData.resource === "blog-post") {
-      meta = await blogPostMeta({ embedData, context, index, opts });
+    } else if (embedData.resource === "pitch") {
+      meta = await pitchMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "contact-block") {
       meta = await contactBlockMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "key-figure") {
