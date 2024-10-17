@@ -23,7 +23,6 @@ import {
   BrightcoveMetaData,
   RelatedContentMetaData,
   ConceptMetaData,
-  ConceptListMetaData,
   FileMetaData,
   PitchMetaData,
   ContactBlockMetaData,
@@ -36,7 +35,7 @@ import {
 } from "@ndla/types-embed";
 import { fetchSimpleArticle } from "./articleApi";
 import { fetchAudioV2 } from "./audioApi";
-import { fetchEmbedConcept, fetchEmbedConcepts } from "./conceptApi";
+import { fetchEmbedConcept } from "./conceptApi";
 import { fetchExternalOembed } from "./externalApi";
 import { checkIfFileExists } from "./fileApi";
 import { fetchH5pLicenseInformation, fetchH5pOembed, fetchH5pInfo } from "./h5pApi";
@@ -269,27 +268,6 @@ const conceptMeta: Fetch<ConceptMetaData> = async ({ embedData, index, context, 
   };
 };
 
-const conceptListMeta: Fetch<ConceptListMetaData> = async ({ embedData, index, context, opts }) => {
-  const conceptList = await fetchEmbedConcepts(embedData.tag, embedData.subjectId, context, !!opts.draftConcept);
-
-  const concepts = await Promise.all(
-    conceptList.map(async (concept) => {
-      const visualElement = await fetchConceptVisualElement(concept.visualElement?.visualElement, context, index, opts);
-      return {
-        concept: {
-          ...concept,
-          content: {
-            ...concept.content,
-            content: parseMarkdown({ markdown: concept.content.content }),
-          },
-        },
-        visualElement,
-      };
-    }),
-  );
-  return { concepts };
-};
-
 const fileListMeta: Fetch<FileMetaData> = async ({ embedData, context }) => {
   const response = await checkIfFileExists(embedData.url, context);
   return { exists: response };
@@ -306,6 +284,7 @@ const contactBlockMeta: Fetch<ContactBlockMetaData> = async ({ embedData, contex
 };
 
 const keyFigureMeta: Fetch<KeyFigureMetaData> = async ({ embedData, context }) => {
+  if (!embedData.imageId) return {};
   const metaImage = await fetchImageV3(embedData.imageId, context);
   return { metaImage };
 };
@@ -449,8 +428,6 @@ export const transformEmbed = async (
         throw new Error("Failed to fetch concept");
       }
       meta = response;
-    } else if (embedData.resource === "concept-list") {
-      meta = await conceptListMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "file") {
       meta = await fileListMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "pitch") {

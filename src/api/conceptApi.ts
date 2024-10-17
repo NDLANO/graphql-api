@@ -7,7 +7,7 @@
  */
 
 import queryString from "query-string";
-import { IConceptSearchResult, IConcept, IConceptSummary } from "@ndla/types-backend/concept-api";
+import { IConceptSearchResult, IConcept } from "@ndla/types-backend/concept-api";
 import { fetchSubject } from "./taxonomyApi";
 import { GQLListingPage, GQLSubject } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
@@ -103,22 +103,4 @@ export const fetchEmbedConcept = async (id: string, context: Context, draftConce
   const res = await fetch(url, context);
   const resolved: IConcept = await resolveJson(res);
   return resolved;
-};
-
-export const fetchEmbedConcepts = async (
-  tag: string,
-  subjectId: string,
-  context: Context,
-  draftConcept: boolean,
-): Promise<IConceptSummary[]> => {
-  const endpoint = draftConcept ? "drafts" : "concepts";
-  const params = queryString.stringify({
-    tags: tag,
-    subjects: subjectId,
-    language: context.language,
-    "page-size": 1000,
-  });
-  const url = `/concept-api/v1/${endpoint}/?${params}`;
-  const res = await fetch(url, context).then(resolveJson);
-  return res.results;
 };

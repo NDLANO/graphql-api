@@ -211,10 +211,6 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
         case "concept":
           conceptMetaData(curr.data.concept, curr.data.visualElement, acc);
           break;
-        case "concept-list": {
-          curr.data.concepts.forEach((c) => conceptMetaData(c.concept, c.visualElement, acc));
-          break;
-        }
         case "iframe":
         case "external": {
           if (curr.data.iframeImage) {

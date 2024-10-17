@@ -2076,10 +2076,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/licenses@npm:^8.0.1-alpha.0":
-  version: 8.0.1-alpha.0
-  resolution: "@ndla/licenses@npm:8.0.1-alpha.0"
-  checksum: 10c0/b6554b0bbf0db813fd590d4e64fe9d4449ae158263a83b48d1fbf1f1c8b6b02b2e1024aacab3d10ce01ba3908197c35c56f22d3d12f5e22c5e7cda975b3ecc68
+"@ndla/licenses@npm:^8.0.3-alpha.0":
+  version: 8.0.3-alpha.0
+  resolution: "@ndla/licenses@npm:8.0.3-alpha.0"
+  checksum: 10c0/07f4db61aba864ef5980d525b1122e8d089b8c346af4c27943bfb40aed54aecd77246ad41ad411491d3b698ee67514ab1eb64d0352f8142d928fab5799d79ee6
   languageName: node
   linkType: hard
 
@@ -2090,10 +2090,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-embed@npm:^5.0.1-alpha.0":
-  version: 5.0.1-alpha.0
-  resolution: "@ndla/types-embed@npm:5.0.1-alpha.0"
-  checksum: 10c0/ab556f4eb98ab6c5ea66dfcc1d9312bb5cbd3a56bfe9266ca97613b7292ec7ed9e9123659f5be8303260b47876d3cc664fcaf256eea438aca24f1ce87a464783
+"@ndla/types-embed@npm:^5.0.4-alpha.0":
+  version: 5.0.4-alpha.0
+  resolution: "@ndla/types-embed@npm:5.0.4-alpha.0"
+  checksum: 10c0/dc75997483b8e3fa7115bad79d2fa1896f107151baba5f476c37466ed18f1ddc4447b6c48e6b44b6123c87339a2b61967c5f97819abde31593ac7abb65fab7ae
   languageName: node
   linkType: hard
 
@@ -8766,9 +8766,9 @@ __metadata:
     "@graphql-tools/mock": "npm:^8.7.10"
     "@graphql-tools/schema": "npm:^9.0.8"
     "@jest-mock/express": "npm:^2.0.2"
-    "@ndla/licenses": "npm:^8.0.1-alpha.0"
+    "@ndla/licenses": "npm:^8.0.3-alpha.0"
     "@ndla/types-backend": "npm:^0.2.92"
-    "@ndla/types-embed": "npm:^5.0.1-alpha.0"
+    "@ndla/types-embed": "npm:^5.0.4-alpha.0"
     "@ndla/types-taxonomy": "npm:^1.0.30"
     "@types/compression": "npm:^1.7.2"
     "@types/cors": "npm:^2.8.4"
