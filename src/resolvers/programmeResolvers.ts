@@ -20,7 +20,7 @@ import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
 
 const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
   return {
-    id: node.id,
+    id: node.contextId ?? node.id,
     title: {
       title: node.name,
       language: language,
