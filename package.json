@@ -34,7 +34,7 @@
     "@graphql-tools/mock": "^8.7.10",
     "@graphql-tools/schema": "^9.0.8",
     "@ndla/licenses": "^8.0.3-alpha.0",
-    "cheerio": "^1.0.0-rc.12",
+    "cheerio": "^1.0.0",
     "compression": "^1.7.4",
     "dataloader": "^1.4.0",
     "dotenv": "^6.2.0",
@@ -51,7 +51,7 @@
     "prismjs": "^1.29.0",
     "prom-client": "^15.1.2",
     "query-string": "^6.2.0",
-    "sanitize-html": "^2.13.0",
+    "sanitize-html": "^2.13.1",
     "winston": "^3.13.0"
   },
   "devDependencies": {
@@ -78,7 +78,7 @@
     "@types/node-fetch": "^2.1.2",
     "@types/prismjs": "^1.26.0",
     "@types/query-string": "^6.1.1",
-    "@types/sanitize-html": "^2.11.0",
+    "@types/sanitize-html": "^2.13.0",
     "@types/serve-static": "1.13.10",
     "@vercel/ncc": "^0.34.0",
     "chalk": "^2.4.1",
