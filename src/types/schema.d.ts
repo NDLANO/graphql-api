@@ -1532,6 +1532,7 @@ export type GQLPodcastSeriesWithEpisodes = GQLPodcastSeriesBase & {
 export type GQLProgrammePage = {
   __typename?: 'ProgrammePage';
   contentUri?: Maybe<Scalars['String']>;
+  contextId?: Maybe<Scalars['String']>;
   desktopImage?: Maybe<GQLMetaImage>;
   grades?: Maybe<Array<GQLGrade>>;
   id: Scalars['String'];
@@ -4024,6 +4025,7 @@ export type GQLPodcastSeriesWithEpisodesResolvers<ContextType = any, ParentType 
 
 export type GQLProgrammePageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ProgrammePage'] = GQLResolversParentTypes['ProgrammePage']> = {
   contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  contextId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   desktopImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   grades?: Resolver<Maybe<Array<GQLResolversTypes['Grade']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
