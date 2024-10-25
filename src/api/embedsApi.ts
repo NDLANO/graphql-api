@@ -246,10 +246,7 @@ const fetchConceptVisualElement = async (
   opts: TransformOptions,
 ): Promise<ConceptVisualElementMeta | undefined> => {
   if (!visualElement) return undefined;
-  const html = load(visualElement, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(visualElement, {});
   const embed = getEmbedsFromContent(html)[0];
   if (!embed) return undefined;
   const res = await transformEmbed(embed, context, index + 0.1, 0, {
@@ -325,14 +322,7 @@ const endsWithPunctuationRegex = /[.!?]$/;
 export const parseCaption = (caption: string): string => {
   const htmlCaption = parseMarkdown({ markdown: caption, inline: true });
 
-  const parsedCaption = load(
-    htmlCaption,
-    {
-      xmlMode: false,
-      decodeEntities: false,
-    },
-    false,
-  );
+  const parsedCaption = load(htmlCaption, {}, false);
 
   const lastTextNode = parsedCaption.root().contents().last();
 
