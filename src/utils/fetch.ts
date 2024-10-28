@@ -39,7 +39,7 @@ export default function createFetch(options: { cache: IKeyValueCache; disableCac
     const response = await nodeFetch(url, requestInit);
     const elapsedTime = performance.now() - startTime;
     if (elapsedTime > slowLogTimeout) {
-      getLogger().warn(
+      getLogger().info(
         `Fetching '${url}' took ${elapsedTime.toFixed(
           2,
         )}ms which is slower than slow log timeout of ${slowLogTimeout}ms`,
