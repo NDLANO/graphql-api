@@ -810,6 +810,7 @@ export const typeDefs = gql`
   interface SearchResult {
     id: Int!
     title: String!
+    htmlTitle: String!
     supportedLanguages: [String!]!
     url: String!
     metaDescription: String!
@@ -821,6 +822,7 @@ export const typeDefs = gql`
   type ArticleSearchResult implements SearchResult {
     id: Int!
     title: String!
+    htmlTitle: String!
     supportedLanguages: [String!]!
     url: String!
     metaDescription: String!
@@ -832,6 +834,7 @@ export const typeDefs = gql`
   type LearningpathSearchResult implements SearchResult {
     id: Int!
     title: String!
+    htmlTitle: String!
     supportedLanguages: [String!]!
     url: String!
     metaDescription: String!
@@ -1026,6 +1029,8 @@ export const typeDefs = gql`
     id: Int!
     path: String!
     name: String!
+    title: String!
+    htmlTitle: String!
     ingress: String!
     traits: [String!]!
     contexts: [SearchContext!]!

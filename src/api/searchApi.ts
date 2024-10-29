@@ -76,6 +76,8 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
         path: path || (isLearningpath ? `/learningpaths/${contentTypeResult.id}` : `/article/${contentTypeResult.id}`),
         url: url,
         name: contentTypeResult.title.title,
+        title: contentTypeResult.title.title,
+        htmlTitle: contentTypeResult.title.htmlTitle,
         ingress: contentTypeResult.metaDescription.metaDescription,
         contexts: contentTypeResult.contexts,
         ...(contentTypeResult.metaImage && {
@@ -131,5 +133,6 @@ export async function searchWithoutPagination(
 const transformResult = (result: IMultiSearchSummary) => ({
   ...result,
   title: result.title.title,
+  htmlTitle: result.title.htmlTitle,
   metaDescription: result.metaDescription?.metaDescription,
 });
