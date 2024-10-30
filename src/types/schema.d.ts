@@ -290,6 +290,7 @@ export type GQLArticleRequiredLibrary = {
 export type GQLArticleSearchResult = GQLSearchResult & {
   __typename?: 'ArticleSearchResult';
   contexts: Array<GQLSearchContext>;
+  htmlTitle: Scalars['String'];
   id: Scalars['Int'];
   metaDescription: Scalars['String'];
   metaImage?: Maybe<GQLMetaImage>;
@@ -725,11 +726,13 @@ export type GQLGroupSearch = {
 export type GQLGroupSearchResult = {
   __typename?: 'GroupSearchResult';
   contexts: Array<GQLSearchContext>;
+  htmlTitle: Scalars['String'];
   id: Scalars['Int'];
   ingress: Scalars['String'];
   metaImage?: Maybe<GQLMetaImage>;
   name: Scalars['String'];
   path: Scalars['String'];
+  title: Scalars['String'];
   traits: Array<Scalars['String']>;
   url: Scalars['String'];
 };
@@ -882,6 +885,7 @@ export type GQLLearningpathFolderResourceMeta = GQLFolderResourceMeta & {
 export type GQLLearningpathSearchResult = GQLSearchResult & {
   __typename?: 'LearningpathSearchResult';
   contexts: Array<GQLSearchContext>;
+  htmlTitle: Scalars['String'];
   id: Scalars['Int'];
   metaDescription: Scalars['String'];
   metaImage?: Maybe<GQLMetaImage>;
@@ -2080,6 +2084,7 @@ export type GQLSearchContextResourceTypes = {
 
 export type GQLSearchResult = {
   contexts: Array<GQLSearchContext>;
+  htmlTitle: Scalars['String'];
   id: Scalars['Int'];
   metaDescription: Scalars['String'];
   metaImage?: Maybe<GQLMetaImage>;
@@ -3082,6 +3087,7 @@ export type GQLArticleRequiredLibraryResolvers<ContextType = any, ParentType ext
 
 export type GQLArticleSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleSearchResult'] = GQLResolversParentTypes['ArticleSearchResult']> = {
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
@@ -3512,11 +3518,13 @@ export type GQLGroupSearchResolvers<ContextType = any, ParentType extends GQLRes
 
 export type GQLGroupSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['GroupSearchResult'] = GQLResolversParentTypes['GroupSearchResult']> = {
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   ingress?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   traits?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3669,6 +3677,7 @@ export type GQLLearningpathFolderResourceMetaResolvers<ContextType = any, Parent
 
 export type GQLLearningpathSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathSearchResult'] = GQLResolversParentTypes['LearningpathSearchResult']> = {
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
@@ -4214,6 +4223,7 @@ export type GQLSearchContextResourceTypesResolvers<ContextType = any, ParentType
 export type GQLSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchResult'] = GQLResolversParentTypes['SearchResult']> = {
   __resolveType: TypeResolveFn<'ArticleSearchResult' | 'LearningpathSearchResult', ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
