@@ -70,6 +70,13 @@ export const resolvers = {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       return article ? articleToMeta(article) : null;
     },
+    async name(node: Node, _: any, context: ContextWithLoaders): Promise<String | null> {
+      if (node.contentUri?.startsWith("urn:article")) {
+        const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
+        return article ? article.title.htmlTitle : null;
+      }
+      return node.name;
+    },
     async coreResources(
       topic: Node,
       args: GQLTopicCoreResourcesArgs,
