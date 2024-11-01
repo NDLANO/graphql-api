@@ -105,6 +105,11 @@ export const transformArticle = async (
     xmlMode: false,
     decodeEntities: false,
   });
+  while (html("math math").length > 0) {
+    html("math math").each((_, el) => {
+      html(el).replaceWith(html(el).html() ?? "");
+    });
+  }
   html("math").each((_, el) => {
     html(el)
       .attr("data-math", html(el).html() ?? "")
