@@ -100,6 +100,15 @@ const brightcoveMetaData = ({ data, embedData }: Success<"brightcove">, acc: Met
 
 const h5pMetaData = ({ data, embedData }: Success<"h5p">, acc: MetaData) => {
   const h5p = data.h5pLicenseInformation?.h5p;
+
+  const authors =
+    h5p?.authors
+      ?.filter((author) => !!author.name)
+      ?.map((author) => ({
+        type: roleMapper(author.role ?? ""),
+        name: author.name,
+      })) ?? [];
+
   const copyright: GQLCopyright | undefined = h5p
     ? {
         license: {
@@ -109,10 +118,7 @@ const h5pMetaData = ({ data, embedData }: Success<"h5p">, acc: MetaData) => {
         },
         creators: [],
         processors: [],
-        rightsholders: h5p.authors?.map((author) => ({
-          type: roleMapper(author.role ?? ""),
-          name: author.name,
-        })),
+        rightsholders: authors,
         origin: h5p.source ?? "",
       }
     : undefined;
