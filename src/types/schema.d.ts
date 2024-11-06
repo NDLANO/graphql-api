@@ -1362,7 +1362,7 @@ export type GQLMyNdlaPersonalData = {
   feideId: Scalars['String'];
   groups: Array<GQLMyNdlaGroup>;
   id: Scalars['Int'];
-  organization: Scalars['String'];
+  organization?: Maybe<Scalars['String']>;
   role: Scalars['String'];
   shareName: Scalars['Boolean'];
   username: Scalars['String'];
@@ -3865,7 +3865,7 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   feideId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   groups?: Resolver<Array<GQLResolversTypes['MyNdlaGroup']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  organization?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   shareName?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

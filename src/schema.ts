@@ -1219,7 +1219,7 @@ export const typeDefs = gql`
     role: String!
     arenaEnabled: Boolean!
     shareName: Boolean!
-    organization: String!
+    organization: String
     groups: [MyNdlaGroup!]!
     arenaGroups: [String!]!
   }
