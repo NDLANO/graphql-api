@@ -6,13 +6,15 @@
  *
  */
 
-import { fetchImageV3, fetchLearningpath, fetchNode, fetchOembed } from "../api";
+import { ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
+import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import {
   GQLLearningpath,
   GQLLearningpathCoverphoto,
   GQLLearningpathStep,
   GQLLearningpathStepOembed,
   GQLLearningpathStepResourceArgs,
+  GQLMyLearningpaths,
   GQLQueryLearningpathArgs,
   GQLResource,
 } from "../types/schema";
@@ -26,6 +28,9 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
+  },
+  async myLearningpaths(_: any, context: ContextWithLoaders): Promise<Array<ILearningPathSummaryV2 | undefined>> {
+    return fetchMyLearningpaths(context);
   },
 };
 

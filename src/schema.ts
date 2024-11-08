@@ -266,6 +266,24 @@ export const typeDefs = gql`
     coverphoto: LearningpathCoverphoto
   }
 
+  type MyLearningpaths {
+    copyright: LearningpathCopyright!
+    coverPhotoUrl: String
+    description: String!
+    duration: Int
+    id: Int!
+    introduction: String!
+    isBasedOn: Int
+    lastUpdated: String!
+    metaUrl: String!
+    revision: Int!
+    status: String!
+    supportedLanguages: [String!]!
+    tags: [String!]!
+    title: String!
+    message: String!
+  }
+
   type TaxonomyMetadata {
     grepCodes: [String!]!
     visible: Boolean!
@@ -1497,6 +1515,7 @@ export const typeDefs = gql`
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
+    myLearningpaths: MyLearningpaths
     programmes: [ProgrammePage!]
     programme(path: String, contextId: String): ProgrammePage
     subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean, ids: [String!]): [Subject!]

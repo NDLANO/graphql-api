@@ -21,7 +21,7 @@ export {
 } from "./curriculumApi";
 export { fetchImage, fetchImageV3 } from "./imageApi";
 export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage } from "./frontpageApi";
-export { fetchLearningpaths, fetchLearningpath } from "./learningpathApi";
+export { fetchLearningpaths, fetchLearningpath, fetchMyLearningpaths } from "./learningpathApi";
 export { fetchOembed } from "./oembedApi";
 export { search, groupSearch, searchWithoutPagination } from "./searchApi";
 export {

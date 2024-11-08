@@ -7,7 +7,7 @@
  */
 
 import { ILearningPathV2, ILearningPathSummaryV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
-import { GQLLearningpath, GQLMeta } from "../types/schema";
+import { GQLLearningpath, GQLMyLearningpaths } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
@@ -51,4 +51,10 @@ export async function fetchLearningpath(id: string, context: Context): Promise<G
     tags: learningpath.tags.tags || [],
     learningsteps,
   };
+}
+
+export async function fetchMyLearningpaths(context: Context): Promise<Array<ILearningPathSummaryV2 | undefined>> {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/mine`, context);
+  const resolved = await resolveJson(response);
+  return resolved;
 }

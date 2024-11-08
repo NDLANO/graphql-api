@@ -1344,6 +1344,25 @@ export type GQLMutationUpdateTopicV2Args = {
   topicId: Scalars['Int'];
 };
 
+export type GQLMyLearningpaths = {
+  __typename?: 'MyLearningpaths';
+  copyright: GQLLearningpathCopyright;
+  coverPhotoUrl?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
+  duration?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
+  introduction: Scalars['String'];
+  isBasedOn?: Maybe<Scalars['Int']>;
+  lastUpdated: Scalars['String'];
+  message: Scalars['String'];
+  metaUrl: Scalars['String'];
+  revision: Scalars['Int'];
+  status: Scalars['String'];
+  supportedLanguages: Array<Scalars['String']>;
+  tags: Array<Scalars['String']>;
+  title: Scalars['String'];
+};
+
 export type GQLMyNdlaGroup = {
   __typename?: 'MyNdlaGroup';
   displayName: Scalars['String'];
@@ -1590,6 +1609,7 @@ export type GQLQuery = {
   learningpath?: Maybe<GQLLearningpath>;
   listArenaUserV2: GQLPaginatedArenaUsers;
   listingPage?: Maybe<GQLListingPage>;
+  myLearningpaths?: Maybe<GQLMyLearningpaths>;
   node?: Maybe<GQLNode>;
   nodeByArticleId?: Maybe<GQLNode>;
   nodes?: Maybe<Array<GQLNode>>;
@@ -2596,6 +2616,7 @@ export type GQLResolversTypes = {
   MovieResourceTypes: ResolverTypeWrapper<GQLMovieResourceTypes>;
   MovieTheme: ResolverTypeWrapper<GQLMovieTheme>;
   Mutation: ResolverTypeWrapper<{}>;
+  MyLearningpaths: ResolverTypeWrapper<GQLMyLearningpaths>;
   MyNdlaGroup: ResolverTypeWrapper<GQLMyNdlaGroup>;
   MyNdlaPersonalData: ResolverTypeWrapper<GQLMyNdlaPersonalData>;
   Name: ResolverTypeWrapper<GQLName>;
@@ -2765,6 +2786,7 @@ export type GQLResolversParentTypes = {
   MovieResourceTypes: GQLMovieResourceTypes;
   MovieTheme: GQLMovieTheme;
   Mutation: {};
+  MyLearningpaths: GQLMyLearningpaths;
   MyNdlaGroup: GQLMyNdlaGroup;
   MyNdlaPersonalData: GQLMyNdlaPersonalData;
   Name: GQLName;
@@ -3848,6 +3870,25 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateTopicV2?: Resolver<GQLResolversTypes['ArenaTopicV2'], ParentType, ContextType, RequireFields<GQLMutationUpdateTopicV2Args, 'content' | 'title' | 'topicId'>>;
 };
 
+export type GQLMyLearningpathsResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyLearningpaths'] = GQLResolversParentTypes['MyLearningpaths']> = {
+  copyright?: Resolver<GQLResolversTypes['LearningpathCopyright'], ParentType, ContextType>;
+  coverPhotoUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  duration?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  introduction?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  isBasedOn?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
+  lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaGroup'] = GQLResolversParentTypes['MyNdlaGroup']> = {
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -4088,6 +4129,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
   listArenaUserV2?: Resolver<GQLResolversTypes['PaginatedArenaUsers'], ParentType, ContextType, Partial<GQLQueryListArenaUserV2Args>>;
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
+  myLearningpaths?: Resolver<Maybe<GQLResolversTypes['MyLearningpaths']>, ParentType, ContextType>;
   node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeArgs>>;
   nodeByArticleId?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeByArticleIdArgs>>;
   nodes?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, Partial<GQLQueryNodesArgs>>;
@@ -4641,6 +4683,7 @@ export type GQLResolvers<ContextType = any> = {
   MovieResourceTypes?: GQLMovieResourceTypesResolvers<ContextType>;
   MovieTheme?: GQLMovieThemeResolvers<ContextType>;
   Mutation?: GQLMutationResolvers<ContextType>;
+  MyLearningpaths?: GQLMyLearningpathsResolvers<ContextType>;
   MyNdlaGroup?: GQLMyNdlaGroupResolvers<ContextType>;
   MyNdlaPersonalData?: GQLMyNdlaPersonalDataResolvers<ContextType>;
   Name?: GQLNameResolvers<ContextType>;
