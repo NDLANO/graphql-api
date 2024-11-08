@@ -119,7 +119,7 @@ export const resolvers = {
       }
       return null;
     },
-    async name(node: Node, _: any, context: ContextWithLoaders): Promise<String | null> {
+    async htmlTitle(node: Node, _: any, context: ContextWithLoaders): Promise<String | null> {
       if (node.contentUri?.startsWith("urn:article")) {
         const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
         return article ? article.title.htmlTitle : null;
