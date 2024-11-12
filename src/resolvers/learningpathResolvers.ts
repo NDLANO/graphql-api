@@ -25,7 +25,8 @@ export const Query = {
     { pathId }: GQLQueryLearningpathArgs,
     context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
-    return fetchLearningpath(pathId, context);
+    const learningpath = await fetchLearningpath(pathId, context);
+    return toGQLLearningpath(learningpath);
   },
   async myLearningpaths(_: any, __: any, context: ContextWithLoaders): Promise<Array<GQLLearningpath>> {
     const learningpaths = await fetchMyLearningpaths(context);

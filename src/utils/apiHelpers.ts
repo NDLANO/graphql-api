@@ -9,7 +9,7 @@
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2, ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
 import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
@@ -189,18 +189,21 @@ export function learningpathToMeta(learningpath: ILearningPathSummaryV2): GQLMet
   };
 }
 
-export function toGQLLearningpath(learningpath: ILearningPathSummaryV2): GQLLearningpath {
-  const coverphoto = learningpath.coverPhotoUrl
-    ? { url: learningpath.coverPhotoUrl, metaUrl: learningpath.coverPhotoUrl }
-    : undefined;
+export function toGQLLearningpath(learningpath: ILearningPathV2): GQLLearningpath {
+  const learningsteps = learningpath.learningsteps.map((step) => ({
+    ...step,
+    title: step.title.title,
+    description: step.description?.description,
+  }));
+
   return {
     ...learningpath,
     title: learningpath.title.title,
     description: learningpath.description.description,
     lastUpdated: learningpath.lastUpdated,
-    coverphoto: coverphoto,
+    coverphoto: learningpath.coverPhoto,
     tags: learningpath.tags.tags || [],
-    revision: learningpath.revision ?? 0,
+    learningsteps,
   };
 }
 
