@@ -850,7 +850,7 @@ export type GQLLearningpath = {
   isBasedOn?: Maybe<Scalars['Int']>;
   lastUpdated: Scalars['String'];
   learningstepUrl: Scalars['String'];
-  learningsteps?: Maybe<Array<GQLLearningpathStep>>;
+  learningsteps: Array<GQLLearningpathStep>;
   metaUrl: Scalars['String'];
   revision: Scalars['Int'];
   status: Scalars['String'];
@@ -868,7 +868,7 @@ export type GQLLearningpathCopyright = {
 
 export type GQLLearningpathCoverphoto = {
   __typename?: 'LearningpathCoverphoto';
-  metaUrl?: Maybe<Scalars['String']>;
+  metaUrl: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -3643,7 +3643,7 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   isBasedOn?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningstepUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  learningsteps?: Resolver<Maybe<Array<GQLResolversTypes['LearningpathStep']>>, ParentType, ContextType>;
+  learningsteps?: Resolver<Array<GQLResolversTypes['LearningpathStep']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3661,7 +3661,7 @@ export type GQLLearningpathCopyrightResolvers<ContextType = any, ParentType exte
 };
 
 export type GQLLearningpathCoverphotoResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathCoverphoto'] = GQLResolversParentTypes['LearningpathCoverphoto']> = {
-  metaUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

@@ -238,7 +238,7 @@ export const typeDefs = gql`
 
   type LearningpathCoverphoto {
     url: String!
-    metaUrl: String
+    metaUrl: String!
   }
 
   type LearningpathCopyright {
@@ -258,7 +258,7 @@ export const typeDefs = gql`
     tags: [String!]!
     supportedLanguages: [String!]!
     isBasedOn: Int
-    learningsteps: [LearningpathStep!]
+    learningsteps: [LearningpathStep!]!
     metaUrl: String!
     revision: Int!
     learningstepUrl: String!
