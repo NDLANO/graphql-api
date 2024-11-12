@@ -850,7 +850,7 @@ export type GQLLearningpath = {
   isBasedOn?: Maybe<Scalars['Int']>;
   lastUpdated: Scalars['String'];
   learningstepUrl: Scalars['String'];
-  learningsteps: Array<GQLLearningpathStep>;
+  learningsteps?: Maybe<Array<GQLLearningpathStep>>;
   metaUrl: Scalars['String'];
   revision: Scalars['Int'];
   status: Scalars['String'];
@@ -868,7 +868,7 @@ export type GQLLearningpathCopyright = {
 
 export type GQLLearningpathCoverphoto = {
   __typename?: 'LearningpathCoverphoto';
-  metaUrl: Scalars['String'];
+  metaUrl?: Maybe<Scalars['String']>;
   url: Scalars['String'];
 };
 
@@ -1590,6 +1590,7 @@ export type GQLQuery = {
   learningpath?: Maybe<GQLLearningpath>;
   listArenaUserV2: GQLPaginatedArenaUsers;
   listingPage?: Maybe<GQLListingPage>;
+  myLearningpaths?: Maybe<Array<GQLLearningpath>>;
   node?: Maybe<GQLNode>;
   nodeByArticleId?: Maybe<GQLNode>;
   nodes?: Maybe<Array<GQLNode>>;
@@ -3642,7 +3643,7 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   isBasedOn?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningstepUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  learningsteps?: Resolver<Array<GQLResolversTypes['LearningpathStep']>, ParentType, ContextType>;
+  learningsteps?: Resolver<Maybe<Array<GQLResolversTypes['LearningpathStep']>>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3660,7 +3661,7 @@ export type GQLLearningpathCopyrightResolvers<ContextType = any, ParentType exte
 };
 
 export type GQLLearningpathCoverphotoResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathCoverphoto'] = GQLResolversParentTypes['LearningpathCoverphoto']> = {
-  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -4088,6 +4089,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
   listArenaUserV2?: Resolver<GQLResolversTypes['PaginatedArenaUsers'], ParentType, ContextType, Partial<GQLQueryListArenaUserV2Args>>;
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
+  myLearningpaths?: Resolver<Maybe<Array<GQLResolversTypes['Learningpath']>>, ParentType, ContextType>;
   node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeArgs>>;
   nodeByArticleId?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeByArticleIdArgs>>;
   nodes?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, Partial<GQLQueryNodesArgs>>;

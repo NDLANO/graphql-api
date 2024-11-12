@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchImageV3, fetchLearningpath, fetchNode, fetchOembed } from "../api";
+import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import {
   GQLLearningpath,
   GQLLearningpathCoverphoto,
@@ -16,7 +16,7 @@ import {
   GQLQueryLearningpathArgs,
   GQLResource,
 } from "../types/schema";
-import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
 
 export const Query = {
@@ -26,6 +26,10 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
+  },
+  async myLearningpaths(_: any, __: any, context: ContextWithLoaders): Promise<Array<GQLLearningpath>> {
+    const learningpaths = await fetchMyLearningpaths(context);
+    return learningpaths.map(toGQLLearningpath);
   },
 };
 
@@ -47,7 +51,7 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLLearningpathCoverphoto | undefined> {
       if (!learningpath.coverphoto) return undefined;
-      const imageId = learningpath.coverphoto?.metaUrl.split("/").pop() ?? "";
+      const imageId = learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "";
       const image = await fetchImageV3(imageId, context);
       return {
         ...learningpath.coverphoto,

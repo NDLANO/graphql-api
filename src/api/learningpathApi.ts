@@ -8,7 +8,7 @@
 
 import { ILearningPathV2, ILearningPathSummaryV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
 import { GQLLearningpath, GQLMeta } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { fetch, resolveJson, toGQLLearningpath } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
   learningpathIds: string[],
@@ -28,6 +28,14 @@ export async function fetchLearningpaths(
     });
     return learningpath;
   });
+}
+
+export async function fetchMyLearningpaths(context: Context): Promise<Array<ILearningPathSummaryV2>> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/mine?language=${context.language}&fallback=true`,
+    context,
+  );
+  return await resolveJson(response);
 }
 
 export async function fetchLearningpath(id: string, context: Context): Promise<GQLLearningpath> {

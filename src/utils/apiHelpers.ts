@@ -14,7 +14,7 @@ import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
 import { apiUrl, defaultLanguage } from "../config";
-import { GQLMeta, GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb } from "../types/schema";
+import { GQLMeta, GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb, GQLLearningpath } from "../types/schema";
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
@@ -186,6 +186,21 @@ export function learningpathToMeta(learningpath: ILearningPathSummaryV2): GQLMet
           alt: learningpath.introduction.introduction,
         }
       : undefined,
+  };
+}
+
+export function toGQLLearningpath(learningpath: ILearningPathSummaryV2): GQLLearningpath {
+  const coverphoto = learningpath.coverPhotoUrl
+    ? { url: learningpath.coverPhotoUrl, metaUrl: learningpath.coverPhotoUrl }
+    : undefined;
+  return {
+    ...learningpath,
+    title: learningpath.title.title,
+    description: learningpath.description.description,
+    lastUpdated: learningpath.lastUpdated,
+    coverphoto: coverphoto,
+    tags: learningpath.tags.tags || [],
+    revision: learningpath.revision ?? 0,
   };
 }
 

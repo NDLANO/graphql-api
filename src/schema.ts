@@ -238,7 +238,7 @@ export const typeDefs = gql`
 
   type LearningpathCoverphoto {
     url: String!
-    metaUrl: String!
+    metaUrl: String
   }
 
   type LearningpathCopyright {
@@ -258,7 +258,7 @@ export const typeDefs = gql`
     tags: [String!]!
     supportedLanguages: [String!]!
     isBasedOn: Int
-    learningsteps: [LearningpathStep!]!
+    learningsteps: [LearningpathStep!]
     metaUrl: String!
     revision: Int!
     learningstepUrl: String!
@@ -1497,6 +1497,7 @@ export const typeDefs = gql`
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
+    myLearningpaths: [Learningpath!]
     programmes: [ProgrammePage!]
     programme(path: String, contextId: String): ProgrammePage
     subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean, ids: [String!]): [Subject!]
