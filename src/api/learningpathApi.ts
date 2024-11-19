@@ -6,30 +6,9 @@
  *
  */
 
-import {
-  ILearningPathV2,
-  ILearningPathSummaryV2,
-  ISearchResultV2,
-  ILearningStepV2,
-} from "@ndla/types-backend/learningpath-api";
-import { GQLLearningpath, GQLLearningpathStep } from "../types/schema";
+import { ILearningPathSummaryV2, ILearningPathV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
+import { GQLLearningpath } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
-
-const mapILearningstep = (learningStep: ILearningStepV2): GQLLearningpathStep => ({
-  ...learningStep,
-  title: learningStep.title.title,
-  description: learningStep.description?.description,
-});
-
-const mapILearningPathV2 = (learningpath: ILearningPathV2): GQLLearningpath => ({
-  ...learningpath,
-  title: learningpath.title.title,
-  description: learningpath.description.description,
-  lastUpdated: learningpath.lastUpdated,
-  coverphoto: learningpath.coverPhoto,
-  tags: learningpath.tags.tags || [],
-  learningsteps: learningpath.learningsteps.map(mapILearningstep),
-});
 
 export async function fetchLearningpaths(
   learningpathIds: string[],
@@ -57,14 +36,19 @@ export async function fetchLearningpath(id: string, context: Context): Promise<G
     context,
   );
   const learningpath: ILearningPathV2 = await resolveJson(response);
-  return mapILearningPathV2(learningpath);
-}
+  const learningsteps = learningpath.learningsteps.map((step) => ({
+    ...step,
+    title: step.title.title,
+    description: step.description?.description,
+  }));
 
-export const fetchMyLearningpaths = async (context: Context) => {
-  const response = await fetch(
-    `/learningpath-api/v2/learningpaths/mine?language=${context.language}&fallback=true`,
-    context,
-  );
-  const learningpaths: ILearningPathV2[] = await resolveJson(response);
-  return learningpaths.map(mapILearningPathV2);
-};
+  return {
+    ...learningpath,
+    title: learningpath.title.title,
+    description: learningpath.description.description,
+    lastUpdated: learningpath.lastUpdated,
+    coverphoto: learningpath.coverPhoto,
+    tags: learningpath.tags.tags || [],
+    learningsteps,
+  };
+}
