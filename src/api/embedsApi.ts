@@ -189,11 +189,14 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   let path = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
   let url = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
   const nodes = await queryNodes(
-    { contentURI, language: context.language, includeContexts: true, filterProgrammes: true },
+    { contentURI, language: context.language, includeContexts: true, filterProgrammes: true, isVisible: true },
     context,
   );
   const node = nodes.find((n) => !!n.path);
-  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
+  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.context;
+  if (!ctx?.isVisible) {
+    return { path };
+  }
   const nodePath = ctx?.path ?? node?.path;
   const nodeUrl = ctx?.url ?? node?.url;
 
