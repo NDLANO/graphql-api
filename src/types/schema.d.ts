@@ -2237,6 +2237,7 @@ export type GQLTaxonomyContext = {
   __typename?: 'TaxonomyContext';
   breadcrumbs: Array<Scalars['String']>;
   contextId: Scalars['String'];
+  isActive: Scalars['Boolean'];
   name: Scalars['String'];
   parentIds: Array<Scalars['String']>;
   parents?: Maybe<Array<GQLTaxonomyCrumb>>;
@@ -4377,6 +4378,7 @@ export type GQLTaxBaseResolvers<ContextType = any, ParentType extends GQLResolve
 export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyContext'] = GQLResolversParentTypes['TaxonomyContext']> = {
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  isActive?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   parents?: Resolver<Maybe<Array<GQLResolversTypes['TaxonomyCrumb']>>, ParentType, ContextType>;
