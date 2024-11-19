@@ -6,7 +6,8 @@
  *
  */
 
-import { IImageMetaInformationV2, IImageMetaInformationV3 } from "@ndla/types-backend/image-api";
+import { IImageMetaInformationV2, IImageMetaInformationV3, Sort } from "@ndla/types-backend/image-api";
+import { GQLQuerySearchImagesArgs } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function fetchImage(imageId: string, context: Context): Promise<IImageMetaInformationV2 | null> {
@@ -22,6 +23,14 @@ export async function fetchImage(imageId: string, context: Context): Promise<IIm
 export async function fetchImageV3(imageId: string, context: Context): Promise<IImageMetaInformationV3> {
   const languageParam = context.language ? `?language=${context.language}` : "";
   const response = await fetch(`/image-api/v3/images/${imageId}${languageParam}`, context);
+  return await resolveJson(response);
+}
+
+export async function searchImages(params: GQLQuerySearchImagesArgs, context: Context) {
+  const response = await fetch("/image-api/v3/images", context, {
+    method: "POST",
+    body: JSON.stringify(params),
+  });
   return await resolveJson(response);
 }
 

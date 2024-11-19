@@ -7,6 +7,7 @@
  */
 
 import { fetchImageV3, fetchLearningpath, fetchNode, fetchOembed } from "../api";
+import { fetchMyLearningpaths } from "../api/learningpathApi";
 import {
   GQLLearningpath,
   GQLLearningpathCoverphoto,
@@ -26,6 +27,9 @@ export const Query = {
     context: ContextWithLoaders,
   ): Promise<GQLLearningpath> {
     return fetchLearningpath(pathId, context);
+  },
+  async myLearningpaths(_: any, __: any, context: ContextWithLoaders): Promise<GQLLearningpath[]> {
+    return fetchMyLearningpaths(context);
   },
 };
 

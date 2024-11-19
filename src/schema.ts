@@ -1606,6 +1606,8 @@ export const typeDefs = gql`
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
     listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
     subjectCollection(language: String!): [Subject!]
+    myLearningpaths: [Learningpath!]!
+    searchImages(query: String, page: Int, pageSize: Int): [ImageMetaInformation]!
   }
 
   type Mutation {
