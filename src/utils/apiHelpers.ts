@@ -196,23 +196,24 @@ export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): G
 };
 
 const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: ContextWithLoaders): GQLTaxonomyContext => {
-  const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || [];
-  const relevance = ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || "";
+  const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || ctx.breadcrumbs[0];
+  const relevance = ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || ctx.relevance[0];
   const url = ctx.url || ctx.path;
   const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, context));
   return {
     ...ctx,
     url,
     name,
-    breadcrumbs,
-    relevance,
+    breadcrumbs: breadcrumbs ?? [],
+    relevance: relevance ?? "",
     parents,
   };
 };
 
 const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, context: ContextWithLoaders): GQLTaxonomyCrumb => {
+  const name = crumb.name[context.language] || crumb.name[defaultLanguage] || crumb.name[0];
   return {
     ...crumb,
-    name: crumb.name[context.language] || crumb.name[defaultLanguage] || "",
+    name: name ?? "",
   };
 };
