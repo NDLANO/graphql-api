@@ -196,8 +196,10 @@ export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): G
 };
 
 const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: ContextWithLoaders): GQLTaxonomyContext => {
-  const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || ctx.breadcrumbs[0];
-  const relevance = ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || ctx.relevance[0];
+  const breadcrumbs =
+    ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || Object.values(ctx.breadcrumbs)[0];
+  const relevance =
+    ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || Object.values(ctx.relevance)[0];
   const url = ctx.url || ctx.path;
   const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, context));
   return {
@@ -211,7 +213,7 @@ const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: Conte
 };
 
 const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, context: ContextWithLoaders): GQLTaxonomyCrumb => {
-  const name = crumb.name[context.language] || crumb.name[defaultLanguage] || crumb.name[0];
+  const name = crumb.name[context.language] || crumb.name[defaultLanguage] || Object.values(crumb.name)[0];
   return {
     ...crumb,
     name: name ?? "",
