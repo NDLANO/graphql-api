@@ -1640,7 +1640,7 @@ export const typeDefs = gql`
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
     listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
     subjectCollection(language: String!): [Subject!]
-    searchImages(query: String, page: Int, pageSize: Int): ImageSearch
+    imageSearch(query: String, page: Int, pageSize: Int): ImageSearch
     imageV3(id: String!): ImageMetaInformationV3
   }
 

@@ -7,7 +7,7 @@
  */
 import { IImageMetaInformationV2, IImageMetaInformationV3, ISearchResultV3 } from "@ndla/types-backend/image-api";
 import { fetchImage, fetchImageV3, searchImages } from "../api/imageApi";
-import { GQLQueryImageArgs, GQLQuerySearchImagesArgs } from "../types/schema";
+import { GQLQueryImageArgs, GQLQueryImageSearchArgs } from "../types/schema";
 
 export const Query = {
   async image(_: any, { id }: GQLQueryImageArgs, context: ContextWithLoaders): Promise<IImageMetaInformationV2 | null> {
@@ -20,7 +20,7 @@ export const Query = {
   ): Promise<IImageMetaInformationV3 | null> {
     return fetchImageV3(id, context);
   },
-  async searchImages(_: any, args: GQLQuerySearchImagesArgs, context: ContextWithLoaders): Promise<ISearchResultV3> {
+  async imageSearch(_: any, args: GQLQueryImageSearchArgs, context: ContextWithLoaders): Promise<ISearchResultV3> {
     return searchImages(args, context);
   },
 };
