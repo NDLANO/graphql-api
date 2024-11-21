@@ -844,6 +844,7 @@ export type GQLLearningpath = {
   canEdit: Scalars['Boolean'];
   copyright: GQLLearningpathCopyright;
   coverphoto?: Maybe<GQLLearningpathCoverphoto>;
+  created: Scalars['String'];
   description: Scalars['String'];
   duration?: Maybe<Scalars['Int']>;
   id: Scalars['Int'];
@@ -3638,6 +3639,7 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   canEdit?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   copyright?: Resolver<GQLResolversTypes['LearningpathCopyright'], ParentType, ContextType>;
   coverphoto?: Resolver<Maybe<GQLResolversTypes['LearningpathCoverphoto']>, ParentType, ContextType>;
+  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   duration?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
