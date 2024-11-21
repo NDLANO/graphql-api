@@ -9,12 +9,12 @@
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2, ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
 import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
 import { apiUrl, defaultLanguage } from "../config";
-import { GQLMeta, GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb } from "../types/schema";
+import { GQLMeta, GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb, GQLLearningpath } from "../types/schema";
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
@@ -189,6 +189,24 @@ export function learningpathToMeta(learningpath: ILearningPathSummaryV2): GQLMet
   };
 }
 
+export function toGQLLearningpath(learningpath: ILearningPathV2): GQLLearningpath {
+  const learningsteps = learningpath.learningsteps.map((step) => ({
+    ...step,
+    title: step.title.title,
+    description: step.description?.description,
+  }));
+
+  return {
+    ...learningpath,
+    title: learningpath.title.title,
+    description: learningpath.description.description,
+    lastUpdated: learningpath.lastUpdated,
+    coverphoto: learningpath.coverPhoto,
+    tags: learningpath.tags.tags || [],
+    learningsteps,
+  };
+}
+
 export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): GQLTaxonomyEntity => {
   const contexts: GQLTaxonomyContext[] = node.contexts.map((ctx) => toGQLTaxonomyContext(ctx, node.name, context));
   const mainContext = node.context ? toGQLTaxonomyContext(node.context, node.name, context) : undefined;
@@ -196,23 +214,26 @@ export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): G
 };
 
 const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: ContextWithLoaders): GQLTaxonomyContext => {
-  const breadcrumbs = ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || [];
-  const relevance = ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || "";
+  const breadcrumbs =
+    ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || Object.values(ctx.breadcrumbs)[0];
+  const relevance =
+    ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || Object.values(ctx.relevance)[0];
   const url = ctx.url || ctx.path;
   const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, context));
   return {
     ...ctx,
     url,
     name,
-    breadcrumbs,
-    relevance,
+    breadcrumbs: breadcrumbs ?? [],
+    relevance: relevance ?? "",
     parents,
   };
 };
 
 const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, context: ContextWithLoaders): GQLTaxonomyCrumb => {
+  const name = crumb.name[context.language] || crumb.name[defaultLanguage] || Object.values(crumb.name)[0];
   return {
     ...crumb,
-    name: crumb.name[context.language] || crumb.name[defaultLanguage] || "",
+    name: name ?? "",
   };
 };

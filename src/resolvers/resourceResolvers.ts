@@ -17,7 +17,7 @@ import {
   GQLResourceType,
   GQLResourceTypeDefinition,
 } from "../types/schema";
-import { articleToMeta, learningpathToMeta, nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { articleToMeta, learningpathToMeta, nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
 import { getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
@@ -79,7 +79,8 @@ export const resolvers = {
     async learningpath(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<GQLLearningpath | null> {
       if (resource.contentUri?.startsWith("urn:learningpath")) {
         const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
-        return fetchLearningpath(learningpathId, context);
+        const learningpath = await fetchLearningpath(learningpathId, context);
+        return toGQLLearningpath(learningpath);
       }
       if (resource.contentUri?.startsWith("urn:article")) {
         return null;

@@ -7,7 +7,6 @@
  */
 
 import { ILearningPathSummaryV2, ILearningPathV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
-import { GQLLearningpath } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
@@ -30,25 +29,18 @@ export async function fetchLearningpaths(
   });
 }
 
-export async function fetchLearningpath(id: string, context: Context): Promise<GQLLearningpath> {
+export async function fetchMyLearningpaths(context: Context): Promise<Array<ILearningPathV2>> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/mine?language=${context.language}&fallback=true`,
+    context,
+  );
+  return await resolveJson(response);
+}
+
+export async function fetchLearningpath(id: string, context: Context): Promise<ILearningPathV2> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/${id}?language=${context.language}&fallback=true`,
     context,
   );
-  const learningpath: ILearningPathV2 = await resolveJson(response);
-  const learningsteps = learningpath.learningsteps.map((step) => ({
-    ...step,
-    title: step.title.title,
-    description: step.description?.description,
-  }));
-
-  return {
-    ...learningpath,
-    title: learningpath.title.title,
-    description: learningpath.description.description,
-    lastUpdated: learningpath.lastUpdated,
-    coverphoto: learningpath.coverPhoto,
-    tags: learningpath.tags.tags || [],
-    learningsteps,
-  };
+  return await resolveJson(response);
 }
