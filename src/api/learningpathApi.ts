@@ -7,8 +7,8 @@
  */
 
 import { ILearningPathV2, ILearningPathSummaryV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
-import { GQLLearningpath, GQLMeta } from "../types/schema";
-import { fetch, resolveJson, toGQLLearningpath } from "../utils/apiHelpers";
+import { GQLMutationUpdateStatusLearningpathArgs } from "../types/schema";
+import { fetch, resolveJson, resolveNothingFromStatus } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
   learningpathIds: string[],
@@ -43,5 +43,23 @@ export async function fetchLearningpath(id: string, context: Context): Promise<I
     `/learningpath-api/v2/learningpaths/${id}?language=${context.language}&fallback=true`,
     context,
   );
+  return await resolveJson(response);
+}
+
+export async function updateLearningpathStatus(
+  { id, status }: GQLMutationUpdateStatusLearningpathArgs,
+  context: Context,
+): Promise<string[]> {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${id}/status`, context, {
+    method: "PUT",
+    body: JSON.stringify({ status: status }),
+  });
+  return await resolveJson(response);
+}
+
+export async function deleteLearningpath(id: number, context: Context): Promise<string[]> {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${id}`, context, {
+    method: "DELETE",
+  });
   return await resolveJson(response);
 }

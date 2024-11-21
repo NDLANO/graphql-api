@@ -1020,6 +1020,7 @@ export type GQLMutation = {
   deleteCategory: Scalars['Int'];
   deleteFolder: Scalars['String'];
   deleteFolderResource: Scalars['String'];
+  deleteLearningpath: Array<Scalars['String']>;
   deletePersonalData: Scalars['Boolean'];
   deletePost: Scalars['Int'];
   deletePostV2: Scalars['Int'];
@@ -1059,6 +1060,7 @@ export type GQLMutation = {
   updatePersonalData: GQLMyNdlaPersonalData;
   updatePost: GQLArenaPost;
   updatePostV2: GQLArenaPostV2;
+  updateStatusLearningpath: Array<Scalars['String']>;
   updateTopicV2: GQLArenaTopicV2;
 };
 
@@ -1109,6 +1111,11 @@ export type GQLMutationDeleteFolderArgs = {
 export type GQLMutationDeleteFolderResourceArgs = {
   folderId: Scalars['String'];
   resourceId: Scalars['String'];
+};
+
+
+export type GQLMutationDeleteLearningpathArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -1333,6 +1340,12 @@ export type GQLMutationUpdatePostArgs = {
 export type GQLMutationUpdatePostV2Args = {
   content: Scalars['String'];
   postId: Scalars['Int'];
+};
+
+
+export type GQLMutationUpdateStatusLearningpathArgs = {
+  id: Scalars['Int'];
+  status: Scalars['String'];
 };
 
 
@@ -3808,6 +3821,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteCategory?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteCategoryArgs, 'categoryId'>>;
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
+  deleteLearningpath?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathArgs, 'id'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   deletePost?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostArgs, 'postId'>>;
   deletePostV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostV2Args, 'postId'>>;
@@ -3847,6 +3861,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
   updatePost?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostArgs, 'content' | 'postId'>>;
   updatePostV2?: Resolver<GQLResolversTypes['ArenaPostV2'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostV2Args, 'content' | 'postId'>>;
+  updateStatusLearningpath?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateStatusLearningpathArgs, 'id' | 'status'>>;
   updateTopicV2?: Resolver<GQLResolversTypes['ArenaTopicV2'], ParentType, ContextType, RequireFields<GQLMutationUpdateTopicV2Args, 'content' | 'title' | 'topicId'>>;
 };
 

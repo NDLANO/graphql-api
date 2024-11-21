@@ -7,12 +7,16 @@
  */
 
 import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
+import { deleteLearningpath, updateLearningpathStatus } from "../api/learningpathApi";
 import {
   GQLLearningpath,
   GQLLearningpathCoverphoto,
   GQLLearningpathStep,
   GQLLearningpathStepOembed,
   GQLLearningpathStepResourceArgs,
+  GQLMutationDeleteLearningpathArgs,
+  GQLMutationResolvers,
+  GQLMutationUpdateStatusLearningpathArgs,
   GQLQueryLearningpathArgs,
   GQLResource,
 } from "../types/schema";
@@ -103,5 +107,14 @@ export const resolvers = {
       }
       return null;
     },
+  },
+};
+
+export const Mutations: Pick<GQLMutationResolvers, "updateStatusLearningpath" | "deleteLearningpath"> = {
+  async updateStatusLearningpath(_: any, params: GQLMutationUpdateStatusLearningpathArgs, context: ContextWithLoaders) {
+    return await updateLearningpathStatus(params, context);
+  },
+  async deleteLearningpath(_: any, params: GQLMutationDeleteLearningpathArgs, context: ContextWithLoaders) {
+    return await deleteLearningpath(params.id, context);
   },
 };
