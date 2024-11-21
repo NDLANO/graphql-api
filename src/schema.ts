@@ -254,6 +254,7 @@ export const typeDefs = gql`
     duration: Int
     canEdit: Boolean!
     verificationStatus: String!
+    created: String!
     lastUpdated: String!
     tags: [String!]!
     supportedLanguages: [String!]!
