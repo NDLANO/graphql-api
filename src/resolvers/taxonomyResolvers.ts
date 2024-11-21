@@ -27,7 +27,7 @@ import {
   GQLQueryNodesArgs,
   GQLTaxonomyEntity,
 } from "../types/schema";
-import { articleToMeta, nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { articleToMeta, nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
 import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
@@ -106,7 +106,8 @@ export const resolvers = {
     async learningpath(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLLearningpath | null> {
       if (node.contentUri?.startsWith("urn:learningpath")) {
         const learningpathId = getLearningpathIdFromUrn(node.contentUri);
-        return fetchLearningpath(learningpathId, context);
+        const learningpath = await fetchLearningpath(learningpathId, context);
+        return toGQLLearningpath(learningpath);
       }
       return null;
     },
