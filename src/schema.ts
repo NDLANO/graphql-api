@@ -232,6 +232,7 @@ export const typeDefs = gql`
     type: String!
     article: Article
     resource(rootId: String, parentId: String): Resource
+    node(rootId: String, parentId: String): Node
     showTitle: Boolean!
     oembed: LearningpathStepOembed
   }

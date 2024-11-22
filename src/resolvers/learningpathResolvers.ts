@@ -83,6 +83,13 @@ export const resolvers = {
     },
     async resource(
       learningpathStep: GQLLearningpathStep,
+      args: GQLLearningpathStepResourceArgs,
+      context: ContextWithLoaders,
+    ): Promise<GQLResource | null> {
+      return this.node(learningpathStep, args, context);
+    },
+    async node(
+      learningpathStep: GQLLearningpathStep,
       { rootId, parentId }: GQLLearningpathStepResourceArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource | null> {
@@ -101,7 +108,7 @@ export const resolvers = {
         const resource = await fetchNode({ id: `urn:${lastResourceMatch}`, rootId, parentId }, context);
         return nodeToTaxonomyEntity(resource, context);
       }
-      return null;
+      return this.resource(learningpathStep, { rootId, parentId }, context);
     },
   },
 };
