@@ -7,7 +7,7 @@
  */
 
 import { ILearningPathV2, ILearningPathSummaryV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
-import { GQLMutationUpdateStatusLearningpathArgs } from "../types/schema";
+import { GQLMutationUpdateStatusLearningpathArgs, GQLMutationNewLearningpathArgs } from "../types/schema";
 import { fetch, resolveJson, resolveNothingFromStatus } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
@@ -60,6 +60,29 @@ export async function updateLearningpathStatus(
 export async function deleteLearningpath(id: number, context: Context): Promise<string[]> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${id}`, context, {
     method: "DELETE",
+  });
+  return await resolveJson(response);
+}
+
+export async function createLearningpath(
+  args: GQLMutationNewLearningpathArgs,
+  context: Context,
+): Promise<ILearningPathV2> {
+  const response = await fetch("/learningpath-api/v2/learningpaths", context, {
+    method: "POST",
+    body: JSON.stringify({
+      ...args,
+      copyright: {
+        license: {
+          description: "Creative Commons Attribution-ShareAlike 4.0 International",
+          license: "CC-BY-SA-4.0",
+          url: "https://creativecommons.org/licenses/by-sa/4.0/",
+        },
+        contributors: [],
+      },
+      description: "",
+      tags: [],
+    }),
   });
   return await resolveJson(response);
 }

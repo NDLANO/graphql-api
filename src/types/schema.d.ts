@@ -1038,6 +1038,7 @@ export type GQLMutation = {
   newArenaTopicV2: GQLArenaTopicV2;
   newFlag: Scalars['Int'];
   newFlagV2: Scalars['Int'];
+  newLearningpath: GQLLearningpath;
   removePostUpvote: Scalars['Int'];
   removePostUpvoteV2: Scalars['Int'];
   replyToTopic: GQLArenaPost;
@@ -1199,6 +1200,13 @@ export type GQLMutationNewFlagArgs = {
 export type GQLMutationNewFlagV2Args = {
   postId: Scalars['Int'];
   reason: Scalars['String'];
+};
+
+
+export type GQLMutationNewLearningpathArgs = {
+  imageUrl: Scalars['String'];
+  language: Scalars['String'];
+  title: Scalars['String'];
 };
 
 
@@ -3840,6 +3848,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   newArenaTopicV2?: Resolver<GQLResolversTypes['ArenaTopicV2'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicV2Args, 'categoryId' | 'content' | 'title'>>;
   newFlag?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagArgs, 'id' | 'reason' | 'type'>>;
   newFlagV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagV2Args, 'postId' | 'reason'>>;
+  newLearningpath?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'imageUrl' | 'language' | 'title'>>;
   removePostUpvote?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteArgs, 'postId'>>;
   removePostUpvoteV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteV2Args, 'postId'>>;
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
