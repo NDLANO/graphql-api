@@ -73,12 +73,16 @@ export const resolvers = {
         context.language;
       const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(crossSubjectCodes, language, context);
       const topics = await fetchSubjectTopics(args.subjectId, context);
-      return crossSubjectTopicInfo.map((crossSubjectTopic) => ({
-        title: crossSubjectTopic.title,
-        code: crossSubjectTopic.code,
-        id: crossSubjectTopic.id,
-        path: topics.find((topic: { name: string }) => topic.name === crossSubjectTopic.title)?.path,
-      }));
+      return crossSubjectTopicInfo.map((crossSubjectTopic) => {
+        const topic = topics.find((topic: { name: string }) => topic.name === crossSubjectTopic.title);
+        return {
+          title: crossSubjectTopic.title,
+          code: crossSubjectTopic.code,
+          id: crossSubjectTopic.id,
+          path: topic?.path,
+          url: topic?.url,
+        };
+      });
     },
     async concepts(article: IArticleV2, _: any, context: ContextWithLoaders): Promise<IConceptSummary[]> {
       if (article?.conceptIds && article.conceptIds.length > 0) {
