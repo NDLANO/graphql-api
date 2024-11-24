@@ -67,6 +67,9 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLCrossSubjectElement[]> {
       const crossSubjectCodes = article.grepCodes?.filter((code) => code.startsWith("TT")) ?? [];
+      if (!crossSubjectCodes.length) {
+        return [];
+      }
       const language =
         article.supportedLanguages?.find((lang) => lang === context.language) ??
         article.supportedLanguages?.[0] ??
