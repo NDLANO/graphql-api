@@ -1022,6 +1022,7 @@ export type GQLMutation = {
   deleteFolder: Scalars['String'];
   deleteFolderResource: Scalars['String'];
   deleteLearningpath: Array<Scalars['String']>;
+  deleteLearningpathStep: Array<Scalars['String']>;
   deletePersonalData: Scalars['Boolean'];
   deletePost: Scalars['Int'];
   deletePostV2: Scalars['Int'];
@@ -1039,6 +1040,7 @@ export type GQLMutation = {
   newFlag: Scalars['Int'];
   newFlagV2: Scalars['Int'];
   newLearningpath: GQLLearningpath;
+  newLearningpathStep: GQLLearningpathStep;
   removePostUpvote: Scalars['Int'];
   removePostUpvoteV2: Scalars['Int'];
   replyToTopic: GQLArenaPost;
@@ -1058,6 +1060,8 @@ export type GQLMutation = {
   updateFolder: GQLFolder;
   updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']>;
+  updateLearningpath: GQLLearningpath;
+  updateLearningpathStep: GQLLearningpathStep;
   updateOtherArenaUser: GQLMyNdlaPersonalData;
   updatePersonalData: GQLMyNdlaPersonalData;
   updatePost: GQLArenaPost;
@@ -1118,6 +1122,12 @@ export type GQLMutationDeleteFolderResourceArgs = {
 
 export type GQLMutationDeleteLearningpathArgs = {
   id: Scalars['Int'];
+};
+
+
+export type GQLMutationDeleteLearningpathStepArgs = {
+  learningpathId: Scalars['Int'];
+  learningstepId: Scalars['Int'];
 };
 
 
@@ -1207,6 +1217,19 @@ export type GQLMutationNewLearningpathArgs = {
   imageUrl: Scalars['String'];
   language: Scalars['String'];
   title: Scalars['String'];
+};
+
+
+export type GQLMutationNewLearningpathStepArgs = {
+  embedType: Scalars['String'];
+  embedUrl: Scalars['String'];
+  imageUrl: Scalars['String'];
+  language: Scalars['String'];
+  learningpathId: Scalars['Int'];
+  license: Scalars['String'];
+  revision: Scalars['Int'];
+  title: Scalars['String'];
+  type: Scalars['String'];
 };
 
 
@@ -1324,6 +1347,29 @@ export type GQLMutationUpdateFolderResourceArgs = {
 export type GQLMutationUpdateFolderStatusArgs = {
   folderId: Scalars['String'];
   status: Scalars['String'];
+};
+
+
+export type GQLMutationUpdateLearningpathArgs = {
+  id: Scalars['Int'];
+  imageUrl: Scalars['String'];
+  language: Scalars['String'];
+  revision: Scalars['Int'];
+  title: Scalars['String'];
+};
+
+
+export type GQLMutationUpdateLearningpathStepArgs = {
+  embedType: Scalars['String'];
+  embedUrl: Scalars['String'];
+  imageUrl: Scalars['String'];
+  language: Scalars['String'];
+  learningpathId: Scalars['Int'];
+  learningstepId: Scalars['Int'];
+  license: Scalars['String'];
+  revision: Scalars['Int'];
+  title: Scalars['String'];
+  type: Scalars['String'];
 };
 
 
@@ -3832,6 +3878,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
   deleteLearningpath?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathArgs, 'id'>>;
+  deleteLearningpathStep?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathStepArgs, 'learningpathId' | 'learningstepId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   deletePost?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostArgs, 'postId'>>;
   deletePostV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostV2Args, 'postId'>>;
@@ -3849,6 +3896,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   newFlag?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagArgs, 'id' | 'reason' | 'type'>>;
   newFlagV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagV2Args, 'postId' | 'reason'>>;
   newLearningpath?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'imageUrl' | 'language' | 'title'>>;
+  newLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathStepArgs, 'embedType' | 'embedUrl' | 'imageUrl' | 'language' | 'learningpathId' | 'license' | 'revision' | 'title' | 'type'>>;
   removePostUpvote?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteArgs, 'postId'>>;
   removePostUpvoteV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteV2Args, 'postId'>>;
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
@@ -3868,6 +3916,8 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
+  updateLearningpath?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathArgs, 'id' | 'imageUrl' | 'language' | 'revision' | 'title'>>;
+  updateLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'embedType' | 'embedUrl' | 'imageUrl' | 'language' | 'learningpathId' | 'learningstepId' | 'license' | 'revision' | 'title' | 'type'>>;
   updateOtherArenaUser?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdateOtherArenaUserArgs, 'data' | 'userId'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
   updatePost?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostArgs, 'content' | 'postId'>>;

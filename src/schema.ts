@@ -1689,6 +1689,31 @@ export const typeDefs = gql`
     updateStatusLearningpath(id: Int!, status: String!): [String!]!
     deleteLearningpath(id: Int!): [String!]!
     newLearningpath(title: String!, imageUrl: String!, language: String!): Learningpath!
+    updateLearningpath(id: Int!, revision: Int!, title: String!, imageUrl: String!, language: String!): Learningpath!
+    newLearningpathStep(
+      learningpathId: Int!
+      title: String!
+      imageUrl: String!
+      language: String!
+      embedUrl: String!
+      embedType: String!
+      type: String!
+      license: String!
+      revision: Int!
+    ): LearningpathStep!
+    updateLearningpathStep(
+      learningpathId: Int!
+      learningstepId: Int!
+      title: String!
+      imageUrl: String!
+      language: String!
+      embedUrl: String!
+      embedType: String!
+      type: String!
+      license: String!
+      revision: Int!
+    ): LearningpathStep!
+    deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]!
   }
 `;
 

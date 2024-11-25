@@ -9,12 +9,19 @@
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
 import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { ILearningPathV2, ILearningPathSummaryV2 } from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2, ILearningPathSummaryV2, ILearningStepV2 } from "@ndla/types-backend/learningpath-api";
 import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
 import { apiUrl, defaultLanguage } from "../config";
-import { GQLMeta, GQLTaxonomyEntity, GQLTaxonomyContext, GQLTaxonomyCrumb, GQLLearningpath } from "../types/schema";
+import {
+  GQLMeta,
+  GQLTaxonomyEntity,
+  GQLTaxonomyContext,
+  GQLTaxonomyCrumb,
+  GQLLearningpath,
+  GQLLearningpathStep,
+} from "../types/schema";
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
@@ -189,13 +196,11 @@ export function learningpathToMeta(learningpath: ILearningPathSummaryV2): GQLMet
   };
 }
 
-export function toGQLLearningpath(learningpath: ILearningPathV2): GQLLearningpath {
-  const learningsteps = learningpath.learningsteps.map((step) => ({
-    ...step,
-    title: step.title.title,
-    description: step.description?.description,
-  }));
+export function toGQLLearningstep(learningstep: ILearningStepV2): GQLLearningpathStep {
+  return { ...learningstep, title: learningstep.title.title, description: learningstep.description?.description };
+}
 
+export function toGQLLearningpath(learningpath: ILearningPathV2): GQLLearningpath {
   return {
     ...learningpath,
     title: learningpath.title.title,
@@ -203,7 +208,7 @@ export function toGQLLearningpath(learningpath: ILearningPathV2): GQLLearningpat
     lastUpdated: learningpath.lastUpdated,
     coverphoto: learningpath.coverPhoto,
     tags: learningpath.tags.tags || [],
-    learningsteps,
+    learningsteps: learningpath.learningsteps.map(toGQLLearningstep),
   };
 }
 

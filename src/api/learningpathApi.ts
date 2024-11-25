@@ -6,8 +6,17 @@
  *
  */
 
-import { ILearningPathV2, ILearningPathSummaryV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
-import { GQLMutationUpdateStatusLearningpathArgs, GQLMutationNewLearningpathArgs } from "../types/schema";
+import {
+  ILearningPathV2,
+  ILearningPathSummaryV2,
+  ISearchResultV2,
+  ILearningStepV2,
+} from "@ndla/types-backend/learningpath-api";
+import {
+  GQLMutationUpdateStatusLearningpathArgs,
+  GQLMutationNewLearningpathArgs,
+  GQLMutationUpdateLearningpathArgs,
+} from "../types/schema";
 import { fetch, resolveJson, resolveNothingFromStatus } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
@@ -84,5 +93,84 @@ export async function createLearningpath(
       tags: [],
     }),
   });
+  return await resolveJson(response);
+}
+
+export async function updateLearningpath(
+  { id, revision, title, imageUrl, language }: GQLMutationUpdateLearningpathArgs,
+  context: Context,
+): Promise<ILearningPathV2> {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${id}`, context, {
+    method: "PATCH",
+    body: JSON.stringify({
+      title,
+      revision,
+      language,
+      coverPhotoMetaUrl: imageUrl,
+    }),
+  });
+  return await resolveJson(response);
+}
+
+export async function createLearningstep(
+  { learningpath_id, title, description, language, embedUrl, embedType, type, license }: any,
+  context: Context,
+): Promise<ILearningStepV2> {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpath_id}/learningsteps`, context, {
+    method: "POST",
+    body: JSON.stringify({
+      title,
+      description,
+      language,
+      embed: {
+        url: embedUrl,
+        embedType,
+      },
+      showTitle: true,
+      type,
+      license,
+    }),
+  });
+  return await resolveJson(response);
+}
+
+export async function updateLearningstep(
+  { learningpath_id, learningstep_id, title, description, language, embedUrl, embedType, type, license, revision }: any,
+  context: Context,
+): Promise<ILearningStepV2> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/${learningpath_id}/learningsteps/${learningstep_id}`,
+    context,
+    {
+      method: "PATCH",
+      body: JSON.stringify({
+        title,
+        description,
+        language,
+        revision,
+        embed: {
+          url: embedUrl,
+          embedType,
+        },
+        showTitle: true,
+        type,
+        license,
+      }),
+    },
+  );
+  return await resolveJson(response);
+}
+
+export async function deleteLearningstep(
+  { learningstep_id, learningpath_id }: any,
+  context: Context,
+): Promise<string[]> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/${learningpath_id}/learningsteps/${learningstep_id}`,
+    context,
+    {
+      method: "DELETE",
+    },
+  );
   return await resolveJson(response);
 }
