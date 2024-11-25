@@ -77,7 +77,7 @@ export const resolvers = {
       const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(crossSubjectCodes, language, context);
       const topics = await fetchSubjectTopics(args.subjectId, context);
       return crossSubjectTopicInfo.map((crossSubjectTopic) => {
-        const topic = topics.find((topic: { name: string }) => topic.name === crossSubjectTopic.title);
+        const topic = topics.find((topic) => topic.name === crossSubjectTopic.title);
         return {
           title: crossSubjectTopic.title,
           code: crossSubjectTopic.code,
