@@ -268,31 +268,52 @@ export const typeDefs = gql`
     madeAvailable: String
   }
 
-  type LearningpathNewInput {
+  input LearningpathEmbedInput {
+    url: String!
+    embedType: String!
+  }
+
+  input ContributorInput {
+    type: String!
+    name: String!
+  }
+
+  input LicenseInput {
+    license: String!
+    url: String
+    description: String
+  }
+
+  input LearningpathCopyrightInput {
+    license: LicenseInput!
+    contributors: [ContributorInput!]!
+  }
+
+  input LearningpathNewInput {
     revision: Int!
     title: String!
     imageUrl: String!
     language: String!
     description: String!
-    tags: [Tags!]!
-    copyright: LearningpathCopyright!
+    tags: [String!]!
+    copyright: LearningpathCopyrightInput!
   }
 
-  type LearningpathUpdateInput {
+  input LearningpathUpdateInput {
     title: String!
     coverPhotoMetaUrl: String!
     language: String!
-    embed: LearningpathStepEmbedUrl!
+    embed: LearningpathEmbedInput!
     type: String!
     license: String!
     revision: Int!
   }
 
-  type LearningstepNewInput {
+  input LearningstepNewInput {
     title: String!
     imageUrl: String!
     language: String!
-    embed: LearningpathStepEmbedUrl!
+    embed: LearningpathEmbedInput!
     type: String!
     license: String!
     revision: Int!
@@ -300,11 +321,11 @@ export const typeDefs = gql`
     showTitle: Boolean!
   }
 
-  type LearningstepUpdateInput {
+  input LearningstepUpdateInput {
     title: String!
     imageUrl: String!
     language: String!
-    embed: LearningpathStepEmbedUrl!
+    embed: LearningpathEmbedInput!
     type: String!
     license: String!
     revision: Int!

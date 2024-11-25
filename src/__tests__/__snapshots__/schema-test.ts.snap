@@ -2,11 +2,11 @@
 
 exports[`can run query on schema 1`] = `
 {
-  "errors": [
-    [GraphQLError: The type of Mutation.newLearningpath(params:) must be Input Type but got: LearningpathNewInput!.],
-    [GraphQLError: The type of Mutation.updateLearningpath(params:) must be Input Type but got: LearningpathUpdateInput!.],
-    [GraphQLError: The type of Mutation.newLearningpathStep(params:) must be Input Type but got: LearningstepNewInput!.],
-    [GraphQLError: The type of Mutation.updateLearningpathStep(params:) must be Input Type but got: LearningstepUpdateInput!.],
-  ],
+  "data": {
+    "resource": {
+      "id": "Hello World",
+      "name": "Hello World",
+    },
+  },
 }
 `;
