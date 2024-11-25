@@ -98,10 +98,12 @@ export const resolvers = {
       }
       return undefined;
     },
-    async availability(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders) {
-      if (!node.contentUri) return undefined;
-      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
-      return article?.availability;
+    async availability(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<string | undefined> {
+      if (node.contentUri?.startsWith("urn:article")) {
+        const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
+        return article?.availability;
+      }
+      return undefined;
     },
     async learningpath(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLLearningpath | null> {
       if (node.contentUri?.startsWith("urn:learningpath")) {
@@ -112,9 +114,18 @@ export const resolvers = {
       return null;
     },
     async meta(node: Node, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
-      if (!node.contentUri?.startsWith("urn:article")) return null;
-      const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
-      return article ? articleToMeta(article) : null;
+      if (node.contentUri?.startsWith("urn:article")) {
+        const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
+        return article ? articleToMeta(article) : null;
+      }
+      return null;
+    },
+    async htmlTitle(node: Node, _: any, context: ContextWithLoaders): Promise<String | null> {
+      if (node.contentUri?.startsWith("urn:article")) {
+        const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
+        return article ? article.title.htmlTitle : null;
+      }
+      return node.name;
     },
     async children(
       node: GQLTaxonomyEntity,
@@ -129,8 +140,10 @@ export const resolvers = {
       return filterMissingArticles(entities, context);
     },
     async subjectpage(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<ISubjectPageData | null> {
-      if (!node.contentUri?.startsWith("urn:frontpage")) return null;
-      return context.loaders.subjectpageLoader.load(node.contentUri.replace("urn:frontpage:", ""));
+      if (node.contentUri?.startsWith("urn:frontpage")) {
+        return context.loaders.subjectpageLoader.load(node.contentUri.replace("urn:frontpage:", ""));
+      }
+      return null;
     },
     async grepCodes(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<string[]> {
       if (node.metadata?.grepCodes) {

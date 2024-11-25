@@ -303,6 +303,7 @@ export const typeDefs = gql`
     contentUri: String
     article: Article
     availability: String
+    htmlTitle: String
     meta: Meta
   }
 
@@ -331,6 +332,7 @@ export const typeDefs = gql`
     meta: Meta
     article: Article
     availability: String
+    htmlTitle: String
     learningpath: Learningpath
     subjectpage: SubjectPage
     grepCodes: [String!]
@@ -359,6 +361,7 @@ export const typeDefs = gql`
     learningpath: Learningpath
     article: Article
     availability: String
+    htmlTitle: String
   }
 
   type TaxonomyCrumb implements TaxBase {
@@ -402,6 +405,7 @@ export const typeDefs = gql`
     meta: Meta
     article: Article
     availability: String
+    htmlTitle: String
     isPrimary: Boolean
     parentId: String
     subtopics: [Topic!]
