@@ -268,6 +268,50 @@ export const typeDefs = gql`
     madeAvailable: String
   }
 
+  type LearningpathNewInput {
+    revision: Int!
+    title: String!
+    imageUrl: String!
+    language: String!
+    description: String!
+    tags: [Tags!]!
+    copyright: LearningpathCopyright!
+  }
+
+  type LearningpathUpdateInput {
+    title: String!
+    coverPhotoMetaUrl: String!
+    language: String!
+    embed: LearningpathStepEmbedUrl!
+    type: String!
+    license: String!
+    revision: Int!
+  }
+
+  type LearningstepNewInput {
+    title: String!
+    imageUrl: String!
+    language: String!
+    embed: LearningpathStepEmbedUrl!
+    type: String!
+    license: String!
+    revision: Int!
+    description: String!
+    showTitle: Boolean!
+  }
+
+  type LearningstepUpdateInput {
+    title: String!
+    imageUrl: String!
+    language: String!
+    embed: LearningpathStepEmbedUrl!
+    type: String!
+    license: String!
+    revision: Int!
+    description: String!
+    showTitle: Boolean!
+  }
+
   type TaxonomyMetadata {
     grepCodes: [String!]!
     visible: Boolean!
@@ -1725,30 +1769,13 @@ export const typeDefs = gql`
     removePostUpvoteV2(postId: Int!): Int!
     updateLearningpathStatus(id: Int!, status: String!): [String!]!
     deleteLearningpath(id: Int!): [String!]!
-    newLearningpath(title: String!, imageUrl: String!, language: String!): Learningpath!
-    updateLearningpath(id: Int!, revision: Int!, title: String!, imageUrl: String!, language: String!): Learningpath!
-    newLearningpathStep(
-      learningpathId: Int!
-      title: String!
-      imageUrl: String!
-      language: String!
-      embedUrl: String!
-      embedType: String!
-      type: String!
-      license: String!
-      revision: Int!
-    ): LearningpathStep!
+    newLearningpath(params: LearningpathNewInput!): Learningpath!
+    updateLearningpath(learningpathId: Int!, params: LearningpathUpdateInput!): Learningpath!
+    newLearningpathStep(learningpathId: Int!, params: LearningstepNewInput!): LearningpathStep!
     updateLearningpathStep(
       learningpathId: Int!
       learningstepId: Int!
-      title: String!
-      imageUrl: String!
-      language: String!
-      embedUrl: String!
-      embedType: String!
-      type: String!
-      license: String!
-      revision: Int!
+      params: LearningstepUpdateInput!
     ): LearningpathStep!
     deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]!
   }

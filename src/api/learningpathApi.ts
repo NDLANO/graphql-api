@@ -13,9 +13,12 @@ import {
   ILearningStepV2,
 } from "@ndla/types-backend/learningpath-api";
 import {
+  GQLMutationDeleteLearningpathStepArgs,
   GQLMutationNewLearningpathArgs,
+  GQLMutationNewLearningpathStepArgs,
   GQLMutationUpdateLearningpathArgs,
   GQLMutationUpdateLearningpathStatusArgs,
+  GQLMutationUpdateLearningpathStepArgs,
 } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
@@ -74,99 +77,59 @@ export async function deleteLearningpath(id: number, context: Context): Promise<
 }
 
 export async function createLearningpath(
-  args: GQLMutationNewLearningpathArgs,
+  { params }: GQLMutationNewLearningpathArgs,
   context: Context,
 ): Promise<ILearningPathV2> {
   const response = await fetch("/learningpath-api/v2/learningpaths", context, {
     method: "POST",
-    body: JSON.stringify({
-      ...args,
-      copyright: {
-        license: {
-          description: "Creative Commons Attribution-ShareAlike 4.0 International",
-          license: "CC-BY-SA-4.0",
-          url: "https://creativecommons.org/licenses/by-sa/4.0/",
-        },
-        contributors: [],
-      },
-      description: "",
-      tags: [],
-    }),
+    body: JSON.stringify(params),
   });
   return await resolveJson(response);
 }
 
 export async function updateLearningpath(
-  { id, revision, title, imageUrl, language }: GQLMutationUpdateLearningpathArgs,
+  { learningpathId, params }: GQLMutationUpdateLearningpathArgs,
   context: Context,
 ): Promise<ILearningPathV2> {
-  const response = await fetch(`/learningpath-api/v2/learningpaths/${id}`, context, {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}`, context, {
     method: "PATCH",
-    body: JSON.stringify({
-      title,
-      revision,
-      language,
-      coverPhotoMetaUrl: imageUrl,
-    }),
+    body: JSON.stringify(params),
   });
   return await resolveJson(response);
 }
 
 export async function createLearningstep(
-  { learningpath_id, title, description, language, embedUrl, embedType, type, license }: any,
+  { learningpathId, params }: GQLMutationNewLearningpathStepArgs,
   context: Context,
 ): Promise<ILearningStepV2> {
-  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpath_id}/learningsteps`, context, {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps`, context, {
     method: "POST",
-    body: JSON.stringify({
-      title,
-      description,
-      language,
-      embed: {
-        url: embedUrl,
-        embedType,
-      },
-      showTitle: true,
-      type,
-      license,
-    }),
+    body: JSON.stringify(params),
   });
   return await resolveJson(response);
 }
 
 export async function updateLearningstep(
-  { learningpath_id, learningstep_id, title, description, language, embedUrl, embedType, type, license, revision }: any,
+  { learningpathId, learningstepId, params }: GQLMutationUpdateLearningpathStepArgs,
   context: Context,
 ): Promise<ILearningStepV2> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${learningpath_id}/learningsteps/${learningstep_id}`,
+    `/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps/${learningstepId}`,
     context,
     {
       method: "PATCH",
-      body: JSON.stringify({
-        title,
-        description,
-        language,
-        revision,
-        embed: {
-          url: embedUrl,
-          embedType,
-        },
-        showTitle: true,
-        type,
-        license,
-      }),
+      body: JSON.stringify(params),
     },
   );
   return await resolveJson(response);
 }
 
 export async function deleteLearningstep(
-  { learningstep_id, learningpath_id }: any,
+  { learningstepId, learningpathId }: GQLMutationDeleteLearningpathStepArgs,
   context: Context,
 ): Promise<string[]> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${learningpath_id}/learningsteps/${learningstep_id}`,
+    `/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps/${learningstepId}`,
     context,
     {
       method: "DELETE",
