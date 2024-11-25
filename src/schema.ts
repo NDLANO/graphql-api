@@ -1482,7 +1482,7 @@ export const typeDefs = gql`
   }
 
   type ImageV3 {
-    filename: String
+    filename: String!
     size: Int!
     contentType: String!
     imageUrl: String!
@@ -1498,11 +1498,11 @@ export const typeDefs = gql`
     copyright: Copyright!
     tags: Tags!
     caption: Caption!
-    supportedLanguages: [String!]
+    supportedLanguages: [String!]!
     created: String!
     createdBy: String!
     modelRelease: String!
-    editorNotes: [EditorNote!]
+    editorNotes: [EditorNote!]!
     image: ImageV3!
   }
 
@@ -1511,7 +1511,7 @@ export const typeDefs = gql`
     page: Int!
     pageSize: Int!
     language: String!
-    results: [ImageMetaInformationV3!]
+    results: [ImageMetaInformationV3!]!
   }
 
   type Query {
@@ -1642,7 +1642,7 @@ export const typeDefs = gql`
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
     listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
     subjectCollection(language: String!): [Subject!]
-    imageSearch(query: String, page: Int, pageSize: Int): ImageSearch
+    imageSearch(query: String, page: Int, pageSize: Int): ImageSearch!
     imageV3(id: String!): ImageMetaInformationV3
   }
 
