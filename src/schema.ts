@@ -265,6 +265,7 @@ export const typeDefs = gql`
     learningstepUrl: String!
     status: String!
     coverphoto: LearningpathCoverphoto
+    madeAvailable: String
   }
 
   type TaxonomyMetadata {

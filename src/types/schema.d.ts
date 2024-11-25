@@ -852,6 +852,7 @@ export type GQLLearningpath = {
   lastUpdated: Scalars['String'];
   learningstepUrl: Scalars['String'];
   learningsteps: Array<GQLLearningpathStep>;
+  madeAvailable?: Maybe<Scalars['String']>;
   metaUrl: Scalars['String'];
   revision: Scalars['Int'];
   status: Scalars['String'];
@@ -3714,6 +3715,7 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningstepUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningsteps?: Resolver<Array<GQLResolversTypes['LearningpathStep']>, ParentType, ContextType>;
+  madeAvailable?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
