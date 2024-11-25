@@ -1061,12 +1061,12 @@ export type GQLMutation = {
   updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']>;
   updateLearningpath: GQLLearningpath;
+  updateLearningpathStatus: Array<Scalars['String']>;
   updateLearningpathStep: GQLLearningpathStep;
   updateOtherArenaUser: GQLMyNdlaPersonalData;
   updatePersonalData: GQLMyNdlaPersonalData;
   updatePost: GQLArenaPost;
   updatePostV2: GQLArenaPostV2;
-  updateStatusLearningpath: Array<Scalars['String']>;
   updateTopicV2: GQLArenaTopicV2;
 };
 
@@ -1359,6 +1359,12 @@ export type GQLMutationUpdateLearningpathArgs = {
 };
 
 
+export type GQLMutationUpdateLearningpathStatusArgs = {
+  id: Scalars['Int'];
+  status: Scalars['String'];
+};
+
+
 export type GQLMutationUpdateLearningpathStepArgs = {
   embedType: Scalars['String'];
   embedUrl: Scalars['String'];
@@ -1395,12 +1401,6 @@ export type GQLMutationUpdatePostArgs = {
 export type GQLMutationUpdatePostV2Args = {
   content: Scalars['String'];
   postId: Scalars['Int'];
-};
-
-
-export type GQLMutationUpdateStatusLearningpathArgs = {
-  id: Scalars['Int'];
-  status: Scalars['String'];
 };
 
 
@@ -3917,12 +3917,12 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
   updateLearningpath?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathArgs, 'id' | 'imageUrl' | 'language' | 'revision' | 'title'>>;
+  updateLearningpathStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStatusArgs, 'id' | 'status'>>;
   updateLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'embedType' | 'embedUrl' | 'imageUrl' | 'language' | 'learningpathId' | 'learningstepId' | 'license' | 'revision' | 'title' | 'type'>>;
   updateOtherArenaUser?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdateOtherArenaUserArgs, 'data' | 'userId'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
   updatePost?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostArgs, 'content' | 'postId'>>;
   updatePostV2?: Resolver<GQLResolversTypes['ArenaPostV2'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostV2Args, 'content' | 'postId'>>;
-  updateStatusLearningpath?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateStatusLearningpathArgs, 'id' | 'status'>>;
   updateTopicV2?: Resolver<GQLResolversTypes['ArenaTopicV2'], ParentType, ContextType, RequireFields<GQLMutationUpdateTopicV2Args, 'content' | 'title' | 'topicId'>>;
 };
 

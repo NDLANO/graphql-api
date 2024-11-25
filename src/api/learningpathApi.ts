@@ -13,11 +13,11 @@ import {
   ILearningStepV2,
 } from "@ndla/types-backend/learningpath-api";
 import {
-  GQLMutationUpdateStatusLearningpathArgs,
   GQLMutationNewLearningpathArgs,
   GQLMutationUpdateLearningpathArgs,
+  GQLMutationUpdateLearningpathStatusArgs,
 } from "../types/schema";
-import { fetch, resolveJson, resolveNothingFromStatus } from "../utils/apiHelpers";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
   learningpathIds: string[],
@@ -56,7 +56,7 @@ export async function fetchLearningpath(id: string, context: Context): Promise<I
 }
 
 export async function updateLearningpathStatus(
-  { id, status }: GQLMutationUpdateStatusLearningpathArgs,
+  { id, status }: GQLMutationUpdateLearningpathStatusArgs,
   context: Context,
 ): Promise<string[]> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${id}/status`, context, {

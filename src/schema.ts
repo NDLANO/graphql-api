@@ -1686,7 +1686,7 @@ export const typeDefs = gql`
     addPostUpvoteV2(postId: Int!): Int!
     removePostUpvote(postId: Int!): Int!
     removePostUpvoteV2(postId: Int!): Int!
-    updateStatusLearningpath(id: Int!, status: String!): [String!]!
+    updateLearningpathStatus(id: Int!, status: String!): [String!]!
     deleteLearningpath(id: Int!): [String!]!
     newLearningpath(title: String!, imageUrl: String!, language: String!): Learningpath!
     updateLearningpath(id: Int!, revision: Int!, title: String!, imageUrl: String!, language: String!): Learningpath!

@@ -23,7 +23,6 @@ import {
   GQLLearningpathStepOembed,
   GQLLearningpathStepResourceArgs,
   GQLMutationDeleteLearningpathArgs,
-  GQLMutationUpdateStatusLearningpathArgs,
   GQLMutationNewLearningpathArgs,
   GQLMutationResolvers,
   GQLQueryLearningpathArgs,
@@ -32,6 +31,7 @@ import {
   GQLMutationNewLearningpathStepArgs,
   GQLMutationUpdateLearningpathStepArgs,
   GQLMutationDeleteLearningpathStepArgs,
+  GQLMutationUpdateLearningpathStatusArgs,
 } from "../types/schema";
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
@@ -125,7 +125,7 @@ export const resolvers = {
 
 export const Mutations: Pick<
   GQLMutationResolvers,
-  | "updateStatusLearningpath"
+  | "updateLearningpathStatus"
   | "deleteLearningpath"
   | "newLearningpath"
   | "updateLearningpath"
@@ -133,7 +133,7 @@ export const Mutations: Pick<
   | "updateLearningpathStep"
   | "deleteLearningpathStep"
 > = {
-  async updateStatusLearningpath(_: any, params: GQLMutationUpdateStatusLearningpathArgs, context: ContextWithLoaders) {
+  async updateLearningpathStatus(_: any, params: GQLMutationUpdateLearningpathStatusArgs, context: ContextWithLoaders) {
     return await updateLearningpathStatus(params, context);
   },
   async deleteLearningpath(_: any, params: GQLMutationDeleteLearningpathArgs, context: ContextWithLoaders) {
