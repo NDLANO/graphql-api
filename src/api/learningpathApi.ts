@@ -6,9 +6,9 @@
  *
  */
 
-import { ILearningPathV2, ILearningPathSummaryV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
+import { ILearningPathSummaryV2, ILearningPathV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
 import { GQLMutationUpdateStatusLearningpathArgs } from "../types/schema";
-import { fetch, resolveJson, resolveNothingFromStatus } from "../utils/apiHelpers";
+import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
   learningpathIds: string[],
