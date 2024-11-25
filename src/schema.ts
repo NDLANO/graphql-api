@@ -658,6 +658,7 @@ export const typeDefs = gql`
     title: String!
     code: String
     path: String
+    url: String
   }
 
   type Element {

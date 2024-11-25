@@ -569,6 +569,7 @@ export type GQLCrossSubjectElement = {
   code?: Maybe<Scalars['String']>;
   path?: Maybe<Scalars['String']>;
   title: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 export type GQLDescription = {
@@ -904,6 +905,7 @@ export type GQLLearningpathStep = {
   id: Scalars['Int'];
   license?: Maybe<GQLLicense>;
   metaUrl: Scalars['String'];
+  node?: Maybe<GQLNode>;
   oembed?: Maybe<GQLLearningpathStepOembed>;
   resource?: Maybe<GQLResource>;
   revision: Scalars['Int'];
@@ -913,6 +915,13 @@ export type GQLLearningpathStep = {
   supportedLanguages: Array<Scalars['String']>;
   title: Scalars['String'];
   type: Scalars['String'];
+};
+
+
+export type GQLLearningpathStepNodeArgs = {
+  parentContextId?: InputMaybe<Scalars['String']>;
+  parentId?: InputMaybe<Scalars['String']>;
+  rootId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -3382,6 +3391,7 @@ export type GQLCrossSubjectElementResolvers<ContextType = any, ParentType extend
   code?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3712,6 +3722,7 @@ export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends G
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLLearningpathStepNodeArgs>>;
   oembed?: Resolver<Maybe<GQLResolversTypes['LearningpathStepOembed']>, ParentType, ContextType>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLLearningpathStepResourceArgs>>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
