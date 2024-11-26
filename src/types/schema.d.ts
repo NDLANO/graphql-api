@@ -953,19 +953,6 @@ export type GQLLearningpathStep = {
   type: Scalars['String'];
 };
 
-
-export type GQLLearningpathStepNodeArgs = {
-  parentContextId?: InputMaybe<Scalars['String']>;
-  parentId?: InputMaybe<Scalars['String']>;
-  rootId?: InputMaybe<Scalars['String']>;
-};
-
-
-export type GQLLearningpathStepResourceArgs = {
-  parentId?: InputMaybe<Scalars['String']>;
-  rootId?: InputMaybe<Scalars['String']>;
-};
-
 export type GQLLearningpathStepEmbedUrl = {
   __typename?: 'LearningpathStepEmbedUrl';
   embedType: Scalars['String'];
@@ -3814,9 +3801,9 @@ export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends G
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLLearningpathStepNodeArgs>>;
+  node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType>;
   oembed?: Resolver<Maybe<GQLResolversTypes['LearningpathStepOembed']>, ParentType, ContextType>;
-  resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLLearningpathStepResourceArgs>>;
+  resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   seqNo?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   showTitle?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
