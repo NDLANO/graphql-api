@@ -57,6 +57,7 @@ async function fetchHelper(path: string, context: Context, options?: RequestOpti
     ...accessTokenAuth,
     ...cacheHeaders,
   };
+
   return fetchFn(apiResourceUrl(path), context, {
     headers,
     ...options,

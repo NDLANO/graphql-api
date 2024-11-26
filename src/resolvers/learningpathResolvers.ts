@@ -134,7 +134,8 @@ export const Mutations: Pick<
   | "deleteLearningpathStep"
 > = {
   async updateLearningpathStatus(_: any, params: GQLMutationUpdateLearningpathStatusArgs, context: ContextWithLoaders) {
-    return await updateLearningpathStatus(params, context);
+    const learningpath = await updateLearningpathStatus(params, context);
+    return toGQLLearningpath(learningpath);
   },
   async deleteLearningpath(_: any, params: GQLMutationDeleteLearningpathArgs, context: ContextWithLoaders) {
     return await deleteLearningpath(params.id, context);

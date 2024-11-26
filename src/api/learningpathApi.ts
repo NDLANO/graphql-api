@@ -61,7 +61,7 @@ export async function fetchLearningpath(id: string, context: Context): Promise<I
 export async function updateLearningpathStatus(
   { id, status }: GQLMutationUpdateLearningpathStatusArgs,
   context: Context,
-): Promise<string[]> {
+): Promise<ILearningPathV2> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${id}/status`, context, {
     method: "PUT",
     body: JSON.stringify({ status: status }),
@@ -69,11 +69,11 @@ export async function updateLearningpathStatus(
   return await resolveJson(response);
 }
 
-export async function deleteLearningpath(id: number, context: Context): Promise<string[]> {
+export async function deleteLearningpath(id: number, context: Context): Promise<boolean> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${id}`, context, {
     method: "DELETE",
   });
-  return await resolveJson(response);
+  return response.ok;
 }
 
 export async function createLearningpath(
