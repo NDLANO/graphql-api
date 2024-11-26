@@ -108,7 +108,7 @@ export const resolvers = {
         const resource = await fetchNode({ id: `urn:${lastResourceMatch}`, rootId, parentId }, context);
         return nodeToTaxonomyEntity(resource, context);
       }
-      return this.resource(learningpathStep, { rootId, parentId }, context);
+      return null;
     },
   },
 };
