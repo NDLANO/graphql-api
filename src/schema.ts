@@ -659,6 +659,7 @@ export const typeDefs = gql`
     title: String!
     code: String
     path: String
+    url: String
   }
 
   type Element {
@@ -1482,6 +1483,39 @@ export const typeDefs = gql`
     sharedFolders: [SharedFolder!]!
   }
 
+  type ImageV3 {
+    filename: String!
+    size: Int!
+    contentType: String!
+    imageUrl: String!
+    dimensions: ImageDimensions
+    language: String!
+  }
+
+  type ImageMetaInformationV3 {
+    id: String!
+    metaUrl: String!
+    title: Title!
+    alttext: ImageAltText!
+    copyright: Copyright!
+    tags: Tags!
+    caption: Caption!
+    supportedLanguages: [String!]!
+    created: String!
+    createdBy: String!
+    modelRelease: String!
+    editorNotes: [EditorNote!]!
+    image: ImageV3!
+  }
+
+  type ImageSearch {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    language: String!
+    results: [ImageMetaInformationV3!]!
+  }
+
   type Query {
     node(id: String, rootId: String, parentId: String, contextId: String): Node
     nodes(
@@ -1610,6 +1644,8 @@ export const typeDefs = gql`
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
     listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
     subjectCollection(language: String!): [Subject!]
+    imageSearch(query: String, page: Int, pageSize: Int): ImageSearch!
+    imageV3(id: String!): ImageMetaInformationV3
   }
 
   type Mutation {
@@ -1687,6 +1723,8 @@ export const typeDefs = gql`
     addPostUpvoteV2(postId: Int!): Int!
     removePostUpvote(postId: Int!): Int!
     removePostUpvoteV2(postId: Int!): Int!
+    updateStatusLearningpath(id: Int!, status: String!): [String!]!
+    deleteLearningpath(id: Int!): [String!]!
   }
 `;
 
