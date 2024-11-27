@@ -537,6 +537,11 @@ export type GQLContributor = {
   type: Scalars['String'];
 };
 
+export type GQLContributorInput = {
+  name: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type GQLCopyright = {
   __typename?: 'Copyright';
   creators: Array<GQLContributor>;
@@ -847,7 +852,7 @@ export type GQLImageMetaInformationV3 = {
   copyright: GQLCopyright;
   created: Scalars['String'];
   createdBy: Scalars['String'];
-  editorNotes: Array<GQLEditorNote>;
+  editorNotes?: Maybe<Array<GQLEditorNote>>;
   id: Scalars['String'];
   image: GQLImageV3;
   metaUrl: Scalars['String'];
@@ -870,7 +875,7 @@ export type GQLImageV3 = {
   __typename?: 'ImageV3';
   contentType: Scalars['String'];
   dimensions?: Maybe<GQLImageDimensions>;
-  filename: Scalars['String'];
+  fileName: Scalars['String'];
   imageUrl: Scalars['String'];
   language: Scalars['String'];
   size: Scalars['Int'];
@@ -889,6 +894,7 @@ export type GQLLearningpath = {
   lastUpdated: Scalars['String'];
   learningstepUrl: Scalars['String'];
   learningsteps: Array<GQLLearningpathStep>;
+  madeAvailable?: Maybe<Scalars['String']>;
   metaUrl: Scalars['String'];
   revision: Scalars['Int'];
   status: Scalars['String'];
@@ -904,9 +910,19 @@ export type GQLLearningpathCopyright = {
   license: GQLLicense;
 };
 
+export type GQLLearningpathCopyrightInput = {
+  contributors: Array<GQLContributorInput>;
+  license: GQLLicenseInput;
+};
+
 export type GQLLearningpathCoverphoto = {
   __typename?: 'LearningpathCoverphoto';
   metaUrl: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type GQLLearningpathEmbedInput = {
+  embedType: Scalars['String'];
   url: Scalars['String'];
 };
 
@@ -918,6 +934,16 @@ export type GQLLearningpathFolderResourceMeta = GQLFolderResourceMeta & {
   resourceTypes: Array<GQLFolderResourceResourceType>;
   title: Scalars['String'];
   type: Scalars['String'];
+};
+
+export type GQLLearningpathNewInput = {
+  copyright: GQLLearningpathCopyrightInput;
+  coverPhotoMetaUrl: Scalars['String'];
+  description: Scalars['String'];
+  duration: Scalars['Int'];
+  language: Scalars['String'];
+  tags: Array<Scalars['String']>;
+  title: Scalars['String'];
 };
 
 export type GQLLearningpathSearchResult = GQLSearchResult & {
@@ -941,7 +967,6 @@ export type GQLLearningpathStep = {
   id: Scalars['Int'];
   license?: Maybe<GQLLicense>;
   metaUrl: Scalars['String'];
-  node?: Maybe<GQLNode>;
   oembed?: Maybe<GQLLearningpathStepOembed>;
   resource?: Maybe<GQLResource>;
   revision: Scalars['Int'];
@@ -951,13 +976,6 @@ export type GQLLearningpathStep = {
   supportedLanguages: Array<Scalars['String']>;
   title: Scalars['String'];
   type: Scalars['String'];
-};
-
-
-export type GQLLearningpathStepNodeArgs = {
-  parentContextId?: InputMaybe<Scalars['String']>;
-  parentId?: InputMaybe<Scalars['String']>;
-  rootId?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -972,6 +990,16 @@ export type GQLLearningpathStepEmbedUrl = {
   url: Scalars['String'];
 };
 
+export type GQLLearningpathStepNewInput = {
+  description: Scalars['String'];
+  embedUrl: GQLLearningpathEmbedInput;
+  language: Scalars['String'];
+  license: Scalars['String'];
+  showTitle: Scalars['Boolean'];
+  title: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type GQLLearningpathStepOembed = {
   __typename?: 'LearningpathStepOembed';
   height: Scalars['Int'];
@@ -981,11 +1009,40 @@ export type GQLLearningpathStepOembed = {
   width: Scalars['Int'];
 };
 
+export type GQLLearningpathStepUpdateInput = {
+  description: Scalars['String'];
+  embedUrl: GQLLearningpathEmbedInput;
+  language: Scalars['String'];
+  license: Scalars['String'];
+  revision: Scalars['Int'];
+  showTitle: Scalars['Boolean'];
+  title: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type GQLLearningpathUpdateInput = {
+  copyright: GQLLearningpathCopyrightInput;
+  coverPhotoMetaUrl: Scalars['String'];
+  deleteMessage: Scalars['Boolean'];
+  description: Scalars['String'];
+  duration: Scalars['Int'];
+  language: Scalars['String'];
+  revision: Scalars['Int'];
+  tags: Array<Scalars['String']>;
+  title: Scalars['String'];
+};
+
 export type GQLLicense = {
   __typename?: 'License';
   description?: Maybe<Scalars['String']>;
   license: Scalars['String'];
   url?: Maybe<Scalars['String']>;
+};
+
+export type GQLLicenseInput = {
+  description?: InputMaybe<Scalars['String']>;
+  license: Scalars['String'];
+  url?: InputMaybe<Scalars['String']>;
 };
 
 export type GQLListingPage = {
@@ -1066,7 +1123,8 @@ export type GQLMutation = {
   deleteCategory: Scalars['Int'];
   deleteFolder: Scalars['String'];
   deleteFolderResource: Scalars['String'];
-  deleteLearningpath: Array<Scalars['String']>;
+  deleteLearningpath?: Maybe<Scalars['Boolean']>;
+  deleteLearningpathStep?: Maybe<Array<Scalars['String']>>;
   deletePersonalData: Scalars['Boolean'];
   deletePost: Scalars['Int'];
   deletePostV2: Scalars['Int'];
@@ -1083,6 +1141,8 @@ export type GQLMutation = {
   newArenaTopicV2: GQLArenaTopicV2;
   newFlag: Scalars['Int'];
   newFlagV2: Scalars['Int'];
+  newLearningpath: GQLLearningpath;
+  newLearningpathStep: GQLLearningpathStep;
   removePostUpvote: Scalars['Int'];
   removePostUpvoteV2: Scalars['Int'];
   replyToTopic: GQLArenaPost;
@@ -1102,11 +1162,13 @@ export type GQLMutation = {
   updateFolder: GQLFolder;
   updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']>;
+  updateLearningpath: GQLLearningpath;
+  updateLearningpathStatus: GQLLearningpath;
+  updateLearningpathStep: GQLLearningpathStep;
   updateOtherArenaUser: GQLMyNdlaPersonalData;
   updatePersonalData: GQLMyNdlaPersonalData;
   updatePost: GQLArenaPost;
   updatePostV2: GQLArenaPostV2;
-  updateStatusLearningpath: Array<Scalars['String']>;
   updateTopicV2: GQLArenaTopicV2;
 };
 
@@ -1162,6 +1224,12 @@ export type GQLMutationDeleteFolderResourceArgs = {
 
 export type GQLMutationDeleteLearningpathArgs = {
   id: Scalars['Int'];
+};
+
+
+export type GQLMutationDeleteLearningpathStepArgs = {
+  learningpathId: Scalars['Int'];
+  learningstepId: Scalars['Int'];
 };
 
 
@@ -1244,6 +1312,17 @@ export type GQLMutationNewFlagArgs = {
 export type GQLMutationNewFlagV2Args = {
   postId: Scalars['Int'];
   reason: Scalars['String'];
+};
+
+
+export type GQLMutationNewLearningpathArgs = {
+  params: GQLLearningpathNewInput;
+};
+
+
+export type GQLMutationNewLearningpathStepArgs = {
+  learningpathId: Scalars['Int'];
+  params: GQLLearningpathStepNewInput;
 };
 
 
@@ -1364,6 +1443,25 @@ export type GQLMutationUpdateFolderStatusArgs = {
 };
 
 
+export type GQLMutationUpdateLearningpathArgs = {
+  learningpathId: Scalars['Int'];
+  params: GQLLearningpathUpdateInput;
+};
+
+
+export type GQLMutationUpdateLearningpathStatusArgs = {
+  id: Scalars['Int'];
+  status: Scalars['String'];
+};
+
+
+export type GQLMutationUpdateLearningpathStepArgs = {
+  learningpathId: Scalars['Int'];
+  learningstepId: Scalars['Int'];
+  params: GQLLearningpathStepUpdateInput;
+};
+
+
 export type GQLMutationUpdateOtherArenaUserArgs = {
   data: GQLArenaUserV2Input;
   userId: Scalars['Int'];
@@ -1386,12 +1484,6 @@ export type GQLMutationUpdatePostArgs = {
 export type GQLMutationUpdatePostV2Args = {
   content: Scalars['String'];
   postId: Scalars['Int'];
-};
-
-
-export type GQLMutationUpdateStatusLearningpathArgs = {
-  id: Scalars['Int'];
-  status: Scalars['String'];
 };
 
 
@@ -2618,6 +2710,7 @@ export type GQLResolversTypes = {
   ConfigMetaBoolean: ResolverTypeWrapper<GQLConfigMetaBoolean>;
   ConfigMetaStringList: ResolverTypeWrapper<GQLConfigMetaStringList>;
   Contributor: ResolverTypeWrapper<GQLContributor>;
+  ContributorInput: GQLContributorInput;
   Copyright: ResolverTypeWrapper<GQLCopyright>;
   CoreElement: ResolverTypeWrapper<GQLCoreElement>;
   CoverPhoto: ResolverTypeWrapper<GQLCoverPhoto>;
@@ -2657,13 +2750,20 @@ export type GQLResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Learningpath: ResolverTypeWrapper<GQLLearningpath>;
   LearningpathCopyright: ResolverTypeWrapper<GQLLearningpathCopyright>;
+  LearningpathCopyrightInput: GQLLearningpathCopyrightInput;
   LearningpathCoverphoto: ResolverTypeWrapper<GQLLearningpathCoverphoto>;
+  LearningpathEmbedInput: GQLLearningpathEmbedInput;
   LearningpathFolderResourceMeta: ResolverTypeWrapper<GQLLearningpathFolderResourceMeta>;
+  LearningpathNewInput: GQLLearningpathNewInput;
   LearningpathSearchResult: ResolverTypeWrapper<GQLLearningpathSearchResult>;
   LearningpathStep: ResolverTypeWrapper<GQLLearningpathStep>;
   LearningpathStepEmbedUrl: ResolverTypeWrapper<GQLLearningpathStepEmbedUrl>;
+  LearningpathStepNewInput: GQLLearningpathStepNewInput;
   LearningpathStepOembed: ResolverTypeWrapper<GQLLearningpathStepOembed>;
+  LearningpathStepUpdateInput: GQLLearningpathStepUpdateInput;
+  LearningpathUpdateInput: GQLLearningpathUpdateInput;
   License: ResolverTypeWrapper<GQLLicense>;
+  LicenseInput: GQLLicenseInput;
   ListingPage: ResolverTypeWrapper<GQLListingPage>;
   Manuscript: ResolverTypeWrapper<GQLManuscript>;
   Meta: ResolverTypeWrapper<GQLMeta>;
@@ -2790,6 +2890,7 @@ export type GQLResolversParentTypes = {
   ConfigMetaBoolean: GQLConfigMetaBoolean;
   ConfigMetaStringList: GQLConfigMetaStringList;
   Contributor: GQLContributor;
+  ContributorInput: GQLContributorInput;
   Copyright: GQLCopyright;
   CoreElement: GQLCoreElement;
   CoverPhoto: GQLCoverPhoto;
@@ -2829,13 +2930,20 @@ export type GQLResolversParentTypes = {
   Int: Scalars['Int'];
   Learningpath: GQLLearningpath;
   LearningpathCopyright: GQLLearningpathCopyright;
+  LearningpathCopyrightInput: GQLLearningpathCopyrightInput;
   LearningpathCoverphoto: GQLLearningpathCoverphoto;
+  LearningpathEmbedInput: GQLLearningpathEmbedInput;
   LearningpathFolderResourceMeta: GQLLearningpathFolderResourceMeta;
+  LearningpathNewInput: GQLLearningpathNewInput;
   LearningpathSearchResult: GQLLearningpathSearchResult;
   LearningpathStep: GQLLearningpathStep;
   LearningpathStepEmbedUrl: GQLLearningpathStepEmbedUrl;
+  LearningpathStepNewInput: GQLLearningpathStepNewInput;
   LearningpathStepOembed: GQLLearningpathStepOembed;
+  LearningpathStepUpdateInput: GQLLearningpathStepUpdateInput;
+  LearningpathUpdateInput: GQLLearningpathUpdateInput;
   License: GQLLicense;
+  LicenseInput: GQLLicenseInput;
   ListingPage: GQLListingPage;
   Manuscript: GQLManuscript;
   Meta: GQLMeta;
@@ -3720,7 +3828,7 @@ export type GQLImageMetaInformationV3Resolvers<ContextType = any, ParentType ext
   copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   createdBy?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  editorNotes?: Resolver<Array<GQLResolversTypes['EditorNote']>, ParentType, ContextType>;
+  editorNotes?: Resolver<Maybe<Array<GQLResolversTypes['EditorNote']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   image?: Resolver<GQLResolversTypes['ImageV3'], ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3743,7 +3851,7 @@ export type GQLImageSearchResolvers<ContextType = any, ParentType extends GQLRes
 export type GQLImageV3Resolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageV3'] = GQLResolversParentTypes['ImageV3']> = {
   contentType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   dimensions?: Resolver<Maybe<GQLResolversTypes['ImageDimensions']>, ParentType, ContextType>;
-  filename?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  fileName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   imageUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   size?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -3762,6 +3870,7 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningstepUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningsteps?: Resolver<Array<GQLResolversTypes['LearningpathStep']>, ParentType, ContextType>;
+  madeAvailable?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3814,7 +3923,6 @@ export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends G
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLLearningpathStepNodeArgs>>;
   oembed?: Resolver<Maybe<GQLResolversTypes['LearningpathStepOembed']>, ParentType, ContextType>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLLearningpathStepResourceArgs>>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -3926,7 +4034,8 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteCategory?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteCategoryArgs, 'categoryId'>>;
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
-  deleteLearningpath?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathArgs, 'id'>>;
+  deleteLearningpath?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathArgs, 'id'>>;
+  deleteLearningpathStep?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathStepArgs, 'learningpathId' | 'learningstepId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   deletePost?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostArgs, 'postId'>>;
   deletePostV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeletePostV2Args, 'postId'>>;
@@ -3943,6 +4052,8 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   newArenaTopicV2?: Resolver<GQLResolversTypes['ArenaTopicV2'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicV2Args, 'categoryId' | 'content' | 'title'>>;
   newFlag?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagArgs, 'id' | 'reason' | 'type'>>;
   newFlagV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagV2Args, 'postId' | 'reason'>>;
+  newLearningpath?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'params'>>;
+  newLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathStepArgs, 'learningpathId' | 'params'>>;
   removePostUpvote?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteArgs, 'postId'>>;
   removePostUpvoteV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteV2Args, 'postId'>>;
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
@@ -3962,11 +4073,13 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
+  updateLearningpath?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathArgs, 'learningpathId' | 'params'>>;
+  updateLearningpathStatus?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStatusArgs, 'id' | 'status'>>;
+  updateLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'learningpathId' | 'learningstepId' | 'params'>>;
   updateOtherArenaUser?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdateOtherArenaUserArgs, 'data' | 'userId'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
   updatePost?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostArgs, 'content' | 'postId'>>;
   updatePostV2?: Resolver<GQLResolversTypes['ArenaPostV2'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostV2Args, 'content' | 'postId'>>;
-  updateStatusLearningpath?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateStatusLearningpathArgs, 'id' | 'status'>>;
   updateTopicV2?: Resolver<GQLResolversTypes['ArenaTopicV2'], ParentType, ContextType, RequireFields<GQLMutationUpdateTopicV2Args, 'content' | 'title' | 'topicId'>>;
 };
 

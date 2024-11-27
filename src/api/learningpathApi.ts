@@ -6,8 +6,20 @@
  *
  */
 
-import { ILearningPathSummaryV2, ILearningPathV2, ISearchResultV2 } from "@ndla/types-backend/learningpath-api";
-import { GQLMutationUpdateStatusLearningpathArgs } from "../types/schema";
+import {
+  ILearningPathV2,
+  ILearningPathSummaryV2,
+  ISearchResultV2,
+  ILearningStepV2,
+} from "@ndla/types-backend/learningpath-api";
+import {
+  GQLMutationDeleteLearningpathStepArgs,
+  GQLMutationNewLearningpathArgs,
+  GQLMutationNewLearningpathStepArgs,
+  GQLMutationUpdateLearningpathArgs,
+  GQLMutationUpdateLearningpathStatusArgs,
+  GQLMutationUpdateLearningpathStepArgs,
+} from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function fetchLearningpaths(
@@ -47,9 +59,9 @@ export async function fetchLearningpath(id: string, context: Context): Promise<I
 }
 
 export async function updateLearningpathStatus(
-  { id, status }: GQLMutationUpdateStatusLearningpathArgs,
+  { id, status }: GQLMutationUpdateLearningpathStatusArgs,
   context: Context,
-): Promise<string[]> {
+): Promise<ILearningPathV2> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${id}/status`, context, {
     method: "PUT",
     body: JSON.stringify({ status: status }),
@@ -57,9 +69,71 @@ export async function updateLearningpathStatus(
   return await resolveJson(response);
 }
 
-export async function deleteLearningpath(id: number, context: Context): Promise<string[]> {
+export async function deleteLearningpath(id: number, context: Context): Promise<boolean> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${id}`, context, {
     method: "DELETE",
   });
+  return response.ok;
+}
+
+export async function createLearningpath(
+  { params }: GQLMutationNewLearningpathArgs,
+  context: Context,
+): Promise<ILearningPathV2> {
+  const response = await fetch("/learningpath-api/v2/learningpaths", context, {
+    method: "POST",
+    body: JSON.stringify(params),
+  });
+  return await resolveJson(response);
+}
+
+export async function updateLearningpath(
+  { learningpathId, params }: GQLMutationUpdateLearningpathArgs,
+  context: Context,
+): Promise<ILearningPathV2> {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}`, context, {
+    method: "PATCH",
+    body: JSON.stringify(params),
+  });
+  return await resolveJson(response);
+}
+
+export async function createLearningstep(
+  { learningpathId, params }: GQLMutationNewLearningpathStepArgs,
+  context: Context,
+): Promise<ILearningStepV2> {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps`, context, {
+    method: "POST",
+    body: JSON.stringify(params),
+  });
+  return await resolveJson(response);
+}
+
+export async function updateLearningstep(
+  { learningpathId, learningstepId, params }: GQLMutationUpdateLearningpathStepArgs,
+  context: Context,
+): Promise<ILearningStepV2> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps/${learningstepId}`,
+    context,
+    {
+      method: "PATCH",
+      body: JSON.stringify(params),
+    },
+  );
+  return await resolveJson(response);
+}
+
+export async function deleteLearningstep(
+  { learningstepId, learningpathId }: GQLMutationDeleteLearningpathStepArgs,
+  context: Context,
+): Promise<string[]> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps/${learningstepId}`,
+    context,
+    {
+      method: "DELETE",
+    },
+  );
   return await resolveJson(response);
 }
