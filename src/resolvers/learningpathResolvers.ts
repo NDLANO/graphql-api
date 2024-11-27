@@ -71,6 +71,9 @@ export const resolvers = {
       if (!learningpath.coverphoto) return undefined;
       const imageId = learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "";
       const image = await fetchImageV3(imageId, context);
+      if (!image) {
+        return undefined;
+      }
       return {
         ...learningpath.coverphoto,
         url: image.image?.imageUrl,

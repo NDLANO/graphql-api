@@ -57,7 +57,7 @@ type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
     index: number;
     opts: TransformOptions;
   } & ExtraData,
-) => Promise<Extract<EmbedMetaData, { resource: T["resource"]; status: "success" }>["data"]>;
+) => Promise<Extract<EmbedMetaData, { resource: T["resource"]; status: "success" }>["data"] | undefined>;
 
 // Some embeds depend on fetching image information, but can function just fine without.
 // This function simply suppresses the error. Do not use it for fetching the actual imageMeta.
@@ -76,12 +76,15 @@ const fetchImageWrapper = async (id: string, context: Context): Promise<IImageMe
 };
 
 const imageMeta: Fetch<ImageMetaData> = async ({ embedData, context }) => {
-  const res = await fetchImageV3(embedData.resourceId, context);
+  const image = await fetchImageV3(embedData.resourceId, context);
+  if (!image) {
+    return undefined;
+  }
   return {
-    ...res,
+    ...image,
     caption: {
-      ...res.caption,
-      caption: parseCaption(res.caption.caption),
+      ...image.caption,
+      caption: parseCaption(image.caption.caption),
     },
   };
 };
@@ -275,17 +278,26 @@ const fileListMeta: Fetch<FileMetaData> = async ({ embedData, context }) => {
 
 const pitchMeta: Fetch<PitchMetaData> = async ({ embedData, context }) => {
   const metaImage = await fetchImageV3(embedData.imageId, context);
+  if (!metaImage) {
+    return undefined;
+  }
   return { metaImage };
 };
 
 const contactBlockMeta: Fetch<ContactBlockMetaData> = async ({ embedData, context }) => {
   const image = await fetchImageV3(embedData.imageId, context);
+  if (!image) {
+    return undefined;
+  }
   return { image };
 };
 
 const keyFigureMeta: Fetch<KeyFigureMetaData> = async ({ embedData, context }) => {
   if (!embedData.imageId) return {};
   const metaImage = await fetchImageV3(embedData.imageId, context);
+  if (!metaImage) {
+    return undefined;
+  }
   return { metaImage };
 };
 
@@ -293,7 +305,9 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, cont
   const image = embedData.imageId
     ? await fetchImageV3(embedData.imageId, context)
     : await Promise.resolve<undefined>(undefined);
-
+  if (!image) {
+    return undefined;
+  }
   return { image };
 };
 

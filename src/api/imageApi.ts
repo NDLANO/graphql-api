@@ -21,10 +21,14 @@ export async function fetchImage(imageId: string, context: Context): Promise<IIm
   }
 }
 
-export async function fetchImageV3(imageId: string, context: Context): Promise<IImageMetaInformationV3> {
+export async function fetchImageV3(imageId: string, context: Context): Promise<IImageMetaInformationV3 | null> {
   const languageParam = context.language ? `?language=${context.language}` : "";
   const response = await fetch(`/image-api/v3/images/${imageId}${languageParam}`, context);
-  return await resolveJson(response);
+  try {
+    return await resolveJson(response);
+  } catch (e) {
+    return null;
+  }
 }
 
 export async function searchImages(params: GQLQueryImageSearchArgs, context: Context): Promise<ISearchResultV3> {
