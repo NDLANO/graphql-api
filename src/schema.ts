@@ -266,6 +266,71 @@ export const typeDefs = gql`
     learningstepUrl: String!
     status: String!
     coverphoto: LearningpathCoverphoto
+    madeAvailable: String
+  }
+
+  input LearningpathEmbedInput {
+    url: String!
+    embedType: String!
+  }
+
+  input ContributorInput {
+    type: String!
+    name: String!
+  }
+
+  input LicenseInput {
+    license: String!
+    url: String
+    description: String
+  }
+
+  input LearningpathCopyrightInput {
+    license: LicenseInput!
+    contributors: [ContributorInput!]!
+  }
+
+  input LearningpathNewInput {
+    title: String!
+    description: String!
+    coverPhotoMetaUrl: String!
+    duration: Int!
+    tags: [String!]!
+    language: String!
+    copyright: LearningpathCopyrightInput!
+  }
+
+  input LearningpathUpdateInput {
+    title: String!
+    coverPhotoMetaUrl: String!
+    language: String!
+    revision: Int!
+    description: String!
+    duration: Int!
+    tags: [String!]!
+    deleteMessage: Boolean!
+    copyright: LearningpathCopyrightInput!
+  }
+
+  input LearningpathStepNewInput {
+    title: String!
+    description: String!
+    language: String!
+    embedUrl: LearningpathEmbedInput!
+    showTitle: Boolean!
+    type: String!
+    license: String!
+  }
+
+  input LearningpathStepUpdateInput {
+    revision: Int!
+    title: String!
+    language: String!
+    description: String!
+    embedUrl: LearningpathEmbedInput!
+    showTitle: Boolean!
+    type: String!
+    license: String!
   }
 
   type TaxonomyMetadata {
@@ -1484,7 +1549,7 @@ export const typeDefs = gql`
   }
 
   type ImageV3 {
-    filename: String!
+    fileName: String!
     size: Int!
     contentType: String!
     imageUrl: String!
@@ -1504,7 +1569,7 @@ export const typeDefs = gql`
     created: String!
     createdBy: String!
     modelRelease: String!
-    editorNotes: [EditorNote!]!
+    editorNotes: [EditorNote!]
     image: ImageV3!
   }
 
@@ -1723,8 +1788,17 @@ export const typeDefs = gql`
     addPostUpvoteV2(postId: Int!): Int!
     removePostUpvote(postId: Int!): Int!
     removePostUpvoteV2(postId: Int!): Int!
-    updateStatusLearningpath(id: Int!, status: String!): [String!]!
-    deleteLearningpath(id: Int!): [String!]!
+    updateLearningpathStatus(id: Int!, status: String!): Learningpath!
+    deleteLearningpath(id: Int!): Boolean
+    newLearningpath(params: LearningpathNewInput!): Learningpath!
+    updateLearningpath(learningpathId: Int!, params: LearningpathUpdateInput!): Learningpath!
+    newLearningpathStep(learningpathId: Int!, params: LearningpathStepNewInput!): LearningpathStep!
+    updateLearningpathStep(
+      learningpathId: Int!
+      learningstepId: Int!
+      params: LearningpathStepUpdateInput!
+    ): LearningpathStep!
+    deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]
   }
 `;
 
