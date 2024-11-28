@@ -106,11 +106,10 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLMetaImageWithCopyright | undefined> {
       if (!article.metaImage) return undefined;
-      const imageId = article.metaImage.url.split("/").pop() ?? "";
+      const imageId = parseInt(article.metaImage?.url?.split("/").pop() ?? "");
+      if (!imageId) return undefined;
       try {
-        const id = parseInt(imageId);
-        if (isNaN(id)) return undefined;
-        const image = await fetchImageV3(id, context);
+        const image = await fetchImageV3(imageId, context);
         return {
           ...article.metaImage,
           url: image.image?.imageUrl,
