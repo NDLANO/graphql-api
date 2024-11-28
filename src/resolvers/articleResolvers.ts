@@ -107,20 +107,16 @@ export const resolvers = {
     ): Promise<GQLMetaImageWithCopyright | undefined> {
       if (!article.metaImage) return undefined;
       const imageId = article.metaImage.url.split("/").pop() ?? "";
-      let image;
       try {
-        image = await fetchImageV3(imageId, context);
+        const image = await fetchImageV3(imageId, context);
+        return {
+          ...article.metaImage,
+          url: image.image?.imageUrl,
+          copyright: image.copyright,
+        };
       } catch (error) {
         return undefined;
       }
-      if (!image) {
-        return undefined;
-      }
-      return {
-        ...article.metaImage,
-        url: image.image?.imageUrl,
-        copyright: image.copyright,
-      };
     },
     introduction(article: IArticleV2): string {
       return article.introduction?.introduction ?? "";
