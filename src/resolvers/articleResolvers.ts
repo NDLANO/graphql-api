@@ -108,7 +108,9 @@ export const resolvers = {
       if (!article.metaImage) return undefined;
       const imageId = article.metaImage.url.split("/").pop() ?? "";
       try {
-        const image = await fetchImageV3(Number(imageId), context);
+        const id = parseInt(imageId);
+        if (isNaN(id)) return undefined;
+        const image = await fetchImageV3(id, context);
         return {
           ...article.metaImage,
           url: image.image?.imageUrl,
