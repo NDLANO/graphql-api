@@ -21,7 +21,7 @@ export async function fetchImage(imageId: string, context: Context): Promise<IIm
   }
 }
 
-export async function fetchImageV3(imageId: string, context: Context): Promise<IImageMetaInformationV3> {
+export async function fetchImageV3(imageId: number | string, context: Context): Promise<IImageMetaInformationV3> {
   const languageParam = context.language ? `?language=${context.language}` : "";
   const response = await fetch(`/image-api/v3/images/${imageId}${languageParam}`, context);
   return await resolveJson(response);
