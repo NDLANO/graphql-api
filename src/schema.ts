@@ -231,7 +231,8 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     type: String!
     article: Article
-    resource(rootId: String, parentId: String): Resource
+    resource: Resource
+    node: Node
     showTitle: Boolean!
     oembed: LearningpathStepOembed
   }
