@@ -29,7 +29,16 @@ import {
 } from "../types/schema";
 import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
 
-type MetaType = "article" | "learningpath" | "multidisciplinary" | "concept" | "image" | "audio" | "video" | "folder";
+type MetaType =
+  | "article"
+  | "learningpath"
+  | "multidisciplinary"
+  | "concept"
+  | "image"
+  | "audio"
+  | "video"
+  | "folder"
+  | "topic";
 
 const findResourceTypes = (result: Node | undefined, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
   const ctx = result?.contexts?.[0];
@@ -60,7 +69,7 @@ const fetchResourceMeta = async (
 const fetchAndTransformResourceMeta = async (
   resources: GQLFolderResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
-  type: "article" | "multidisciplinary" | "learningpath",
+  type: "article" | "multidisciplinary" | "learningpath" | "topic",
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   try {
@@ -100,6 +109,9 @@ export const fetchFolderResourceMeta = async (
     return res[0] ?? null;
   } else if (resource.resourceType === "multidisciplinary") {
     const res = await fetchAndTransformResourceMeta([resource], context, "multidisciplinary");
+    return res[0] ?? null;
+  } else if (resource.resourceType === "topic") {
+    const res = await fetchAndTransformResourceMeta([resource], context, "topic");
     return res[0] ?? null;
   } else if (resource.resourceType === "image") {
     const res = await fetchImageMeta([resource], context, "image");
