@@ -101,10 +101,7 @@ export const transformArticle = async (
   visualElement: string | undefined,
   { subject, previewH5p, showVisualElement, draftConcept, absoluteUrl, prettyUrl }: TransformArticleOptions,
 ) => {
-  const html = load(content, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(content, {});
   html("math").each((_, el) => {
     html(el)
       .attr("data-math", html(el).html() ?? "")
@@ -123,13 +120,7 @@ export const transformArticle = async (
     html("body").prepend(`<section>${visualElement}</section>`);
   }
 
-  const visEl =
-    visualElement && !showVisualElement
-      ? load(`${visualElement}`, {
-          xmlMode: false,
-          decodeEntities: false,
-        })
-      : undefined;
+  const visEl = visualElement && !showVisualElement ? load(`${visualElement}`, {}) : undefined;
 
   const embeds = visEl ? getEmbedsFromContent(visEl).concat(getEmbedsFromContent(html)) : getEmbedsFromContent(html);
 

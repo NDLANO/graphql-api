@@ -108,10 +108,7 @@ export const fetchResourceEmbed = async (
   const embedHtml = toEmbedHtml(embed);
 
   const content = toHtml(embedHtml);
-  const html = load(content, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(content, {});
   const embeds = getEmbedsFromContent(html)[0];
   if (!embeds) {
     throw new Error("No embeds found");
@@ -133,10 +130,7 @@ export const fetchResourceEmbeds = async ({ resources }: GQLQueryResourceEmbedsA
   const embeds = resources.map((params) => toEmbed(params)).filter((embed) => !!embed);
   const content = embeds.map((embed) => toEmbedHtml(embed!)).join("");
   const bodyString = toHtml(content);
-  const html = load(bodyString, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(bodyString, {});
   const embedsFromContent = getEmbedsFromContent(html);
 
   const embedPromises = await Promise.all(
