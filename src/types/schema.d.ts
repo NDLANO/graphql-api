@@ -938,7 +938,7 @@ export type GQLLearningpathFolderResourceMeta = GQLFolderResourceMeta & {
 
 export type GQLLearningpathNewInput = {
   copyright: GQLLearningpathCopyrightInput;
-  coverPhotoMetaUrl: Scalars['String'];
+  coverPhotoMetaUrl?: InputMaybe<Scalars['String']>;
   description: Scalars['String'];
   duration: Scalars['Int'];
   language: Scalars['String'];
@@ -961,7 +961,6 @@ export type GQLLearningpathSearchResult = GQLSearchResult & {
 
 export type GQLLearningpathStep = {
   __typename?: 'LearningpathStep';
-  article?: Maybe<GQLArticle>;
   description?: Maybe<Scalars['String']>;
   embedUrl?: Maybe<GQLLearningpathStepEmbedUrl>;
   id: Scalars['Int'];
@@ -991,10 +990,11 @@ export type GQLLearningpathStepEmbedUrl = {
 };
 
 export type GQLLearningpathStepNewInput = {
-  description: Scalars['String'];
-  embedUrl: GQLLearningpathEmbedInput;
+  description?: InputMaybe<Scalars['String']>;
+  embedUrl?: InputMaybe<GQLLearningpathEmbedInput>;
+  introduction?: InputMaybe<Scalars['String']>;
   language: Scalars['String'];
-  license: Scalars['String'];
+  license?: InputMaybe<Scalars['String']>;
   showTitle: Scalars['Boolean'];
   title: Scalars['String'];
   type: Scalars['String'];
@@ -1010,26 +1010,27 @@ export type GQLLearningpathStepOembed = {
 };
 
 export type GQLLearningpathStepUpdateInput = {
-  description: Scalars['String'];
-  embedUrl: GQLLearningpathEmbedInput;
+  description?: InputMaybe<Scalars['String']>;
+  embedUrl?: InputMaybe<GQLLearningpathEmbedInput>;
+  introduction?: InputMaybe<Scalars['String']>;
   language: Scalars['String'];
-  license: Scalars['String'];
+  license?: InputMaybe<Scalars['String']>;
   revision: Scalars['Int'];
-  showTitle: Scalars['Boolean'];
-  title: Scalars['String'];
-  type: Scalars['String'];
+  showTitle?: InputMaybe<Scalars['Boolean']>;
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type GQLLearningpathUpdateInput = {
-  copyright: GQLLearningpathCopyrightInput;
-  coverPhotoMetaUrl: Scalars['String'];
-  deleteMessage: Scalars['Boolean'];
-  description: Scalars['String'];
-  duration: Scalars['Int'];
+  copyright?: InputMaybe<GQLLearningpathCopyrightInput>;
+  coverPhotoMetaUrl?: InputMaybe<Scalars['String']>;
+  deleteMessage?: InputMaybe<Scalars['Boolean']>;
+  description?: InputMaybe<Scalars['String']>;
+  duration?: InputMaybe<Scalars['Int']>;
   language: Scalars['String'];
   revision: Scalars['Int'];
-  tags: Array<Scalars['String']>;
-  title: Scalars['String'];
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  title?: InputMaybe<Scalars['String']>;
 };
 
 export type GQLLicense = {
@@ -1141,8 +1142,8 @@ export type GQLMutation = {
   newArenaTopicV2: GQLArenaTopicV2;
   newFlag: Scalars['Int'];
   newFlagV2: Scalars['Int'];
-  newLearningpath: GQLLearningpath;
-  newLearningpathStep: GQLLearningpathStep;
+  newLearningpath: GQLMyNdlaLearningpath;
+  newLearningpathStep: GQLMyNdlaLearningpathStep;
   removePostUpvote: Scalars['Int'];
   removePostUpvoteV2: Scalars['Int'];
   replyToTopic: GQLArenaPost;
@@ -1162,9 +1163,9 @@ export type GQLMutation = {
   updateFolder: GQLFolder;
   updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']>;
-  updateLearningpath: GQLLearningpath;
-  updateLearningpathStatus: GQLLearningpath;
-  updateLearningpathStep: GQLLearningpathStep;
+  updateLearningpath: GQLMyNdlaLearningpath;
+  updateLearningpathStatus: GQLMyNdlaLearningpath;
+  updateLearningpathStep: GQLMyNdlaLearningpathStep;
   updateOtherArenaUser: GQLMyNdlaPersonalData;
   updatePersonalData: GQLMyNdlaPersonalData;
   updatePost: GQLArenaPost;
@@ -1503,6 +1504,54 @@ export type GQLMyNdlaGroup = {
   parentId?: Maybe<Scalars['String']>;
 };
 
+export type GQLMyNdlaLearningpath = {
+  __typename?: 'MyNdlaLearningpath';
+  canEdit: Scalars['Boolean'];
+  copyright: GQLLearningpathCopyright;
+  coverphoto?: Maybe<GQLLearningpathCoverphoto>;
+  created: Scalars['String'];
+  description: Scalars['String'];
+  duration?: Maybe<Scalars['Int']>;
+  id: Scalars['Int'];
+  isBasedOn?: Maybe<Scalars['Int']>;
+  lastUpdated: Scalars['String'];
+  learningstepUrl: Scalars['String'];
+  learningsteps: Array<GQLMyNdlaLearningpathStep>;
+  madeAvailable?: Maybe<Scalars['String']>;
+  metaUrl: Scalars['String'];
+  revision: Scalars['Int'];
+  status: Scalars['String'];
+  supportedLanguages: Array<Scalars['String']>;
+  tags: Array<Scalars['String']>;
+  title: Scalars['String'];
+  verificationStatus: Scalars['String'];
+};
+
+export type GQLMyNdlaLearningpathStep = {
+  __typename?: 'MyNdlaLearningpathStep';
+  description?: Maybe<Scalars['String']>;
+  embedUrl?: Maybe<GQLLearningpathStepEmbedUrl>;
+  id: Scalars['Int'];
+  introduction?: Maybe<Scalars['String']>;
+  license?: Maybe<GQLLicense>;
+  metaUrl: Scalars['String'];
+  oembed?: Maybe<GQLLearningpathStepOembed>;
+  resource?: Maybe<GQLResource>;
+  revision: Scalars['Int'];
+  seqNo: Scalars['Int'];
+  showTitle: Scalars['Boolean'];
+  status: Scalars['String'];
+  supportedLanguages: Array<Scalars['String']>;
+  title: Scalars['String'];
+  type: Scalars['String'];
+};
+
+
+export type GQLMyNdlaLearningpathStepResourceArgs = {
+  parentId?: InputMaybe<Scalars['String']>;
+  rootId?: InputMaybe<Scalars['String']>;
+};
+
 export type GQLMyNdlaPersonalData = {
   __typename?: 'MyNdlaPersonalData';
   arenaEnabled: Scalars['Boolean'];
@@ -1741,9 +1790,11 @@ export type GQLQuery = {
   imageSearch: GQLImageSearch;
   imageV3?: Maybe<GQLImageMetaInformationV3>;
   learningpath?: Maybe<GQLLearningpath>;
+  learningpathStepOembed: GQLLearningpathStepOembed;
   listArenaUserV2: GQLPaginatedArenaUsers;
   listingPage?: Maybe<GQLListingPage>;
-  myLearningpaths?: Maybe<Array<GQLLearningpath>>;
+  myLearningpaths?: Maybe<Array<GQLMyNdlaLearningpath>>;
+  myNdlaLearningpath?: Maybe<GQLMyNdlaLearningpath>;
   node?: Maybe<GQLNode>;
   nodeByArticleId?: Maybe<GQLNode>;
   nodes?: Maybe<Array<GQLNode>>;
@@ -1976,6 +2027,11 @@ export type GQLQueryLearningpathArgs = {
 };
 
 
+export type GQLQueryLearningpathStepOembedArgs = {
+  url: Scalars['String'];
+};
+
+
 export type GQLQueryListArenaUserV2Args = {
   filterTeachers?: InputMaybe<Scalars['Boolean']>;
   page?: InputMaybe<Scalars['Int']>;
@@ -1986,6 +2042,11 @@ export type GQLQueryListArenaUserV2Args = {
 
 export type GQLQueryListingPageArgs = {
   subjects?: InputMaybe<Scalars['String']>;
+};
+
+
+export type GQLQueryMyNdlaLearningpathArgs = {
+  pathId: Scalars['String'];
 };
 
 
@@ -2775,6 +2836,8 @@ export type GQLResolversTypes = {
   MovieTheme: ResolverTypeWrapper<GQLMovieTheme>;
   Mutation: ResolverTypeWrapper<{}>;
   MyNdlaGroup: ResolverTypeWrapper<GQLMyNdlaGroup>;
+  MyNdlaLearningpath: ResolverTypeWrapper<GQLMyNdlaLearningpath>;
+  MyNdlaLearningpathStep: ResolverTypeWrapper<GQLMyNdlaLearningpathStep>;
   MyNdlaPersonalData: ResolverTypeWrapper<GQLMyNdlaPersonalData>;
   Name: ResolverTypeWrapper<GQLName>;
   NewFolder: ResolverTypeWrapper<GQLNewFolder>;
@@ -2955,6 +3018,8 @@ export type GQLResolversParentTypes = {
   MovieTheme: GQLMovieTheme;
   Mutation: {};
   MyNdlaGroup: GQLMyNdlaGroup;
+  MyNdlaLearningpath: GQLMyNdlaLearningpath;
+  MyNdlaLearningpathStep: GQLMyNdlaLearningpathStep;
   MyNdlaPersonalData: GQLMyNdlaPersonalData;
   Name: GQLName;
   NewFolder: GQLNewFolder;
@@ -3917,7 +3982,6 @@ export type GQLLearningpathSearchResultResolvers<ContextType = any, ParentType e
 };
 
 export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathStep'] = GQLResolversParentTypes['LearningpathStep']> = {
-  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   embedUrl?: Resolver<Maybe<GQLResolversTypes['LearningpathStepEmbedUrl']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -4052,8 +4116,8 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   newArenaTopicV2?: Resolver<GQLResolversTypes['ArenaTopicV2'], ParentType, ContextType, RequireFields<GQLMutationNewArenaTopicV2Args, 'categoryId' | 'content' | 'title'>>;
   newFlag?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagArgs, 'id' | 'reason' | 'type'>>;
   newFlagV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationNewFlagV2Args, 'postId' | 'reason'>>;
-  newLearningpath?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'params'>>;
-  newLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathStepArgs, 'learningpathId' | 'params'>>;
+  newLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'params'>>;
+  newLearningpathStep?: Resolver<GQLResolversTypes['MyNdlaLearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathStepArgs, 'learningpathId' | 'params'>>;
   removePostUpvote?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteArgs, 'postId'>>;
   removePostUpvoteV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationRemovePostUpvoteV2Args, 'postId'>>;
   replyToTopic?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationReplyToTopicArgs, 'content' | 'topicId'>>;
@@ -4073,9 +4137,9 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
   updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
-  updateLearningpath?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathArgs, 'learningpathId' | 'params'>>;
-  updateLearningpathStatus?: Resolver<GQLResolversTypes['Learningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStatusArgs, 'id' | 'status'>>;
-  updateLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'learningpathId' | 'learningstepId' | 'params'>>;
+  updateLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathArgs, 'learningpathId' | 'params'>>;
+  updateLearningpathStatus?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStatusArgs, 'id' | 'status'>>;
+  updateLearningpathStep?: Resolver<GQLResolversTypes['MyNdlaLearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'learningpathId' | 'learningstepId' | 'params'>>;
   updateOtherArenaUser?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, RequireFields<GQLMutationUpdateOtherArenaUserArgs, 'data' | 'userId'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
   updatePost?: Resolver<GQLResolversTypes['ArenaPost'], ParentType, ContextType, RequireFields<GQLMutationUpdatePostArgs, 'content' | 'postId'>>;
@@ -4088,6 +4152,48 @@ export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLRes
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   isPrimarySchool?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpath'] = GQLResolversParentTypes['MyNdlaLearningpath']> = {
+  canEdit?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  copyright?: Resolver<GQLResolversTypes['LearningpathCopyright'], ParentType, ContextType>;
+  coverphoto?: Resolver<Maybe<GQLResolversTypes['LearningpathCoverphoto']>, ParentType, ContextType>;
+  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  duration?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  isBasedOn?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
+  lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  learningstepUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  learningsteps?: Resolver<Array<GQLResolversTypes['MyNdlaLearningpathStep']>, ParentType, ContextType>;
+  madeAvailable?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  verificationStatus?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpathStep'] = GQLResolversParentTypes['MyNdlaLearningpathStep']> = {
+  description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  embedUrl?: Resolver<Maybe<GQLResolversTypes['LearningpathStepEmbedUrl']>, ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
+  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  oembed?: Resolver<Maybe<GQLResolversTypes['LearningpathStepOembed']>, ParentType, ContextType>;
+  resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLMyNdlaLearningpathStepResourceArgs>>;
+  revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  seqNo?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  showTitle?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4323,9 +4429,11 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   imageSearch?: Resolver<GQLResolversTypes['ImageSearch'], ParentType, ContextType, Partial<GQLQueryImageSearchArgs>>;
   imageV3?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType, RequireFields<GQLQueryImageV3Args, 'id'>>;
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
+  learningpathStepOembed?: Resolver<GQLResolversTypes['LearningpathStepOembed'], ParentType, ContextType, RequireFields<GQLQueryLearningpathStepOembedArgs, 'url'>>;
   listArenaUserV2?: Resolver<GQLResolversTypes['PaginatedArenaUsers'], ParentType, ContextType, Partial<GQLQueryListArenaUserV2Args>>;
   listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
-  myLearningpaths?: Resolver<Maybe<Array<GQLResolversTypes['Learningpath']>>, ParentType, ContextType>;
+  myLearningpaths?: Resolver<Maybe<Array<GQLResolversTypes['MyNdlaLearningpath']>>, ParentType, ContextType>;
+  myNdlaLearningpath?: Resolver<Maybe<GQLResolversTypes['MyNdlaLearningpath']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaLearningpathArgs, 'pathId'>>;
   node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeArgs>>;
   nodeByArticleId?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeByArticleIdArgs>>;
   nodes?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, Partial<GQLQueryNodesArgs>>;
@@ -4884,6 +4992,8 @@ export type GQLResolvers<ContextType = any> = {
   MovieTheme?: GQLMovieThemeResolvers<ContextType>;
   Mutation?: GQLMutationResolvers<ContextType>;
   MyNdlaGroup?: GQLMyNdlaGroupResolvers<ContextType>;
+  MyNdlaLearningpath?: GQLMyNdlaLearningpathResolvers<ContextType>;
+  MyNdlaLearningpathStep?: GQLMyNdlaLearningpathStepResolvers<ContextType>;
   MyNdlaPersonalData?: GQLMyNdlaPersonalDataResolvers<ContextType>;
   Name?: GQLNameResolvers<ContextType>;
   NewFolder?: GQLNewFolderResolvers<ContextType>;

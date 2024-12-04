@@ -21,6 +21,8 @@ import {
   GQLTaxonomyCrumb,
   GQLLearningpath,
   GQLLearningpathStep,
+  GQLMyNdlaLearningpath,
+  GQLMyNdlaLearningpathStep,
 } from "../types/schema";
 
 const apiBaseUrl = (() => {
@@ -197,11 +199,13 @@ export function learningpathToMeta(learningpath: ILearningPathSummaryV2): GQLMet
   };
 }
 
-export function toGQLLearningstep(learningstep: ILearningStepV2): GQLLearningpathStep {
-  return { ...learningstep, title: learningstep.title.title, description: learningstep.description?.description };
+export function toGQLLearningstep<T = GQLMyNdlaLearningpathStep | GQLLearningpathStep>(
+  learningstep: ILearningStepV2,
+): T {
+  return { ...learningstep, title: learningstep.title.title, description: learningstep.description?.description } as T;
 }
 
-export function toGQLLearningpath(learningpath: ILearningPathV2): GQLLearningpath {
+export function toGQLLearningpath<T = GQLMyNdlaLearningpath | GQLLearningpath>(learningpath: ILearningPathV2): T {
   return {
     ...learningpath,
     title: learningpath.title.title,
@@ -210,7 +214,7 @@ export function toGQLLearningpath(learningpath: ILearningPathV2): GQLLearningpat
     coverphoto: learningpath.coverPhoto,
     tags: learningpath.tags.tags || [],
     learningsteps: learningpath.learningsteps.map(toGQLLearningstep),
-  };
+  } as T;
 }
 
 export const nodeToTaxonomyEntity = (node: Node, context: ContextWithLoaders): GQLTaxonomyEntity => {

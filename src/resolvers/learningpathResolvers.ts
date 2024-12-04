@@ -32,6 +32,8 @@ import {
   GQLMutationUpdateLearningpathStepArgs,
   GQLMutationDeleteLearningpathStepArgs,
   GQLMutationUpdateLearningpathStatusArgs,
+  GQLMyNdlaLearningpath,
+  GQLMyNdlaLearningpathStep,
 } from "../types/schema";
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
@@ -45,9 +47,17 @@ export const Query = {
     const learningpath = await fetchLearningpath(pathId, context);
     return toGQLLearningpath(learningpath);
   },
-  async myLearningpaths(_: any, __: any, context: ContextWithLoaders): Promise<Array<GQLLearningpath>> {
+  async myNdlaLearningpath(
+    _: any,
+    { pathId }: GQLQueryLearningpathArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLMyNdlaLearningpath> {
+    const learningpath = await fetchLearningpath(pathId, context);
+    return toGQLLearningpath(learningpath);
+  },
+  async myLearningpaths(_: any, __: any, context: ContextWithLoaders): Promise<Array<GQLMyNdlaLearningpath>> {
     const learningpaths = await fetchMyLearningpaths(context);
-    return learningpaths.map(toGQLLearningpath);
+    return learningpaths.map<GQLMyNdlaLearningpath>(toGQLLearningpath);
   },
 };
 
@@ -144,7 +154,7 @@ export const Mutations: Pick<
     _: any,
     params: GQLMutationNewLearningpathArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLLearningpath> {
+  ): Promise<GQLMyNdlaLearningpath> {
     const learningpath = await createLearningpath(params, context);
     return toGQLLearningpath(learningpath);
   },
@@ -152,7 +162,7 @@ export const Mutations: Pick<
     _: any,
     params: GQLMutationUpdateLearningpathArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLLearningpath> {
+  ): Promise<GQLMyNdlaLearningpath> {
     const learningpath = await updateLearningpath(params, context);
     return toGQLLearningpath(learningpath);
   },
@@ -160,7 +170,7 @@ export const Mutations: Pick<
     _: any,
     params: GQLMutationNewLearningpathStepArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLLearningpathStep> {
+  ): Promise<GQLMyNdlaLearningpathStep> {
     const learningstep = await createLearningstep(params, context);
     return toGQLLearningstep(learningstep);
   },
@@ -168,7 +178,7 @@ export const Mutations: Pick<
     _: any,
     params: GQLMutationUpdateLearningpathStepArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLLearningpathStep> {
+  ): Promise<GQLMyNdlaLearningpathStep> {
     const learningstep = await updateLearningstep(params, context);
     return toGQLLearningstep(learningstep);
   },

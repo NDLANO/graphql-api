@@ -10,6 +10,7 @@ import { Query as ArenaQuery, Mutations as ArenaMutations, resolvers as ArenaRes
 import { Query as ArticleQuery, resolvers as articleResolvers } from "./articleResolvers";
 import { Query as ConceptQuery, resolvers as conceptResolvers } from "./conceptResolvers";
 import { Query as CurriculumQuery, resolvers as curriculumResolvers } from "./curriculumResolvers";
+import { Query as ExternalQuery } from "./externalResolvers";
 import {
   Query as FolderResolvers,
   Mutations as FolderMutations,
@@ -53,6 +54,7 @@ export const resolvers = {
     ...TransformQuery,
     ...ProgrammeQuery,
     ...ArenaQuery,
+    ...ExternalQuery,
   },
   Mutation: {
     ...FolderMutations,
