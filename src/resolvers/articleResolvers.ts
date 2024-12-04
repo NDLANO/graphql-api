@@ -107,7 +107,7 @@ export const resolvers = {
     ): Promise<GQLMetaImageWithCopyright | undefined> {
       if (!article.metaImage) return undefined;
       const imageId = parseInt(article.metaImage?.url?.split("/").pop() ?? "");
-      if (!imageId) return undefined;
+      if (isNaN(imageId)) return undefined;
       try {
         const image = await fetchImageV3(imageId, context);
         return {
