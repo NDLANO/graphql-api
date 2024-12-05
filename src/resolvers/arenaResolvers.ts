@@ -430,7 +430,7 @@ export const Mutations: Pick<
 
 export const resolvers = {
   ArenaPostV2: {
-    async contentAsHTML(post: GQLArenaPostV2, _: any, context: ContextWithLoaders): Promise<string> {
+    async contentAsHTML(post: GQLArenaPostV2): Promise<string> {
       return parseMarkdown({ markdown: post.content });
     },
   },

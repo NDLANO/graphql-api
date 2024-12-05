@@ -140,7 +140,7 @@ export const resolvers = {
       return [];
     },
     async alternateNodes(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLNode[] | undefined> {
-      const { contentUri, id, path } = node;
+      const { contentUri, path } = node;
       if (!path && contentUri) {
         const nodes = await queryNodes(
           {

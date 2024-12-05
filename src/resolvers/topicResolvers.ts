@@ -72,7 +72,7 @@ export const resolvers = {
     },
     async coreResources(
       topic: Node,
-      args: GQLTopicCoreResourcesArgs,
+      _: GQLTopicCoreResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchNodeResources(
@@ -87,7 +87,7 @@ export const resolvers = {
     },
     async supplementaryResources(
       topic: Node,
-      args: GQLTopicSupplementaryResourcesArgs,
+      _args: GQLTopicSupplementaryResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchNodeResources(
@@ -106,7 +106,7 @@ export const resolvers = {
       return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
     async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
-      const { contentUri, id, path } = topic;
+      const { contentUri, path } = topic;
       if (!path && contentUri) {
         const nodes = await queryNodes(
           {

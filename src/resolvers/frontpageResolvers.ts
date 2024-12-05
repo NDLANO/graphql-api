@@ -14,8 +14,7 @@ import {
   IMovieTheme,
   IMenu,
 } from "@ndla/types-backend/frontpage-api";
-import { TaxonomyContext } from "@ndla/types-taxonomy";
-import { fetchFilmFrontpage, queryContexts, queryNodes } from "../api";
+import { fetchFilmFrontpage } from "../api";
 import { GQLMetaImage, GQLResourceType } from "../types/schema";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
@@ -42,7 +41,7 @@ export const resolvers = {
     async article(menu: IFrontPage, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
       return context.loaders.articlesLoader.load(`${menu.articleId}`);
     },
-    async hideLevel(menu: IFrontPage | IMenu, _: any, context: ContextWithLoaders): Promise<boolean> {
+    async hideLevel(menu: IFrontPage | IMenu): Promise<boolean> {
       return "hideLevel" in menu ? menu.hideLevel ?? false : false;
     },
   },

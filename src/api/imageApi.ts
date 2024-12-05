@@ -7,7 +7,7 @@
  */
 
 import qs from "query-string";
-import { IImageMetaInformationV2, IImageMetaInformationV3, ISearchResultV3, Sort } from "@ndla/types-backend/image-api";
+import { IImageMetaInformationV2, IImageMetaInformationV3, ISearchResultV3 } from "@ndla/types-backend/image-api";
 import { GQLQueryImageSearchArgs } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 

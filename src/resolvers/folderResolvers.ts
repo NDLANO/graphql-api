@@ -105,17 +105,17 @@ export const Query: Pick<
 
 export const resolvers = {
   Folder: {
-    async id(folder: IFolderData, _: any, context: ContextWithLoaders) {
+    async id(folder: IFolderData) {
       return folder.id.toString();
     },
   },
   FolderResource: {
-    async id(resource: IResource, _: any, context: ContextWithLoaders) {
+    async id(resource: IResource) {
       return resource.id.toString();
     },
   },
   FolderResourceMeta: {
-    async id(meta: GQLFolderResourceMeta, _: any, context: ContextWithLoaders) {
+    async id(meta: GQLFolderResourceMeta) {
       return meta.id.toString();
     },
   },
