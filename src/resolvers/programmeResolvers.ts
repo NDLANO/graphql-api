@@ -74,7 +74,7 @@ export const resolvers = {
       programme: GQLProgrammePage,
       __: any,
       context: ContextWithLoaders,
-    ): Promise<String | undefined> {
+    ): Promise<string | undefined> {
       if (!programme.contentUri?.startsWith("urn:frontpage")) return undefined;
       const subjectpage = await context.loaders.subjectpageLoader.load(
         programme.contentUri.replace("urn:frontpage:", ""),
