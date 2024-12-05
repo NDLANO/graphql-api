@@ -81,6 +81,7 @@ const fetchAndTransformResourceMeta = async (
       };
     });
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(`Failed to fetch article metas with parameters ${resources}`);
     return [];
   }
