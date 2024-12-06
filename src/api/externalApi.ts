@@ -11,9 +11,15 @@ import { OembedEmbedData, OembedProxyData } from "@ndla/types-embed";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export const fetchExternalOembed = async (embed: OembedEmbedData, context: Context): Promise<OembedProxyData> => {
-  const url = `/oembed-proxy/v1/oembed?${queryString.stringify({
-    url: embed.url,
-  })}`;
-  const res = await fetch(url, context);
+  return await fetchOembedUrl(embed.url, context);
+};
+
+export const fetchOembedUrl = async (url: string, context: Context): Promise<OembedProxyData> => {
+  const res = await fetch(
+    `/oembed-proxy/v1/oembed?${queryString.stringify({
+      url,
+    })}`,
+    context,
+  );
   return await resolveJson(res);
 };
