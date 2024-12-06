@@ -92,6 +92,7 @@ export async function resolveJson(response: Response, fallback?: any): Promise<a
 
   const message = `Api call to ${url} failed with status ${status} ${statusText}`;
   if (fallback) {
+    // eslint-disable-next-line no-console
     console.error(message);
     return fallback;
   }

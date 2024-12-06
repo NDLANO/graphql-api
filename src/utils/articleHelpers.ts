@@ -8,7 +8,7 @@
 
 import { IArticleV2 } from "@ndla/types-backend/article-api";
 import { NodeChild } from "@ndla/types-taxonomy";
-import { GQLMeta, GQLTaxonomyEntity } from "../types/schema";
+import { GQLTaxonomyEntity } from "../types/schema";
 
 export function isNDLAEmbedUrl(url: string) {
   return /^https:\/(.*).ndla.no/.test(url) || /^http:\/\/localhost/.test(url);

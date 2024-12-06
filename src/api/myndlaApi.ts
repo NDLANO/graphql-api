@@ -189,7 +189,7 @@ export const deleteCategory = async (categoryId: number, context: Context): Prom
 };
 
 export const deleteTopic = async (topicId: number, context: Context): Promise<void> => {
-  const resp = await fetch(`${arenaBaseUrl}/topics/${topicId}`, context, {
+  await fetch(`${arenaBaseUrl}/topics/${topicId}`, context, {
     method: "DELETE",
   });
   return;

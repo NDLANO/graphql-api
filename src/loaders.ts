@@ -24,7 +24,7 @@ import {
   fetchSubjectPage,
   queryNodes,
 } from "./api";
-import { GQLMeta, GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import { GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2 | undefined> {
   return new DataLoader(
@@ -49,7 +49,7 @@ export function lk20CurriculumLoader(context: Context): DataLoader<CurriculumLoa
         return fetchLK20Curriculum(code, language, context);
       }),
     );
-    return uniqueCurriculumIds.map(({ code, language }) => {
+    return uniqueCurriculumIds.map(({ code }) => {
       return responses.find((response) => response.code === code);
     });
   });

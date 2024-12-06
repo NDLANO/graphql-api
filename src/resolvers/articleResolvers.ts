@@ -25,7 +25,6 @@ import {
   GQLCompetenceGoal,
   GQLCoreElement,
   GQLCrossSubjectElement,
-  GQLMetaImage,
   GQLQueryArticleArgs,
   GQLTransformedArticleContent,
   GQLArticleTransformedContentArgs,

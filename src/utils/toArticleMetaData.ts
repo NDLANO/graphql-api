@@ -25,6 +25,7 @@ import {
   GQLImageLicense,
   GQLPodcastLicense,
 } from "../types/schema";
+import { unreachable } from "./unreachable";
 
 type Success<T extends EmbedMetaData["resource"]> = Extract<EmbedMetaData, { resource: T; status: "success" }>;
 
@@ -163,12 +164,15 @@ const conceptMetaData = (
       case "h5p":
         h5pMetaData(visualElement, acc);
         break;
+      case "iframe":
       case "external": {
         if (visualElement.data.iframeImage) {
           imageMetaData(visualElement.data.iframeImage, acc);
         }
         break;
       }
+      default:
+        unreachable(visualElement);
     }
   }
 };
@@ -239,6 +243,16 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
         case "copyright":
           textblockMetaData(curr, acc);
           break;
+        case "content-link":
+        case "related-content":
+        case "code-block":
+        case "file":
+        case "link-block":
+        case "uu-disclaimer":
+        case "comment":
+          break;
+        default:
+          unreachable(curr);
       }
       return acc;
     },
