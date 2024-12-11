@@ -6,10 +6,10 @@
  *
  */
 
-import { IAudioMetaInformation, IAudioSummarySearchResult, ISeries } from "@ndla/types-backend/audio-api";
+import { IAudioMetaInformationDTO, IAudioSummarySearchResultDTO, ISeriesDTO } from "@ndla/types-backend/audio-api";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
-export async function fetchAudio(context: Context, audioId: number | string): Promise<IAudioMetaInformation | null> {
+export async function fetchAudio(context: Context, audioId: number | string): Promise<IAudioMetaInformationDTO | null> {
   const response = await fetch(`/audio-api/v1/audio/${audioId}?language=${context.language}`, context);
   try {
     return await resolveJson(response);
@@ -18,7 +18,7 @@ export async function fetchAudio(context: Context, audioId: number | string): Pr
   }
 }
 
-export async function fetchAudioV2(context: Context, audioId: number | string): Promise<IAudioMetaInformation> {
+export async function fetchAudioV2(context: Context, audioId: number | string): Promise<IAudioMetaInformationDTO> {
   const response = await fetch(`/audio-api/v1/audio/${audioId}?language=${context.language}`, context);
   return await resolveJson(response);
 }
@@ -28,7 +28,7 @@ export async function fetchPodcastsPage(
   pageSize: number,
   page: number,
   fallback: boolean,
-): Promise<IAudioSummarySearchResult> {
+): Promise<IAudioSummarySearchResultDTO> {
   const response = await fetch(
     `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast&language=${context.language}&fallback=${fallback}`,
     context,
@@ -36,7 +36,7 @@ export async function fetchPodcastsPage(
   return await resolveJson(response);
 }
 
-export async function fetchPodcastSeries(context: Context, podcastId: number): Promise<ISeries> {
+export async function fetchPodcastSeries(context: Context, podcastId: number): Promise<ISeriesDTO> {
   const response = await fetch(`/audio-api/v1/series/${podcastId}?language=${context.language}`, context);
   return await resolveJson(response);
 }
@@ -46,7 +46,7 @@ export async function fetchPodcastSeriesPage(
   pageSize: number,
   page: number,
   fallback: boolean,
-): Promise<IAudioSummarySearchResult> {
+): Promise<IAudioSummarySearchResultDTO> {
   const response = await fetch(
     `/audio-api/v1/series/?page-size=${pageSize}&page=${page}&language=${context.language}&fallback=${fallback}`,
     context,

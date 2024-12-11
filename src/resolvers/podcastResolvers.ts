@@ -6,7 +6,12 @@
  *
  */
 
-import { IAudioMetaInformation, IAudioSummarySearchResult, IPodcastMeta, ISeries } from "@ndla/types-backend/audio-api";
+import {
+  IAudioMetaInformationDTO,
+  IAudioSummarySearchResultDTO,
+  IPodcastMetaDTO,
+  ISeriesDTO,
+} from "@ndla/types-backend/audio-api";
 import { fetchAudio, fetchPodcastSeries, fetchPodcastSeriesPage, fetchPodcastsPage } from "../api/audioApi";
 import { fetchImage } from "../api/imageApi";
 import { fetchResourceEmbeds } from "../api/resourceEmbedApi";
@@ -21,31 +26,35 @@ import {
 } from "../types/schema";
 
 export const Query = {
-  async audio(_: any, { id }: GQLQueryAudioArgs, context: ContextWithLoaders): Promise<IAudioMetaInformation | null> {
+  async audio(
+    _: any,
+    { id }: GQLQueryAudioArgs,
+    context: ContextWithLoaders,
+  ): Promise<IAudioMetaInformationDTO | null> {
     return fetchAudio(context, id);
   },
   async podcastSearch(
     _: any,
     { pageSize, page, fallback }: GQLQueryPodcastSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<IAudioSummarySearchResult> {
+  ): Promise<IAudioSummarySearchResultDTO> {
     return fetchPodcastsPage(context, pageSize, page, fallback ?? false);
   },
-  async podcastSeries(_: any, { id }: GQLQueryPodcastSeriesArgs, context: ContextWithLoaders): Promise<ISeries> {
+  async podcastSeries(_: any, { id }: GQLQueryPodcastSeriesArgs, context: ContextWithLoaders): Promise<ISeriesDTO> {
     return fetchPodcastSeries(context, id);
   },
   async podcastSeriesSearch(
     _: any,
     { pageSize, page, fallback }: GQLQueryPodcastSeriesSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<IAudioSummarySearchResult> {
+  ): Promise<IAudioSummarySearchResultDTO> {
     return fetchPodcastSeriesPage(context, pageSize, page, fallback ?? false);
   },
 };
 
 export const resolvers = {
   PodcastSeriesWithEpisodes: {
-    async content(series: ISeries, _: any, context: ContextWithLoaders): Promise<GQLResourceEmbed | null> {
+    async content(series: ISeriesDTO, _: any, context: ContextWithLoaders): Promise<GQLResourceEmbed | null> {
       if (!series.episodes?.length) {
         return null;
       }
@@ -55,7 +64,11 @@ export const resolvers = {
       }));
       return await fetchResourceEmbeds({ resources: embeds }, context);
     },
-    async image(podcastSeries: ISeries, _: any, context: ContextWithLoaders): Promise<GQLImageMetaInformation | null> {
+    async image(
+      podcastSeries: ISeriesDTO,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLImageMetaInformation | null> {
       const id = podcastSeries?.coverPhoto.id;
       if (!id) {
         return null;
@@ -77,7 +90,7 @@ export const resolvers = {
   },
   PodcastMeta: {
     async image(
-      podcastMeta: IPodcastMeta,
+      podcastMeta: IPodcastMetaDTO,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLImageMetaInformation | null> {

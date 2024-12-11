@@ -7,8 +7,8 @@
  */
 
 import sortBy from "lodash/sortBy";
-import { IConcept, IConceptSummary } from "@ndla/types-backend/concept-api";
-import { IImageMetaInformationV3 } from "@ndla/types-backend/image-api";
+import { IConceptDTO, IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
+import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { ConceptVisualElementMeta, EmbedMetaData } from "@ndla/types-embed";
 import { licenseFixer, roleMapper } from "./apiHelpers";
 import { ndlaUrl } from "../config";
@@ -38,7 +38,7 @@ const footnoteMetaData = ({ embedData, data }: Success<"footnote">, acc: MetaDat
   });
 };
 
-const imageMetaData = (data: IImageMetaInformationV3, acc: MetaData) => {
+const imageMetaData = (data: IImageMetaInformationV3DTO, acc: MetaData) => {
   acc["images"] = acc["images"].concat({
     id: data.id,
     title: data.title.title,
@@ -133,7 +133,7 @@ const h5pMetaData = ({ data, embedData }: Success<"h5p">, acc: MetaData) => {
 };
 
 const conceptMetaData = (
-  concept: IConcept | IConceptSummary,
+  concept: IConceptDTO | IConceptSummaryDTO,
   visualElement: ConceptVisualElementMeta | undefined,
   acc: MetaData,
 ) => {

@@ -7,7 +7,7 @@
  */
 
 import queryString from "query-string";
-import { IGroupSearchResult, IMultiSearchSummary } from "@ndla/types-backend/search-api";
+import { IGroupSearchResultDTO, IMultiSearchSummaryDTO } from "@ndla/types-backend/search-api";
 import { searchConcepts } from "./conceptApi";
 import {
   GQLGroupSearch,
@@ -41,7 +41,7 @@ export async function search(searchQuery: GQLQuerySearchArgs, context: Context):
   const concepts = await searchConcepts(conceptQuery, context);
   return {
     ...searchResults,
-    results: searchResults.results.map((result: IMultiSearchSummary) => transformResult(result)),
+    results: searchResults.results.map((result: IMultiSearchSummaryDTO) => transformResult(result)),
     concepts: { concepts },
   };
 }
@@ -61,7 +61,7 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
   });
   const subjects = searchQuery.subjects?.split(",") || [];
   const json = await resolveJson(response);
-  return json.map((result: IGroupSearchResult) => ({
+  return json.map((result: IGroupSearchResultDTO) => ({
     ...result,
     resources: result.results.map((contentTypeResult) => {
       const searchCtx = contentTypeResult.contexts.find((c) =>
@@ -125,12 +125,12 @@ export async function searchWithoutPagination(
   allResultsJson.push(firstPageJson);
   return {
     results: allResultsJson.flatMap((json) =>
-      json.results.map((result: IMultiSearchSummary) => transformResult(result)),
+      json.results.map((result: IMultiSearchSummaryDTO) => transformResult(result)),
     ),
   };
 }
 
-const transformResult = (result: IMultiSearchSummary) => ({
+const transformResult = (result: IMultiSearchSummaryDTO) => ({
   ...result,
   title: result.title.title,
   htmlTitle: result.title.htmlTitle,

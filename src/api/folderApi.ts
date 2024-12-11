@@ -7,7 +7,13 @@
  */
 
 import qs from "query-string";
-import { IMyNDLAUser, IFolder, IFolderData, IResource, IUserFolder } from "@ndla/types-backend/myndla-api";
+import {
+  IMyNDLAUserDTO,
+  IFolderDTO,
+  IFolderDataDTO,
+  IResourceDTO,
+  IUserFolderDTO,
+} from "@ndla/types-backend/myndla-api";
 import {
   GQLMutationAddFolderArgs,
   GQLMutationAddFolderResourceArgs,
@@ -42,7 +48,7 @@ export const queryString = (params: QueryParamsType) => {
 export async function fetchFolders(
   { includeResources, includeSubfolders }: GQLQueryFoldersArgs,
   context: Context,
-): Promise<IUserFolder> {
+): Promise<IUserFolderDTO> {
   const params = queryString({
     "include-resources": includeResources,
     "include-subfolders": includeSubfolders,
@@ -58,7 +64,7 @@ export async function fetchFolders(
 export async function fetchFolder(
   { id, includeResources, includeSubfolders }: GQLQueryFolderArgs,
   context: Context,
-): Promise<IFolderData> {
+): Promise<IFolderDataDTO> {
   const params = queryString({ includeResources, includeSubfolders });
   const response = await fetch(`/myndla-api/v1/folders/${id}${params}`, {
     ...context,
@@ -70,7 +76,7 @@ export async function fetchFolder(
 export async function fetchSharedFolder(
   { id, includeResources, includeSubfolders }: GQLQueryFolderArgs,
   context: Context,
-): Promise<IFolderData> {
+): Promise<IFolderDataDTO> {
   const params = queryString({ includeResources, includeSubfolders });
   const response = await fetch(`/myndla-api/v1/folders/shared/${id}${params}`, {
     ...context,
@@ -82,7 +88,7 @@ export async function fetchSharedFolder(
 export async function fetchAllFolderResources(
   { size }: GQLQueryAllFolderResourcesArgs,
   context: Context,
-): Promise<IResource[]> {
+): Promise<IResourceDTO[]> {
   const params = queryString({ size });
   const response = await fetch(`/myndla-api/v1/folders/resources/${params}`, {
     ...context,
@@ -95,7 +101,7 @@ export async function fetchAllFolderResources(
 export async function postFolder(
   { name, parentId, status, description }: GQLMutationAddFolderArgs,
   context: Context,
-): Promise<IFolder> {
+): Promise<IFolderDTO> {
   const response = await fetch(`/myndla-api/v1/folders`, context, {
     method: "POST",
     body: JSON.stringify({ name, parentId, status, description }),
@@ -107,7 +113,7 @@ export async function postFolder(
 export async function patchFolder(
   { id, name, status, description }: GQLMutationUpdateFolderArgs,
   context: Context,
-): Promise<IFolder> {
+): Promise<IFolderDTO> {
   const response = await fetch(`/myndla-api/v1/folders/${id}`, context, {
     method: "PATCH",
     body: JSON.stringify({ name, status, description }),
@@ -126,7 +132,7 @@ export async function deleteFolder({ id }: GQLMutationDeleteFolderArgs, context:
 export async function postFolderResource(
   { folderId, resourceType, path, tags, resourceId }: GQLMutationAddFolderResourceArgs,
   context: Context,
-): Promise<IResource> {
+): Promise<IResourceDTO> {
   const response = await fetch(`/myndla-api/v1/folders/${folderId}/resources/`, context, {
     method: "POST",
     body: JSON.stringify({ resourceType, path, tags, resourceId }),
@@ -138,7 +144,7 @@ export async function postFolderResource(
 export async function patchFolderResource(
   { id, tags }: GQLMutationUpdateFolderResourceArgs,
   context: Context,
-): Promise<IResource> {
+): Promise<IResourceDTO> {
   const response = await fetch(`/myndla-api/v1/folders/resources/${id}`, context, {
     method: "PATCH",
     body: JSON.stringify({ tags }),
@@ -168,7 +174,7 @@ export async function deletePersonalData(context: Context): Promise<boolean> {
   }
 }
 
-export async function getPersonalData(context: Context): Promise<IMyNDLAUser | undefined> {
+export async function getPersonalData(context: Context): Promise<IMyNDLAUserDTO | undefined> {
   try {
     const response = await fetch(`/myndla-api/v1/users/`, {
       ...context,
@@ -183,7 +189,7 @@ export async function getPersonalData(context: Context): Promise<IMyNDLAUser | u
 export async function patchPersonalData(
   userData: GQLMutationUpdatePersonalDataArgs,
   context: Context,
-): Promise<IMyNDLAUser> {
+): Promise<IMyNDLAUserDTO> {
   const response = await fetch(`/myndla-api/v1/users/`, context, {
     method: "PATCH",
     body: JSON.stringify(userData),

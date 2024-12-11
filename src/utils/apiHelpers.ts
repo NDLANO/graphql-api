@@ -8,8 +8,12 @@
 
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
-import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { ILearningPathV2, ILearningPathSummaryV2, ILearningStepV2 } from "@ndla/types-backend/learningpath-api";
+import { IArticleV2DTO } from "@ndla/types-backend/article-api";
+import {
+  ILearningPathV2DTO,
+  ILearningPathSummaryV2DTO,
+  ILearningStepV2DTO,
+} from "@ndla/types-backend/learningpath-api";
 import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
@@ -168,7 +172,7 @@ export function licenseFixer(lic: string, licVer: string) {
   return `${lic.replace(" ", "-")}-${licVer}`;
 }
 
-export function articleToMeta(article: IArticleV2): GQLMeta {
+export function articleToMeta(article: IArticleV2DTO): GQLMeta {
   return {
     id: article.id,
     title: article.title.title,
@@ -183,7 +187,7 @@ export function articleToMeta(article: IArticleV2): GQLMeta {
   };
 }
 
-export function learningpathToMeta(learningpath: ILearningPathSummaryV2): GQLMeta {
+export function learningpathToMeta(learningpath: ILearningPathSummaryV2DTO): GQLMeta {
   return {
     id: learningpath.id,
     title: learningpath.title.title,
@@ -201,12 +205,12 @@ export function learningpathToMeta(learningpath: ILearningPathSummaryV2): GQLMet
 }
 
 export function toGQLLearningstep<T = GQLMyNdlaLearningpathStep | GQLLearningpathStep>(
-  learningstep: ILearningStepV2,
+  learningstep: ILearningStepV2DTO,
 ): T {
   return { ...learningstep, title: learningstep.title.title, description: learningstep.description?.description } as T;
 }
 
-export function toGQLLearningpath<T = GQLMyNdlaLearningpath | GQLLearningpath>(learningpath: ILearningPathV2): T {
+export function toGQLLearningpath<T = GQLMyNdlaLearningpath | GQLLearningpath>(learningpath: ILearningPathV2DTO): T {
   return {
     ...learningpath,
     title: learningpath.title.title,
