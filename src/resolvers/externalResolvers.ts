@@ -6,11 +6,14 @@
  *
  */
 
-import { fetchOembedUrl } from "../api/externalApi";
+import { fetchOembedUrl, fetchOpengraph } from "../api/externalApi";
 import { GQLQueryLearningpathStepOembedArgs } from "../types/schema";
 
 export const Query = {
   async learningpathStepOembed(_: any, { url }: GQLQueryLearningpathStepOembedArgs, context: ContextWithLoaders) {
     return await fetchOembedUrl(url, context);
+  },
+  async opengraph(_: any, { url }: any, _context: ContextWithLoaders) {
+    return await fetchOpengraph(url);
   },
 };

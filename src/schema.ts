@@ -331,6 +331,7 @@ export const typeDefs = gql`
   input LearningpathNewInput {
     title: String!
     description: String!
+    introduction: String
     coverPhotoMetaUrl: String
     duration: Int!
     tags: [String!]!
@@ -1621,6 +1622,14 @@ export const typeDefs = gql`
     results: [ImageMetaInformationV3!]!
   }
 
+  type ExternalOpengraph {
+    title: String
+    description: String
+    url: String
+    imageUrl: String
+    imageAlt: String
+  }
+
   type Query {
     node(id: String, rootId: String, parentId: String, contextId: String): Node
     nodes(
@@ -1753,6 +1762,7 @@ export const typeDefs = gql`
     imageSearch(query: String, page: Int, pageSize: Int): ImageSearch!
     imageV3(id: String!): ImageMetaInformationV3
     learningpathStepOembed(url: String!): LearningpathStepOembed!
+    opengraph(url: String!): ExternalOpengraph
   }
 
   type Mutation {

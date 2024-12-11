@@ -207,7 +207,12 @@ export function learningpathToMeta(learningpath: ILearningPathSummaryV2DTO): GQL
 export function toGQLLearningstep<T = GQLMyNdlaLearningpathStep | GQLLearningpathStep>(
   learningstep: ILearningStepV2DTO,
 ): T {
-  return { ...learningstep, title: learningstep.title.title, description: learningstep.description?.description } as T;
+  return {
+    ...learningstep,
+    title: learningstep.title.title,
+    description: learningstep.description?.description,
+    introduction: learningstep.introduction?.introduction,
+  } as T;
 }
 
 export function toGQLLearningpath<T = GQLMyNdlaLearningpath | GQLLearningpath>(learningpath: ILearningPathV2DTO): T {
