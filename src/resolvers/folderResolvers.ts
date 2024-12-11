@@ -7,6 +7,7 @@
  */
 
 import { IFolderDataDTO, IResourceDTO, IUserFolderDTO } from "@ndla/types-backend/myndla-api";
+import { fetchImageV3 } from "../api";
 import {
   deleteFolder,
   deleteFolderResource,
@@ -117,6 +118,24 @@ export const resolvers = {
   FolderResourceMeta: {
     async id(meta: GQLFolderResourceMeta) {
       return meta.id.toString();
+    },
+  },
+  ArticleFolderResourceMeta: {
+    async metaImage(meta: GQLFolderResourceMeta, _: any, context: ContextWithLoaders) {
+      if (!meta.metaImage?.url) {
+        return undefined;
+      }
+      const imageId = parseInt(meta.metaImage.url.split("/").pop() ?? "");
+      if (isNaN(imageId)) return undefined;
+      try {
+        const image = await fetchImageV3(imageId, context);
+        return {
+          ...meta.metaImage,
+          url: image.image?.imageUrl,
+        };
+      } catch (e) {
+        return meta.metaImage;
+      }
     },
   },
 };
