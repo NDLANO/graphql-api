@@ -6,7 +6,7 @@
  *
  */
 
-import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { queryNodes } from "./taxonomyApi";
 import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
@@ -19,7 +19,7 @@ interface ArticleParams {
 }
 
 export const fetchTransformedContent = async (
-  article: IArticleV2,
+  article: IArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
   context: Context,
 ): Promise<GQLTransformedArticleContent> => {
@@ -48,7 +48,7 @@ export const fetchTransformedContent = async (
 };
 
 export async function fetchRelatedContent(
-  article: IArticleV2,
+  article: IArticleV2DTO,
   params: { subjectId?: string },
   context: Context,
 ): Promise<GQLRelatedContent[]> {
@@ -92,7 +92,7 @@ export async function fetchRelatedContent(
   return relatedContent as GQLRelatedContent[];
 }
 
-export async function fetchArticle(params: ArticleParams, context: Context): Promise<IArticleV2> {
+export async function fetchArticle(params: ArticleParams, context: Context): Promise<IArticleV2DTO> {
   const article = await fetchSimpleArticle(params.articleId, context);
   return article;
 }
@@ -102,7 +102,7 @@ export async function fetchArticlesPage(
   context: Context,
   pageSize: number,
   page: number,
-): Promise<IArticleV2[]> {
+): Promise<IArticleV2DTO[]> {
   return fetch(
     `/article-api/v2/articles/ids?ids=${articleIds.join(",")}&language=${
       context.language
@@ -111,7 +111,7 @@ export async function fetchArticlesPage(
   ).then((res) => res.json());
 }
 
-export async function fetchArticles(articleIds: string[], context: Context): Promise<(IArticleV2 | undefined)[]> {
+export async function fetchArticles(articleIds: string[], context: Context): Promise<(IArticleV2DTO | undefined)[]> {
   const pageSize = 100;
   const ids = articleIds.filter((id) => id && id !== "undefined");
   const numberOfPages = Math.ceil(ids.length / pageSize);
@@ -130,7 +130,7 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
   return articleIds.map((id) => articles.find((article) => article.id.toString() === id.toString()));
 }
 
-export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2> {
+export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2DTO> {
   const articleId = getArticleIdFromUrn(articleUrn);
   const response = await fetch(
     `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,

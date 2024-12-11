@@ -6,7 +6,7 @@
  *
  */
 
-import { IFolderData, IResource, IUserFolder } from "@ndla/types-backend/myndla-api";
+import { IFolderDataDTO, IResourceDTO, IUserFolderDTO } from "@ndla/types-backend/myndla-api";
 import {
   deleteFolder,
   deleteFolderResource,
@@ -67,20 +67,20 @@ export const Query: Pick<
   | "folderResourceMeta"
   | "personalData"
 > = {
-  async folders(_: any, params: GQLQueryFoldersArgs, context: ContextWithLoaders): Promise<IUserFolder> {
+  async folders(_: any, params: GQLQueryFoldersArgs, context: ContextWithLoaders): Promise<IUserFolderDTO> {
     return fetchFolders(params, context);
   },
-  async folder(_: any, params: GQLQueryFolderArgs, context: ContextWithLoaders): Promise<IFolderData> {
+  async folder(_: any, params: GQLQueryFolderArgs, context: ContextWithLoaders): Promise<IFolderDataDTO> {
     return fetchFolder(params, context);
   },
-  async sharedFolder(_: any, params: GQLQuerySharedFolderArgs, context: ContextWithLoaders): Promise<IFolderData> {
+  async sharedFolder(_: any, params: GQLQuerySharedFolderArgs, context: ContextWithLoaders): Promise<IFolderDataDTO> {
     return fetchSharedFolder(params, context);
   },
   async allFolderResources(
     _: any,
     params: GQLQueryAllFolderResourcesArgs,
     context: ContextWithLoaders,
-  ): Promise<IResource[]> {
+  ): Promise<IResourceDTO[]> {
     return fetchAllFolderResources(params, context);
   },
   async folderResourceMetaSearch(
@@ -105,12 +105,12 @@ export const Query: Pick<
 
 export const resolvers = {
   Folder: {
-    async id(folder: IFolderData) {
+    async id(folder: IFolderDataDTO) {
       return folder.id.toString();
     },
   },
   FolderResource: {
-    async id(resource: IResource) {
+    async id(resource: IResourceDTO) {
       return resource.id.toString();
     },
   },
@@ -139,10 +139,14 @@ export const Mutations: Pick<
   | "favoriteSharedFolder"
   | "unFavoriteSharedFolder"
 > = {
-  async addFolder(_: any, params: GQLMutationAddFolderArgs, context: ContextWithLoaders): Promise<IFolderData> {
+  async addFolder(_: any, params: GQLMutationAddFolderArgs, context: ContextWithLoaders): Promise<IFolderDataDTO> {
     return postFolder(params, context);
   },
-  async updateFolder(_: any, params: GQLMutationUpdateFolderArgs, context: ContextWithLoaders): Promise<IFolderData> {
+  async updateFolder(
+    _: any,
+    params: GQLMutationUpdateFolderArgs,
+    context: ContextWithLoaders,
+  ): Promise<IFolderDataDTO> {
     return patchFolder(params, context);
   },
   async deleteFolder(_: any, params: GQLMutationDeleteFolderArgs, context: ContextWithLoaders): Promise<string> {
@@ -152,14 +156,14 @@ export const Mutations: Pick<
     _: any,
     params: GQLMutationAddFolderResourceArgs,
     context: ContextWithLoaders,
-  ): Promise<IResource> {
+  ): Promise<IResourceDTO> {
     return postFolderResource(params, context);
   },
   async updateFolderResource(
     _: any,
     params: GQLMutationUpdateFolderResourceArgs,
     context: ContextWithLoaders,
-  ): Promise<IResource> {
+  ): Promise<IResourceDTO> {
     return patchFolderResource(params, context);
   },
   async deleteFolderResource(

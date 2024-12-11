@@ -9,8 +9,8 @@
 import DataLoader from "dataloader";
 import { Request, Response } from "express";
 import { RequestInit, RequestCache } from "node-fetch";
-import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { IFrontPage, ISubjectPageData } from "@ndla/types-backend/frontpage-api";
+import { IArticleV2DTO } from "@ndla/types-backend/article-api";
+import { IFrontPageDTO, ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import { GQLReference, GQLSubject } from "./schema";
 
@@ -44,15 +44,15 @@ declare global {
   }
 
   interface Loaders {
-    articlesLoader: DataLoader<string, IArticleV2 | undefined>;
+    articlesLoader: DataLoader<string, IArticleV2DTO | undefined>;
     learningpathsLoader: DataLoader<string, any>;
     subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
     subjectsLoader: DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }>;
     nodeLoader: DataLoader<NodeLoaderParams, Node>;
     nodesLoader: DataLoader<NodesLoaderParams, Node[]>;
     resourceTypesLoader: DataLoader<any, any>;
-    frontpageLoader: DataLoader<string, IFrontPage>;
-    subjectpageLoader: DataLoader<string, ISubjectPageData | null>;
+    frontpageLoader: DataLoader<string, IFrontPageDTO>;
+    subjectpageLoader: DataLoader<string, ISubjectPageDataDTO | null>;
     lk20CurriculumLoader: DataLoader<CurriculumLoaderParams, GQLReference | undefined>;
   }
 

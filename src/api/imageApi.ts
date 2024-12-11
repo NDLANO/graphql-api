@@ -7,11 +7,15 @@
  */
 
 import qs from "query-string";
-import { IImageMetaInformationV2, IImageMetaInformationV3, ISearchResultV3 } from "@ndla/types-backend/image-api";
+import {
+  IImageMetaInformationV2DTO,
+  IImageMetaInformationV3DTO,
+  ISearchResultV3DTO,
+} from "@ndla/types-backend/image-api";
 import { GQLQueryImageSearchArgs } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
-export async function fetchImage(imageId: string, context: Context): Promise<IImageMetaInformationV2 | null> {
+export async function fetchImage(imageId: string, context: Context): Promise<IImageMetaInformationV2DTO | null> {
   const languageParam = context.language ? `?language=${context.language}` : "";
   const response = await fetch(`/image-api/v2/images/${imageId}${languageParam}`, context);
   try {
@@ -21,13 +25,13 @@ export async function fetchImage(imageId: string, context: Context): Promise<IIm
   }
 }
 
-export async function fetchImageV3(imageId: number | string, context: Context): Promise<IImageMetaInformationV3> {
+export async function fetchImageV3(imageId: number | string, context: Context): Promise<IImageMetaInformationV3DTO> {
   const languageParam = context.language ? `?language=${context.language}` : "";
   const response = await fetch(`/image-api/v3/images/${imageId}${languageParam}`, context);
   return await resolveJson(response);
 }
 
-export async function searchImages(params: GQLQueryImageSearchArgs, context: Context): Promise<ISearchResultV3> {
+export async function searchImages(params: GQLQueryImageSearchArgs, context: Context): Promise<ISearchResultV3DTO> {
   const queryStr = qs.stringify({
     "page-size": params.pageSize,
     page: params.page,
@@ -37,7 +41,7 @@ export async function searchImages(params: GQLQueryImageSearchArgs, context: Con
   return await resolveJson(response);
 }
 
-export function convertToSimpleImage(image: IImageMetaInformationV2) {
+export function convertToSimpleImage(image: IImageMetaInformationV2DTO) {
   return {
     title: image.title.title,
     src: image.imageUrl,

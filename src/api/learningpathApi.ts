@@ -7,10 +7,10 @@
  */
 
 import {
-  ILearningPathV2,
-  ILearningPathSummaryV2,
-  ISearchResultV2,
-  ILearningStepV2,
+  ILearningPathV2DTO,
+  ILearningPathSummaryV2DTO,
+  ISearchResultV2DTO,
+  ILearningStepV2DTO,
 } from "@ndla/types-backend/learningpath-api";
 import {
   GQLMutationDeleteLearningpathStepArgs,
@@ -25,12 +25,12 @@ import { fetch, resolveJson } from "../utils/apiHelpers";
 export async function fetchLearningpaths(
   learningpathIds: string[],
   context: Context,
-): Promise<Array<ILearningPathSummaryV2 | undefined>> {
+): Promise<Array<ILearningPathSummaryV2DTO | undefined>> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/?language=${context.language}&fallback=true&ids=${learningpathIds.join(",")}`,
     context,
   );
-  const json: ISearchResultV2 = await resolveJson(response);
+  const json: ISearchResultV2DTO = await resolveJson(response);
 
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
@@ -42,7 +42,7 @@ export async function fetchLearningpaths(
   });
 }
 
-export async function fetchMyLearningpaths(context: Context): Promise<Array<ILearningPathV2>> {
+export async function fetchMyLearningpaths(context: Context): Promise<Array<ILearningPathV2DTO>> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/mine?language=${context.language}&fallback=true`,
     context,
@@ -50,7 +50,7 @@ export async function fetchMyLearningpaths(context: Context): Promise<Array<ILea
   return await resolveJson(response);
 }
 
-export async function fetchLearningpath(id: string, context: Context): Promise<ILearningPathV2> {
+export async function fetchLearningpath(id: string, context: Context): Promise<ILearningPathV2DTO> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/${id}?language=${context.language}&fallback=true`,
     context,
@@ -61,7 +61,7 @@ export async function fetchLearningpath(id: string, context: Context): Promise<I
 export async function updateLearningpathStatus(
   { id, status }: GQLMutationUpdateLearningpathStatusArgs,
   context: Context,
-): Promise<ILearningPathV2> {
+): Promise<ILearningPathV2DTO> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${id}/status`, context, {
     method: "PUT",
     body: JSON.stringify({ status: status }),
@@ -79,7 +79,7 @@ export async function deleteLearningpath(id: number, context: Context): Promise<
 export async function createLearningpath(
   { params }: GQLMutationNewLearningpathArgs,
   context: Context,
-): Promise<ILearningPathV2> {
+): Promise<ILearningPathV2DTO> {
   const response = await fetch("/learningpath-api/v2/learningpaths", context, {
     method: "POST",
     body: JSON.stringify(params),
@@ -90,7 +90,7 @@ export async function createLearningpath(
 export async function updateLearningpath(
   { learningpathId, params }: GQLMutationUpdateLearningpathArgs,
   context: Context,
-): Promise<ILearningPathV2> {
+): Promise<ILearningPathV2DTO> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}`, context, {
     method: "PATCH",
     body: JSON.stringify(params),
@@ -101,7 +101,7 @@ export async function updateLearningpath(
 export async function createLearningstep(
   { learningpathId, params }: GQLMutationNewLearningpathStepArgs,
   context: Context,
-): Promise<ILearningStepV2> {
+): Promise<ILearningStepV2DTO> {
   const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps`, context, {
     method: "POST",
     body: JSON.stringify(params),
@@ -112,7 +112,7 @@ export async function createLearningstep(
 export async function updateLearningstep(
   { learningpathId, learningstepId, params }: GQLMutationUpdateLearningpathStepArgs,
   context: Context,
-): Promise<ILearningStepV2> {
+): Promise<ILearningStepV2DTO> {
   const response = await fetch(
     `/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps/${learningstepId}`,
     context,

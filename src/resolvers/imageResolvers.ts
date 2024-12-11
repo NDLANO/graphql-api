@@ -5,22 +5,30 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import { IImageMetaInformationV2, IImageMetaInformationV3, ISearchResultV3 } from "@ndla/types-backend/image-api";
+import {
+  IImageMetaInformationV2DTO,
+  IImageMetaInformationV3DTO,
+  ISearchResultV3DTO,
+} from "@ndla/types-backend/image-api";
 import { fetchImage, fetchImageV3, searchImages } from "../api/imageApi";
 import { GQLQueryImageArgs, GQLQueryImageSearchArgs } from "../types/schema";
 
 export const Query = {
-  async image(_: any, { id }: GQLQueryImageArgs, context: ContextWithLoaders): Promise<IImageMetaInformationV2 | null> {
+  async image(
+    _: any,
+    { id }: GQLQueryImageArgs,
+    context: ContextWithLoaders,
+  ): Promise<IImageMetaInformationV2DTO | null> {
     return fetchImage(id, context);
   },
   async imageV3(
     _: any,
     { id }: GQLQueryImageArgs,
     context: ContextWithLoaders,
-  ): Promise<IImageMetaInformationV3 | null> {
+  ): Promise<IImageMetaInformationV3DTO | null> {
     return fetchImageV3(id, context);
   },
-  async imageSearch(_: any, args: GQLQueryImageSearchArgs, context: ContextWithLoaders): Promise<ISearchResultV3> {
+  async imageSearch(_: any, args: GQLQueryImageSearchArgs, context: ContextWithLoaders): Promise<ISearchResultV3DTO> {
     return searchImages(args, context);
   },
 };
