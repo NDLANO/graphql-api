@@ -71,6 +71,50 @@ const buildOembedFromIframeUrl = (url: string): GQLLearningpathStepOembed => {
   };
 };
 
+const getOembed = async (
+  learningpathStep: GQLLearningpathStep,
+  _: any,
+  context: ContextWithLoaders,
+): Promise<GQLLearningpathStepOembed | null> => {
+  if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
+    return null;
+  }
+  if (learningpathStep.embedUrl && learningpathStep.embedUrl.embedType === "iframe") {
+    return buildOembedFromIframeUrl(learningpathStep.embedUrl.url);
+  }
+  if (
+    learningpathStep.embedUrl &&
+    learningpathStep.embedUrl.embedType === "oembed" &&
+    learningpathStep.embedUrl.url !== "https://ndla.no"
+  ) {
+    return fetchOembed<GQLLearningpathStepOembed>(learningpathStep.embedUrl.url, context);
+  }
+  return null;
+};
+
+const getResource = async (
+  learningpathStep: GQLLearningpathStep,
+  { rootId, parentId }: GQLLearningpathStepResourceArgs,
+  context: ContextWithLoaders,
+): Promise<GQLResource | null> => {
+  if (
+    !learningpathStep.embedUrl ||
+    !learningpathStep.embedUrl.url ||
+    (learningpathStep.embedUrl.embedType !== "oembed" && learningpathStep.embedUrl.embedType !== "iframe") ||
+    !isNDLAEmbedUrl(learningpathStep.embedUrl.url)
+  ) {
+    return null;
+  }
+
+  const lastResourceMatch = learningpathStep.embedUrl.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
+
+  if (lastResourceMatch !== undefined) {
+    const resource = await fetchNode({ id: `urn:${lastResourceMatch}`, rootId, parentId }, context);
+    return nodeToTaxonomyEntity(resource, context);
+  }
+  return null;
+};
+
 export const resolvers = {
   Learningpath: {
     async coverphoto(
@@ -88,48 +132,12 @@ export const resolvers = {
     },
   },
   LearningpathStep: {
-    async oembed(
-      learningpathStep: GQLLearningpathStep,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLLearningpathStepOembed | null> {
-      if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
-        return null;
-      }
-      if (learningpathStep.embedUrl && learningpathStep.embedUrl.embedType === "iframe") {
-        return buildOembedFromIframeUrl(learningpathStep.embedUrl.url);
-      }
-      if (
-        learningpathStep.embedUrl &&
-        learningpathStep.embedUrl.embedType === "oembed" &&
-        learningpathStep.embedUrl.url !== "https://ndla.no"
-      ) {
-        return fetchOembed<GQLLearningpathStepOembed>(learningpathStep.embedUrl.url, context);
-      }
-      return null;
-    },
-    async resource(
-      learningpathStep: GQLLearningpathStep,
-      { rootId, parentId }: GQLLearningpathStepResourceArgs,
-      context: ContextWithLoaders,
-    ): Promise<GQLResource | null> {
-      if (
-        !learningpathStep.embedUrl ||
-        !learningpathStep.embedUrl.url ||
-        (learningpathStep.embedUrl.embedType !== "oembed" && learningpathStep.embedUrl.embedType !== "iframe") ||
-        !isNDLAEmbedUrl(learningpathStep.embedUrl.url)
-      ) {
-        return null;
-      }
-
-      const lastResourceMatch = learningpathStep.embedUrl.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
-
-      if (lastResourceMatch !== undefined) {
-        const resource = await fetchNode({ id: `urn:${lastResourceMatch}`, rootId, parentId }, context);
-        return nodeToTaxonomyEntity(resource, context);
-      }
-      return null;
-    },
+    oembed: getOembed,
+    resource: getResource,
+  },
+  MyNdlaLearningpathStep: {
+    oembed: getOembed,
+    resource: getResource,
   },
 };
 
