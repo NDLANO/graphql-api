@@ -1668,7 +1668,6 @@ export const typeDefs = gql`
       language: String
       ids: [Int!]
       resourceTypes: String
-      contextFilters: String
       levels: String
       sort: String
       fallback: String
@@ -1676,6 +1675,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
       grepCodes: String
+      traits: [String!]
       aggregatePaths: [String!]
       filterInactive: Boolean
     ): Search
@@ -1714,7 +1714,6 @@ export const typeDefs = gql`
       language: String
       ids: [Int!]
       resourceTypes: String
-      contextFilters: String
       levels: String
       sort: String
       fallback: String

@@ -2138,7 +2138,6 @@ export type GQLQueryResourceEmbedsArgs = {
 
 export type GQLQuerySearchArgs = {
   aggregatePaths?: InputMaybe<Array<Scalars['String']['input']>>;
-  contextFilters?: InputMaybe<Scalars['String']['input']>;
   contextTypes?: InputMaybe<Scalars['String']['input']>;
   fallback?: InputMaybe<Scalars['String']['input']>;
   filterInactive?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2154,11 +2153,11 @@ export type GQLQuerySearchArgs = {
   resourceTypes?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
   subjects?: InputMaybe<Scalars['String']['input']>;
+  traits?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type GQLQuerySearchWithoutPaginationArgs = {
-  contextFilters?: InputMaybe<Scalars['String']['input']>;
   contextTypes?: InputMaybe<Scalars['String']['input']>;
   fallback?: InputMaybe<Scalars['String']['input']>;
   ids?: InputMaybe<Array<Scalars['Int']['input']>>;
