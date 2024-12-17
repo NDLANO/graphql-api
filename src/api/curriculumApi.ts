@@ -11,6 +11,7 @@ import { Response } from "node-fetch";
 import { GQLCompetenceGoal, GQLCoreElement, GQLElement, GQLReference } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 import { isoLanguageMapping } from "../utils/mapping";
+import { grepSearch } from "./searchApi";
 
 interface Text {
   spraak: string;
@@ -68,13 +69,6 @@ interface CoreElement extends GrepElement {
     tekst: Text[];
   };
   "tilhoerer-laereplan": Reference;
-}
-
-interface CrossSubjectTopic {
-  id: string;
-  kode: string;
-  tittel: Text[];
-  "lenke-til-beskrivelse": string;
 }
 
 async function curriculumFetch(path: string, context: Context, options?: RequestOptions): Promise<Response> {
@@ -247,20 +241,14 @@ export async function fetchCrossSubjectTopicsByCode(
   language: string,
   context: Context,
 ): Promise<GQLReference[]> {
-  return Promise.all(
-    codes.map(async (code) => {
-      const response = await curriculumFetch(`/grep/kl06/v201906/tverrfaglige-temaer-lk20/${code}`, context);
-      const json: CrossSubjectTopic = await resolveJson(response, {});
-
-      const title = filterTextsForLanguage(json.tittel ?? [], language);
-
-      return {
-        code: json.kode,
-        id: json.kode,
-        title,
-      };
-    }),
-  );
+  const searchResult = await grepSearch({ codes, language }, context);
+  return searchResult.results.map((result) => {
+    return {
+      code: result.code,
+      id: result.code,
+      title: result.title.title,
+    };
+  });
 }
 
 export async function fetchCrossSubjectTopics(
