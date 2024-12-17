@@ -7,7 +7,12 @@
  */
 
 import queryString from "query-string";
-import { IGroupSearchResultDTO, IMultiSearchSummaryDTO } from "@ndla/types-backend/search-api";
+import {
+  IGroupSearchResultDTO,
+  IMultiSearchSummaryDTO,
+  IGrepSearchResultsDTO,
+  IGrepSearchInputDTO,
+} from "@ndla/types-backend/search-api";
 import { searchConcepts } from "./conceptApi";
 import {
   GQLGroupSearch,
@@ -134,3 +139,12 @@ const transformResult = (result: IMultiSearchSummaryDTO) => ({
   htmlTitle: result.title.htmlTitle,
   metaDescription: result.metaDescription?.metaDescription,
 });
+
+export const grepSearch = async (input: IGrepSearchInputDTO, context: Context): Promise<IGrepSearchResultsDTO> => {
+  const response = await fetch(`/search-api/v1/search/grep/`, context, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+
+  return resolveJson(response);
+};
