@@ -35,7 +35,6 @@ export const fetchTransformedContent = async (
       previewH5p: params.previewH5p,
       absoluteUrl: params.absoluteUrl,
       showVisualElement: params.showVisualElement === "true",
-      prettyUrl: params.prettyUrl,
     },
   );
 

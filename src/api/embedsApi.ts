@@ -148,7 +148,6 @@ export interface TransformOptions {
   draftConcept?: boolean;
   previewH5p?: boolean;
   absoluteUrl?: boolean;
-  prettyUrl?: boolean;
   subject?: string;
   shortCircuitOnError?: boolean;
   standalone?: boolean;
@@ -186,7 +185,6 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   const host = opts.absoluteUrl ? ndlaUrl : "";
 
   const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
-  let path = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
   let url = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
   const nodes = await queryNodes(
     { contentURI, language: context.language, includeContexts: true, filterProgrammes: true, isVisible: true },
@@ -195,23 +193,16 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   const node = nodes.find((n) => !!n.path);
   const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.context;
   if (!ctx?.isVisible) {
-    return { path };
+    return { path: url };
   }
-  const nodePath = ctx?.path ?? node?.path;
+
   const nodeUrl = ctx?.url ?? node?.url;
 
-  if (nodePath) {
-    path = `${host}/${context.language}${nodePath}`;
-  }
   if (nodeUrl) {
     url = `${host}/${context.language}${nodeUrl}`;
   }
 
-  if (opts.prettyUrl) {
-    return { path: url };
-  }
-
-  return { path };
+  return { path: url };
 };
 
 const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, context, opts }) => {
@@ -231,7 +222,7 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
       ),
     ]);
     let resource = resources?.[0];
-    if (resource && opts.prettyUrl) {
+    if (resource) {
       const path = resource?.url;
       // TODO: for now, trick RelatedContentEmbed to use provided path
       resource = { ...resource, path, paths: [] };
@@ -320,7 +311,7 @@ const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, contex
   const node = nodes.find((n) => !!n.path);
   const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
   return ctx
-    ? { disclaimerLink: { text: node?.name ?? "", href: `${host}${ctx.path}` } }
+    ? { disclaimerLink: { text: node?.name ?? "", href: `${host}${ctx.url}` } }
     : { disclaimerLink: { text: article.title.title, href: `${host}/article/${article.id}` } };
 };
 
