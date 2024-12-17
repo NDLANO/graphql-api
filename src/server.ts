@@ -22,7 +22,6 @@ import {
   learningpathsLoader,
   subjectsLoader,
   frontpageLoader,
-  lk20CurriculumLoader,
   subjectpageLoader,
   nodeLoader,
   nodesLoader,
@@ -122,7 +121,6 @@ async function getContext({ req, res }: { req: Request; res: Response }): Promis
       subjectsLoader: subjectsLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
       subjectpageLoader: subjectpageLoader(defaultContext),
-      lk20CurriculumLoader: lk20CurriculumLoader(defaultContext),
     },
   };
 }

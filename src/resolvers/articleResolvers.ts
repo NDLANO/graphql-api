@@ -9,16 +9,9 @@
 import { load } from "cheerio";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
-import {
-  fetchArticle,
-  fetchOembed,
-  fetchCompetenceGoals,
-  fetchCoreElements,
-  fetchCrossSubjectTopicsByCode,
-  fetchImageV3,
-  fetchSubjectTopics,
-  searchConcepts,
-} from "../api";
+import { fetchArticle, fetchOembed, fetchImageV3, fetchSubjectTopics, searchConcepts } from "../api";
+import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
+
 import { fetchTransformedContent, fetchRelatedContent, fetchTransformedDisclaimer } from "../api/articleApi";
 import { ndlaUrl } from "../config";
 import {
@@ -47,18 +40,28 @@ export const Query = {
 export const resolvers = {
   Article: {
     async competenceGoals(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
+      if ((article.grepCodes ?? []).length) return [];
+
       const language =
         article.supportedLanguages?.find((lang) => lang === context.language) ??
         article.supportedLanguages?.[0] ??
         context.language;
-      return fetchCompetenceGoals(article.grepCodes ?? [], language, context);
+      const result = await grepSearch({ codes: article.grepCodes, language: language }, context);
+      return result.results.map((hit) => {
+        return {
+          ...hit,
+          type: "LK20",
+          id: hit.code,
+          title: hit.title.title,
+        };
+      });
     },
     async coreElements(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
       const language =
         article.supportedLanguages?.find((lang) => lang === context.language) ??
         article.supportedLanguages?.[0] ??
         context.language;
-      return fetchCoreElements(article.grepCodes ?? [], language, context);
+      return coreElements(article.grepCodes ?? [], language, context);
     },
     async crossSubjectTopics(
       article: IArticleV2DTO,

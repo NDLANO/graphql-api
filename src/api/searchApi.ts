@@ -7,12 +7,21 @@
  */
 
 import queryString from "query-string";
-import { IGroupSearchResultDTO, IMultiSearchSummaryDTO } from "@ndla/types-backend/search-api";
+import {
+  IGrepSearchInputDTO,
+  IGrepSearchResultsDTO,
+  IGroupSearchResultDTO,
+  IMultiSearchSummaryDTO,
+} from "@ndla/types-backend/search-api";
 import { searchConcepts } from "./conceptApi";
 import {
+  GQLCompetenceGoal,
+  GQLCoreElement,
+  GQLElement,
   GQLGroupSearch,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
+  GQLReference,
   GQLSearch,
   GQLSearchWithoutPagination,
 } from "../types/schema";
@@ -134,3 +143,111 @@ const transformResult = (result: IMultiSearchSummaryDTO) => ({
   htmlTitle: result.title.htmlTitle,
   metaDescription: result.metaDescription?.metaDescription,
 });
+
+export const grepSearch = async (input: IGrepSearchInputDTO, context: Context): Promise<IGrepSearchResultsDTO> => {
+  const response = await fetch(`/search-api/v1/search/grep`, context, {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+
+  return resolveJson(response);
+};
+
+export const competenceGoals = async (
+  codes: string[],
+  language: string | undefined,
+  context: Context,
+): Promise<GQLCompetenceGoal[]> => {
+  const references = await grepSearch({ language, codes }, context);
+  const competenceGoals = references.results.filter((r) => {
+    return r.typename === "GrepKompetansemaalDTO";
+  });
+
+  return competenceGoals.map((reference) => {
+    const crossSubjectTopicsCodes: GQLElement[] = reference.tverrfagligeTemaer.map((t) => {
+      return {
+        reference: {
+          id: t.code,
+          code: t.code,
+          title: t.title.title,
+        },
+      };
+    });
+
+    const competenceGoalSet: GQLReference | undefined = {
+      id: reference.kompetansemaalSett.code,
+      code: reference.kompetansemaalSett.code,
+      title: reference.kompetansemaalSett.title,
+    };
+
+    const goal: GQLCompetenceGoal = {
+      ...reference,
+      id: reference.code,
+      title: reference.title.title,
+      type: "LK20",
+      curriculumCode: reference.laereplan.code,
+      curriculum: {
+        id: reference.laereplan.code,
+        code: reference.laereplan.code,
+        title: reference.laereplan.title.title,
+      },
+      competenceGoalSetCode: reference.kompetansemaalSett.code,
+      crossSubjectTopicsCodes,
+      competenceGoalSet,
+    };
+
+    return goal;
+  });
+};
+
+export const coreElements = async (
+  codes: string[],
+  language: string | undefined,
+  context: Context,
+): Promise<GQLCoreElement[]> => {
+  if (!codes.length) return [];
+  const coreElementCodes = codes.filter((c) => c.startsWith("KE"));
+  if (!coreElementCodes.length) return [];
+
+  const fetched = await grepSearch({ codes: coreElementCodes, language, pageSize: 100 }, context);
+  const coreElements = fetched.results.filter((r) => {
+    return r.typename === "GrepKjerneelementDTO";
+  });
+  return coreElements.map((reference) => {
+    return {
+      id: reference.code,
+      title: reference.title.title,
+      description: reference.description.description,
+      curriculumCode: reference.laereplan.code,
+      curriculum: {
+        code: reference.laereplan.code,
+        id: reference.laereplan.code,
+        title: reference.laereplan.title.title,
+      },
+    };
+  });
+};
+
+export const fetchCompetenceGoalSetCodes = async (code: string, context: Context): Promise<string[]> => {
+  const fetched = await grepSearch({ codes: [code], pageSize: 100 }, context);
+  const filtered = fetched.results.filter((result) => result.typename === "GrepKompetansemaalSettDTO");
+  return filtered.flatMap((result) => result.kompetansemaal.map((k) => k.code));
+};
+
+export const fetchCrossSubjectTopicsByCode = async (
+  inputCodes: string[],
+  language: string | undefined,
+  context: Context,
+): Promise<GQLReference[]> => {
+  const codes = inputCodes.filter((code) => code.startsWith("TT"));
+  const fetched = await grepSearch({ codes, language, pageSize: 100 }, context);
+  return fetched.results
+    .filter((result) => result.typename === "GrepTverrfagligTemaDTO")
+    .map((result) => {
+      return {
+        ...result,
+        id: result.code,
+        title: result.title.title,
+      };
+    });
+};

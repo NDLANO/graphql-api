@@ -20,11 +20,10 @@ import {
   fetchNode,
   fetchFrontpage,
   fetchFilmFrontpage,
-  fetchLK20Curriculum,
   fetchSubjectPage,
   queryNodes,
 } from "./api";
-import { GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import { GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -38,20 +37,6 @@ export function articlesLoader(context: Context): DataLoader<string, IArticleV2D
 export function learningpathsLoader(context: Context): DataLoader<string, ILearningPathSummaryV2DTO | undefined> {
   return new DataLoader(async (learningpathIds) => {
     return fetchLearningpaths(learningpathIds, context);
-  });
-}
-
-export function lk20CurriculumLoader(context: Context): DataLoader<CurriculumLoaderParams, GQLReference | undefined> {
-  return new DataLoader(async (ids) => {
-    const uniqueCurriculumIds = Array.from(new Set(ids));
-    const responses = await Promise.all(
-      uniqueCurriculumIds.map(async ({ code, language }) => {
-        return fetchLK20Curriculum(code, language, context);
-      }),
-    );
-    return uniqueCurriculumIds.map(({ code }) => {
-      return responses.find((response) => response.code === code);
-    });
   });
 }
 
