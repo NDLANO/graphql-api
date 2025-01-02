@@ -37,6 +37,10 @@ const apiBaseUrl = (() => {
 })();
 
 function apiResourceUrl(path: string): string {
+  if (path.startsWith("/search-api")) {
+    return `http://localhost:1339${path}`;
+  }
+
   if (path.startsWith("http")) {
     return path;
   }

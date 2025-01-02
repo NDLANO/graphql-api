@@ -126,7 +126,6 @@ async function fetchLK20CompetenceGoal(code: string, language: string, context: 
   return {
     id: json.kode,
     title: `${filterTextsForLanguage(json.tittel?.tekst ?? [], lang)} (${json.kode})`,
-    type: "LK20",
     code: json.kode,
     language: lang,
     curriculumCode: json["tilhoerer-laereplan"].kode,

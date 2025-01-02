@@ -459,7 +459,6 @@ export type GQLCompetenceGoal = {
   id: Scalars['String']['output'];
   language?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
 };
 
 export type GQLConcept = {
@@ -3537,7 +3536,6 @@ export type GQLCompetenceGoalResolvers<ContextType = any, ParentType extends GQL
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

@@ -19,6 +19,8 @@ import {
   fetchSubjectTopics,
   searchConcepts,
 } from "../api";
+import { grepSearch } from "../api/searchApi";
+
 import { fetchTransformedContent, fetchRelatedContent } from "../api/articleApi";
 import { ndlaUrl } from "../config";
 import {
@@ -47,11 +49,20 @@ export const Query = {
 export const resolvers = {
   Article: {
     async competenceGoals(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
+      if ((article.grepCodes ?? []).length) return [];
+
       const language =
         article.supportedLanguages?.find((lang) => lang === context.language) ??
         article.supportedLanguages?.[0] ??
         context.language;
-      return fetchCompetenceGoals(article.grepCodes ?? [], language, context);
+      const result = await grepSearch({ codes: article.grepCodes, language: language }, context);
+      return result.results.map((hit) => {
+        return {
+          ...hit,
+          id: hit.code,
+          title: hit.title.title,
+        };
+      });
     },
     async coreElements(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
       const language =

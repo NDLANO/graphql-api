@@ -739,7 +739,6 @@ export const typeDefs = gql`
     id: String!
     code: String
     title: String!
-    type: String!
     language: String
     curriculumId: String
     curriculumCode: String

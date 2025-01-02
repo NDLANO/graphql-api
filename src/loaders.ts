@@ -20,11 +20,11 @@ import {
   fetchNode,
   fetchFrontpage,
   fetchFilmFrontpage,
-  fetchLK20Curriculum,
   fetchSubjectPage,
   queryNodes,
 } from "./api";
 import { GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import { convertedGrepSearch } from "./api/searchApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -43,14 +43,17 @@ export function learningpathsLoader(context: Context): DataLoader<string, ILearn
 
 export function lk20CurriculumLoader(context: Context): DataLoader<CurriculumLoaderParams, GQLReference | undefined> {
   return new DataLoader(async (ids) => {
-    const uniqueCurriculumIds = Array.from(new Set(ids));
-    const responses = await Promise.all(
-      uniqueCurriculumIds.map(async ({ code, language }) => {
-        return fetchLK20Curriculum(code, language, context);
-      }),
-    );
-    return uniqueCurriculumIds.map(({ code }) => {
-      return responses.find((response) => response.code === code);
+    const languages = new Set(ids.map(({ language }) => language));
+    if (languages.size !== 1) {
+      // TODO: Maybe disallow passing in multiple languages altogether
+      throw new Error("Non-1 number of languages passed to curriculum loader");
+    }
+
+    const uniqueCurriculumIds = Array.from(new Set(ids.map(({ code }) => code)));
+    const language = Array.from(languages)[0]!;
+    const result = await convertedGrepSearch({ codes: uniqueCurriculumIds, language, pageSize: 100 }, context);
+    return ids.map((id) => {
+      return result.find(({ code }) => code === id.code);
     });
   });
 }

@@ -8,16 +8,17 @@
 
 import queryString from "query-string";
 import {
+  IGrepSearchInputDTO,
+  IGrepSearchResultsDTO,
   IGroupSearchResultDTO,
   IMultiSearchSummaryDTO,
-  IGrepSearchResultsDTO,
-  IGrepSearchInputDTO,
 } from "@ndla/types-backend/search-api";
 import { searchConcepts } from "./conceptApi";
 import {
   GQLGroupSearch,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
+  GQLReference,
   GQLSearch,
   GQLSearchWithoutPagination,
 } from "../types/schema";
@@ -141,10 +142,21 @@ const transformResult = (result: IMultiSearchSummaryDTO) => ({
 });
 
 export const grepSearch = async (input: IGrepSearchInputDTO, context: Context): Promise<IGrepSearchResultsDTO> => {
-  const response = await fetch(`/search-api/v1/search/grep/`, context, {
+  const response = await fetch(`/search-api/v1/search/grep`, context, {
     method: "POST",
     body: JSON.stringify(input),
   });
 
   return resolveJson(response);
+};
+
+export const convertedGrepSearch = async (input: IGrepSearchInputDTO, context: Context): Promise<GQLReference[]> => {
+  const response = await grepSearch(input, context);
+  return response.results.map((r) => {
+    return {
+      code: r.code,
+      id: r.code,
+      title: r.title.title,
+    };
+  });
 };

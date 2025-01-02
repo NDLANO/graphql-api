@@ -14,6 +14,7 @@ import {
   fetchCrossSubjectTopics,
 } from "../api";
 import { GQLCompetenceGoal, GQLCoreElement, GQLElement, GQLReference } from "../types/schema";
+import { convertedGrepSearch, grepSearch } from "../api/searchApi";
 
 export const Query = {
   async competenceGoals(
@@ -21,7 +22,11 @@ export const Query = {
     { codes, language }: { codes: string[]; language?: string },
     context: ContextWithLoaders,
   ): Promise<GQLCompetenceGoal[]> {
-    return fetchCompetenceGoals(codes, language ?? context.language, context);
+    // TODO:
+    const old = await fetchCompetenceGoals(codes, language ?? context.language, context);
+    console.log({ old });
+    const references = await convertedGrepSearch({ language, codes }, context);
+    return references.map((reference) => ({ ...reference, __typename: "CompetenceGoal" }));
   },
   async coreElements(
     _: any,
@@ -54,7 +59,12 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLReference | undefined> {
       if (!competenceGoal.competenceGoalSetCode) return undefined;
-      return fetchCompetenceSet(competenceGoal.competenceGoalSetCode, competenceGoal.language, context);
+      const results = await convertedGrepSearch(
+        { language: competenceGoal.language, codes: [competenceGoal.competenceGoalSetCode] },
+        context,
+      );
+
+      return results[0];
     },
     async crossSubjectTopics(
       competenceGoal: GQLCompetenceGoal,
@@ -70,6 +80,7 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLElement[] | undefined> {
       if (!competenceGoal.coreElementsCodes) return undefined;
+
       return fetchCoreElementReferences(competenceGoal.coreElementsCodes, competenceGoal.language, context);
     },
   },
