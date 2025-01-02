@@ -6,8 +6,8 @@
  *
  */
 
-import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { IConcept, IConceptSearchResult, IConceptSummary } from "@ndla/types-backend/concept-api";
+import { IArticleV2DTO } from "@ndla/types-backend/article-api";
+import { IConceptDTO, IConceptSearchResultDTO, IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { searchConcepts, fetchConcept, fetchListingPage } from "../api";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
 import {
@@ -23,7 +23,7 @@ import { articleToMeta } from "../utils/apiHelpers";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
 export const Query = {
-  async concept(_: any, { id }: GQLQueryConceptArgs, context: ContextWithLoaders): Promise<IConcept | undefined> {
+  async concept(_: any, { id }: GQLQueryConceptArgs, context: ContextWithLoaders): Promise<IConceptDTO | undefined> {
     return fetchConcept(id, context);
   },
   async listingPage(_: any, args: GQLQueryListingPageArgs, context: ContextWithLoaders): Promise<GQLListingPage> {
@@ -33,7 +33,7 @@ export const Query = {
     _: any,
     searchQuery: GQLQueryConceptSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<IConceptSearchResult> {
+  ): Promise<IConceptSearchResultDTO> {
     return searchConcepts(searchQuery, context);
   },
 };
@@ -48,14 +48,14 @@ export const resolvers = {
       const data = await context.loaders.subjectsLoader.load(params);
       return subjectIds.map((id) => data.subjects.find((subject) => subject.id === id)?.name || "");
     },
-    async visualElement(concept: IConcept, _: any, context: ContextWithLoaders): Promise<GQLVisualElement | null> {
+    async visualElement(concept: IConceptDTO, _: any, context: ContextWithLoaders): Promise<GQLVisualElement | null> {
       const visualElement = concept.visualElement?.visualElement;
       if (visualElement) {
         return await parseVisualElement(visualElement, context);
       }
       return null;
     },
-    async image(concept: IConcept, _: any, context: ContextWithLoaders) {
+    async image(concept: IConceptDTO, _: any, context: ContextWithLoaders) {
       const metaImageId = concept.metaImage?.url?.split("/").pop();
       if (metaImageId) {
         const image = await fetchImage(metaImageId, context);
@@ -66,29 +66,29 @@ export const resolvers = {
       }
       return undefined;
     },
-    async articles(concept: IConcept, _: any, context: ContextWithLoaders): Promise<GQLMeta[]> {
+    async articles(concept: IConceptDTO, _: any, context: ContextWithLoaders): Promise<GQLMeta[]> {
       const articleIds = concept.articleIds;
       if (!articleIds || articleIds.length === 0) {
         return [];
       }
       const fetched = await context.loaders.articlesLoader.loadMany(articleIds.map((id) => `${id}`));
-      return fetched.filter((article): article is IArticleV2 => !!article).map(articleToMeta);
+      return fetched.filter((article): article is IArticleV2DTO => !!article).map(articleToMeta);
     },
-    title(concept: IConcept, _: any, __: ContextWithLoaders): string {
+    title(concept: IConceptDTO, _: any, __: ContextWithLoaders): string {
       return concept.title.title;
     },
-    content(concept: IConcept, _: any, __: ContextWithLoaders): string {
+    content(concept: IConceptDTO, _: any, __: ContextWithLoaders): string {
       return concept.content?.content ?? "";
     },
-    tags: (concept: IConcept, _: any, __: ContextWithLoaders): string[] => {
+    tags: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
       return concept.tags?.tags || [];
     },
-    subjectIds: (concept: IConcept, _: any, __: ContextWithLoaders): string[] => {
+    subjectIds: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
       return concept.subjectIds || [];
     },
   },
   ConceptResult: {
-    concepts: (conceptResult: IConceptSearchResult, _: any, __: ContextWithLoaders): IConceptSummary[] => {
+    concepts: (conceptResult: IConceptSearchResultDTO, _: any, __: ContextWithLoaders): IConceptSummaryDTO[] => {
       return conceptResult.results;
     },
   },

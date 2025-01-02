@@ -10,6 +10,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 import { GraphQLFormattedError } from "graphql/error/GraphQLError";
 import { createLogger, transports, format, Logger } from "winston";
 import "source-map-support/register";
+import { unreachable } from "./unreachable";
 
 export const loggerStorage = new AsyncLocalStorage<Logger>();
 
@@ -75,6 +76,8 @@ export const logError = (err: GraphQLFormattedError) => {
     case "error":
       getLogger().error(err);
       break;
+    default:
+      unreachable(logLevel);
   }
 };
 

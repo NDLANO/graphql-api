@@ -10,6 +10,7 @@ import { Query as ArenaQuery, Mutations as ArenaMutations, resolvers as ArenaRes
 import { Query as ArticleQuery, resolvers as articleResolvers } from "./articleResolvers";
 import { Query as ConceptQuery, resolvers as conceptResolvers } from "./conceptResolvers";
 import { Query as CurriculumQuery, resolvers as curriculumResolvers } from "./curriculumResolvers";
+import { Query as ExternalQuery } from "./externalResolvers";
 import {
   Query as FolderResolvers,
   Mutations as FolderMutations,
@@ -17,7 +18,11 @@ import {
 } from "./folderResolvers";
 import { Query as FrontpageQuery, resolvers as frontpageResolvers } from "./frontpageResolvers";
 import { Query as ImageQuery, resolvers as ImageResolvers } from "./imageResolvers";
-import { Query as LearningpathQuery, resolvers as learningpathResolvers } from "./learningpathResolvers";
+import {
+  Query as LearningpathQuery,
+  resolvers as learningpathResolvers,
+  Mutations as LearningpathMutations,
+} from "./learningpathResolvers";
 import { Query as MyNDLAQuery, resolvers as MyNDLAResolvers } from "./myndlaResolvers";
 import { Query as PodcastQuery, resolvers as podcastResolvers } from "./podcastResolvers";
 import { Query as ProgrammeQuery, resolvers as ProgrammeResolvers } from "./programmeResolvers";
@@ -49,11 +54,13 @@ export const resolvers = {
     ...TransformQuery,
     ...ProgrammeQuery,
     ...ArenaQuery,
+    ...ExternalQuery,
   },
   Mutation: {
     ...FolderMutations,
     ...TransformArticleMutations,
     ...ArenaMutations,
+    ...LearningpathMutations,
   },
   ...folderResolvers,
   ...articleResolvers,

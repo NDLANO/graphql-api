@@ -230,7 +230,24 @@ export const typeDefs = gql`
     status: String!
     supportedLanguages: [String!]!
     type: String!
-    article: Article
+    resource(rootId: String, parentId: String): Resource
+    showTitle: Boolean!
+    oembed: LearningpathStepOembed
+  }
+
+  type MyNdlaLearningpathStep {
+    id: Int!
+    title: String!
+    seqNo: Int!
+    introduction: String
+    description: String
+    embedUrl: LearningpathStepEmbedUrl
+    license: License
+    metaUrl: String!
+    revision: Int!
+    status: String!
+    supportedLanguages: [String!]!
+    type: String!
     resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
     oembed: LearningpathStepOembed
@@ -254,6 +271,7 @@ export const typeDefs = gql`
     duration: Int
     canEdit: Boolean!
     verificationStatus: String!
+    created: String!
     lastUpdated: String!
     tags: [String!]!
     supportedLanguages: [String!]!
@@ -264,6 +282,96 @@ export const typeDefs = gql`
     learningstepUrl: String!
     status: String!
     coverphoto: LearningpathCoverphoto
+    madeAvailable: String
+  }
+
+  type MyNdlaLearningpath {
+    id: Int!
+    title: String!
+    description: String!
+    copyright: LearningpathCopyright!
+    duration: Int
+    canEdit: Boolean!
+    verificationStatus: String!
+    created: String!
+    lastUpdated: String!
+    tags: [String!]!
+    supportedLanguages: [String!]!
+    isBasedOn: Int
+    learningsteps: [MyNdlaLearningpathStep!]!
+    metaUrl: String!
+    revision: Int!
+    learningstepUrl: String!
+    status: String!
+    coverphoto: LearningpathCoverphoto
+    madeAvailable: String
+  }
+
+  input LearningpathEmbedInput {
+    url: String!
+    embedType: String!
+  }
+
+  input ContributorInput {
+    type: String!
+    name: String!
+  }
+
+  input LicenseInput {
+    license: String!
+    url: String
+    description: String
+  }
+
+  input LearningpathCopyrightInput {
+    license: LicenseInput!
+    contributors: [ContributorInput!]!
+  }
+
+  input LearningpathNewInput {
+    title: String!
+    description: String!
+    introduction: String
+    coverPhotoMetaUrl: String
+    duration: Int!
+    tags: [String!]!
+    language: String!
+    copyright: LearningpathCopyrightInput!
+  }
+
+  input LearningpathUpdateInput {
+    title: String
+    coverPhotoMetaUrl: String
+    language: String!
+    revision: Int!
+    description: String
+    duration: Int
+    tags: [String!]
+    deleteMessage: Boolean
+    copyright: LearningpathCopyrightInput
+  }
+
+  input LearningpathStepNewInput {
+    title: String!
+    introduction: String
+    description: String
+    language: String!
+    embedUrl: LearningpathEmbedInput
+    showTitle: Boolean!
+    type: String!
+    license: String
+  }
+
+  input LearningpathStepUpdateInput {
+    revision: Int!
+    title: String
+    introduction: String
+    language: String!
+    description: String
+    embedUrl: LearningpathEmbedInput
+    showTitle: Boolean
+    type: String
+    license: String
   }
 
   type TaxonomyMetadata {
@@ -377,6 +485,7 @@ export const typeDefs = gql`
     parentIds: [String!]!
     rootId: String!
     relevance: String!
+    isActive: Boolean!
     parents: [TaxonomyCrumb!]
   }
 
@@ -656,6 +765,7 @@ export const typeDefs = gql`
     title: String!
     code: String
     path: String
+    url: String
   }
 
   type Element {
@@ -1479,6 +1589,47 @@ export const typeDefs = gql`
     sharedFolders: [SharedFolder!]!
   }
 
+  type ImageV3 {
+    fileName: String!
+    size: Int!
+    contentType: String!
+    imageUrl: String!
+    dimensions: ImageDimensions
+    language: String!
+  }
+
+  type ImageMetaInformationV3 {
+    id: String!
+    metaUrl: String!
+    title: Title!
+    alttext: ImageAltText!
+    copyright: Copyright!
+    tags: Tags!
+    caption: Caption!
+    supportedLanguages: [String!]!
+    created: String!
+    createdBy: String!
+    modelRelease: String!
+    editorNotes: [EditorNote!]
+    image: ImageV3!
+  }
+
+  type ImageSearch {
+    totalCount: Int!
+    page: Int!
+    pageSize: Int!
+    language: String!
+    results: [ImageMetaInformationV3!]!
+  }
+
+  type ExternalOpengraph {
+    title: String
+    description: String
+    url: String
+    imageUrl: String
+    imageAlt: String
+  }
+
   type Query {
     node(id: String, rootId: String, parentId: String, contextId: String): Node
     nodes(
@@ -1497,6 +1648,8 @@ export const typeDefs = gql`
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage
     learningpath(pathId: String!): Learningpath
+    myNdlaLearningpath(pathId: String!): MyNdlaLearningpath
+    myLearningpaths: [MyNdlaLearningpath!]
     programmes: [ProgrammePage!]
     programme(path: String, contextId: String): ProgrammePage
     subjects(metadataFilterKey: String, metadataFilterValue: String, filterVisible: Boolean, ids: [String!]): [Subject!]
@@ -1515,7 +1668,6 @@ export const typeDefs = gql`
       language: String
       ids: [Int!]
       resourceTypes: String
-      contextFilters: String
       levels: String
       sort: String
       fallback: String
@@ -1523,6 +1675,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
       grepCodes: String
+      traits: [String!]
       aggregatePaths: [String!]
       filterInactive: Boolean
     ): Search
@@ -1561,7 +1714,6 @@ export const typeDefs = gql`
       language: String
       ids: [Int!]
       resourceTypes: String
-      contextFilters: String
       levels: String
       sort: String
       fallback: String
@@ -1606,6 +1758,10 @@ export const typeDefs = gql`
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
     listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
     subjectCollection(language: String!): [Subject!]
+    imageSearch(query: String, page: Int, pageSize: Int): ImageSearch!
+    imageV3(id: String!): ImageMetaInformationV3
+    learningpathStepOembed(url: String!): LearningpathStepOembed!
+    opengraph(url: String!): ExternalOpengraph
   }
 
   type Mutation {
@@ -1683,6 +1839,17 @@ export const typeDefs = gql`
     addPostUpvoteV2(postId: Int!): Int!
     removePostUpvote(postId: Int!): Int!
     removePostUpvoteV2(postId: Int!): Int!
+    updateLearningpathStatus(id: Int!, status: String!): MyNdlaLearningpath!
+    deleteLearningpath(id: Int!): Boolean
+    newLearningpath(params: LearningpathNewInput!): MyNdlaLearningpath!
+    updateLearningpath(learningpathId: Int!, params: LearningpathUpdateInput!): MyNdlaLearningpath!
+    newLearningpathStep(learningpathId: Int!, params: LearningpathStepNewInput!): MyNdlaLearningpathStep!
+    updateLearningpathStep(
+      learningpathId: Int!
+      learningstepId: Int!
+      params: LearningpathStepUpdateInput!
+    ): MyNdlaLearningpathStep!
+    deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]
   }
 `;
 

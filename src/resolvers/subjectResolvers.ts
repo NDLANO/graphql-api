@@ -6,7 +6,7 @@
  *
  */
 
-import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
+import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchLK20CompetenceGoalSet } from "../api";
 import {
@@ -82,7 +82,7 @@ export const resolvers = {
       });
       return filterMissingArticles(topics, context);
     },
-    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageData | null> {
+    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageDataDTO | null> {
       if (!subject.contentUri?.startsWith("urn:frontpage")) return null;
       return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
     },
@@ -95,21 +95,25 @@ export const resolvers = {
     },
   },
   SubjectPage: {
-    async connectedTo(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async connectedTo(
+      subjectpage: ISubjectPageDataDTO,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.connectedTo.map((id) => {
           return { id };
         }),
       );
     },
-    async buildsOn(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async buildsOn(subjectpage: ISubjectPageDataDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.buildsOn.map((id) => {
           return { id };
         }),
       );
     },
-    async leadsTo(subjectpage: ISubjectPageData, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async leadsTo(subjectpage: ISubjectPageDataDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.leadsTo.map((id) => {
           return { id };

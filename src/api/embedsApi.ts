@@ -9,7 +9,7 @@
 import { toUnicode } from "node:punycode";
 import { load } from "cheerio";
 import he from "he";
-import { IImageMetaInformationV3 } from "@ndla/types-backend/image-api";
+import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import {
   AudioMetaData,
   ImageMetaData,
@@ -61,7 +61,7 @@ type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
 
 // Some embeds depend on fetching image information, but can function just fine without.
 // This function simply suppresses the error. Do not use it for fetching the actual imageMeta.
-const fetchImageWrapper = async (id: string, context: Context): Promise<IImageMetaInformationV3> => {
+const fetchImageWrapper = async (id: string, context: Context): Promise<IImageMetaInformationV3DTO> => {
   const image = await fetchImageV3(id, context);
   if (image === null) {
     throw Error("Failed to fetch image");
@@ -89,7 +89,7 @@ const imageMeta: Fetch<ImageMetaData> = async ({ embedData, context }) => {
 const audioMeta: Fetch<AudioMetaData> = async ({ embedData, context }) => {
   const audio = await fetchAudioV2(context, embedData.resourceId);
   const coverPhotoId = audio.podcastMeta?.coverPhoto?.id;
-  let imageMeta: IImageMetaInformationV3 | undefined;
+  let imageMeta: IImageMetaInformationV3DTO | undefined;
   if (coverPhotoId) {
     imageMeta = await fetchImageWrapper(coverPhotoId, context);
   }
@@ -189,11 +189,14 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   let path = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
   let url = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
   const nodes = await queryNodes(
-    { contentURI, language: context.language, includeContexts: true, filterProgrammes: true },
+    { contentURI, language: context.language, includeContexts: true, filterProgrammes: true, isVisible: true },
     context,
   );
   const node = nodes.find((n) => !!n.path);
-  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
+  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.context;
+  if (!ctx?.isVisible) {
+    return { path };
+  }
   const nodePath = ctx?.path ?? node?.path;
   const nodeUrl = ctx?.url ?? node?.url;
 

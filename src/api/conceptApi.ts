@@ -7,7 +7,7 @@
  */
 
 import queryString from "query-string";
-import { IConceptSearchResult, IConcept } from "@ndla/types-backend/concept-api";
+import { IConceptSearchResultDTO, IConceptDTO } from "@ndla/types-backend/concept-api";
 import { fetchSubject } from "./taxonomyApi";
 import { GQLListingPage, GQLSubject } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
@@ -26,7 +26,7 @@ export async function searchConcepts(
     conceptType?: string;
   },
   context: Context,
-): Promise<IConceptSearchResult> {
+): Promise<IConceptSearchResultDTO> {
   const idsString = params.ids?.join(",");
   const query = {
     query: params.query,
@@ -42,14 +42,14 @@ export async function searchConcepts(
     sort: "title",
   };
   const response = await fetch(`/concept-api/v1/concepts?${queryString.stringify(query)}`, context);
-  const conceptResult: IConceptSearchResult = await resolveJson(response);
+  const conceptResult: IConceptSearchResultDTO = await resolveJson(response);
   return conceptResult;
 }
 
-export async function fetchConcept(id: string | number, context: Context): Promise<IConcept | undefined> {
+export async function fetchConcept(id: string | number, context: Context): Promise<IConceptDTO | undefined> {
   const response = await fetch(`/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`, context);
   try {
-    const concept: IConcept = await resolveJson(response);
+    const concept: IConceptDTO = await resolveJson(response);
     return concept;
   } catch (e) {
     return undefined;
@@ -97,10 +97,10 @@ const getTags = (tags: string[] | TagType[]) => {
   return [];
 };
 
-export const fetchEmbedConcept = async (id: string, context: Context, draftConcept: boolean): Promise<IConcept> => {
+export const fetchEmbedConcept = async (id: string, context: Context, draftConcept: boolean): Promise<IConceptDTO> => {
   const endpoint = draftConcept ? "drafts" : "concepts";
   const url = `/concept-api/v1/${endpoint}/${id}?language=${context.language}&fallback=true`;
   const res = await fetch(url, context);
-  const resolved: IConcept = await resolveJson(res);
+  const resolved: IConceptDTO = await resolveJson(res);
   return resolved;
 };

@@ -127,7 +127,7 @@ async function getContext({ req, res }: { req: Request; res: Response }): Promis
   };
 }
 
-app.get("/health", (req: Request, res: Response) => {
+app.get("/health", (_: Request, res: Response) => {
   res.status(200).json({ status: 200, text: "Health check ok" });
 });
 

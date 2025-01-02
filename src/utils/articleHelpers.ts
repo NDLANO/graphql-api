@@ -6,9 +6,9 @@
  *
  */
 
-import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { NodeChild } from "@ndla/types-taxonomy";
-import { GQLMeta, GQLTaxonomyEntity } from "../types/schema";
+import { GQLTaxonomyEntity } from "../types/schema";
 
 export function isNDLAEmbedUrl(url: string) {
   return /^https:\/(.*).ndla.no/.test(url) || /^http:\/\/localhost/.test(url);
@@ -53,7 +53,7 @@ export async function filterMissingArticles<T extends GQLTaxonomyEntity | NodeCh
   const articles = await context.loaders.articlesLoader.loadMany(
     articleResources.map((taxonomyEntity) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "")),
   );
-  const nonNullArticles = articles.filter((article): article is IArticleV2 => !!article);
+  const nonNullArticles = articles.filter((article): article is IArticleV2DTO => !!article);
 
   const activeResources = articleResources.filter((taxonomyEntity) =>
     nonNullArticles.find((article) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "") === `${article.id}`),

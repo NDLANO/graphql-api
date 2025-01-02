@@ -13,7 +13,7 @@ export function setupLogger(correlationID: string, next: NextFunction): void {
   loggerStorage.run(buildLogger({ correlationID }), next, "route");
 }
 
-const loggerMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+const loggerMiddleware = (_: Request, res: Response, next: NextFunction): void => {
   const cid = res.locals.correlationId as string;
   setupLogger(cid, next);
 };

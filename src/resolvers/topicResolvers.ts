@@ -6,7 +6,7 @@
  *
  */
 
-import { IArticleV2 } from "@ndla/types-backend/article-api";
+import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchNode, fetchNodeResources, fetchChildren, queryNodes } from "../api";
 import {
@@ -59,7 +59,7 @@ export const resolvers = {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       return article?.availability;
     },
-    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
+    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2DTO | undefined> {
       if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       }
@@ -72,7 +72,7 @@ export const resolvers = {
     },
     async coreResources(
       topic: Node,
-      args: GQLTopicCoreResourcesArgs,
+      _: GQLTopicCoreResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchNodeResources(
@@ -87,7 +87,7 @@ export const resolvers = {
     },
     async supplementaryResources(
       topic: Node,
-      args: GQLTopicSupplementaryResourcesArgs,
+      _args: GQLTopicSupplementaryResourcesArgs,
       context: ContextWithLoaders,
     ): Promise<GQLResource[]> {
       const topicResources = await fetchNodeResources(
@@ -106,7 +106,7 @@ export const resolvers = {
       return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
     async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
-      const { contentUri, id, path } = topic;
+      const { contentUri, path } = topic;
       if (!path && contentUri) {
         const nodes = await queryNodes(
           {

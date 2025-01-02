@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-import createLRUCache from "lru-cache";
+import LRUCache from "lru-cache";
 import { Response } from "node-fetch";
 
 export interface IKeyValueCache {
@@ -19,9 +19,9 @@ export const createCache = (
   // size: 100 mb default
   options: { size: number } = { size: 100000000 },
 ): IKeyValueCache => {
-  const cache = createLRUCache({
-    max: options.size,
-    length: (n: string, key: string) => n.length + key.length,
+  const cache = new LRUCache<string, string>({
+    maxSize: options.size,
+    sizeCalculation: (n, key) => n.length + key.length,
   });
 
   return {
@@ -30,7 +30,7 @@ export const createCache = (
     },
     async set(key, value, maxAge) {
       if (maxAge) {
-        cache.set(key, value, maxAge);
+        cache.set(key, value, { ttl: maxAge });
       } else {
         cache.set(key, value);
       }

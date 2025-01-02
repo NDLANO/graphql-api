@@ -7,8 +7,8 @@
  */
 
 import sortBy from "lodash/sortBy";
-import { IConcept, IConceptSummary } from "@ndla/types-backend/concept-api";
-import { IImageMetaInformationV3 } from "@ndla/types-backend/image-api";
+import { IConceptDTO, IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
+import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { ConceptVisualElementMeta, EmbedMetaData } from "@ndla/types-embed";
 import { licenseFixer, roleMapper } from "./apiHelpers";
 import { ndlaUrl } from "../config";
@@ -25,6 +25,7 @@ import {
   GQLImageLicense,
   GQLPodcastLicense,
 } from "../types/schema";
+import { unreachable } from "./unreachable";
 
 type Success<T extends EmbedMetaData["resource"]> = Extract<EmbedMetaData, { resource: T; status: "success" }>;
 
@@ -37,7 +38,7 @@ const footnoteMetaData = ({ embedData, data }: Success<"footnote">, acc: MetaDat
   });
 };
 
-const imageMetaData = (data: IImageMetaInformationV3, acc: MetaData) => {
+const imageMetaData = (data: IImageMetaInformationV3DTO, acc: MetaData) => {
   acc["images"] = acc["images"].concat({
     id: data.id,
     title: data.title.title,
@@ -100,6 +101,15 @@ const brightcoveMetaData = ({ data, embedData }: Success<"brightcove">, acc: Met
 
 const h5pMetaData = ({ data, embedData }: Success<"h5p">, acc: MetaData) => {
   const h5p = data.h5pLicenseInformation?.h5p;
+
+  const authors =
+    h5p?.authors
+      ?.filter((author) => !!author.name)
+      ?.map((author) => ({
+        type: roleMapper(author.role ?? ""),
+        name: author.name,
+      })) ?? [];
+
   const copyright: GQLCopyright | undefined = h5p
     ? {
         license: {
@@ -109,10 +119,7 @@ const h5pMetaData = ({ data, embedData }: Success<"h5p">, acc: MetaData) => {
         },
         creators: [],
         processors: [],
-        rightsholders: h5p.authors?.map((author) => ({
-          type: roleMapper(author.role ?? ""),
-          name: author.name,
-        })),
+        rightsholders: authors,
         origin: h5p.source ?? "",
       }
     : undefined;
@@ -126,7 +133,7 @@ const h5pMetaData = ({ data, embedData }: Success<"h5p">, acc: MetaData) => {
 };
 
 const conceptMetaData = (
-  concept: IConcept | IConceptSummary,
+  concept: IConceptDTO | IConceptSummaryDTO,
   visualElement: ConceptVisualElementMeta | undefined,
   acc: MetaData,
 ) => {
@@ -157,12 +164,15 @@ const conceptMetaData = (
       case "h5p":
         h5pMetaData(visualElement, acc);
         break;
+      case "iframe":
       case "external": {
         if (visualElement.data.iframeImage) {
           imageMetaData(visualElement.data.iframeImage, acc);
         }
         break;
       }
+      default:
+        unreachable(visualElement);
     }
   }
 };
@@ -233,6 +243,16 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
         case "copyright":
           textblockMetaData(curr, acc);
           break;
+        case "content-link":
+        case "related-content":
+        case "code-block":
+        case "file":
+        case "link-block":
+        case "uu-disclaimer":
+        case "comment":
+          break;
+        default:
+          unreachable(curr);
       }
       return acc;
     },

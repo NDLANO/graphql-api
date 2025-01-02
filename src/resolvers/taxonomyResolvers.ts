@@ -6,8 +6,8 @@
  *
  */
 
-import { IArticleV2 } from "@ndla/types-backend/article-api";
-import { ISubjectPageData } from "@ndla/types-backend/frontpage-api";
+import { IArticleV2DTO } from "@ndla/types-backend/article-api";
+import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
   fetchChildren,
@@ -27,7 +27,7 @@ import {
   GQLQueryNodesArgs,
   GQLTaxonomyEntity,
 } from "../types/schema";
-import { articleToMeta, nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { articleToMeta, nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
 import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
@@ -92,7 +92,7 @@ export const Query = {
 
 export const resolvers = {
   Node: {
-    async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2 | undefined> {
+    async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2DTO | undefined> {
       if (node.contentUri?.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
       }
@@ -106,7 +106,8 @@ export const resolvers = {
     async learningpath(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLLearningpath | null> {
       if (node.contentUri?.startsWith("urn:learningpath")) {
         const learningpathId = getLearningpathIdFromUrn(node.contentUri);
-        return fetchLearningpath(learningpathId, context);
+        const learningpath = await fetchLearningpath(learningpathId, context);
+        return toGQLLearningpath(learningpath);
       }
       return null;
     },
@@ -127,7 +128,11 @@ export const resolvers = {
       const entities = children.map((node) => nodeToTaxonomyEntity(node, context));
       return filterMissingArticles(entities, context);
     },
-    async subjectpage(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<ISubjectPageData | null> {
+    async subjectpage(
+      node: GQLTaxonomyEntity,
+      __: any,
+      context: ContextWithLoaders,
+    ): Promise<ISubjectPageDataDTO | null> {
       if (!node.contentUri?.startsWith("urn:frontpage")) return null;
       return context.loaders.subjectpageLoader.load(node.contentUri.replace("urn:frontpage:", ""));
     },
@@ -139,7 +144,7 @@ export const resolvers = {
       return [];
     },
     async alternateNodes(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLNode[] | undefined> {
-      const { contentUri, id, path } = node;
+      const { contentUri, path } = node;
       if (!path && contentUri) {
         const nodes = await queryNodes(
           {
