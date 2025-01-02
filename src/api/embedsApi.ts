@@ -31,7 +31,6 @@ import {
   ConceptVisualElementMeta,
   CampaignBlockMetaData,
   ConceptData,
-  UuDisclaimerMetaData,
 } from "@ndla/types-embed";
 import { fetchSimpleArticle } from "./articleApi";
 import { fetchAudioV2 } from "./audioApi";
@@ -291,30 +290,6 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, cont
   return { image };
 };
 
-const uuDisclaimerMeta: Fetch<UuDisclaimerMetaData> = async ({ embedData, context, opts }) => {
-  const host = opts.absoluteUrl ? ndlaUrl : "";
-  if (!embedData.articleId) {
-    return {};
-  }
-  const [article, nodes] = await Promise.all([
-    fetchSimpleArticle(`urn:article:${embedData.articleId}`, context),
-    queryNodes(
-      {
-        contentURI: `urn:article:${embedData.articleId}`,
-        language: context.language,
-        includeContexts: true,
-        filterProgrammes: true,
-      },
-      context,
-    ),
-  ]);
-  const node = nodes.find((n) => !!n.path);
-  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.contexts?.[0];
-  return ctx
-    ? { disclaimerLink: { text: node?.name ?? "", href: `${host}${ctx.url}` } }
-    : { disclaimerLink: { text: article.title.title, href: `${host}/article/${article.id}` } };
-};
-
 const endsWithPunctuationRegex = /[.!?]$/;
 export const parseCaption = (caption: string): string => {
   const htmlCaption = parseMarkdown({ markdown: caption, inline: true });
@@ -434,8 +409,6 @@ export const transformEmbed = async (
       meta = await campaignBlockMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "link-block") {
       meta = undefined;
-    } else if (embedData.resource === "uu-disclaimer") {
-      meta = await uuDisclaimerMeta({ embedData, context, index, opts });
     } else if (embedData.resource === "copyright") {
       meta = undefined;
     } else {
