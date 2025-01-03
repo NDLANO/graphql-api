@@ -139,6 +139,9 @@ export const resolvers = {
     language(article: IArticleV2DTO): string {
       return article.content.language;
     },
+    disclaimer(article: IArticleV2DTO): string | undefined {
+      return article.disclaimer?.disclaimer;
+    },
     async transformedContent(
       article: IArticleV2DTO,
       args: GQLArticleTransformedContentArgs,

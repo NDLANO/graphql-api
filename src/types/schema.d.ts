@@ -221,6 +221,7 @@ export type GQLArticle = {
   coreElements?: Maybe<Array<GQLCoreElement>>;
   created: Scalars['String']['output'];
   crossSubjectTopics?: Maybe<Array<GQLCrossSubjectElement>>;
+  disclaimer?: Maybe<Scalars['String']['output']>;
   grepCodes?: Maybe<Array<Scalars['String']['output']>>;
   htmlIntroduction?: Maybe<Scalars['String']['output']>;
   htmlTitle: Scalars['String']['output'];
@@ -3314,6 +3315,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   coreElements?: Resolver<Maybe<Array<GQLResolversTypes['CoreElement']>>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   crossSubjectTopics?: Resolver<Maybe<Array<GQLResolversTypes['CrossSubjectElement']>>, ParentType, ContextType, Partial<GQLArticleCrossSubjectTopicsArgs>>;
+  disclaimer?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   htmlIntroduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
