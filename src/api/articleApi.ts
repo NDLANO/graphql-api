@@ -10,7 +10,12 @@ import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { queryNodes } from "./taxonomyApi";
 import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
-import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
+import {
+  GQLArticleTransformedContentArgs,
+  GQLRelatedContent,
+  GQLTransformedArticleContent,
+  GQLTransformedDisclaimerContent,
+} from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 import { getArticleIdFromUrn, findPrimaryPath } from "../utils/articleHelpers";
 
@@ -44,6 +49,15 @@ export const fetchTransformedContent = async (
     visualElement,
     visualElementEmbed: visualElementEmbed,
   };
+};
+
+export const fetchTransformedDisclaimer = async (
+  article: IArticleV2DTO,
+  context: Context,
+): Promise<GQLTransformedDisclaimerContent> => {
+  if (!article.disclaimer?.disclaimer) return { content: "" };
+  const { content } = await transformArticle(article.disclaimer.disclaimer, context, undefined, {});
+  return { content: content ?? "" };
 };
 
 export async function fetchRelatedContent(
