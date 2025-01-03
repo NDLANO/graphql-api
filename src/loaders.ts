@@ -24,7 +24,7 @@ import {
   queryNodes,
 } from "./api";
 import { GQLReference, GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
-import { convertedGrepSearch } from "./api/searchApi";
+import { convertedGrepSearch, grepSearch } from "./api/searchApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -51,9 +51,21 @@ export function lk20CurriculumLoader(context: Context): DataLoader<CurriculumLoa
 
     const uniqueCurriculumIds = Array.from(new Set(ids.map(({ code }) => code)));
     const language = Array.from(languages)[0]!;
-    const result = await convertedGrepSearch({ codes: uniqueCurriculumIds, language, pageSize: 100 }, context);
+    console.log("heii", { uniqueCurriculumIds });
+    const result = await grepSearch({ codes: uniqueCurriculumIds, language, pageSize: 100 }, context);
+    console.log("hooo");
     return ids.map((id) => {
-      return result.find(({ code }) => code === id.code);
+      return { code: "APEKAT", id: "APEKAT", title: "aepeek" };
+      const found = result.results.find(({ code }) => code === id.code);
+      if (!found) return undefined;
+      const ref: GQLReference = {
+        ...found,
+        code: found.code,
+        id: found.code,
+        title: found.title.title,
+      };
+      console.log({ ref });
+      return ref;
     });
   });
 }

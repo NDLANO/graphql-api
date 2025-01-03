@@ -6,15 +6,10 @@
  *
  */
 
-import {
-  fetchCompetenceGoals,
-  fetchCompetenceSet,
-  fetchCoreElements,
-  fetchCoreElementReferences,
-  fetchCrossSubjectTopics,
-} from "../api";
+import { fetchCompetenceGoals, fetchCoreElements, fetchCoreElementReferences, fetchCrossSubjectTopics } from "../api";
 import { GQLCompetenceGoal, GQLCoreElement, GQLElement, GQLReference } from "../types/schema";
 import { convertedGrepSearch, grepSearch } from "../api/searchApi";
+import { unreachable } from "../utils/unreachable";
 
 export const Query = {
   async competenceGoals(
@@ -22,11 +17,40 @@ export const Query = {
     { codes, language }: { codes: string[]; language?: string },
     context: ContextWithLoaders,
   ): Promise<GQLCompetenceGoal[]> {
-    // TODO:
-    const old = await fetchCompetenceGoals(codes, language ?? context.language, context);
-    console.log({ old });
-    const references = await convertedGrepSearch({ language, codes }, context);
-    return references.map((reference) => ({ ...reference, __typename: "CompetenceGoal" }));
+    const references = await grepSearch({ language, codes }, context);
+    const competenceGoals = references.results.filter((r) => {
+      return r.grepType === "kompetansemaal";
+    });
+
+    return competenceGoals.map((reference) => {
+      const crossSubjectTopicsCodes: GQLElement[] = reference.tverrfagligeTemaer.map((t) => {
+        return {
+          explanation: [], // TODO: What is this?
+          reference: {
+            id: t.code,
+            code: t.code,
+            title: t.title.title,
+          },
+        };
+      });
+
+      const goal: GQLCompetenceGoal = {
+        ...reference,
+        id: reference.code,
+        title: reference.title.title,
+        curriculumCode: reference.laereplan.code,
+        curriculum: {
+          id: reference.laereplan.code,
+          code: reference.laereplan.code,
+          title: reference.laereplan.title.title,
+        },
+        competenceGoalSetCode: reference.kompetansemaalSett.code,
+        crossSubjectTopicsCodes,
+        __typename: "CompetenceGoal",
+      };
+
+      return goal;
+    });
   },
   async coreElements(
     _: any,
@@ -42,17 +66,6 @@ export const Query = {
 
 export const resolvers = {
   CompetenceGoal: {
-    async curriculum(
-      competenceGoal: GQLCompetenceGoal,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLReference | undefined> {
-      if (!competenceGoal.curriculumCode) return undefined;
-      return context.loaders.lk20CurriculumLoader.load({
-        code: competenceGoal.curriculumCode,
-        language: competenceGoal.language,
-      });
-    },
     async competenceGoalSet(
       competenceGoal: GQLCompetenceGoal,
       _: any,

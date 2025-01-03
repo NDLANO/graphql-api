@@ -154,8 +154,7 @@ export const convertedGrepSearch = async (input: IGrepSearchInputDTO, context: C
   const response = await grepSearch(input, context);
   return response.results.map((r) => {
     return {
-      code: r.code,
-      id: r.code,
+      ...r,
       title: r.title.title,
     };
   });
