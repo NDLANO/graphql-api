@@ -7,6 +7,7 @@
  */
 
 import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
+import { fetchOpengraph } from "../api/externalApi";
 import {
   createLearningpath,
   createLearningstep,
@@ -34,6 +35,7 @@ import {
   GQLMutationUpdateLearningpathStatusArgs,
   GQLMyNdlaLearningpath,
   GQLMyNdlaLearningpathStep,
+  GQLExternalOpengraph,
 } from "../types/schema";
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
@@ -115,6 +117,14 @@ const getResource = async (
   return null;
 };
 
+const getOpengraph = async (learningpathStep: GQLLearningpathStep): Promise<GQLExternalOpengraph | null> => {
+  if (learningpathStep.embedUrl?.embedType !== "external") {
+    return null;
+  }
+
+  return fetchOpengraph(learningpathStep.embedUrl.url);
+};
+
 export const resolvers = {
   Learningpath: {
     async coverphoto(
@@ -134,10 +144,12 @@ export const resolvers = {
   LearningpathStep: {
     oembed: getOembed,
     resource: getResource,
+    opengraph: getOpengraph,
   },
   MyNdlaLearningpathStep: {
     oembed: getOembed,
     resource: getResource,
+    opengraph: getOpengraph,
   },
 };
 
