@@ -977,9 +977,11 @@ export type GQLLearningpathStep = {
   description?: Maybe<Scalars['String']['output']>;
   embedUrl?: Maybe<GQLLearningpathStepEmbedUrl>;
   id: Scalars['Int']['output'];
+  introduction?: Maybe<Scalars['String']['output']>;
   license?: Maybe<GQLLicense>;
   metaUrl: Scalars['String']['output'];
   oembed?: Maybe<GQLLearningpathStepOembed>;
+  opengraph?: Maybe<GQLExternalOpengraph>;
   resource?: Maybe<GQLResource>;
   revision: Scalars['Int']['output'];
   seqNo: Scalars['Int']['output'];
@@ -1549,6 +1551,7 @@ export type GQLMyNdlaLearningpathStep = {
   license?: Maybe<GQLLicense>;
   metaUrl: Scalars['String']['output'];
   oembed?: Maybe<GQLLearningpathStepOembed>;
+  opengraph?: Maybe<GQLExternalOpengraph>;
   resource?: Maybe<GQLResource>;
   revision: Scalars['Int']['output'];
   seqNo: Scalars['Int']['output'];
@@ -4024,9 +4027,11 @@ export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends G
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   embedUrl?: Resolver<Maybe<GQLResolversTypes['LearningpathStepEmbedUrl']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   oembed?: Resolver<Maybe<GQLResolversTypes['LearningpathStepOembed']>, ParentType, ContextType>;
+  opengraph?: Resolver<Maybe<GQLResolversTypes['ExternalOpengraph']>, ParentType, ContextType>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLLearningpathStepResourceArgs>>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   seqNo?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -4225,6 +4230,7 @@ export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType ext
   license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   oembed?: Resolver<Maybe<GQLResolversTypes['LearningpathStepOembed']>, ParentType, ContextType>;
+  opengraph?: Resolver<Maybe<GQLResolversTypes['ExternalOpengraph']>, ParentType, ContextType>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLMyNdlaLearningpathStepResourceArgs>>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   seqNo?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;

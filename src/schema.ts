@@ -223,6 +223,7 @@ export const typeDefs = gql`
     title: String!
     seqNo: Int!
     description: String
+    introduction: String
     embedUrl: LearningpathStepEmbedUrl
     license: License
     metaUrl: String!
@@ -233,6 +234,7 @@ export const typeDefs = gql`
     resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
     oembed: LearningpathStepOembed
+    opengraph: ExternalOpengraph
   }
 
   type MyNdlaLearningpathStep {
@@ -251,6 +253,7 @@ export const typeDefs = gql`
     resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
     oembed: LearningpathStepOembed
+    opengraph: ExternalOpengraph
   }
 
   type LearningpathCoverphoto {
