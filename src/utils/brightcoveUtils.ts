@@ -98,6 +98,7 @@ export const getContributorGroups = (fields: Record<string, string>) => {
 export const getBrightcoveCopyright = (
   customFields: Record<string, string>,
   locale: string,
+  origin?: string,
 ): BrightcoveCopyright | undefined => {
   const licenseCode = getLicenseByNBTitle(customFields.license);
   if (!licenseCode) {
@@ -111,6 +112,7 @@ export const getBrightcoveCopyright = (
       description: license.description,
       url: license.url,
     },
+    origin,
     ...getContributorGroups(customFields),
   };
 };

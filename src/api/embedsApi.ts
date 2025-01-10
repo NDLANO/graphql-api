@@ -175,7 +175,7 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({ embedData, context })
 
   return {
     ...video,
-    copyright: getBrightcoveCopyright(video.custom_fields, context.language),
+    copyright: getBrightcoveCopyright(video.custom_fields, context.language, video.link?.url),
     sources,
   };
 };
