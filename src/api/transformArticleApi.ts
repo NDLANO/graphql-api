@@ -134,9 +134,31 @@ export const transformArticle = async (
 
   let footnoteCount = 0;
   const embedPromises = await Promise.all(
-    embeds.map((embed, index) => {
+    embeds.map(async (embed, index) => {
       if (embed.data.resource === "footnote") {
         footnoteCount += 1;
+      }
+      if (embed.data.resource === "uu-disclaimer") {
+        try {
+          const transformedContent = await transformArticle(embed.data.disclaimer, context, undefined, {});
+          const uuDisclaimerEmbedData = {
+            resource: embed.data.resource,
+            data: { transformedContent: transformedContent.content },
+            status: "success",
+            embedData: embed.data,
+          } as EmbedMetaData;
+          embed.embed.attr("data-json", JSON.stringify(uuDisclaimerEmbedData));
+          return uuDisclaimerEmbedData;
+        } catch (e) {
+          const uuDisclaimerEmbedData = {
+            resource: embed.data.resource,
+            embedData: embed.data,
+            status: "error",
+            message: `Failed to fetch data for embed of type ${embed.data.resource} with index ${index}`,
+          } as EmbedMetaData;
+          embed.embed.attr("data-json", JSON.stringify(uuDisclaimerEmbedData));
+          return uuDisclaimerEmbedData;
+        }
       }
       return transformEmbed(embed, context, index, footnoteCount, {
         subject,
