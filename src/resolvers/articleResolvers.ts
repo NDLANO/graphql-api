@@ -31,7 +31,6 @@ import {
   GQLRelatedContent,
   GQLVisualElementOembed,
   GQLMetaImageWithCopyright,
-  GQLTransformedDisclaimerContent,
 } from "../types/schema";
 
 export const Query = {
@@ -142,10 +141,10 @@ export const resolvers = {
     },
     async transformedDisclaimer(
       article: IArticleV2DTO,
-      _: any,
+      args: GQLArticleTransformedContentArgs,
       context: ContextWithLoaders,
-    ): Promise<GQLTransformedDisclaimerContent> {
-      return fetchTransformedDisclaimer(article, context);
+    ): Promise<GQLTransformedArticleContent> {
+      return fetchTransformedDisclaimer(article, args, context);
     },
     async transformedContent(
       article: IArticleV2DTO,

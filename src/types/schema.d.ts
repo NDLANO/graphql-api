@@ -241,7 +241,7 @@ export type GQLArticle = {
   tags?: Maybe<Array<Scalars['String']['output']>>;
   title: Scalars['String']['output'];
   transformedContent: GQLTransformedArticleContent;
-  transformedDisclaimer: GQLTransformedDisclaimerContent;
+  transformedDisclaimer: GQLTransformedArticleContent;
   updated: Scalars['String']['output'];
 };
 
@@ -257,6 +257,11 @@ export type GQLArticleRelatedContentArgs = {
 
 
 export type GQLArticleTransformedContentArgs = {
+  transformArgs?: InputMaybe<GQLTransformedArticleContentInput>;
+};
+
+
+export type GQLArticleTransformedDisclaimerArgs = {
   transformArgs?: InputMaybe<GQLTransformedArticleContentInput>;
 };
 
@@ -2614,11 +2619,6 @@ export type GQLTransformedArticleContentInput = {
   subjectId?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type GQLTransformedDisclaimerContent = {
-  __typename?: 'TransformedDisclaimerContent';
-  content: Scalars['String']['output'];
-};
-
 export type GQLUpdatedFolder = {
   __typename?: 'UpdatedFolder';
   name?: Maybe<Scalars['String']['output']>;
@@ -2934,7 +2934,6 @@ export type GQLResolversTypes = {
   Transcription: ResolverTypeWrapper<GQLTranscription>;
   TransformedArticleContent: ResolverTypeWrapper<GQLTransformedArticleContent>;
   TransformedArticleContentInput: GQLTransformedArticleContentInput;
-  TransformedDisclaimerContent: ResolverTypeWrapper<GQLTransformedDisclaimerContent>;
   UpdatedFolder: ResolverTypeWrapper<GQLUpdatedFolder>;
   UpdatedFolderResource: ResolverTypeWrapper<GQLUpdatedFolderResource>;
   UptimeAlert: ResolverTypeWrapper<GQLUptimeAlert>;
@@ -3118,7 +3117,6 @@ export type GQLResolversParentTypes = {
   Transcription: GQLTranscription;
   TransformedArticleContent: GQLTransformedArticleContent;
   TransformedArticleContentInput: GQLTransformedArticleContentInput;
-  TransformedDisclaimerContent: GQLTransformedDisclaimerContent;
   UpdatedFolder: GQLUpdatedFolder;
   UpdatedFolderResource: GQLUpdatedFolderResource;
   UptimeAlert: GQLUptimeAlert;
@@ -3345,7 +3343,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   transformedContent?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedContentArgs>>;
-  transformedDisclaimer?: Resolver<GQLResolversTypes['TransformedDisclaimerContent'], ParentType, ContextType>;
+  transformedDisclaimer?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedDisclaimerArgs>>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -4885,11 +4883,6 @@ export type GQLTransformedArticleContentResolvers<ContextType = any, ParentType 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLTransformedDisclaimerContentResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TransformedDisclaimerContent'] = GQLResolversParentTypes['TransformedDisclaimerContent']> = {
-  content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLUpdatedFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UpdatedFolder'] = GQLResolversParentTypes['UpdatedFolder']> = {
   name?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -5110,7 +5103,6 @@ export type GQLResolvers<ContextType = any> = {
   TopiclessArenaCategoryV2?: GQLTopiclessArenaCategoryV2Resolvers<ContextType>;
   Transcription?: GQLTranscriptionResolvers<ContextType>;
   TransformedArticleContent?: GQLTransformedArticleContentResolvers<ContextType>;
-  TransformedDisclaimerContent?: GQLTransformedDisclaimerContentResolvers<ContextType>;
   UpdatedFolder?: GQLUpdatedFolderResolvers<ContextType>;
   UpdatedFolderResource?: GQLUpdatedFolderResourceResolvers<ContextType>;
   UptimeAlert?: GQLUptimeAlertResolvers<ContextType>;
