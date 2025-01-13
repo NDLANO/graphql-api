@@ -714,6 +714,7 @@ export const typeDefs = gql`
     language: String!
     transformedContent(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
     oembed: String
+    transformedDisclaimer(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
   }
 
   input TransformedArticleContentInput {

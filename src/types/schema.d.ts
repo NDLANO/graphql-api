@@ -241,6 +241,7 @@ export type GQLArticle = {
   tags?: Maybe<Array<Scalars['String']['output']>>;
   title: Scalars['String']['output'];
   transformedContent: GQLTransformedArticleContent;
+  transformedDisclaimer: GQLTransformedArticleContent;
   updated: Scalars['String']['output'];
 };
 
@@ -256,6 +257,11 @@ export type GQLArticleRelatedContentArgs = {
 
 
 export type GQLArticleTransformedContentArgs = {
+  transformArgs?: InputMaybe<GQLTransformedArticleContentInput>;
+};
+
+
+export type GQLArticleTransformedDisclaimerArgs = {
   transformArgs?: InputMaybe<GQLTransformedArticleContentInput>;
 };
 
@@ -3337,6 +3343,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   transformedContent?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedContentArgs>>;
+  transformedDisclaimer?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedDisclaimerArgs>>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

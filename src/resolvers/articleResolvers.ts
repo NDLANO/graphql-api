@@ -19,7 +19,7 @@ import {
   fetchSubjectTopics,
   searchConcepts,
 } from "../api";
-import { fetchTransformedContent, fetchRelatedContent } from "../api/articleApi";
+import { fetchTransformedContent, fetchRelatedContent, fetchTransformedDisclaimer } from "../api/articleApi";
 import { ndlaUrl } from "../config";
 import {
   GQLCompetenceGoal,
@@ -138,6 +138,13 @@ export const resolvers = {
     },
     language(article: IArticleV2DTO): string {
       return article.content.language;
+    },
+    async transformedDisclaimer(
+      article: IArticleV2DTO,
+      args: GQLArticleTransformedContentArgs,
+      context: ContextWithLoaders,
+    ): Promise<GQLTransformedArticleContent> {
+      return fetchTransformedDisclaimer(article, args, context);
     },
     async transformedContent(
       article: IArticleV2DTO,

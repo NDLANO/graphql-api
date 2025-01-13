@@ -46,6 +46,29 @@ export const fetchTransformedContent = async (
   };
 };
 
+export const fetchTransformedDisclaimer = async (
+  article: IArticleV2DTO,
+  _params: GQLArticleTransformedContentArgs,
+  context: Context,
+): Promise<GQLTransformedArticleContent> => {
+  if (!article.disclaimer?.disclaimer) return { content: "" };
+  const params = _params.transformArgs ?? {};
+  const subject = params.subjectId;
+  const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
+    article.disclaimer.disclaimer,
+    context,
+    undefined,
+    {
+      subject,
+      draftConcept: params.draftConcept,
+      previewH5p: params.previewH5p,
+      absoluteUrl: params.absoluteUrl,
+      showVisualElement: params.showVisualElement === "true",
+    },
+  );
+  return { content: content ?? "", metaData, visualElement, visualElementEmbed: visualElementEmbed };
+};
+
 export async function fetchRelatedContent(
   article: IArticleV2DTO,
   params: { subjectId?: string },
