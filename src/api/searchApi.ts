@@ -189,7 +189,7 @@ export const competenceGoals = async (
       curriculum: {
         id: reference.laereplan.code,
         code: reference.laereplan.code,
-        title: reference.laereplan.title.title,
+        title: reference.laereplan.title,
       },
       competenceGoalSetCode: reference.kompetansemaalSett.code,
       crossSubjectTopicsCodes,
@@ -222,7 +222,7 @@ export const coreElements = async (
       curriculum: {
         code: reference.laereplan.code,
         id: reference.laereplan.code,
-        title: reference.laereplan.title.title,
+        title: reference.laereplan.title,
       },
     };
   });
