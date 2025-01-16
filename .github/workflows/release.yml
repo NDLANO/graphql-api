@@ -1,7 +1,7 @@
-name: 'Release: graphql-api'
+name: "Release: graphql-api"
 on:
   workflow_dispatch:
-    inputs: { }
+    inputs: {}
   push:
     branches:
       - master
@@ -35,14 +35,17 @@ jobs:
           path: ndla/deploy
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: ${{ vars.PYTHON_VERSION }}
       - uses: abatilo/actions-poetry@v2
         with:
-          poetry-version: '1.6.1'
+          poetry-version: ${{ vars.POETRY_VERSION }}
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ vars.TERRAFORM_VERSION }}
       - name: Setup ~/bin directory
         run: |
-         mkdir -p /home/runner/bin
-         echo "/home/runner/bin" >> $GITHUB_PATH
+          mkdir -p /home/runner/bin
+          echo "/home/runner/bin" >> $GITHUB_PATH
       - name: Login to ECR repo
         run: RES=$(aws sts assume-role --role-arn $CI_RELEASE_ROLE --role-session-name github-actions-ecr-login)
           AWS_ACCESS_KEY_ID=$(echo $RES | jq -r .Credentials.AccessKeyId)
@@ -64,7 +67,7 @@ jobs:
           # Setup the virtualenv in the repo to make caching of dependencies easier
           poetry config virtualenvs.create true --local
           poetry config virtualenvs.in-project true --local
-          
+
           # Install the deps!
           poetry --directory $NDLA_DEPLOY install
       - name: Download blackbox
