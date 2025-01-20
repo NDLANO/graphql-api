@@ -1682,6 +1682,7 @@ export const typeDefs = gql`
       traits: [String!]
       aggregatePaths: [String!]
       filterInactive: Boolean
+      license: String
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
@@ -1697,6 +1698,7 @@ export const typeDefs = gql`
       grepCodes: String
       aggregatePaths: [String!]
       filterInactive: Boolean
+      license: String
     ): [GroupSearch!]
     listingPage(subjects: String): ListingPage
     concept(id: Int!): Concept
@@ -1724,6 +1726,7 @@ export const typeDefs = gql`
       subjects: String
       languageFilter: String
       relevance: String
+      license: String
     ): SearchWithoutPagination
     audio(id: Int!): Audio
     podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch

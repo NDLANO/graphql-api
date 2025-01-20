@@ -2020,6 +2020,7 @@ export type GQLQueryGroupSearchArgs = {
   grepCodes?: InputMaybe<Scalars['String']['input']>;
   language?: InputMaybe<Scalars['String']['input']>;
   levels?: InputMaybe<Scalars['String']['input']>;
+  license?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
@@ -2155,6 +2156,7 @@ export type GQLQuerySearchArgs = {
   language?: InputMaybe<Scalars['String']['input']>;
   languageFilter?: InputMaybe<Scalars['String']['input']>;
   levels?: InputMaybe<Scalars['String']['input']>;
+  license?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
@@ -2173,6 +2175,7 @@ export type GQLQuerySearchWithoutPaginationArgs = {
   language?: InputMaybe<Scalars['String']['input']>;
   languageFilter?: InputMaybe<Scalars['String']['input']>;
   levels?: InputMaybe<Scalars['String']['input']>;
+  license?: InputMaybe<Scalars['String']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   relevance?: InputMaybe<Scalars['String']['input']>;
   resourceTypes?: InputMaybe<Scalars['String']['input']>;
