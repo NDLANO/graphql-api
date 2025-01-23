@@ -1491,6 +1491,7 @@ export type GQLMutationUpdateOtherArenaUserArgs = {
 
 
 export type GQLMutationUpdatePersonalDataArgs = {
+  arenaAccepted?: InputMaybe<Scalars['Boolean']['input']>;
   favoriteSubjects?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   shareName?: InputMaybe<Scalars['Boolean']['input']>;
 };
@@ -1576,6 +1577,7 @@ export type GQLMyNdlaLearningpathStepResourceArgs = {
 
 export type GQLMyNdlaPersonalData = {
   __typename?: 'MyNdlaPersonalData';
+  arenaAccepted: Scalars['Boolean']['output'];
   arenaEnabled: Scalars['Boolean']['output'];
   arenaGroups: Array<Scalars['String']['output']>;
   displayName: Scalars['String']['output'];
@@ -4253,6 +4255,7 @@ export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType ext
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
+  arenaAccepted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   arenaEnabled?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   arenaGroups?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
