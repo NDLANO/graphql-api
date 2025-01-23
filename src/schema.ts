@@ -1332,6 +1332,7 @@ export const typeDefs = gql`
     favoriteSubjects: [String!]!
     role: String!
     arenaEnabled: Boolean!
+    arenaAccepted: Boolean!
     shareName: Boolean!
     organization: String!
     groups: [MyNdlaGroup!]!
@@ -1785,7 +1786,7 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
-    updatePersonalData(favoriteSubjects: [String], shareName: Boolean): MyNdlaPersonalData!
+    updatePersonalData(favoriteSubjects: [String], shareName: Boolean, arenaAccepted: Boolean): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
     sortSavedSharedFolders(sortedIds: [String!]!): SortResult!
