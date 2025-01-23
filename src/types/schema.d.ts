@@ -957,11 +957,11 @@ export type GQLLearningpathFolderResourceMeta = GQLFolderResourceMeta & {
 export type GQLLearningpathNewInput = {
   copyright: GQLLearningpathCopyrightInput;
   coverPhotoMetaUrl?: InputMaybe<Scalars['String']['input']>;
-  description: Scalars['String']['input'];
-  duration: Scalars['Int']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
   introduction?: InputMaybe<Scalars['String']['input']>;
   language: Scalars['String']['input'];
-  tags: Array<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
   title: Scalars['String']['input'];
 };
 
