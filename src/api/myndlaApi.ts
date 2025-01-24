@@ -352,7 +352,6 @@ export const updateOtherUser = async (
 
   const body: IUpdatedMyNDLAUserDTO = {
     arenaEnabled: data.arenaEnabled,
-    shareName: data.shareName,
     favoriteSubjects: data.favoriteSubjects,
     arenaGroups,
   };
