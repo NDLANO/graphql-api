@@ -601,7 +601,6 @@ export type GQLEditorNote = {
 
 export type GQLElement = {
   __typename?: 'Element';
-  explanation: Array<Maybe<Scalars['String']['output']>>;
   reference: GQLReference;
 };
 
@@ -3683,7 +3682,6 @@ export type GQLEditorNoteResolvers<ContextType = any, ParentType extends GQLReso
 };
 
 export type GQLElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Element'] = GQLResolversParentTypes['Element']> = {
-  explanation?: Resolver<Array<Maybe<GQLResolversTypes['String']>>, ParentType, ContextType>;
   reference?: Resolver<GQLResolversTypes['Reference'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

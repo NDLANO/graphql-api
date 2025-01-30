@@ -8,7 +8,6 @@
 
 import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchLK20CompetenceGoalSet } from "../api";
 import {
   GQLQuerySubjectArgs,
   GQLQuerySubjectCollectionArgs,
@@ -17,6 +16,7 @@ import {
   GQLTopic,
 } from "../types/schema";
 import { filterMissingArticles } from "../utils/articleHelpers";
+import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
@@ -89,7 +89,7 @@ export const resolvers = {
     async grepCodes(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<string[]> {
       if (subject.metadata?.grepCodes) {
         const code = subject.metadata?.grepCodes?.find((c) => c.startsWith("KV"));
-        return code ? fetchLK20CompetenceGoalSet(code, context) : [];
+        return code ? fetchCompetenceGoalSetCodes(code, context) : [];
       }
       return [];
     },

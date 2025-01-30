@@ -9,14 +9,7 @@
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
-import {
-  fetchChildren,
-  fetchLK20CompetenceGoalSet,
-  fetchLearningpath,
-  fetchNode,
-  fetchNodeByContentUri,
-  queryNodes,
-} from "../api";
+import { fetchChildren, fetchLearningpath, fetchNode, fetchNodeByContentUri, queryNodes } from "../api";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -29,6 +22,7 @@ import {
 } from "../types/schema";
 import { articleToMeta, nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
 import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
+import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 
 export const Query = {
   async node(
@@ -139,7 +133,7 @@ export const resolvers = {
     async grepCodes(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<string[]> {
       if (node.metadata?.grepCodes) {
         const code = node.metadata?.grepCodes?.find((c) => c.startsWith("KV"));
-        return code ? fetchLK20CompetenceGoalSet(code, context) : [];
+        return code ? fetchCompetenceGoalSetCodes(code, context) : [];
       }
       return [];
     },

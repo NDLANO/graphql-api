@@ -12,7 +12,7 @@ import { RequestInit, RequestCache } from "node-fetch";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IFrontPageDTO, ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
-import { GQLReference, GQLSubject } from "./schema";
+import { GQLSubject } from "./schema";
 
 declare global {
   interface SubjectTopicsLoaderParams {
@@ -38,11 +38,6 @@ declare global {
     filterVisible?: boolean;
   }
 
-  interface CurriculumLoaderParams {
-    code: string;
-    language: string | undefined;
-  }
-
   interface Loaders {
     articlesLoader: DataLoader<string, IArticleV2DTO | undefined>;
     learningpathsLoader: DataLoader<string, any>;
@@ -53,7 +48,6 @@ declare global {
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPageDTO>;
     subjectpageLoader: DataLoader<string, ISubjectPageDataDTO | null>;
-    lk20CurriculumLoader: DataLoader<CurriculumLoaderParams, GQLReference | undefined>;
   }
 
   interface AuthToken {

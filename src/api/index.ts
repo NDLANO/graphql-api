@@ -8,17 +8,6 @@
 
 export { fetchArticle, fetchArticles } from "./articleApi";
 export { searchConcepts, fetchConcept, fetchListingPage } from "./conceptApi";
-export {
-  fetchCompetenceGoals,
-  fetchCompetenceSet,
-  fetchCoreElement,
-  fetchCoreElements,
-  fetchCoreElementReferences,
-  fetchCrossSubjectTopicsByCode,
-  fetchCrossSubjectTopics,
-  fetchLK20Curriculum,
-  fetchLK20CompetenceGoalSet,
-} from "./curriculumApi";
 export { fetchImage, fetchImageV3 } from "./imageApi";
 export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage } from "./frontpageApi";
 export { fetchLearningpaths, fetchMyLearningpaths, fetchLearningpath } from "./learningpathApi";

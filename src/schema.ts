@@ -774,7 +774,6 @@ export const typeDefs = gql`
 
   type Element {
     reference: Reference!
-    explanation: [String]!
   }
 
   type Reference {
