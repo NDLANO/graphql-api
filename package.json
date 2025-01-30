@@ -60,7 +60,7 @@
     "@graphql-tools/mock": "^9.0.9",
     "@jest-mock/express": "^2.0.2",
     "@ndla/types-backend": "^1.0.17",
-    "@ndla/types-embed": "^5.0.9-alpha.0",
+    "@ndla/types-embed": "^5.0.10-alpha.0",
     "@ndla/types-taxonomy": "^1.0.34",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",

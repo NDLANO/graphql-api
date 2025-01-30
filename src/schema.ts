@@ -333,11 +333,11 @@ export const typeDefs = gql`
 
   input LearningpathNewInput {
     title: String!
-    description: String!
+    description: String
     introduction: String
     coverPhotoMetaUrl: String
-    duration: Int!
-    tags: [String!]!
+    duration: Int
+    tags: [String!]
     language: String!
     copyright: LearningpathCopyrightInput!
   }

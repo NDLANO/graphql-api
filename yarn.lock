@@ -2148,10 +2148,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-embed@npm:^5.0.9-alpha.0":
-  version: 5.0.9-alpha.0
-  resolution: "@ndla/types-embed@npm:5.0.9-alpha.0"
-  checksum: 10c0/cc5c091a9a014f31fd8af8fcbc9b52911ac19051f50db10fdaab57238f68e18732c1da822dda8a3a6572cf6c75f99f81c13637b023a8e73328a78635fafc4e06
+"@ndla/types-embed@npm:^5.0.10-alpha.0":
+  version: 5.0.10-alpha.0
+  resolution: "@ndla/types-embed@npm:5.0.10-alpha.0"
+  checksum: 10c0/f90689194940a58db9bb0db9d6aff9b6fcc1a193a20ed46962e49dd7651581c522f851d76c4f6d376bb155ee2f4d9db09b10cb16d608de88fbee4b032a711e5e
   languageName: node
   linkType: hard
 
@@ -7461,7 +7461,7 @@ __metadata:
     "@jest-mock/express": "npm:^2.0.2"
     "@ndla/licenses": "npm:^8.0.3-alpha.0"
     "@ndla/types-backend": "npm:^1.0.17"
-    "@ndla/types-embed": "npm:^5.0.9-alpha.0"
+    "@ndla/types-embed": "npm:^5.0.10-alpha.0"
     "@ndla/types-taxonomy": "npm:^1.0.34"
     "@types/compression": "npm:^1.7.2"
     "@types/cors": "npm:^2.8.4"
