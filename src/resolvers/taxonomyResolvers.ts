@@ -131,11 +131,13 @@ export const resolvers = {
       return context.loaders.subjectpageLoader.load(node.contentUri.replace("urn:frontpage:", ""));
     },
     async grepCodes(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<string[]> {
-      if (node.metadata?.grepCodes) {
-        const code = node.metadata?.grepCodes?.find((c) => c.startsWith("KV"));
-        return code ? fetchCompetenceGoalSetCodes(code, context) : [];
+      if (!node.metadata?.grepCodes) {
+        return [];
       }
-      return [];
+      const sets = node.metadata?.grepCodes.filter((c) => c.startsWith("KV"));
+      const rest = node.metadata?.grepCodes.filter((c) => !c.startsWith("KV"));
+      const result = await Promise.all(sets.map((set) => fetchCompetenceGoalSetCodes(set, context)));
+      return rest.concat(result.flat());
     },
     async alternateNodes(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLNode[] | undefined> {
       const { contentUri, path } = node;
