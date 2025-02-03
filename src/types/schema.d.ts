@@ -206,7 +206,6 @@ export type GQLArenaUserV2Input = {
   arenaEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   arenaGroups?: InputMaybe<Array<Scalars['String']['input']>>;
   favoriteSubjects?: InputMaybe<Array<Scalars['String']['input']>>;
-  shareName?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type GQLArticle = {
@@ -1492,7 +1491,6 @@ export type GQLMutationUpdateOtherArenaUserArgs = {
 export type GQLMutationUpdatePersonalDataArgs = {
   arenaAccepted?: InputMaybe<Scalars['Boolean']['input']>;
   favoriteSubjects?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  shareName?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -1587,7 +1585,6 @@ export type GQLMyNdlaPersonalData = {
   id: Scalars['Int']['output'];
   organization: Scalars['String']['output'];
   role: Scalars['String']['output'];
-  shareName: Scalars['Boolean']['output'];
   username: Scalars['String']['output'];
 };
 
@@ -4264,7 +4261,6 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  shareName?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
