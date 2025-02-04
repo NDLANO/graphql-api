@@ -354,6 +354,16 @@ export const typeDefs = gql`
     copyright: LearningpathCopyrightInput
   }
 
+  input LearningpathCopyInput {
+    title: String!
+    description: String
+    language: String!
+    coverPhotoMetaUrl: String
+    duration: Int
+    tags: [String!]
+    copyright: LearningpathCopyrightInput
+  }
+
   input LearningpathStepNewInput {
     title: String!
     introduction: String
@@ -1855,6 +1865,7 @@ export const typeDefs = gql`
       params: LearningpathStepUpdateInput!
     ): MyNdlaLearningpathStep!
     deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]
+    copyLearningpath(learningpathId: Int!, params: LearningpathCopyInput!): MyNdlaLearningpath!
   }
 `;
 

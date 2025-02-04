@@ -9,6 +9,7 @@
 import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import { fetchOpengraph } from "../api/externalApi";
 import {
+  copyLearningpath,
   createLearningpath,
   createLearningstep,
   deleteLearningpath,
@@ -36,6 +37,7 @@ import {
   GQLMyNdlaLearningpath,
   GQLMyNdlaLearningpathStep,
   GQLExternalOpengraph,
+  GQLMutationCopyLearningpathArgs,
 } from "../types/schema";
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
@@ -162,6 +164,7 @@ export const Mutations: Pick<
   | "newLearningpathStep"
   | "updateLearningpathStep"
   | "deleteLearningpathStep"
+  | "copyLearningpath"
 > = {
   async updateLearningpathStatus(_: any, params: GQLMutationUpdateLearningpathStatusArgs, context: ContextWithLoaders) {
     const learningpath = await updateLearningpathStatus(params, context);
@@ -204,5 +207,13 @@ export const Mutations: Pick<
   },
   async deleteLearningpathStep(_: any, params: GQLMutationDeleteLearningpathStepArgs, context: ContextWithLoaders) {
     return await deleteLearningstep(params, context);
+  },
+  async copyLearningpath(
+    _: any,
+    params: GQLMutationCopyLearningpathArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLMyNdlaLearningpath> {
+    const learningpath = await copyLearningpath(params, context);
+    return toGQLLearningpath(learningpath);
   },
 };

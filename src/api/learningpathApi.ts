@@ -13,6 +13,7 @@ import {
   ILearningStepV2DTO,
 } from "@ndla/types-backend/learningpath-api";
 import {
+  GQLMutationCopyLearningpathArgs,
   GQLMutationDeleteLearningpathStepArgs,
   GQLMutationNewLearningpathArgs,
   GQLMutationNewLearningpathStepArgs,
@@ -135,5 +136,16 @@ export async function deleteLearningstep(
       method: "DELETE",
     },
   );
+  return await resolveJson(response);
+}
+
+export async function copyLearningpath(
+  { learningpathId, params }: GQLMutationCopyLearningpathArgs,
+  context: Context,
+): Promise<ILearningPathV2DTO> {
+  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}/copy`, context, {
+    method: "POST",
+    body: JSON.stringify(params),
+  });
   return await resolveJson(response);
 }
