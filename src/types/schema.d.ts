@@ -920,6 +920,16 @@ export type GQLLearningpath = {
   verificationStatus: Scalars['String']['output'];
 };
 
+export type GQLLearningpathCopyInput = {
+  copyright?: InputMaybe<GQLLearningpathCopyrightInput>;
+  coverPhotoMetaUrl?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  duration?: InputMaybe<Scalars['Int']['input']>;
+  language: Scalars['String']['input'];
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  title: Scalars['String']['input'];
+};
+
 export type GQLLearningpathCopyright = {
   __typename?: 'LearningpathCopyright';
   contributors: Array<GQLContributor>;
@@ -1139,6 +1149,7 @@ export type GQLMutation = {
   addFolderResource: GQLFolderResource;
   addPostUpvote: Scalars['Int']['output'];
   addPostUpvoteV2: Scalars['Int']['output'];
+  copyLearningpath: GQLMyNdlaLearningpath;
   copySharedFolder: GQLFolder;
   deleteCategory: Scalars['Int']['output'];
   deleteFolder: Scalars['String']['output'];
@@ -1217,6 +1228,12 @@ export type GQLMutationAddPostUpvoteArgs = {
 
 export type GQLMutationAddPostUpvoteV2Args = {
   postId: Scalars['Int']['input'];
+};
+
+
+export type GQLMutationCopyLearningpathArgs = {
+  learningpathId: Scalars['Int']['input'];
+  params: GQLLearningpathCopyInput;
 };
 
 
@@ -2849,6 +2866,7 @@ export type GQLResolversTypes = {
   ImageV3: ResolverTypeWrapper<GQLImageV3>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Learningpath: ResolverTypeWrapper<GQLLearningpath>;
+  LearningpathCopyInput: GQLLearningpathCopyInput;
   LearningpathCopyright: ResolverTypeWrapper<GQLLearningpathCopyright>;
   LearningpathCopyrightInput: GQLLearningpathCopyrightInput;
   LearningpathCoverphoto: ResolverTypeWrapper<GQLLearningpathCoverphoto>;
@@ -3032,6 +3050,7 @@ export type GQLResolversParentTypes = {
   ImageV3: GQLImageV3;
   Int: Scalars['Int']['output'];
   Learningpath: GQLLearningpath;
+  LearningpathCopyInput: GQLLearningpathCopyInput;
   LearningpathCopyright: GQLLearningpathCopyright;
   LearningpathCopyrightInput: GQLLearningpathCopyrightInput;
   LearningpathCoverphoto: GQLLearningpathCoverphoto;
@@ -4145,6 +4164,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   addFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationAddFolderResourceArgs, 'folderId' | 'path' | 'resourceId' | 'resourceType'>>;
   addPostUpvote?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationAddPostUpvoteArgs, 'postId'>>;
   addPostUpvoteV2?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationAddPostUpvoteV2Args, 'postId'>>;
+  copyLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationCopyLearningpathArgs, 'learningpathId' | 'params'>>;
   copySharedFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationCopySharedFolderArgs, 'folderId'>>;
   deleteCategory?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType, RequireFields<GQLMutationDeleteCategoryArgs, 'categoryId'>>;
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
