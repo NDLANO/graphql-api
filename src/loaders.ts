@@ -9,7 +9,7 @@
 import DataLoader from "dataloader";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IFilmFrontPageDataDTO, IFrontPageDTO, ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
-import { ILearningPathSummaryV2DTO } from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
   fetchArticles,
@@ -34,7 +34,7 @@ export function articlesLoader(context: Context): DataLoader<string, IArticleV2D
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<string, ILearningPathSummaryV2DTO | undefined> {
+export function learningpathsLoader(context: Context): DataLoader<string, ILearningPathV2DTO | undefined> {
   return new DataLoader(async (learningpathIds) => {
     return fetchLearningpaths(learningpathIds, context);
   });
