@@ -8,6 +8,7 @@
 
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
+import { GraphQLError } from "graphql";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchChildren, fetchLearningpath, fetchNode, fetchNodeByContentUri, queryNodes } from "../api";
 import {
@@ -37,7 +38,9 @@ export const Query = {
     if (contextId) {
       const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: true }, context);
       if (nodes.length === 0) {
-        throw new Error(`No node found with contextId: ${contextId}`);
+        throw new GraphQLError(`No node found with contextId: ${contextId}`, {
+          extensions: { status: 404 },
+        });
       }
       const node = nodes[0];
       return node ? nodeToTaxonomyEntity(node, context) : undefined;
