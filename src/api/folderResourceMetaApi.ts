@@ -10,7 +10,7 @@ import groupBy from "lodash/groupBy";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IAudioMetaInformationDTO } from "@ndla/types-backend/audio-api";
 import { IImageMetaInformationV2DTO } from "@ndla/types-backend/image-api";
-import { ILearningPathSummaryV2DTO } from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { ResourceType } from "@ndla/types-backend/myndla-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchAudio } from "./audioApi";
@@ -47,7 +47,7 @@ const fetchResourceMeta = async (
   if (type === "learningpath") {
     const learningpaths = await context.loaders.learningpathsLoader.loadMany(ids);
     return learningpaths
-      .filter((learningpath): learningpath is ILearningPathSummaryV2DTO => !!learningpath)
+      .filter((learningpath): learningpath is ILearningPathV2DTO => !!learningpath)
       .map(learningpathToMeta);
   } else {
     const articles = await context.loaders.articlesLoader.loadMany(ids);

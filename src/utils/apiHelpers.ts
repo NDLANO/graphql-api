@@ -9,11 +9,7 @@
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import {
-  ILearningPathV2DTO,
-  ILearningPathSummaryV2DTO,
-  ILearningStepV2DTO,
-} from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2DTO, ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
@@ -187,18 +183,17 @@ export function articleToMeta(article: IArticleV2DTO): GQLMeta {
   };
 }
 
-export function learningpathToMeta(learningpath: ILearningPathSummaryV2DTO): GQLMeta {
+export function learningpathToMeta(learningpath: ILearningPathV2DTO): GQLMeta {
   return {
     id: learningpath.id,
     title: learningpath.title.title,
     htmlTitle: learningpath.title.title,
-    introduction: learningpath.introduction.introduction,
     metaDescription: learningpath.description.description,
     lastUpdated: learningpath.lastUpdated,
-    metaImage: learningpath.coverPhotoUrl
+    metaImage: learningpath.coverPhoto?.url
       ? {
-          url: learningpath.coverPhotoUrl,
-          alt: learningpath.introduction.introduction,
+          url: learningpath.coverPhoto.url,
+          alt: "",
         }
       : undefined,
   };

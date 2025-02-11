@@ -6,12 +6,7 @@
  *
  */
 
-import {
-  ILearningPathV2DTO,
-  ILearningPathSummaryV2DTO,
-  ISearchResultV2DTO,
-  ILearningStepV2DTO,
-} from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2DTO, ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
 import {
   GQLMutationCopyLearningpathArgs,
   GQLMutationDeleteLearningpathStepArgs,
@@ -26,17 +21,16 @@ import { fetch, resolveJson } from "../utils/apiHelpers";
 export async function fetchLearningpaths(
   learningpathIds: string[],
   context: Context,
-): Promise<Array<ILearningPathSummaryV2DTO | undefined>> {
+): Promise<Array<ILearningPathV2DTO | undefined>> {
   const response = await fetch(
-    `/learningpath-api/v2/learningpaths/?language=${context.language}&fallback=true&ids=${learningpathIds.join(",")}`,
+    `/learningpath-api/v2/learningpaths/ids?language=${context.language}&ids=${learningpathIds.join(",")}`,
     context,
   );
-  const json: ISearchResultV2DTO = await resolveJson(response);
-
+  const json: ILearningPathV2DTO[] = await resolveJson(response);
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
   return learningpathIds.map((id) => {
-    const learningpath = json.results.find((item) => {
+    const learningpath = json.find((item) => {
       return item.id.toString() === id;
     });
     return learningpath;
