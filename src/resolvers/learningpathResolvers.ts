@@ -6,7 +6,7 @@
  *
  */
 
-import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
+import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed, queryNodes } from "../api";
 import { fetchOpengraph } from "../api/externalApi";
 import {
   copyLearningpath,
@@ -112,9 +112,19 @@ const getResource = async (
 
   const lastResourceMatch = learningpathStep.embedUrl.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
 
-  if (lastResourceMatch !== undefined) {
+  const contextId = learningpathStep.embedUrl.url.includes("/r/")
+    ? learningpathStep.embedUrl.url.split("/").pop()
+    : undefined;
+
+  if (lastResourceMatch && !contextId) {
     const resource = await fetchNode({ id: `urn:${lastResourceMatch}`, rootId, parentId }, context);
     return nodeToTaxonomyEntity(resource, context);
+  } else if (contextId) {
+    const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: true }, context);
+
+    if (nodes[0]) {
+      return nodeToTaxonomyEntity(nodes[0], context);
+    }
   }
   return null;
 };
