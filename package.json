@@ -18,7 +18,6 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "generate-schema-types": "graphql-codegen --config local-codegen.yml && prettier --write src/types/schema.d.ts src/schema.ts",
     "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"node --watch build/server.js\"",
-    "start-with-local-converter": "LOCAL_CONVERTER=true yarn start",
     "start-prod": "NODE_ENV=production node ./build/server.js",
     "test": "jest",
     "tdd": "jest --watch"
