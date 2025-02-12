@@ -7,36 +7,13 @@
  */
 
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IConceptDTO, IConceptSearchResultDTO, IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
-import { searchConcepts, fetchConcept, fetchListingPage } from "../api";
+import { IConceptDTO } from "@ndla/types-backend/concept-api";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
-import {
-  GQLConcept,
-  GQLListingPage,
-  GQLMeta,
-  GQLQueryConceptArgs,
-  GQLQueryConceptSearchArgs,
-  GQLQueryListingPageArgs,
-  GQLVisualElement,
-} from "../types/schema";
+import { GQLConcept, GQLMeta, GQLVisualElement } from "../types/schema";
 import { articleToMeta } from "../utils/apiHelpers";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
-export const Query = {
-  async concept(_: any, { id }: GQLQueryConceptArgs, context: ContextWithLoaders): Promise<IConceptDTO | undefined> {
-    return fetchConcept(id, context);
-  },
-  async listingPage(_: any, args: GQLQueryListingPageArgs, context: ContextWithLoaders): Promise<GQLListingPage> {
-    return fetchListingPage(context, args.subjects);
-  },
-  async conceptSearch(
-    _: any,
-    searchQuery: GQLQueryConceptSearchArgs,
-    context: ContextWithLoaders,
-  ): Promise<IConceptSearchResultDTO> {
-    return searchConcepts(searchQuery, context);
-  },
-};
+export const Query = {};
 
 export const resolvers = {
   Concept: {
@@ -85,11 +62,6 @@ export const resolvers = {
     },
     subjectIds: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
       return concept.subjectIds || [];
-    },
-  },
-  ConceptResult: {
-    concepts: (conceptResult: IConceptSearchResultDTO, _: any, __: ContextWithLoaders): IConceptSummaryDTO[] => {
-      return conceptResult.results;
     },
   },
 };
