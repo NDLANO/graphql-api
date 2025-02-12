@@ -58,7 +58,7 @@
     "@graphql-eslint/eslint-plugin": "^4.3.0",
     "@graphql-tools/mock": "^9.0.9",
     "@jest-mock/express": "^2.0.2",
-    "@ndla/types-backend": "^1.0.20",
+    "@ndla/types-backend": "^1.0.21",
     "@ndla/types-embed": "^5.0.10-alpha.0",
     "@ndla/types-taxonomy": "^1.0.34",
     "@types/compression": "^1.7.2",

@@ -286,6 +286,7 @@ export const typeDefs = gql`
     status: String!
     coverphoto: LearningpathCoverphoto
     madeAvailable: String
+    isMyNDLAOwner: Boolean!
   }
 
   type MyNdlaLearningpath {
@@ -308,6 +309,7 @@ export const typeDefs = gql`
     status: String!
     coverphoto: LearningpathCoverphoto
     madeAvailable: String
+    isMyNDLAOwner: Boolean!
   }
 
   input LearningpathEmbedInput {

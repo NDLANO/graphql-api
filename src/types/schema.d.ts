@@ -297,6 +297,7 @@ export type GQLArticleRequiredLibrary = {
 
 export type GQLArticleSearchResult = GQLSearchResult & {
   __typename?: 'ArticleSearchResult';
+  context?: Maybe<GQLSearchContext>;
   contexts: Array<GQLSearchContext>;
   htmlTitle: Scalars['String']['output'];
   id: Scalars['Int']['output'];
@@ -907,6 +908,7 @@ export type GQLLearningpath = {
   duration?: Maybe<Scalars['Int']['output']>;
   id: Scalars['Int']['output'];
   isBasedOn?: Maybe<Scalars['Int']['output']>;
+  isMyNDLAOwner: Scalars['Boolean']['output'];
   lastUpdated: Scalars['String']['output'];
   learningstepUrl: Scalars['String']['output'];
   learningsteps: Array<GQLLearningpathStep>;
@@ -975,6 +977,7 @@ export type GQLLearningpathNewInput = {
 
 export type GQLLearningpathSearchResult = GQLSearchResult & {
   __typename?: 'LearningpathSearchResult';
+  context?: Maybe<GQLSearchContext>;
   contexts: Array<GQLSearchContext>;
   htmlTitle: Scalars['String']['output'];
   id: Scalars['Int']['output'];
@@ -1551,6 +1554,7 @@ export type GQLMyNdlaLearningpath = {
   duration?: Maybe<Scalars['Int']['output']>;
   id: Scalars['Int']['output'];
   isBasedOn?: Maybe<Scalars['Int']['output']>;
+  isMyNDLAOwner: Scalars['Boolean']['output'];
   lastUpdated: Scalars['String']['output'];
   learningstepUrl: Scalars['String']['output'];
   learningsteps: Array<GQLMyNdlaLearningpathStep>;
@@ -2357,6 +2361,7 @@ export type GQLSearchContextResourceTypes = {
 };
 
 export type GQLSearchResult = {
+  context?: Maybe<GQLSearchContext>;
   contexts: Array<GQLSearchContext>;
   htmlTitle: Scalars['String']['output'];
   id: Scalars['Int']['output'];
@@ -3402,6 +3407,7 @@ export type GQLArticleRequiredLibraryResolvers<ContextType = any, ParentType ext
 };
 
 export type GQLArticleSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleSearchResult'] = GQLResolversParentTypes['ArticleSearchResult']> = {
+  context?: Resolver<Maybe<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -4002,6 +4008,7 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   duration?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isBasedOn?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
+  isMyNDLAOwner?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningstepUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningsteps?: Resolver<Array<GQLResolversTypes['LearningpathStep']>, ParentType, ContextType>;
@@ -4039,6 +4046,7 @@ export type GQLLearningpathFolderResourceMetaResolvers<ContextType = any, Parent
 };
 
 export type GQLLearningpathSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathSearchResult'] = GQLResolversParentTypes['LearningpathSearchResult']> = {
+  context?: Resolver<Maybe<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -4237,6 +4245,7 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
   duration?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   isBasedOn?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
+  isMyNDLAOwner?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningstepUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningsteps?: Resolver<Array<GQLResolversTypes['MyNdlaLearningpathStep']>, ParentType, ContextType>;
@@ -4644,6 +4653,7 @@ export type GQLSearchContextResourceTypesResolvers<ContextType = any, ParentType
 
 export type GQLSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchResult'] = GQLResolversParentTypes['SearchResult']> = {
   __resolveType: TypeResolveFn<'ArticleSearchResult' | 'LearningpathSearchResult', ParentType, ContextType>;
+  context?: Resolver<Maybe<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
