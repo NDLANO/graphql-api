@@ -1777,7 +1777,7 @@ export const typeDefs = gql`
     arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
     listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
     subjectCollection(language: String!): [Subject!]
-    imageSearch(query: String, page: Int, pageSize: Int): ImageSearch!
+    imageSearch(query: String, page: Int, pageSize: Int, license: String): ImageSearch!
     imageV3(id: String!): ImageMetaInformationV3
     learningpathStepOembed(url: String!): LearningpathStepOembed!
     opengraph(url: String!): ExternalOpengraph

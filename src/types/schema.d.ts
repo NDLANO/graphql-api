@@ -2052,6 +2052,7 @@ export type GQLQueryImageArgs = {
 
 
 export type GQLQueryImageSearchArgs = {
+  license?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
