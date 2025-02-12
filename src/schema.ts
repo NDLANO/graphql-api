@@ -939,6 +939,7 @@ export const typeDefs = gql`
     metaDescription: String!
     metaImage: MetaImage
     traits: [String!]!
+    context: SearchContext
     contexts: [SearchContext!]!
   }
 
@@ -951,6 +952,7 @@ export const typeDefs = gql`
     metaDescription: String!
     metaImage: MetaImage
     traits: [String!]!
+    context: SearchContext
     contexts: [SearchContext!]!
   }
 
@@ -963,6 +965,7 @@ export const typeDefs = gql`
     metaDescription: String!
     metaImage: MetaImage
     traits: [String!]!
+    context: SearchContext
     contexts: [SearchContext!]!
   }
 
