@@ -34,6 +34,7 @@ export async function fetchImageV3(imageId: number | string, context: Context): 
 export async function searchImages(params: GQLQueryImageSearchArgs, context: Context): Promise<ISearchResultV3DTO> {
   const queryStr = qs.stringify({
     "page-size": params.pageSize,
+    license: params.license,
     page: params.page,
     query: params.query,
   });
