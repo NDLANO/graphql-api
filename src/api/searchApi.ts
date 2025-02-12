@@ -47,9 +47,10 @@ export async function search(searchQuery: GQLQuerySearchArgs, context: Context):
     fallback: searchQuery.fallback === "true",
   };
   const concepts = await searchConcepts(conceptQuery, context);
+  const subjects = searchQuery.subjects?.split(",") || [];
   return {
     ...searchResults,
-    results: searchResults.results.map((result: IMultiSearchSummaryDTO) => transformResult(result)),
+    results: searchResults.results.map((result: IMultiSearchSummaryDTO) => transformResult(result, subjects)),
     concepts: { concepts },
   };
 }
@@ -130,18 +131,20 @@ export async function searchWithoutPagination(
   const response = await Promise.all(requests);
   const allResultsJson = await Promise.all(response.map(resolveJson));
   allResultsJson.push(firstPageJson);
+  const subjects = searchQuery.subjects?.split(",") || [];
   return {
     results: allResultsJson.flatMap((json) =>
-      json.results.map((result: IMultiSearchSummaryDTO) => transformResult(result)),
+      json.results.map((result: IMultiSearchSummaryDTO) => transformResult(result, subjects)),
     ),
   };
 }
 
-const transformResult = (result: IMultiSearchSummaryDTO) => ({
+const transformResult = (result: IMultiSearchSummaryDTO, subjects: string[]) => ({
   ...result,
   title: result.title.title,
   htmlTitle: result.title.htmlTitle,
   metaDescription: result.metaDescription?.metaDescription,
+  context: result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary)),
 });
 
 export const grepSearch = async (input: IGrepSearchInputDTO, context: Context): Promise<IGrepSearchResultsDTO> => {
