@@ -518,15 +518,6 @@ export type GQLConceptLicense = {
   title: Scalars['String']['output'];
 };
 
-export type GQLConceptResult = {
-  __typename?: 'ConceptResult';
-  concepts: Array<GQLConcept>;
-  language: Scalars['String']['output'];
-  page?: Maybe<Scalars['Int']['output']>;
-  pageSize: Scalars['Int']['output'];
-  totalCount: Scalars['Int']['output'];
-};
-
 export type GQLConfigMetaBoolean = {
   __typename?: 'ConfigMetaBoolean';
   key: Scalars['String']['output'];
@@ -1073,12 +1064,6 @@ export type GQLLicenseInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   license: Scalars['String']['input'];
   url?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type GQLListingPage = {
-  __typename?: 'ListingPage';
-  subjects?: Maybe<Array<GQLSubject>>;
-  tags?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 export type GQLManuscript = {
@@ -1813,8 +1798,6 @@ export type GQLQuery = {
   audio?: Maybe<GQLAudio>;
   competenceGoal?: Maybe<GQLCompetenceGoal>;
   competenceGoals?: Maybe<Array<GQLCompetenceGoal>>;
-  concept?: Maybe<GQLConcept>;
-  conceptSearch?: Maybe<GQLConceptResult>;
   coreElement?: Maybe<GQLCoreElement>;
   coreElements?: Maybe<Array<GQLCoreElement>>;
   examLockStatus: GQLConfigMetaBoolean;
@@ -1831,7 +1814,6 @@ export type GQLQuery = {
   learningpath?: Maybe<GQLLearningpath>;
   learningpathStepOembed: GQLLearningpathStepOembed;
   listArenaUserV2: GQLPaginatedArenaUsers;
-  listingPage?: Maybe<GQLListingPage>;
   myLearningpaths?: Maybe<Array<GQLMyNdlaLearningpath>>;
   myNdlaLearningpath?: Maybe<GQLMyNdlaLearningpath>;
   node?: Maybe<GQLNode>;
@@ -1975,25 +1957,6 @@ export type GQLQueryCompetenceGoalsArgs = {
 };
 
 
-export type GQLQueryConceptArgs = {
-  id: Scalars['Int']['input'];
-};
-
-
-export type GQLQueryConceptSearchArgs = {
-  conceptType?: InputMaybe<Scalars['String']['input']>;
-  exactMatch?: InputMaybe<Scalars['Boolean']['input']>;
-  fallback?: InputMaybe<Scalars['Boolean']['input']>;
-  ids?: InputMaybe<Array<Scalars['Int']['input']>>;
-  language?: InputMaybe<Scalars['String']['input']>;
-  page?: InputMaybe<Scalars['Int']['input']>;
-  pageSize?: InputMaybe<Scalars['Int']['input']>;
-  query?: InputMaybe<Scalars['String']['input']>;
-  subjects?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<Scalars['String']['input']>;
-};
-
-
 export type GQLQueryCoreElementArgs = {
   code: Scalars['String']['input'];
   language?: InputMaybe<Scalars['String']['input']>;
@@ -2078,11 +2041,6 @@ export type GQLQueryListArenaUserV2Args = {
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type GQLQueryListingPageArgs = {
-  subjects?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2320,7 +2278,6 @@ export type GQLResourceTypeDefinition = {
 export type GQLSearch = {
   __typename?: 'Search';
   aggregations: Array<GQLAggregationResult>;
-  concepts?: Maybe<GQLConceptResult>;
   language: Scalars['String']['output'];
   page?: Maybe<Scalars['Int']['output']>;
   pageSize: Scalars['Int']['output'];
@@ -2824,7 +2781,6 @@ export type GQLResolversTypes = {
   ConceptCopyright: ResolverTypeWrapper<GQLConceptCopyright>;
   ConceptFolderResourceMeta: ResolverTypeWrapper<GQLConceptFolderResourceMeta>;
   ConceptLicense: ResolverTypeWrapper<GQLConceptLicense>;
-  ConceptResult: ResolverTypeWrapper<GQLConceptResult>;
   ConfigMetaBoolean: ResolverTypeWrapper<GQLConfigMetaBoolean>;
   ConfigMetaStringList: ResolverTypeWrapper<GQLConfigMetaStringList>;
   Contributor: ResolverTypeWrapper<GQLContributor>;
@@ -2884,7 +2840,6 @@ export type GQLResolversTypes = {
   LearningpathUpdateInput: GQLLearningpathUpdateInput;
   License: ResolverTypeWrapper<GQLLicense>;
   LicenseInput: GQLLicenseInput;
-  ListingPage: ResolverTypeWrapper<GQLListingPage>;
   Manuscript: ResolverTypeWrapper<GQLManuscript>;
   Meta: ResolverTypeWrapper<GQLMeta>;
   MetaImage: ResolverTypeWrapper<GQLMetaImage>;
@@ -3008,7 +2963,6 @@ export type GQLResolversParentTypes = {
   ConceptCopyright: GQLConceptCopyright;
   ConceptFolderResourceMeta: GQLConceptFolderResourceMeta;
   ConceptLicense: GQLConceptLicense;
-  ConceptResult: GQLConceptResult;
   ConfigMetaBoolean: GQLConfigMetaBoolean;
   ConfigMetaStringList: GQLConfigMetaStringList;
   Contributor: GQLContributor;
@@ -3068,7 +3022,6 @@ export type GQLResolversParentTypes = {
   LearningpathUpdateInput: GQLLearningpathUpdateInput;
   License: GQLLicense;
   LicenseInput: GQLLicenseInput;
-  ListingPage: GQLListingPage;
   Manuscript: GQLManuscript;
   Meta: GQLMeta;
   MetaImage: GQLMetaImage;
@@ -3624,15 +3577,6 @@ export type GQLConceptLicenseResolvers<ContextType = any, ParentType extends GQL
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLConceptResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConceptResult'] = GQLResolversParentTypes['ConceptResult']> = {
-  concepts?: Resolver<Array<GQLResolversTypes['Concept']>, ParentType, ContextType>;
-  language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  page?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
-  pageSize?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  totalCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLConfigMetaBooleanResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaBoolean'] = GQLResolversParentTypes['ConfigMetaBoolean']> = {
   key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
@@ -4093,12 +4037,6 @@ export type GQLLicenseResolvers<ContextType = any, ParentType extends GQLResolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLListingPageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ListingPage'] = GQLResolversParentTypes['ListingPage']> = {
-  subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType>;
-  tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLManuscriptResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Manuscript'] = GQLResolversParentTypes['Manuscript']> = {
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   manuscript?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -4488,8 +4426,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   audio?: Resolver<Maybe<GQLResolversTypes['Audio']>, ParentType, ContextType, RequireFields<GQLQueryAudioArgs, 'id'>>;
   competenceGoal?: Resolver<Maybe<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, RequireFields<GQLQueryCompetenceGoalArgs, 'code'>>;
   competenceGoals?: Resolver<Maybe<Array<GQLResolversTypes['CompetenceGoal']>>, ParentType, ContextType, Partial<GQLQueryCompetenceGoalsArgs>>;
-  concept?: Resolver<Maybe<GQLResolversTypes['Concept']>, ParentType, ContextType, RequireFields<GQLQueryConceptArgs, 'id'>>;
-  conceptSearch?: Resolver<Maybe<GQLResolversTypes['ConceptResult']>, ParentType, ContextType, Partial<GQLQueryConceptSearchArgs>>;
   coreElement?: Resolver<Maybe<GQLResolversTypes['CoreElement']>, ParentType, ContextType, RequireFields<GQLQueryCoreElementArgs, 'code'>>;
   coreElements?: Resolver<Maybe<Array<GQLResolversTypes['CoreElement']>>, ParentType, ContextType, Partial<GQLQueryCoreElementsArgs>>;
   examLockStatus?: Resolver<GQLResolversTypes['ConfigMetaBoolean'], ParentType, ContextType>;
@@ -4506,7 +4442,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
   learningpathStepOembed?: Resolver<GQLResolversTypes['LearningpathStepOembed'], ParentType, ContextType, RequireFields<GQLQueryLearningpathStepOembedArgs, 'url'>>;
   listArenaUserV2?: Resolver<GQLResolversTypes['PaginatedArenaUsers'], ParentType, ContextType, Partial<GQLQueryListArenaUserV2Args>>;
-  listingPage?: Resolver<Maybe<GQLResolversTypes['ListingPage']>, ParentType, ContextType, Partial<GQLQueryListingPageArgs>>;
   myLearningpaths?: Resolver<Maybe<Array<GQLResolversTypes['MyNdlaLearningpath']>>, ParentType, ContextType>;
   myNdlaLearningpath?: Resolver<Maybe<GQLResolversTypes['MyNdlaLearningpath']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaLearningpathArgs, 'pathId'>>;
   node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeArgs>>;
@@ -4605,7 +4540,6 @@ export type GQLResourceTypeDefinitionResolvers<ContextType = any, ParentType ext
 
 export type GQLSearchResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Search'] = GQLResolversParentTypes['Search']> = {
   aggregations?: Resolver<Array<GQLResolversTypes['AggregationResult']>, ParentType, ContextType>;
-  concepts?: Resolver<Maybe<GQLResolversTypes['ConceptResult']>, ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   page?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   pageSize?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -5010,7 +4944,6 @@ export type GQLResolvers<ContextType = any> = {
   ConceptCopyright?: GQLConceptCopyrightResolvers<ContextType>;
   ConceptFolderResourceMeta?: GQLConceptFolderResourceMetaResolvers<ContextType>;
   ConceptLicense?: GQLConceptLicenseResolvers<ContextType>;
-  ConceptResult?: GQLConceptResultResolvers<ContextType>;
   ConfigMetaBoolean?: GQLConfigMetaBooleanResolvers<ContextType>;
   ConfigMetaStringList?: GQLConfigMetaStringListResolvers<ContextType>;
   Contributor?: GQLContributorResolvers<ContextType>;
@@ -5058,7 +4991,6 @@ export type GQLResolvers<ContextType = any> = {
   LearningpathStepEmbedUrl?: GQLLearningpathStepEmbedUrlResolvers<ContextType>;
   LearningpathStepOembed?: GQLLearningpathStepOembedResolvers<ContextType>;
   License?: GQLLicenseResolvers<ContextType>;
-  ListingPage?: GQLListingPageResolvers<ContextType>;
   Manuscript?: GQLManuscriptResolvers<ContextType>;
   Meta?: GQLMetaResolvers<ContextType>;
   MetaImage?: GQLMetaImageResolvers<ContextType>;
