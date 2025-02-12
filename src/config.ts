@@ -63,7 +63,6 @@ export const h5pHostUrl = () => {
 export const defaultLanguage = getEnvironmentVariabel("DEFAULT_LANGUAGE", "nb");
 export const port = getEnvironmentVariabel("PORT", "4000");
 export const apiUrl = getEnvironmentVariabel("API_URL", ndlaApiUrl());
-export const localConverter = getEnvironmentVariabel("LOCAL_CONVERTER", false);
 export const ndlaUrl = getEnvironmentVariabel("NDLA_URL", ndlaFrontendUrl());
 export const uptimeOwner = getEnvironmentVariabel("UPTIME_OWNER", "NDLANO");
 export const uptimeRepo = getEnvironmentVariabel("UPTIME_REPO", "oppetid");
