@@ -28,7 +28,7 @@
   "dependencies": {
     "@apollo/server": "^4.11.2",
     "@graphql-tools/schema": "^10.0.11",
-    "@ndla/licenses": "^8.0.3-alpha.0",
+    "@ndla/licenses": "^9.0.0",
     "cheerio": "^1.0.0-rc.12",
     "compression": "^1.7.4",
     "dataloader": "^1.4.0",
