@@ -6,33 +6,33 @@
  *
  */
 
-import { contributorGroups, contributorTypes, getLicenseByAbbreviation } from "@ndla/licenses";
+import { licenses, contributorGroups, contributorTypes, getLicenseByAbbreviation } from "@ndla/licenses";
 import { BrightcoveCopyright } from "@ndla/types-embed";
 
 const getLicenseByNBTitle = (title?: string) => {
   switch (title?.replace(/\s/g, "").toLowerCase()) {
     case "navngivelse-ikkekommersiell-ingenbearbeidelse":
-      return "CC-BY-NC-ND-4.0";
+      return licenses.CC_BY_NC_ND_4;
     case "navngivelse-ikkekommersiell-delpåsammevilkår":
-      return "CC-BY-NC-SA-4.0";
+      return licenses.CC_BY_NC_SA_4;
     case "navngivelse-ikkekommersiell":
-      return "CC-BY-NC-4.0";
+      return licenses.CC_BY_NC_4;
     case "navngivelse-ingenbearbeidelse":
-      return "CC-BY-ND-4.0";
+      return licenses.CC_BY_ND_4;
     case "navngivelse-delpåsammevilkår":
-      return "CC-BY-SA-4.0";
+      return licenses.CC_BY_SA_4;
     case "navngivelse":
-      return "CC-BY-4.0";
+      return licenses.CC_BY_4;
     case "offentligdomene":
-      return "PD";
+      return licenses.PD;
     case "publicdomaindedication":
-      return "CC0-1.0";
+      return licenses.CC0;
     case "publicdomainmark":
-      return "PD";
+      return licenses.PD;
     case "fristatus-erklæring":
-      return "CC0-1.0";
+      return licenses.CC0;
     case "opphavsrett":
-      return "COPYRIGHTED";
+      return licenses.COPYRIGHTED;
     default:
       return title;
   }
