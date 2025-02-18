@@ -6,7 +6,6 @@
  *
  */
 
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IConceptDTO, IConceptSearchResultDTO, IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { searchConcepts, fetchConcept, fetchListingPage } from "../api";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
@@ -19,15 +18,14 @@ import {
   GQLQueryListingPageArgs,
   GQLVisualElement,
 } from "../types/schema";
-import { articleToMeta } from "../utils/apiHelpers";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
 export const Query = {
   async concept(_: any, { id }: GQLQueryConceptArgs, context: ContextWithLoaders): Promise<IConceptDTO | undefined> {
     return fetchConcept(id, context);
   },
-  async listingPage(_: any, args: GQLQueryListingPageArgs, context: ContextWithLoaders): Promise<GQLListingPage> {
-    return fetchListingPage(context, args.subjects);
+  async listingPage(_: any, __: GQLQueryListingPageArgs, context: ContextWithLoaders): Promise<GQLListingPage> {
+    return fetchListingPage(context);
   },
   async conceptSearch(
     _: any,
@@ -66,13 +64,8 @@ export const resolvers = {
       }
       return undefined;
     },
-    async articles(concept: IConceptDTO, _: any, context: ContextWithLoaders): Promise<GQLMeta[]> {
-      const articleIds = concept.articleIds;
-      if (!articleIds || articleIds.length === 0) {
-        return [];
-      }
-      const fetched = await context.loaders.articlesLoader.loadMany(articleIds.map((id) => `${id}`));
-      return fetched.filter((article): article is IArticleV2DTO => !!article).map(articleToMeta);
+    async articles(_: IConceptDTO, __: any, ___: ContextWithLoaders): Promise<GQLMeta[]> {
+      return [];
     },
     title(concept: IConceptDTO, _: any, __: ContextWithLoaders): string {
       return concept.title.title;
@@ -83,8 +76,8 @@ export const resolvers = {
     tags: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
       return concept.tags?.tags || [];
     },
-    subjectIds: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
-      return concept.subjectIds || [];
+    subjectIds: (_: any, __: any, ___: ContextWithLoaders): string[] => {
+      return [];
     },
   },
   ConceptResult: {

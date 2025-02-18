@@ -8,8 +8,7 @@
 
 import queryString from "query-string";
 import { IConceptSearchResultDTO, IConceptDTO } from "@ndla/types-backend/concept-api";
-import { fetchSubject } from "./taxonomyApi";
-import { GQLListingPage, GQLSubject } from "../types/schema";
+import { GQLListingPage } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function searchConcepts(
@@ -56,16 +55,9 @@ export async function fetchConcept(id: string | number, context: Context): Promi
   }
 }
 
-export async function fetchListingPage(context: Context, querySubjects?: string): Promise<GQLListingPage> {
-  const subjectIds: string[] = await resolveJson(await fetch(`/concept-api/v1/concepts/subjects/`, context));
-  const subjectResults = await Promise.allSettled(subjectIds.map((id) => fetchSubject(context, id)));
-  const subjects = (
-    subjectResults.filter((result) => result.status === "fulfilled") as Array<PromiseFulfilledResult<GQLSubject>>
-  ).map((res) => res.value);
-
+export async function fetchListingPage(context: Context): Promise<GQLListingPage> {
   const params = queryString.stringify({
     language: context.language,
-    subjects: querySubjects,
   });
   const tags = await resolveJson(await fetch(`/concept-api/v1/concepts/tags/?${params}`, context)).catch((error) => {
     if (error.status !== 404) {
@@ -75,7 +67,7 @@ export async function fetchListingPage(context: Context, querySubjects?: string)
     }
   });
   return {
-    subjects,
+    subjects: [],
     tags: getTags(tags),
   };
 }
