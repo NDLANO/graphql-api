@@ -37,6 +37,6 @@ export const fetchOpengraph = async (url: string): Promise<GQLExternalOpengraph 
     description: ogs.result.ogDescription,
     imageUrl: ogs.result.ogImage?.[0]?.url,
     imageAlt: ogs.result.ogImage?.[0]?.alt,
-    url: ogs.result.ogUrl,
+    url: ogs.result.ogUrl ?? url,
   };
 };

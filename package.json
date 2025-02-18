@@ -18,7 +18,6 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "generate-schema-types": "graphql-codegen --config local-codegen.yml && prettier --write src/types/schema.d.ts src/schema.ts",
     "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold\"  \"tsc -w\" \"node --watch build/server.js\"",
-    "start-with-local-converter": "LOCAL_CONVERTER=true yarn start",
     "start-prod": "NODE_ENV=production node ./build/server.js",
     "test": "jest",
     "tdd": "jest --watch"
@@ -29,7 +28,7 @@
   "dependencies": {
     "@apollo/server": "^4.11.2",
     "@graphql-tools/schema": "^10.0.11",
-    "@ndla/licenses": "^8.0.3-alpha.0",
+    "@ndla/licenses": "^9.0.0",
     "cheerio": "^1.0.0-rc.12",
     "compression": "^1.7.4",
     "dataloader": "^1.4.0",
@@ -59,7 +58,7 @@
     "@graphql-eslint/eslint-plugin": "^4.3.0",
     "@graphql-tools/mock": "^9.0.9",
     "@jest-mock/express": "^2.0.2",
-    "@ndla/types-backend": "^1.0.20",
+    "@ndla/types-backend": "^1.0.21",
     "@ndla/types-embed": "^5.0.10-alpha.0",
     "@ndla/types-taxonomy": "^1.0.34",
     "@types/compression": "^1.7.2",

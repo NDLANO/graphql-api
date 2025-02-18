@@ -6,11 +6,9 @@
  *
  */
 
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IConceptDTO } from "@ndla/types-backend/concept-api";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
 import { GQLConcept, GQLMeta, GQLVisualElement } from "../types/schema";
-import { articleToMeta } from "../utils/apiHelpers";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
 export const Query = {};
@@ -43,13 +41,8 @@ export const resolvers = {
       }
       return undefined;
     },
-    async articles(concept: IConceptDTO, _: any, context: ContextWithLoaders): Promise<GQLMeta[]> {
-      const articleIds = concept.articleIds;
-      if (!articleIds || articleIds.length === 0) {
-        return [];
-      }
-      const fetched = await context.loaders.articlesLoader.loadMany(articleIds.map((id) => `${id}`));
-      return fetched.filter((article): article is IArticleV2DTO => !!article).map(articleToMeta);
+    async articles(_: IConceptDTO, __: any, ___: ContextWithLoaders): Promise<GQLMeta[]> {
+      return [];
     },
     title(concept: IConceptDTO, _: any, __: ContextWithLoaders): string {
       return concept.title.title;
@@ -60,8 +53,8 @@ export const resolvers = {
     tags: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
       return concept.tags?.tags || [];
     },
-    subjectIds: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
-      return concept.subjectIds || [];
+    subjectIds: (_: any, __: any, ___: ContextWithLoaders): string[] => {
+      return [];
     },
   },
 };
