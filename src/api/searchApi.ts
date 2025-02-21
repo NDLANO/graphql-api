@@ -13,7 +13,6 @@ import {
   IGroupSearchResultDTO,
   IMultiSearchSummaryDTO,
 } from "@ndla/types-backend/search-api";
-import { searchConcepts } from "./conceptApi";
 import {
   GQLCompetenceGoal,
   GQLCoreElement,
@@ -41,17 +40,11 @@ export async function search(searchQuery: GQLQuerySearchArgs, context: Context):
   const response = await fetch(`/search-api/v1/search/?${queryString.stringify(query)}`, context, {
     cache: "no-store",
   });
-  const searchResults = await resolveJson(response);
-  const conceptQuery = {
-    ...searchQuery,
-    fallback: searchQuery.fallback === "true",
-  };
-  const concepts = await searchConcepts(conceptQuery, context);
   const subjects = searchQuery.subjects?.split(",") || [];
+  const searchResults = await resolveJson(response);
   return {
     ...searchResults,
     results: searchResults.results.map((result: IMultiSearchSummaryDTO) => transformResult(result, subjects)),
-    concepts: { concepts },
   };
 }
 

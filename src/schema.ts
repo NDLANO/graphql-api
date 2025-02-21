@@ -1057,19 +1057,6 @@ export const typeDefs = gql`
     thumbnail: String
   }
 
-  type ListingPage {
-    subjects: [Subject!]
-    tags: [String!]
-  }
-
-  type ConceptResult {
-    totalCount: Int!
-    page: Int
-    pageSize: Int!
-    language: String!
-    concepts: [Concept!]!
-  }
-
   type Concept {
     id: Int!
     title: String!
@@ -1117,7 +1104,6 @@ export const typeDefs = gql`
     results: [SearchResult!]!
     suggestions: [SuggestionResult!]!
     aggregations: [AggregationResult!]!
-    concepts: ConceptResult
   }
 
   type SearchWithoutPagination {
@@ -1714,20 +1700,6 @@ export const typeDefs = gql`
       filterInactive: Boolean
       license: String
     ): [GroupSearch!]
-    listingPage(subjects: String): ListingPage
-    concept(id: Int!): Concept
-    conceptSearch(
-      query: String
-      subjects: String
-      tags: String
-      ids: [Int!]
-      page: Int
-      pageSize: Int
-      exactMatch: Boolean
-      language: String
-      fallback: Boolean
-      conceptType: String
-    ): ConceptResult
     searchWithoutPagination(
       query: String
       contextTypes: String
