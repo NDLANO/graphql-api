@@ -154,7 +154,7 @@ export const competenceGoals = async (
   language: string | undefined,
   context: Context,
 ): Promise<GQLCompetenceGoal[]> => {
-  const references = await grepSearch({ language, codes }, context);
+  const references = await grepSearch({ language, codes, pageSize: codes.length }, context);
   const competenceGoals = references.results.filter((r) => {
     return r.typename === "GrepKompetansemaalDTO";
   });
