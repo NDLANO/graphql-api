@@ -1591,7 +1591,7 @@ export type GQLMyNdlaPersonalData = {
   groups: Array<GQLMyNdlaGroup>;
   id: Scalars['Int']['output'];
   organization: Scalars['String']['output'];
-  role: Scalars['String']['output'];
+  role: GQLUserRole;
   shareNameAccepted: Scalars['Boolean']['output'];
   username: Scalars['String']['output'];
 };
@@ -2627,6 +2627,11 @@ export type GQLUserFolder = {
   sharedFolders: Array<GQLSharedFolder>;
 };
 
+export enum GQLUserRole {
+  Employee = 'employee',
+  Student = 'student'
+}
+
 export type GQLVideoFolderResourceMeta = GQLFolderResourceMeta & {
   __typename?: 'VideoFolderResourceMeta';
   description: Scalars['String']['output'];
@@ -2920,6 +2925,7 @@ export type GQLResolversTypes = {
   UpdatedFolderResource: ResolverTypeWrapper<GQLUpdatedFolderResource>;
   UptimeAlert: ResolverTypeWrapper<GQLUptimeAlert>;
   UserFolder: ResolverTypeWrapper<GQLUserFolder>;
+  UserRole: GQLUserRole;
   VideoFolderResourceMeta: ResolverTypeWrapper<GQLVideoFolderResourceMeta>;
   VisualElement: ResolverTypeWrapper<GQLVisualElement>;
   VisualElementOembed: ResolverTypeWrapper<GQLVisualElementOembed>;
@@ -4230,7 +4236,7 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   groups?: Resolver<Array<GQLResolversTypes['MyNdlaGroup']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  role?: Resolver<GQLResolversTypes['UserRole'], ParentType, ContextType>;
   shareNameAccepted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
