@@ -24,6 +24,7 @@ import {
   queryNodes,
 } from "./api";
 import { GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import { searchNodes } from "./api/taxonomyApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -151,4 +152,14 @@ export function resourceTypesLoader(context: Context): DataLoader<string, any> {
       return allResourceTypes.find((resourceType) => resourceType.id === resourceTypeId);
     });
   });
+}
+
+export function searchNodesLoader(context: Context): DataLoader<string, Node> {
+  return new DataLoader(
+    async (contentUris) => {
+      const searchResult = await searchNodes({ contentUris }, context);
+      return searchResult.results;
+    },
+    { maxBatchSize: 100 },
+  );
 }
