@@ -28,7 +28,7 @@ import {
 } from "../types/schema";
 import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
 
-const findResourceTypes = (result: Node | undefined, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
+const findResourceTypes = (result: Node | null, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
   const ctx = result?.contexts?.[0];
   const resourceTypes = ctx?.resourceTypes.map((t) => ({
     id: t.id,
@@ -68,7 +68,7 @@ const fetchAndTransformResourceMeta = async (
       fetchResourceMeta(nodeType, ids, context),
     ]);
     return ids.map((id) => {
-      const node = nodes.find((n) => n.contentUri === `urn:${nodeType}:${id}`);
+      const node = nodes.find((n) => !!n && n.contentUri === `urn:${nodeType}:${id}`);
       const element = elements.find((e) => e?.id === Number(id));
       return {
         id,
@@ -76,7 +76,7 @@ const fetchAndTransformResourceMeta = async (
         type,
         description: element?.metaDescription ?? "",
         metaImage: element?.metaImage,
-        resourceTypes: findResourceTypes(node, context),
+        resourceTypes: findResourceTypes(node ?? null, context),
       };
     });
   } catch (e) {
