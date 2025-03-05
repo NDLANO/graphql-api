@@ -25,6 +25,7 @@ import {
   subjectpageLoader,
   nodeLoader,
   nodesLoader,
+  searchNodesLoader,
 } from "./loaders";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
@@ -121,6 +122,7 @@ async function getContext({ req, res }: { req: Request; res: Response }): Promis
       subjectsLoader: subjectsLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
       subjectpageLoader: subjectpageLoader(defaultContext),
+      searchNodesLoader: searchNodesLoader(defaultContext),
     },
   };
 }

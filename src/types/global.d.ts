@@ -48,6 +48,7 @@ declare global {
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPageDTO>;
     subjectpageLoader: DataLoader<string, ISubjectPageDataDTO | null>;
+    searchNodesLoader: DataLoader<string, Node | null>;
   }
 
   interface AuthToken {

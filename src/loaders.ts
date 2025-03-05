@@ -24,6 +24,7 @@ import {
   queryNodes,
 } from "./api";
 import { GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import { searchNodes } from "./api/taxonomyApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -151,4 +152,16 @@ export function resourceTypesLoader(context: Context): DataLoader<string, any> {
       return allResourceTypes.find((resourceType) => resourceType.id === resourceTypeId);
     });
   });
+}
+
+export function searchNodesLoader(context: Context): DataLoader<string, Node | null> {
+  return new DataLoader(
+    async (contentUris) => {
+      const results: Array<Node | null> = (await searchNodes({ contentUris }, context)).results;
+      // Returned values in DataLoader must be same length as the number of keys, so we fill missing values with null
+      const missingValues = Array<null>(contentUris.length - results.length).fill(null);
+      return results.concat(missingValues);
+    },
+    { maxBatchSize: 100 },
+  );
 }
