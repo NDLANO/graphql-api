@@ -11,7 +11,7 @@ import { Request, Response } from "express";
 import { RequestInit, RequestCache } from "node-fetch";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IFrontPageDTO, ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
-import { Node, SearchResult } from "@ndla/types-taxonomy";
+import { Node } from "@ndla/types-taxonomy";
 import { GQLSubject } from "./schema";
 
 declare global {
