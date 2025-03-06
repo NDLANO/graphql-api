@@ -113,8 +113,13 @@ const getResource = async (
   const lastResourceMatch = learningpathStep.embedUrl.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
 
   if (lastResourceMatch !== undefined) {
-    const resource = await fetchNode({ id: `urn:${lastResourceMatch}`, rootId, parentId }, context);
-    return nodeToTaxonomyEntity(resource, context);
+    try {
+      const resource = await fetchNode({ id: `urn:${lastResourceMatch}`, rootId, parentId }, context);
+      return nodeToTaxonomyEntity(resource, context);
+    } catch (e) {
+      // No need to throw this as an error, as it is not critical
+      return null;
+    }
   }
   return null;
 };
