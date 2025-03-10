@@ -9,8 +9,8 @@
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import {
   IFrontPageDTO,
-  ISubjectPageDataDTO,
-  IFilmFrontPageDataDTO,
+  ISubjectPageDTO,
+  IFilmFrontPageDTO,
   IMovieThemeDTO,
   IMenuDTO,
 } from "@ndla/types-backend/frontpage-api";
@@ -27,11 +27,11 @@ export const Query = {
     return context.loaders.frontpageLoader.load("frontpage");
   },
 
-  async subjectpage(_: any, { id }: Id, context: ContextWithLoaders): Promise<ISubjectPageDataDTO | null> {
+  async subjectpage(_: any, { id }: Id, context: ContextWithLoaders): Promise<ISubjectPageDTO | null> {
     return context.loaders.subjectpageLoader.load(`${id}`);
   },
 
-  async filmfrontpage(_: any, __: any, context: ContextWithLoaders): Promise<IFilmFrontPageDataDTO> {
+  async filmfrontpage(_: any, __: any, context: ContextWithLoaders): Promise<IFilmFrontPageDTO> {
     return fetchFilmFrontpage(context);
   },
 };
@@ -90,7 +90,7 @@ export const resolvers = {
 
   FilmFrontpage: {
     async article(
-      frontpage: IFilmFrontPageDataDTO,
+      frontpage: IFilmFrontPageDTO,
       _: any,
       context: ContextWithLoaders,
     ): Promise<IArticleV2DTO | undefined> {

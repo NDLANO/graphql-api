@@ -6,7 +6,7 @@
  *
  */
 
-import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
+import { ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
   GQLQuerySubjectArgs,
@@ -82,7 +82,7 @@ export const resolvers = {
       });
       return filterMissingArticles(topics, context);
     },
-    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageDataDTO | null> {
+    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageDTO | null> {
       if (!subject.contentUri?.startsWith("urn:frontpage")) return null;
       return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
     },
@@ -95,25 +95,21 @@ export const resolvers = {
     },
   },
   SubjectPage: {
-    async connectedTo(
-      subjectpage: ISubjectPageDataDTO,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLSubjectLink[]> {
+    async connectedTo(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.connectedTo.map((id) => {
           return { id };
         }),
       );
     },
-    async buildsOn(subjectpage: ISubjectPageDataDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async buildsOn(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.buildsOn.map((id) => {
           return { id };
         }),
       );
     },
-    async leadsTo(subjectpage: ISubjectPageDataDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async leadsTo(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.leadsTo.map((id) => {
           return { id };

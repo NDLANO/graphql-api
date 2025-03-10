@@ -65,31 +65,35 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
   const json = await resolveJson(response);
   return json.map((result: IGroupSearchResultDTO) => ({
     ...result,
-    resources: result.results.map((contentTypeResult) => {
-      const searchCtx = contentTypeResult.contexts.find((c) =>
-        subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary,
-      );
-      const path = searchCtx?.path ?? contentTypeResult.paths?.[0];
-      const url = searchCtx?.url ?? contentTypeResult.paths?.[0];
+    resources: result.results
+      .map((contentTypeResult) => {
+        if (contentTypeResult.typename === "NodeHitDTO") return null;
+        const searchCtx = contentTypeResult.contexts.find((c) =>
+          subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary,
+        );
+        const path = searchCtx?.path ?? contentTypeResult.paths?.[0];
+        const url = searchCtx?.url ?? contentTypeResult.paths?.[0];
 
-      const isLearningpath = contentTypeResult.learningResourceType === "learningpath";
-      return {
-        ...contentTypeResult,
-        path: path || (isLearningpath ? `/learningpaths/${contentTypeResult.id}` : `/article/${contentTypeResult.id}`),
-        url: url,
-        name: contentTypeResult.title.title,
-        title: contentTypeResult.title.title,
-        htmlTitle: contentTypeResult.title.htmlTitle,
-        ingress: contentTypeResult.metaDescription.metaDescription,
-        contexts: contentTypeResult.contexts,
-        ...(contentTypeResult.metaImage && {
-          metaImage: {
-            url: contentTypeResult.metaImage?.url,
-            alt: contentTypeResult.metaImage?.alt,
-          },
-        }),
-      };
-    }),
+        const isLearningpath = contentTypeResult.learningResourceType === "learningpath";
+        return {
+          ...contentTypeResult,
+          path:
+            path || (isLearningpath ? `/learningpaths/${contentTypeResult.id}` : `/article/${contentTypeResult.id}`),
+          url: url,
+          name: contentTypeResult.title.title,
+          title: contentTypeResult.title.title,
+          htmlTitle: contentTypeResult.title.htmlTitle,
+          ingress: contentTypeResult.metaDescription.metaDescription,
+          contexts: contentTypeResult.contexts,
+          ...(contentTypeResult.metaImage && {
+            metaImage: {
+              url: contentTypeResult.metaImage?.url,
+              alt: contentTypeResult.metaImage?.alt,
+            },
+          }),
+        };
+      })
+      .filter(Boolean),
   }));
 }
 
