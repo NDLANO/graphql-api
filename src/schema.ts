@@ -933,20 +933,19 @@ export const typeDefs = gql`
   }
 
   interface SearchResult {
-    id: Int!
+    id: String!
     title: String!
-    htmlTitle: String!
     supportedLanguages: [String!]!
     url: String!
     metaDescription: String!
-    metaImage: MetaImage
-    traits: [String!]!
     context: SearchContext
     contexts: [SearchContext!]!
   }
 
+  union SearchResultUnion = ArticleSearchResult | LearningpathSearchResult | NodeSearchResult
+
   type ArticleSearchResult implements SearchResult {
-    id: Int!
+    id: String!
     title: String!
     htmlTitle: String!
     supportedLanguages: [String!]!
@@ -959,7 +958,7 @@ export const typeDefs = gql`
   }
 
   type LearningpathSearchResult implements SearchResult {
-    id: Int!
+    id: String!
     title: String!
     htmlTitle: String!
     supportedLanguages: [String!]!
@@ -967,6 +966,18 @@ export const typeDefs = gql`
     metaDescription: String!
     metaImage: MetaImage
     traits: [String!]!
+    context: SearchContext
+    contexts: [SearchContext!]!
+  }
+
+  type NodeSearchResult implements SearchResult {
+    id: String!
+    title: String!
+    htmlTitle: String!
+    supportedLanguages: [String!]!
+    url: String!
+    metaDescription: String!
+    metaImage: MetaImage
     context: SearchContext
     contexts: [SearchContext!]!
   }
@@ -981,11 +992,9 @@ export const typeDefs = gql`
     relevanceId: String!
     path: String!
     publicId: String!
-    parentIds: [String!]!
     language: String!
     isPrimary: Boolean!
     isActive: Boolean!
-    isVisible: Boolean!
     contextId: String!
     url: String!
   }

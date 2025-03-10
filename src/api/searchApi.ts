@@ -12,16 +12,19 @@ import {
   IGrepSearchResultsDTO,
   IGroupSearchResultDTO,
   IMultiSearchSummaryDTO,
+  INodeHitDTO,
 } from "@ndla/types-backend/search-api";
 import {
   GQLCompetenceGoal,
   GQLCoreElement,
   GQLElement,
   GQLGroupSearch,
+  GQLNodeSearchResult,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
   GQLReference,
   GQLSearch,
+  GQLSearchResultUnion,
   GQLSearchWithoutPagination,
 } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
@@ -131,18 +134,34 @@ export async function searchWithoutPagination(
   const subjects = searchQuery.subjects?.split(",") || [];
   return {
     results: allResultsJson.flatMap((json) =>
-      json.results.map((result: IMultiSearchSummaryDTO) => transformResult(result, subjects)),
+      json.results.map((result: IMultiSearchSummaryDTO | INodeHitDTO) => transformResult(result, subjects)),
     ),
   };
 }
 
-const transformResult = (result: IMultiSearchSummaryDTO, subjects: string[]) => ({
-  ...result,
-  title: result.title.title,
-  htmlTitle: result.title.htmlTitle,
-  metaDescription: result.metaDescription?.metaDescription,
-  context: result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary)),
-});
+const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects: string[]): GQLSearchResultUnion => {
+  if (result.typename === "NodeHitDTO") {
+    const ret: GQLNodeSearchResult = {
+      htmlTitle: result.title,
+      title: result.title,
+      supportedLanguages: [],
+      metaDescription: result.subjectPage?.metaDescription.metaDescription ?? "",
+      id: result.id,
+      url: result.url ?? "",
+      contexts: [],
+    };
+    return ret;
+  }
+  const primaryContext = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
+  return {
+    ...result,
+    id: result.id.toString(),
+    title: result.title.title,
+    htmlTitle: result.title.htmlTitle,
+    metaDescription: result.metaDescription?.metaDescription,
+    context: primaryContext ? { ...primaryContext } : undefined,
+  };
+};
 
 export const grepSearch = async (input: IGrepSearchInputDTO, context: Context): Promise<IGrepSearchResultsDTO> => {
   const response = await fetch(`/search-api/v1/search/grep`, context, {
