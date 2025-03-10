@@ -6,7 +6,7 @@
  *
  */
 
-import { IFrontPageDTO, IFilmFrontPageDataDTO, ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
+import { IFrontPageDTO, IFilmFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export interface IMovieMeta {
@@ -24,7 +24,7 @@ export async function fetchFrontpage(context: Context): Promise<IFrontPageDTO> {
   return await resolveJson(response);
 }
 
-export async function fetchSubjectPage(subjectPageId: number, context: Context): Promise<ISubjectPageDataDTO> {
+export async function fetchSubjectPage(subjectPageId: number, context: Context): Promise<ISubjectPageDTO> {
   const response = await fetch(
     `/frontpage-api/v1/subjectpage/${subjectPageId}?language=${context.language}&fallback=true`,
     context,
@@ -32,7 +32,7 @@ export async function fetchSubjectPage(subjectPageId: number, context: Context):
   return await resolveJson(response);
 }
 
-export async function fetchFilmFrontpage(context: Context): Promise<IFilmFrontPageDataDTO> {
+export async function fetchFilmFrontpage(context: Context): Promise<IFilmFrontPageDTO> {
   const response = await fetch(`/frontpage-api/v1/filmfrontpage`, context);
   return await resolveJson(response);
 }

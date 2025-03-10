@@ -7,7 +7,7 @@
  */
 
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
+import { ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { GraphQLError } from "graphql";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchChildren, fetchLearningpath, fetchNode, fetchNodeByContentUri, queryNodes } from "../api";
@@ -125,11 +125,7 @@ export const resolvers = {
       const entities = children.map((node) => nodeToTaxonomyEntity(node, context));
       return filterMissingArticles(entities, context);
     },
-    async subjectpage(
-      node: GQLTaxonomyEntity,
-      __: any,
-      context: ContextWithLoaders,
-    ): Promise<ISubjectPageDataDTO | null> {
+    async subjectpage(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<ISubjectPageDTO | null> {
       if (!node.contentUri?.startsWith("urn:frontpage")) return null;
       return context.loaders.subjectpageLoader.load(node.contentUri.replace("urn:frontpage:", ""));
     },
