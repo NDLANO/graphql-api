@@ -144,6 +144,7 @@ export async function searchWithoutPagination(
 const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects: string[]): GQLSearchResultUnion => {
   if (result.typename === "NodeHitDTO") {
     const ret: GQLNodeSearchResult = {
+      __typename: "NodeSearchResult",
       htmlTitle: result.title,
       title: result.title,
       supportedLanguages: [],
@@ -158,6 +159,7 @@ const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects:
   return {
     ...result,
     id: result.id.toString(),
+    __typename: result.learningResourceType === "learningpath" ? "LearningpathSearchResult" : "ArticleSearchResult",
     title: result.title.title,
     htmlTitle: result.title.htmlTitle,
     metaDescription: result.metaDescription?.metaDescription,
