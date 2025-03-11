@@ -118,7 +118,7 @@ export type GQLArticleSearchResult = GQLSearchResult & {
   context?: Maybe<GQLSearchContext>;
   contexts: Array<GQLSearchContext>;
   htmlTitle: Scalars['String']['output'];
-  id: Scalars['Int']['output'];
+  id: Scalars['String']['output'];
   metaDescription: Scalars['String']['output'];
   metaImage?: Maybe<GQLMetaImage>;
   supportedLanguages: Array<Scalars['String']['output']>;
@@ -789,7 +789,7 @@ export type GQLLearningpathSearchResult = GQLSearchResult & {
   context?: Maybe<GQLSearchContext>;
   contexts: Array<GQLSearchContext>;
   htmlTitle: Scalars['String']['output'];
-  id: Scalars['Int']['output'];
+  id: Scalars['String']['output'];
   metaDescription: Scalars['String']['output'];
   metaImage?: Maybe<GQLMetaImage>;
   supportedLanguages: Array<Scalars['String']['output']>;
@@ -1265,6 +1265,19 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
 export type GQLNodeChildrenArgs = {
   nodeType?: InputMaybe<Scalars['String']['input']>;
   recursive?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type GQLNodeSearchResult = GQLSearchResult & {
+  __typename?: 'NodeSearchResult';
+  context?: Maybe<GQLSearchContext>;
+  contexts: Array<GQLSearchContext>;
+  htmlTitle: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  metaDescription: Scalars['String']['output'];
+  metaImage?: Maybe<GQLMetaImage>;
+  supportedLanguages: Array<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type GQLOwner = {
@@ -1772,9 +1785,7 @@ export type GQLSearchContext = {
   contextType: Scalars['String']['output'];
   isActive: Scalars['Boolean']['output'];
   isPrimary: Scalars['Boolean']['output'];
-  isVisible: Scalars['Boolean']['output'];
   language: Scalars['String']['output'];
-  parentIds: Array<Scalars['String']['output']>;
   path: Scalars['String']['output'];
   publicId: Scalars['String']['output'];
   relevance: Scalars['String']['output'];
@@ -1795,15 +1806,14 @@ export type GQLSearchContextResourceTypes = {
 export type GQLSearchResult = {
   context?: Maybe<GQLSearchContext>;
   contexts: Array<GQLSearchContext>;
-  htmlTitle: Scalars['String']['output'];
-  id: Scalars['Int']['output'];
+  id: Scalars['String']['output'];
   metaDescription: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImage>;
   supportedLanguages: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
-  traits: Array<Scalars['String']['output']>;
   url: Scalars['String']['output'];
 };
+
+export type GQLSearchResultUnion = GQLArticleSearchResult | GQLLearningpathSearchResult | GQLNodeSearchResult;
 
 export type GQLSearchSuggestion = {
   __typename?: 'SearchSuggestion';
@@ -2190,12 +2200,16 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type GQLResolversUnionTypes<_RefType extends Record<string, unknown>> = {
+  SearchResultUnion: ( GQLArticleSearchResult ) | ( GQLLearningpathSearchResult ) | ( GQLNodeSearchResult );
+};
 
 /** Mapping of interface types */
 export type GQLResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
   FolderResourceMeta: ( GQLArticleFolderResourceMeta ) | ( GQLAudioFolderResourceMeta ) | ( GQLConceptFolderResourceMeta ) | ( GQLImageFolderResourceMeta ) | ( GQLLearningpathFolderResourceMeta ) | ( GQLVideoFolderResourceMeta );
   PodcastSeriesBase: ( GQLPodcastSeries ) | ( GQLPodcastSeriesWithEpisodes );
-  SearchResult: ( GQLArticleSearchResult ) | ( GQLLearningpathSearchResult );
+  SearchResult: ( GQLArticleSearchResult ) | ( GQLLearningpathSearchResult ) | ( GQLNodeSearchResult );
   TaxBase: ( GQLNode ) | ( GQLResource ) | ( GQLSubject ) | ( GQLTaxonomyCrumb ) | ( GQLTopic );
   TaxonomyEntity: ( GQLNode ) | ( GQLResource ) | ( GQLSubject ) | ( GQLTopic );
   WithArticle: ( GQLNode ) | ( GQLResource ) | ( GQLTopic );
@@ -2307,6 +2321,7 @@ export type GQLResolversTypes = {
   NewFolder: ResolverTypeWrapper<GQLNewFolder>;
   NewFolderResource: ResolverTypeWrapper<GQLNewFolderResource>;
   Node: ResolverTypeWrapper<GQLNode>;
+  NodeSearchResult: ResolverTypeWrapper<GQLNodeSearchResult>;
   Owner: ResolverTypeWrapper<GQLOwner>;
   PodcastLicense: ResolverTypeWrapper<GQLPodcastLicense>;
   PodcastMeta: ResolverTypeWrapper<GQLPodcastMeta>;
@@ -2329,6 +2344,7 @@ export type GQLResolversTypes = {
   SearchContext: ResolverTypeWrapper<GQLSearchContext>;
   SearchContextResourceTypes: ResolverTypeWrapper<GQLSearchContextResourceTypes>;
   SearchResult: ResolverTypeWrapper<GQLResolversInterfaceTypes<GQLResolversTypes>['SearchResult']>;
+  SearchResultUnion: ResolverTypeWrapper<GQLResolversUnionTypes<GQLResolversTypes>['SearchResultUnion']>;
   SearchSuggestion: ResolverTypeWrapper<GQLSearchSuggestion>;
   SearchWithoutPagination: ResolverTypeWrapper<Omit<GQLSearchWithoutPagination, 'results'> & { results: Array<GQLResolversTypes['SearchResult']> }>;
   SharedFolder: ResolverTypeWrapper<GQLSharedFolder>;
@@ -2471,6 +2487,7 @@ export type GQLResolversParentTypes = {
   NewFolder: GQLNewFolder;
   NewFolderResource: GQLNewFolderResource;
   Node: GQLNode;
+  NodeSearchResult: GQLNodeSearchResult;
   Owner: GQLOwner;
   PodcastLicense: GQLPodcastLicense;
   PodcastMeta: GQLPodcastMeta;
@@ -2493,6 +2510,7 @@ export type GQLResolversParentTypes = {
   SearchContext: GQLSearchContext;
   SearchContextResourceTypes: GQLSearchContextResourceTypes;
   SearchResult: GQLResolversInterfaceTypes<GQLResolversParentTypes>['SearchResult'];
+  SearchResultUnion: GQLResolversUnionTypes<GQLResolversParentTypes>['SearchResultUnion'];
   SearchSuggestion: GQLSearchSuggestion;
   SearchWithoutPagination: Omit<GQLSearchWithoutPagination, 'results'> & { results: Array<GQLResolversParentTypes['SearchResult']> };
   SharedFolder: GQLSharedFolder;
@@ -2608,7 +2626,7 @@ export type GQLArticleSearchResultResolvers<ContextType = any, ParentType extend
   context?: Resolver<Maybe<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3238,7 +3256,7 @@ export type GQLLearningpathSearchResultResolvers<ContextType = any, ParentType e
   context?: Resolver<Maybe<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3504,6 +3522,19 @@ export type GQLNodeResolvers<ContextType = any, ParentType extends GQLResolversP
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLNodeSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['NodeSearchResult'] = GQLResolversParentTypes['NodeSearchResult']> = {
+  context?: Resolver<Maybe<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
+  contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLOwnerResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Owner'] = GQLResolversParentTypes['Owner']> = {
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3732,9 +3763,7 @@ export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLR
   contextType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   isActive?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   isPrimary?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
-  isVisible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   publicId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   relevance?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3754,17 +3783,18 @@ export type GQLSearchContextResourceTypesResolvers<ContextType = any, ParentType
 };
 
 export type GQLSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchResult'] = GQLResolversParentTypes['SearchResult']> = {
-  __resolveType: TypeResolveFn<'ArticleSearchResult' | 'LearningpathSearchResult', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'ArticleSearchResult' | 'LearningpathSearchResult' | 'NodeSearchResult', ParentType, ContextType>;
   context?: Resolver<Maybe<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
   contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
-  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  traits?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type GQLSearchResultUnionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchResultUnion'] = GQLResolversParentTypes['SearchResultUnion']> = {
+  __resolveType: TypeResolveFn<'ArticleSearchResult' | 'LearningpathSearchResult' | 'NodeSearchResult', ParentType, ContextType>;
 };
 
 export type GQLSearchSuggestionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchSuggestion'] = GQLResolversParentTypes['SearchSuggestion']> = {
@@ -4158,6 +4188,7 @@ export type GQLResolvers<ContextType = any> = {
   NewFolder?: GQLNewFolderResolvers<ContextType>;
   NewFolderResource?: GQLNewFolderResourceResolvers<ContextType>;
   Node?: GQLNodeResolvers<ContextType>;
+  NodeSearchResult?: GQLNodeSearchResultResolvers<ContextType>;
   Owner?: GQLOwnerResolvers<ContextType>;
   PodcastLicense?: GQLPodcastLicenseResolvers<ContextType>;
   PodcastMeta?: GQLPodcastMetaResolvers<ContextType>;
@@ -4179,6 +4210,7 @@ export type GQLResolvers<ContextType = any> = {
   SearchContext?: GQLSearchContextResolvers<ContextType>;
   SearchContextResourceTypes?: GQLSearchContextResourceTypesResolvers<ContextType>;
   SearchResult?: GQLSearchResultResolvers<ContextType>;
+  SearchResultUnion?: GQLSearchResultUnionResolvers<ContextType>;
   SearchSuggestion?: GQLSearchSuggestionResolvers<ContextType>;
   SearchWithoutPagination?: GQLSearchWithoutPaginationResolvers<ContextType>;
   SharedFolder?: GQLSharedFolderResolvers<ContextType>;
