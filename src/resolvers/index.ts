@@ -6,7 +6,6 @@
  *
  */
 
-import { IMultiSearchSummaryDTO } from "@ndla/types-backend/search-api";
 import { Query as ArticleQuery, resolvers as articleResolvers } from "./articleResolvers";
 import { Query as ConceptQuery, resolvers as conceptResolvers } from "./conceptResolvers";
 import { Query as CurriculumQuery, resolvers as curriculumResolvers } from "./curriculumResolvers";
@@ -90,17 +89,6 @@ export const resolvers = {
       }
 
       return "Resource";
-    },
-  },
-  SearchResult: {
-    // Resolves SearchResult interface
-    __resolveType(searchResult: IMultiSearchSummaryDTO) {
-      if (searchResult.resultType === "node") {
-        return "NodeSearchResult";
-      } else if (searchResult.learningResourceType === "learningpath") {
-        return "LearningpathSearchResult";
-      }
-      return "ArticleSearchResult";
     },
   },
   FolderResourceMeta: {
