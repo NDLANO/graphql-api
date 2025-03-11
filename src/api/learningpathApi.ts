@@ -8,6 +8,7 @@
 
 import { ILearningPathV2DTO, ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
 import {
+  GQLLearningpathSeqNo,
   GQLMutationCopyLearningpathArgs,
   GQLMutationDeleteLearningpathStepArgs,
   GQLMutationNewLearningpathArgs,
@@ -15,6 +16,7 @@ import {
   GQLMutationUpdateLearningpathArgs,
   GQLMutationUpdateLearningpathStatusArgs,
   GQLMutationUpdateLearningpathStepArgs,
+  GQLMutationUpdateLearningpathStepSeqNoArgs,
 } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
@@ -141,5 +143,20 @@ export async function copyLearningpath(
     method: "POST",
     body: JSON.stringify(params),
   });
+  return await resolveJson(response);
+}
+
+export async function updateLearningpathStepSeqNo(
+  { learningpathId, learningpathStepId, seqNo }: GQLMutationUpdateLearningpathStepSeqNoArgs,
+  context: Context,
+): Promise<GQLLearningpathSeqNo> {
+  const response = await fetch(
+    `/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps/${learningpathStepId}/seqNo`,
+    context,
+    {
+      method: "PUT",
+      body: JSON.stringify({ seqNo: seqNo }),
+    },
+  );
   return await resolveJson(response);
 }
