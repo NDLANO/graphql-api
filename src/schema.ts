@@ -266,6 +266,10 @@ export const typeDefs = gql`
     contributors: [Contributor!]!
   }
 
+  type LearningpathSeqNo {
+    seqNo: Int!
+  }
+
   type Learningpath {
     id: Int!
     title: String!
@@ -1572,6 +1576,7 @@ export const typeDefs = gql`
     ): MyNdlaLearningpathStep!
     deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]
     copyLearningpath(learningpathId: Int!, params: LearningpathCopyInput!): MyNdlaLearningpath!
+    updateLearningpathStepSeqNo(learningpathId: Int!, learningpathStepId: Int!, seqNo: Int!): LearningpathSeqNo!
   }
 `;
 

@@ -798,6 +798,11 @@ export type GQLLearningpathSearchResult = GQLSearchResult & {
   url: Scalars['String']['output'];
 };
 
+export type GQLLearningpathSeqNo = {
+  __typename?: 'LearningpathSeqNo';
+  seqNo: Scalars['Int']['output'];
+};
+
 export type GQLLearningpathStep = {
   __typename?: 'LearningpathStep';
   description?: Maybe<Scalars['String']['output']>;
@@ -974,6 +979,7 @@ export type GQLMutation = {
   updateLearningpath: GQLMyNdlaLearningpath;
   updateLearningpathStatus: GQLMyNdlaLearningpath;
   updateLearningpathStep: GQLMyNdlaLearningpathStep;
+  updateLearningpathStepSeqNo: GQLLearningpathSeqNo;
   updatePersonalData: GQLMyNdlaPersonalData;
 };
 
@@ -1114,6 +1120,13 @@ export type GQLMutationUpdateLearningpathStepArgs = {
   learningpathId: Scalars['Int']['input'];
   learningstepId: Scalars['Int']['input'];
   params: GQLLearningpathStepUpdateInput;
+};
+
+
+export type GQLMutationUpdateLearningpathStepSeqNoArgs = {
+  learningpathId: Scalars['Int']['input'];
+  learningpathStepId: Scalars['Int']['input'];
+  seqNo: Scalars['Int']['input'];
 };
 
 
@@ -2268,6 +2281,7 @@ export type GQLResolversTypes = {
   LearningpathFolderResourceMeta: ResolverTypeWrapper<GQLLearningpathFolderResourceMeta>;
   LearningpathNewInput: GQLLearningpathNewInput;
   LearningpathSearchResult: ResolverTypeWrapper<GQLLearningpathSearchResult>;
+  LearningpathSeqNo: ResolverTypeWrapper<GQLLearningpathSeqNo>;
   LearningpathStep: ResolverTypeWrapper<GQLLearningpathStep>;
   LearningpathStepEmbedUrl: ResolverTypeWrapper<GQLLearningpathStepEmbedUrl>;
   LearningpathStepNewInput: GQLLearningpathStepNewInput;
@@ -2431,6 +2445,7 @@ export type GQLResolversParentTypes = {
   LearningpathFolderResourceMeta: GQLLearningpathFolderResourceMeta;
   LearningpathNewInput: GQLLearningpathNewInput;
   LearningpathSearchResult: GQLLearningpathSearchResult;
+  LearningpathSeqNo: GQLLearningpathSeqNo;
   LearningpathStep: GQLLearningpathStep;
   LearningpathStepEmbedUrl: GQLLearningpathStepEmbedUrl;
   LearningpathStepNewInput: GQLLearningpathStepNewInput;
@@ -3233,6 +3248,11 @@ export type GQLLearningpathSearchResultResolvers<ContextType = any, ParentType e
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GQLLearningpathSeqNoResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathSeqNo'] = GQLResolversParentTypes['LearningpathSeqNo']> = {
+  seqNo?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathStep'] = GQLResolversParentTypes['LearningpathStep']> = {
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   embedUrl?: Resolver<Maybe<GQLResolversTypes['LearningpathStepEmbedUrl']>, ParentType, ContextType>;
@@ -3361,6 +3381,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathArgs, 'learningpathId' | 'params'>>;
   updateLearningpathStatus?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStatusArgs, 'id' | 'status'>>;
   updateLearningpathStep?: Resolver<GQLResolversTypes['MyNdlaLearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'learningpathId' | 'learningstepId' | 'params'>>;
+  updateLearningpathStepSeqNo?: Resolver<GQLResolversTypes['LearningpathSeqNo'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepSeqNoArgs, 'learningpathId' | 'learningpathStepId' | 'seqNo'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
 };
 
@@ -4115,6 +4136,7 @@ export type GQLResolvers<ContextType = any> = {
   LearningpathCoverphoto?: GQLLearningpathCoverphotoResolvers<ContextType>;
   LearningpathFolderResourceMeta?: GQLLearningpathFolderResourceMetaResolvers<ContextType>;
   LearningpathSearchResult?: GQLLearningpathSearchResultResolvers<ContextType>;
+  LearningpathSeqNo?: GQLLearningpathSeqNoResolvers<ContextType>;
   LearningpathStep?: GQLLearningpathStepResolvers<ContextType>;
   LearningpathStepEmbedUrl?: GQLLearningpathStepEmbedUrlResolvers<ContextType>;
   LearningpathStepOembed?: GQLLearningpathStepOembedResolvers<ContextType>;

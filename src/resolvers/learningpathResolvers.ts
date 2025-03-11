@@ -16,6 +16,7 @@ import {
   deleteLearningstep,
   updateLearningpath,
   updateLearningpathStatus,
+  updateLearningpathStepSeqNo,
   updateLearningstep,
 } from "../api/learningpathApi";
 import {
@@ -38,6 +39,8 @@ import {
   GQLMyNdlaLearningpathStep,
   GQLExternalOpengraph,
   GQLMutationCopyLearningpathArgs,
+  GQLLearningpathSeqNo,
+  GQLMutationUpdateLearningpathStepSeqNoArgs,
 } from "../types/schema";
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
@@ -165,6 +168,7 @@ export const Mutations: Pick<
   | "updateLearningpathStep"
   | "deleteLearningpathStep"
   | "copyLearningpath"
+  | "updateLearningpathStepSeqNo"
 > = {
   async updateLearningpathStatus(_: any, params: GQLMutationUpdateLearningpathStatusArgs, context: ContextWithLoaders) {
     const learningpath = await updateLearningpathStatus(params, context);
@@ -215,5 +219,12 @@ export const Mutations: Pick<
   ): Promise<GQLMyNdlaLearningpath> {
     const learningpath = await copyLearningpath(params, context);
     return toGQLLearningpath(learningpath);
+  },
+  async updateLearningpathStepSeqNo(
+    _: any,
+    params: GQLMutationUpdateLearningpathStepSeqNoArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLLearningpathSeqNo> {
+    return await updateLearningpathStepSeqNo(params, context);
   },
 };
