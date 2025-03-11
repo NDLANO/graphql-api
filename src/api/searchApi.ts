@@ -34,6 +34,8 @@ export async function search(searchQuery: GQLQuerySearchArgs, context: Context):
     ...searchQuery,
     "page-size": searchQuery.pageSize,
     "context-types": searchQuery.contextTypes,
+    "result-types": searchQuery.resultTypes,
+    "node-types": searchQuery.nodeTypes,
     "resource-types": searchQuery.resourceTypes,
     "language-filter": searchQuery.languageFilter,
     "grep-codes": searchQuery.grepCodes,

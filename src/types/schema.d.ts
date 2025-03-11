@@ -1624,11 +1624,13 @@ export type GQLQuerySearchArgs = {
   languageFilter?: InputMaybe<Scalars['String']['input']>;
   levels?: InputMaybe<Scalars['String']['input']>;
   license?: InputMaybe<Scalars['String']['input']>;
+  nodeTypes?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   pageSize?: InputMaybe<Scalars['Int']['input']>;
   query?: InputMaybe<Scalars['String']['input']>;
   relevance?: InputMaybe<Scalars['String']['input']>;
   resourceTypes?: InputMaybe<Scalars['String']['input']>;
+  resultTypes?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
   subjects?: InputMaybe<Scalars['String']['input']>;
   traits?: InputMaybe<Array<Scalars['String']['input']>>;

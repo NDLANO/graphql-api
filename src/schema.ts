@@ -1482,6 +1482,8 @@ export const typeDefs = gql`
       aggregatePaths: [String!]
       filterInactive: Boolean
       license: String
+      resultTypes: String
+      nodeTypes: String
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
