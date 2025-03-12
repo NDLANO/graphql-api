@@ -6,9 +6,10 @@
  *
  */
 
-import { ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { ISubjectPageDTO, IVisualElementDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
+  GQLImageLicense,
   GQLQuerySubjectArgs,
   GQLQuerySubjectCollectionArgs,
   GQLSubject,
@@ -17,6 +18,8 @@ import {
 } from "../types/schema";
 import { filterMissingArticles } from "../utils/articleHelpers";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
+import { fetchImageV3 } from "../api";
+import { convertToImageLicense } from "../api/imageApi";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
@@ -115,6 +118,22 @@ export const resolvers = {
           return { id };
         }),
       );
+    },
+  },
+  SubjectPageVisualElement: {
+    async image(
+      visualElement: IVisualElementDTO,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLImageLicense | undefined> {
+      const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
+      if (isNaN(imageId)) return undefined;
+      try {
+        const image = await fetchImageV3(imageId, context);
+        return convertToImageLicense(image);
+      } catch (e) {
+        return undefined;
+      }
     },
   },
 };

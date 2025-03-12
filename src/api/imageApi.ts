@@ -12,7 +12,7 @@ import {
   IImageMetaInformationV3DTO,
   ISearchResultV3DTO,
 } from "@ndla/types-backend/image-api";
-import { GQLQueryImageSearchArgs } from "../types/schema";
+import { GQLImageLicense, GQLQueryImageSearchArgs } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
 
 export async function fetchImage(imageId: string, context: Context): Promise<IImageMetaInformationV2DTO | null> {
@@ -49,5 +49,16 @@ export function convertToSimpleImage(image: IImageMetaInformationV2DTO) {
     altText: image.alttext.alttext,
     contentType: image.contentType,
     copyright: image.copyright,
+  };
+}
+
+export function convertToImageLicense(imageMeta: IImageMetaInformationV3DTO): GQLImageLicense {
+  return {
+    id: imageMeta.id,
+    title: imageMeta.title.title,
+    src: imageMeta.image.imageUrl,
+    altText: imageMeta.alttext.alttext,
+    contentType: imageMeta.image.contentType,
+    copyright: imageMeta.copyright,
   };
 }
