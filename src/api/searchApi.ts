@@ -76,8 +76,8 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
         const searchCtx = contentTypeResult.contexts.find((c) =>
           subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary,
         );
-        const path = searchCtx?.path ?? contentTypeResult.paths?.[0];
-        const url = searchCtx?.url ?? contentTypeResult.paths?.[0];
+        const path = searchCtx?.path ?? contentTypeResult.contexts?.[0]?.path;
+        const url = searchCtx?.url ?? contentTypeResult.contexts?.[0]?.url;
 
         const isLearningpath = contentTypeResult.learningResourceType === "learningpath";
         return {
