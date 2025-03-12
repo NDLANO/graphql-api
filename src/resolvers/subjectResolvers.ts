@@ -121,7 +121,11 @@ export const resolvers = {
     },
   },
   SubjectPageVisualElement: {
-    async image(visualElement: IVisualElementDTO, _: any, context: ContextWithLoaders): Promise<GQLImageLicense> {
+    async imageLicense(
+      visualElement: IVisualElementDTO,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLImageLicense> {
       const imageId = visualElement.url.split("/").pop() ?? "";
       const image = await fetchImageV3(imageId, context);
       return convertToImageLicense(image);
