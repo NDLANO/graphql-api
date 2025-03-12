@@ -154,13 +154,11 @@ export function resourceTypesLoader(context: Context): DataLoader<string, any> {
   });
 }
 
-export function searchNodesLoader(context: Context): DataLoader<string, Node | null> {
+export function searchNodesLoader(context: Context): DataLoader<string, Node[]> {
   return new DataLoader(
     async (contentUris) => {
-      const results: Array<Node | null> = (await searchNodes({ contentUris }, context)).results;
-      // Returned values in DataLoader must be same length as the number of keys, so we fill missing values with null
-      const missingValues = Array<null>(contentUris.length - results.length).fill(null);
-      return results.concat(missingValues);
+      const searchResult = await searchNodes({ contentUris }, context);
+      return contentUris.map((uri) => searchResult.results.filter((n) => n.contentUri === uri));
     },
     { maxBatchSize: 100 },
   );

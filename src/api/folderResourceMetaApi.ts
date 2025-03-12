@@ -68,7 +68,7 @@ const fetchAndTransformResourceMeta = async (
       fetchResourceMeta(nodeType, ids, context),
     ]);
     return ids.map((id) => {
-      const node = nodes.find((n) => !!n && n.contentUri === `urn:${nodeType}:${id}`);
+      const node = nodes.flatMap((x) => x).find((n) => !!n && n.contentUri === `urn:${nodeType}:${id}`);
       const element = elements.find((e) => e?.id === Number(id));
       return {
         id,
