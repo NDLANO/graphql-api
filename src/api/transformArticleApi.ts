@@ -122,13 +122,12 @@ export const transformArticle = async (
     html("body").prepend(`<section>${visualElement}</section>`);
   }
 
-  const visEl =
-    visualElement && !showVisualElement
-      ? load(`${visualElement}`, {
-          xmlMode: false,
-          decodeEntities: false,
-        })
-      : undefined;
+  const visEl = visualElement
+    ? load(`${visualElement}`, {
+        xmlMode: false,
+        decodeEntities: false,
+      })
+    : undefined;
 
   const embeds = visEl ? getEmbedsFromContent(visEl).concat(getEmbedsFromContent(html)) : getEmbedsFromContent(html);
 
