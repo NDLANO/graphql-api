@@ -58,7 +58,7 @@ export const Query = {
   ): Promise<GQLSubject[]> {
     return await context.loaders.subjectsLoader
       .load({ metadataFilter: { key: "language", value: language } })
-      .then((s) => s.subjects);
+      .then((s) => s.subjects.sort((a, b) => (a.name < b.name ? -1 : 1)));
   },
 };
 
