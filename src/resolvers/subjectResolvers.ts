@@ -121,19 +121,10 @@ export const resolvers = {
     },
   },
   SubjectPageVisualElement: {
-    async image(
-      visualElement: IVisualElementDTO,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLImageLicense | undefined> {
-      const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
-      if (isNaN(imageId)) return undefined;
-      try {
-        const image = await fetchImageV3(imageId, context);
-        return convertToImageLicense(image);
-      } catch (e) {
-        return undefined;
-      }
+    async image(visualElement: IVisualElementDTO, _: any, context: ContextWithLoaders): Promise<GQLImageLicense> {
+      const imageId = visualElement.url.split("/").pop() ?? "";
+      const image = await fetchImageV3(imageId, context);
+      return convertToImageLicense(image);
     },
   },
 };
