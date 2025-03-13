@@ -46,7 +46,10 @@ export const resolvers = {
         article.supportedLanguages?.find((lang) => lang === context.language) ??
         article.supportedLanguages?.[0] ??
         context.language;
-      const result = await grepSearch({ codes: article.grepCodes, language: language }, context);
+      const result = await grepSearch(
+        { codes: article.grepCodes.filter((code) => code.startsWith("KM")), language: language },
+        context,
+      );
       return result.results.map((hit) => {
         return {
           ...hit,
