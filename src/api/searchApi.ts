@@ -68,34 +68,22 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
   });
   const subjects = searchQuery.subjects?.split(",") || [];
   const json = await resolveJson(response);
-  return json.map((result: IGroupSearchResultDTO) => ({
-    ...result,
-    resources: result.results
-      .map((contentTypeResult) => {
-        if (contentTypeResult.typename === "NodeHitDTO") return null;
-        const searchCtx = contentTypeResult.contexts.find((c) =>
-          subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary,
-        );
-        const path = searchCtx?.path ?? contentTypeResult.contexts?.[0]?.path;
-        const url = searchCtx?.url ?? contentTypeResult.contexts?.[0]?.url;
-
-        const isLearningpath = contentTypeResult.learningResourceType === "learningpath";
+  return json.map((searchResult: IGroupSearchResultDTO) => ({
+    ...searchResult,
+    resources: searchResult.results
+      .map((result) => {
+        if (result.typename === "NodeHitDTO") return null;
+        const searchCtx = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
+        const url = searchCtx?.url ?? result.contexts?.[0]?.url;
+        const isLearningpath = result.learningResourceType === "learningpath";
         return {
-          ...contentTypeResult,
-          path:
-            path || (isLearningpath ? `/learningpaths/${contentTypeResult.id}` : `/article/${contentTypeResult.id}`),
-          url: url,
-          name: contentTypeResult.title.title,
-          title: contentTypeResult.title.title,
-          htmlTitle: contentTypeResult.title.htmlTitle,
-          ingress: contentTypeResult.metaDescription.metaDescription,
-          contexts: contentTypeResult.contexts,
-          ...(contentTypeResult.metaImage && {
-            metaImage: {
-              url: contentTypeResult.metaImage?.url,
-              alt: contentTypeResult.metaImage?.alt,
-            },
-          }),
+          ...result,
+          url: url || (isLearningpath ? `/learningpaths/${result.id}` : `/article/${result.id}`),
+          name: result.title.title,
+          title: result.title.title,
+          htmlTitle: result.title.htmlTitle,
+          ingress: result.metaDescription.metaDescription,
+          contexts: result.contexts,
         };
       })
       .filter(Boolean),
@@ -155,15 +143,18 @@ const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects:
     };
     return ret;
   }
-  const primaryContext = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
+  const searchCtx = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
+  const url = searchCtx?.url ?? result.contexts?.[0]?.url;
+  const isLearningpath = result.learningResourceType === "learningpath";
   return {
     ...result,
     id: result.id.toString(),
-    __typename: result.learningResourceType === "learningpath" ? "LearningpathSearchResult" : "ArticleSearchResult",
+    __typename: isLearningpath ? "LearningpathSearchResult" : "ArticleSearchResult",
+    url: url || (isLearningpath ? `/learningpaths/${result.id}` : `/article/${result.id}`),
     title: result.title.title,
     htmlTitle: result.title.htmlTitle,
     metaDescription: result.metaDescription?.metaDescription,
-    context: primaryContext ? { ...primaryContext } : undefined,
+    context: searchCtx ? { ...searchCtx } : undefined,
   };
 };
 
