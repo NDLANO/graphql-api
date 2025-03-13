@@ -40,7 +40,7 @@ export const Query = {
 export const resolvers = {
   Article: {
     async competenceGoals(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
-      if ((article.grepCodes ?? []).length) return [];
+      if (!(article.grepCodes ?? []).length) return [];
 
       const language =
         article.supportedLanguages?.find((lang) => lang === context.language) ??
