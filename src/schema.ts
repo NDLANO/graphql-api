@@ -809,6 +809,7 @@ export const typeDefs = gql`
     type: String!
     url: String!
     alt: String
+    imageLicense: ImageLicense
   }
 
   type SubjectPageAbout {
