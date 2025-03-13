@@ -26,7 +26,7 @@ const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
       title: node.name,
       language: language,
     },
-    url: node.url || node.path,
+    url: node.url,
     contentUri: node.contentUri,
   };
 };
@@ -120,7 +120,7 @@ export const resolvers = {
             title: child.name,
             language: context.language,
           },
-          url: child.url || child.path,
+          url: child.url,
         };
       });
     },
@@ -136,7 +136,7 @@ export const resolvers = {
             title: child.name,
             language: context.language,
           },
-          url: child.url || child.path,
+          url: child.url,
           isProgrammeSubject,
         };
       });
@@ -148,9 +148,8 @@ export const resolvers = {
       const nodes = children.map((child) => {
         // Pick the context that is the subjects own root context to avoid getting paths starting with /programme:
         const context = child.contexts.find((c) => c.rootId === child.id) || child.contexts[0];
-        const path = context?.path ?? child.path;
         const url = context?.url ?? child.url;
-        return { ...child, path, url };
+        return { ...child, url };
       });
       return nodes.map((node) => nodeToTaxonomyEntity(node, context));
     },

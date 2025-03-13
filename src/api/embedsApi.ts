@@ -189,7 +189,7 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
     { contentURI, language: context.language, includeContexts: true, filterProgrammes: true, isVisible: true },
     context,
   );
-  const node = nodes.find((n) => !!n.path);
+  const node = nodes.find((n) => !!n.context);
   const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.context;
   if (!ctx?.isVisible) {
     return { path: url };
@@ -220,12 +220,7 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
         context,
       ),
     ]);
-    let resource = resources?.[0];
-    if (resource) {
-      const path = resource?.url;
-      // TODO: for now, trick RelatedContentEmbed to use provided path
-      resource = { ...resource, path, paths: [] };
-    }
+    const resource = resources?.[0];
     return { article, resource };
   } else {
     return undefined;

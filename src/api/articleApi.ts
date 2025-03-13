@@ -12,7 +12,7 @@ import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
 import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
-import { getArticleIdFromUrn, findPrimaryPath } from "../utils/articleHelpers";
+import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 interface ArticleParams {
   articleId: string;
@@ -93,11 +93,11 @@ export async function fetchRelatedContent(
         );
         const node = nodes?.[0];
         if (node) {
-          const primaryPath = params.subjectId ? findPrimaryPath(node.paths, params.subjectId) : undefined;
-          const path = primaryPath ?? node.path;
+          const ctx = node.contexts.find((c) => c.rootId === params.subjectId) ?? node.context;
+          const url = ctx?.url ?? node.url;
           return {
             title: node.name,
-            url: `${ndlaUrl}${path}`,
+            url: `${ndlaUrl}${url}`,
           };
         } else {
           return {
