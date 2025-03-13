@@ -1251,7 +1251,9 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   name: Scalars['String']['output'];
   nodeType: Scalars['String']['output'];
   parentId?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use url */
   path?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use contexts */
   paths: Array<Scalars['String']['output']>;
   rank?: Maybe<Scalars['Int']['output']>;
   relevanceId?: Maybe<Scalars['String']['output']>;
@@ -1724,7 +1726,9 @@ export type GQLResource = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   name: Scalars['String']['output'];
   nodeType: Scalars['String']['output'];
   parents?: Maybe<Array<GQLTopic>>;
+  /** @deprecated Use url */
   path?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use contexts */
   paths: Array<Scalars['String']['output']>;
   rank?: Maybe<Scalars['Int']['output']>;
   relevanceId?: Maybe<Scalars['String']['output']>;
@@ -1865,7 +1869,9 @@ export type GQLSubject = GQLTaxBase & GQLTaxonomyEntity & {
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String']['output'];
   nodeType: Scalars['String']['output'];
+  /** @deprecated Use url */
   path?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use contexts */
   paths: Array<Scalars['String']['output']>;
   relevanceId?: Maybe<Scalars['String']['output']>;
   resourceTypes?: Maybe<Array<GQLResourceType>>;
@@ -1981,7 +1987,9 @@ export type GQLTaxonomyEntity = {
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String']['output'];
   nodeType: Scalars['String']['output'];
+  /** @deprecated Use url */
   path?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use contexts */
   paths: Array<Scalars['String']['output']>;
   relevanceId?: Maybe<Scalars['String']['output']>;
   resourceTypes?: Maybe<Array<GQLResourceType>>;
@@ -2027,7 +2035,9 @@ export type GQLTopic = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   name: Scalars['String']['output'];
   nodeType: Scalars['String']['output'];
   parentId?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use url */
   path?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use contexts */
   paths: Array<Scalars['String']['output']>;
   relevanceId?: Maybe<Scalars['String']['output']>;
   resourceTypes?: Maybe<Array<GQLResourceType>>;

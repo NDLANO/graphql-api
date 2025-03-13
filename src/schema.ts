@@ -410,8 +410,8 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
+    path: String @deprecated(reason: "Use url")
+    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contextId: String
@@ -436,8 +436,8 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
+    path: String @deprecated(reason: "Use url")
+    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contextId: String
@@ -466,8 +466,8 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
+    path: String @deprecated(reason: "Use url")
+    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -512,8 +512,8 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
+    path: String @deprecated(reason: "Use url")
+    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -891,8 +891,8 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
+    path: String @deprecated(reason: "Use url")
+    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
