@@ -84,7 +84,6 @@ export const resolvers = {
           title: crossSubjectTopic.title,
           code: crossSubjectTopic.code,
           id: crossSubjectTopic.id,
-          path: topic?.path,
           url: topic?.url,
         };
       });

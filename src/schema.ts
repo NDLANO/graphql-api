@@ -402,7 +402,6 @@ export const typeDefs = gql`
   interface TaxBase {
     id: String!
     name: String!
-    path: String
     url: String
   }
 
@@ -410,8 +409,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String @deprecated(reason: "Use url")
-    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contextId: String
@@ -436,8 +433,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String @deprecated(reason: "Use url")
-    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contextId: String
@@ -466,8 +461,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String @deprecated(reason: "Use url")
-    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -491,7 +484,6 @@ export const typeDefs = gql`
     id: String!
     contextId: String!
     name: String!
-    path: String!
     url: String!
   }
 
@@ -499,7 +491,6 @@ export const typeDefs = gql`
     contextId: String!
     breadcrumbs: [String!]!
     name: String!
-    path: String!
     url: String!
     parentIds: [String!]!
     rootId: String!
@@ -512,8 +503,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String @deprecated(reason: "Use url")
-    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -873,7 +862,6 @@ export const typeDefs = gql`
     metaImage: MetaImage
     metaDescription: String!
     resourceTypes: [ResourceType!]!
-    path: String!
     url: String!
   }
 
@@ -891,8 +879,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String @deprecated(reason: "Use url")
-    paths: [String!]! @deprecated(reason: "Use contexts")
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!

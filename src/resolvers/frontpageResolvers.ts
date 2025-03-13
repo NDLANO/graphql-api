@@ -74,10 +74,6 @@ export const resolvers = {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(id));
       return article?.metaDescription.metaDescription || "";
     },
-    async path(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
-      return nodes[0]?.path || "";
-    },
     async url(id: string, _: any, context: ContextWithLoaders): Promise<string> {
       const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
       return nodes[0]?.url || "";
