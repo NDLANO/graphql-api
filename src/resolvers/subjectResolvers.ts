@@ -125,8 +125,9 @@ export const resolvers = {
       visualElement: IVisualElementDTO,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLImageLicense> {
-      const imageId = visualElement.url.split("/").pop() ?? "";
+    ): Promise<GQLImageLicense | undefined> {
+      const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
+      if (isNaN(imageId)) return undefined;
       const image = await fetchImageV3(imageId, context);
       return convertToImageLicense(image);
     },
