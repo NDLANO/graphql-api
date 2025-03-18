@@ -10,7 +10,6 @@ import groupBy from "lodash/groupBy";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IAudioMetaInformationDTO } from "@ndla/types-backend/audio-api";
 import { IImageMetaInformationV2DTO } from "@ndla/types-backend/image-api";
-import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { ResourceType } from "@ndla/types-backend/myndla-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchAudio } from "./audioApi";
@@ -27,6 +26,8 @@ import {
   GQLQueryFolderResourceMetaSearchArgs,
 } from "../types/schema";
 import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
+import { getArticleIdFromUrn, isNDLAEmbedUrl } from "../utils/articleHelpers";
+import { fetchNode } from "./taxonomyApi";
 
 const findResourceTypes = (result: Node | null, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
   const ctx = result?.contexts?.[0];
@@ -45,9 +46,27 @@ const fetchResourceMeta = async (
 ): Promise<Array<GQLMeta | undefined>> => {
   if (type === "learningpath") {
     const learningpaths = await context.loaders.learningpathsLoader.loadMany(ids);
-    return learningpaths
-      .filter((learningpath): learningpath is ILearningPathV2DTO => !!learningpath)
-      .map(learningpathToMeta);
+    return Promise.all(
+      learningpaths
+        .filter((learningpath) => !!learningpath)
+        .map(async (learningpath) => {
+          const learningStepWithResource = learningpath.learningsteps.find(
+            (learningStep) =>
+              learningStep.embedUrl &&
+              learningStep.embedUrl.url &&
+              (learningStep.embedUrl.embedType === "oembed" || learningStep.embedUrl.embedType === "iframe") &&
+              isNDLAEmbedUrl(learningStep.embedUrl.url),
+          );
+
+          const lastResourceMatch = learningStepWithResource?.embedUrl?.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
+          const resource = lastResourceMatch ? await fetchNode({ id: `urn:${lastResourceMatch}` }, context) : undefined;
+          const article = resource?.contentUri
+            ? await context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri))
+            : undefined;
+
+          return learningpathToMeta(learningpath, article?.metaImage);
+        }),
+    );
   } else {
     const articles = await context.loaders.articlesLoader.loadMany(ids);
     return articles.filter((article): article is IArticleV2DTO => !!article).map(articleToMeta);
