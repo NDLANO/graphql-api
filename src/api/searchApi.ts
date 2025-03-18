@@ -83,6 +83,7 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
           title: result.title.title,
           htmlTitle: result.title.htmlTitle,
           ingress: result.metaDescription.metaDescription,
+          context: result.context,
           contexts: result.contexts,
         };
       })
@@ -139,6 +140,7 @@ const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects:
       metaDescription: result.subjectPage?.metaDescription.metaDescription ?? "",
       id: result.id,
       url: result.url ?? "",
+      context: result.context,
       contexts: [],
     };
     return ret;
