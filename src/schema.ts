@@ -724,6 +724,7 @@ export const typeDefs = gql`
 
   input TransformedArticleContentInput {
     subjectId: String
+    contextId: String
     isOembed: String
     showVisualElement: String
     path: String
