@@ -96,7 +96,7 @@ export const toVisualElement = (meta: Extract<EmbedMetaData, { status: "success"
 
 export const transformArticle = async (
   content: string,
-  context: Context,
+  context: ContextWithLoaders,
   visualElement: string | undefined,
   { subject, previewH5p, showVisualElement, draftConcept, absoluteUrl }: TransformArticleOptions,
 ) => {

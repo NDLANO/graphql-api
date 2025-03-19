@@ -21,7 +21,7 @@ interface ArticleParams {
 export const fetchTransformedContent = async (
   article: IArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLTransformedArticleContent> => {
   const params = _params.transformArgs ?? {};
   const subject = params.subjectId;
@@ -49,7 +49,7 @@ export const fetchTransformedContent = async (
 export const fetchTransformedDisclaimer = async (
   article: IArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLTransformedArticleContent> => {
   if (!article.disclaimer?.disclaimer) return { content: "" };
   const params = _params.transformArgs ?? {};
