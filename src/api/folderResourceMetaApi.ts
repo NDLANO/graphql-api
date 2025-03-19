@@ -26,8 +26,7 @@ import {
   GQLQueryFolderResourceMetaSearchArgs,
 } from "../types/schema";
 import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
-import { getArticleIdFromUrn, isNDLAEmbedUrl } from "../utils/articleHelpers";
-import { fetchNode } from "./taxonomyApi";
+import { isNDLAEmbedUrl } from "../utils/articleHelpers";
 
 const findResourceTypes = (result: Node | null, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
   const ctx = result?.contexts?.[0];
@@ -58,11 +57,8 @@ const fetchResourceMeta = async (
               isNDLAEmbedUrl(learningStep.embedUrl.url),
           );
 
-          const lastResourceMatch = learningStepWithResource?.embedUrl?.url.match(/(resource:[:\da-fA-F-]+)/g)?.pop();
-          const resource = lastResourceMatch ? await fetchNode({ id: `urn:${lastResourceMatch}` }, context) : undefined;
-          const article = resource?.contentUri
-            ? await context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri))
-            : undefined;
+          const articleId = learningStepWithResource?.embedUrl?.url.split("/").pop();
+          const article = articleId ? await context.loaders.articlesLoader.load(articleId) : undefined;
 
           return learningpathToMeta(learningpath, article?.metaImage);
         }),
