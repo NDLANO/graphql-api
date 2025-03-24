@@ -23,7 +23,6 @@ import {
   GQLLearningpathStep,
   GQLMyNdlaLearningpath,
   GQLMyNdlaLearningpathStep,
-  GQLMetaImage,
 } from "../types/schema";
 
 const apiBaseUrl = (() => {
@@ -184,21 +183,19 @@ export function articleToMeta(article: IArticleV2DTO): GQLMeta {
   };
 }
 
-export function learningpathToMeta(learningpath: ILearningPathV2DTO, metaImage?: GQLMetaImage): GQLMeta {
+export function learningpathToMeta(learningpath: ILearningPathV2DTO): GQLMeta {
   return {
     id: learningpath.id,
     title: learningpath.title.title,
     htmlTitle: learningpath.title.title,
     metaDescription: learningpath.description.description,
     lastUpdated: learningpath.lastUpdated,
-    metaImage:
-      metaImage ??
-      (learningpath.coverPhoto?.url
-        ? {
-            url: learningpath.coverPhoto.url,
-            alt: "",
-          }
-        : undefined),
+    metaImage: learningpath.coverPhoto?.url
+      ? {
+          url: learningpath.coverPhoto.url,
+          alt: "",
+        }
+      : undefined,
   };
 }
 
