@@ -128,8 +128,12 @@ export const resolvers = {
     ): Promise<GQLImageLicense | undefined> {
       const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
       if (isNaN(imageId)) return undefined;
-      const image = await fetchImageV3(imageId, context);
-      return convertToImageLicense(image);
+      try {
+        const image = await fetchImageV3(imageId, context);
+        return convertToImageLicense(image);
+      } catch (e) {
+        return undefined;
+      }
     },
   },
 };
