@@ -28,6 +28,24 @@ export const fetchOembedUrl = async (url: string, context: Context): Promise<Oem
   return await resolveJson(res);
 };
 
+export const getYoutubeVideoId = (url: string) => {
+  try {
+    const urlObj = new URL(url);
+    if (urlObj.hostname.includes("youtu")) {
+      let videoId;
+      if (urlObj.pathname.startsWith("/watch")) {
+        videoId = urlObj.searchParams.get("v");
+      } else {
+        videoId = urlObj.pathname.split("/")?.[1]?.split("?")[0];
+      }
+      return videoId ?? "";
+    }
+  } catch (_) {
+    // No url
+  }
+  return "";
+};
+
 export const fetchOpengraph = async (url: string): Promise<GQLExternalOpengraph | null> => {
   if (!url.includes("youtu")) {
     const ogs = await openGraph({ url });
@@ -42,7 +60,7 @@ export const fetchOpengraph = async (url: string): Promise<GQLExternalOpengraph 
       url: ogs.result.ogUrl,
     };
   } else {
-    const videoId = url.split("/")[3]?.split("?")[0] ?? "";
+    const videoId = getYoutubeVideoId(url);
     const yt_metadata = await youtube({
       version: "v3",
       auth: googleApiKey,
