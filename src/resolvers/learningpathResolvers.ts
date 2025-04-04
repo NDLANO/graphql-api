@@ -130,21 +130,45 @@ const getOpengraph = async (learningpathStep: GQLLearningpathStep): Promise<GQLE
   return fetchOpengraph(learningpathStep.embedUrl.url);
 };
 
+const getCoverphoto = async (
+  learningpath: GQLLearningpath,
+  _: any,
+  context: ContextWithLoaders,
+): Promise<GQLLearningpathCoverphoto | undefined> => {
+  let url: string | undefined;
+  const imageId = learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "";
+  if (imageId) {
+    const image = await fetchImageV3(imageId, context);
+    url = image.image.imageUrl;
+  } else {
+    const learningStepWithResource = learningpath.learningsteps.find(
+      (learningStep) =>
+        learningStep.embedUrl &&
+        learningStep.embedUrl.url &&
+        (learningStep.embedUrl.embedType === "oembed" || learningStep.embedUrl.embedType === "iframe") &&
+        isNDLAEmbedUrl(learningStep.embedUrl.url),
+    );
+    const articleId = learningStepWithResource?.embedUrl?.url.split("/").pop();
+    const article = articleId ? await context.loaders.articlesLoader.load(articleId) : undefined;
+    const imageId = article?.metaImage?.url.split("/").pop();
+    const image = imageId ? await fetchImageV3(imageId, context) : undefined;
+    url = image?.metaUrl;
+  }
+
+  return url
+    ? {
+        metaUrl: learningpath.coverphoto?.metaUrl ?? "",
+        url,
+      }
+    : undefined;
+};
+
 export const resolvers = {
   Learningpath: {
-    async coverphoto(
-      learningpath: GQLLearningpath,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLLearningpathCoverphoto | undefined> {
-      if (!learningpath.coverphoto) return undefined;
-      const imageId = learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "";
-      const image = await fetchImageV3(imageId, context);
-      return {
-        ...learningpath.coverphoto,
-        url: image.image?.imageUrl,
-      };
-    },
+    coverphoto: getCoverphoto,
+  },
+  MyNdlaLearningpath: {
+    coverphoto: getCoverphoto,
   },
   LearningpathStep: {
     oembed: getOembed,
