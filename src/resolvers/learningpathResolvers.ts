@@ -150,7 +150,9 @@ const getCoverphoto = async (
     );
     const articleId = learningStepWithResource?.embedUrl?.url.split("/").pop();
     const article = articleId ? await context.loaders.articlesLoader.load(articleId) : undefined;
-    url = article?.metaImage?.url;
+    const imageId = article?.metaImage?.url.split("/").pop();
+    const image = imageId ? await fetchImageV3(imageId, context) : undefined;
+    url = image?.metaUrl;
   }
 
   return url
