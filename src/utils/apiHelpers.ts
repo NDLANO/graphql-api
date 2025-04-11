@@ -14,6 +14,8 @@ import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
 import { createCache } from "../cache";
 import { apiUrl, defaultLanguage } from "../config";
+import createClient, { Client, FetchResponse, Middleware } from "openapi-fetch";
+import type { MediaType } from "openapi-typescript-helpers";
 import {
   GQLMeta,
   GQLTaxonomyEntity,
@@ -24,6 +26,9 @@ import {
   GQLMyNdlaLearningpath,
   GQLMyNdlaLearningpathStep,
 } from "../types/schema";
+import { getContext, getContextOrThrow } from "./contextMiddleware";
+import { getCorrelationId } from "./correlationIdMiddleware";
+import getLogger from "./logger";
 
 const apiBaseUrl = (() => {
   // if (process.env.NODE_ENV === 'test') {
@@ -39,34 +44,121 @@ function apiResourceUrl(path: string): string {
   return apiBaseUrl + path;
 }
 
+function buildErrorPayload(status: number, messages: string, json: any): Error {
+  return Object.assign({}, { status, json, messages }, new Error(""));
+}
+
+export const resolveOATS = async <A extends Record<string | number, any>, B, C extends MediaType>(
+  res: FetchResponse<A, B, C>,
+) => {
+  const { data, response, error } = res;
+  if (response.ok) return data;
+  const messages = getErrorMessages(error) ?? response.statusText;
+  throw buildErrorPayload(response.status, messages, error);
+};
+
+/** Resolves a response from OpenApi-TS fetch client and asserts that the response is successful */
+export const resolveJsonOATS = async <A extends Record<string | number, any>, B, C extends MediaType>(
+  res: FetchResponse<A, B, C>,
+) => {
+  const { data, response, error } = res;
+  if (response.ok && data) return data;
+  const messages = getErrorMessages(error) ?? response.statusText;
+  throw buildErrorPayload(response.status, messages, error);
+};
+
+const getErrorMessages = (err: unknown): string | undefined => {
+  if (!err || typeof err !== "object") return;
+  if ("messages" in err && typeof err.messages === "string") return err.messages;
+  if ("description" in err && typeof err.description === "string") return err.description;
+  return;
+};
+
+/** openapi-fetch middleware to add authentication headers */
+export const OATSAuthMiddleware: Middleware = {
+  async onRequest({ request, options: _options }) {
+    request.headers.set("x-correlation-id", getCorrelationId() ?? "");
+    return request;
+  },
+};
+
+export const createAuthClient = <T extends {}>() => {
+  const client = createClient<T>({
+    baseUrl: apiBaseUrl,
+    fetch: openapiFetch,
+    querySerializer: {
+      array: {
+        style: "form",
+        explode: false,
+      },
+    },
+  });
+
+  client.use(OATSAuthMiddleware);
+
+  return client;
+};
+
 const cache = createCache();
 
-async function fetchHelper(path: string, context: Context, options?: RequestOptions): Promise<Response> {
+function getHeadersFromContext(context: Context): {
+  "Cache-Control"?: string | undefined;
+  Authorization?: string | undefined;
+  versionhash?: string | undefined;
+  feideAuthorization?: string | undefined;
+} {
+  const accessTokenAuth = context.token ? { Authorization: `Bearer ${context.token.access_token}` } : null;
+  const feideAuthorization = context.feideAuthorization ? { feideAuthorization: context.feideAuthorization } : null;
+  const versionHash = context.versionHash ? { versionhash: context.versionHash } : null;
+  const cacheHeaders = !context.shouldUseCache ? { "Cache-Control": "no-cache" } : null;
+
+  return {
+    ...feideAuthorization,
+    ...versionHash,
+    ...accessTokenAuth,
+    ...cacheHeaders,
+  };
+}
+
+async function openapiFetch(req: globalThis.Request): Promise<globalThis.Response> {
+  const startTime = performance.now();
+  const slowLogTimeout = 500;
+
+  const ctx = getContextOrThrow();
+  const headers = getHeadersFromContext(ctx);
+
+  for (const [key, value] of Object.entries(headers)) {
+    if (value !== undefined && value !== null) req.headers.set(key, value);
+  }
+
+  const response = await globalThis.fetch(req);
+
+  const elapsedTime = performance.now() - startTime;
+  if (elapsedTime > slowLogTimeout) {
+    getLogger().info(
+      `Fetching '${req.url}' took ${elapsedTime.toFixed(
+        2,
+      )}ms which is slower than slow log timeout of ${slowLogTimeout}ms`,
+    );
+  }
+
+  return response;
+}
+
+export async function fetch(path: string, context: Context, options?: RequestOptions): Promise<Response> {
   const fetchFn = createFetch({
     cache,
     disableCache: !context.shouldUseCache,
     context,
   });
 
-  const accessTokenAuth = context.token ? { Authorization: `Bearer ${context.token.access_token}` } : null;
-  const feideAuthorization = context.feideAuthorization ? { feideAuthorization: context.feideAuthorization } : null;
-  const versionHash = context.versionHash ? { versionhash: context.versionHash } : null;
-  const cacheHeaders = !context.shouldUseCache ? { "Cache-Control": "no-cache" } : null;
-
-  const headers = {
-    ...feideAuthorization,
-    ...versionHash,
-    ...accessTokenAuth,
-    ...cacheHeaders,
-  };
+  const headers = getHeadersFromContext(context);
 
   return fetchFn(apiResourceUrl(path), context, {
     headers,
     ...options,
   });
 }
-
-export const fetch = fetchHelper;
 
 export async function resolveNothingFromStatus(response: Response): Promise<void> {
   const { status, ok, url, statusText } = response;

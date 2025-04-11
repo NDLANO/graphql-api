@@ -6,17 +6,19 @@
  *
  */
 
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
+import { IArticleV2DTO, openapi } from "@ndla/types-backend/article-api";
 import { queryNodes } from "./taxonomyApi";
 import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
 import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { createAuthClient, fetch, resolveJson, resolveJsonOATS } from "../utils/apiHelpers";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 interface ArticleParams {
   articleId: string;
 }
+
+const client = createAuthClient<openapi.paths>();
 
 export const fetchTransformedContent = async (
   article: IArticleV2DTO,
