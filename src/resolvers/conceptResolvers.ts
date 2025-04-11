@@ -30,17 +30,6 @@ export const resolvers = {
       }
       return null;
     },
-    async image(concept: IConceptDTO, _: any, context: ContextWithLoaders) {
-      const metaImageId = concept.metaImage?.url?.split("/").pop();
-      if (metaImageId) {
-        const image = await fetchImage(metaImageId, context);
-        if (!image) {
-          return undefined;
-        }
-        return convertToSimpleImage(image);
-      }
-      return undefined;
-    },
     async articles(_: IConceptDTO, __: any, ___: ContextWithLoaders): Promise<GQLMeta[]> {
       return [];
     },

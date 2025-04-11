@@ -200,7 +200,6 @@ const fetchConceptsMeta = async (
   return results.map((c) => ({
     id: c.id.toString(),
     description: c.content.content,
-    metaImage: c.metaImage,
     title: c.title.title,
     resourceTypes: [{ id: "concept", name: "concept" }],
     type,
