@@ -12,9 +12,9 @@ import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ILearningPathV2DTO, ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
 import createFetch from "./fetch";
-import { createCache } from "../cache";
+import { createCache, setHeaderIfShouldNotCache } from "../cache";
 import { apiUrl, defaultLanguage } from "../config";
-import createClient, { Client, FetchResponse, Middleware } from "openapi-fetch";
+import createClient, { FetchResponse, Middleware } from "openapi-fetch";
 import type { MediaType } from "openapi-typescript-helpers";
 import {
   GQLMeta,
@@ -27,7 +27,6 @@ import {
   GQLMyNdlaLearningpathStep,
 } from "../types/schema";
 import { getContext, getContextOrThrow } from "./contextMiddleware";
-import { getCorrelationId } from "./correlationIdMiddleware";
 import getLogger from "./logger";
 
 const apiBaseUrl = (() => {
@@ -74,11 +73,16 @@ const getErrorMessages = (err: unknown): string | undefined => {
   return;
 };
 
-/** openapi-fetch middleware to add authentication headers */
-export const OATSAuthMiddleware: Middleware = {
-  async onRequest({ request, options: _options }) {
-    request.headers.set("x-correlation-id", getCorrelationId() ?? "");
+export const OATSCacheMiddleware: Middleware = {
+  onRequest({ request }) {
     return request;
+  },
+  onResponse({ response }) {
+    const ctx = getContextOrThrow();
+    const shouldCache = setHeaderIfShouldNotCache(response, ctx);
+    console.log({ ctx: ctx.shouldUseCache });
+
+    return response;
   },
 };
 
@@ -94,7 +98,8 @@ export const createAuthClient = <T extends {}>() => {
     },
   });
 
-  client.use(OATSAuthMiddleware);
+  // TODO: Write middleware to convert external urls to internal urls when running in environments
+  client.use(OATSCacheMiddleware);
 
   return client;
 };

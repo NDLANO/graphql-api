@@ -169,10 +169,18 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
 }
 
 export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2DTO> {
-  const articleId = getArticleIdFromUrn(articleUrn);
-  const response = await fetch(
-    `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,
-    context,
-  );
-  return await resolveJson(response);
+  return await client
+    .GET("/article-api/v2/articles/{article_id}", {
+      params: {
+        path: {
+          article_id: getArticleIdFromUrn(articleUrn),
+        },
+        query: {
+          language: context.language,
+          license: "all",
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }

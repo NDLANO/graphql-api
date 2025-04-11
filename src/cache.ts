@@ -44,7 +44,7 @@ const getCacheStrictness = (cacheControlValue: string | number | string[] | unde
 };
 
 /** Returns `true` if the response can be cached, and `false` if the result shouldn't be cached. */
-export const setHeaderIfShouldNotCache = (response: Response, context: Context): boolean => {
+export const setHeaderIfShouldNotCache = (response: globalThis.Response, context: Context): boolean => {
   const { res } = context;
 
   const cacheControlResponse = response.headers.get("cache-control")?.toLowerCase();
