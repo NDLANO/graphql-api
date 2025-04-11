@@ -8,6 +8,7 @@
 
 import queryString from "query-string";
 import {
+  openapi,
   IGrepSearchInputDTO,
   IGrepSearchResultsDTO,
   IGroupSearchResultDTO,

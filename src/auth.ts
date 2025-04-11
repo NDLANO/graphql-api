@@ -9,7 +9,7 @@
 import { Request } from "express";
 import isString from "lodash/isString";
 
-export async function getToken(request: Request): Promise<AuthToken | undefined> {
+export function getToken(request: Request): AuthToken | undefined {
   const authorization = request.headers.authorization;
 
   if (isString(authorization)) {
