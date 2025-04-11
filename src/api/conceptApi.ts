@@ -6,30 +6,54 @@
  *
  */
 
-import queryString from "query-string";
-import { IConceptSearchResultDTO, IConceptDTO } from "@ndla/types-backend/concept-api";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { IConceptSearchResultDTO, IConceptDTO, openapi } from "@ndla/types-backend/concept-api";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+
+const client = createAuthClient<openapi.paths>();
+
+const getNumberId = (conceptId: number | string): number => {
+  if (typeof conceptId === "string") {
+    const numberId = parseInt(conceptId);
+    if (isNaN(numberId)) {
+      throw new Error(`Invalid conceptId: ${conceptId}`);
+    }
+    return numberId;
+  }
+  return conceptId;
+};
 
 export async function searchConcepts(
   params: {
     ids?: number[];
   },
-  context: Context,
+  _context: Context,
 ): Promise<IConceptSearchResultDTO> {
-  const idsString = params.ids?.join(",");
-  const query = {
-    ids: idsString,
-    sort: "title",
-  };
-  const response = await fetch(`/concept-api/v1/concepts?${queryString.stringify(query)}`, context);
-  const conceptResult: IConceptSearchResultDTO = await resolveJson(response);
-  return conceptResult;
+  return client
+    .GET("/concept-api/v1/concepts", {
+      params: {
+        query: {
+          ids: params.ids,
+          sort: "title",
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchConcept(id: string | number, context: Context): Promise<IConceptDTO | undefined> {
-  const response = await fetch(`/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`, context);
+  const response = await client.GET("/concept-api/v1/concepts/{concept_id}", {
+    params: {
+      path: {
+        concept_id: getNumberId(id),
+      },
+      query: {
+        language: context.language,
+        fallback: true,
+      },
+    },
+  });
   try {
-    const concept: IConceptDTO = await resolveJson(response);
+    const concept: IConceptDTO = await resolveJsonOATS(response);
     return concept;
   } catch (e) {
     return undefined;
@@ -37,9 +61,16 @@ export async function fetchConcept(id: string | number, context: Context): Promi
 }
 
 export const fetchEmbedConcept = async (id: string, context: Context, draftConcept: boolean): Promise<IConceptDTO> => {
-  const endpoint = draftConcept ? "drafts" : "concepts";
-  const url = `/concept-api/v1/${endpoint}/${id}?language=${context.language}&fallback=true`;
-  const res = await fetch(url, context);
-  const resolved: IConceptDTO = await resolveJson(res);
-  return resolved;
+  const options = {
+    params: {
+      path: { concept_id: getNumberId(id) },
+      query: { language: context.language, fallback: true },
+    },
+  };
+
+  if (draftConcept) {
+    return client.GET("/concept-api/v1/drafts/{concept_id}", options).then(resolveJsonOATS);
+  } else {
+    return client.GET("/concept-api/v1/concepts/{concept_id}", options).then(resolveJsonOATS);
+  }
 };

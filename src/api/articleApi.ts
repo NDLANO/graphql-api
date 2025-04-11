@@ -11,7 +11,7 @@ import { queryNodes } from "./taxonomyApi";
 import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
 import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
-import { createAuthClient, fetch, resolveJson, resolveJsonOATS } from "../utils/apiHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 interface ArticleParams {
@@ -136,22 +136,30 @@ export async function fetchArticle(params: ArticleParams, context: Context): Pro
 }
 
 export async function fetchArticlesPage(
-  articleIds: string[],
+  articleIds: number[],
   context: Context,
   pageSize: number,
   page: number,
 ): Promise<IArticleV2DTO[]> {
-  return fetch(
-    `/article-api/v2/articles/ids?ids=${articleIds.join(",")}&language=${
-      context.language
-    }&page-size=${pageSize}&page=${page}&license=all&fallback=true`,
-    context,
-  ).then((res) => res.json());
+  return client
+    .GET("/article-api/v2/articles/ids", {
+      params: {
+        query: {
+          ids: articleIds,
+          language: context.language,
+          "page-size": pageSize,
+          page,
+          license: "all",
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchArticles(articleIds: string[], context: Context): Promise<(IArticleV2DTO | undefined)[]> {
   const pageSize = 100;
-  const ids = articleIds.filter((id) => id && id !== "undefined");
+  const ids = articleIds.map(parseInt).filter((id) => isNaN(id) === false);
   const numberOfPages = Math.ceil(ids.length / pageSize);
 
   const requests = [];
@@ -169,10 +177,18 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
 }
 
 export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2DTO> {
-  const articleId = getArticleIdFromUrn(articleUrn);
-  const response = await fetch(
-    `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,
-    context,
-  );
-  return await resolveJson(response);
+  return await client
+    .GET("/article-api/v2/articles/{article_id}", {
+      params: {
+        path: {
+          article_id: getArticleIdFromUrn(articleUrn),
+        },
+        query: {
+          language: context.language,
+          license: "all",
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }

@@ -10,7 +10,8 @@ import { Response } from "node-fetch";
 import qs from "query-string";
 import { Node, NodeChild, TaxonomyContext, Version, SearchResult } from "@ndla/types-taxonomy";
 import { GQLResourceType, GQLResourceTypeDefinition, GQLSubject, GQLTopic } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { resolveJson } from "../utils/apiHelpers";
+import { fetch } from "../utils/fetch";
 
 async function taxonomyFetch(path: string, context: Context, options?: RequestOptions): Promise<Response> {
   return fetch(path, context, { ...options, useTaxonomyCache: true });

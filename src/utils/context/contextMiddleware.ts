@@ -6,7 +6,7 @@
  *
  */
 
-import { getToken } from "../auth";
+import { getToken } from "../../auth";
 import {
   articlesLoader,
   subjectTopicsLoader,
@@ -18,11 +18,11 @@ import {
   nodeLoader,
   nodesLoader,
   searchNodesLoader,
-} from "../loaders";
+} from "../../loaders";
 import isString from "lodash/isString";
-import { defaultLanguage } from "../config";
+import { defaultLanguage } from "../../config";
 import { NextFunction, Request, Response } from "express";
-import { AsyncLocalStorage } from "node:async_hooks";
+import { getAsyncContextStorage } from "./contextStore";
 
 function getShouldUseCache(request: Request): boolean {
   const cacheControl = request.headers["cache-control"]?.toLowerCase();
@@ -66,8 +66,6 @@ function getFeideAuthorization(request: Request): string | undefined {
   return getHeaderString(request, "feideauthorization");
 }
 
-const asyncContextStorage = new AsyncLocalStorage<ContextWithLoaders>();
-
 export function contextExpressMiddleware(req: Request, res: Response, next: NextFunction): void {
   const token = getToken(req);
   const feideAuthorization = getFeideAuthorization(req);
@@ -103,18 +101,7 @@ export function contextExpressMiddleware(req: Request, res: Response, next: Next
     },
   };
 
-  asyncContextStorage.run(contextObject, () => {
+  getAsyncContextStorage().run(contextObject, () => {
     next();
   });
-}
-
-export function getContextOrThrow(): ContextWithLoaders {
-  const ctx = getContext();
-  if (ctx === undefined)
-    throw Error("Could not get context in `getContextOrThow`, did you remember to attach `contextExpressMiddleware`?");
-  return ctx;
-}
-
-export function getContext(): ContextWithLoaders | undefined {
-  return asyncContextStorage.getStore();
 }

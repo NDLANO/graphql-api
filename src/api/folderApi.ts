@@ -13,6 +13,9 @@ import {
   IFolderDataDTO,
   IResourceDTO,
   IUserFolderDTO,
+  ResourceType,
+  openapi,
+  FolderStatus,
 } from "@ndla/types-backend/myndla-api";
 import {
   GQLMutationAddFolderArgs,
@@ -34,7 +37,9 @@ import {
   GQLQueryFoldersArgs,
   GQLSortResult,
 } from "../types/schema";
-import { fetch, resolveJson, resolveNothingFromStatus } from "../utils/apiHelpers";
+import { createAuthClient, resolveJsonOATS, resolveOATS } from "../utils/openapi-fetch/utils";
+
+const client = createAuthClient<openapi.paths>({ disableCache: true });
 
 interface QueryParamsType {
   [key: string]: any;
@@ -47,140 +52,145 @@ export const queryString = (params: QueryParamsType) => {
 
 export async function fetchFolders(
   { includeResources, includeSubfolders }: GQLQueryFoldersArgs,
-  context: Context,
+  _context: Context,
 ): Promise<IUserFolderDTO> {
-  const params = queryString({
-    "include-resources": includeResources,
-    "include-subfolders": includeSubfolders,
-  });
-  const response = await fetch(`/myndla-api/v1/folders${params}`, {
-    ...context,
-    shouldUseCache: false,
-  });
-  const resolved = await resolveJson(response);
-  return resolved;
+  return client
+    .GET("/myndla-api/v1/folders", {
+      params: {
+        query: {
+          "include-resources": includeResources,
+          "include-subfolders": includeSubfolders,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchFolder(
   { id, includeResources, includeSubfolders }: GQLQueryFolderArgs,
-  context: Context,
+  _context: Context,
 ): Promise<IFolderDataDTO> {
-  const params = queryString({ includeResources, includeSubfolders });
-  const response = await fetch(`/myndla-api/v1/folders/${id}${params}`, {
-    ...context,
-    shouldUseCache: false,
-  });
-  return await resolveJson(response);
+  return client
+    .GET("/myndla-api/v1/folders/{folder-id}", {
+      params: {
+        path: {
+          "folder-id": id,
+        },
+        query: {
+          "include-resources": includeResources,
+          "include-subfolders": includeSubfolders,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
-export async function fetchSharedFolder(
-  { id, includeResources, includeSubfolders }: GQLQueryFolderArgs,
-  context: Context,
-): Promise<IFolderDataDTO> {
-  const params = queryString({ includeResources, includeSubfolders });
-  const response = await fetch(`/myndla-api/v1/folders/shared/${id}${params}`, {
-    ...context,
-    shouldUseCache: false,
-  });
-  return await resolveJson(response);
+export async function fetchSharedFolder({ id }: GQLQueryFolderArgs, _context: Context): Promise<IFolderDataDTO> {
+  return client
+    .GET("/myndla-api/v1/folders/shared/{folder-id}", {
+      params: { path: { "folder-id": id } },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchAllFolderResources(
   { size }: GQLQueryAllFolderResourcesArgs,
-  context: Context,
+  _context: Context,
 ): Promise<IResourceDTO[]> {
-  const params = queryString({ size });
-  const response = await fetch(`/myndla-api/v1/folders/resources/${params}`, {
-    ...context,
-    shouldUseCache: false,
-  });
-  const resolved = await resolveJson(response);
-  return resolved;
+  return client.GET("/myndla-api/v1/folders/resources", { params: { query: { size } } }).then(resolveJsonOATS);
 }
 
 export async function postFolder(
   { name, parentId, status, description }: GQLMutationAddFolderArgs,
-  context: Context,
+  _context: Context,
 ): Promise<IFolderDTO> {
-  const response = await fetch(`/myndla-api/v1/folders`, context, {
-    method: "POST",
-    body: JSON.stringify({ name, parentId, status, description }),
-  });
-  const folder = await resolveJson(response);
-  return folder;
+  const body = {
+    name,
+    parentId,
+    status,
+    description,
+  };
+
+  return client.POST("/myndla-api/v1/folders", { body }).then(resolveJsonOATS);
 }
 
 export async function patchFolder(
   { id, name, status, description }: GQLMutationUpdateFolderArgs,
-  context: Context,
+  _context: Context,
 ): Promise<IFolderDTO> {
-  const response = await fetch(`/myndla-api/v1/folders/${id}`, context, {
-    method: "PATCH",
-    body: JSON.stringify({ name, status, description }),
-  });
-  const folder = await resolveJson(response);
-  return folder;
+  return client
+    .PATCH("/myndla-api/v1/folders/{folder-id}", {
+      params: { path: { "folder-id": id } },
+      body: { name, status, description },
+    })
+    .then(resolveJsonOATS);
 }
 
-export async function deleteFolder({ id }: GQLMutationDeleteFolderArgs, context: Context): Promise<string> {
-  await fetch(`/myndla-api/v1/folders/${id}`, context, {
-    method: "DELETE",
-  });
-  return id;
+export async function deleteFolder({ id }: GQLMutationDeleteFolderArgs, _context: Context): Promise<string> {
+  return client
+    .DELETE("/myndla-api/v1/folders/{folder-id}", {
+      params: { path: { "folder-id": id } },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function postFolderResource(
   { folderId, resourceType, path, tags, resourceId }: GQLMutationAddFolderResourceArgs,
-  context: Context,
+  _context: Context,
 ): Promise<IResourceDTO> {
-  const response = await fetch(`/myndla-api/v1/folders/${folderId}/resources/`, context, {
-    method: "POST",
-    body: JSON.stringify({ resourceType, path, tags, resourceId }),
-  });
-
-  return await resolveJson(response);
+  return client
+    .POST("/myndla-api/v1/folders/{folder-id}/resources", {
+      params: { path: { "folder-id": folderId } },
+      body: {
+        resourceType: resourceType as ResourceType,
+        path,
+        tags,
+        resourceId,
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function patchFolderResource(
   { id, tags }: GQLMutationUpdateFolderResourceArgs,
-  context: Context,
+  _context: Context,
 ): Promise<IResourceDTO> {
-  const response = await fetch(`/myndla-api/v1/folders/resources/${id}`, context, {
-    method: "PATCH",
-    body: JSON.stringify({ tags }),
-  });
-
-  return await resolveJson(response);
+  return client
+    .PATCH("/myndla-api/v1/folders/resources/{resource-id}", {
+      params: { path: { "resource-id": id } },
+      body: { tags },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function deleteFolderResource(
   { folderId, resourceId }: GQLMutationDeleteFolderResourceArgs,
-  context: Context,
+  _context: Context,
 ): Promise<string> {
-  await fetch(`/myndla-api/v1/folders/${folderId}/resources/${resourceId}`, context, {
-    method: "DELETE",
-  });
-  return resourceId;
+  return client
+    .DELETE("/myndla-api/v1/folders/{folder-id}/resources/{resource-id}", {
+      params: {
+        path: {
+          "folder-id": folderId,
+          "resource-id": resourceId,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
-export async function deletePersonalData(context: Context): Promise<boolean> {
+export async function deletePersonalData(_context: Context): Promise<boolean> {
   try {
-    await fetch("/myndla-api/v1/users/delete-personal-data/", context, {
-      method: "DELETE",
-    });
+    await client.DELETE("/myndla-api/v1/users/delete-personal-data", {});
     return true;
   } catch (e) {
     return false;
   }
 }
 
-export async function getPersonalData(context: Context): Promise<IMyNDLAUserDTO | undefined> {
+export async function getPersonalData(_context: Context): Promise<IMyNDLAUserDTO | undefined> {
   try {
-    const response = await fetch(`/myndla-api/v1/users/`, {
-      ...context,
-      shouldUseCache: false,
-    });
-    return await resolveJson(response);
+    return client.GET("/myndla-api/v1/users", {}).then(resolveJsonOATS);
   } catch (e) {
     return undefined;
   }
@@ -188,90 +198,120 @@ export async function getPersonalData(context: Context): Promise<IMyNDLAUserDTO 
 
 export async function patchPersonalData(
   userData: GQLMutationUpdatePersonalDataArgs,
-  context: Context,
+  _context: Context,
 ): Promise<IMyNDLAUserDTO> {
-  const response = await fetch(`/myndla-api/v1/users/`, context, {
-    method: "PATCH",
-    body: JSON.stringify(userData),
-  });
-  return await resolveJson(response);
+  return client
+    .PATCH("/myndla-api/v1/users", {
+      body: userData,
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function sortFolders(
   { parentId, sortedIds }: GQLMutationSortFoldersArgs,
-  context: Context,
+  _context: Context,
 ): Promise<GQLSortResult> {
-  const query = queryString({
-    "folder-id": parentId,
-  });
+  await client
+    .PUT("/myndla-api/v1/folders/sort-subfolders", {
+      params: {
+        query: {
+          "folder-id": parentId,
+        },
+      },
+      body: { sortedIds },
+    })
+    .then(resolveOATS);
 
-  const response = await fetch(`/myndla-api/v1/folders/sort-subfolders${query}`, context, {
-    method: "PUT",
-    body: JSON.stringify({ sortedIds }),
-  });
-  await resolveNothingFromStatus(response);
   return { parentId, sortedIds };
 }
 
 export async function sortResources(
   { parentId, sortedIds }: GQLMutationSortResourcesArgs,
-  context: Context,
+  _context: Context,
 ): Promise<GQLSortResult> {
-  const response = await fetch(`/myndla-api/v1/folders/sort-resources/${parentId}`, context, {
-    method: "PUT",
-    body: JSON.stringify({ sortedIds }),
-  });
-  await resolveNothingFromStatus(response);
+  await client
+    .PUT("/myndla-api/v1/folders/sort-resources/{folder-id}", {
+      params: { path: { "folder-id": parentId } },
+      body: { sortedIds },
+    })
+    .then(resolveOATS);
   return { parentId, sortedIds };
 }
 
 export async function sortSavedSharedFolders(
   { sortedIds }: GQLMutationSortSavedSharedFoldersArgs,
-  context: Context,
+  _context: Context,
 ): Promise<GQLSortResult> {
-  const response = await fetch(`/myndla-api/v1/folders/sort-saved/`, context, {
-    method: "PUT",
-    body: JSON.stringify({ sortedIds }),
-  });
-  await resolveNothingFromStatus(response);
+  await client
+    .PUT("/myndla-api/v1/folders/sort-saved", {
+      body: { sortedIds },
+    })
+    .then(resolveOATS);
+
   return { sortedIds };
 }
 
 export async function updateFolderStatus(
   { folderId, status }: GQLMutationUpdateFolderStatusArgs,
-  context: Context,
+  _context: Context,
 ): Promise<string[]> {
-  const params = queryString({ "folder-status": status });
-  const response = await fetch(`/myndla-api/v1/folders/shared/${folderId}${params}`, context, {
-    method: "PATCH",
-  });
-
-  return await resolveJson(response);
+  return client
+    .PATCH("/myndla-api/v1/folders/shared/{folder-id}", {
+      params: {
+        path: {
+          "folder-id": folderId,
+        },
+        query: {
+          "folder-status": status as FolderStatus,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function copySharedFolder(
   { folderId, destinationFolderId }: GQLMutationCopySharedFolderArgs,
-  context: Context,
+  _context: Context,
 ) {
-  const params = queryString({ "destination-folder-id": destinationFolderId });
-  const response = await fetch(`/myndla-api/v1/folders/clone/${folderId}${params}`, context, { method: "POST" });
-  return await resolveJson(response);
+  return client
+    .POST("/myndla-api/v1/folders/clone/{source-folder-id}", {
+      params: {
+        path: {
+          "source-folder-id": folderId,
+        },
+        query: {
+          "destination-folder-id": destinationFolderId,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function favoriteSharedFolder(
   { folderId }: GQLMutationFavoriteSharedFolderArgs,
-  context: Context,
+  _context: Context,
 ): Promise<string> {
-  const response = await fetch(`/myndla-api/v1/folders/shared/${folderId}/save`, context, { method: "POST" });
-  await resolveNothingFromStatus(response);
+  await client
+    .POST("/myndla-api/v1/folders/shared/{folder-id}/save", {
+      params: {
+        path: {
+          "folder-id": folderId,
+        },
+      },
+    })
+    .then(resolveOATS);
+
   return folderId;
 }
 
 export async function unFavoriteSharedFolder(
   { folderId }: GQLMutationUnFavoriteSharedFolderArgs,
-  context: Context,
+  _context: Context,
 ): Promise<string> {
-  const response = await fetch(`/myndla-api/v1/folders/shared/${folderId}/save`, context, { method: "DELETE" });
-  await resolveNothingFromStatus(response);
+  await client
+    .DELETE("/myndla-api/v1/folders/shared/{folder-id}/save", {
+      params: { path: { "folder-id": folderId } },
+    })
+    .then(resolveOATS);
   return folderId;
 }

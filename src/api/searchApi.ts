@@ -6,20 +6,18 @@
  *
  */
 
-import queryString from "query-string";
 import {
   openapi,
   IGrepSearchInputDTO,
   IGrepSearchResultsDTO,
-  IGroupSearchResultDTO,
   IMultiSearchSummaryDTO,
   INodeHitDTO,
+  MultiSearchResultDTO,
 } from "@ndla/types-backend/search-api";
 import {
   GQLCompetenceGoal,
   GQLCoreElement,
   GQLElement,
-  GQLGroupSearch,
   GQLNodeSearchResult,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
@@ -28,100 +26,87 @@ import {
   GQLSearchResultUnion,
   GQLSearchWithoutPagination,
 } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-export async function search(searchQuery: GQLQuerySearchArgs, context: Context): Promise<GQLSearch> {
-  const query = {
+const client = createAuthClient<openapi.paths>();
+
+function commaSeparatedStringToArray(input: string | string[] | undefined): string[] | undefined {
+  if (!input) return;
+  if (Array.isArray(input)) return input;
+  return input.split(",").map((s) => s.trim());
+}
+
+const convertQuery = (searchQuery: GQLQuerySearchArgs) => {
+  return {
     ...searchQuery,
     "page-size": searchQuery.pageSize,
-    "context-types": searchQuery.contextTypes,
-    "result-types": searchQuery.resultTypes,
-    "node-types": searchQuery.nodeTypes,
-    "resource-types": searchQuery.resourceTypes,
-    "language-filter": searchQuery.languageFilter,
-    "grep-codes": searchQuery.grepCodes,
-    "aggregate-paths": searchQuery.aggregatePaths,
+    "context-types": commaSeparatedStringToArray(searchQuery.contextTypes),
+    "result-types": commaSeparatedStringToArray(searchQuery.resultTypes),
+    "node-types": commaSeparatedStringToArray(searchQuery.nodeTypes),
+    "resource-types": commaSeparatedStringToArray(searchQuery.resourceTypes),
+    "language-filter": commaSeparatedStringToArray(searchQuery.languageFilter),
+    "grep-codes": commaSeparatedStringToArray(searchQuery.grepCodes),
+    "aggregate-paths": commaSeparatedStringToArray(searchQuery.aggregatePaths),
     "filter-inactive": searchQuery.filterInactive,
+    fallback: searchQuery.fallback === "true",
+    subjects: commaSeparatedStringToArray(searchQuery.subjects),
+    relevance: commaSeparatedStringToArray(searchQuery.relevance),
   };
-  const response = await fetch(`/search-api/v1/search/?${queryString.stringify(query)}`, context, {
-    cache: "no-store",
+};
+
+export async function search(searchQuery: GQLQuerySearchArgs, _context: Context): Promise<GQLSearch> {
+  const query = convertQuery(searchQuery);
+  const response = await client.GET("/search-api/v1/search", {
+    headers: {
+      "cache-control": "no-store",
+    },
+    params: { query },
   });
-  const subjects = searchQuery.subjects?.split(",") || [];
-  const searchResults = await resolveJson(response);
+
+  const subjects = commaSeparatedStringToArray(searchQuery.subjects) || [];
+  const searchResults = await resolveJsonOATS(response);
   return {
     ...searchResults,
-    results: searchResults.results.map((result: IMultiSearchSummaryDTO) => transformResult(result, subjects)),
+    results: searchResults.results.map((result) => transformResult(result, subjects)),
   };
 }
 
-export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Context): Promise<GQLGroupSearch> {
-  const query = {
-    ...searchQuery,
-    "page-size": searchQuery.pageSize,
-    "resource-types": searchQuery.resourceTypes,
-    "context-types": searchQuery.contextTypes,
-    "grep-codes": searchQuery.grepCodes,
-    "aggregate-paths": searchQuery.aggregatePaths,
-    "filter-inactive": searchQuery.filterInactive,
-  };
-  const response = await fetch(`/search-api/v1/search/group/?${queryString.stringify(query)}`, context, {
-    cache: "no-store",
-  });
-  const subjects = searchQuery.subjects?.split(",") || [];
-  const json = await resolveJson(response);
-  return json.map((searchResult: IGroupSearchResultDTO) => ({
-    ...searchResult,
-    resources: searchResult.results
-      .map((result) => {
-        if (result.typename === "NodeHitDTO") return null;
-        const searchCtx = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
-        const url = searchCtx?.url ?? result.contexts?.[0]?.url;
-        const isLearningpath = result.learningResourceType === "learningpath";
-        return {
-          ...result,
-          url: url || (isLearningpath ? `/learningpaths/${result.id}` : `/article/${result.id}`),
-          name: result.title.title,
-          title: result.title.title,
-          htmlTitle: result.title.htmlTitle,
-          ingress: result.metaDescription.metaDescription,
-          context: result.context,
-          contexts: result.contexts,
-        };
-      })
-      .filter(Boolean),
-  }));
+async function queryOnGivenPage(
+  searchQuery: GQLQuerySearchWithoutPaginationArgs,
+  page: number,
+  _context: Context,
+): Promise<MultiSearchResultDTO> {
+  const query = convertQuery(searchQuery);
+  return client
+    .GET("/search-api/v1/search", {
+      headers: {
+        "cache-control": "no-store",
+      },
+      params: {
+        query: {
+          ...query,
+          "page-size": 100,
+          page,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
-
-const queryOnGivenPage = (searchQuery: GQLQuerySearchWithoutPaginationArgs, page: string, context: Context) =>
-  fetch(
-    `/search-api/v1/search/?${queryString.stringify({
-      ...searchQuery,
-      page,
-      "page-size": "100",
-      "context-types": searchQuery.contextTypes,
-      "resource-types": searchQuery.resourceTypes,
-      "language-filter": searchQuery.languageFilter,
-    })}`,
-    context,
-    { cache: "no-store" },
-  );
 
 export async function searchWithoutPagination(
   searchQuery: GQLQuerySearchWithoutPaginationArgs,
   context: Context,
 ): Promise<GQLSearchWithoutPagination> {
-  const firstQuery = await queryOnGivenPage(searchQuery, "1", context);
-  const firstPageJson = await resolveJson(firstQuery);
+  const firstPageJson = await queryOnGivenPage(searchQuery, 1, context);
   const numberOfPages = Math.ceil(firstPageJson.totalCount / firstPageJson.pageSize);
 
   const requests = [];
   if (numberOfPages > 1) {
     for (let i = 2; i <= numberOfPages; i += 1) {
-      requests.push(queryOnGivenPage(searchQuery, i.toString(), context));
+      requests.push(queryOnGivenPage(searchQuery, i, context));
     }
   }
-  const response = await Promise.all(requests);
-  const allResultsJson = await Promise.all(response.map(resolveJson));
+  const allResultsJson = await Promise.all(requests);
   allResultsJson.push(firstPageJson);
   const subjects = searchQuery.subjects?.split(",") || [];
   return {
@@ -161,14 +146,8 @@ const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects:
   };
 };
 
-export const grepSearch = async (input: IGrepSearchInputDTO, context: Context): Promise<IGrepSearchResultsDTO> => {
-  const response = await fetch(`/search-api/v1/search/grep`, context, {
-    method: "POST",
-    body: JSON.stringify(input),
-  });
-
-  return resolveJson(response);
-};
+export const grepSearch = async (input: IGrepSearchInputDTO, _context: Context): Promise<IGrepSearchResultsDTO> =>
+  client.POST("/search-api/v1/search/grep", { body: input }).then(resolveJsonOATS);
 
 export const competenceGoals = async (
   codes: string[],

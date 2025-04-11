@@ -19,6 +19,7 @@ export function getEnvironmentVariabel(key: string, fallback?: string | boolean)
 }
 
 export const ndlaEnvironment = getEnvironmentVariabel("NDLA_ENVIRONMENT", "test");
+export const environmentApiHost = `api.${ndlaEnvironment.toString().replace("_", "-")}.ndla.no`;
 
 const ndlaApiUrl = () => {
   const host = getEnvironmentVariabel("API_GATEWAY_HOST");
@@ -29,7 +30,7 @@ const ndlaApiUrl = () => {
       case "prod":
         return "https://api.ndla.no";
       default:
-        return `https://api.${ndlaEnvironment.toString().replace("_", "-")}.ndla.no`;
+        return `https://${environmentApiHost}`;
     }
   } else {
     return `http://${host}`;
@@ -61,6 +62,7 @@ export const h5pHostUrl = () => {
   }
 };
 
+export const cacheTime = getEnvironmentVariabel("CACHE_TIME", "60");
 export const defaultLanguage = getEnvironmentVariabel("DEFAULT_LANGUAGE", "nb");
 export const port = getEnvironmentVariabel("PORT", "4000");
 export const apiUrl = getEnvironmentVariabel("API_URL", ndlaApiUrl());

@@ -18,7 +18,8 @@ import { typeDefs } from "./schema";
 import correlationIdMiddleware from "./utils/correlationIdMiddleware";
 import { logError } from "./utils/logger";
 import loggerMiddleware from "./utils/loggerMiddleware";
-import { contextExpressMiddleware, getContextOrThrow } from "./utils/contextMiddleware";
+import { contextExpressMiddleware } from "./utils/context/contextMiddleware";
+import { getContextOrThrow } from "./utils/context/contextStore";
 
 const GRAPHQL_PORT = port;
 
