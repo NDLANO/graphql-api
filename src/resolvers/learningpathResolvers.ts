@@ -152,7 +152,7 @@ const getCoverphoto = async (
     const article = articleId ? await context.loaders.articlesLoader.load(articleId) : undefined;
     const imageId = article?.metaImage?.url.split("/").pop();
     const image = imageId ? await fetchImageV3(imageId, context) : undefined;
-    url = image?.metaUrl;
+    url = image?.image.imageUrl;
   }
 
   return url
