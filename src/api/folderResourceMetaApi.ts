@@ -67,18 +67,22 @@ const fetchAndTransformResourceMeta = async (
       context.loaders.searchNodesLoader.loadMany(ids.map((r) => `urn:${nodeType}:${r}`)),
       fetchResourceMeta(nodeType, ids, context),
     ]);
-    return ids.map((id) => {
-      const node = nodes.flatMap((x) => x).find((n) => !!n && n.contentUri === `urn:${nodeType}:${id}`);
-      const element = elements.find((e) => e?.id === Number(id));
-      return {
-        id,
-        title: element?.title ?? "",
-        type,
-        description: element?.metaDescription ?? "",
-        metaImage: element?.metaImage,
-        resourceTypes: findResourceTypes(node ?? null, context),
-      };
-    });
+    return ids
+      .map((id) => {
+        const node = nodes.flatMap((x) => x).find((n) => !!n && n.contentUri === `urn:${nodeType}:${id}`);
+        const element = elements.find((e) => e?.id === Number(id));
+        return element
+          ? {
+              id,
+              title: element.title,
+              type,
+              description: element.metaDescription ?? "",
+              metaImage: element.metaImage,
+              resourceTypes: findResourceTypes(node ?? null, context),
+            }
+          : undefined;
+      })
+      .filter((meta) => !!meta);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(`Failed to fetch article metas with parameters ${resources}`);
