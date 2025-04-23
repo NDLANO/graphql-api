@@ -250,6 +250,7 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
         case "link-block":
         case "uu-disclaimer":
         case "comment":
+        case "symbol":
           break;
         default:
           unreachable(curr);

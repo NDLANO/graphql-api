@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
 import Prism from "prismjs";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-markup";

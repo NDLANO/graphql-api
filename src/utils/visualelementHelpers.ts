@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
 import { load } from "cheerio";
 import { fetchH5pLicenseInformation, fetchH5pInfo } from "../api/h5pApi";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
