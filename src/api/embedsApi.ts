@@ -412,6 +412,8 @@ export const transformEmbed = async (
       meta = undefined;
     } else if (embedData.resource === "copyright") {
       meta = undefined;
+    } else if (embedData.resource === "symbol") {
+      meta = undefined;
     } else {
       return;
     }
