@@ -143,7 +143,6 @@ const conceptMetaData = (
     copyright: concept.copyright,
     src: `${ndlaUrl}/embed-iframe/concept/${concept.id}`,
     content: concept.content?.htmlContent ?? "",
-    metaImageUrl: concept.metaImage?.url,
   };
   if (concept.conceptType === "gloss") {
     acc["glosses"] = acc["glosses"].concat(data);
