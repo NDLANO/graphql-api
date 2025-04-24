@@ -645,7 +645,6 @@ export const typeDefs = gql`
     title: String!
     src: String
     content: String
-    metaImageUrl: String
     copyright: ConceptCopyright
   }
 
@@ -1069,7 +1068,6 @@ export const typeDefs = gql`
     subjectNames: [String!]
     articleIds: [Int!]!
     articles: [Meta!]
-    metaImage: MetaImage
     visualElement: VisualElement
     copyright: ConceptCopyright
     source: String
