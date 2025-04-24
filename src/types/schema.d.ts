@@ -296,8 +296,6 @@ export type GQLConcept = {
   created: Scalars['String']['output'];
   glossData?: Maybe<GQLGloss>;
   id: Scalars['Int']['output'];
-  image?: Maybe<GQLImageLicense>;
-  metaImage?: Maybe<GQLMetaImage>;
   source?: Maybe<Scalars['String']['output']>;
   subjectIds?: Maybe<Array<Scalars['String']['output']>>;
   subjectNames?: Maybe<Array<Scalars['String']['output']>>;
@@ -332,7 +330,6 @@ export type GQLConceptLicense = {
   content?: Maybe<Scalars['String']['output']>;
   copyright?: Maybe<GQLConceptCopyright>;
   id: Scalars['String']['output'];
-  metaImageUrl?: Maybe<Scalars['String']['output']>;
   src?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
 };
@@ -2794,8 +2791,6 @@ export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolve
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   glossData?: Resolver<Maybe<GQLResolversTypes['Gloss']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  image?: Resolver<Maybe<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   source?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   subjectIds?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   subjectNames?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
@@ -2830,7 +2825,6 @@ export type GQLConceptLicenseResolvers<ContextType = any, ParentType extends GQL
   content?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
