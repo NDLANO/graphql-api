@@ -29,9 +29,6 @@ export const resolvers = {
       }
       return null;
     },
-    async image(_: any, __: any, ___: ContextWithLoaders) {
-      return undefined;
-    },
     async articles(_: IConceptDTO, __: any, ___: ContextWithLoaders): Promise<GQLMeta[]> {
       return [];
     },

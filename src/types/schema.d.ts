@@ -296,7 +296,6 @@ export type GQLConcept = {
   created: Scalars['String']['output'];
   glossData?: Maybe<GQLGloss>;
   id: Scalars['Int']['output'];
-  image?: Maybe<GQLImageLicense>;
   source?: Maybe<Scalars['String']['output']>;
   subjectIds?: Maybe<Array<Scalars['String']['output']>>;
   subjectNames?: Maybe<Array<Scalars['String']['output']>>;
@@ -2792,7 +2791,6 @@ export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolve
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   glossData?: Resolver<Maybe<GQLResolversTypes['Gloss']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  image?: Resolver<Maybe<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
   source?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   subjectIds?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   subjectNames?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;

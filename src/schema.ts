@@ -1063,7 +1063,6 @@ export const typeDefs = gql`
     content: String!
     created: String!
     tags: [String!]!
-    image: ImageLicense
     subjectIds: [String!]
     subjectNames: [String!]
     articleIds: [Int!]!
