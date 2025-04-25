@@ -1,5 +1,5 @@
 ### Build stage
-FROM node:20.13-alpine3.18 as builder
+FROM node:20.13-alpine3.18 AS builder
 
 ENV HOME=/home/app
 ENV APP_PATH=$HOME/graphql-api

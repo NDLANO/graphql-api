@@ -52,7 +52,7 @@ const URL_DOMAIN_REGEX = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n]+)/im;
 type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
   params: {
     embedData: T["embedData"];
-    context: Context;
+    context: ContextWithLoaders;
     index: number;
     opts: TransformOptions;
   } & ExtraData,
@@ -181,24 +181,30 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({ embedData, context })
 
 const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context, opts }) => {
   const contentURI = `urn:${embedData.contentType ?? "article"}:${embedData.contentId}`;
-  const host = opts.absoluteUrl ? ndlaUrl : "";
-
   const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
-  let url = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
+  const host = opts.absoluteUrl ? ndlaUrl : "";
+  const baseUrl = `${host}/${context.language}`;
   const nodes = await queryNodes(
     { contentURI, language: context.language, includeContexts: true, filterProgrammes: true, isVisible: true },
     context,
   );
-  const node = nodes.find((n) => !!n.path);
+
+  if (nodes.length === 0 && contentType === "article") {
+    const article = await context.loaders.articlesLoader.load(embedData.contentId);
+    return { path: `${baseUrl}/article/${article?.slug ?? embedData.contentId}` };
+  }
+
+  const node = nodes.find((n) => !!n.context);
   const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.context;
+  let url = `${baseUrl}/${contentType}/${embedData.contentId}`;
+
   if (!ctx?.isVisible) {
     return { path: url };
   }
 
   const nodeUrl = ctx?.url ?? node?.url;
-
   if (nodeUrl) {
-    url = `${host}/${context.language}${nodeUrl}`;
+    url = `${baseUrl}${nodeUrl}`;
   }
 
   return { path: url };
@@ -220,12 +226,7 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
         context,
       ),
     ]);
-    let resource = resources?.[0];
-    if (resource) {
-      const path = resource?.url;
-      // TODO: for now, trick RelatedContentEmbed to use provided path
-      resource = { ...resource, path, paths: [] };
-    }
+    const resource = resources?.[0];
     return { article, resource };
   } else {
     return undefined;
@@ -234,7 +235,7 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
 
 const fetchConceptVisualElement = async (
   visualElement: string | undefined,
-  context: Context,
+  context: ContextWithLoaders,
   index: number,
   opts: TransformOptions,
 ): Promise<ConceptVisualElementMeta | undefined> => {
@@ -317,7 +318,7 @@ export const parseCaption = (caption: string): string => {
 
 export const transformEmbed = async (
   embed: CheerioEmbed,
-  context: Context,
+  context: ContextWithLoaders,
   index: number,
   footnoteCount: number,
   opts: TransformOptions,
@@ -410,6 +411,8 @@ export const transformEmbed = async (
     } else if (embedData.resource === "link-block") {
       meta = undefined;
     } else if (embedData.resource === "copyright") {
+      meta = undefined;
+    } else if (embedData.resource === "symbol") {
       meta = undefined;
     } else {
       return;

@@ -40,13 +40,16 @@ export const Query = {
 export const resolvers = {
   Article: {
     async competenceGoals(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
-      if ((article.grepCodes ?? []).length) return [];
+      if (!(article.grepCodes ?? []).length) return [];
 
       const language =
         article.supportedLanguages?.find((lang) => lang === context.language) ??
         article.supportedLanguages?.[0] ??
         context.language;
-      const result = await grepSearch({ codes: article.grepCodes, language: language }, context);
+      const result = await grepSearch(
+        { codes: article.grepCodes.filter((code) => code.startsWith("KM")), language: language },
+        context,
+      );
       return result.results.map((hit) => {
         return {
           ...hit,
@@ -84,7 +87,6 @@ export const resolvers = {
           title: crossSubjectTopic.title,
           code: crossSubjectTopic.code,
           id: crossSubjectTopic.id,
-          path: topic?.path,
           url: topic?.url,
         };
       });

@@ -233,11 +233,9 @@ const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: Conte
     ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || Object.values(ctx.breadcrumbs)[0];
   const relevance =
     ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || Object.values(ctx.relevance)[0];
-  const url = ctx.url || ctx.path;
   const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, context));
   return {
     ...ctx,
-    url,
     name,
     breadcrumbs: breadcrumbs ?? [],
     relevance: relevance ?? "",

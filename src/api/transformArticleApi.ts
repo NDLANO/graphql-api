@@ -96,7 +96,7 @@ export const toVisualElement = (meta: Extract<EmbedMetaData, { status: "success"
 
 export const transformArticle = async (
   content: string,
-  context: Context,
+  context: ContextWithLoaders,
   visualElement: string | undefined,
   { subject, previewH5p, showVisualElement, draftConcept, absoluteUrl }: TransformArticleOptions,
 ) => {
@@ -118,20 +118,13 @@ export const transformArticle = async (
       html(el).prepend("<summary></summary>");
     }
   });
-  if (showVisualElement && visualElement) {
+
+  const hasVisualElement = showVisualElement && visualElement;
+  if (hasVisualElement) {
     html("body").prepend(`<section>${visualElement}</section>`);
   }
 
-  const visEl =
-    visualElement && !showVisualElement
-      ? load(`${visualElement}`, {
-          xmlMode: false,
-          decodeEntities: false,
-        })
-      : undefined;
-
-  const embeds = visEl ? getEmbedsFromContent(visEl).concat(getEmbedsFromContent(html)) : getEmbedsFromContent(html);
-
+  const embeds = getEmbedsFromContent(html);
   let footnoteCount = 0;
   const embedPromises = await Promise.all(
     embeds.map(async (embed, index) => {
@@ -169,10 +162,10 @@ export const transformArticle = async (
     }),
   );
   const metaData = toArticleMetaData(embedPromises);
-  const visualElementCheerio = visEl?.("body") ?? embeds[0]?.embed;
-  const transformedVisEl = visualElementCheerio?.html();
   const transformedContent = html("body").html();
-  const visualElementMeta = visEl || (visualElement && showVisualElement) ? embedPromises[0] : undefined;
+  const visualElementCheerio = hasVisualElement ? embeds[0]?.embed : undefined;
+  const transformedVisEl = visualElementCheerio?.parent().html();
+  const visualElementMeta = hasVisualElement ? embedPromises[0] : undefined;
   const transformedVisualElement =
     visualElementMeta?.status === "success" ? toVisualElement(visualElementMeta) : undefined;
 

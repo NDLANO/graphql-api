@@ -6,7 +6,6 @@
  *
  */
 
-import { Query as ArenaQuery, Mutations as ArenaMutations, resolvers as ArenaResolvers } from "./arenaResolvers";
 import { Query as ArticleQuery, resolvers as articleResolvers } from "./articleResolvers";
 import { Query as ConceptQuery, resolvers as conceptResolvers } from "./conceptResolvers";
 import { Query as CurriculumQuery, resolvers as curriculumResolvers } from "./curriculumResolvers";
@@ -53,13 +52,11 @@ export const resolvers = {
     ...ImageQuery,
     ...TransformQuery,
     ...ProgrammeQuery,
-    ...ArenaQuery,
     ...ExternalQuery,
   },
   Mutation: {
     ...FolderMutations,
     ...TransformArticleMutations,
-    ...ArenaMutations,
     ...LearningpathMutations,
   },
   ...folderResolvers,
@@ -78,7 +75,6 @@ export const resolvers = {
   ...uptimeResolvers,
   ...ImageResolvers,
   ...ProgrammeResolvers,
-  ...ArenaResolvers,
   TaxonomyEntity: {
     // Resolves TaxonomyEntity interface
     __resolveType(entity: any) {
@@ -93,15 +89,6 @@ export const resolvers = {
       }
 
       return "Resource";
-    },
-  },
-  SearchResult: {
-    // Resolves SearchResult interface
-    __resolveType(searchResult: any) {
-      if (searchResult.learningResourceType === "learningpath") {
-        return "LearningpathSearchResult";
-      }
-      return "ArticleSearchResult";
     },
   },
   FolderResourceMeta: {

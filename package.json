@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
+    "@googleapis/youtube": "^24.0.0",
     "@graphql-tools/schema": "^10.0.11",
     "@ndla/licenses": "^9.0.0",
     "cheerio": "^1.0.0-rc.12",
@@ -58,8 +59,8 @@
     "@graphql-eslint/eslint-plugin": "^4.3.0",
     "@graphql-tools/mock": "^9.0.9",
     "@jest-mock/express": "^2.0.2",
-    "@ndla/types-backend": "^1.0.21",
-    "@ndla/types-embed": "^5.0.10-alpha.0",
+    "@ndla/types-backend": "^1.0.39",
+    "@ndla/types-embed": "^5.0.13-alpha.0",
     "@ndla/types-taxonomy": "^1.0.34",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.4",
@@ -83,7 +84,7 @@
     "nock": "^13.2.9",
     "prettier": "^3.1.0",
     "ts-jest": "^29.0.1",
-    "typescript": "^5.7.2",
+    "typescript": "^5.8.2",
     "typescript-eslint": "^8.17.0"
   },
   "packageManager": "yarn@4.1.0"

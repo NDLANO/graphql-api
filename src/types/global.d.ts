@@ -10,7 +10,8 @@ import DataLoader from "dataloader";
 import { Request, Response } from "express";
 import { RequestInit, RequestCache } from "node-fetch";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IFrontPageDTO, ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
+import { IFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import { GQLSubject } from "./schema";
 
@@ -40,14 +41,15 @@ declare global {
 
   interface Loaders {
     articlesLoader: DataLoader<string, IArticleV2DTO | undefined>;
-    learningpathsLoader: DataLoader<string, any>;
+    learningpathsLoader: DataLoader<string, ILearningPathV2DTO | undefined>;
     subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
     subjectsLoader: DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }>;
     nodeLoader: DataLoader<NodeLoaderParams, Node>;
     nodesLoader: DataLoader<NodesLoaderParams, Node[]>;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPageDTO>;
-    subjectpageLoader: DataLoader<string, ISubjectPageDataDTO | null>;
+    subjectpageLoader: DataLoader<string, ISubjectPageDTO | null>;
+    searchNodesLoader: DataLoader<string, Node[]>;
   }
 
   interface AuthToken {

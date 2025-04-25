@@ -7,7 +7,6 @@
  */
 
 import { IConceptDTO } from "@ndla/types-backend/concept-api";
-import { convertToSimpleImage, fetchImage } from "../api/imageApi";
 import { GQLConcept, GQLMeta, GQLVisualElement } from "../types/schema";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
@@ -29,17 +28,6 @@ export const resolvers = {
         return await parseVisualElement(visualElement, context);
       }
       return null;
-    },
-    async image(concept: IConceptDTO, _: any, context: ContextWithLoaders) {
-      const metaImageId = concept.metaImage?.url?.split("/").pop();
-      if (metaImageId) {
-        const image = await fetchImage(metaImageId, context);
-        if (!image) {
-          return undefined;
-        }
-        return convertToSimpleImage(image);
-      }
-      return undefined;
     },
     async articles(_: IConceptDTO, __: any, ___: ContextWithLoaders): Promise<GQLMeta[]> {
       return [];

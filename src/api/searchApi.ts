@@ -12,16 +12,19 @@ import {
   IGrepSearchResultsDTO,
   IGroupSearchResultDTO,
   IMultiSearchSummaryDTO,
+  INodeHitDTO,
 } from "@ndla/types-backend/search-api";
 import {
   GQLCompetenceGoal,
   GQLCoreElement,
   GQLElement,
   GQLGroupSearch,
+  GQLNodeSearchResult,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
   GQLReference,
   GQLSearch,
+  GQLSearchResultUnion,
   GQLSearchWithoutPagination,
 } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
@@ -31,6 +34,8 @@ export async function search(searchQuery: GQLQuerySearchArgs, context: Context):
     ...searchQuery,
     "page-size": searchQuery.pageSize,
     "context-types": searchQuery.contextTypes,
+    "result-types": searchQuery.resultTypes,
+    "node-types": searchQuery.nodeTypes,
     "resource-types": searchQuery.resourceTypes,
     "language-filter": searchQuery.languageFilter,
     "grep-codes": searchQuery.grepCodes,
@@ -63,33 +68,26 @@ export async function groupSearch(searchQuery: GQLQuerySearchArgs, context: Cont
   });
   const subjects = searchQuery.subjects?.split(",") || [];
   const json = await resolveJson(response);
-  return json.map((result: IGroupSearchResultDTO) => ({
-    ...result,
-    resources: result.results.map((contentTypeResult) => {
-      const searchCtx = contentTypeResult.contexts.find((c) =>
-        subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary,
-      );
-      const path = searchCtx?.path ?? contentTypeResult.paths?.[0];
-      const url = searchCtx?.url ?? contentTypeResult.paths?.[0];
-
-      const isLearningpath = contentTypeResult.learningResourceType === "learningpath";
-      return {
-        ...contentTypeResult,
-        path: path || (isLearningpath ? `/learningpaths/${contentTypeResult.id}` : `/article/${contentTypeResult.id}`),
-        url: url,
-        name: contentTypeResult.title.title,
-        title: contentTypeResult.title.title,
-        htmlTitle: contentTypeResult.title.htmlTitle,
-        ingress: contentTypeResult.metaDescription.metaDescription,
-        contexts: contentTypeResult.contexts,
-        ...(contentTypeResult.metaImage && {
-          metaImage: {
-            url: contentTypeResult.metaImage?.url,
-            alt: contentTypeResult.metaImage?.alt,
-          },
-        }),
-      };
-    }),
+  return json.map((searchResult: IGroupSearchResultDTO) => ({
+    ...searchResult,
+    resources: searchResult.results
+      .map((result) => {
+        if (result.typename === "NodeHitDTO") return null;
+        const searchCtx = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
+        const url = searchCtx?.url ?? result.contexts?.[0]?.url;
+        const isLearningpath = result.learningResourceType === "learningpath";
+        return {
+          ...result,
+          url: url || (isLearningpath ? `/learningpaths/${result.id}` : `/article/${result.id}`),
+          name: result.title.title,
+          title: result.title.title,
+          htmlTitle: result.title.htmlTitle,
+          ingress: result.metaDescription.metaDescription,
+          context: result.context,
+          contexts: result.contexts,
+        };
+      })
+      .filter(Boolean),
   }));
 }
 
@@ -127,18 +125,40 @@ export async function searchWithoutPagination(
   const subjects = searchQuery.subjects?.split(",") || [];
   return {
     results: allResultsJson.flatMap((json) =>
-      json.results.map((result: IMultiSearchSummaryDTO) => transformResult(result, subjects)),
+      json.results.map((result: IMultiSearchSummaryDTO | INodeHitDTO) => transformResult(result, subjects)),
     ),
   };
 }
 
-const transformResult = (result: IMultiSearchSummaryDTO, subjects: string[]) => ({
-  ...result,
-  title: result.title.title,
-  htmlTitle: result.title.htmlTitle,
-  metaDescription: result.metaDescription?.metaDescription,
-  context: result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary)),
-});
+const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects: string[]): GQLSearchResultUnion => {
+  if (result.typename === "NodeHitDTO") {
+    const ret: GQLNodeSearchResult = {
+      __typename: "NodeSearchResult",
+      htmlTitle: result.title,
+      title: result.title,
+      supportedLanguages: [],
+      metaDescription: result.subjectPage?.metaDescription.metaDescription ?? "",
+      id: result.id,
+      url: result.url ?? "",
+      context: result.context,
+      contexts: [],
+    };
+    return ret;
+  }
+  const searchCtx = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
+  const url = searchCtx?.url ?? result.contexts?.[0]?.url;
+  const isLearningpath = result.learningResourceType === "learningpath";
+  return {
+    ...result,
+    id: result.id.toString(),
+    __typename: isLearningpath ? "LearningpathSearchResult" : "ArticleSearchResult",
+    url: url || (isLearningpath ? `/learningpaths/${result.id}` : `/article/${result.id}`),
+    title: result.title.title,
+    htmlTitle: result.title.htmlTitle,
+    metaDescription: result.metaDescription?.metaDescription,
+    context: searchCtx ? { ...searchCtx } : undefined,
+  };
+};
 
 export const grepSearch = async (input: IGrepSearchInputDTO, context: Context): Promise<IGrepSearchResultsDTO> => {
   const response = await fetch(`/search-api/v1/search/grep`, context, {

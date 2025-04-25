@@ -12,7 +12,7 @@ import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
 import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
 import { fetch, resolveJson } from "../utils/apiHelpers";
-import { getArticleIdFromUrn, findPrimaryPath } from "../utils/articleHelpers";
+import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 interface ArticleParams {
   articleId: string;
@@ -21,16 +21,23 @@ interface ArticleParams {
 export const fetchTransformedContent = async (
   article: IArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLTransformedArticleContent> => {
   const params = _params.transformArgs ?? {};
-  const subject = params.subjectId;
+  let subjectId = params.subjectId;
+  if (params.contextId && !subjectId) {
+    const contextNode = await context.loaders.nodesLoader.load({ contextId: params.contextId });
+    const contextRootId = contextNode[0]?.context?.rootId;
+    if (contextRootId) {
+      subjectId = contextRootId;
+    }
+  }
   const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
     article.content.content,
     context,
     article.visualElement?.visualElement,
     {
-      subject,
+      subject: subjectId,
       draftConcept: params.draftConcept,
       previewH5p: params.previewH5p,
       absoluteUrl: params.absoluteUrl,
@@ -49,17 +56,24 @@ export const fetchTransformedContent = async (
 export const fetchTransformedDisclaimer = async (
   article: IArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLTransformedArticleContent> => {
   if (!article.disclaimer?.disclaimer) return { content: "" };
   const params = _params.transformArgs ?? {};
-  const subject = params.subjectId;
+  let subjectId = params.subjectId;
+  if (params.contextId && !subjectId) {
+    const contextNode = await context.loaders.nodesLoader.load({ contextId: params.contextId });
+    const contextRootId = contextNode[0]?.context?.rootId;
+    if (contextRootId) {
+      subjectId = contextRootId;
+    }
+  }
   const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
     article.disclaimer.disclaimer,
     context,
     undefined,
     {
-      subject,
+      subject: subjectId,
       draftConcept: params.draftConcept,
       previewH5p: params.previewH5p,
       absoluteUrl: params.absoluteUrl,
@@ -93,11 +107,11 @@ export async function fetchRelatedContent(
         );
         const node = nodes?.[0];
         if (node) {
-          const primaryPath = params.subjectId ? findPrimaryPath(node.paths, params.subjectId) : undefined;
-          const path = primaryPath ?? node.path;
+          const ctx = node.contexts.find((c) => c.rootId === params.subjectId) ?? node.context;
+          const url = ctx?.url ?? node.url;
           return {
             title: node.name,
-            url: `${ndlaUrl}${path}`,
+            url: `${ndlaUrl}${url}`,
           };
         } else {
           return {

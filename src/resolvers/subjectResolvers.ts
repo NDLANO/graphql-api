@@ -6,9 +6,10 @@
  *
  */
 
-import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
+import { ISubjectPageDTO, IVisualElementDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
+  GQLImageLicense,
   GQLQuerySubjectArgs,
   GQLQuerySubjectCollectionArgs,
   GQLSubject,
@@ -17,6 +18,8 @@ import {
 } from "../types/schema";
 import { filterMissingArticles } from "../utils/articleHelpers";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
+import { fetchImageV3 } from "../api";
+import { convertToImageLicense } from "../api/imageApi";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
@@ -58,7 +61,7 @@ export const Query = {
   ): Promise<GQLSubject[]> {
     return await context.loaders.subjectsLoader
       .load({ metadataFilter: { key: "language", value: language } })
-      .then((s) => s.subjects);
+      .then((s) => s.subjects.sort((a, b) => (a.name < b.name ? -1 : 1)));
   },
 };
 
@@ -82,7 +85,7 @@ export const resolvers = {
       });
       return filterMissingArticles(topics, context);
     },
-    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageDataDTO | null> {
+    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageDTO | null> {
       if (!subject.contentUri?.startsWith("urn:frontpage")) return null;
       return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
     },
@@ -95,30 +98,42 @@ export const resolvers = {
     },
   },
   SubjectPage: {
-    async connectedTo(
-      subjectpage: ISubjectPageDataDTO,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLSubjectLink[]> {
+    async connectedTo(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.connectedTo.map((id) => {
           return { id };
         }),
       );
     },
-    async buildsOn(subjectpage: ISubjectPageDataDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async buildsOn(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.buildsOn.map((id) => {
           return { id };
         }),
       );
     },
-    async leadsTo(subjectpage: ISubjectPageDataDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async leadsTo(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.leadsTo.map((id) => {
           return { id };
         }),
       );
+    },
+  },
+  SubjectPageVisualElement: {
+    async imageLicense(
+      visualElement: IVisualElementDTO,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLImageLicense | undefined> {
+      const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
+      if (isNaN(imageId)) return undefined;
+      try {
+        const image = await fetchImageV3(imageId, context);
+        return convertToImageLicense(image);
+      } catch (e) {
+        return undefined;
+      }
     },
   },
 };

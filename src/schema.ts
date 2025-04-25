@@ -266,6 +266,10 @@ export const typeDefs = gql`
     contributors: [Contributor!]!
   }
 
+  type LearningpathSeqNo {
+    seqNo: Int!
+  }
+
   type Learningpath {
     id: Int!
     title: String!
@@ -398,7 +402,6 @@ export const typeDefs = gql`
   interface TaxBase {
     id: String!
     name: String!
-    path: String
     url: String
   }
 
@@ -406,8 +409,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contextId: String
@@ -432,8 +433,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contextId: String
@@ -462,8 +461,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -487,7 +484,6 @@ export const typeDefs = gql`
     id: String!
     contextId: String!
     name: String!
-    path: String!
     url: String!
   }
 
@@ -495,7 +491,6 @@ export const typeDefs = gql`
     contextId: String!
     breadcrumbs: [String!]!
     name: String!
-    path: String!
     url: String!
     parentIds: [String!]!
     rootId: String!
@@ -508,8 +503,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -652,7 +645,6 @@ export const typeDefs = gql`
     title: String!
     src: String
     content: String
-    metaImageUrl: String
     copyright: ConceptCopyright
   }
 
@@ -731,6 +723,7 @@ export const typeDefs = gql`
 
   input TransformedArticleContentInput {
     subjectId: String
+    contextId: String
     isOembed: String
     showVisualElement: String
     path: String
@@ -805,6 +798,7 @@ export const typeDefs = gql`
     type: String!
     url: String!
     alt: String
+    imageLicense: ImageLicense
   }
 
   type SubjectPageAbout {
@@ -869,7 +863,6 @@ export const typeDefs = gql`
     metaImage: MetaImage
     metaDescription: String!
     resourceTypes: [ResourceType!]!
-    path: String!
     url: String!
   }
 
@@ -887,8 +880,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -933,20 +924,19 @@ export const typeDefs = gql`
   }
 
   interface SearchResult {
-    id: Int!
+    id: String!
     title: String!
-    htmlTitle: String!
     supportedLanguages: [String!]!
     url: String!
     metaDescription: String!
-    metaImage: MetaImage
-    traits: [String!]!
     context: SearchContext
     contexts: [SearchContext!]!
   }
 
+  union SearchResultUnion = ArticleSearchResult | LearningpathSearchResult | NodeSearchResult
+
   type ArticleSearchResult implements SearchResult {
-    id: Int!
+    id: String!
     title: String!
     htmlTitle: String!
     supportedLanguages: [String!]!
@@ -959,7 +949,7 @@ export const typeDefs = gql`
   }
 
   type LearningpathSearchResult implements SearchResult {
-    id: Int!
+    id: String!
     title: String!
     htmlTitle: String!
     supportedLanguages: [String!]!
@@ -967,6 +957,18 @@ export const typeDefs = gql`
     metaDescription: String!
     metaImage: MetaImage
     traits: [String!]!
+    context: SearchContext
+    contexts: [SearchContext!]!
+  }
+
+  type NodeSearchResult implements SearchResult {
+    id: String!
+    title: String!
+    htmlTitle: String!
+    supportedLanguages: [String!]!
+    url: String!
+    metaDescription: String!
+    metaImage: MetaImage
     context: SearchContext
     contexts: [SearchContext!]!
   }
@@ -981,11 +983,9 @@ export const typeDefs = gql`
     relevanceId: String!
     path: String!
     publicId: String!
-    parentIds: [String!]!
     language: String!
     isPrimary: Boolean!
     isActive: Boolean!
-    isVisible: Boolean!
     contextId: String!
     url: String!
   }
@@ -1063,12 +1063,10 @@ export const typeDefs = gql`
     content: String!
     created: String!
     tags: [String!]!
-    image: ImageLicense
     subjectIds: [String!]
     subjectNames: [String!]
     articleIds: [Int!]!
     articles: [Meta!]
-    metaImage: MetaImage
     visualElement: VisualElement
     copyright: ConceptCopyright
     source: String
@@ -1340,7 +1338,6 @@ export const typeDefs = gql`
     arenaAccepted: Boolean!
     organization: String!
     groups: [MyNdlaGroup!]!
-    arenaGroups: [String!]!
     shareNameAccepted: Boolean!
   }
 
@@ -1375,222 +1372,9 @@ export const typeDefs = gql`
     conceptType: String
   }
 
-  type ArenaCategory {
-    id: Int!
-    name: String!
-    description: String!
-    htmlDescription: String!
-    slug: String!
-    topicCount: Int!
-    postCount: Int!
-    voteCount: Int
-    disabled: Boolean!
-    topics: [ArenaTopic!]
-    breadcrumbs: [CategoryBreadcrumb!]!
-    parentCategoryId: Int
-    children: [ArenaCategory!]
-  }
-
-  type ArenaUser {
-    id: Int!
-    displayName: String!
-    username: String!
-    profilePicture: String
-    slug: String!
-    groupTitleArray: [String!]
-    location: String
-  }
-
-  type ArenaPost {
-    id: Int!
-    topicId: Int!
-    content: String!
-    timestamp: String!
-    isMainPost: Boolean!
-    user: ArenaUser
-    deleted: Boolean!
-    flagId: Int
-    toPid: Int
-    replies: [ArenaPost!]!
-    upvotes: Int!
-    upvoted: Boolean!
-  }
-
-  type ArenaBreadcrumb {
-    name: String!
-    id: Int!
-    type: String!
-  }
-
-  type ArenaTopic {
-    id: Int!
-    categoryId: Int!
-    title: String!
-    slug: String!
-    postCount: Int!
-    voteCount: Int!
-    locked: Boolean!
-    pinned: Boolean!
-    timestamp: String!
-    posts: [ArenaPost!]!
-    breadcrumbs: [ArenaBreadcrumb!]!
-    deleted: Boolean!
-    isFollowing: Boolean
-  }
-
   type CategoryBreadcrumb {
     id: Int!
     title: String!
-  }
-
-  interface ArenaCategoryV2Base {
-    id: Int!
-    title: String!
-    description: String!
-    postCount: Int!
-    topicCount: Int!
-    voteCount: Int
-    isFollowing: Boolean!
-    visible: Boolean!
-    parentCategoryId: Int
-    breadcrumbs: [CategoryBreadcrumb!]!
-  }
-
-  type TopiclessArenaCategoryV2 implements ArenaCategoryV2Base {
-    id: Int!
-    title: String!
-    description: String!
-    postCount: Int!
-    topicCount: Int!
-    voteCount: Int
-    isFollowing: Boolean!
-    visible: Boolean!
-    categoryCount: Int
-    subcategories: [TopiclessArenaCategoryV2!]
-    parentCategoryId: Int
-    breadcrumbs: [CategoryBreadcrumb!]!
-  }
-
-  type ArenaCategoryV2 implements ArenaCategoryV2Base {
-    id: Int!
-    title: String!
-    description: String!
-    postCount: Int!
-    topicCount: Int!
-    voteCount: Int
-    topics: [ArenaTopicV2!]
-    categoryCount: Int
-    subcategories: [TopiclessArenaCategoryV2!]
-    isFollowing: Boolean!
-    visible: Boolean!
-    parentCategoryId: Int
-    breadcrumbs: [CategoryBreadcrumb!]!
-  }
-
-  type ArenaTopicV2 {
-    id: Int!
-    title: String!
-    postCount: Int!
-    voteCount: Int!
-    created: String!
-    updated: String!
-    categoryId: Int!
-    posts: PaginatedPosts
-    isFollowing: Boolean!
-    isPinned: Boolean!
-    isLocked: Boolean!
-  }
-
-  type PaginatedTopics {
-    totalCount: Int!
-    page: Int!
-    pageSize: Int!
-    items: [ArenaTopicV2!]!
-  }
-
-  type PaginatedArenaUsers {
-    totalCount: Int!
-    page: Int!
-    pageSize: Int!
-    items: [ArenaUserV2!]!
-  }
-
-  type PaginatedPosts {
-    totalCount: Int!
-    page: Int!
-    pageSize: Int!
-    items: [ArenaPostV2!]!
-  }
-
-  type ArenaPostV2 {
-    id: Int!
-    content: String!
-    contentAsHTML: String
-    created: String!
-    updated: String!
-    owner: ArenaUserV2
-    topicId: Int!
-    flags: [ArenaFlag!]
-    replies: [ArenaPostV2!]!
-    upvotes: Int!
-    upvoted: Boolean!
-  }
-
-  type ArenaFlag {
-    id: Int!
-    reason: String!
-    created: String!
-    resolved: String
-    isResolved: Boolean!
-    flagger: ArenaUserV2
-  }
-
-  type ArenaUserV2 {
-    id: Int!
-    displayName: String!
-    username: String!
-    location: String!
-    groups: [String!]!
-  }
-
-  input ArenaUserV2Input {
-    favoriteSubjects: [String!]
-    arenaEnabled: Boolean
-    arenaGroups: [String!]
-  }
-
-  type ArenaNewPostNotificationV2 {
-    id: Int!
-    topicId: Int!
-    isRead: Boolean!
-    topicTitle: String!
-    post: ArenaPostV2!
-    notificationTime: String!
-  }
-
-  type PaginatedArenaNewPostNotificationV2 {
-    totalCount: Int!
-    page: Int!
-    pageSize: Int!
-    items: [ArenaNewPostNotificationV2!]!
-  }
-
-  type ArenaNotification {
-    bodyShort: String!
-    path: String!
-    from: Int!
-    importance: Int!
-    datetimeISO: String!
-    read: Boolean!
-    user: ArenaUser!
-    image: String
-    readClass: String!
-    postId: Int!
-    topicId: Int!
-    notificationId: String!
-    topicTitle: String!
-    type: String!
-    subject: String!
   }
 
   type UserFolder {
@@ -1688,6 +1472,8 @@ export const typeDefs = gql`
       aggregatePaths: [String!]
       filterInactive: Boolean
       license: String
+      resultTypes: String
+      nodeTypes: String
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
@@ -1737,24 +1523,6 @@ export const typeDefs = gql`
     arenaEnabledOrgs: ConfigMetaStringList
     resourceEmbed(id: String!, type: String!): ResourceEmbed!
     resourceEmbeds(resources: [ResourceEmbedInput!]!): ResourceEmbed!
-    arenaCategories: [ArenaCategory!]!
-    arenaCategory(categoryId: Int!, page: Int!): ArenaCategory
-    arenaUser(username: String!): ArenaUser
-    arenaUserById(id: Int!): ArenaUser
-    arenaAllFlags(page: Int, pageSize: Int): PaginatedPosts!
-    arenaTopic(topicId: Int!, page: Int): ArenaTopic
-    arenaRecentTopics: [ArenaTopic!]!
-    arenaTopicsByUser(userSlug: String!): [ArenaTopic!]!
-    arenaNotifications: [ArenaNotification!]!
-    arenaCategoriesV2(filterFollowed: Boolean): [ArenaCategoryV2!]!
-    arenaCategoryV2(categoryId: Int!, page: Int, pageSize: Int): ArenaCategoryV2
-    arenaNotificationsV2(page: Int, pageSize: Int): PaginatedArenaNewPostNotificationV2!
-    arenaRecentTopicsV2(page: Int, pageSize: Int): PaginatedTopics!
-    arenaTopicV2(topicId: Int!, page: Int, pageSize: Int): ArenaTopicV2
-    arenaTopicsByUserV2(userId: Int!, page: Int, pageSize: Int): PaginatedTopics!
-    arenaUserV2(username: String!): ArenaUserV2
-    arenaPostInContext(postId: Int!, pageSize: Int): ArenaTopicV2
-    listArenaUserV2(page: Int, pageSize: Int, query: String, filterTeachers: Boolean): PaginatedArenaUsers!
     subjectCollection(language: String!): [Subject!]
     imageSearch(query: String, page: Int, pageSize: Int, license: String): ImageSearch!
     imageV3(id: String!): ImageMetaInformationV3
@@ -1795,52 +1563,8 @@ export const typeDefs = gql`
       absoluteUrl: Boolean
       prettyUrl: Boolean
     ): String!
-    markNotificationAsRead(topicIds: [Int!]!): [Int!]!
-    newArenaTopic(categoryId: Int!, title: String!, content: String!): ArenaTopic!
-    newArenaCategory(title: String!, description: String!, visible: Boolean!, parentCategoryId: Int): ArenaCategoryV2!
-    updateArenaCategory(
-      categoryId: Int!
-      title: String!
-      description: String!
-      visible: Boolean!
-      parentCategoryId: Int
-    ): ArenaCategoryV2!
-    newArenaTopicV2(
-      categoryId: Int!
-      title: String!
-      content: String!
-      isLocked: Boolean
-      isPinned: Boolean
-    ): ArenaTopicV2!
-    markNotificationsAsReadV2(notificationIds: [Int!]!): [Int!]!
-    markAllNotificationsAsRead: Boolean!
-    replyToTopic(topicId: Int!, content: String!, postId: Int): ArenaPost!
-    replyToTopicV2(topicId: Int!, content: String!, postId: Int): ArenaPostV2!
-    updatePost(postId: Int!, content: String!, title: String): ArenaPost!
-    updatePostV2(postId: Int!, content: String!): ArenaPostV2!
-    updateTopicV2(topicId: Int!, title: String!, content: String!, isLocked: Boolean, isPinned: Boolean): ArenaTopicV2!
-    deletePost(postId: Int!): Int!
-    deletePostV2(postId: Int!): Int!
-    deleteTopic(topicId: Int!): Int!
-    deleteTopicV2(topicId: Int!): Int!
-    deleteCategory(categoryId: Int!): Int!
-    newFlag(type: String!, id: Int!, reason: String!): Int!
-    newFlagV2(postId: Int!, reason: String!): Int!
-    resolveFlag(flagId: Int!): ArenaFlag!
-    subscribeToTopic(topicId: Int!): Int!
-    followTopic(topicId: Int!): ArenaTopicV2!
-    followCategory(categoryId: Int!): ArenaCategoryV2!
-    unfollowTopic(topicId: Int!): ArenaTopicV2!
-    unfollowCategory(categoryId: Int!): ArenaCategoryV2!
-    unsubscribeFromTopic(topicId: Int!): Int!
-    updateOtherArenaUser(userId: Int!, data: ArenaUserV2Input!): MyNdlaPersonalData!
     favoriteSharedFolder(folderId: String!): String!
     unFavoriteSharedFolder(folderId: String!): String!
-    sortArenaCategories(sortedIds: [Int!]!, parentId: Int): [ArenaCategoryV2!]!
-    addPostUpvote(postId: Int!): Int!
-    addPostUpvoteV2(postId: Int!): Int!
-    removePostUpvote(postId: Int!): Int!
-    removePostUpvoteV2(postId: Int!): Int!
     updateLearningpathStatus(id: Int!, status: String!): MyNdlaLearningpath!
     deleteLearningpath(id: Int!): Boolean
     newLearningpath(params: LearningpathNewInput!): MyNdlaLearningpath!
@@ -1853,6 +1577,7 @@ export const typeDefs = gql`
     ): MyNdlaLearningpathStep!
     deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]
     copyLearningpath(learningpathId: Int!, params: LearningpathCopyInput!): MyNdlaLearningpath!
+    updateLearningpathStepSeqNo(learningpathId: Int!, learningpathStepId: Int!, seqNo: Int!): LearningpathSeqNo!
   }
 `;
 

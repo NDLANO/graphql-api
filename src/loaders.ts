@@ -8,7 +8,7 @@
 
 import DataLoader from "dataloader";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IFilmFrontPageDataDTO, IFrontPageDTO, ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
+import { IFilmFrontPageDTO, IFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
@@ -24,6 +24,7 @@ import {
   queryNodes,
 } from "./api";
 import { GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import { searchNodes } from "./api/taxonomyApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -47,14 +48,14 @@ export function frontpageLoader(context: Context): DataLoader<string, IFrontPage
   });
 }
 
-export function filmFrontpageLoader(context: Context): DataLoader<string, IFilmFrontPageDataDTO> {
+export function filmFrontpageLoader(context: Context): DataLoader<string, IFilmFrontPageDTO> {
   return new DataLoader(async () => {
     const filmFrontpage = await fetchFilmFrontpage(context);
     return [filmFrontpage];
   });
 }
 
-export function subjectpageLoader(context: Context): DataLoader<string, ISubjectPageDataDTO | null> {
+export function subjectpageLoader(context: Context): DataLoader<string, ISubjectPageDTO | null> {
   return new DataLoader(async (subjectPageIds) => {
     return Promise.all(
       subjectPageIds.map((subjectPageId) => {
@@ -151,4 +152,14 @@ export function resourceTypesLoader(context: Context): DataLoader<string, any> {
       return allResourceTypes.find((resourceType) => resourceType.id === resourceTypeId);
     });
   });
+}
+
+export function searchNodesLoader(context: Context): DataLoader<string, Node[]> {
+  return new DataLoader(
+    async (contentUris) => {
+      const searchResult = await searchNodes({ contentUris }, context);
+      return contentUris.map((uri) => searchResult.results.filter((n) => n.contentUri === uri));
+    },
+    { maxBatchSize: 100 },
+  );
 }
