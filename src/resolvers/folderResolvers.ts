@@ -56,6 +56,7 @@ import {
   GQLMutationFavoriteSharedFolderArgs,
   GQLMutationUnFavoriteSharedFolderArgs,
   GQLMutationSortSavedSharedFoldersArgs,
+  GQLUserRole,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -196,7 +197,11 @@ export const Mutations: Pick<
     return deletePersonalData(context);
   },
   async updatePersonalData(_: any, params: GQLMutationUpdatePersonalDataArgs, context: ContextWithLoaders) {
-    return patchPersonalData(params, context);
+    const personalData = await patchPersonalData(params, context);
+    return {
+      ...personalData,
+      role: personalData.role === "employee" ? GQLUserRole.Employee : GQLUserRole.Student,
+    };
   },
   async sortFolders(_: any, params: GQLMutationSortFoldersArgs, context: ContextWithLoaders) {
     return sortFolders(params, context);
