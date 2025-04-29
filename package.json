@@ -23,7 +23,7 @@
     "tdd": "jest --watch"
   },
   "engines": {
-    "node": ">=20.13.0"
+    "node": ">=20.19.1"
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
