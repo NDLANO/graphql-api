@@ -1321,6 +1321,11 @@ export const typeDefs = gql`
     parentId: String
   }
 
+  enum UserRole {
+    employee
+    student
+  }
+
   type MyNdlaPersonalData {
     id: Int!
     feideId: String!
@@ -1328,7 +1333,7 @@ export const typeDefs = gql`
     email: String!
     displayName: String!
     favoriteSubjects: [String!]!
-    role: String!
+    role: UserRole!
     arenaEnabled: Boolean!
     arenaAccepted: Boolean!
     organization: String!
