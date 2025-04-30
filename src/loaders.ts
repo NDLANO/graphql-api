@@ -37,7 +37,10 @@ export function articlesLoader(context: Context): DataLoader<string, IArticleV2D
 
 export function learningpathsLoader(context: Context): DataLoader<string, ILearningPathV2DTO | undefined> {
   return new DataLoader(async (learningpathIds) => {
-    return fetchLearningpaths(learningpathIds.map(parseInt), context);
+    return fetchLearningpaths(
+      learningpathIds.map((id) => parseInt(id)),
+      context,
+    );
   });
 }
 
