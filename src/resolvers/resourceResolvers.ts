@@ -66,9 +66,10 @@ export const resolvers = {
     },
     async meta(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<GQLMeta | null> {
       if (resource.contentUri?.startsWith("urn:learningpath")) {
-        const learningpath = await context.loaders.learningpathsLoader.load(
-          resource.contentUri.replace("urn:learningpath:", ""),
-        );
+        const learningpathId = parseInt(getLearningpathIdFromUrn(resource.contentUri));
+        const learningpath = isNaN(learningpathId)
+          ? undefined
+          : await context.loaders.learningpathsLoader.load(learningpathId);
         return learningpath ? learningpathToMeta(learningpath) : null;
       } else if (resource.contentUri?.startsWith("urn:article")) {
         const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));

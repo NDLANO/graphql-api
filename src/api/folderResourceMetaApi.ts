@@ -27,6 +27,7 @@ import {
   GQLQueryFolderResourceMetaSearchArgs,
 } from "../types/schema";
 import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
+import getLogger from "../utils/logger";
 
 const findResourceTypes = (result: Node | null, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
   const ctx = result?.contexts?.[0];
@@ -44,7 +45,8 @@ const fetchResourceMeta = async (
   context: ContextWithLoaders,
 ): Promise<Array<GQLMeta | undefined>> => {
   if (type === "learningpath") {
-    const learningpaths = await context.loaders.learningpathsLoader.loadMany(ids);
+    const numberIds = ids.map((id) => parseInt(id)).filter((id) => !!id);
+    const learningpaths = await context.loaders.learningpathsLoader.loadMany(numberIds);
     return learningpaths
       .filter((learningpath): learningpath is ILearningPathV2DTO => !!learningpath)
       .map(learningpathToMeta);
@@ -80,8 +82,7 @@ const fetchAndTransformResourceMeta = async (
       };
     });
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(`Failed to fetch article metas with parameters ${resources}`);
+    getLogger().error(`Failed to fetch article metas with parameters: ${JSON.stringify(resources)}`, resources);
     return [];
   }
 };
