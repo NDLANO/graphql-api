@@ -22,6 +22,7 @@ import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils"
 import { getNumberId } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
+const cachelessClient = createAuthClient<openapi.paths>({ disableCache: true });
 
 export async function fetchLearningpaths(
   learningpathIds: number[],
@@ -48,7 +49,7 @@ export async function fetchLearningpaths(
 }
 
 export async function fetchMyLearningpaths(_context: Context): Promise<Array<ILearningPathV2DTO>> {
-  return client.GET("/learningpath-api/v2/learningpaths/mine").then(resolveJsonOATS);
+  return cachelessClient.GET("/learningpath-api/v2/learningpaths/mine").then(resolveJsonOATS);
 }
 
 export async function fetchLearningpath(id: string, context: Context): Promise<ILearningPathV2DTO> {
