@@ -36,7 +36,9 @@ function commaSeparatedStringToArray(input: string | string[] | undefined): stri
   return input.split(",").map((s) => s.trim());
 }
 
-const convertQuery = (searchQuery: GQLQuerySearchArgs) => {
+type SearchQueryParams = openapi.operations["getSearch-apiV1Search"]["parameters"]["query"];
+
+const convertQuery = (searchQuery: GQLQuerySearchArgs): SearchQueryParams => {
   return {
     ...searchQuery,
     "page-size": searchQuery.pageSize,
