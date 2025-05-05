@@ -14,19 +14,9 @@ import {
   SeriesSummarySearchResultDTO,
 } from "@ndla/types-backend/audio-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getNumberId } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
-
-const getNumberId = (audioId: number | string): number => {
-  if (typeof audioId === "string") {
-    const numberId = parseInt(audioId);
-    if (isNaN(numberId)) {
-      throw new Error(`Invalid audioId: ${audioId}`);
-    }
-    return numberId;
-  }
-  return audioId;
-};
 
 export async function fetchAudio(context: Context, audioId: number | string): Promise<IAudioMetaInformationDTO | null> {
   const response = await client.GET("/audio-api/v1/audio/{audio-id}", {

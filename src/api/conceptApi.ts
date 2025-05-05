@@ -8,19 +8,9 @@
 
 import { IConceptSearchResultDTO, IConceptDTO, openapi } from "@ndla/types-backend/concept-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getNumberId } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
-
-const getNumberId = (conceptId: number | string): number => {
-  if (typeof conceptId === "string") {
-    const numberId = parseInt(conceptId);
-    if (isNaN(numberId)) {
-      throw new Error(`Invalid conceptId: ${conceptId}`);
-    }
-    return numberId;
-  }
-  return conceptId;
-};
 
 export async function searchConcepts(
   params: {

@@ -19,19 +19,9 @@ import {
   GQLMutationUpdateLearningpathStepSeqNoArgs,
 } from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getNumberId } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
-
-const getNumberId = (id: number | string): number => {
-  if (typeof id === "string") {
-    const numberId = parseInt(id);
-    if (isNaN(numberId)) {
-      throw new Error(`Invalid leanringpathId: ${id}`);
-    }
-    return numberId;
-  }
-  return id;
-};
 
 export async function fetchLearningpaths(
   learningpathIds: number[],

@@ -14,19 +14,9 @@ import {
 } from "@ndla/types-backend/image-api";
 import { GQLImageLicense, GQLQueryImageSearchArgs } from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getNumberId } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
-
-const getNumberId = (imageId: number | string): number => {
-  if (typeof imageId === "string") {
-    const numberId = parseInt(imageId);
-    if (isNaN(numberId)) {
-      throw new Error(`Invalid imageId: ${imageId}`);
-    }
-    return numberId;
-  }
-  return imageId;
-};
 
 export async function fetchImage(imageId: string, context: Context): Promise<IImageMetaInformationV2DTO | null> {
   const response = await client.GET("/image-api/v2/images/{image_id}", {

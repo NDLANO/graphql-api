@@ -231,3 +231,14 @@ const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, context: ContextWithLoaders): 
     name: name ?? "",
   };
 };
+
+export const getNumberId = (id: number | string): number => {
+  if (typeof id === "string") {
+    const numberId = parseInt(id);
+    if (isNaN(numberId)) {
+      throw new Error(`Invalid id: ${id}`);
+    }
+    return numberId;
+  }
+  return id;
+};
