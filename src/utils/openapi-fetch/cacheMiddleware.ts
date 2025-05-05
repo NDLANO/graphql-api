@@ -22,7 +22,6 @@ export function cachedResponse(data: string | undefined): globalThis.Response | 
 
 export const OATSCacheMiddleware: Middleware = {
   async onRequest({ request }) {
-    const ctx = getContextOrThrow();
     const cacheControl = request.headers.get("Cache-Control");
 
     const isCachable =
@@ -32,6 +31,7 @@ export const OATSCacheMiddleware: Middleware = {
 
     if (!isCachable) return request;
 
+    const ctx = getContextOrThrow();
     const cacheKey = getCacheKey(request.url, ctx);
     const data = await getCache().get(cacheKey);
     const cached = cachedResponse(data);
