@@ -1649,8 +1649,6 @@ export type GQLQuerySearchWithoutPaginationArgs = {
 
 export type GQLQuerySharedFolderArgs = {
   id: Scalars['String']['input'];
-  includeResources?: InputMaybe<Scalars['Boolean']['input']>;
-  includeSubfolders?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
