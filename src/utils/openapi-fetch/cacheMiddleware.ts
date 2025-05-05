@@ -24,12 +24,12 @@ export const OATSCacheMiddleware: Middleware = {
   async onRequest({ request }) {
     const cacheControl = request.headers.get("Cache-Control");
 
-    const isCachable =
+    const isCacheable =
       (request.method === undefined || request.method === "GET") &&
       cacheControl !== "no-store" &&
       cacheControl !== "reload";
 
-    if (!isCachable) return request;
+    if (!isCacheable) return request;
 
     const ctx = getContextOrThrow();
     const cacheKey = getCacheKey(request.url, ctx);
