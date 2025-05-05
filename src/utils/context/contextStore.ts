@@ -17,7 +17,7 @@ export function getAsyncContextStorage() {
 export function getContextOrThrow(): ContextWithLoaders {
   const ctx = getContext();
   if (ctx === undefined)
-    throw Error("Could not get context in `getContextOrThow`, did you remember to attach `contextExpressMiddleware`?");
+    throw Error("Could not get context in `getContextOrThrow`, did you remember to attach `contextExpressMiddleware`?");
   return ctx;
 }
 
