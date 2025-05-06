@@ -6,6 +6,7 @@
  *
  */
 
+import { OEmbedDTO } from "@ndla/types-backend/oembed-proxy";
 import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import { fetchOpengraph } from "../api/externalApi";
 import {
@@ -82,7 +83,7 @@ const getOembed = async (
   learningpathStep: GQLLearningpathStep,
   _: any,
   context: ContextWithLoaders,
-): Promise<GQLLearningpathStepOembed | null> => {
+): Promise<OEmbedDTO | null> => {
   if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
     return null;
   }
@@ -94,7 +95,7 @@ const getOembed = async (
     learningpathStep.embedUrl.embedType === "oembed" &&
     learningpathStep.embedUrl.url !== "https://ndla.no"
   ) {
-    return fetchOembed<GQLLearningpathStepOembed>(learningpathStep.embedUrl.url, context);
+    return fetchOembed(learningpathStep.embedUrl.url, context);
   }
   return null;
 };

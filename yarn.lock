@@ -7726,6 +7726,7 @@ __metadata:
     nock: "npm:^13.2.9"
     node-fetch: "npm:2.6.7"
     open-graph-scraper: "npm:^6.8.3"
+    openapi-fetch: "npm:^0.13.5"
     prettier: "npm:^3.1.0"
     prismjs: "npm:^1.29.0"
     prom-client: "npm:^15.1.3"
@@ -8017,6 +8018,22 @@ __metadata:
     iconv-lite: "npm:^0.6.3"
     undici: "npm:^6.21.0"
   checksum: 10c0/85f65f250b13b1c51ac2d88cf7fe0cc5691cc63d002ec0cf6462371736b4d2a59d386453a61bc11d7bdb568afca5dd36c43641e1e296afe924109d265ac16588
+  languageName: node
+  linkType: hard
+
+"openapi-fetch@npm:^0.13.5":
+  version: 0.13.5
+  resolution: "openapi-fetch@npm:0.13.5"
+  dependencies:
+    openapi-typescript-helpers: "npm:^0.0.15"
+  checksum: 10c0/57736d9d4310d7bc7fa5e4e37e80d28893a7fefee88ee6e0327600de893e0638479445bf0c9f5bd7b1a2429f409425d3945d6e942b23b37b8081630ac52244fb
+  languageName: node
+  linkType: hard
+
+"openapi-typescript-helpers@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "openapi-typescript-helpers@npm:0.0.15"
+  checksum: 10c0/5eb68d487b787e3e31266470b1a310726549dd45a1079655ab18066ab291b0b3c343fdf629991013706a2329b86964f8798d56ef0272b94b931fe6c19abd7a88
   languageName: node
   linkType: hard
 

@@ -6,9 +6,8 @@
  *
  */
 
-import { search, groupSearch, searchWithoutPagination } from "../api";
+import { search, searchWithoutPagination } from "../api";
 import {
-  GQLGroupSearch,
   GQLQuerySearchArgs,
   GQLQuerySearchWithoutPaginationArgs,
   GQLSearch,
@@ -18,9 +17,6 @@ import {
 export const Query = {
   async search(_: any, searchQuery: GQLQuerySearchArgs, context: ContextWithLoaders): Promise<GQLSearch> {
     return search(searchQuery, context);
-  },
-  async groupSearch(_: any, searchQuery: GQLQuerySearchArgs, context: ContextWithLoaders): Promise<GQLGroupSearch> {
-    return groupSearch(searchQuery, context);
   },
   async searchWithoutPagination(
     _: any,
