@@ -1907,6 +1907,7 @@ export type GQLSubjectPageVisualElement = {
   __typename?: 'SubjectPageVisualElement';
   alt?: Maybe<Scalars['String']['output']>;
   imageLicense?: Maybe<GQLImageLicense>;
+  imageUrl?: Maybe<Scalars['String']['output']>;
   type: Scalars['String']['output'];
   url: Scalars['String']['output'];
 };
@@ -3872,6 +3873,7 @@ export type GQLSubjectPageBannerResolvers<ContextType = any, ParentType extends 
 export type GQLSubjectPageVisualElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectPageVisualElement'] = GQLResolversParentTypes['SubjectPageVisualElement']> = {
   alt?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   imageLicense?: Resolver<Maybe<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
+  imageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

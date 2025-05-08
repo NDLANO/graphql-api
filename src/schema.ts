@@ -797,6 +797,7 @@ export const typeDefs = gql`
   type SubjectPageVisualElement {
     type: String!
     url: String!
+    imageUrl: String
     alt: String
     imageLicense: ImageLicense
   }
