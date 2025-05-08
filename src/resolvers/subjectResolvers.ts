@@ -135,5 +135,14 @@ export const resolvers = {
         return undefined;
       }
     },
+    async imageUrl(visualElement: IVisualElementDTO, _: any, context: ContextWithLoaders): Promise<string | null> {
+      if (visualElement.type === "image") {
+        const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
+        if (!imageId) return null;
+        const image = await fetchImageV3(imageId, context);
+        return image.image.imageUrl;
+      }
+      return null;
+    },
   },
 };
