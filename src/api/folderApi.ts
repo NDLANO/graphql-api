@@ -127,11 +127,10 @@ export async function patchFolder(
 }
 
 export async function deleteFolder({ id }: GQLMutationDeleteFolderArgs, _context: Context): Promise<string> {
-  return client
-    .DELETE("/myndla-api/v1/folders/{folder-id}", {
-      params: { path: { "folder-id": id } },
-    })
-    .then(resolveJsonOATS);
+  await client
+    .DELETE("/myndla-api/v1/folders/{folder-id}", { params: { path: { "folder-id": id } } })
+    .then(resolveOATS);
+  return id;
 }
 
 export async function postFolderResource(
