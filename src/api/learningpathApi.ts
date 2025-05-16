@@ -34,6 +34,7 @@ export async function fetchLearningpaths(
         query: {
           ids: learningpathIds,
           language: context.language,
+          fallback: true,
         },
       },
     })
