@@ -220,6 +220,7 @@ const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: Conte
     name,
     breadcrumbs: breadcrumbs ?? [],
     relevance: relevance ?? "",
+    root: ctx.root[context.language] ?? ctx.root[defaultLanguage] ?? Object.values(ctx.root)[0] ?? "",
     parents,
   };
 };

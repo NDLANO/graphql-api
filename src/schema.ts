@@ -495,6 +495,7 @@ export const typeDefs = gql`
     parentIds: [String!]!
     rootId: String!
     relevance: String!
+    root: String!
     isActive: Boolean!
     parents: [TaxonomyCrumb!]
   }
