@@ -11,6 +11,7 @@ import { GraphQLFormattedError } from "graphql/error/GraphQLError";
 import { createLogger, transports, format, Logger } from "winston";
 import "source-map-support/register";
 import { unreachable } from "./unreachable";
+import { getContext } from "./context/contextStore";
 
 export const loggerStorage = new AsyncLocalStorage<Logger>();
 
@@ -63,18 +64,40 @@ const getLoglevelFromError = (err: GraphQLFormattedError): LogLevel => {
   return "error";
 };
 
+const getErrorLog = (err: GraphQLFormattedError) => {
+  const ctx = getContext();
+  const context = ctx
+    ? {
+        requestPath: ctx.req.url,
+        requestBody: ctx.req.body,
+      }
+    : {};
+
+  const { message, locations, path, extensions } = err;
+  const errorLog = {
+    message,
+    locations,
+    path,
+    extensions,
+    ...context,
+  };
+  return errorLog;
+};
+
 export const logError = (err: GraphQLFormattedError) => {
   const logLevel = getLoglevelFromError(err);
 
+  const errorLog = getErrorLog(err);
+
   switch (logLevel) {
     case "info":
-      getLogger().info(err);
+      getLogger().info(errorLog);
       break;
     case "warn":
-      getLogger().warn(err);
+      getLogger().warn(errorLog);
       break;
     case "error":
-      getLogger().error(err);
+      getLogger().error(errorLog);
       break;
     default:
       unreachable(logLevel);
