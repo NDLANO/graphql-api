@@ -7,6 +7,7 @@
  */
 
 import { Node } from "@ndla/types-taxonomy";
+import { GraphQLError } from "graphql";
 import { fetchChildren, queryNodes } from "../api/taxonomyApi";
 import {
   GQLCategory,
@@ -57,12 +58,16 @@ export const Query = {
     const id = path?.split("__")[1] || contextId;
 
     if (!id) {
-      throw new Error(`Failed to find a programme with contextId ${contextId}`);
+      throw new GraphQLError(`No programme found with contextId: ${contextId}`, {
+        extensions: { status: 404 },
+      });
     }
 
     const node = await queryNodes({ contextId: id, language: context.language }, context);
     if (!node[0]) {
-      throw new Error(`Failed to find a programme with contextId ${contextId}`);
+      throw new GraphQLError(`No programme found with contextId: ${contextId}`, {
+        extensions: { status: 404 },
+      });
     }
     return nodeToProgramme(node[0], context.language);
   },
