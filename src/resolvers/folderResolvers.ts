@@ -56,7 +56,7 @@ import {
   GQLMutationFavoriteSharedFolderArgs,
   GQLMutationUnFavoriteSharedFolderArgs,
   GQLMutationSortSavedSharedFoldersArgs,
-  GQLUserRole,
+  type GQLUserRole,
 } from "../types/schema";
 
 export const Query: Pick<
