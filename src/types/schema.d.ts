@@ -1649,8 +1649,6 @@ export type GQLQuerySearchWithoutPaginationArgs = {
 
 export type GQLQuerySharedFolderArgs = {
   id: Scalars['String']['input'];
-  includeResources?: InputMaybe<Scalars['Boolean']['input']>;
-  includeSubfolders?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -1909,6 +1907,7 @@ export type GQLSubjectPageVisualElement = {
   __typename?: 'SubjectPageVisualElement';
   alt?: Maybe<Scalars['String']['output']>;
   imageLicense?: Maybe<GQLImageLicense>;
+  imageUrl?: Maybe<Scalars['String']['output']>;
   type: Scalars['String']['output'];
   url: Scalars['String']['output'];
 };
@@ -1946,6 +1945,7 @@ export type GQLTaxonomyContext = {
   parentIds: Array<Scalars['String']['output']>;
   parents?: Maybe<Array<GQLTaxonomyCrumb>>;
   relevance: Scalars['String']['output'];
+  root: Scalars['String']['output'];
   rootId: Scalars['String']['output'];
   url: Scalars['String']['output'];
 };
@@ -3880,6 +3880,7 @@ export type GQLSubjectPageBannerResolvers<ContextType = any, ParentType extends 
 export type GQLSubjectPageVisualElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectPageVisualElement'] = GQLResolversParentTypes['SubjectPageVisualElement']> = {
   alt?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   imageLicense?: Resolver<Maybe<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
+  imageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3918,6 +3919,7 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   parents?: Resolver<Maybe<Array<GQLResolversTypes['TaxonomyCrumb']>>, ParentType, ContextType>;
   relevance?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  root?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   rootId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

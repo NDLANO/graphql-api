@@ -22,7 +22,6 @@ import {
   GQLTransformedArticleContent,
   GQLArticleTransformedContentArgs,
   GQLRelatedContent,
-  GQLVisualElementOembed,
   GQLMetaImageWithCopyright,
 } from "../types/schema";
 
@@ -99,8 +98,8 @@ export const resolvers = {
       return [];
     },
     async oembed(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<string | undefined> {
-      const oembed = await fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}/article/${article.id}`, context);
-      if (oembed.html === undefined) return undefined;
+      const oembed = await fetchOembed(`${ndlaUrl}/article/${article.id}`, context);
+      if (oembed?.html === undefined) return undefined;
       const parsed = load(oembed.html);
       return parsed("iframe").attr("src");
     },

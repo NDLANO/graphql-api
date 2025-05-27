@@ -495,6 +495,7 @@ export const typeDefs = gql`
     parentIds: [String!]!
     rootId: String!
     relevance: String!
+    root: String!
     isActive: Boolean!
     parents: [TaxonomyCrumb!]
   }
@@ -797,6 +798,7 @@ export const typeDefs = gql`
   type SubjectPageVisualElement {
     type: String!
     url: String!
+    imageUrl: String
     alt: String
     imageLicense: ImageLicense
   }
@@ -1514,7 +1516,7 @@ export const typeDefs = gql`
     folderResourceMeta(resource: FolderResourceMetaSearchInput!): FolderResourceMeta
     folderResourceMetaSearch(resources: [FolderResourceMetaSearchInput!]!): [FolderResourceMeta!]!
     folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
-    sharedFolder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): SharedFolder!
+    sharedFolder(id: String!): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV2

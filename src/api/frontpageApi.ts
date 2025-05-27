@@ -6,8 +6,10 @@
  *
  */
 
-import { IFrontPageDTO, IFilmFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { openapi, IFrontPageDTO, IFilmFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+
+const client = createAuthClient<openapi.paths>();
 
 export interface IMovieMeta {
   title: string;
@@ -19,20 +21,26 @@ export interface IMovieMeta {
   };
 }
 
-export async function fetchFrontpage(context: Context): Promise<IFrontPageDTO> {
-  const response = await fetch(`/frontpage-api/v1/frontpage`, context);
-  return await resolveJson(response);
+export async function fetchFrontpage(_context: Context): Promise<IFrontPageDTO> {
+  return client.GET("/frontpage-api/v1/frontpage").then(resolveJsonOATS);
 }
 
 export async function fetchSubjectPage(subjectPageId: number, context: Context): Promise<ISubjectPageDTO> {
-  const response = await fetch(
-    `/frontpage-api/v1/subjectpage/${subjectPageId}?language=${context.language}&fallback=true`,
-    context,
-  );
-  return await resolveJson(response);
+  return client
+    .GET("/frontpage-api/v1/subjectpage/{subjectpage-id}", {
+      params: {
+        path: {
+          "subjectpage-id": subjectPageId,
+        },
+        query: {
+          language: context.language,
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
-export async function fetchFilmFrontpage(context: Context): Promise<IFilmFrontPageDTO> {
-  const response = await fetch(`/frontpage-api/v1/filmfrontpage`, context);
-  return await resolveJson(response);
+export async function fetchFilmFrontpage(_context: Context): Promise<IFilmFrontPageDTO> {
+  return client.GET("/frontpage-api/v1/filmfrontpage").then(resolveJsonOATS);
 }

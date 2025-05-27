@@ -11,6 +11,7 @@ import {
   IAudioSummarySearchResultDTO,
   IPodcastMetaDTO,
   ISeriesDTO,
+  SeriesSummarySearchResultDTO,
 } from "@ndla/types-backend/audio-api";
 import { fetchAudio, fetchPodcastSeries, fetchPodcastSeriesPage, fetchPodcastsPage } from "../api/audioApi";
 import { fetchImage } from "../api/imageApi";
@@ -47,7 +48,7 @@ export const Query = {
     _: any,
     { pageSize, page, fallback }: GQLQueryPodcastSeriesSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<IAudioSummarySearchResultDTO> {
+  ): Promise<SeriesSummarySearchResultDTO> {
     return fetchPodcastSeriesPage(context, pageSize, page, fallback ?? false);
   },
 };

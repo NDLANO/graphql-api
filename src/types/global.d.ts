@@ -41,7 +41,7 @@ declare global {
 
   interface Loaders {
     articlesLoader: DataLoader<string, IArticleV2DTO | undefined>;
-    learningpathsLoader: DataLoader<string, ILearningPathV2DTO | undefined>;
+    learningpathsLoader: DataLoader<number, ILearningPathV2DTO | undefined>;
     subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
     subjectsLoader: DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }>;
     nodeLoader: DataLoader<NodeLoaderParams, Node>;

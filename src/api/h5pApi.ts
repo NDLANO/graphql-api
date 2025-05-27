@@ -16,7 +16,8 @@ import {
   H5pInfo,
 } from "@ndla/types-embed";
 import { h5pHostUrl } from "../config";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { resolveJson } from "../utils/apiHelpers";
+import { fetch } from "../utils/fetch";
 
 const fetchPreviewOembed = async (embed: H5pEmbedData, context: Context): Promise<H5pPreviewResponse> => {
   const url = `${h5pHostUrl()}/oembed/preview?${queryString.stringify({
