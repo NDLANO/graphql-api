@@ -18,7 +18,7 @@ import {
   GQLMutationUpdateLearningpathStepArgs,
   GQLMutationUpdateLearningpathStepSeqNoArgs,
 } from "../types/schema";
-import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { createAuthClient, resolveJsonOATS, resolveOATS } from "../utils/openapi-fetch/utils";
 import { getNumberId } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
@@ -159,7 +159,7 @@ export async function deleteLearningstep(
   { learningstepId, learningpathId }: GQLMutationDeleteLearningpathStepArgs,
   _context: Context,
 ): Promise<string[]> {
-  return client
+  await client
     .DELETE("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}", {
       params: {
         path: {
@@ -168,7 +168,8 @@ export async function deleteLearningstep(
         },
       },
     })
-    .then(resolveJsonOATS);
+    .then(resolveOATS);
+  return [];
 }
 
 export async function copyLearningpath(
