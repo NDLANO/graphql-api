@@ -1572,7 +1572,7 @@ export const typeDefs = gql`
       learningstepId: Int!
       params: LearningpathStepUpdateInput!
     ): MyNdlaLearningpathStep!
-    deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]
+    deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): Boolean
     copyLearningpath(learningpathId: Int!, params: LearningpathCopyInput!): MyNdlaLearningpath!
     updateLearningpathStepSeqNo(learningpathId: Int!, learningpathStepId: Int!, seqNo: Int!): LearningpathSeqNo!
   }

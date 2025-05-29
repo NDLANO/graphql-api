@@ -174,17 +174,19 @@ export async function updateLearningstep(
 export async function deleteLearningstep(
   { learningstepId, learningpathId }: GQLMutationDeleteLearningpathStepArgs,
   _context: Context,
-): Promise<string[]> {
-  return client
-    .DELETE("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}", {
+): Promise<boolean> {
+  const { response } = await client.DELETE(
+    "/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}",
+    {
       params: {
         path: {
           learningpath_id: learningpathId,
           learningstep_id: learningstepId,
         },
       },
-    })
-    .then(resolveJsonOATS);
+    },
+  );
+  return response.ok;
 }
 
 export async function copyLearningpath(
