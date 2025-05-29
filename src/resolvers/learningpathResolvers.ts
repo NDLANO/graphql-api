@@ -15,6 +15,7 @@ import {
   createLearningstep,
   deleteLearningpath,
   deleteLearningstep,
+  fetchMyLearningpath,
   updateLearningpath,
   updateLearningpathStatus,
   updateLearningpathStepSeqNo,
@@ -60,7 +61,7 @@ export const Query = {
     { pathId }: GQLQueryLearningpathArgs,
     context: ContextWithLoaders,
   ): Promise<GQLMyNdlaLearningpath> {
-    const learningpath = await fetchLearningpath(pathId, context);
+    const learningpath = await fetchMyLearningpath(pathId, context);
     return toGQLLearningpath(learningpath);
   },
   async myLearningpaths(_: any, __: any, context: ContextWithLoaders): Promise<Array<GQLMyNdlaLearningpath>> {
