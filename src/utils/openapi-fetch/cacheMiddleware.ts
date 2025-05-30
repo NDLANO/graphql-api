@@ -41,11 +41,11 @@ export const OATSCacheMiddleware: Middleware = {
   async onResponse({ request, response }) {
     const ctx = getContextOrThrow();
     const shouldCache = setHeaderIfShouldNotCache(response, ctx);
-    const body = await response.text();
     if (response.status !== 200 || !shouldCache || request.method !== "GET") return;
 
     const cacheKey = getCacheKey(request.url, ctx);
     const headers: Record<string, unknown> = {};
+    const body = await response.text();
     response.headers.forEach((value, key) => (headers[key] = value));
     await getCache().set(
       cacheKey,
