@@ -24,7 +24,7 @@ import {
   queryNodes,
 } from "./api";
 import { GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
-import { searchNodes } from "./api/taxonomyApi";
+import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -84,7 +84,7 @@ export function nodeLoader(context: Context): DataLoader<NodeLoaderParams, Node>
   );
 }
 
-export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Node[]> {
+export function nodesLoader(context: Context): DataLoader<NodeQueryParams, Node[]> {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
@@ -92,18 +92,14 @@ export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Nod
           if (!input) {
             throw Error("Tried to get node with no params");
           }
-          const params = {
-            isVisible: input.filterVisible,
-            rootId: input.rootId,
-            includeContexts: true,
-            filterProgrammes: true,
-          };
-          if (input.contextId) {
-            return queryNodes({ ...params, contextId: input.contextId }, context);
-          } else if (input.contentURI) {
-            return queryNodes({ ...params, contentURI: input.contentURI }, context);
-          }
-          throw Error("Tried to get node with insufficient params");
+          return queryNodes(
+            {
+              includeContexts: true,
+              filterProgrammes: true,
+              ...input,
+            },
+            context,
+          );
         }),
       );
     },

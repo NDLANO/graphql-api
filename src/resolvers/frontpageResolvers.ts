@@ -75,11 +75,21 @@ export const resolvers = {
       return article?.metaDescription.metaDescription || "";
     },
     async url(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
+      const nodes = await context.loaders.nodesLoader.load({
+        contentURI: id,
+        rootId: "urn:subject:20",
+        includeContexts: true,
+        filterProgrammes: true,
+      });
       return nodes[0]?.url || "";
     },
     async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
-      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
+      const nodes = await context.loaders.nodesLoader.load({
+        contentURI: id,
+        rootId: "urn:subject:20",
+        includeContexts: true,
+        filterProgrammes: true,
+      });
       return nodes[0]?.resourceTypes ?? [];
     },
   },

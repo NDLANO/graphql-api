@@ -39,7 +39,6 @@ import { fetchExternalOembed } from "./externalApi";
 import { checkIfFileExists } from "./fileApi";
 import { fetchH5pLicenseInformation, fetchH5pOembed, fetchH5pInfo } from "./h5pApi";
 import { fetchImageV3 } from "./imageApi";
-import { queryNodes } from "./taxonomyApi";
 import { fetchVideo, fetchVideoSources } from "./videoApi";
 import { ndlaUrl } from "../config";
 import { getBrightcoveCopyright } from "../utils/brightcoveUtils";
@@ -184,10 +183,13 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
   const host = opts.absoluteUrl ? ndlaUrl : "";
   const baseUrl = `${host}/${context.language}`;
-  const nodes = await queryNodes(
-    { contentURI, language: context.language, includeContexts: true, filterProgrammes: true, isVisible: true },
-    context,
-  );
+  const nodes = await context.loaders.nodesLoader.load({
+    contentURI,
+    language: context.language,
+    includeContexts: true,
+    filterProgrammes: true,
+    isVisible: true,
+  });
 
   if (nodes.length === 0 && contentType === "article") {
     const article = await context.loaders.articlesLoader.load(embedData.contentId);
@@ -215,16 +217,14 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
   if (typeof articleId === "string" || typeof articleId === "number") {
     const [article, resources] = await Promise.all([
       fetchSimpleArticle(`urn:article:${articleId}`, context),
-      queryNodes(
-        {
-          contentURI: `urn:article:${articleId}`,
-          language: context.language,
-          filterProgrammes: true,
-          isVisible: true,
-          rootId: opts.subject,
-        },
-        context,
-      ),
+      context.loaders.nodesLoader.load({
+        contentURI: `urn:article:${articleId}`,
+        language: context.language,
+        filterProgrammes: true,
+        includeContexts: true,
+        isVisible: true,
+        rootId: opts.subject,
+      }),
     ]);
     const resource = resources?.[0];
     return { article, resource };

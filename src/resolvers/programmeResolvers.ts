@@ -8,7 +8,7 @@
 
 import { Node } from "@ndla/types-taxonomy";
 import { GraphQLError } from "graphql";
-import { fetchChildren, queryNodes } from "../api/taxonomyApi";
+import { fetchChildren } from "../api/taxonomyApi";
 import {
   GQLCategory,
   GQLGrade,
@@ -34,16 +34,13 @@ const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
 
 export const Query = {
   async programmes(_: any, __: any, context: ContextWithLoaders): Promise<GQLProgrammePage[]> {
-    const nodes = await queryNodes(
-      {
-        nodeType: "PROGRAMME",
-        isRoot: true,
-        language: context.language,
-        includeContexts: true,
-        isVisible: true,
-      },
-      context,
-    );
+    const nodes = await context.loaders.nodesLoader.load({
+      nodeType: "PROGRAMME",
+      isRoot: true,
+      language: context.language,
+      isVisible: true,
+      filterProgrammes: false,
+    });
     return nodes.sort((a, b) => a.name.localeCompare(b.name)).map((node) => nodeToProgramme(node, context.language));
   },
   async programme(
@@ -63,7 +60,12 @@ export const Query = {
       });
     }
 
-    const node = await queryNodes({ contextId: id, language: context.language }, context);
+    const node = await context.loaders.nodesLoader.load({
+      contextId: id,
+      language: context.language,
+      filterProgrammes: false,
+      includeContexts: true,
+    });
     if (!node[0]) {
       throw new GraphQLError(`No programme found with contextId: ${contextId}`, {
         extensions: { status: 404 },
