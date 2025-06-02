@@ -21,7 +21,6 @@ export {
   fetchNode,
   fetchNodeByContentUri,
   fetchNodeResources,
-  fetchTopics,
   fetchChildren,
   queryContexts,
   queryNodes,

@@ -72,18 +72,6 @@ export async function fetchSubjectTopics(subjectId: string, context: Context): P
   return resolveJson(response);
 }
 
-export async function fetchTopics(args: { contentUri?: string }, context: Context): Promise<GQLTopic[]> {
-  const query = qs.stringify({
-    contentURI: args.contentUri ?? "",
-    nodeType: "TOPIC",
-    language: context.language,
-    includeContexts: true,
-    filterProgrammes: true,
-  });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
-  return resolveJson(response);
-}
-
 export async function fetchNodeByContentUri(contentUri: string, context: Context): Promise<Node | undefined> {
   const query = qs.stringify({
     contentURI: contentUri,
