@@ -7,7 +7,6 @@
  */
 
 import { IArticleV2DTO, openapi } from "@ndla/types-backend/article-api";
-import { queryNodes } from "./taxonomyApi";
 import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
 import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
@@ -28,7 +27,11 @@ export const fetchTransformedContent = async (
   const params = _params.transformArgs ?? {};
   let subjectId = params.subjectId;
   if (params.contextId && !subjectId) {
-    const contextNode = await context.loaders.nodesLoader.load({ contextId: params.contextId });
+    const contextNode = await context.loaders.nodesLoader.load({
+      contextId: params.contextId,
+      includeContexts: true,
+      filterProgrammes: true,
+    });
     const contextRootId = contextNode[0]?.context?.rootId;
     if (contextRootId) {
       subjectId = contextRootId;
@@ -64,7 +67,11 @@ export const fetchTransformedDisclaimer = async (
   const params = _params.transformArgs ?? {};
   let subjectId = params.subjectId;
   if (params.contextId && !subjectId) {
-    const contextNode = await context.loaders.nodesLoader.load({ contextId: params.contextId });
+    const contextNode = await context.loaders.nodesLoader.load({
+      contextId: params.contextId,
+      includeContexts: true,
+      filterProgrammes: true,
+    });
     const contextRootId = contextNode[0]?.context?.rootId;
     if (contextRootId) {
       subjectId = contextRootId;
@@ -88,7 +95,7 @@ export const fetchTransformedDisclaimer = async (
 export async function fetchRelatedContent(
   article: IArticleV2DTO,
   params: { subjectId?: string },
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLRelatedContent[]> {
   const nullableRelatedContent: (GQLRelatedContent | undefined)[] = await Promise.all(
     article?.relatedContent?.map(async (rc) => {
@@ -100,13 +107,12 @@ export async function fetchRelatedContent(
       }
       try {
         const related = await fetchSimpleArticle(`urn:article:${rc}`, context);
-        const nodes = await queryNodes(
-          {
-            contentURI: `urn:article:${related.id}`,
-            language: context.language,
-          },
-          context,
-        );
+        const nodes = await context.loaders.nodesLoader.load({
+          contentURI: `urn:article:${related.id}`,
+          language: context.language,
+          includeContexts: true,
+          filterProgrammes: true,
+        });
         const node = nodes?.[0];
         if (node) {
           const ctx = node.contexts.find((c) => c.rootId === params.subjectId) ?? node.context;
