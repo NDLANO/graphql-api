@@ -36,7 +36,7 @@ export const Query = {
       return nodeToTaxonomyEntity(node, context);
     }
     if (contextId) {
-      const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: true }, context);
+      const nodes = await context.loaders.nodesLoader.load({ contextId });
       if (nodes.length === 0) {
         throw new GraphQLError(`No node found with contextId: ${contextId}`, {
           extensions: { status: 404 },
