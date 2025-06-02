@@ -14,13 +14,20 @@ export const Query = {};
 
 export const resolvers = {
   Concept: {
-    async subjectNames(concept: GQLConcept, params: any, context: ContextWithLoaders): Promise<string[]> {
+    async subjectNames(concept: GQLConcept, _: any, context: ContextWithLoaders): Promise<string[]> {
       const subjectIds = concept.subjectIds;
       if (!subjectIds || subjectIds.length === 0) {
         return [];
       }
-      const data = await context.loaders.subjectsLoader.load(params);
-      return subjectIds.map((id) => data.subjects.find((subject) => subject.id === id)?.name || "");
+      // TODO: This is crazy deprecated. Should we consider removing it?
+      const data = await context.loaders.nodesLoader.load({
+        language: context.language,
+        nodeType: "SUBJECT",
+        includeContexts: true,
+        filterProgrammes: true,
+        ids: subjectIds,
+      });
+      return subjectIds.map((id) => data.find((subject) => subject.id === id)?.name || "");
     },
     async visualElement(concept: IConceptDTO, _: any, context: ContextWithLoaders): Promise<GQLVisualElement | null> {
       const visualElement = concept.visualElement?.visualElement;

@@ -16,14 +16,13 @@ import {
   fetchSubjectTopics,
   fetchLearningpaths,
   fetchResourceTypes,
-  fetchSubjects,
   fetchNode,
   fetchFrontpage,
   fetchFilmFrontpage,
   fetchSubjectPage,
   queryNodes,
 } from "./api";
-import { GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import { GQLResourceTypeDefinition } from "./types/schema";
 import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
@@ -104,23 +103,6 @@ export function nodesLoader(context: Context): DataLoader<NodeQueryParams, Node[
       );
     },
     { cacheKeyFn: (key) => JSON.stringify(key) },
-  );
-}
-
-export function subjectsLoader(context: Context): DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }> {
-  return new DataLoader(
-    async (inputs) => {
-      return Promise.all(
-        inputs.map(async (input) => {
-          const subjects = await fetchSubjects(
-            { metadataFilter: input.metadataFilter, isVisible: input.filterVisible, ids: input.ids },
-            context,
-          );
-          return { subjects };
-        }),
-      );
-    },
-    { cacheKeyFn: (key) => key },
   );
 }
 
