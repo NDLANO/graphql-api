@@ -53,6 +53,22 @@ export async function fetchMyLearningpaths(_context: Context): Promise<Array<ILe
   return cachelessClient.GET("/learningpath-api/v2/learningpaths/mine").then(resolveJsonOATS);
 }
 
+export async function fetchMyLearningpath(id: string, context: Context): Promise<ILearningPathV2DTO> {
+  return cachelessClient
+    .GET("/learningpath-api/v2/learningpaths/{learningpath_id}", {
+      params: {
+        path: {
+          learningpath_id: getNumberId(id),
+        },
+        query: {
+          language: context.language,
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
+}
+
 export async function fetchLearningpath(id: string, context: Context): Promise<ILearningPathV2DTO> {
   return client
     .GET("/learningpath-api/v2/learningpaths/{learningpath_id}", {
@@ -158,17 +174,19 @@ export async function updateLearningstep(
 export async function deleteLearningstep(
   { learningstepId, learningpathId }: GQLMutationDeleteLearningpathStepArgs,
   _context: Context,
-): Promise<string[]> {
-  return client
-    .DELETE("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}", {
+): Promise<boolean> {
+  const { response } = await client.DELETE(
+    "/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}",
+    {
       params: {
         path: {
           learningpath_id: learningpathId,
           learningstep_id: learningstepId,
         },
       },
-    })
-    .then(resolveJsonOATS);
+    },
+  );
+  return response.ok;
 }
 
 export async function copyLearningpath(
