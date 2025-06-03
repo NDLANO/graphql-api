@@ -288,8 +288,6 @@ export type GQLCompetenceGoal = {
 
 export type GQLConcept = {
   __typename?: 'Concept';
-  articleIds: Array<Scalars['Int']['output']>;
-  articles?: Maybe<Array<GQLMeta>>;
   conceptType: Scalars['String']['output'];
   content: Scalars['String']['output'];
   copyright?: Maybe<GQLConceptCopyright>;
@@ -297,8 +295,6 @@ export type GQLConcept = {
   glossData?: Maybe<GQLGloss>;
   id: Scalars['Int']['output'];
   source?: Maybe<Scalars['String']['output']>;
-  subjectIds?: Maybe<Array<Scalars['String']['output']>>;
-  subjectNames?: Maybe<Array<Scalars['String']['output']>>;
   supportedLanguages: Array<Scalars['String']['output']>;
   tags: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
@@ -2783,8 +2779,6 @@ export type GQLCompetenceGoalResolvers<ContextType = any, ParentType extends GQL
 };
 
 export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Concept'] = GQLResolversParentTypes['Concept']> = {
-  articleIds?: Resolver<Array<GQLResolversTypes['Int']>, ParentType, ContextType>;
-  articles?: Resolver<Maybe<Array<GQLResolversTypes['Meta']>>, ParentType, ContextType>;
   conceptType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
@@ -2792,8 +2786,6 @@ export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolve
   glossData?: Resolver<Maybe<GQLResolversTypes['Gloss']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   source?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  subjectIds?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  subjectNames?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

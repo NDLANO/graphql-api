@@ -1065,10 +1065,6 @@ export const typeDefs = gql`
     content: String!
     created: String!
     tags: [String!]!
-    subjectIds: [String!]
-    subjectNames: [String!]
-    articleIds: [Int!]!
-    articles: [Meta!]
     visualElement: VisualElement
     copyright: ConceptCopyright
     source: String
