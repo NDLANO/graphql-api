@@ -36,32 +36,33 @@ export const Query = {
         }
       | undefined,
     context: ContextWithLoaders,
-  ): Promise<GQLSubject[]> {
-    const metaDataFilter = input?.metadataFilterKey
-      ? {
-          metadataFilter: {
-            key: input.metadataFilterKey,
-            value: input.metadataFilterValue,
-          },
-        }
-      : {};
-
-    const loaderParams = {
-      ...metaDataFilter,
-      filterVisible: input?.filterVisible,
+  ): Promise<Node[]> {
+    return context.loaders.nodesLoader.load({
+      language: context.language,
+      nodeType: "SUBJECT",
+      includeContexts: true,
+      filterProgrammes: true,
+      key: input?.metadataFilterKey,
+      value: input?.metadataFilterValue,
+      isVisible: input?.filterVisible,
       ids: input?.ids,
-    };
-
-    return context.loaders.subjectsLoader.load(loaderParams).then((s) => s.subjects);
+    });
   },
   async subjectCollection(
     _: any,
     { language }: GQLQuerySubjectCollectionArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLSubject[]> {
-    return await context.loaders.subjectsLoader
-      .load({ metadataFilter: { key: "language", value: language } })
-      .then((s) => s.subjects.sort((a, b) => (a.name < b.name ? -1 : 1)));
+  ): Promise<Node[]> {
+    return await context.loaders.nodesLoader
+      .load({
+        language: context.language,
+        key: "language",
+        value: language,
+        nodeType: "SUBJECT",
+        includeContexts: true,
+        filterProgrammes: true,
+      })
+      .then((s) => s.sort((a, b) => (a.name < b.name ? -1 : 1)));
   },
 };
 

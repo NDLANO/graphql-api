@@ -10,7 +10,7 @@ import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { GraphQLError } from "graphql";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchChildren, fetchLearningpath, fetchNode, fetchNodeByContentUri } from "../api";
+import { fetchChildren, fetchLearningpath, fetchNode } from "../api";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -82,7 +82,14 @@ export const Query = {
   ): Promise<GQLNode | null> {
     let node = null;
     if (articleId) {
-      node = await fetchNodeByContentUri(`urn:article:${articleId}`, context);
+      const res = await context.loaders.nodesLoader.load({
+        contentURI: `urn:article:${articleId}`,
+        language: context.language,
+        includeContexts: true,
+        filterProgrammes: true,
+        isVisible: true,
+      });
+      node = res[0];
     } else if (nodeId) {
       node = await fetchNode({ id: nodeId }, context);
     }

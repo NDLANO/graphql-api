@@ -13,18 +13,11 @@ import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
-import { GQLSubject } from "./schema";
 import { NodeQueryParams } from "../api/taxonomyApi";
 
 declare global {
   interface SubjectTopicsLoaderParams {
     subjectId: string;
-  }
-
-  interface SubjectsLoaderParams {
-    metadataFilter?: { key: string; value?: string };
-    filterVisible?: boolean;
-    ids?: string[];
   }
 
   interface NodeLoaderParams {
@@ -37,7 +30,6 @@ declare global {
     articlesLoader: DataLoader<string, IArticleV2DTO | undefined>;
     learningpathsLoader: DataLoader<number, ILearningPathV2DTO | undefined>;
     subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
-    subjectsLoader: DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }>;
     nodeLoader: DataLoader<NodeLoaderParams, Node>;
     nodesLoader: DataLoader<NodeQueryParams, Node[]>;
     resourceTypesLoader: DataLoader<any, any>;

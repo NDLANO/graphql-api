@@ -16,10 +16,7 @@ export { search, searchWithoutPagination } from "./searchApi";
 export {
   fetchResourceTypes,
   fetchSubjectTopics,
-  fetchSubjects,
-  fetchSubject,
   fetchNode,
-  fetchNodeByContentUri,
   fetchNodeResources,
   fetchChildren,
   queryContexts,
