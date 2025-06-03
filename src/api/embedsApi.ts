@@ -291,29 +291,8 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, cont
   return { image };
 };
 
-const endsWithPunctuationRegex = /[.!?]$/;
 export const parseCaption = (caption: string): string => {
-  const htmlCaption = parseMarkdown({ markdown: caption, inline: true });
-
-  const parsedCaption = load(
-    htmlCaption,
-    {
-      xmlMode: false,
-      decodeEntities: false,
-    },
-    false,
-  );
-
-  const lastTextNode = parsedCaption.root().contents().last();
-
-  const lastText = lastTextNode.text();
-  if (endsWithPunctuationRegex.test(parsedCaption.text().trimEnd())) return htmlCaption;
-  const newText = `${lastText.trimEnd()}.`;
-
-  if (lastTextNode?.[0]?.type === "text") lastTextNode.replaceWith(newText);
-  else lastTextNode.text(newText);
-
-  return parsedCaption.html();
+  return parseMarkdown({ markdown: caption, inline: true });
 };
 
 export const transformEmbed = async (
