@@ -71,3 +71,4 @@ export const uptimeOwner = getEnvironmentVariabel("UPTIME_OWNER", "NDLANO");
 export const uptimeRepo = getEnvironmentVariabel("UPTIME_REPO", "oppetid");
 export const uptimeToken = getEnvironmentVariabel("UPTIME_API_TOKEN", undefined);
 export const googleApiKey = getEnvironmentVariabel("NDLA_GOOGLE_API_KEY", undefined);
+export const slowLogTimeout = getEnvironmentVariabel("SLOW_LOG_TIMEOUT", "500");
