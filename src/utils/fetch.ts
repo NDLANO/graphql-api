@@ -9,6 +9,7 @@
 import { performance } from "perf_hooks";
 import nodeFetch, { Response, Request, RequestInit } from "node-fetch";
 import { cacheTime, getCache, getCacheKey, IKeyValueCache, setHeaderIfShouldNotCache } from "../cache";
+import { slowLogTimeout as configSlowLogTimeout } from "../config";
 import getLogger from "../utils/logger";
 import { apiResourceUrl, getHeadersFromContext } from "./apiHelpers";
 
@@ -23,7 +24,7 @@ export default function createFetch(options: { cache: IKeyValueCache; disableCac
     init?: RequestInit,
   ): Promise<{ response: Response; shouldCache: boolean }> {
     const startTime = performance.now();
-    const slowLogTimeout = 500;
+    const slowLogTimeout = parseInt(configSlowLogTimeout);
 
     const headers = {
       ...init?.headers,
