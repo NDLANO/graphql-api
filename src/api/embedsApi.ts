@@ -79,7 +79,7 @@ const imageMeta: Fetch<ImageMetaData> = async ({ embedData, context }) => {
     ...res,
     caption: {
       ...res.caption,
-      caption: parseCaption(res.caption.caption),
+      caption: parseCaption(res.caption.caption, embedData.hideByline === "true"),
     },
   };
 };
@@ -292,8 +292,10 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, cont
 };
 
 const endsWithPunctuationRegex = /[.!?]$/;
-export const parseCaption = (caption: string): string => {
+export const parseCaption = (caption: string, skipPunctuation: boolean = false): string => {
   const htmlCaption = parseMarkdown({ markdown: caption, inline: true });
+
+  if (skipPunctuation) return htmlCaption;
 
   const parsedCaption = load(
     htmlCaption,
@@ -339,7 +341,7 @@ export const transformEmbed = async (
     if (embedData.resource === "image") {
       meta = await imageMeta({ embedData, context, index, opts });
       if (embedData.caption) {
-        embedData.caption = parseCaption(embedData.caption);
+        embedData.caption = parseCaption(embedData.caption, embedData.hideByline === "true");
       }
       embedData.pageUrl = `/${embedData.resource}/${embedData.resourceId}`;
     } else if (embedData.resource === "audio") {
