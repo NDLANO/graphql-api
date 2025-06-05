@@ -46,6 +46,7 @@ import {
 } from "../types/schema";
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
+import { transformArticle } from "../api/transformArticleApi";
 
 export const Query = {
   async learningpath(
@@ -165,6 +166,12 @@ const getCoverphoto = async (
     : undefined;
 };
 
+const transformDescription = async (step: GQLLearningpathStep, context: ContextWithLoaders): Promise<string | null> => {
+  if (!step.description) return null;
+  const res = await transformArticle(step.description, context, undefined, {});
+  return res.content;
+};
+
 export const resolvers = {
   Learningpath: {
     coverphoto: getCoverphoto,
@@ -176,6 +183,7 @@ export const resolvers = {
     oembed: getOembed,
     resource: getResource,
     opengraph: getOpengraph,
+    description: transformDescription,
   },
   MyNdlaLearningpathStep: {
     oembed: getOembed,
