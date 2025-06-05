@@ -12,6 +12,7 @@ import { createLogger, transports, format, Logger } from "winston";
 import "source-map-support/register";
 import { unreachable } from "./unreachable";
 import { getContext } from "./context/contextStore";
+import { IncomingHttpHeaders } from "node:http2";
 
 export const loggerStorage = new AsyncLocalStorage<Logger>();
 
@@ -64,12 +65,22 @@ const getLoglevelFromError = (err: GraphQLFormattedError): LogLevel => {
   return "error";
 };
 
+const sensorHeaders = (headers: IncomingHttpHeaders): IncomingHttpHeaders => {
+  const { authorization, feideauthorization, ...rest } = headers;
+  return {
+    ...rest,
+    authorization: authorization ? "<REDACTED>" : undefined,
+    feideauthorization: feideauthorization ? "<REDACTED>" : undefined,
+  };
+};
+
 const getErrorLog = (err: GraphQLFormattedError) => {
   const ctx = getContext();
   const context = ctx
     ? {
         requestPath: ctx.req.url,
         requestBody: ctx.req.body,
+        requestHeaders: sensorHeaders(ctx.req.headers),
       }
     : {};
 
