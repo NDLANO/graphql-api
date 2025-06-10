@@ -18,7 +18,7 @@ export async function parseVisualElement(
   visualElementEmbed: string,
   context: Context,
 ): Promise<GQLVisualElement | null> {
-  const parsedElement = load(visualElementEmbed);
+  const parsedElement = load(visualElementEmbed, null, false);
   const data: any = parsedElement("ndlaembed").data();
 
   switch (data?.resource) {

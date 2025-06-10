@@ -240,10 +240,7 @@ const fetchConceptVisualElement = async (
   opts: TransformOptions,
 ): Promise<ConceptVisualElementMeta | undefined> => {
   if (!visualElement) return undefined;
-  const html = load(visualElement, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(visualElement, null, false);
   const embed = getEmbedsFromContent(html)[0];
   if (!embed) return undefined;
   const res = await transformEmbed(embed, context, index + 0.1, 0, {
@@ -297,14 +294,7 @@ export const parseCaption = (caption: string, skipPunctuation: boolean = false):
 
   if (skipPunctuation) return htmlCaption;
 
-  const parsedCaption = load(
-    htmlCaption,
-    {
-      xmlMode: false,
-      decodeEntities: false,
-    },
-    false,
-  );
+  const parsedCaption = load(htmlCaption, null, false);
 
   const lastTextNode = parsedCaption.root().contents().last();
 

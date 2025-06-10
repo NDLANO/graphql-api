@@ -100,7 +100,7 @@ export const resolvers = {
     async oembed(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<string | undefined> {
       const oembed = await fetchOembed(`${ndlaUrl}/article/${article.id}`, context);
       if (oembed?.html === undefined) return undefined;
-      const parsed = load(oembed.html);
+      const parsed = load(oembed.html, null, false);
       return parsed("iframe").attr("src");
     },
     async metaImage(
