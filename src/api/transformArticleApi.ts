@@ -100,10 +100,7 @@ export const transformArticle = async (
   visualElement: string | undefined,
   { subject, previewH5p, showVisualElement, draftConcept, absoluteUrl }: TransformArticleOptions,
 ) => {
-  const html = load(content, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(content, null, false);
   html("math").each((_, el) => {
     html(el)
       .attr("data-math", html(el).html() ?? "")
@@ -121,7 +118,7 @@ export const transformArticle = async (
 
   const hasVisualElement = showVisualElement && visualElement;
   if (hasVisualElement) {
-    html("body").prepend(`<section>${visualElement}</section>`);
+    html("section").prepend(`<section>${visualElement}</section>`);
   }
 
   const embeds = getEmbedsFromContent(html);
@@ -162,7 +159,7 @@ export const transformArticle = async (
     }),
   );
   const metaData = toArticleMetaData(embedPromises);
-  const transformedContent = html("body").html();
+  const transformedContent = html.html();
   const visualElementCheerio = hasVisualElement ? embeds[0]?.embed : undefined;
   const transformedVisEl = visualElementCheerio?.parent().html();
   const visualElementMeta = hasVisualElement ? embedPromises[0] : undefined;
