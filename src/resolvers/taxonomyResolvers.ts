@@ -49,7 +49,9 @@ export const Query = {
       const node = nodes[0];
       return node ? nodeToTaxonomyEntity(node, context) : undefined;
     }
-    throw new Error("Missing id or contextId");
+    throw new GraphQLError(`Missing id or contextId`, {
+      extensions: { status: 400 },
+    });
   },
   async nodes(
     _: any,
