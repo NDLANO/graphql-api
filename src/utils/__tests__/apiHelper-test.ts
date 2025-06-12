@@ -6,6 +6,7 @@
  *
  */
 
+import { expect, test } from "vitest";
 import { licenseFixer } from "../apiHelpers";
 
 test("license C converts to COPYRIGHTED", async () => {

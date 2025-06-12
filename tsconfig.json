@@ -17,7 +17,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
     "lib": ["es2020", "esnext.asynciterable", "DOM"],
+    "types": ["vitest/globals"],
     "paths": {
       "*": ["node_modules/*", "src/types/*"]
     },
@@ -28,8 +30,5 @@
     ]
   },
   "include": ["src/**/*"],
-  "exclude": [
-    "**/*-test.ts"
-  ],
-  "preset": "ts-jest"
+  "exclude": ["**/*-test.ts"]
 }

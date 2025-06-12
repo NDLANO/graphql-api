@@ -55,7 +55,7 @@ Paste this on the left side
 
 ### Unit tests
 
-Test framework: Jest.
+Test framework: Vitest.
 
 ```
 $ yarn test
