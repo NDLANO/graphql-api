@@ -7,6 +7,7 @@
  */
 
 import { graphql } from "graphql";
+import { expect, test } from "vitest";
 import { addMocksToSchema } from "@graphql-tools/mock";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 

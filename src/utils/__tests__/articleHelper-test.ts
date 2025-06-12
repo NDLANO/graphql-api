@@ -6,6 +6,7 @@
  *
  */
 
+import { expect, test } from "vitest";
 import { isNDLAEmbedUrl, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../articleHelpers";
 
 const testNdlaFrontendUrl =

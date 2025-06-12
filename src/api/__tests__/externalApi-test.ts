@@ -6,6 +6,7 @@
  *
  */
 
+import { expect, test } from "vitest";
 import { getYoutubeVideoId } from "../externalApi";
 
 test("getYoutubeVideoId handles different urls", () => {
