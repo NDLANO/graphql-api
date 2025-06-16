@@ -6,6 +6,7 @@
  *
  */
 
+import { expect, test } from "vitest";
 import { isoLanguageMapping } from "../mapping";
 
 test("isoLanguageMapping should work", () => {
