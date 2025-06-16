@@ -6,40 +6,63 @@
  *
  */
 
-import qs from "query-string";
 import {
+  openapi,
   IImageMetaInformationV2DTO,
   IImageMetaInformationV3DTO,
   ISearchResultV3DTO,
 } from "@ndla/types-backend/image-api";
-import { GQLQueryImageSearchArgs } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { GQLImageLicense, GQLQueryImageSearchArgs } from "../types/schema";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getNumberId } from "../utils/apiHelpers";
+
+const client = createAuthClient<openapi.paths>();
 
 export async function fetchImage(imageId: string, context: Context): Promise<IImageMetaInformationV2DTO | null> {
-  const languageParam = context.language ? `?language=${context.language}` : "";
-  const response = await fetch(`/image-api/v2/images/${imageId}${languageParam}`, context);
+  const response = await client.GET("/image-api/v2/images/{image_id}", {
+    params: {
+      path: {
+        image_id: getNumberId(imageId),
+      },
+      query: {
+        language: context.language,
+      },
+    },
+  });
+
   try {
-    return await resolveJson(response);
+    return await resolveJsonOATS(response);
   } catch (e) {
     return null;
   }
 }
 
 export async function fetchImageV3(imageId: number | string, context: Context): Promise<IImageMetaInformationV3DTO> {
-  const languageParam = context.language ? `?language=${context.language}` : "";
-  const response = await fetch(`/image-api/v3/images/${imageId}${languageParam}`, context);
-  return await resolveJson(response);
+  return client
+    .GET("/image-api/v3/images/{image_id}", {
+      params: {
+        path: {
+          image_id: getNumberId(imageId),
+        },
+        query: { language: context.language },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
-export async function searchImages(params: GQLQueryImageSearchArgs, context: Context): Promise<ISearchResultV3DTO> {
-  const queryStr = qs.stringify({
-    "page-size": params.pageSize,
-    license: params.license,
-    page: params.page,
-    query: params.query,
-  });
-  const response = await fetch(`/image-api/v3/images?${queryStr}`, context);
-  return await resolveJson(response);
+export async function searchImages(params: GQLQueryImageSearchArgs, _context: Context): Promise<ISearchResultV3DTO> {
+  return client
+    .GET("/image-api/v3/images", {
+      params: {
+        query: {
+          "page-size": params.pageSize,
+          license: params.license,
+          page: params.page,
+          query: params.query,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export function convertToSimpleImage(image: IImageMetaInformationV2DTO) {
@@ -49,5 +72,16 @@ export function convertToSimpleImage(image: IImageMetaInformationV2DTO) {
     altText: image.alttext.alttext,
     contentType: image.contentType,
     copyright: image.copyright,
+  };
+}
+
+export function convertToImageLicense(imageMeta: IImageMetaInformationV3DTO): GQLImageLicense {
+  return {
+    id: imageMeta.id,
+    title: imageMeta.title.title,
+    src: imageMeta.image.imageUrl,
+    altText: imageMeta.alttext.alttext,
+    contentType: imageMeta.image.contentType,
+    copyright: imageMeta.copyright,
   };
 }

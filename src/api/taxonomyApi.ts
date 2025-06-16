@@ -9,8 +9,9 @@
 import { Response } from "node-fetch";
 import qs from "query-string";
 import { Node, NodeChild, TaxonomyContext, Version, SearchResult } from "@ndla/types-taxonomy";
-import { GQLResourceType, GQLResourceTypeDefinition, GQLSubject, GQLTopic } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { GQLResourceType, GQLResourceTypeDefinition, GQLTopic } from "../types/schema";
+import { resolveJson } from "../utils/apiHelpers";
+import { fetch } from "../utils/fetch";
 
 async function taxonomyFetch(path: string, context: Context, options?: RequestOptions): Promise<Response> {
   return fetch(path, context, { ...options, useTaxonomyCache: true });
@@ -26,39 +27,6 @@ export async function fetchResourceTypes<T extends GQLResourceType | GQLResource
   return resolveJson(response);
 }
 
-interface GetSubjectsParams {
-  metadataFilter?: {
-    key?: string;
-    value?: string;
-  };
-  isVisible?: boolean;
-  ids?: string[];
-}
-
-export async function fetchSubjects(
-  { metadataFilter, isVisible, ids }: GetSubjectsParams,
-  context: Context,
-): Promise<GQLSubject[]> {
-  const query = qs.stringify({
-    language: context.language,
-    key: metadataFilter?.key,
-    value: metadataFilter?.value,
-    nodeType: "SUBJECT",
-    includeContexts: true,
-    filterProgrammes: true,
-    isVisible,
-    ids: ids?.join(","),
-  });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
-  return resolveJson(response);
-}
-
-export async function fetchSubject(context: Context, id: string): Promise<GQLSubject> {
-  const query = qs.stringify({ language: context.language });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${id}?${query}`, context);
-  return resolveJson(response);
-}
-
 export async function fetchSubjectTopics(subjectId: string, context: Context): Promise<GQLTopic[]> {
   const query = qs.stringify({
     recursive: true,
@@ -69,31 +37,6 @@ export async function fetchSubjectTopics(subjectId: string, context: Context): P
   });
   const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${subjectId}/nodes?${query}`, context);
   return resolveJson(response);
-}
-
-export async function fetchTopics(args: { contentUri?: string }, context: Context): Promise<GQLTopic[]> {
-  const query = qs.stringify({
-    contentURI: args.contentUri ?? "",
-    nodeType: "TOPIC",
-    language: context.language,
-    includeContexts: true,
-    filterProgrammes: true,
-  });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
-  return resolveJson(response);
-}
-
-export async function fetchNodeByContentUri(contentUri: string, context: Context): Promise<Node | undefined> {
-  const query = qs.stringify({
-    contentURI: contentUri,
-    language: context.language,
-    includeContexts: true,
-    filterProgrammes: true,
-    isVisible: true,
-  });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
-  const resolved: Node[] = await resolveJson(response);
-  return resolved[0];
 }
 
 export async function fetchNode(
@@ -205,10 +148,13 @@ interface NodeQueryParamsBase {
 type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<T, Exclude<keyof T, Keys>> &
   { [K in Keys]-?: Required<Pick<T, K>> & Partial<Record<Exclude<Keys, K>, undefined>> }[Keys];
 
-type NodeQueryParams = NodeQueryParamsBase &
+export type NodeQueryParams = NodeQueryParamsBase &
   RequireAtLeastOne<{ contextId?: string; contentURI?: string; nodeType?: string }>;
 
 export const queryNodes = async (params: NodeQueryParams, context: Context): Promise<Node[]> => {
-  const res = await fetch(`/${context.taxonomyUrl}/v1/nodes?${qs.stringify(params)}`, context);
+  const res = await taxonomyFetch(
+    `/${context.taxonomyUrl}/v1/nodes?${qs.stringify({ ...params, ids: params.ids?.join(",") })}`,
+    context,
+  );
   return await resolveJson(res);
 };

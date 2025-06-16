@@ -266,6 +266,10 @@ export const typeDefs = gql`
     contributors: [Contributor!]!
   }
 
+  type LearningpathSeqNo {
+    seqNo: Int!
+  }
+
   type Learningpath {
     id: Int!
     title: String!
@@ -398,7 +402,6 @@ export const typeDefs = gql`
   interface TaxBase {
     id: String!
     name: String!
-    path: String
     url: String
   }
 
@@ -406,8 +409,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contextId: String
@@ -432,8 +433,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contextId: String
@@ -462,8 +461,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -487,7 +484,6 @@ export const typeDefs = gql`
     id: String!
     contextId: String!
     name: String!
-    path: String!
     url: String!
   }
 
@@ -495,11 +491,11 @@ export const typeDefs = gql`
     contextId: String!
     breadcrumbs: [String!]!
     name: String!
-    path: String!
     url: String!
     parentIds: [String!]!
     rootId: String!
     relevance: String!
+    root: String!
     isActive: Boolean!
     parents: [TaxonomyCrumb!]
   }
@@ -508,8 +504,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -652,7 +646,6 @@ export const typeDefs = gql`
     title: String!
     src: String
     content: String
-    metaImageUrl: String
     copyright: ConceptCopyright
   }
 
@@ -731,6 +724,7 @@ export const typeDefs = gql`
 
   input TransformedArticleContentInput {
     subjectId: String
+    contextId: String
     isOembed: String
     showVisualElement: String
     path: String
@@ -804,7 +798,9 @@ export const typeDefs = gql`
   type SubjectPageVisualElement {
     type: String!
     url: String!
+    imageUrl: String
     alt: String
+    imageLicense: ImageLicense
   }
 
   type SubjectPageAbout {
@@ -869,7 +865,6 @@ export const typeDefs = gql`
     metaImage: MetaImage
     metaDescription: String!
     resourceTypes: [ResourceType!]!
-    path: String!
     url: String!
   }
 
@@ -887,8 +882,6 @@ export const typeDefs = gql`
     id: String!
     name: String!
     contentUri: String
-    path: String
-    paths: [String!]!
     metadata: TaxonomyMetadata!
     relevanceId: String
     contexts: [TaxonomyContext!]!
@@ -933,20 +926,19 @@ export const typeDefs = gql`
   }
 
   interface SearchResult {
-    id: Int!
+    id: String!
     title: String!
-    htmlTitle: String!
     supportedLanguages: [String!]!
     url: String!
     metaDescription: String!
-    metaImage: MetaImage
-    traits: [String!]!
     context: SearchContext
     contexts: [SearchContext!]!
   }
 
+  union SearchResultUnion = ArticleSearchResult | LearningpathSearchResult | NodeSearchResult
+
   type ArticleSearchResult implements SearchResult {
-    id: Int!
+    id: String!
     title: String!
     htmlTitle: String!
     supportedLanguages: [String!]!
@@ -959,7 +951,7 @@ export const typeDefs = gql`
   }
 
   type LearningpathSearchResult implements SearchResult {
-    id: Int!
+    id: String!
     title: String!
     htmlTitle: String!
     supportedLanguages: [String!]!
@@ -967,6 +959,18 @@ export const typeDefs = gql`
     metaDescription: String!
     metaImage: MetaImage
     traits: [String!]!
+    context: SearchContext
+    contexts: [SearchContext!]!
+  }
+
+  type NodeSearchResult implements SearchResult {
+    id: String!
+    title: String!
+    htmlTitle: String!
+    supportedLanguages: [String!]!
+    url: String!
+    metaDescription: String!
+    metaImage: MetaImage
     context: SearchContext
     contexts: [SearchContext!]!
   }
@@ -981,11 +985,9 @@ export const typeDefs = gql`
     relevanceId: String!
     path: String!
     publicId: String!
-    parentIds: [String!]!
     language: String!
     isPrimary: Boolean!
     isActive: Boolean!
-    isVisible: Boolean!
     contextId: String!
     url: String!
   }
@@ -1063,12 +1065,6 @@ export const typeDefs = gql`
     content: String!
     created: String!
     tags: [String!]!
-    image: ImageLicense
-    subjectIds: [String!]
-    subjectNames: [String!]
-    articleIds: [Int!]!
-    articles: [Meta!]
-    metaImage: MetaImage
     visualElement: VisualElement
     copyright: ConceptCopyright
     source: String
@@ -1469,6 +1465,8 @@ export const typeDefs = gql`
       aggregatePaths: [String!]
       filterInactive: Boolean
       license: String
+      resultTypes: String
+      nodeTypes: String
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
@@ -1509,7 +1507,7 @@ export const typeDefs = gql`
     folderResourceMeta(resource: FolderResourceMetaSearchInput!): FolderResourceMeta
     folderResourceMetaSearch(resources: [FolderResourceMetaSearchInput!]!): [FolderResourceMeta!]!
     folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
-    sharedFolder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): SharedFolder!
+    sharedFolder(id: String!): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV2
@@ -1570,8 +1568,9 @@ export const typeDefs = gql`
       learningstepId: Int!
       params: LearningpathStepUpdateInput!
     ): MyNdlaLearningpathStep!
-    deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): [String!]
+    deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): Boolean
     copyLearningpath(learningpathId: Int!, params: LearningpathCopyInput!): MyNdlaLearningpath!
+    updateLearningpathStepSeqNo(learningpathId: Int!, learningpathStepId: Int!, seqNo: Int!): LearningpathSeqNo!
   }
 `;
 

@@ -10,7 +10,7 @@ import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { GraphQLError } from "graphql";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchChildren, fetchLearningpath, fetchNode, fetchNodeByContentUri, queryNodes } from "../api";
+import { fetchChildren, fetchLearningpath, fetchNode } from "../api";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -36,7 +36,11 @@ export const Query = {
       return nodeToTaxonomyEntity(node, context);
     }
     if (contextId) {
-      const nodes = await queryNodes({ contextId, includeContexts: true, filterProgrammes: true }, context);
+      const nodes = await context.loaders.nodesLoader.load({
+        contextId,
+        includeContexts: true,
+        filterProgrammes: true,
+      });
       if (nodes.length === 0) {
         throw new GraphQLError(`No node found with contextId: ${contextId}`, {
           extensions: { status: 404 },
@@ -45,7 +49,9 @@ export const Query = {
       const node = nodes[0];
       return node ? nodeToTaxonomyEntity(node, context) : undefined;
     }
-    throw new Error("Missing id or contextId");
+    throw new GraphQLError(`Missing id or contextId`, {
+      extensions: { status: 400 },
+    });
   },
   async nodes(
     _: any,
@@ -63,9 +69,9 @@ export const Query = {
     };
     let nodes: Node[] = [];
     if (contentUri) {
-      nodes = await queryNodes({ contentURI: contentUri, ...params }, context);
+      nodes = await context.loaders.nodesLoader.load({ contentURI: contentUri, ...params });
     } else if (nodeType) {
-      nodes = await queryNodes({ nodeType: nodeType, ...params }, context);
+      nodes = await context.loaders.nodesLoader.load({ nodeType: nodeType, ...params });
     }
     return nodes.map((node) => {
       return nodeToTaxonomyEntity(node, context);
@@ -78,7 +84,14 @@ export const Query = {
   ): Promise<GQLNode | null> {
     let node = null;
     if (articleId) {
-      node = await fetchNodeByContentUri(`urn:article:${articleId}`, context);
+      const res = await context.loaders.nodesLoader.load({
+        contentURI: `urn:article:${articleId}`,
+        language: context.language,
+        includeContexts: true,
+        filterProgrammes: true,
+        isVisible: true,
+      });
+      node = res[0];
     } else if (nodeId) {
       node = await fetchNode({ id: nodeId }, context);
     }
@@ -137,17 +150,15 @@ export const resolvers = {
       return [];
     },
     async alternateNodes(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLNode[] | undefined> {
-      const { contentUri, path } = node;
-      if (!path && contentUri) {
-        const nodes = await queryNodes(
-          {
-            contentURI: contentUri,
-            includeContexts: true,
-            isVisible: true,
-            language: context.language,
-          },
-          context,
-        );
+      const { contentUri, url } = node;
+      if (!url && contentUri) {
+        const nodes = await context.loaders.nodesLoader.load({
+          contentURI: contentUri,
+          includeContexts: true,
+          filterProgrammes: true,
+          isVisible: true,
+          language: context.language,
+        });
         return nodes.map((node) => nodeToTaxonomyEntity(node, context));
       }
       return;

@@ -39,7 +39,6 @@ import { fetchExternalOembed } from "./externalApi";
 import { checkIfFileExists } from "./fileApi";
 import { fetchH5pLicenseInformation, fetchH5pOembed, fetchH5pInfo } from "./h5pApi";
 import { fetchImageV3 } from "./imageApi";
-import { queryNodes } from "./taxonomyApi";
 import { fetchVideo, fetchVideoSources } from "./videoApi";
 import { ndlaUrl } from "../config";
 import { getBrightcoveCopyright } from "../utils/brightcoveUtils";
@@ -52,7 +51,7 @@ const URL_DOMAIN_REGEX = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n]+)/im;
 type Fetch<T extends EmbedMetaData, ExtraData = {}> = (
   params: {
     embedData: T["embedData"];
-    context: Context;
+    context: ContextWithLoaders;
     index: number;
     opts: TransformOptions;
   } & ExtraData,
@@ -80,7 +79,7 @@ const imageMeta: Fetch<ImageMetaData> = async ({ embedData, context }) => {
     ...res,
     caption: {
       ...res.caption,
-      caption: parseCaption(res.caption.caption),
+      caption: parseCaption(res.caption.caption, embedData.hideByline === "true"),
     },
   };
 };
@@ -181,24 +180,33 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({ embedData, context })
 
 const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context, opts }) => {
   const contentURI = `urn:${embedData.contentType ?? "article"}:${embedData.contentId}`;
-  const host = opts.absoluteUrl ? ndlaUrl : "";
-
   const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
-  let url = `${host}/${context.language}/${contentType}/${embedData.contentId}`;
-  const nodes = await queryNodes(
-    { contentURI, language: context.language, includeContexts: true, filterProgrammes: true, isVisible: true },
-    context,
-  );
-  const node = nodes.find((n) => !!n.path);
+  const host = opts.absoluteUrl ? ndlaUrl : "";
+  const baseUrl = `${host}/${context.language}`;
+  const nodes = await context.loaders.nodesLoader.load({
+    contentURI,
+    language: context.language,
+    includeContexts: true,
+    filterProgrammes: true,
+    isVisible: true,
+  });
+
+  if (nodes.length === 0 && contentType === "article") {
+    const article = await context.loaders.articlesLoader.load(embedData.contentId);
+    return { path: `${baseUrl}/article/${article?.slug ?? embedData.contentId}` };
+  }
+
+  const node = nodes.find((n) => !!n.context);
   const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.context;
+  let url = `${baseUrl}/${contentType}/${embedData.contentId}`;
+
   if (!ctx?.isVisible) {
     return { path: url };
   }
 
   const nodeUrl = ctx?.url ?? node?.url;
-
   if (nodeUrl) {
-    url = `${host}/${context.language}${nodeUrl}`;
+    url = `${baseUrl}${nodeUrl}`;
   }
 
   return { path: url };
@@ -209,23 +217,16 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
   if (typeof articleId === "string" || typeof articleId === "number") {
     const [article, resources] = await Promise.all([
       fetchSimpleArticle(`urn:article:${articleId}`, context),
-      queryNodes(
-        {
-          contentURI: `urn:article:${articleId}`,
-          language: context.language,
-          filterProgrammes: true,
-          isVisible: true,
-          rootId: opts.subject,
-        },
-        context,
-      ),
+      context.loaders.nodesLoader.load({
+        contentURI: `urn:article:${articleId}`,
+        language: context.language,
+        filterProgrammes: true,
+        includeContexts: true,
+        isVisible: true,
+        rootId: opts.subject,
+      }),
     ]);
-    let resource = resources?.[0];
-    if (resource) {
-      const path = resource?.url;
-      // TODO: for now, trick RelatedContentEmbed to use provided path
-      resource = { ...resource, path, paths: [] };
-    }
+    const resource = resources?.[0];
     return { article, resource };
   } else {
     return undefined;
@@ -234,15 +235,12 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
 
 const fetchConceptVisualElement = async (
   visualElement: string | undefined,
-  context: Context,
+  context: ContextWithLoaders,
   index: number,
   opts: TransformOptions,
 ): Promise<ConceptVisualElementMeta | undefined> => {
   if (!visualElement) return undefined;
-  const html = load(visualElement, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(visualElement, null, false);
   const embed = getEmbedsFromContent(html)[0];
   if (!embed) return undefined;
   const res = await transformEmbed(embed, context, index + 0.1, 0, {
@@ -291,17 +289,12 @@ const campaignBlockMeta: Fetch<CampaignBlockMetaData> = async ({ embedData, cont
 };
 
 const endsWithPunctuationRegex = /[.!?]$/;
-export const parseCaption = (caption: string): string => {
+export const parseCaption = (caption: string, skipPunctuation: boolean = false): string => {
   const htmlCaption = parseMarkdown({ markdown: caption, inline: true });
 
-  const parsedCaption = load(
-    htmlCaption,
-    {
-      xmlMode: false,
-      decodeEntities: false,
-    },
-    false,
-  );
+  if (skipPunctuation) return htmlCaption;
+
+  const parsedCaption = load(htmlCaption, null, false);
 
   const lastTextNode = parsedCaption.root().contents().last();
 
@@ -317,7 +310,7 @@ export const parseCaption = (caption: string): string => {
 
 export const transformEmbed = async (
   embed: CheerioEmbed,
-  context: Context,
+  context: ContextWithLoaders,
   index: number,
   footnoteCount: number,
   opts: TransformOptions,
@@ -338,7 +331,7 @@ export const transformEmbed = async (
     if (embedData.resource === "image") {
       meta = await imageMeta({ embedData, context, index, opts });
       if (embedData.caption) {
-        embedData.caption = parseCaption(embedData.caption);
+        embedData.caption = parseCaption(embedData.caption, embedData.hideByline === "true");
       }
       embedData.pageUrl = `/${embedData.resource}/${embedData.resourceId}`;
     } else if (embedData.resource === "audio") {
@@ -410,6 +403,8 @@ export const transformEmbed = async (
     } else if (embedData.resource === "link-block") {
       meta = undefined;
     } else if (embedData.resource === "copyright") {
+      meta = undefined;
+    } else if (embedData.resource === "symbol") {
       meta = undefined;
     } else {
       return;

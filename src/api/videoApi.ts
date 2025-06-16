@@ -8,7 +8,8 @@
 
 import { BrightcoveApiType, BrightcoveVideoSource } from "@ndla/types-embed";
 import { getEnvironmentVariabel } from "../config";
-import { resolveJson, fetch } from "../utils/apiHelpers";
+import { resolveJson } from "../utils/apiHelpers";
+import { fetch } from "../utils/fetch";
 
 const b64EncodeUnicode = (str: string) =>
   btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(Number(`0x${p1}`))));

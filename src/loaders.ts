@@ -16,15 +16,14 @@ import {
   fetchSubjectTopics,
   fetchLearningpaths,
   fetchResourceTypes,
-  fetchSubjects,
   fetchNode,
   fetchFrontpage,
   fetchFilmFrontpage,
   fetchSubjectPage,
   queryNodes,
 } from "./api";
-import { GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
-import { searchNodes } from "./api/taxonomyApi";
+import { GQLResourceTypeDefinition } from "./types/schema";
+import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -35,7 +34,7 @@ export function articlesLoader(context: Context): DataLoader<string, IArticleV2D
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<string, ILearningPathV2DTO | undefined> {
+export function learningpathsLoader(context: Context): DataLoader<number, ILearningPathV2DTO | undefined> {
   return new DataLoader(async (learningpathIds) => {
     return fetchLearningpaths(learningpathIds, context);
   });
@@ -84,7 +83,7 @@ export function nodeLoader(context: Context): DataLoader<NodeLoaderParams, Node>
   );
 }
 
-export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Node[]> {
+export function nodesLoader(context: Context): DataLoader<NodeQueryParams, Node[]> {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
@@ -92,39 +91,18 @@ export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Nod
           if (!input) {
             throw Error("Tried to get node with no params");
           }
-          const params = {
-            isVisible: input.filterVisible,
-            rootId: input.rootId,
-            includeContexts: true,
-            filterProgrammes: true,
-          };
-          if (input.contextId) {
-            return queryNodes({ ...params, contextId: input.contextId }, context);
-          } else if (input.contentURI) {
-            return queryNodes({ ...params, contentURI: input.contentURI }, context);
-          }
-          throw Error("Tried to get node with insufficient params");
+          return queryNodes(
+            {
+              includeContexts: true,
+              filterProgrammes: true,
+              ...input,
+            },
+            context,
+          );
         }),
       );
     },
     { cacheKeyFn: (key) => JSON.stringify(key) },
-  );
-}
-
-export function subjectsLoader(context: Context): DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }> {
-  return new DataLoader(
-    async (inputs) => {
-      return Promise.all(
-        inputs.map(async (input) => {
-          const subjects = await fetchSubjects(
-            { metadataFilter: input.metadataFilter, isVisible: input.filterVisible, ids: input.ids },
-            context,
-          );
-          return { subjects };
-        }),
-      );
-    },
-    { cacheKeyFn: (key) => key },
   );
 }
 
@@ -154,13 +132,11 @@ export function resourceTypesLoader(context: Context): DataLoader<string, any> {
   });
 }
 
-export function searchNodesLoader(context: Context): DataLoader<string, Node | null> {
+export function searchNodesLoader(context: Context): DataLoader<string, Node[]> {
   return new DataLoader(
     async (contentUris) => {
-      const results: Array<Node | null> = (await searchNodes({ contentUris }, context)).results;
-      // Returned values in DataLoader must be same length as the number of keys, so we fill missing values with null
-      const missingValues = Array<null>(contentUris.length - results.length).fill(null);
-      return results.concat(missingValues);
+      const searchResult = await searchNodes({ contentUris }, context);
+      return contentUris.map((uri) => searchResult.results.filter((n) => n.contentUri === uri));
     },
     { maxBatchSize: 100 },
   );

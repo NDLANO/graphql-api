@@ -143,7 +143,6 @@ const conceptMetaData = (
     copyright: concept.copyright,
     src: `${ndlaUrl}/embed-iframe/concept/${concept.id}`,
     content: concept.content?.htmlContent ?? "",
-    metaImageUrl: concept.metaImage?.url,
   };
   if (concept.conceptType === "gloss") {
     acc["glosses"] = acc["glosses"].concat(data);
@@ -250,6 +249,7 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
         case "link-block":
         case "uu-disclaimer":
         case "comment":
+        case "symbol":
           break;
         default:
           unreachable(curr);

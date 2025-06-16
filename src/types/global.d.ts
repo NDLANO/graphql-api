@@ -11,18 +11,13 @@ import { Request, Response } from "express";
 import { RequestInit, RequestCache } from "node-fetch";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
-import { GQLSubject } from "./schema";
+import { NodeQueryParams } from "../api/taxonomyApi";
 
 declare global {
   interface SubjectTopicsLoaderParams {
     subjectId: string;
-  }
-
-  interface SubjectsLoaderParams {
-    metadataFilter?: { key: string; value?: string };
-    filterVisible?: boolean;
-    ids?: string[];
   }
 
   interface NodeLoaderParams {
@@ -31,24 +26,16 @@ declare global {
     parentId?: string;
   }
 
-  interface NodesLoaderParams {
-    contextId?: string;
-    contentURI?: string;
-    rootId?: string;
-    filterVisible?: boolean;
-  }
-
   interface Loaders {
     articlesLoader: DataLoader<string, IArticleV2DTO | undefined>;
-    learningpathsLoader: DataLoader<string, any>;
+    learningpathsLoader: DataLoader<number, ILearningPathV2DTO | undefined>;
     subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
-    subjectsLoader: DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }>;
     nodeLoader: DataLoader<NodeLoaderParams, Node>;
-    nodesLoader: DataLoader<NodesLoaderParams, Node[]>;
+    nodesLoader: DataLoader<NodeQueryParams, Node[]>;
     resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, IFrontPageDTO>;
     subjectpageLoader: DataLoader<string, ISubjectPageDTO | null>;
-    searchNodesLoader: DataLoader<string, Node | null>;
+    searchNodesLoader: DataLoader<string, Node[]>;
   }
 
   interface AuthToken {

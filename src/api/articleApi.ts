@@ -6,31 +6,43 @@
  *
  */
 
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { queryNodes } from "./taxonomyApi";
+import { IArticleV2DTO, openapi } from "@ndla/types-backend/article-api";
 import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
 import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
-import { getArticleIdFromUrn, findPrimaryPath } from "../utils/articleHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 interface ArticleParams {
   articleId: string;
 }
 
+const client = createAuthClient<openapi.paths>();
+
 export const fetchTransformedContent = async (
   article: IArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLTransformedArticleContent> => {
   const params = _params.transformArgs ?? {};
-  const subject = params.subjectId;
+  let subjectId = params.subjectId;
+  if (params.contextId && !subjectId) {
+    const contextNode = await context.loaders.nodesLoader.load({
+      contextId: params.contextId,
+      includeContexts: true,
+      filterProgrammes: true,
+    });
+    const contextRootId = contextNode[0]?.context?.rootId;
+    if (contextRootId) {
+      subjectId = contextRootId;
+    }
+  }
   const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
     article.content.content,
     context,
     article.visualElement?.visualElement,
     {
-      subject,
+      subject: subjectId,
       draftConcept: params.draftConcept,
       previewH5p: params.previewH5p,
       absoluteUrl: params.absoluteUrl,
@@ -49,17 +61,28 @@ export const fetchTransformedContent = async (
 export const fetchTransformedDisclaimer = async (
   article: IArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLTransformedArticleContent> => {
   if (!article.disclaimer?.disclaimer) return { content: "" };
   const params = _params.transformArgs ?? {};
-  const subject = params.subjectId;
+  let subjectId = params.subjectId;
+  if (params.contextId && !subjectId) {
+    const contextNode = await context.loaders.nodesLoader.load({
+      contextId: params.contextId,
+      includeContexts: true,
+      filterProgrammes: true,
+    });
+    const contextRootId = contextNode[0]?.context?.rootId;
+    if (contextRootId) {
+      subjectId = contextRootId;
+    }
+  }
   const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
     article.disclaimer.disclaimer,
     context,
     undefined,
     {
-      subject,
+      subject: subjectId,
       draftConcept: params.draftConcept,
       previewH5p: params.previewH5p,
       absoluteUrl: params.absoluteUrl,
@@ -72,7 +95,7 @@ export const fetchTransformedDisclaimer = async (
 export async function fetchRelatedContent(
   article: IArticleV2DTO,
   params: { subjectId?: string },
-  context: Context,
+  context: ContextWithLoaders,
 ): Promise<GQLRelatedContent[]> {
   const nullableRelatedContent: (GQLRelatedContent | undefined)[] = await Promise.all(
     article?.relatedContent?.map(async (rc) => {
@@ -84,20 +107,19 @@ export async function fetchRelatedContent(
       }
       try {
         const related = await fetchSimpleArticle(`urn:article:${rc}`, context);
-        const nodes = await queryNodes(
-          {
-            contentURI: `urn:article:${related.id}`,
-            language: context.language,
-          },
-          context,
-        );
+        const nodes = await context.loaders.nodesLoader.load({
+          contentURI: `urn:article:${related.id}`,
+          language: context.language,
+          includeContexts: true,
+          filterProgrammes: true,
+        });
         const node = nodes?.[0];
         if (node) {
-          const primaryPath = params.subjectId ? findPrimaryPath(node.paths, params.subjectId) : undefined;
-          const path = primaryPath ?? node.path;
+          const ctx = node.contexts.find((c) => c.rootId === params.subjectId) ?? node.context;
+          const url = ctx?.url ?? node.url;
           return {
             title: node.name,
-            url: `${ndlaUrl}${path}`,
+            url: `${ndlaUrl}${url}`,
           };
         } else {
           return {
@@ -120,22 +142,30 @@ export async function fetchArticle(params: ArticleParams, context: Context): Pro
 }
 
 export async function fetchArticlesPage(
-  articleIds: string[],
+  articleIds: number[],
   context: Context,
   pageSize: number,
   page: number,
 ): Promise<IArticleV2DTO[]> {
-  return fetch(
-    `/article-api/v2/articles/ids?ids=${articleIds.join(",")}&language=${
-      context.language
-    }&page-size=${pageSize}&page=${page}&license=all&fallback=true`,
-    context,
-  ).then((res) => res.json());
+  return client
+    .GET("/article-api/v2/articles/ids", {
+      params: {
+        query: {
+          ids: articleIds,
+          language: context.language,
+          "page-size": pageSize,
+          page,
+          license: "all",
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchArticles(articleIds: string[], context: Context): Promise<(IArticleV2DTO | undefined)[]> {
   const pageSize = 100;
-  const ids = articleIds.filter((id) => id && id !== "undefined");
+  const ids = articleIds.map((id) => parseInt(id)).filter((id) => isNaN(id) === false);
   const numberOfPages = Math.ceil(ids.length / pageSize);
 
   const requests = [];
@@ -153,10 +183,18 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
 }
 
 export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2DTO> {
-  const articleId = getArticleIdFromUrn(articleUrn);
-  const response = await fetch(
-    `/article-api/v2/articles/${articleId}?language=${context.language}&license=all&fallback=true`,
-    context,
-  );
-  return await resolveJson(response);
+  return await client
+    .GET("/article-api/v2/articles/{article_id}", {
+      params: {
+        path: {
+          article_id: getArticleIdFromUrn(articleUrn),
+        },
+        query: {
+          language: context.language,
+          license: "all",
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }

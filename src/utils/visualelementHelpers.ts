@@ -5,19 +5,20 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
 import { load } from "cheerio";
 import { fetchH5pLicenseInformation, fetchH5pInfo } from "../api/h5pApi";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
 import { fetchOembed } from "../api/oembedApi";
 import { fetchVideo, fetchVideoSources } from "../api/videoApi";
 import { getBrightcoveCopyright } from "./brightcoveUtils";
-import { GQLCopyright, GQLH5pElement, GQLVisualElement, GQLVisualElementOembed } from "../types/schema";
+import { GQLCopyright, GQLVisualElement } from "../types/schema";
 
 export async function parseVisualElement(
   visualElementEmbed: string,
   context: Context,
 ): Promise<GQLVisualElement | null> {
-  const parsedElement = load(visualElementEmbed);
+  const parsedElement = load(visualElementEmbed, null, false);
   const data: any = parsedElement("ndlaembed").data();
 
   switch (data?.resource) {
@@ -92,7 +93,7 @@ const parseH5PFromEmbed = async (embedData: VisualElementH5P, context: Context):
   const h5pId = pathArr[pathArr.length - 1];
   const [license, visualElementOembed, h5pInfo] = await Promise.all([
     fetchH5pLicenseInformation(h5pId, context),
-    fetchOembed<GQLH5pElement>(embedData.url, context),
+    fetchOembed(embedData.url, context),
     fetchH5pInfo(h5pId, context),
   ]);
 
@@ -159,7 +160,7 @@ const parseOembedFromEmbed = async (
   embedData: VisualElementOembed,
   context: Context,
 ): Promise<GQLVisualElement | null> => {
-  const visualElementOembed = await fetchOembed<GQLVisualElementOembed>(embedData.url, context);
+  const visualElementOembed = await fetchOembed(embedData.url, context);
   if (!visualElementOembed) return null;
   return {
     url: embedData.url,

@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
 import LRUCache from "lru-cache";
 import { Response } from "node-fetch";
 
@@ -12,6 +13,8 @@ export interface IKeyValueCache {
   get(key: string): Promise<string | undefined>;
   set(key: string, value: string, maxAge?: number): Promise<void>;
 }
+
+export const cacheTime = 1000 * 60 * 5; // 5 min
 
 // Create a cache with a generic interface.
 // Uses lru-cache now, but should be simple to switch to a redis/memcache implementation using the same interface
@@ -44,18 +47,28 @@ const getCacheStrictness = (cacheControlValue: string | number | string[] | unde
 };
 
 /** Returns `true` if the response can be cached, and `false` if the result shouldn't be cached. */
-export const setHeaderIfShouldNotCache = (response: Response, context: Context): boolean => {
-  const { res } = context;
-
+export const setHeaderIfShouldNotCache = (response: globalThis.Response | Response, context: Context): boolean => {
   const cacheControlResponse = response.headers.get("cache-control")?.toLowerCase();
 
-  const presetHeader = res.getHeader("cache-control");
+  const presetHeader = context.res.getHeader("cache-control");
   const presetStrictness = getCacheStrictness(presetHeader);
   const newStrictness = getCacheStrictness(cacheControlResponse);
 
   if (presetStrictness < newStrictness && cacheControlResponse) {
-    res.setHeader("cache-control", cacheControlResponse);
+    context.res.setHeader("cache-control", cacheControlResponse);
   }
 
   return newStrictness === -1;
 };
+
+const cache = createCache();
+
+export function getCacheKey(url: string, { versionHash }: Context, options?: RequestOptions): string {
+  const { useTaxonomyCache } = options ?? {};
+  if (useTaxonomyCache && versionHash && versionHash !== "default") return `${url}_${versionHash}`;
+  return url;
+}
+
+export function getCache() {
+  return cache;
+}

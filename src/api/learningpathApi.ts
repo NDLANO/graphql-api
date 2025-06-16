@@ -6,8 +6,9 @@
  *
  */
 
-import { ILearningPathV2DTO, ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
+import { openapi, ILearningPathV2DTO, ILearningStepV2DTO, AuthorDTO } from "@ndla/types-backend/learningpath-api";
 import {
+  GQLLearningpathSeqNo,
   GQLMutationCopyLearningpathArgs,
   GQLMutationDeleteLearningpathStepArgs,
   GQLMutationNewLearningpathArgs,
@@ -15,131 +16,210 @@ import {
   GQLMutationUpdateLearningpathArgs,
   GQLMutationUpdateLearningpathStatusArgs,
   GQLMutationUpdateLearningpathStepArgs,
+  GQLMutationUpdateLearningpathStepSeqNoArgs,
 } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getNumberId } from "../utils/apiHelpers";
+
+const client = createAuthClient<openapi.paths>();
+const cachelessClient = createAuthClient<openapi.paths>({ disableCache: true });
 
 export async function fetchLearningpaths(
-  learningpathIds: string[],
+  learningpathIds: number[],
   context: Context,
 ): Promise<Array<ILearningPathV2DTO | undefined>> {
-  const response = await fetch(
-    `/learningpath-api/v2/learningpaths/ids?language=${context.language}&ids=${learningpathIds.join(",")}`,
-    context,
-  );
-  const json: ILearningPathV2DTO[] = await resolveJson(response);
+  const json = await client
+    .GET("/learningpath-api/v2/learningpaths/ids", {
+      params: {
+        query: {
+          ids: learningpathIds,
+          language: context.language,
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
   // The api does not always return the exact number of results as ids provided.
   // So always map over ids so that dataLoader gets the right amount of results in correct order.
   return learningpathIds.map((id) => {
     const learningpath = json.find((item) => {
-      return item.id.toString() === id;
+      return item.id === id;
     });
     return learningpath;
   });
 }
 
-export async function fetchMyLearningpaths(context: Context): Promise<Array<ILearningPathV2DTO>> {
-  const response = await fetch(
-    `/learningpath-api/v2/learningpaths/mine?language=${context.language}&fallback=true`,
-    context,
-  );
-  return await resolveJson(response);
+export async function fetchMyLearningpaths(_context: Context): Promise<Array<ILearningPathV2DTO>> {
+  return cachelessClient.GET("/learningpath-api/v2/learningpaths/mine").then(resolveJsonOATS);
+}
+
+export async function fetchMyLearningpath(id: string, context: Context): Promise<ILearningPathV2DTO> {
+  return cachelessClient
+    .GET("/learningpath-api/v2/learningpaths/{learningpath_id}", {
+      params: {
+        path: {
+          learningpath_id: getNumberId(id),
+        },
+        query: {
+          language: context.language,
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchLearningpath(id: string, context: Context): Promise<ILearningPathV2DTO> {
-  const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${id}?language=${context.language}&fallback=true`,
-    context,
-  );
-  return await resolveJson(response);
+  return client
+    .GET("/learningpath-api/v2/learningpaths/{learningpath_id}", {
+      params: {
+        path: {
+          learningpath_id: getNumberId(id),
+        },
+        query: {
+          language: context.language,
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function updateLearningpathStatus(
   { id, status }: GQLMutationUpdateLearningpathStatusArgs,
-  context: Context,
+  _context: Context,
 ): Promise<ILearningPathV2DTO> {
-  const response = await fetch(`/learningpath-api/v2/learningpaths/${id}/status`, context, {
-    method: "PUT",
-    body: JSON.stringify({ status: status }),
-  });
-  return await resolveJson(response);
+  return client
+    .PUT("/learningpath-api/v2/learningpaths/{learningpath_id}/status", {
+      params: { path: { learningpath_id: id } },
+      body: { status },
+    })
+    .then(resolveJsonOATS);
 }
 
-export async function deleteLearningpath(id: number, context: Context): Promise<boolean> {
-  const response = await fetch(`/learningpath-api/v2/learningpaths/${id}`, context, {
-    method: "DELETE",
+export async function deleteLearningpath(id: number, _context: Context): Promise<boolean> {
+  const { response } = await client.DELETE("/learningpath-api/v2/learningpaths/{learningpath_id}", {
+    params: { path: { learningpath_id: id } },
   });
   return response.ok;
 }
 
 export async function createLearningpath(
   { params }: GQLMutationNewLearningpathArgs,
-  context: Context,
+  _context: Context,
 ): Promise<ILearningPathV2DTO> {
-  const response = await fetch("/learningpath-api/v2/learningpaths", context, {
-    method: "POST",
-    body: JSON.stringify(params),
-  });
-  return await resolveJson(response);
+  return client
+    .POST("/learningpath-api/v2/learningpaths", {
+      body: {
+        ...params,
+        copyright: {
+          ...params.copyright,
+          contributors: params.copyright.contributors as AuthorDTO[],
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function updateLearningpath(
   { learningpathId, params }: GQLMutationUpdateLearningpathArgs,
-  context: Context,
+  _context: Context,
 ): Promise<ILearningPathV2DTO> {
-  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}`, context, {
-    method: "PATCH",
-    body: JSON.stringify(params),
-  });
-  return await resolveJson(response);
+  const copyright = params.copyright
+    ? {
+        ...params.copyright,
+        contributors: params.copyright?.contributors as AuthorDTO[],
+      }
+    : undefined;
+  return client
+    .PATCH("/learningpath-api/v2/learningpaths/{learningpath_id}", {
+      params: { path: { learningpath_id: learningpathId } },
+      body: {
+        ...params,
+        copyright,
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function createLearningstep(
   { learningpathId, params }: GQLMutationNewLearningpathStepArgs,
-  context: Context,
+  _context: Context,
 ): Promise<ILearningStepV2DTO> {
-  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps`, context, {
-    method: "POST",
-    body: JSON.stringify(params),
-  });
-  return await resolveJson(response);
+  return client
+    .POST("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps", {
+      params: { path: { learningpath_id: learningpathId } },
+      body: params,
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function updateLearningstep(
   { learningpathId, learningstepId, params }: GQLMutationUpdateLearningpathStepArgs,
-  context: Context,
+  _context: Context,
 ): Promise<ILearningStepV2DTO> {
-  const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps/${learningstepId}`,
-    context,
-    {
-      method: "PATCH",
-      body: JSON.stringify(params),
-    },
-  );
-  return await resolveJson(response);
+  return client
+    .PATCH("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}", {
+      params: {
+        path: {
+          learningpath_id: learningpathId,
+          learningstep_id: learningstepId,
+        },
+      },
+      body: params,
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function deleteLearningstep(
   { learningstepId, learningpathId }: GQLMutationDeleteLearningpathStepArgs,
-  context: Context,
-): Promise<string[]> {
-  const response = await fetch(
-    `/learningpath-api/v2/learningpaths/${learningpathId}/learningsteps/${learningstepId}`,
-    context,
+  _context: Context,
+): Promise<boolean> {
+  const { response } = await client.DELETE(
+    "/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}",
     {
-      method: "DELETE",
+      params: {
+        path: {
+          learningpath_id: learningpathId,
+          learningstep_id: learningstepId,
+        },
+      },
     },
   );
-  return await resolveJson(response);
+  return response.ok;
 }
 
 export async function copyLearningpath(
   { learningpathId, params }: GQLMutationCopyLearningpathArgs,
-  context: Context,
+  _context: Context,
 ): Promise<ILearningPathV2DTO> {
-  const response = await fetch(`/learningpath-api/v2/learningpaths/${learningpathId}/copy`, context, {
-    method: "POST",
-    body: JSON.stringify(params),
-  });
-  return await resolveJson(response);
+  const copyright = params.copyright
+    ? { ...params.copyright, contributors: params.copyright.contributors as AuthorDTO[] }
+    : undefined;
+  return client
+    .POST("/learningpath-api/v2/learningpaths/{learningpath_id}/copy", {
+      body: {
+        ...params,
+        copyright,
+      },
+      params: { path: { learningpath_id: learningpathId } },
+    })
+    .then(resolveJsonOATS);
+}
+
+export async function updateLearningpathStepSeqNo(
+  { learningpathId, learningpathStepId, seqNo }: GQLMutationUpdateLearningpathStepSeqNoArgs,
+  _context: Context,
+): Promise<GQLLearningpathSeqNo> {
+  return client
+    .PUT("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}/seqNo", {
+      body: { seqNo },
+      params: {
+        path: {
+          learningpath_id: learningpathId,
+          learningstep_id: learningpathStepId,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }

@@ -6,10 +6,11 @@
  *
  */
 
+import { beforeAll, expect, test, vi } from "vitest";
 import { parseCaption } from "../embedsApi";
 
 beforeAll(() => {
-  jest.spyOn(console, "error").mockImplementation(() => {});
+  vi.spyOn(console, "error").mockImplementation(() => {});
 });
 
 test("that punctuation is added to captions when missing", async () => {

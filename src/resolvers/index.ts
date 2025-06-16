@@ -91,15 +91,6 @@ export const resolvers = {
       return "Resource";
     },
   },
-  SearchResult: {
-    // Resolves SearchResult interface
-    __resolveType(searchResult: any) {
-      if (searchResult.learningResourceType === "learningpath") {
-        return "LearningpathSearchResult";
-      }
-      return "ArticleSearchResult";
-    },
-  },
   FolderResourceMeta: {
     // Resolves FolderResourceMeta interface
     __resolveType(folderResourceMeta: any) {

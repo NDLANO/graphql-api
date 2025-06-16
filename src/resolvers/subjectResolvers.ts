@@ -6,9 +6,10 @@
  *
  */
 
-import { ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { ISubjectPageDTO, IVisualElementDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
+  GQLImageLicense,
   GQLQuerySubjectArgs,
   GQLQuerySubjectCollectionArgs,
   GQLSubject,
@@ -17,6 +18,8 @@ import {
 } from "../types/schema";
 import { filterMissingArticles } from "../utils/articleHelpers";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
+import { fetchImageV3 } from "../api";
+import { convertToImageLicense } from "../api/imageApi";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
@@ -33,32 +36,33 @@ export const Query = {
         }
       | undefined,
     context: ContextWithLoaders,
-  ): Promise<GQLSubject[]> {
-    const metaDataFilter = input?.metadataFilterKey
-      ? {
-          metadataFilter: {
-            key: input.metadataFilterKey,
-            value: input.metadataFilterValue,
-          },
-        }
-      : {};
-
-    const loaderParams = {
-      ...metaDataFilter,
-      filterVisible: input?.filterVisible,
+  ): Promise<Node[]> {
+    return context.loaders.nodesLoader.load({
+      language: context.language,
+      nodeType: "SUBJECT",
+      includeContexts: true,
+      filterProgrammes: true,
+      key: input?.metadataFilterKey,
+      value: input?.metadataFilterValue,
+      isVisible: input?.filterVisible,
       ids: input?.ids,
-    };
-
-    return context.loaders.subjectsLoader.load(loaderParams).then((s) => s.subjects);
+    });
   },
   async subjectCollection(
     _: any,
     { language }: GQLQuerySubjectCollectionArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLSubject[]> {
-    return await context.loaders.subjectsLoader
-      .load({ metadataFilter: { key: "language", value: language } })
-      .then((s) => s.subjects);
+  ): Promise<Node[]> {
+    return await context.loaders.nodesLoader
+      .load({
+        language: context.language,
+        key: "language",
+        value: language,
+        nodeType: "SUBJECT",
+        includeContexts: true,
+        filterProgrammes: true,
+      })
+      .then((s) => s.sort((a, b) => (a.name < b.name ? -1 : 1)));
   },
 };
 
@@ -115,6 +119,31 @@ export const resolvers = {
           return { id };
         }),
       );
+    },
+  },
+  SubjectPageVisualElement: {
+    async imageLicense(
+      visualElement: IVisualElementDTO,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLImageLicense | undefined> {
+      const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
+      if (isNaN(imageId)) return undefined;
+      try {
+        const image = await fetchImageV3(imageId, context);
+        return convertToImageLicense(image);
+      } catch (e) {
+        return undefined;
+      }
+    },
+    async imageUrl(visualElement: IVisualElementDTO, _: any, context: ContextWithLoaders): Promise<string | null> {
+      if (visualElement.type === "image") {
+        const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
+        if (!imageId) return null;
+        const image = await fetchImageV3(imageId, context);
+        return image.image.imageUrl;
+      }
+      return null;
     },
   },
 };

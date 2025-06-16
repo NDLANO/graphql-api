@@ -8,13 +8,10 @@
 
 import { performance } from "perf_hooks";
 import nodeFetch, { Response, Request, RequestInit } from "node-fetch";
-import { IKeyValueCache, setHeaderIfShouldNotCache } from "../cache";
+import { cacheTime, getCache, getCacheKey, IKeyValueCache, setHeaderIfShouldNotCache } from "../cache";
+import { slowLogTimeout as configSlowLogTimeout } from "../config";
 import getLogger from "../utils/logger";
-
-function getCacheKey(url: string, { versionHash }: Context, { useTaxonomyCache }: RequestOptions): string {
-  if (useTaxonomyCache && versionHash && versionHash !== "default") return `${url}_${versionHash}`;
-  return url;
-}
+import { apiResourceUrl, getHeadersFromContext } from "./apiHelpers";
 
 export default function createFetch(options: { cache: IKeyValueCache; disableCache: boolean; context: Context }) {
   if (!options || !options.cache) throw Error("cache is a required option");
@@ -27,7 +24,7 @@ export default function createFetch(options: { cache: IKeyValueCache; disableCac
     init?: RequestInit,
   ): Promise<{ response: Response; shouldCache: boolean }> {
     const startTime = performance.now();
-    const slowLogTimeout = 500;
+    const slowLogTimeout = parseInt(configSlowLogTimeout);
 
     const headers = {
       ...init?.headers,
@@ -76,7 +73,7 @@ export default function createFetch(options: { cache: IKeyValueCache; disableCac
             body,
             headers: response.headers,
           }),
-          1000 * 60 * 5, // 5 min
+          cacheTime,
         );
       }
 
@@ -100,9 +97,24 @@ export default function createFetch(options: { cache: IKeyValueCache; disableCac
     }
     const cacheKey = getCacheKey(url, ctx, reqOptions);
     const data = await cache.get(cacheKey);
-    const cached = await cachedResponse(url, data);
+    const cached = cachedResponse(url, data);
     if (cached) return cached;
 
     return cachingFetch(url, ctx, reqOptions);
   };
+}
+
+export async function fetch(path: string, context: Context, options?: RequestOptions): Promise<Response> {
+  const fetchFn = createFetch({
+    cache: getCache(),
+    disableCache: !context.shouldUseCache,
+    context,
+  });
+
+  const headers = getHeadersFromContext(context);
+
+  return fetchFn(apiResourceUrl(path), context, {
+    headers,
+    ...options,
+  });
 }

@@ -7,42 +7,19 @@
  */
 
 import { IConceptDTO } from "@ndla/types-backend/concept-api";
-import { convertToSimpleImage, fetchImage } from "../api/imageApi";
-import { GQLConcept, GQLMeta, GQLVisualElement } from "../types/schema";
+import { GQLVisualElement } from "../types/schema";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
 export const Query = {};
 
 export const resolvers = {
   Concept: {
-    async subjectNames(concept: GQLConcept, params: any, context: ContextWithLoaders): Promise<string[]> {
-      const subjectIds = concept.subjectIds;
-      if (!subjectIds || subjectIds.length === 0) {
-        return [];
-      }
-      const data = await context.loaders.subjectsLoader.load(params);
-      return subjectIds.map((id) => data.subjects.find((subject) => subject.id === id)?.name || "");
-    },
     async visualElement(concept: IConceptDTO, _: any, context: ContextWithLoaders): Promise<GQLVisualElement | null> {
       const visualElement = concept.visualElement?.visualElement;
       if (visualElement) {
         return await parseVisualElement(visualElement, context);
       }
       return null;
-    },
-    async image(concept: IConceptDTO, _: any, context: ContextWithLoaders) {
-      const metaImageId = concept.metaImage?.url?.split("/").pop();
-      if (metaImageId) {
-        const image = await fetchImage(metaImageId, context);
-        if (!image) {
-          return undefined;
-        }
-        return convertToSimpleImage(image);
-      }
-      return undefined;
-    },
-    async articles(_: IConceptDTO, __: any, ___: ContextWithLoaders): Promise<GQLMeta[]> {
-      return [];
     },
     title(concept: IConceptDTO, _: any, __: ContextWithLoaders): string {
       return concept.title.title;
@@ -52,9 +29,6 @@ export const resolvers = {
     },
     tags: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
       return concept.tags?.tags || [];
-    },
-    subjectIds: (_: any, __: any, ___: ContextWithLoaders): string[] => {
-      return [];
     },
   },
 };
