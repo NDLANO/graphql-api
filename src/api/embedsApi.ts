@@ -6,7 +6,7 @@
  *
  */
 
-import { toUnicode } from "node:punycode";
+import { toUnicode } from "punycode/";
 import { load } from "cheerio";
 import he from "he";
 import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
