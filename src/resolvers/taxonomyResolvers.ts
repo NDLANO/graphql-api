@@ -73,6 +73,10 @@ export const Query = {
     } else if (nodeType) {
       nodes = await context.loaders.nodesLoader.load({ nodeType: nodeType, ...params });
     }
+    if (ids && ids.length === nodes.length) {
+      // return in same order as ids
+      nodes = ids.map((id) => nodes.find((node) => node.id === id)).filter((node) => !!node);
+    }
     return nodes.map((node) => {
       return nodeToTaxonomyEntity(node, context);
     });
