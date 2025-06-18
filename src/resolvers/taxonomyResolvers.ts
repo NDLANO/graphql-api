@@ -6,6 +6,7 @@
  *
  */
 
+import sortBy from "lodash/sortBy";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { GraphQLError } from "graphql";
@@ -73,9 +74,9 @@ export const Query = {
     } else if (nodeType) {
       nodes = await context.loaders.nodesLoader.load({ nodeType: nodeType, ...params });
     }
-    if (ids && ids.length === nodes.length) {
+    if (ids) {
       // return in same order as ids
-      nodes = ids.map((id) => nodes.find((node) => node.id === id)).filter((node) => !!node);
+      nodes = sortBy(nodes, (n) => ids.indexOf(n.id));
     }
     return nodes.map((node) => {
       return nodeToTaxonomyEntity(node, context);
