@@ -36,12 +36,12 @@ export async function filterMissingArticles<T extends GQLTaxonomyEntity | NodeCh
 
   const entitiesWithContentUri = visibleEntities.filter((taxonomyEntity) => !!taxonomyEntity.contentUri);
 
-  const learningpathResources = entitiesWithContentUri.filter(
-    (taxonomyEntity) => taxonomyEntity.contentUri?.includes("urn:learningpath"),
+  const learningpathResources = entitiesWithContentUri.filter((taxonomyEntity) =>
+    taxonomyEntity.contentUri?.includes("urn:learningpath"),
   );
 
-  const articleResources = entitiesWithContentUri.filter(
-    (taxonomyEntity) => taxonomyEntity.contentUri?.includes("urn:article"),
+  const articleResources = entitiesWithContentUri.filter((taxonomyEntity) =>
+    taxonomyEntity.contentUri?.includes("urn:article"),
   );
 
   const articles = await context.loaders.articlesLoader.loadMany(
