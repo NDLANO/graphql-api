@@ -6625,12 +6625,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "marked@npm:9.1.0"
+"marked@npm:^15.0.12":
+  version: 15.0.12
+  resolution: "marked@npm:15.0.12"
   bin:
     marked: bin/marked.js
-  checksum: 10c0/9dfa56b5ba1b9093db2d763ebb3bb895d864e487176e14f18abb421eb6ba84d4a8003fec5e044cf962ace9ff5fb2f05cf28750f4b9b7ab2f48477a5ae1023676
+  checksum: 10c0/e09da211544b787ecfb25fed07af206060bf7cd6d9de6cb123f15c496a57f83b7aabea93340aaa94dae9c94e097ae129377cad6310abc16009590972e85f4212
   languageName: node
   linkType: hard
 
@@ -6926,7 +6926,7 @@ __metadata:
     he: "npm:^1.2.0"
     lodash: "npm:^4.17.21"
     lru-cache: "npm:^7.0.0"
-    marked: "npm:^9.1.0"
+    marked: "npm:^15.0.12"
     node-fetch: "npm:2.7.0"
     open-graph-scraper: "npm:^6.10.0"
     openapi-fetch: "npm:^0.13.5"
