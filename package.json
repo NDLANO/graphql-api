@@ -44,7 +44,7 @@
     "lru-cache": "^7.0.0",
     "marked": "^9.1.0",
     "node-fetch": "2.6.7",
-    "open-graph-scraper": "^6.8.3",
+    "open-graph-scraper": "^6.10.0",
     "openapi-fetch": "^0.13.5",
     "prismjs": "^1.30.0",
     "prom-client": "^15.1.3",
