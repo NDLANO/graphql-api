@@ -25,14 +25,15 @@ const client = createAuthClient<openapi.paths>();
 const cachelessClient = createAuthClient<openapi.paths>({ disableCache: true });
 
 export async function fetchLearningpaths(
-  learningpathIds: number[],
+  learningpathIds: readonly number[],
   context: Context,
 ): Promise<Array<ILearningPathV2DTO | undefined>> {
+  const ids = learningpathIds.filter((id) => isNaN(id) === false);
   const json = await client
     .GET("/learningpath-api/v2/learningpaths/ids", {
       params: {
         query: {
-          ids: learningpathIds,
+          ids: ids,
           language: context.language,
           fallback: true,
         },

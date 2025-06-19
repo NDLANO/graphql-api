@@ -3918,13 +3918,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dataloader@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "dataloader@npm:1.4.0"
-  checksum: 10c0/5fa4c843b9e60195092f1fc7e2acaff318ed46886dc670ddff683bc560f12d4079e6d1e77749501b7e111a8582d26a2aa2a2fbe6d7d5e1520cef64f4e1fd242d
-  languageName: node
-  linkType: hard
-
 "dataloader@npm:^2.2.3":
   version: 2.2.3
   resolution: "dataloader@npm:2.2.3"
@@ -6918,7 +6911,7 @@ __metadata:
     cheerio: "npm:^1.1.0"
     compression: "npm:^1.8.0"
     concurrently: "npm:^9.1.0"
-    dataloader: "npm:^1.4.0"
+    dataloader: "npm:^2.2.3"
     dotenv: "npm:^16.5.0"
     eslint: "npm:^9.16.0"
     eslint-config-ndla: "npm:^6.0.0-alpha.0"

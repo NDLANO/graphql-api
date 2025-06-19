@@ -56,7 +56,10 @@ export async function fetchNode(
   return await resolveJson(response);
 }
 
-export async function searchNodes(params: { contentUris: string[] }, context: Context): Promise<SearchResult<Node>> {
+export async function searchNodes(
+  params: { contentUris: readonly string[] },
+  context: Context,
+): Promise<SearchResult<Node>> {
   const { contentUris } = params;
   const query = qs.stringify({
     language: context.language,
