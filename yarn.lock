@@ -2279,12 +2279,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/compression@npm:^1.7.2":
-  version: 1.7.2
-  resolution: "@types/compression@npm:1.7.2"
+"@types/compression@npm:^1.8.1":
+  version: 1.8.1
+  resolution: "@types/compression@npm:1.8.1"
   dependencies:
     "@types/express": "npm:*"
-  checksum: 10c0/1ef9ad65cde187abd386db93c9f962c9415b77b1a81549a88cc6c7b45dac09502363efee0270493ab1541548a88b3e93115084a84d936c5cd02d59d17505dc13
+    "@types/node": "npm:*"
+  checksum: 10c0/3b958b1c9b7cdf9852cd8fbd85fb9067196656fb771aaed950b1ae6ebab5e87d2f7b75260160c772038919a12c8ca8bee42aaa3fdb989b0646163979d75fe8b2
   languageName: node
   linkType: hard
 
@@ -2806,7 +2807,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"accepts@npm:~1.3.5, accepts@npm:~1.3.8":
+"accepts@npm:~1.3.8":
   version: 1.3.8
   resolution: "accepts@npm:1.3.8"
   dependencies:
@@ -3319,13 +3320,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bytes@npm:3.0.0":
-  version: 3.0.0
-  resolution: "bytes@npm:3.0.0"
-  checksum: 10c0/91d42c38601c76460519ffef88371caacaea483a354c8e4b8808e7b027574436a5713337c003ea3de63ee4991c2a9a637884fdfe7f761760d746929d9e8fec60
-  languageName: node
-  linkType: hard
-
 "bytes@npm:3.1.2":
   version: 3.1.2
   resolution: "bytes@npm:3.1.2"
@@ -3711,7 +3705,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compressible@npm:~2.0.16":
+"compressible@npm:~2.0.18":
   version: 2.0.18
   resolution: "compressible@npm:2.0.18"
   dependencies:
@@ -3720,18 +3714,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compression@npm:^1.7.4":
-  version: 1.7.4
-  resolution: "compression@npm:1.7.4"
+"compression@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "compression@npm:1.8.0"
   dependencies:
-    accepts: "npm:~1.3.5"
-    bytes: "npm:3.0.0"
-    compressible: "npm:~2.0.16"
+    bytes: "npm:3.1.2"
+    compressible: "npm:~2.0.18"
     debug: "npm:2.6.9"
+    negotiator: "npm:~0.6.4"
     on-headers: "npm:~1.0.2"
-    safe-buffer: "npm:5.1.2"
+    safe-buffer: "npm:5.2.1"
     vary: "npm:~1.1.2"
-  checksum: 10c0/138db836202a406d8a14156a5564fb1700632a76b6e7d1546939472895a5304f2b23c80d7a22bf44c767e87a26e070dbc342ea63bb45ee9c863354fa5556bbbc
+  checksum: 10c0/804d3c8430939f4fd88e5128333f311b4035f6425a7f2959d74cfb5c98ef3a3e3e18143208f3f9d0fcae4cd3bcf3d2fbe525e0fcb955e6e146e070936f025a24
   languageName: node
   linkType: hard
 
@@ -6912,7 +6906,7 @@ __metadata:
     "@ndla/types-backend": "npm:^1.0.39"
     "@ndla/types-embed": "npm:^5.0.13-alpha.0"
     "@ndla/types-taxonomy": "npm:^1.0.34"
-    "@types/compression": "npm:^1.7.2"
+    "@types/compression": "npm:^1.8.1"
     "@types/cors": "npm:^2.8.4"
     "@types/dotenv": "npm:^6.1.0"
     "@types/express": "npm:^4.17.21"
@@ -6929,7 +6923,7 @@ __metadata:
     "@types/source-map-support": "npm:^0"
     "@vercel/ncc": "npm:^0.34.0"
     cheerio: "npm:^1.1.0"
-    compression: "npm:^1.7.4"
+    compression: "npm:^1.8.0"
     concurrently: "npm:^9.1.0"
     dataloader: "npm:^1.4.0"
     dotenv: "npm:^6.2.0"
@@ -6965,6 +6959,13 @@ __metadata:
   version: 0.6.3
   resolution: "negotiator@npm:0.6.3"
   checksum: 10c0/3ec9fd413e7bf071c937ae60d572bc67155262068ed522cf4b3be5edbe6ddf67d095ec03a3a14ebf8fc8e95f8e1d61be4869db0dbb0de696f6b837358bd43fc2
+  languageName: node
+  linkType: hard
+
+"negotiator@npm:~0.6.4":
+  version: 0.6.4
+  resolution: "negotiator@npm:0.6.4"
+  checksum: 10c0/3e677139c7fb7628a6f36335bf11a885a62c21d5390204590a1a214a5631fcbe5ea74ef6a610b60afe84b4d975cbe0566a23f20ee17c77c73e74b80032108dea
   languageName: node
   linkType: hard
 
@@ -8000,13 +8001,6 @@ __metadata:
     has-symbols: "npm:^1.0.3"
     isarray: "npm:^2.0.5"
   checksum: 10c0/12f9fdb01c8585e199a347eacc3bae7b5164ae805cdc8c6707199dbad5b9e30001a50a43c4ee24dc9ea32dbb7279397850e9208a7e217f4d8b1cf5d90129dec9
-  languageName: node
-  linkType: hard
-
-"safe-buffer@npm:5.1.2":
-  version: 5.1.2
-  resolution: "safe-buffer@npm:5.1.2"
-  checksum: 10c0/780ba6b5d99cc9a40f7b951d47152297d0e260f0df01472a1b99d4889679a4b94a13d644f7dbc4f022572f09ae9005fa2fbb93bbbd83643316f365a3e9a45b21
   languageName: node
   linkType: hard
 
