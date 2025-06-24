@@ -9,6 +9,7 @@
 import { toUnicode } from "punycode/";
 import { load } from "cheerio";
 import he from "he";
+import { FrontPageDTO, MenuDataDTO, MenuDTO } from "@ndla/types-backend/frontpage-api";
 import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import {
   AudioMetaData,
@@ -178,6 +179,22 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({ embedData, context })
   };
 };
 
+const extractArticleIds = (data: FrontPageDTO): string[] => {
+  const articleIds: string[] = [];
+
+  function traverse(obj: MenuDataDTO | MenuDTO) {
+    articleIds.push(`${obj.articleId}`);
+    if (obj.menu) {
+      obj.menu.map((m) => traverse(m));
+    }
+  }
+
+  if (data.menu) {
+    data.menu.map((m) => traverse(m));
+  }
+  return articleIds;
+};
+
 const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context, opts }) => {
   const contentURI = `urn:${embedData.contentType ?? "article"}:${embedData.contentId}`;
   const contentType = embedData.contentType === "learningpath" ? "learningpaths" : "article";
@@ -192,8 +209,10 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   });
 
   if (nodes.length === 0 && contentType === "article") {
+    const menuids = extractArticleIds(await context.loaders.frontpageLoader.load(context.language));
+    const pathelement = menuids.includes(embedData.contentId) ? "/om" : "/article";
     const article = await context.loaders.articlesLoader.load(embedData.contentId);
-    return { path: `${baseUrl}/article/${article?.slug ?? embedData.contentId}` };
+    return { path: `${baseUrl}${pathelement}/${article?.slug ?? embedData.contentId}` };
   }
 
   const node = nodes.find((n) => !!n.context);
