@@ -166,6 +166,20 @@ const getCoverphoto = async (
     : undefined;
 };
 
+const getBasedOn = async (
+  learningpath: GQLLearningpath,
+  _: any,
+  context: ContextWithLoaders,
+): Promise<string | undefined> => {
+  const originalId = learningpath.isBasedOn;
+  if (!originalId) return undefined;
+  const node = await context.loaders.searchNodesLoader.load(`urn:learningpath:${originalId}`);
+  if (node.length === 0) {
+    return `/learningpath/${originalId}`;
+  }
+  return node[0]?.url;
+};
+
 const transformDescription = async (step: GQLLearningpathStep, context: ContextWithLoaders): Promise<string | null> => {
   if (!step.description) return null;
   const res = await transformArticle(step.description, context, undefined, {});
@@ -175,9 +189,11 @@ const transformDescription = async (step: GQLLearningpathStep, context: ContextW
 export const resolvers = {
   Learningpath: {
     coverphoto: getCoverphoto,
+    basedOn: getBasedOn,
   },
   MyNdlaLearningpath: {
     coverphoto: getCoverphoto,
+    basedOn: getBasedOn,
   },
   LearningpathStep: {
     oembed: getOembed,

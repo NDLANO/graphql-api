@@ -283,6 +283,7 @@ export const typeDefs = gql`
     tags: [String!]!
     supportedLanguages: [String!]!
     isBasedOn: Int
+    basedOn: String
     learningsteps: [LearningpathStep!]!
     metaUrl: String!
     revision: Int!
@@ -306,6 +307,7 @@ export const typeDefs = gql`
     tags: [String!]!
     supportedLanguages: [String!]!
     isBasedOn: Int
+    basedOn: String
     learningsteps: [MyNdlaLearningpathStep!]!
     metaUrl: String!
     revision: Int!
