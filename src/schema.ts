@@ -1062,6 +1062,7 @@ export const typeDefs = gql`
   type Concept {
     id: Int!
     title: String!
+    htmlTitle: String!
     content: String!
     created: String!
     tags: [String!]!

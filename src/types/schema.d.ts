@@ -293,6 +293,7 @@ export type GQLConcept = {
   copyright?: Maybe<GQLConceptCopyright>;
   created: Scalars['String']['output'];
   glossData?: Maybe<GQLGloss>;
+  htmlTitle: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   source?: Maybe<Scalars['String']['output']>;
   supportedLanguages: Array<Scalars['String']['output']>;
@@ -2784,6 +2785,7 @@ export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolve
   copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   glossData?: Resolver<Maybe<GQLResolversTypes['Gloss']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   source?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
