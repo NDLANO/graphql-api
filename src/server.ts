@@ -8,7 +8,7 @@
 
 import compression from "compression";
 import cors from "cors";
-import express, { json, Request, Response } from "express";
+import express, { json } from "express";
 import promBundle from "express-prom-bundle";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
@@ -16,14 +16,21 @@ import { port } from "./config";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
 import correlationIdMiddleware from "./utils/correlationIdMiddleware";
-import { logError } from "./utils/logger";
+import { getLogger, logError } from "./utils/logger";
 import loggerMiddleware from "./utils/loggerMiddleware";
 import { contextExpressMiddleware } from "./utils/context/contextMiddleware";
 import { getContextOrThrow } from "./utils/context/contextStore";
+import { Server } from "http";
+import { healthRouter } from "./utils/healthRouter";
+import { activeRequestsMiddleware } from "./utils/activeRequestsMiddleware";
+import { gracefulShutdown } from "./utils/gracefulShutdown";
 
 const GRAPHQL_PORT = port;
 
 const app = express();
+
+let server: Server;
+let apolloServer: ApolloServer<ContextWithLoaders>;
 
 const metricsMiddleware = promBundle({
   includeMethod: true,
@@ -37,12 +44,11 @@ app.use(metricsMiddleware);
 app.use(compression());
 app.use(express.json({ limit: "1mb" }));
 
-app.get("/health", (_: Request, res: Response) => {
-  res.status(200).json({ status: 200, text: "Health check ok" });
-});
+app.use(healthRouter);
+app.use(activeRequestsMiddleware);
 
-async function startApolloServer() {
-  const server = new ApolloServer({
+async function startApolloServer(): Promise<void> {
+  apolloServer = new ApolloServer({
     typeDefs,
     resolvers,
     introspection: true,
@@ -60,7 +66,7 @@ async function startApolloServer() {
       };
     },
   });
-  await server.start();
+  await apolloServer.start();
   app.use(
     "/graphql-api/graphql",
     cors(),
@@ -68,13 +74,13 @@ async function startApolloServer() {
     correlationIdMiddleware,
     contextExpressMiddleware,
     loggerMiddleware,
-    expressMiddleware(server, { context: async () => getContextOrThrow() }),
+    expressMiddleware(apolloServer, { context: async () => getContextOrThrow() }),
+  );
+  server = app.listen(GRAPHQL_PORT, () =>
+    getLogger().info(`GraphQL Playground is now running on http://localhost:${GRAPHQL_PORT}/graphql-api/graphql`),
   );
 }
 
-startApolloServer();
+process.on("SIGTERM", () => gracefulShutdown(server, apolloServer));
 
-app.listen(GRAPHQL_PORT, () =>
-  // eslint-disable-next-line no-console
-  console.log(`GraphQL Playground is now running on http://localhost:${GRAPHQL_PORT}/graphql-api/graphql`),
-);
+startApolloServer();
