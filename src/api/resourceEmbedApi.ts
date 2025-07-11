@@ -73,7 +73,6 @@ const toEmbed = ({
       resource: "concept",
       contentId: id,
       type: (conceptType ?? "notion") as "block" | "inline" | "notion",
-      linkText: "",
     };
   } else {
     return null;
