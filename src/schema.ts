@@ -733,7 +733,6 @@ export const typeDefs = gql`
     previewH5p: Boolean
     draftConcept: Boolean
     absoluteUrl: Boolean
-    prettyUrl: Boolean
   }
 
   type TransformedArticleContent {
@@ -1557,7 +1556,6 @@ export const typeDefs = gql`
       previewH5p: Boolean
       draftConcept: Boolean
       absoluteUrl: Boolean
-      prettyUrl: Boolean
     ): String!
     favoriteSharedFolder(folderId: String!): String!
     unFavoriteSharedFolder(folderId: String!): String!
