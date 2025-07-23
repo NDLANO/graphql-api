@@ -77,7 +77,7 @@ const buildOembedFromIframeUrl = (url: string): GQLLearningpathStepOembed => {
     version: "1.0",
     height: 800,
     width: 800,
-    html: `<iframe src="${url}" frameborder="0" allowFullscreen="" />`,
+    html: `<iframe src="${url}" allow="fullscreen" style="border: none;" />`,
   };
 };
 
