@@ -179,18 +179,18 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({ embedData, context })
   };
 };
 
+function traverse(articleIds: string[], obj: MenuDataDTO | MenuDTO) {
+  articleIds.push(`${obj.articleId}`);
+  if (obj.menu) {
+    obj.menu.map((m) => traverse(articleIds, m));
+  }
+}
+
 const extractArticleIds = (data: FrontPageDTO): string[] => {
   const articleIds: string[] = [];
 
-  function traverse(obj: MenuDataDTO | MenuDTO) {
-    articleIds.push(`${obj.articleId}`);
-    if (obj.menu) {
-      obj.menu.map((m) => traverse(m));
-    }
-  }
-
   if (data.menu) {
-    data.menu.map((m) => traverse(m));
+    data.menu.map((m) => traverse(articleIds, m));
   }
   return articleIds;
 };
