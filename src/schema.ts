@@ -283,6 +283,7 @@ export const typeDefs = gql`
     tags: [String!]!
     supportedLanguages: [String!]!
     isBasedOn: Int
+    basedOn: String
     learningsteps: [LearningpathStep!]!
     metaUrl: String!
     revision: Int!
@@ -306,6 +307,7 @@ export const typeDefs = gql`
     tags: [String!]!
     supportedLanguages: [String!]!
     isBasedOn: Int
+    basedOn: String
     learningsteps: [MyNdlaLearningpathStep!]!
     metaUrl: String!
     revision: Int!
@@ -731,7 +733,6 @@ export const typeDefs = gql`
     previewH5p: Boolean
     draftConcept: Boolean
     absoluteUrl: Boolean
-    prettyUrl: Boolean
   }
 
   type TransformedArticleContent {
@@ -1062,6 +1063,7 @@ export const typeDefs = gql`
   type Concept {
     id: Int!
     title: String!
+    htmlTitle: String!
     content: String!
     created: String!
     tags: [String!]!
@@ -1554,7 +1556,6 @@ export const typeDefs = gql`
       previewH5p: Boolean
       draftConcept: Boolean
       absoluteUrl: Boolean
-      prettyUrl: Boolean
     ): String!
     favoriteSharedFolder(folderId: String!): String!
     unFavoriteSharedFolder(folderId: String!): String!

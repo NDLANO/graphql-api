@@ -293,6 +293,7 @@ export type GQLConcept = {
   copyright?: Maybe<GQLConceptCopyright>;
   created: Scalars['String']['output'];
   glossData?: Maybe<GQLGloss>;
+  htmlTitle: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   source?: Maybe<Scalars['String']['output']>;
   supportedLanguages: Array<Scalars['String']['output']>;
@@ -702,6 +703,7 @@ export type GQLImageV3 = {
 
 export type GQLLearningpath = {
   __typename?: 'Learningpath';
+  basedOn?: Maybe<Scalars['String']['output']>;
   canEdit: Scalars['Boolean']['output'];
   copyright: GQLLearningpathCopyright;
   coverphoto?: Maybe<GQLLearningpathCoverphoto>;
@@ -1064,7 +1066,6 @@ export type GQLMutationTransformArticleContentArgs = {
   absoluteUrl?: InputMaybe<Scalars['Boolean']['input']>;
   content: Scalars['String']['input'];
   draftConcept?: InputMaybe<Scalars['Boolean']['input']>;
-  prettyUrl?: InputMaybe<Scalars['Boolean']['input']>;
   previewH5p?: InputMaybe<Scalars['Boolean']['input']>;
   subject?: InputMaybe<Scalars['String']['input']>;
   visualElement?: InputMaybe<Scalars['String']['input']>;
@@ -1138,6 +1139,7 @@ export type GQLMyNdlaGroup = {
 
 export type GQLMyNdlaLearningpath = {
   __typename?: 'MyNdlaLearningpath';
+  basedOn?: Maybe<Scalars['String']['output']>;
   canEdit: Scalars['Boolean']['output'];
   copyright: GQLLearningpathCopyright;
   coverphoto?: Maybe<GQLLearningpathCoverphoto>;
@@ -2047,7 +2049,6 @@ export type GQLTransformedArticleContentInput = {
   draftConcept?: InputMaybe<Scalars['Boolean']['input']>;
   isOembed?: InputMaybe<Scalars['String']['input']>;
   path?: InputMaybe<Scalars['String']['input']>;
-  prettyUrl?: InputMaybe<Scalars['Boolean']['input']>;
   previewH5p?: InputMaybe<Scalars['Boolean']['input']>;
   showVisualElement?: InputMaybe<Scalars['String']['input']>;
   subjectId?: InputMaybe<Scalars['String']['input']>;
@@ -2784,6 +2785,7 @@ export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolve
   copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   glossData?: Resolver<Maybe<GQLResolversTypes['Gloss']>, ParentType, ContextType>;
+  htmlTitle?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   source?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3183,6 +3185,7 @@ export type GQLImageV3Resolvers<ContextType = any, ParentType extends GQLResolve
 };
 
 export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Learningpath'] = GQLResolversParentTypes['Learningpath']> = {
+  basedOn?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   canEdit?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   copyright?: Resolver<GQLResolversTypes['LearningpathCopyright'], ParentType, ContextType>;
   coverphoto?: Resolver<Maybe<GQLResolversTypes['LearningpathCoverphoto']>, ParentType, ContextType>;
@@ -3387,6 +3390,7 @@ export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLRes
 };
 
 export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpath'] = GQLResolversParentTypes['MyNdlaLearningpath']> = {
+  basedOn?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   canEdit?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   copyright?: Resolver<GQLResolversTypes['LearningpathCopyright'], ParentType, ContextType>;
   coverphoto?: Resolver<Maybe<GQLResolversTypes['LearningpathCoverphoto']>, ParentType, ContextType>;

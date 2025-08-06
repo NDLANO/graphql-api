@@ -67,6 +67,8 @@ export async function searchNodes(
     isVisible: true,
     includeContexts: true,
     filterProgrammes: true,
+    page: 1,
+    pageSize: 100,
   });
   const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/search?${query}`, context);
   return await resolveJson(response);
