@@ -7,6 +7,7 @@
  */
 
 import { OEmbedDTO } from "@ndla/types-backend/oembed-proxy";
+import { ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
 import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import { fetchOpengraph } from "../api/externalApi";
 import {
@@ -47,6 +48,7 @@ import {
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
 import { transformArticle } from "../api/transformArticleApi";
+import { searchNodes } from "../api/taxonomyApi";
 
 export const Query = {
   async learningpath(
@@ -103,10 +105,17 @@ const getOembed = async (
 };
 
 const getResource = async (
-  learningpathStep: GQLLearningpathStep,
+  learningpathStep: ILearningStepV2DTO,
   { rootId, parentId }: GQLLearningpathStepResourceArgs,
   context: ContextWithLoaders,
 ): Promise<GQLResource | null> => {
+  if (learningpathStep.article) {
+    const nodes = await searchNodes({ contentUris: [`urn:article:${learningpathStep.article}`] }, context);
+    const node = nodes.results[0];
+    if (node) {
+      return nodeToTaxonomyEntity(node, context);
+    }
+  }
   if (
     !learningpathStep.embedUrl ||
     !learningpathStep.embedUrl.url ||
@@ -199,12 +208,14 @@ export const resolvers = {
     oembed: getOembed,
     resource: getResource,
     opengraph: getOpengraph,
+    articleId: (step: ILearningStepV2DTO) => step.article,
     description: transformDescription,
   },
   MyNdlaLearningpathStep: {
     oembed: getOembed,
     resource: getResource,
     opengraph: getOpengraph,
+    articleId: (step: ILearningStepV2DTO) => step.article,
   },
 };
 
