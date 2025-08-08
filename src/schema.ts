@@ -231,6 +231,7 @@ export const typeDefs = gql`
     status: String!
     supportedLanguages: [String!]!
     type: String!
+    articleId: Int
     resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
     oembed: LearningpathStepOembed
@@ -250,6 +251,7 @@ export const typeDefs = gql`
     status: String!
     supportedLanguages: [String!]!
     type: String!
+    articleId: Int
     resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
     oembed: LearningpathStepOembed
@@ -374,6 +376,7 @@ export const typeDefs = gql`
 
   input LearningpathStepNewInput {
     title: String!
+    articleId: Int
     introduction: String
     description: String
     language: String!
@@ -385,6 +388,7 @@ export const typeDefs = gql`
 
   input LearningpathStepUpdateInput {
     revision: Int!
+    articleId: Int
     title: String
     introduction: String
     language: String!

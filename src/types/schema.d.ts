@@ -800,6 +800,7 @@ export type GQLLearningpathSeqNo = {
 
 export type GQLLearningpathStep = {
   __typename?: 'LearningpathStep';
+  articleId?: Maybe<Scalars['Int']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   embedUrl?: Maybe<GQLLearningpathStepEmbedUrl>;
   id: Scalars['Int']['output'];
@@ -831,6 +832,7 @@ export type GQLLearningpathStepEmbedUrl = {
 };
 
 export type GQLLearningpathStepNewInput = {
+  articleId?: InputMaybe<Scalars['Int']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   embedUrl?: InputMaybe<GQLLearningpathEmbedInput>;
   introduction?: InputMaybe<Scalars['String']['input']>;
@@ -851,6 +853,7 @@ export type GQLLearningpathStepOembed = {
 };
 
 export type GQLLearningpathStepUpdateInput = {
+  articleId?: InputMaybe<Scalars['Int']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   embedUrl?: InputMaybe<GQLLearningpathEmbedInput>;
   introduction?: InputMaybe<Scalars['String']['input']>;
@@ -1164,6 +1167,7 @@ export type GQLMyNdlaLearningpath = {
 
 export type GQLMyNdlaLearningpathStep = {
   __typename?: 'MyNdlaLearningpathStep';
+  articleId?: Maybe<Scalars['Int']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   embedUrl?: Maybe<GQLLearningpathStepEmbedUrl>;
   id: Scalars['Int']['output'];
@@ -3251,6 +3255,7 @@ export type GQLLearningpathSeqNoResolvers<ContextType = any, ParentType extends 
 };
 
 export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathStep'] = GQLResolversParentTypes['LearningpathStep']> = {
+  articleId?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   embedUrl?: Resolver<Maybe<GQLResolversTypes['LearningpathStepEmbedUrl']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -3415,6 +3420,7 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
 };
 
 export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpathStep'] = GQLResolversParentTypes['MyNdlaLearningpathStep']> = {
+  articleId?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   embedUrl?: Resolver<Maybe<GQLResolversTypes['LearningpathStepEmbedUrl']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
