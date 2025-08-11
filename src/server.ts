@@ -81,6 +81,8 @@ async function startApolloServer(): Promise<void> {
   );
 }
 
-process.on("SIGTERM", () => gracefulShutdown(server, apolloServer));
+if (process.env.NODE_ENV === "production") {
+  process.on("SIGTERM", () => gracefulShutdown(server, apolloServer));
+}
 
 startApolloServer();
