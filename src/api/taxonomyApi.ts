@@ -154,9 +154,11 @@ export type NodeQueryParams = NodeQueryParamsBase &
   RequireAtLeastOne<{ contextId?: string; contentURI?: string; nodeType?: string }>;
 
 export const queryNodes = async (params: NodeQueryParams, context: Context): Promise<Node[]> => {
-  const res = await taxonomyFetch(
-    `/${context.taxonomyUrl}/v1/nodes?${qs.stringify({ ...params, ids: params.ids?.join(",") })}`,
-    context,
-  );
+  const query = qs.stringify({
+    language: context.language,
+    ...params,
+    ids: params.ids?.join(","),
+  });
+  const res = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
   return await resolveJson(res);
 };
