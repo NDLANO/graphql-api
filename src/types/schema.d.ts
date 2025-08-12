@@ -1361,6 +1361,7 @@ export type GQLProgrammePage = {
   id: Scalars['String']['output'];
   metaDescription?: Maybe<Scalars['String']['output']>;
   mobileImage?: Maybe<GQLMetaImage>;
+  supportedLanguages: Array<Scalars['String']['output']>;
   title: GQLTitle;
   url?: Maybe<Scalars['String']['output']>;
 };
@@ -3603,6 +3604,7 @@ export type GQLProgrammePageResolvers<ContextType = any, ParentType extends GQLR
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   mobileImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
