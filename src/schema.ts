@@ -914,6 +914,7 @@ export const typeDefs = gql`
     desktopImage: MetaImage
     mobileImage: MetaImage
     grades: [Grade!]
+    supportedLanguages: [String!]!
   }
 
   type Grade {

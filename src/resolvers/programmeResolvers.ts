@@ -29,6 +29,7 @@ const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
     },
     url: node.url,
     contentUri: node.contentUri,
+    supportedLanguages: node.supportedLanguages,
   };
 };
 
