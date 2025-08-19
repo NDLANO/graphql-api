@@ -184,7 +184,7 @@ const getBasedOn = async (
   if (!originalId) return undefined;
   const node = await context.loaders.searchNodesLoader.load(`urn:learningpath:${originalId}`);
   if (node.length === 0) {
-    return `/learningpath/${originalId}`;
+    return `/learningpaths/${originalId}`;
   }
   return node[0]?.url;
 };
