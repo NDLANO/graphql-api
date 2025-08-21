@@ -6,7 +6,6 @@
  *
  */
 
-import qs from "query-string";
 import {
   IMyNDLAUserDTO,
   IFolderDTO,
@@ -40,15 +39,6 @@ import {
 import { createAuthClient, resolveJsonOATS, resolveOATS } from "../utils/openapi-fetch/utils";
 
 const client = createAuthClient<openapi.paths>({ disableCache: true });
-
-interface QueryParamsType {
-  [key: string]: any;
-}
-
-export const queryString = (params: QueryParamsType) => {
-  const stringified = qs.stringify(params);
-  return stringified.length ? `?${stringified}` : "";
-};
 
 export async function fetchFolders(
   { includeResources, includeSubfolders }: GQLQueryFoldersArgs,

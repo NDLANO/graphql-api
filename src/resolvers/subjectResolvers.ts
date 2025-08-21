@@ -100,25 +100,28 @@ export const resolvers = {
   },
   SubjectPage: {
     async connectedTo(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.nodeLoader.loadMany(
+      const connectedTo = await context.loaders.nodeLoader.loadMany(
         subjectpage.connectedTo.map((id) => {
           return { id };
         }),
       );
+      return connectedTo.filter((sub): sub is Node => !!sub);
     },
     async buildsOn(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.nodeLoader.loadMany(
+      const buildsOn = await context.loaders.nodeLoader.loadMany(
         subjectpage.buildsOn.map((id) => {
           return { id };
         }),
       );
+      return buildsOn.filter((sub): sub is Node => !!sub);
     },
     async leadsTo(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.nodeLoader.loadMany(
+      const leadsTo = await context.loaders.nodeLoader.loadMany(
         subjectpage.leadsTo.map((id) => {
           return { id };
         }),
       );
+      return leadsTo.filter((sub): sub is Node => !!sub);
     },
   },
   SubjectPageVisualElement: {
