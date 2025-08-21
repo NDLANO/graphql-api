@@ -44,6 +44,7 @@ import {
   GQLMutationCopyLearningpathArgs,
   GQLLearningpathSeqNo,
   GQLMutationUpdateLearningpathStepSeqNoArgs,
+  GQLLicense,
 } from "../types/schema";
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
@@ -195,6 +196,10 @@ const transformDescription = async (step: GQLLearningpathStep, context: ContextW
   return res.content;
 };
 
+const getLicense = async (learningstep: GQLLearningpathStep): Promise<GQLLicense | undefined> => {
+  return learningstep.copyright?.license ?? undefined;
+};
+
 export const resolvers = {
   Learningpath: {
     coverphoto: getCoverphoto,
@@ -209,11 +214,13 @@ export const resolvers = {
     resource: getResource,
     opengraph: getOpengraph,
     description: transformDescription,
+    license: getLicense,
   },
   MyNdlaLearningpathStep: {
     oembed: getOembed,
     resource: getResource,
     opengraph: getOpengraph,
+    license: getLicense,
   },
 };
 
