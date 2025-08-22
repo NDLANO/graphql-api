@@ -226,6 +226,7 @@ export const typeDefs = gql`
     introduction: String
     embedUrl: LearningpathStepEmbedUrl
     license: License
+    copyright: LearningpathCopyright
     metaUrl: String!
     revision: Int!
     status: String!
@@ -246,6 +247,7 @@ export const typeDefs = gql`
     description: String
     embedUrl: LearningpathStepEmbedUrl
     license: License
+    copyright: LearningpathCopyright
     metaUrl: String!
     revision: Int!
     status: String!
