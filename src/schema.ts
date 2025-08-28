@@ -386,6 +386,7 @@ export const typeDefs = gql`
     showTitle: Boolean!
     type: String!
     license: String
+    copyright: LearningpathCopyrightInput
   }
 
   input LearningpathStepUpdateInput {
@@ -399,6 +400,7 @@ export const typeDefs = gql`
     showTitle: Boolean
     type: String
     license: String
+    copyright: LearningpathCopyrightInput
   }
 
   type TaxonomyMetadata {

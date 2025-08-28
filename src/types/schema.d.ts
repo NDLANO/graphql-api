@@ -834,6 +834,7 @@ export type GQLLearningpathStepEmbedUrl = {
 
 export type GQLLearningpathStepNewInput = {
   articleId?: InputMaybe<Scalars['Int']['input']>;
+  copyright?: InputMaybe<GQLLearningpathCopyrightInput>;
   description?: InputMaybe<Scalars['String']['input']>;
   embedUrl?: InputMaybe<GQLLearningpathEmbedInput>;
   introduction?: InputMaybe<Scalars['String']['input']>;
@@ -855,6 +856,7 @@ export type GQLLearningpathStepOembed = {
 
 export type GQLLearningpathStepUpdateInput = {
   articleId?: InputMaybe<Scalars['Int']['input']>;
+  copyright?: InputMaybe<GQLLearningpathCopyrightInput>;
   description?: InputMaybe<Scalars['String']['input']>;
   embedUrl?: InputMaybe<GQLLearningpathEmbedInput>;
   introduction?: InputMaybe<Scalars['String']['input']>;
