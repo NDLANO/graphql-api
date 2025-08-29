@@ -10,13 +10,12 @@ import groupBy from "lodash/groupBy";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { IAudioMetaInformationDTO } from "@ndla/types-backend/audio-api";
 import { IImageMetaInformationV2DTO } from "@ndla/types-backend/image-api";
-import { ILearningPathSummaryV2DTO } from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { ResourceType } from "@ndla/types-backend/myndla-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchAudio } from "./audioApi";
 import { searchConcepts } from "./conceptApi";
 import { fetchImage } from "./imageApi";
-import { searchNodes } from "./taxonomyApi";
 import { fetchVideo } from "./videoApi";
 import { defaultLanguage } from "../config";
 import {
@@ -28,8 +27,9 @@ import {
   GQLQueryFolderResourceMetaSearchArgs,
 } from "../types/schema";
 import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
+import getLogger from "../utils/logger";
 
-const findResourceTypes = (result: Node | undefined, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
+const findResourceTypes = (result: Node | null, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
   const ctx = result?.contexts?.[0];
   const resourceTypes = ctx?.resourceTypes.map((t) => ({
     id: t.id,
@@ -45,9 +45,10 @@ const fetchResourceMeta = async (
   context: ContextWithLoaders,
 ): Promise<Array<GQLMeta | undefined>> => {
   if (type === "learningpath") {
-    const learningpaths = await context.loaders.learningpathsLoader.loadMany(ids);
+    const numberIds = ids.map((id) => parseInt(id)).filter((id) => !!id);
+    const learningpaths = await context.loaders.learningpathsLoader.loadMany(numberIds);
     return learningpaths
-      .filter((learningpath): learningpath is ILearningPathSummaryV2DTO => !!learningpath)
+      .filter((learningpath): learningpath is ILearningPathV2DTO => !!learningpath)
       .map(learningpathToMeta);
   } else {
     const articles = await context.loaders.articlesLoader.loadMany(ids);
@@ -65,24 +66,27 @@ const fetchAndTransformResourceMeta = async (
     const nodeType = type === "learningpath" ? type : "article";
     const ids = resources.map((r) => r.id);
     const [nodes, elements] = await Promise.all([
-      searchNodes({ contentUris: ids.map((r) => `urn:${nodeType}:${r}`) }, context),
+      context.loaders.searchNodesLoader.loadMany(ids.map((r) => `urn:${nodeType}:${r}`)),
       fetchResourceMeta(nodeType, ids, context),
     ]);
-    return ids.map((id) => {
-      const node = nodes.results.find((n) => n.contentUri === `urn:${nodeType}:${id}`);
-      const element = elements.find((e) => e?.id === Number(id));
-      return {
-        id,
-        title: element?.title ?? "",
-        type,
-        description: element?.metaDescription ?? "",
-        metaImage: element?.metaImage,
-        resourceTypes: findResourceTypes(node, context),
-      };
-    });
+    return ids
+      .map((id) => {
+        const node = nodes.flatMap((x) => x).find((n) => !!n && n.contentUri === `urn:${nodeType}:${id}`);
+        const element = elements.find((e) => e?.id === Number(id));
+        return element
+          ? {
+              id,
+              title: element.title,
+              type,
+              description: element.metaDescription ?? "",
+              metaImage: element.metaImage,
+              resourceTypes: findResourceTypes(node ?? null, context),
+            }
+          : undefined;
+      })
+      .filter((meta) => !!meta);
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(`Failed to fetch article metas with parameters ${resources}`);
+    getLogger().error(`Failed to fetch article metas with parameters: ${JSON.stringify(resources)}`, resources);
     return [];
   }
 };
@@ -201,7 +205,6 @@ const fetchConceptsMeta = async (
   return results.map((c) => ({
     id: c.id.toString(),
     description: c.content.content,
-    metaImage: c.metaImage,
     title: c.title.title,
     resourceTypes: [{ id: "concept", name: "concept" }],
     type,

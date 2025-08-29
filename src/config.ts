@@ -5,6 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -18,6 +19,7 @@ export function getEnvironmentVariabel(key: string, fallback?: string | boolean)
 }
 
 export const ndlaEnvironment = getEnvironmentVariabel("NDLA_ENVIRONMENT", "test");
+export const environmentApiHost = `api.${ndlaEnvironment.toString().replace("_", "-")}.ndla.no`;
 
 const ndlaApiUrl = () => {
   const host = getEnvironmentVariabel("API_GATEWAY_HOST");
@@ -28,7 +30,7 @@ const ndlaApiUrl = () => {
       case "prod":
         return "https://api.ndla.no";
       default:
-        return `https://api.${ndlaEnvironment.toString().replace("_", "-")}.ndla.no`;
+        return `https://${environmentApiHost}`;
     }
   } else {
     return `http://${host}`;
@@ -60,11 +62,14 @@ export const h5pHostUrl = () => {
   }
 };
 
+export const cacheTime = getEnvironmentVariabel("CACHE_TIME", "60");
 export const defaultLanguage = getEnvironmentVariabel("DEFAULT_LANGUAGE", "nb");
 export const port = getEnvironmentVariabel("PORT", "4000");
 export const apiUrl = getEnvironmentVariabel("API_URL", ndlaApiUrl());
-export const localConverter = getEnvironmentVariabel("LOCAL_CONVERTER", false);
 export const ndlaUrl = getEnvironmentVariabel("NDLA_URL", ndlaFrontendUrl());
 export const uptimeOwner = getEnvironmentVariabel("UPTIME_OWNER", "NDLANO");
 export const uptimeRepo = getEnvironmentVariabel("UPTIME_REPO", "oppetid");
 export const uptimeToken = getEnvironmentVariabel("UPTIME_API_TOKEN", undefined);
+export const googleApiKey = getEnvironmentVariabel("NDLA_GOOGLE_API_KEY", undefined);
+export const slowLogTimeout = getEnvironmentVariabel("SLOW_LOG_TIMEOUT", "500");
+export const gracePeriodSeconds = parseInt(getEnvironmentVariabel("READINESS_PROBE_DETECTION_SECONDS", "7"));

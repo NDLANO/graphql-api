@@ -6,15 +6,20 @@
  *
  */
 
+import { OEmbedDTO } from "@ndla/types-backend/oembed-proxy";
+import { ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
 import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import { fetchOpengraph } from "../api/externalApi";
 import {
+  copyLearningpath,
   createLearningpath,
   createLearningstep,
   deleteLearningpath,
   deleteLearningstep,
+  fetchMyLearningpath,
   updateLearningpath,
   updateLearningpathStatus,
+  updateLearningpathStepSeqNo,
   updateLearningstep,
 } from "../api/learningpathApi";
 import {
@@ -36,9 +41,15 @@ import {
   GQLMyNdlaLearningpath,
   GQLMyNdlaLearningpathStep,
   GQLExternalOpengraph,
+  GQLMutationCopyLearningpathArgs,
+  GQLLearningpathSeqNo,
+  GQLMutationUpdateLearningpathStepSeqNoArgs,
+  GQLLicense,
 } from "../types/schema";
 import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
+import { transformArticle } from "../api/transformArticleApi";
+import { searchNodes } from "../api/taxonomyApi";
 
 export const Query = {
   async learningpath(
@@ -54,7 +65,7 @@ export const Query = {
     { pathId }: GQLQueryLearningpathArgs,
     context: ContextWithLoaders,
   ): Promise<GQLMyNdlaLearningpath> {
-    const learningpath = await fetchLearningpath(pathId, context);
+    const learningpath = await fetchMyLearningpath(pathId, context);
     return toGQLLearningpath(learningpath);
   },
   async myLearningpaths(_: any, __: any, context: ContextWithLoaders): Promise<Array<GQLMyNdlaLearningpath>> {
@@ -77,7 +88,7 @@ const getOembed = async (
   learningpathStep: GQLLearningpathStep,
   _: any,
   context: ContextWithLoaders,
-): Promise<GQLLearningpathStepOembed | null> => {
+): Promise<OEmbedDTO | null> => {
   if (!learningpathStep.embedUrl || !learningpathStep.embedUrl.url) {
     return null;
   }
@@ -89,16 +100,23 @@ const getOembed = async (
     learningpathStep.embedUrl.embedType === "oembed" &&
     learningpathStep.embedUrl.url !== "https://ndla.no"
   ) {
-    return fetchOembed<GQLLearningpathStepOembed>(learningpathStep.embedUrl.url, context);
+    return fetchOembed(learningpathStep.embedUrl.url, context);
   }
   return null;
 };
 
 const getResource = async (
-  learningpathStep: GQLLearningpathStep,
+  learningpathStep: ILearningStepV2DTO,
   { rootId, parentId }: GQLLearningpathStepResourceArgs,
   context: ContextWithLoaders,
 ): Promise<GQLResource | null> => {
+  if (learningpathStep.articleId) {
+    const nodes = await searchNodes({ contentUris: [`urn:article:${learningpathStep.articleId}`] }, context);
+    const node = nodes.results[0];
+    if (node) {
+      return nodeToTaxonomyEntity(node, context);
+    }
+  }
   if (
     !learningpathStep.embedUrl ||
     !learningpathStep.embedUrl.url ||
@@ -125,31 +143,84 @@ const getOpengraph = async (learningpathStep: GQLLearningpathStep): Promise<GQLE
   return fetchOpengraph(learningpathStep.embedUrl.url);
 };
 
+const getCoverphoto = async (
+  learningpath: GQLLearningpath,
+  _: any,
+  context: ContextWithLoaders,
+): Promise<GQLLearningpathCoverphoto | undefined> => {
+  let url: string | undefined;
+  const imageId = learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "";
+  if (imageId) {
+    const image = await fetchImageV3(imageId, context);
+    url = image.image.imageUrl;
+  } else {
+    const learningStepWithResource = learningpath.learningsteps.find(
+      (learningStep) =>
+        learningStep.embedUrl &&
+        learningStep.embedUrl.url &&
+        (learningStep.embedUrl.embedType === "oembed" || learningStep.embedUrl.embedType === "iframe") &&
+        isNDLAEmbedUrl(learningStep.embedUrl.url),
+    );
+    const articleId = learningStepWithResource?.embedUrl?.url.split("/").pop();
+    const article = articleId ? await context.loaders.articlesLoader.load(articleId) : undefined;
+    const imageId = article?.metaImage?.url.split("/").pop();
+    const image = imageId ? await fetchImageV3(imageId, context) : undefined;
+    url = image?.image.imageUrl;
+  }
+
+  return url
+    ? {
+        metaUrl: learningpath.coverphoto?.metaUrl ?? "",
+        url,
+      }
+    : undefined;
+};
+
+const getBasedOn = async (
+  learningpath: GQLLearningpath,
+  _: any,
+  context: ContextWithLoaders,
+): Promise<string | undefined> => {
+  const originalId = learningpath.isBasedOn;
+  if (!originalId) return undefined;
+  const node = await context.loaders.searchNodesLoader.load(`urn:learningpath:${originalId}`);
+  if (node.length === 0) {
+    return `/learningpaths/${originalId}`;
+  }
+  return node[0]?.url;
+};
+
+const transformDescription = async (step: GQLLearningpathStep, context: ContextWithLoaders): Promise<string | null> => {
+  if (!step.description) return null;
+  const res = await transformArticle(step.description, context, undefined, {});
+  return res.content;
+};
+
+const getLicense = async (learningstep: GQLLearningpathStep): Promise<GQLLicense | undefined> => {
+  return learningstep.copyright?.license ?? undefined;
+};
+
 export const resolvers = {
   Learningpath: {
-    async coverphoto(
-      learningpath: GQLLearningpath,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<GQLLearningpathCoverphoto | undefined> {
-      if (!learningpath.coverphoto) return undefined;
-      const imageId = learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "";
-      const image = await fetchImageV3(imageId, context);
-      return {
-        ...learningpath.coverphoto,
-        url: image.image?.imageUrl,
-      };
-    },
+    coverphoto: getCoverphoto,
+    basedOn: getBasedOn,
+  },
+  MyNdlaLearningpath: {
+    coverphoto: getCoverphoto,
+    basedOn: getBasedOn,
   },
   LearningpathStep: {
     oembed: getOembed,
     resource: getResource,
     opengraph: getOpengraph,
+    description: transformDescription,
+    license: getLicense,
   },
   MyNdlaLearningpathStep: {
     oembed: getOembed,
     resource: getResource,
     opengraph: getOpengraph,
+    license: getLicense,
   },
 };
 
@@ -162,6 +233,8 @@ export const Mutations: Pick<
   | "newLearningpathStep"
   | "updateLearningpathStep"
   | "deleteLearningpathStep"
+  | "copyLearningpath"
+  | "updateLearningpathStepSeqNo"
 > = {
   async updateLearningpathStatus(_: any, params: GQLMutationUpdateLearningpathStatusArgs, context: ContextWithLoaders) {
     const learningpath = await updateLearningpathStatus(params, context);
@@ -204,5 +277,20 @@ export const Mutations: Pick<
   },
   async deleteLearningpathStep(_: any, params: GQLMutationDeleteLearningpathStepArgs, context: ContextWithLoaders) {
     return await deleteLearningstep(params, context);
+  },
+  async copyLearningpath(
+    _: any,
+    params: GQLMutationCopyLearningpathArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLMyNdlaLearningpath> {
+    const learningpath = await copyLearningpath(params, context);
+    return toGQLLearningpath(learningpath);
+  },
+  async updateLearningpathStepSeqNo(
+    _: any,
+    params: GQLMutationUpdateLearningpathStepSeqNoArgs,
+    context: ContextWithLoaders,
+  ): Promise<GQLLearningpathSeqNo> {
+    return await updateLearningpathStepSeqNo(params, context);
   },
 };

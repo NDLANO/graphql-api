@@ -6,101 +6,61 @@
  *
  */
 
-import queryString from "query-string";
-import { IConceptSearchResultDTO, IConceptDTO } from "@ndla/types-backend/concept-api";
-import { fetchSubject } from "./taxonomyApi";
-import { GQLListingPage, GQLSubject } from "../types/schema";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import { IConceptSearchResultDTO, IConceptDTO, openapi } from "@ndla/types-backend/concept-api";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getNumberId } from "../utils/apiHelpers";
+
+const client = createAuthClient<openapi.paths>();
 
 export async function searchConcepts(
   params: {
-    query?: string;
-    subjects?: string;
     ids?: number[];
-    tags?: string;
-    page?: number;
-    pageSize?: number;
-    exactMatch?: boolean;
-    language?: string;
-    fallback?: boolean;
-    conceptType?: string;
   },
-  context: Context,
+  _context: Context,
 ): Promise<IConceptSearchResultDTO> {
-  const idsString = params.ids?.join(",");
-  const query = {
-    query: params.query,
-    subjects: params.subjects,
-    tags: params.tags,
-    page: params.page,
-    language: params.language,
-    fallback: params.fallback,
-    ids: idsString,
-    "page-size": params.pageSize,
-    "exact-match": params.exactMatch,
-    "concept-type": params.conceptType,
-    sort: "title",
-  };
-  const response = await fetch(`/concept-api/v1/concepts?${queryString.stringify(query)}`, context);
-  const conceptResult: IConceptSearchResultDTO = await resolveJson(response);
-  return conceptResult;
+  return client
+    .GET("/concept-api/v1/concepts", {
+      params: {
+        query: {
+          ids: params.ids,
+          sort: "title",
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchConcept(id: string | number, context: Context): Promise<IConceptDTO | undefined> {
-  const response = await fetch(`/concept-api/v1/concepts/${id}?language=${context.language}&fallback=true`, context);
+  const response = await client.GET("/concept-api/v1/concepts/{concept_id}", {
+    params: {
+      path: {
+        concept_id: getNumberId(id),
+      },
+      query: {
+        language: context.language,
+        fallback: true,
+      },
+    },
+  });
   try {
-    const concept: IConceptDTO = await resolveJson(response);
+    const concept: IConceptDTO = await resolveJsonOATS(response);
     return concept;
   } catch (e) {
     return undefined;
   }
 }
 
-export async function fetchListingPage(context: Context, querySubjects?: string): Promise<GQLListingPage> {
-  const subjectIds: string[] = await resolveJson(await fetch(`/concept-api/v1/concepts/subjects/`, context));
-  const subjectResults = await Promise.allSettled(subjectIds.map((id) => fetchSubject(context, id)));
-  const subjects = (
-    subjectResults.filter((result) => result.status === "fulfilled") as Array<PromiseFulfilledResult<GQLSubject>>
-  ).map((res) => res.value);
-
-  const params = queryString.stringify({
-    language: context.language,
-    subjects: querySubjects,
-  });
-  const tags = await resolveJson(await fetch(`/concept-api/v1/concepts/tags/?${params}`, context)).catch((error) => {
-    if (error.status !== 404) {
-      throw error;
-    } else {
-      return [{ tags: [] }];
-    }
-  });
-  return {
-    subjects,
-    tags: getTags(tags),
-  };
-}
-
-interface TagType {
-  tags: string[];
-}
-
-const isStringArray = (tags: string[] | TagType[]): tags is string[] => {
-  return !tags.some((tag: string | TagType) => typeof tag !== "string");
-};
-
-const getTags = (tags: string[] | TagType[]) => {
-  if (isStringArray(tags)) {
-    return tags;
-  } else if (tags.length > 0) {
-    return Array.from(new Set(tags.flatMap((t) => t.tags)));
-  }
-  return [];
-};
-
 export const fetchEmbedConcept = async (id: string, context: Context, draftConcept: boolean): Promise<IConceptDTO> => {
-  const endpoint = draftConcept ? "drafts" : "concepts";
-  const url = `/concept-api/v1/${endpoint}/${id}?language=${context.language}&fallback=true`;
-  const res = await fetch(url, context);
-  const resolved: IConceptDTO = await resolveJson(res);
-  return resolved;
+  const options = {
+    params: {
+      path: { concept_id: getNumberId(id) },
+      query: { language: context.language, fallback: true },
+    },
+  };
+
+  if (draftConcept) {
+    return client.GET("/concept-api/v1/drafts/{concept_id}", options).then(resolveJsonOATS);
+  } else {
+    return client.GET("/concept-api/v1/concepts/{concept_id}", options).then(resolveJsonOATS);
+  }
 };

@@ -9,8 +9,8 @@
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import {
   IFrontPageDTO,
-  ISubjectPageDataDTO,
-  IFilmFrontPageDataDTO,
+  ISubjectPageDTO,
+  IFilmFrontPageDTO,
   IMovieThemeDTO,
   IMenuDTO,
 } from "@ndla/types-backend/frontpage-api";
@@ -27,11 +27,11 @@ export const Query = {
     return context.loaders.frontpageLoader.load("frontpage");
   },
 
-  async subjectpage(_: any, { id }: Id, context: ContextWithLoaders): Promise<ISubjectPageDataDTO | null> {
+  async subjectpage(_: any, { id }: Id, context: ContextWithLoaders): Promise<ISubjectPageDTO | null> {
     return context.loaders.subjectpageLoader.load(`${id}`);
   },
 
-  async filmfrontpage(_: any, __: any, context: ContextWithLoaders): Promise<IFilmFrontPageDataDTO> {
+  async filmfrontpage(_: any, __: any, context: ContextWithLoaders): Promise<IFilmFrontPageDTO> {
     return fetchFilmFrontpage(context);
   },
 };
@@ -74,23 +74,29 @@ export const resolvers = {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(id));
       return article?.metaDescription.metaDescription || "";
     },
-    async path(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
-      return nodes[0]?.path || "";
-    },
     async url(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
+      const nodes = await context.loaders.nodesLoader.load({
+        contentURI: id,
+        rootId: "urn:subject:20",
+        includeContexts: true,
+        filterProgrammes: true,
+      });
       return nodes[0]?.url || "";
     },
     async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
-      const nodes = await context.loaders.nodesLoader.load({ contentURI: id, rootId: "urn:subject:20" });
+      const nodes = await context.loaders.nodesLoader.load({
+        contentURI: id,
+        rootId: "urn:subject:20",
+        includeContexts: true,
+        filterProgrammes: true,
+      });
       return nodes[0]?.resourceTypes ?? [];
     },
   },
 
   FilmFrontpage: {
     async article(
-      frontpage: IFilmFrontPageDataDTO,
+      frontpage: IFilmFrontPageDTO,
       _: any,
       context: ContextWithLoaders,
     ): Promise<IArticleV2DTO | undefined> {

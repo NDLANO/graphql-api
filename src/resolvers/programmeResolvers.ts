@@ -7,7 +7,8 @@
  */
 
 import { Node } from "@ndla/types-taxonomy";
-import { fetchChildren, queryNodes } from "../api/taxonomyApi";
+import { GraphQLError } from "graphql";
+import { fetchChildren } from "../api/taxonomyApi";
 import {
   GQLCategory,
   GQLGrade,
@@ -26,23 +27,21 @@ const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
       title: node.name,
       language: language,
     },
-    url: node.url || node.path,
+    url: node.url,
     contentUri: node.contentUri,
+    supportedLanguages: node.supportedLanguages,
   };
 };
 
 export const Query = {
   async programmes(_: any, __: any, context: ContextWithLoaders): Promise<GQLProgrammePage[]> {
-    const nodes = await queryNodes(
-      {
-        nodeType: "PROGRAMME",
-        isRoot: true,
-        language: context.language,
-        includeContexts: true,
-        isVisible: true,
-      },
-      context,
-    );
+    const nodes = await context.loaders.nodesLoader.load({
+      nodeType: "PROGRAMME",
+      isRoot: true,
+      language: context.language,
+      isVisible: true,
+      filterProgrammes: false,
+    });
     return nodes.sort((a, b) => a.name.localeCompare(b.name)).map((node) => nodeToProgramme(node, context.language));
   },
   async programme(
@@ -57,12 +56,21 @@ export const Query = {
     const id = path?.split("__")[1] || contextId;
 
     if (!id) {
-      throw new Error(`Failed to find a programme with contextId ${contextId}`);
+      throw new GraphQLError(`No programme found with contextId: ${contextId}`, {
+        extensions: { status: 404 },
+      });
     }
 
-    const node = await queryNodes({ contextId: id, language: context.language }, context);
+    const node = await context.loaders.nodesLoader.load({
+      contextId: id,
+      language: context.language,
+      filterProgrammes: false,
+      includeContexts: true,
+    });
     if (!node[0]) {
-      throw new Error(`Failed to find a programme with contextId ${contextId}`);
+      throw new GraphQLError(`No programme found with contextId: ${contextId}`, {
+        extensions: { status: 404 },
+      });
     }
     return nodeToProgramme(node[0], context.language);
   },
@@ -120,7 +128,7 @@ export const resolvers = {
             title: child.name,
             language: context.language,
           },
-          url: child.url || child.path,
+          url: child.url,
         };
       });
     },
@@ -136,7 +144,7 @@ export const resolvers = {
             title: child.name,
             language: context.language,
           },
-          url: child.url || child.path,
+          url: child.url,
           isProgrammeSubject,
         };
       });
@@ -148,9 +156,8 @@ export const resolvers = {
       const nodes = children.map((child) => {
         // Pick the context that is the subjects own root context to avoid getting paths starting with /programme:
         const context = child.contexts.find((c) => c.rootId === child.id) || child.contexts[0];
-        const path = context?.path ?? child.path;
         const url = context?.url ?? child.url;
-        return { ...child, path, url };
+        return { ...child, url };
       });
       return nodes.map((node) => nodeToTaxonomyEntity(node, context));
     },

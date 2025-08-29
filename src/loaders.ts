@@ -8,22 +8,22 @@
 
 import DataLoader from "dataloader";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IFilmFrontPageDataDTO, IFrontPageDTO, ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
-import { ILearningPathSummaryV2DTO } from "@ndla/types-backend/learningpath-api";
+import { IFilmFrontPageDTO, IFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
   fetchArticles,
   fetchSubjectTopics,
   fetchLearningpaths,
   fetchResourceTypes,
-  fetchSubjects,
   fetchNode,
   fetchFrontpage,
   fetchFilmFrontpage,
   fetchSubjectPage,
   queryNodes,
 } from "./api";
-import { GQLResourceTypeDefinition, GQLSubject } from "./types/schema";
+import { GQLResourceTypeDefinition } from "./types/schema";
+import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 
 export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
   return new DataLoader(
@@ -34,7 +34,7 @@ export function articlesLoader(context: Context): DataLoader<string, IArticleV2D
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<string, ILearningPathSummaryV2DTO | undefined> {
+export function learningpathsLoader(context: Context): DataLoader<number, ILearningPathV2DTO | undefined> {
   return new DataLoader(async (learningpathIds) => {
     return fetchLearningpaths(learningpathIds, context);
   });
@@ -47,14 +47,14 @@ export function frontpageLoader(context: Context): DataLoader<string, IFrontPage
   });
 }
 
-export function filmFrontpageLoader(context: Context): DataLoader<string, IFilmFrontPageDataDTO> {
+export function filmFrontpageLoader(context: Context): DataLoader<string, IFilmFrontPageDTO> {
   return new DataLoader(async () => {
     const filmFrontpage = await fetchFilmFrontpage(context);
     return [filmFrontpage];
   });
 }
 
-export function subjectpageLoader(context: Context): DataLoader<string, ISubjectPageDataDTO | null> {
+export function subjectpageLoader(context: Context): DataLoader<string, ISubjectPageDTO | null> {
   return new DataLoader(async (subjectPageIds) => {
     return Promise.all(
       subjectPageIds.map((subjectPageId) => {
@@ -83,7 +83,7 @@ export function nodeLoader(context: Context): DataLoader<NodeLoaderParams, Node>
   );
 }
 
-export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Node[]> {
+export function nodesLoader(context: Context): DataLoader<NodeQueryParams, Node[]> {
   return new DataLoader(
     async (inputs) => {
       return Promise.all(
@@ -91,39 +91,18 @@ export function nodesLoader(context: Context): DataLoader<NodesLoaderParams, Nod
           if (!input) {
             throw Error("Tried to get node with no params");
           }
-          const params = {
-            isVisible: input.filterVisible,
-            rootId: input.rootId,
-            includeContexts: true,
-            filterProgrammes: true,
-          };
-          if (input.contextId) {
-            return queryNodes({ ...params, contextId: input.contextId }, context);
-          } else if (input.contentURI) {
-            return queryNodes({ ...params, contentURI: input.contentURI }, context);
-          }
-          throw Error("Tried to get node with insufficient params");
+          return queryNodes(
+            {
+              includeContexts: true,
+              filterProgrammes: true,
+              ...input,
+            },
+            context,
+          );
         }),
       );
     },
     { cacheKeyFn: (key) => JSON.stringify(key) },
-  );
-}
-
-export function subjectsLoader(context: Context): DataLoader<SubjectsLoaderParams, { subjects: GQLSubject[] }> {
-  return new DataLoader(
-    async (inputs) => {
-      return Promise.all(
-        inputs.map(async (input) => {
-          const subjects = await fetchSubjects(
-            { metadataFilter: input.metadataFilter, isVisible: input.filterVisible, ids: input.ids },
-            context,
-          );
-          return { subjects };
-        }),
-      );
-    },
-    { cacheKeyFn: (key) => key },
   );
 }
 
@@ -151,4 +130,14 @@ export function resourceTypesLoader(context: Context): DataLoader<string, any> {
       return allResourceTypes.find((resourceType) => resourceType.id === resourceTypeId);
     });
   });
+}
+
+export function searchNodesLoader(context: Context): DataLoader<string, Node[]> {
+  return new DataLoader(
+    async (contentUris) => {
+      const searchResult = await searchNodes({ contentUris }, context);
+      return contentUris.map((uri) => searchResult.results.filter((n) => n.contentUri === uri));
+    },
+    { maxBatchSize: 100 },
+  );
 }

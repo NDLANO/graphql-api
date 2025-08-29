@@ -96,14 +96,17 @@ export const toVisualElement = (meta: Extract<EmbedMetaData, { status: "success"
 
 export const transformArticle = async (
   content: string,
-  context: Context,
+  context: ContextWithLoaders,
   visualElement: string | undefined,
   { subject, previewH5p, showVisualElement, draftConcept, absoluteUrl }: TransformArticleOptions,
 ) => {
-  const html = load(content, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(content, null, false);
+
+  while (html("math math").length > 0) {
+    html("math math").each((_, el) => {
+      html(el).replaceWith(html(el).html() ?? "");
+    });
+  }
   html("math").each((_, el) => {
     html(el)
       .attr("data-math", html(el).html() ?? "")
@@ -118,20 +121,13 @@ export const transformArticle = async (
       html(el).prepend("<summary></summary>");
     }
   });
-  if (showVisualElement && visualElement) {
-    html("body").prepend(`<section>${visualElement}</section>`);
+
+  const hasVisualElement = showVisualElement && visualElement;
+  if (hasVisualElement) {
+    html("section").prepend(`<section>${visualElement}</section>`);
   }
 
-  const visEl =
-    visualElement && !showVisualElement
-      ? load(`${visualElement}`, {
-          xmlMode: false,
-          decodeEntities: false,
-        })
-      : undefined;
-
-  const embeds = visEl ? getEmbedsFromContent(visEl).concat(getEmbedsFromContent(html)) : getEmbedsFromContent(html);
-
+  const embeds = getEmbedsFromContent(html);
   let footnoteCount = 0;
   const embedPromises = await Promise.all(
     embeds.map(async (embed, index) => {
@@ -169,10 +165,10 @@ export const transformArticle = async (
     }),
   );
   const metaData = toArticleMetaData(embedPromises);
-  const visualElementCheerio = visEl?.("body") ?? embeds[0]?.embed;
-  const transformedVisEl = visualElementCheerio?.html();
-  const transformedContent = html("body").html();
-  const visualElementMeta = visEl || (visualElement && showVisualElement) ? embedPromises[0] : undefined;
+  const transformedContent = html.html();
+  const visualElementCheerio = hasVisualElement ? embeds[0]?.embed : undefined;
+  const transformedVisEl = visualElementCheerio?.parent().html();
+  const visualElementMeta = hasVisualElement ? embedPromises[0] : undefined;
   const transformedVisualElement =
     visualElementMeta?.status === "success" ? toVisualElement(visualElementMeta) : undefined;
 

@@ -6,21 +6,49 @@
  *
  */
 
-import { IAudioMetaInformationDTO, IAudioSummarySearchResultDTO, ISeriesDTO } from "@ndla/types-backend/audio-api";
-import { fetch, resolveJson } from "../utils/apiHelpers";
+import {
+  IAudioMetaInformationDTO,
+  IAudioSummarySearchResultDTO,
+  ISeriesDTO,
+  openapi,
+  SeriesSummarySearchResultDTO,
+} from "@ndla/types-backend/audio-api";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { getNumberId } from "../utils/apiHelpers";
+
+const client = createAuthClient<openapi.paths>();
 
 export async function fetchAudio(context: Context, audioId: number | string): Promise<IAudioMetaInformationDTO | null> {
-  const response = await fetch(`/audio-api/v1/audio/${audioId}?language=${context.language}`, context);
+  const response = await client.GET("/audio-api/v1/audio/{audio-id}", {
+    params: {
+      path: {
+        "audio-id": getNumberId(audioId),
+      },
+      query: {
+        language: context.language,
+      },
+    },
+  });
   try {
-    return await resolveJson(response);
+    return await resolveJsonOATS(response);
   } catch (e) {
     return null;
   }
 }
 
 export async function fetchAudioV2(context: Context, audioId: number | string): Promise<IAudioMetaInformationDTO> {
-  const response = await fetch(`/audio-api/v1/audio/${audioId}?language=${context.language}`, context);
-  return await resolveJson(response);
+  return client
+    .GET("/audio-api/v1/audio/{audio-id}", {
+      params: {
+        path: {
+          "audio-id": getNumberId(audioId),
+        },
+        query: {
+          language: context.language,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchPodcastsPage(
@@ -29,16 +57,32 @@ export async function fetchPodcastsPage(
   page: number,
   fallback: boolean,
 ): Promise<IAudioSummarySearchResultDTO> {
-  const response = await fetch(
-    `/audio-api/v1/audio/?page-size=${pageSize}&page=${page}&audio-type=podcast&language=${context.language}&fallback=${fallback}`,
-    context,
-  );
-  return await resolveJson(response);
+  return client
+    .GET("/audio-api/v1/audio", {
+      params: {
+        query: {
+          "page-size": pageSize,
+          page,
+          "audio-type": "podcast",
+          language: context.language,
+          fallback,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchPodcastSeries(context: Context, podcastId: number): Promise<ISeriesDTO> {
-  const response = await fetch(`/audio-api/v1/series/${podcastId}?language=${context.language}`, context);
-  return await resolveJson(response);
+  return client
+    .GET("/audio-api/v1/series/{series-id}", {
+      params: {
+        path: {
+          "series-id": podcastId,
+        },
+        query: { language: context.language },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchPodcastSeriesPage(
@@ -46,10 +90,17 @@ export async function fetchPodcastSeriesPage(
   pageSize: number,
   page: number,
   fallback: boolean,
-): Promise<IAudioSummarySearchResultDTO> {
-  const response = await fetch(
-    `/audio-api/v1/series/?page-size=${pageSize}&page=${page}&language=${context.language}&fallback=${fallback}`,
-    context,
-  );
-  return await resolveJson(response);
+): Promise<SeriesSummarySearchResultDTO> {
+  return client
+    .GET("/audio-api/v1/series", {
+      params: {
+        query: {
+          "page-size": pageSize,
+          page,
+          language: context.language,
+          fallback,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }

@@ -5,49 +5,29 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
+
 import { load } from "cheerio";
-import { fetch, resolveJson } from "./apiHelpers";
 import { fetchH5pLicenseInformation, fetchH5pInfo } from "../api/h5pApi";
 import { convertToSimpleImage, fetchImage } from "../api/imageApi";
 import { fetchOembed } from "../api/oembedApi";
-import { localConverter } from "../config";
-import {
-  GQLBrightcoveLicense,
-  GQLCopyright,
-  GQLH5pElement,
-  GQLImageLicense,
-  GQLVisualElement,
-  GQLVisualElementOembed,
-} from "../types/schema";
-
-export async function fetchVisualElementLicense<T>(
-  visualElement: string,
-  resource: string,
-  context: Context,
-): Promise<T> {
-  const host = localConverter ? "http://localhost:3100" : "";
-  const metaDataResponse = await fetch(
-    encodeURI(`${host}/article-converter/json/${context.language}/meta-data?embed=${visualElement}`),
-    context,
-  );
-  const metaData = await resolveJson(metaDataResponse);
-  return metaData.metaData[resource]?.[0] ?? "";
-}
+import { fetchVideo, fetchVideoSources } from "../api/videoApi";
+import { getBrightcoveCopyright } from "./brightcoveUtils";
+import { GQLCopyright, GQLVisualElement } from "../types/schema";
 
 export async function parseVisualElement(
   visualElementEmbed: string,
   context: Context,
 ): Promise<GQLVisualElement | null> {
-  const parsedElement = load(visualElementEmbed);
+  const parsedElement = load(visualElementEmbed, null, false);
   const data: any = parsedElement("ndlaembed").data();
 
   switch (data?.resource) {
     case "brightcove":
-      return await parseBrightcoveFromEmbed(data, context, visualElementEmbed);
+      return await parseBrightcoveFromEmbed(data, context);
     case "h5p":
       return await parseH5PFromEmbed(data, context);
     case "image":
-      return await parseImageFromEmbed(data, context, visualElementEmbed);
+      return await parseImageFromEmbed(data, context);
     case "external":
       return await parseOembedFromEmbed(data, context);
     default:
@@ -70,22 +50,34 @@ interface VisualElementBrightcove {
 const parseBrightcoveFromEmbed = async (
   embedData: VisualElementBrightcove,
   context: Context,
-  visualElementEmbed: string,
 ): Promise<GQLVisualElement> => {
-  const license = await fetchVisualElementLicense<GQLBrightcoveLicense>(visualElementEmbed, "brightcoves", context);
+  const [video, sources] = await Promise.all([
+    fetchVideo(embedData.videoid, embedData.account, context),
+    fetchVideoSources(embedData.videoid, embedData.account, context),
+  ]);
+  const mp4s = sources
+    .filter((source) => source.container === "MP4" && source.src)
+    .sort((a, b) => (b.size ?? 0) - (a.size ?? 0));
+  const source = sources.filter((s) => s.width && s.height).sort((a, b) => (b.height ?? 0) - (a.height ?? 0))[0];
+  const license = getBrightcoveCopyright(video.custom_fields, context.language);
+  const url = `https://players.brightcove.net/${embedData.account}/${embedData.player}_default/index.html?videoId=${embedData.videoid}`;
   return {
-    url: `https://players.brightcove.net/${embedData.account}/${embedData.player}_default/index.html?videoId=${embedData.videoid}`,
+    url,
     brightcove: {
-      iframe: license.iframe,
-      src: license.src,
-      cover: license.cover,
-      description: license.description,
-      download: license.download,
-      uploadDate: license.uploadDate,
+      iframe: {
+        src: url,
+        width: source?.width ?? 640,
+        height: source?.height ?? 480,
+      },
+      src: url,
+      cover: video?.images?.poster?.src,
+      description: (video?.description || video.long_description || video.name) ?? "",
+      download: mp4s[0]?.src,
+      uploadDate: video.published_at ?? undefined,
       ...embedData,
     },
-    title: license.title,
-    copyright: license.copyright,
+    title: video?.name,
+    copyright: license,
     resource: "brightcove",
   };
 };
@@ -101,7 +93,7 @@ const parseH5PFromEmbed = async (embedData: VisualElementH5P, context: Context):
   const h5pId = pathArr[pathArr.length - 1];
   const [license, visualElementOembed, h5pInfo] = await Promise.all([
     fetchH5pLicenseInformation(h5pId, context),
-    fetchOembed<GQLH5pElement>(embedData.url, context),
+    fetchOembed(embedData.url, context),
     fetchH5pInfo(h5pId, context),
   ]);
 
@@ -141,28 +133,21 @@ interface VisualElementImage {
   caption?: string;
 }
 
-const parseImageFromEmbed = async (
-  embedData: VisualElementImage,
-  context: Context,
-  visualElementEmbed: string,
-): Promise<GQLVisualElement> => {
-  const [image, license] = await Promise.all([
-    fetchImage(embedData.resourceId, context),
-    fetchVisualElementLicense<GQLImageLicense>(visualElementEmbed, "images", context),
-  ]);
+const parseImageFromEmbed = async (embedData: VisualElementImage, context: Context): Promise<GQLVisualElement> => {
+  const [image] = await Promise.all([fetchImage(embedData.resourceId, context)]);
   const transformedImage = image && convertToSimpleImage(image);
 
   return {
     image: {
       ...embedData,
       alt: embedData.alt || transformedImage?.altText || "",
-      src: license.src || transformedImage?.src || "",
+      src: transformedImage?.src || "",
       altText: embedData.alt || transformedImage?.altText || "",
       caption: embedData.caption,
     },
     url: embedData.url,
-    copyright: license.copyright,
-    title: license.title || transformedImage?.title,
+    copyright: transformedImage?.copyright,
+    title: transformedImage?.title,
     resource: "image",
   };
 };
@@ -175,7 +160,7 @@ const parseOembedFromEmbed = async (
   embedData: VisualElementOembed,
   context: Context,
 ): Promise<GQLVisualElement | null> => {
-  const visualElementOembed = await fetchOembed<GQLVisualElementOembed>(embedData.url, context);
+  const visualElementOembed = await fetchOembed(embedData.url, context);
   if (!visualElementOembed) return null;
   return {
     url: embedData.url,

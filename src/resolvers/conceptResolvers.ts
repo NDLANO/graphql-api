@@ -6,90 +6,36 @@
  *
  */
 
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IConceptDTO, IConceptSearchResultDTO, IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
-import { searchConcepts, fetchConcept, fetchListingPage } from "../api";
-import { convertToSimpleImage, fetchImage } from "../api/imageApi";
-import {
-  GQLConcept,
-  GQLListingPage,
-  GQLMeta,
-  GQLQueryConceptArgs,
-  GQLQueryConceptSearchArgs,
-  GQLQueryListingPageArgs,
-  GQLVisualElement,
-} from "../types/schema";
-import { articleToMeta } from "../utils/apiHelpers";
+import { IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
+import { GQLVisualElement } from "../types/schema";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
-export const Query = {
-  async concept(_: any, { id }: GQLQueryConceptArgs, context: ContextWithLoaders): Promise<IConceptDTO | undefined> {
-    return fetchConcept(id, context);
-  },
-  async listingPage(_: any, args: GQLQueryListingPageArgs, context: ContextWithLoaders): Promise<GQLListingPage> {
-    return fetchListingPage(context, args.subjects);
-  },
-  async conceptSearch(
-    _: any,
-    searchQuery: GQLQueryConceptSearchArgs,
-    context: ContextWithLoaders,
-  ): Promise<IConceptSearchResultDTO> {
-    return searchConcepts(searchQuery, context);
-  },
-};
+export const Query = {};
 
 export const resolvers = {
   Concept: {
-    async subjectNames(concept: GQLConcept, params: any, context: ContextWithLoaders): Promise<string[]> {
-      const subjectIds = concept.subjectIds;
-      if (!subjectIds || subjectIds.length === 0) {
-        return [];
-      }
-      const data = await context.loaders.subjectsLoader.load(params);
-      return subjectIds.map((id) => data.subjects.find((subject) => subject.id === id)?.name || "");
-    },
-    async visualElement(concept: IConceptDTO, _: any, context: ContextWithLoaders): Promise<GQLVisualElement | null> {
+    async visualElement(
+      concept: IConceptSummaryDTO,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLVisualElement | null> {
       const visualElement = concept.visualElement?.visualElement;
       if (visualElement) {
         return await parseVisualElement(visualElement, context);
       }
       return null;
     },
-    async image(concept: IConceptDTO, _: any, context: ContextWithLoaders) {
-      const metaImageId = concept.metaImage?.url?.split("/").pop();
-      if (metaImageId) {
-        const image = await fetchImage(metaImageId, context);
-        if (!image) {
-          return undefined;
-        }
-        return convertToSimpleImage(image);
-      }
-      return undefined;
-    },
-    async articles(concept: IConceptDTO, _: any, context: ContextWithLoaders): Promise<GQLMeta[]> {
-      const articleIds = concept.articleIds;
-      if (!articleIds || articleIds.length === 0) {
-        return [];
-      }
-      const fetched = await context.loaders.articlesLoader.loadMany(articleIds.map((id) => `${id}`));
-      return fetched.filter((article): article is IArticleV2DTO => !!article).map(articleToMeta);
-    },
-    title(concept: IConceptDTO, _: any, __: ContextWithLoaders): string {
+    title(concept: IConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
       return concept.title.title;
     },
-    content(concept: IConceptDTO, _: any, __: ContextWithLoaders): string {
+    htmlTitle(concept: IConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
+      return concept.title.htmlTitle;
+    },
+    content(concept: IConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
       return concept.content?.content ?? "";
     },
-    tags: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
+    tags: (concept: IConceptSummaryDTO, _: any, __: ContextWithLoaders): string[] => {
       return concept.tags?.tags || [];
-    },
-    subjectIds: (concept: IConceptDTO, _: any, __: ContextWithLoaders): string[] => {
-      return concept.subjectIds || [];
-    },
-  },
-  ConceptResult: {
-    concepts: (conceptResult: IConceptSearchResultDTO, _: any, __: ContextWithLoaders): IConceptSummaryDTO[] => {
-      return conceptResult.results;
     },
   },
 };

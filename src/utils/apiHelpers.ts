@@ -9,14 +9,8 @@
 import { GraphQLError } from "graphql";
 import { Response } from "node-fetch";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import {
-  ILearningPathV2DTO,
-  ILearningPathSummaryV2DTO,
-  ILearningStepV2DTO,
-} from "@ndla/types-backend/learningpath-api";
+import { ILearningPathV2DTO, ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node, TaxonomyContext, TaxonomyCrumb } from "@ndla/types-taxonomy";
-import createFetch from "./fetch";
-import { createCache } from "../cache";
 import { apiUrl, defaultLanguage } from "../config";
 import {
   GQLMeta,
@@ -29,48 +23,31 @@ import {
   GQLMyNdlaLearningpathStep,
 } from "../types/schema";
 
-const apiBaseUrl = (() => {
-  // if (process.env.NODE_ENV === 'test') {
-  //   return 'http://some-api';
-  // }
-  return apiUrl;
-})();
-
-function apiResourceUrl(path: string): string {
+export function apiResourceUrl(path: string): string {
   if (path.startsWith("http")) {
     return path;
   }
-  return apiBaseUrl + path;
+  return apiUrl + path;
 }
 
-const cache = createCache();
-
-async function fetchHelper(path: string, context: Context, options?: RequestOptions): Promise<Response> {
-  const fetchFn = createFetch({
-    cache,
-    disableCache: !context.shouldUseCache,
-    context,
-  });
-
+export function getHeadersFromContext(context: Context): {
+  "Cache-Control"?: string | undefined;
+  Authorization?: string | undefined;
+  versionhash?: string | undefined;
+  feideAuthorization?: string | undefined;
+} {
   const accessTokenAuth = context.token ? { Authorization: `Bearer ${context.token.access_token}` } : null;
   const feideAuthorization = context.feideAuthorization ? { feideAuthorization: context.feideAuthorization } : null;
   const versionHash = context.versionHash ? { versionhash: context.versionHash } : null;
   const cacheHeaders = !context.shouldUseCache ? { "Cache-Control": "no-cache" } : null;
 
-  const headers = {
+  return {
     ...feideAuthorization,
     ...versionHash,
     ...accessTokenAuth,
     ...cacheHeaders,
   };
-
-  return fetchFn(apiResourceUrl(path), context, {
-    headers,
-    ...options,
-  });
 }
-
-export const fetch = fetchHelper;
 
 export async function resolveNothingFromStatus(response: Response): Promise<void> {
   const { status, ok, url, statusText } = response;
@@ -187,18 +164,17 @@ export function articleToMeta(article: IArticleV2DTO): GQLMeta {
   };
 }
 
-export function learningpathToMeta(learningpath: ILearningPathSummaryV2DTO): GQLMeta {
+export function learningpathToMeta(learningpath: ILearningPathV2DTO): GQLMeta {
   return {
     id: learningpath.id,
     title: learningpath.title.title,
     htmlTitle: learningpath.title.title,
-    introduction: learningpath.introduction.introduction,
     metaDescription: learningpath.description.description,
     lastUpdated: learningpath.lastUpdated,
-    metaImage: learningpath.coverPhotoUrl
+    metaImage: learningpath.coverPhoto?.url
       ? {
-          url: learningpath.coverPhotoUrl,
-          alt: learningpath.introduction.introduction,
+          url: learningpath.coverPhoto.url,
+          alt: "",
         }
       : undefined,
   };
@@ -238,14 +214,13 @@ const toGQLTaxonomyContext = (ctx: TaxonomyContext, name: string, context: Conte
     ctx.breadcrumbs[context.language] || ctx.breadcrumbs[defaultLanguage] || Object.values(ctx.breadcrumbs)[0];
   const relevance =
     ctx.relevance[context.language] || ctx.relevance[defaultLanguage] || Object.values(ctx.relevance)[0];
-  const url = ctx.url || ctx.path;
   const parents = ctx.parents.map((parent) => toGQLTaxonomyCrumb(parent, context));
   return {
     ...ctx,
-    url,
     name,
     breadcrumbs: breadcrumbs ?? [],
     relevance: relevance ?? "",
+    root: ctx.root[context.language] ?? ctx.root[defaultLanguage] ?? Object.values(ctx.root)[0] ?? "",
     parents,
   };
 };
@@ -256,4 +231,15 @@ const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, context: ContextWithLoaders): 
     ...crumb,
     name: name ?? "",
   };
+};
+
+export const getNumberId = (id: number | string): number => {
+  if (typeof id === "string") {
+    const numberId = parseInt(id);
+    if (isNaN(numberId)) {
+      throw new Error(`Invalid id: ${id}`);
+    }
+    return numberId;
+  }
+  return id;
 };

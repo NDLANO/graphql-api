@@ -73,7 +73,6 @@ const toEmbed = ({
       resource: "concept",
       contentId: id,
       type: (conceptType ?? "notion") as "block" | "inline" | "notion",
-      linkText: "",
     };
   } else {
     return null;
@@ -108,10 +107,7 @@ export const fetchResourceEmbed = async (
   const embedHtml = toEmbedHtml(embed);
 
   const content = toHtml(embedHtml);
-  const html = load(content, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(content, null, false);
   const embeds = getEmbedsFromContent(html)[0];
   if (!embeds) {
     throw new Error("No embeds found");
@@ -125,7 +121,7 @@ export const fetchResourceEmbed = async (
 
   return {
     meta: metadata,
-    content: html("body").html() ?? "",
+    content: html.html() ?? "",
   };
 };
 
@@ -133,10 +129,7 @@ export const fetchResourceEmbeds = async ({ resources }: GQLQueryResourceEmbedsA
   const embeds = resources.map((params) => toEmbed(params)).filter((embed) => !!embed);
   const content = embeds.map((embed) => toEmbedHtml(embed!)).join("");
   const bodyString = toHtml(content);
-  const html = load(bodyString, {
-    xmlMode: false,
-    decodeEntities: false,
-  });
+  const html = load(bodyString, null, false);
   const embedsFromContent = getEmbedsFromContent(html);
 
   const embedPromises = await Promise.all(
@@ -152,6 +145,6 @@ export const fetchResourceEmbeds = async ({ resources }: GQLQueryResourceEmbedsA
 
   return {
     meta: metadata,
-    content: html("body").html() ?? "",
+    content: html.html() ?? "",
   };
 };

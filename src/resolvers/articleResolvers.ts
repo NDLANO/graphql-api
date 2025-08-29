@@ -22,7 +22,6 @@ import {
   GQLTransformedArticleContent,
   GQLArticleTransformedContentArgs,
   GQLRelatedContent,
-  GQLVisualElementOembed,
   GQLMetaImageWithCopyright,
 } from "../types/schema";
 
@@ -40,13 +39,16 @@ export const Query = {
 export const resolvers = {
   Article: {
     async competenceGoals(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
-      if ((article.grepCodes ?? []).length) return [];
+      if (!(article.grepCodes ?? []).length) return [];
 
       const language =
         article.supportedLanguages?.find((lang) => lang === context.language) ??
         article.supportedLanguages?.[0] ??
         context.language;
-      const result = await grepSearch({ codes: article.grepCodes, language: language }, context);
+      const result = await grepSearch(
+        { codes: article.grepCodes.filter((code) => code.startsWith("KM")), language: language },
+        context,
+      );
       return result.results.map((hit) => {
         return {
           ...hit,
@@ -84,7 +86,6 @@ export const resolvers = {
           title: crossSubjectTopic.title,
           code: crossSubjectTopic.code,
           id: crossSubjectTopic.id,
-          path: topic?.path,
           url: topic?.url,
         };
       });
@@ -97,9 +98,9 @@ export const resolvers = {
       return [];
     },
     async oembed(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<string | undefined> {
-      const oembed = await fetchOembed<GQLVisualElementOembed>(`${ndlaUrl}/article/${article.id}`, context);
-      if (oembed.html === undefined) return undefined;
-      const parsed = load(oembed.html);
+      const oembed = await fetchOembed(`${ndlaUrl}/article/${article.id}`, context);
+      if (oembed?.html === undefined) return undefined;
+      const parsed = load(oembed.html, null, false);
       return parsed("iframe").attr("src");
     },
     async metaImage(

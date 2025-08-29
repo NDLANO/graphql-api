@@ -8,7 +8,7 @@
 
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchNode, fetchNodeResources, fetchChildren, queryNodes } from "../api";
+import { fetchNode, fetchNodeResources, fetchChildren } from "../api";
 import {
   GQLMeta,
   GQLQueryTopicArgs,
@@ -36,16 +36,13 @@ export const Query = {
     { contentUri, filterVisible }: GQLQueryTopicsArgs,
     context: ContextWithLoaders,
   ): Promise<GQLTopic[]> {
-    const nodes = await queryNodes(
-      {
-        contentURI: contentUri,
-        isVisible: filterVisible,
-        includeContexts: true,
-        filterProgrammes: true,
-        language: context.language,
-      },
-      context,
-    );
+    const nodes = await context.loaders.nodesLoader.load({
+      contentURI: contentUri,
+      isVisible: filterVisible,
+      includeContexts: true,
+      filterProgrammes: true,
+      language: context.language,
+    });
     return nodes.map((node) => {
       return nodeToTaxonomyEntity(node, context);
     });
@@ -108,15 +105,13 @@ export const resolvers = {
     async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
       const { contentUri, path } = topic;
       if (!path && contentUri) {
-        const nodes = await queryNodes(
-          {
-            contentURI: contentUri,
-            includeContexts: true,
-            isVisible: true,
-            language: context.language,
-          },
-          context,
-        );
+        const nodes = await context.loaders.nodesLoader.load({
+          contentURI: contentUri,
+          includeContexts: true,
+          filterProgrammes: true,
+          isVisible: true,
+          language: context.language,
+        });
         return nodes.map((node) => nodeToTaxonomyEntity(node, context));
       }
       return;
