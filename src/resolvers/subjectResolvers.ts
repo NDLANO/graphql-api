@@ -6,6 +6,7 @@
  *
  */
 
+import partition from "lodash/partition";
 import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
@@ -90,8 +91,7 @@ export const resolvers = {
       if (!subject.metadata?.grepCodes) {
         return [];
       }
-      const sets = subject.metadata?.grepCodes.filter((c) => c.startsWith("KV"));
-      const rest = subject.metadata?.grepCodes.filter((c) => !c.startsWith("KV"));
+      const [sets, rest] = partition(subject.metadata?.grepCodes, (code) => code.startsWith("KV"));
       const result = await Promise.all(sets.map((set) => fetchCompetenceGoalSetCodes(set, context)));
       return rest.concat(result.flat());
     },

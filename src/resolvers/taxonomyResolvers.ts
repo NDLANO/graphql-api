@@ -6,6 +6,7 @@
  *
  */
 
+import partition from "lodash/partition";
 import { IArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ISubjectPageDataDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
@@ -134,8 +135,7 @@ export const resolvers = {
       if (!node.metadata?.grepCodes) {
         return [];
       }
-      const sets = node.metadata?.grepCodes.filter((c) => c.startsWith("KV"));
-      const rest = node.metadata?.grepCodes.filter((c) => !c.startsWith("KV"));
+      const [sets, rest] = partition(node.metadata?.grepCodes, (code) => code.startsWith("KV"));
       const result = await Promise.all(sets.map((set) => fetchCompetenceGoalSetCodes(set, context)));
       return rest.concat(result.flat());
     },
