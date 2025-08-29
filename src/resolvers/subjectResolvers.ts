@@ -6,6 +6,7 @@
  *
  */
 
+import partition from "lodash/partition";
 import { ISubjectPageDTO, IVisualElementDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
@@ -91,11 +92,12 @@ export const resolvers = {
       return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
     },
     async grepCodes(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<string[]> {
-      if (subject.metadata?.grepCodes) {
-        const code = subject.metadata?.grepCodes?.find((c) => c.startsWith("KV"));
-        return code ? fetchCompetenceGoalSetCodes(code, context) : [];
+      if (!subject.metadata?.grepCodes) {
+        return [];
       }
-      return [];
+      const [sets, rest] = partition(subject.metadata?.grepCodes, (code) => code.startsWith("KV"));
+      const result = await Promise.all(sets.map((set) => fetchCompetenceGoalSetCodes(set, context)));
+      return rest.concat(result.flat());
     },
   },
   SubjectPage: {
