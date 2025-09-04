@@ -1949,10 +1949,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-backend@npm:^1.0.62":
-  version: 1.0.62
-  resolution: "@ndla/types-backend@npm:1.0.62"
-  checksum: 10c0/b461d3d82c9faf52a4e5fa167f75dddde157650ebb3911c28a7d4f68b0f44fc1d0799500104a884bf14b8ec51634f52306dfb5dc3597afad9f945d1573091174
+"@ndla/types-backend@npm:^1.0.70":
+  version: 1.0.70
+  resolution: "@ndla/types-backend@npm:1.0.70"
+  checksum: 10c0/a7d54fcdb914b5b3a11ba0b1a1536b9c510e4ee9b6ad4d76adfdcf9b06ac7bd50a8d257dba21e6569f589da4d2918f44b5ff1f37a1849bff87eb7139b0ee47a4
   languageName: node
   linkType: hard
 
@@ -6905,7 +6905,7 @@ __metadata:
     "@graphql-tools/mock": "npm:^9.0.23"
     "@graphql-tools/schema": "npm:^10.0.23"
     "@ndla/licenses": "npm:^9.0.3"
-    "@ndla/types-backend": "npm:^1.0.62"
+    "@ndla/types-backend": "npm:^1.0.70"
     "@ndla/types-embed": "npm:^5.0.16-alpha.0"
     "@ndla/types-taxonomy": "npm:^1.0.34"
     "@types/compression": "npm:^1.7.2"

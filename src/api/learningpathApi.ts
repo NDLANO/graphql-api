@@ -6,7 +6,13 @@
  *
  */
 
-import { openapi, ILearningPathV2DTO, ILearningStepV2DTO, AuthorDTO } from "@ndla/types-backend/learningpath-api";
+import {
+  openapi,
+  ILearningPathV2DTO,
+  ILearningStepV2DTO,
+  AuthorDTO,
+  CopyrightDTO,
+} from "@ndla/types-backend/learningpath-api";
 import {
   GQLLearningpathSeqNo,
   GQLMutationCopyLearningpathArgs,
@@ -149,7 +155,10 @@ export async function createLearningstep(
   return client
     .POST("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps", {
       params: { path: { learningpath_id: learningpathId } },
-      body: params,
+      body: {
+        ...params,
+        copyright: params.copyright as CopyrightDTO | undefined,
+      },
     })
     .then(resolveJsonOATS);
 }
@@ -166,7 +175,10 @@ export async function updateLearningstep(
           learningstep_id: learningstepId,
         },
       },
-      body: params,
+      body: {
+        ...params,
+        copyright: params.copyright as CopyrightDTO | undefined,
+      },
     })
     .then(resolveJsonOATS);
 }

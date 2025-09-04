@@ -278,6 +278,7 @@ export const typeDefs = gql`
     id: Int!
     title: String!
     description: String!
+    introduction: String
     copyright: LearningpathCopyright!
     duration: Int
     canEdit: Boolean!

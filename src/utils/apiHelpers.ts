@@ -196,6 +196,7 @@ export function toGQLLearningpath<T = GQLMyNdlaLearningpath | GQLLearningpath>(l
     ...learningpath,
     title: learningpath.title.title,
     description: learningpath.description.description,
+    introduction: learningpath.introduction.introduction,
     lastUpdated: learningpath.lastUpdated,
     coverphoto: learningpath.coverPhoto,
     tags: learningpath.tags.tags || [],

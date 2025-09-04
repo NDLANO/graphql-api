@@ -9,7 +9,7 @@
 import { toUnicode } from "punycode/";
 import { load } from "cheerio";
 import he from "he";
-import { FrontPageDTO, MenuDataDTO, MenuDTO } from "@ndla/types-backend/frontpage-api";
+import { FrontPageDTO, MenuDTO } from "@ndla/types-backend/frontpage-api";
 import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import {
   AudioMetaData,
@@ -179,7 +179,7 @@ const brightcoveMeta: Fetch<BrightcoveMetaData> = async ({ embedData, context })
   };
 };
 
-function traverse(articleIds: string[], obj: MenuDataDTO | MenuDTO) {
+function traverse(articleIds: string[], obj: MenuDTO) {
   articleIds.push(`${obj.articleId}`);
   if (obj.menu) {
     obj.menu.map((m) => traverse(articleIds, m));
