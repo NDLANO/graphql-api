@@ -875,6 +875,7 @@ export type GQLLearningpathUpdateInput = {
   deleteMessage?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   duration?: InputMaybe<Scalars['Int']['input']>;
+  introduction?: InputMaybe<Scalars['String']['input']>;
   language: Scalars['String']['input'];
   revision: Scalars['Int']['input'];
   tags?: InputMaybe<Array<Scalars['String']['input']>>;

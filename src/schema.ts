@@ -359,6 +359,7 @@ export const typeDefs = gql`
   input LearningpathUpdateInput {
     title: String
     coverPhotoMetaUrl: String
+    introduction: String
     language: String!
     revision: Int!
     description: String
