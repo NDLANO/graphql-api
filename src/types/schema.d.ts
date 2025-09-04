@@ -1154,6 +1154,7 @@ export type GQLMyNdlaLearningpath = {
   description: Scalars['String']['output'];
   duration?: Maybe<Scalars['Int']['output']>;
   id: Scalars['Int']['output'];
+  introduction?: Maybe<Scalars['String']['output']>;
   isBasedOn?: Maybe<Scalars['Int']['output']>;
   isMyNDLAOwner: Scalars['Boolean']['output'];
   lastUpdated: Scalars['String']['output'];
@@ -3411,6 +3412,7 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
   description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   duration?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   isBasedOn?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   isMyNDLAOwner?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;

@@ -302,6 +302,7 @@ export const typeDefs = gql`
   type MyNdlaLearningpath {
     id: Int!
     title: String!
+    introduction: String
     description: String!
     copyright: LearningpathCopyright!
     duration: Int
