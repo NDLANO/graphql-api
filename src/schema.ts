@@ -677,15 +677,15 @@ export const typeDefs = gql`
   }
 
   type ArticleMetaData {
-    footnotes: [FootNote!]
-    images: [ImageLicense!]
-    audios: [AudioLicense!]
-    podcasts: [PodcastLicense!]
-    brightcoves: [BrightcoveLicense!]
-    h5ps: [H5pLicense!]
-    concepts: [ConceptLicense!]
-    glosses: [GlossLicense!]
-    textblocks: [TextblockLicense!]
+    footnotes: [FootNote!]!
+    images: [ImageLicense!]!
+    audios: [AudioLicense!]!
+    podcasts: [PodcastLicense!]!
+    brightcoves: [BrightcoveLicense!]!
+    h5ps: [H5pLicense!]!
+    concepts: [ConceptLicense!]!
+    glosses: [GlossLicense!]!
+    textblocks: [TextblockLicense!]!
     copyText: String
   }
 
@@ -1360,13 +1360,13 @@ export const typeDefs = gql`
   }
 
   type ResourceMetaData {
-    images: [ImageLicense!]
-    audios: [AudioLicense!]
-    podcasts: [PodcastLicense!]
-    brightcoves: [BrightcoveLicense!]
-    h5ps: [H5pLicense!]
-    concepts: [ConceptLicense!]
-    glosses: [GlossLicense!]
+    images: [ImageLicense!]!
+    audios: [AudioLicense!]!
+    podcasts: [PodcastLicense!]!
+    brightcoves: [BrightcoveLicense!]!
+    h5ps: [H5pLicense!]!
+    concepts: [ConceptLicense!]!
+    glosses: [GlossLicense!]!
   }
 
   type ResourceEmbed {
