@@ -733,6 +733,7 @@ export const typeDefs = gql`
     transformedContent(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
     oembed: String
     transformedDisclaimer(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
+    traits: [String!]!
   }
 
   input TransformedArticleContentInput {
