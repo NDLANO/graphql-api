@@ -13,7 +13,7 @@ import { OATSInternalUrlMiddleware } from "./internalUrlMiddleware";
 import { getHeadersFromContext } from "../apiHelpers";
 import getLogger from "../logger";
 import { GraphQLError } from "graphql";
-import { apiUrl } from "../../config";
+import { apiUrl, slowLogTimeout as configSlowLogTimeout } from "../../config";
 import { getContextOrThrow } from "../context/contextStore";
 
 export const resolveOATS = async <A extends Record<string | number, any>, B, C extends MediaType>(
@@ -58,9 +58,10 @@ export function createAuthClient<T extends {}>(options?: ClientCreateOptions) {
   return client;
 }
 
+const slowLogTimeout = parseInt(configSlowLogTimeout);
+
 async function fetchFunction(req: globalThis.Request): Promise<globalThis.Response> {
   const startTime = performance.now();
-  const slowLogTimeout = 500;
 
   const ctx = getContextOrThrow();
   const headers = getHeadersFromContext(ctx);
