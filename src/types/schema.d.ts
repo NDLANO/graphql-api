@@ -57,6 +57,7 @@ export type GQLArticle = {
   supportedLanguages?: Maybe<Array<Scalars['String']['output']>>;
   tags?: Maybe<Array<Scalars['String']['output']>>;
   title: Scalars['String']['output'];
+  traits: Array<Scalars['String']['output']>;
   transformedContent: GQLTransformedArticleContent;
   transformedDisclaimer: GQLTransformedArticleContent;
   updated: Scalars['String']['output'];
@@ -94,16 +95,16 @@ export type GQLArticleFolderResourceMeta = GQLFolderResourceMeta & {
 
 export type GQLArticleMetaData = {
   __typename?: 'ArticleMetaData';
-  audios?: Maybe<Array<GQLAudioLicense>>;
-  brightcoves?: Maybe<Array<GQLBrightcoveLicense>>;
-  concepts?: Maybe<Array<GQLConceptLicense>>;
+  audios: Array<GQLAudioLicense>;
+  brightcoves: Array<GQLBrightcoveLicense>;
+  concepts: Array<GQLConceptLicense>;
   copyText?: Maybe<Scalars['String']['output']>;
-  footnotes?: Maybe<Array<GQLFootNote>>;
-  glosses?: Maybe<Array<GQLGlossLicense>>;
-  h5ps?: Maybe<Array<GQLH5pLicense>>;
-  images?: Maybe<Array<GQLImageLicense>>;
-  podcasts?: Maybe<Array<GQLPodcastLicense>>;
-  textblocks?: Maybe<Array<GQLTextblockLicense>>;
+  footnotes: Array<GQLFootNote>;
+  glosses: Array<GQLGlossLicense>;
+  h5ps: Array<GQLH5pLicense>;
+  images: Array<GQLImageLicense>;
+  podcasts: Array<GQLPodcastLicense>;
+  textblocks: Array<GQLTextblockLicense>;
 };
 
 export type GQLArticleRequiredLibrary = {
@@ -1747,13 +1748,13 @@ export type GQLResourceEmbedInput = {
 
 export type GQLResourceMetaData = {
   __typename?: 'ResourceMetaData';
-  audios?: Maybe<Array<GQLAudioLicense>>;
-  brightcoves?: Maybe<Array<GQLBrightcoveLicense>>;
-  concepts?: Maybe<Array<GQLConceptLicense>>;
-  glosses?: Maybe<Array<GQLGlossLicense>>;
-  h5ps?: Maybe<Array<GQLH5pLicense>>;
-  images?: Maybe<Array<GQLImageLicense>>;
-  podcasts?: Maybe<Array<GQLPodcastLicense>>;
+  audios: Array<GQLAudioLicense>;
+  brightcoves: Array<GQLBrightcoveLicense>;
+  concepts: Array<GQLConceptLicense>;
+  glosses: Array<GQLGlossLicense>;
+  h5ps: Array<GQLH5pLicense>;
+  images: Array<GQLImageLicense>;
+  podcasts: Array<GQLPodcastLicense>;
 };
 
 export type GQLResourceType = {
@@ -2581,6 +2582,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  traits?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   transformedContent?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedContentArgs>>;
   transformedDisclaimer?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedDisclaimerArgs>>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -2598,16 +2600,16 @@ export type GQLArticleFolderResourceMetaResolvers<ContextType = any, ParentType 
 };
 
 export type GQLArticleMetaDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleMetaData'] = GQLResolversParentTypes['ArticleMetaData']> = {
-  audios?: Resolver<Maybe<Array<GQLResolversTypes['AudioLicense']>>, ParentType, ContextType>;
-  brightcoves?: Resolver<Maybe<Array<GQLResolversTypes['BrightcoveLicense']>>, ParentType, ContextType>;
-  concepts?: Resolver<Maybe<Array<GQLResolversTypes['ConceptLicense']>>, ParentType, ContextType>;
+  audios?: Resolver<Array<GQLResolversTypes['AudioLicense']>, ParentType, ContextType>;
+  brightcoves?: Resolver<Array<GQLResolversTypes['BrightcoveLicense']>, ParentType, ContextType>;
+  concepts?: Resolver<Array<GQLResolversTypes['ConceptLicense']>, ParentType, ContextType>;
   copyText?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  footnotes?: Resolver<Maybe<Array<GQLResolversTypes['FootNote']>>, ParentType, ContextType>;
-  glosses?: Resolver<Maybe<Array<GQLResolversTypes['GlossLicense']>>, ParentType, ContextType>;
-  h5ps?: Resolver<Maybe<Array<GQLResolversTypes['H5pLicense']>>, ParentType, ContextType>;
-  images?: Resolver<Maybe<Array<GQLResolversTypes['ImageLicense']>>, ParentType, ContextType>;
-  podcasts?: Resolver<Maybe<Array<GQLResolversTypes['PodcastLicense']>>, ParentType, ContextType>;
-  textblocks?: Resolver<Maybe<Array<GQLResolversTypes['TextblockLicense']>>, ParentType, ContextType>;
+  footnotes?: Resolver<Array<GQLResolversTypes['FootNote']>, ParentType, ContextType>;
+  glosses?: Resolver<Array<GQLResolversTypes['GlossLicense']>, ParentType, ContextType>;
+  h5ps?: Resolver<Array<GQLResolversTypes['H5pLicense']>, ParentType, ContextType>;
+  images?: Resolver<Array<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
+  podcasts?: Resolver<Array<GQLResolversTypes['PodcastLicense']>, ParentType, ContextType>;
+  textblocks?: Resolver<Array<GQLResolversTypes['TextblockLicense']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3717,13 +3719,13 @@ export type GQLResourceEmbedResolvers<ContextType = any, ParentType extends GQLR
 };
 
 export type GQLResourceMetaDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceMetaData'] = GQLResolversParentTypes['ResourceMetaData']> = {
-  audios?: Resolver<Maybe<Array<GQLResolversTypes['AudioLicense']>>, ParentType, ContextType>;
-  brightcoves?: Resolver<Maybe<Array<GQLResolversTypes['BrightcoveLicense']>>, ParentType, ContextType>;
-  concepts?: Resolver<Maybe<Array<GQLResolversTypes['ConceptLicense']>>, ParentType, ContextType>;
-  glosses?: Resolver<Maybe<Array<GQLResolversTypes['GlossLicense']>>, ParentType, ContextType>;
-  h5ps?: Resolver<Maybe<Array<GQLResolversTypes['H5pLicense']>>, ParentType, ContextType>;
-  images?: Resolver<Maybe<Array<GQLResolversTypes['ImageLicense']>>, ParentType, ContextType>;
-  podcasts?: Resolver<Maybe<Array<GQLResolversTypes['PodcastLicense']>>, ParentType, ContextType>;
+  audios?: Resolver<Array<GQLResolversTypes['AudioLicense']>, ParentType, ContextType>;
+  brightcoves?: Resolver<Array<GQLResolversTypes['BrightcoveLicense']>, ParentType, ContextType>;
+  concepts?: Resolver<Array<GQLResolversTypes['ConceptLicense']>, ParentType, ContextType>;
+  glosses?: Resolver<Array<GQLResolversTypes['GlossLicense']>, ParentType, ContextType>;
+  h5ps?: Resolver<Array<GQLResolversTypes['H5pLicense']>, ParentType, ContextType>;
+  images?: Resolver<Array<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
+  podcasts?: Resolver<Array<GQLResolversTypes['PodcastLicense']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

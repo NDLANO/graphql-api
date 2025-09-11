@@ -7,6 +7,7 @@
  */
 
 import sortBy from "lodash/sortBy";
+import uniqBy from "lodash/uniqBy";
 import { IConceptDTO, IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { ConceptVisualElementMeta, EmbedMetaData } from "@ndla/types-embed";
@@ -196,7 +197,7 @@ interface MetaData {
 }
 
 export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<GQLArticleMetaData, "__typename"> => {
-  return embeds.reduce<MetaData>(
+  const metadata = embeds.reduce<MetaData>(
     (acc, curr) => {
       if (!curr || curr.status === "error") {
         return acc;
@@ -268,4 +269,13 @@ export const toArticleMetaData = (embeds: (EmbedMetaData | undefined)[]): Omit<G
       textblocks: [],
     },
   );
+  metadata.images = uniqBy(metadata.images, (img) => img.id);
+  metadata.audios = uniqBy(metadata.audios, (audio) => audio.id);
+  metadata.podcasts = uniqBy(metadata.podcasts, (podcast) => podcast.id);
+  metadata.brightcoves = uniqBy(metadata.brightcoves, (brightcove) => brightcove.id);
+  metadata.h5ps = uniqBy(metadata.h5ps, (h5p) => h5p.id);
+  metadata.concepts = uniqBy(metadata.concepts, (concept) => concept.id);
+  metadata.glosses = uniqBy(metadata.glosses, (gloss) => gloss.id);
+
+  return metadata;
 };
