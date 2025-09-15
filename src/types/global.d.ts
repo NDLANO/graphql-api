@@ -52,7 +52,6 @@ declare global {
     versionHash?: string;
     language: string;
     shouldUseCache: boolean;
-    taxonomyUrl: string;
   }
 
   interface ContextWithLoaders extends Context {
