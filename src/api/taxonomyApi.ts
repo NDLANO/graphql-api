@@ -23,7 +23,7 @@ export async function fetchResourceTypes<T extends GQLResourceType | GQLResource
   const query = qs.stringify({
     language: context.language,
   });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/resource-types?${query}`, context);
+  const response = await taxonomyFetch(`/taxonomy/v1/resource-types?${query}`, context);
   return resolveJson(response);
 }
 
@@ -35,7 +35,7 @@ export async function fetchSubjectTopics(subjectId: string, context: Context): P
     includeContexts: true,
     filterProgrammes: true,
   });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${subjectId}/nodes?${query}`, context);
+  const response = await taxonomyFetch(`/taxonomy/v1/nodes/${subjectId}/nodes?${query}`, context);
   return resolveJson(response);
 }
 
@@ -52,7 +52,7 @@ export async function fetchNode(
     rootId,
     parentId,
   });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${id}?${query}`, context);
+  const response = await taxonomyFetch(`/taxonomy/v1/nodes/${id}?${query}`, context);
   return await resolveJson(response);
 }
 
@@ -67,7 +67,7 @@ export async function searchNodes(params: { contentUris: string[] }, context: Co
     page: 1,
     pageSize: 100,
   });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/search?${query}`, context);
+  const response = await taxonomyFetch(`/taxonomy/v1/nodes/search?${query}`, context);
   return await resolveJson(response);
 }
 
@@ -88,7 +88,7 @@ export async function fetchChildren(
     filterProgrammes: true,
     language: context.language,
   });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${id}/nodes?${query}`, context);
+  const response = await taxonomyFetch(`/taxonomy/v1/nodes/${id}/nodes?${query}`, context);
   return resolveJson(response);
 }
 
@@ -105,17 +105,17 @@ export async function fetchNodeResources(params: FetchNodeResourcesParams, conte
     includeContexts: true,
     filterProgrammes: true,
   });
-  const response = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes/${id}/resources?${query}`, context);
+  const response = await taxonomyFetch(`/taxonomy/v1/nodes/${id}/resources?${query}`, context);
   return await resolveJson(response);
 }
 
 export async function queryContexts(contentURI: string, context: Context): Promise<TaxonomyContext[]> {
-  const response = await fetch(`/${context.taxonomyUrl}/v1/queries/${contentURI}`, context);
+  const response = await fetch(`/taxonomy/v1/queries/${contentURI}`, context);
   return await resolveJson(response);
 }
 
 export async function fetchVersion(hash: string, context: Context): Promise<Version | undefined> {
-  const response = await fetch(`/${context.taxonomyUrl}/v1/versions?hash=${hash}`, {
+  const response = await fetch(`/taxonomy/v1/versions?hash=${hash}`, {
     ...context,
     versionHash: "default",
   });
@@ -159,6 +159,6 @@ export const queryNodes = async (params: NodeQueryParams, context: Context): Pro
     ...params,
     ids: params.ids?.join(","),
   });
-  const res = await taxonomyFetch(`/${context.taxonomyUrl}/v1/nodes?${query}`, context);
+  const res = await taxonomyFetch(`/taxonomy/v1/nodes?${query}`, context);
   return await resolveJson(res);
 };

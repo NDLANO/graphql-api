@@ -34,11 +34,6 @@ function getShouldUseCache(request: Request): boolean {
   return !cacheControlDisable && !feideHeaderPresent;
 }
 
-const getTaxonomyUrl = (request: Request): string => {
-  const taxonomyUrl = request.headers["use-taxonomy2"];
-  return taxonomyUrl === "true" ? "taxonomy2" : "taxonomy";
-};
-
 function getVersionHash(request: Request): string | undefined {
   return getHeaderString(request, "versionhash");
 }
@@ -72,14 +67,12 @@ export function contextExpressMiddleware(req: Request, res: Response, next: Next
 
   const language = getAcceptLanguage(req);
   const shouldUseCache = getShouldUseCache(req);
-  const taxonomyUrl = getTaxonomyUrl(req);
   const defaultContext = {
     language,
     token,
     feideAuthorization,
     versionHash,
     shouldUseCache,
-    taxonomyUrl,
     req,
     res,
   };
