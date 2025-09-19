@@ -166,7 +166,7 @@ export async function deleteFolderResource(
   { folderId, resourceId }: GQLMutationDeleteFolderResourceArgs,
   _context: Context,
 ): Promise<string> {
-  return client
+  await client
     .DELETE("/myndla-api/v1/folders/{folder-id}/resources/{resource-id}", {
       params: {
         path: {
@@ -175,7 +175,8 @@ export async function deleteFolderResource(
         },
       },
     })
-    .then(resolveJsonOATS);
+    .then(resolveOATS);
+  return resourceId;
 }
 
 export async function deletePersonalData(_context: Context): Promise<boolean> {
