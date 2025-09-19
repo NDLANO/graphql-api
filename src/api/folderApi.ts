@@ -166,7 +166,7 @@ export async function deleteFolderResource(
   { folderId, resourceId }: GQLMutationDeleteFolderResourceArgs,
   _context: Context,
 ): Promise<string> {
-  client
+  await client
     .DELETE("/myndla-api/v1/folders/{folder-id}/resources/{resource-id}", {
       params: {
         path: {
