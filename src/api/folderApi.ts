@@ -176,7 +176,7 @@ export async function deleteFolderResource(
       },
     })
     .then(resolveOATS);
-  return folderId;
+  return resourceId;
 }
 
 export async function deletePersonalData(_context: Context): Promise<boolean> {
