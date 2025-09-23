@@ -143,6 +143,11 @@ export const resolvers = {
     language(article: IArticleV2DTO): string {
       return article.content.language;
     },
+    requiredLibraries(article: IArticleV2DTO): IArticleV2DTO["requiredLibraries"] {
+      return article.requiredLibraries.map((lib) =>
+        lib.url.startsWith("http://") ? { ...lib, url: lib.url.replace("http://", "https://") } : lib,
+      );
+    },
     async transformedDisclaimer(
       article: IArticleV2DTO,
       args: GQLArticleTransformedContentArgs,
