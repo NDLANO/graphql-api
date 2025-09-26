@@ -1133,9 +1133,7 @@ export type GQLMutationUpdateLearningpathStepSeqNoArgs = {
 
 
 export type GQLMutationUpdatePersonalDataArgs = {
-  arenaAccepted?: InputMaybe<Scalars['Boolean']['input']>;
   favoriteSubjects?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  shareNameAccepted?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type GQLMyNdlaGroup = {
@@ -1202,7 +1200,6 @@ export type GQLMyNdlaLearningpathStepResourceArgs = {
 
 export type GQLMyNdlaPersonalData = {
   __typename?: 'MyNdlaPersonalData';
-  arenaAccepted: Scalars['Boolean']['output'];
   arenaEnabled: Scalars['Boolean']['output'];
   displayName: Scalars['String']['output'];
   email: Scalars['String']['output'];
@@ -1212,7 +1209,6 @@ export type GQLMyNdlaPersonalData = {
   id: Scalars['Int']['output'];
   organization: Scalars['String']['output'];
   role: Scalars['String']['output'];
-  shareNameAccepted: Scalars['Boolean']['output'];
   username: Scalars['String']['output'];
 };
 
@@ -3455,7 +3451,6 @@ export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType ext
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
-  arenaAccepted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   arenaEnabled?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   displayName?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   email?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3465,7 +3460,6 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  shareNameAccepted?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

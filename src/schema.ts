@@ -1343,10 +1343,8 @@ export const typeDefs = gql`
     favoriteSubjects: [String!]!
     role: String!
     arenaEnabled: Boolean!
-    arenaAccepted: Boolean!
     organization: String!
     groups: [MyNdlaGroup!]!
-    shareNameAccepted: Boolean!
   }
 
   type ConfigMetaBoolean {
@@ -1552,11 +1550,7 @@ export const typeDefs = gql`
     updateFolderResource(id: String!, tags: [String!]): FolderResource!
     deleteFolderResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
-    updatePersonalData(
-      favoriteSubjects: [String]
-      arenaAccepted: Boolean
-      shareNameAccepted: Boolean
-    ): MyNdlaPersonalData!
+    updatePersonalData(favoriteSubjects: [String]): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
     sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
     sortSavedSharedFolders(sortedIds: [String!]!): SortResult!
