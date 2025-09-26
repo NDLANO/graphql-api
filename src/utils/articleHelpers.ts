@@ -11,7 +11,7 @@ import { NodeChild } from "@ndla/types-taxonomy";
 import { GQLTaxonomyEntity } from "../types/schema";
 
 export function isNDLAEmbedUrl(url: string) {
-  return /^https:\/(.*).ndla.no/.test(url) || /^http:\/\/localhost/.test(url);
+  return /^https:\/\/([a-z0-9-]+\.)*ndla.no/.test(url) || /^http:\/\/localhost/.test(url);
 }
 
 export function getArticleIdFromUrn(urn: string): string {

@@ -40,6 +40,7 @@ test("NDLA Urls should be true in isNDLAEmbedUrl function", async () => {
 });
 
 test("Random Urls should be false in isNDLAEmbedUrl function", async () => {
+  expect(isNDLAEmbedUrl("https://evilndla.no")).toBe(false);
   expect(isNDLAEmbedUrl("https://www.youtube.com/watch?v=fwwefwfw")).toBe(false);
   expect(isNDLAEmbedUrl("https://norge.no")).toBe(false);
   expect(isNDLAEmbedUrl("https://www.norge.no")).toBe(false);
