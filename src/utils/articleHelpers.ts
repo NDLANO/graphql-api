@@ -11,7 +11,13 @@ import { NodeChild } from "@ndla/types-taxonomy";
 import { GQLTaxonomyEntity } from "../types/schema";
 
 export function isNDLAEmbedUrl(url: string) {
-  return /^https:\/(.*).ndla.no/.test(url) || /^http:\/\/localhost/.test(url);
+  try {
+    const urlObject = new URL(url);
+    if (urlObject.hostname === "ndla.no" || urlObject.hostname.endsWith(".ndla.no")) return true;
+    return urlObject.hostname === "localhost";
+  } catch {
+    return false;
+  }
 }
 
 export function getArticleIdFromUrn(urn: string): string {
