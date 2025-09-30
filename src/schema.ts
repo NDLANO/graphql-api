@@ -222,6 +222,7 @@ export const typeDefs = gql`
     id: Int!
     title: String!
     seqNo: Int!
+    canEdit: Boolean!
     description: String
     introduction: String
     embedUrl: LearningpathStepEmbedUrl
@@ -243,6 +244,7 @@ export const typeDefs = gql`
     id: Int!
     title: String!
     seqNo: Int!
+    canEdit: Boolean!
     introduction: String
     description: String
     embedUrl: LearningpathStepEmbedUrl
