@@ -20,7 +20,6 @@ import {
   GQLLearningpath,
   GQLLearningpathStep,
   GQLMyNdlaLearningpath,
-  GQLMyNdlaLearningpathStep,
 } from "../types/schema";
 
 export function apiResourceUrl(path: string): string {
@@ -180,9 +179,7 @@ export function learningpathToMeta(learningpath: ILearningPathV2DTO): GQLMeta {
   };
 }
 
-export function toGQLLearningstep<T = GQLMyNdlaLearningpathStep | GQLLearningpathStep>(
-  learningstep: ILearningStepV2DTO,
-): T {
+export function toGQLLearningstep<T = GQLLearningpathStep>(learningstep: ILearningStepV2DTO): T {
   return {
     ...learningstep,
     title: learningstep.title.title,

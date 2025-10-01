@@ -240,28 +240,6 @@ export const typeDefs = gql`
     opengraph: ExternalOpengraph
   }
 
-  type MyNdlaLearningpathStep {
-    id: Int!
-    title: String!
-    seqNo: Int!
-    canEdit: Boolean!
-    introduction: String
-    description: String
-    embedUrl: LearningpathStepEmbedUrl
-    license: License
-    copyright: LearningpathCopyright
-    metaUrl: String!
-    revision: Int!
-    status: String!
-    supportedLanguages: [String!]!
-    type: String!
-    articleId: Int
-    resource(rootId: String, parentId: String): Resource
-    showTitle: Boolean!
-    oembed: LearningpathStepOembed
-    opengraph: ExternalOpengraph
-  }
-
   type LearningpathCoverphoto {
     url: String!
     metaUrl: String!
@@ -316,7 +294,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     isBasedOn: Int
     basedOn: String
-    learningsteps: [MyNdlaLearningpathStep!]!
+    learningsteps: [LearningpathStep!]!
     metaUrl: String!
     revision: Int!
     learningstepUrl: String!
@@ -1572,12 +1550,12 @@ export const typeDefs = gql`
     deleteLearningpath(id: Int!): Boolean
     newLearningpath(params: LearningpathNewInput!): MyNdlaLearningpath!
     updateLearningpath(learningpathId: Int!, params: LearningpathUpdateInput!): MyNdlaLearningpath!
-    newLearningpathStep(learningpathId: Int!, params: LearningpathStepNewInput!): MyNdlaLearningpathStep!
+    newLearningpathStep(learningpathId: Int!, params: LearningpathStepNewInput!): LearningpathStep!
     updateLearningpathStep(
       learningpathId: Int!
       learningstepId: Int!
       params: LearningpathStepUpdateInput!
-    ): MyNdlaLearningpathStep!
+    ): LearningpathStep!
     deleteLearningpathStep(learningpathId: Int!, learningstepId: Int!): Boolean
     copyLearningpath(learningpathId: Int!, params: LearningpathCopyInput!): MyNdlaLearningpath!
     updateLearningpathStepSeqNo(learningpathId: Int!, learningpathStepId: Int!, seqNo: Int!): LearningpathSeqNo!

@@ -971,7 +971,7 @@ export type GQLMutation = {
   deletePersonalData: Scalars['Boolean']['output'];
   favoriteSharedFolder: Scalars['String']['output'];
   newLearningpath: GQLMyNdlaLearningpath;
-  newLearningpathStep: GQLMyNdlaLearningpathStep;
+  newLearningpathStep: GQLLearningpathStep;
   sortFolders: GQLSortResult;
   sortResources: GQLSortResult;
   sortSavedSharedFolders: GQLSortResult;
@@ -982,7 +982,7 @@ export type GQLMutation = {
   updateFolderStatus: Array<Scalars['String']['output']>;
   updateLearningpath: GQLMyNdlaLearningpath;
   updateLearningpathStatus: GQLMyNdlaLearningpath;
-  updateLearningpathStep: GQLMyNdlaLearningpathStep;
+  updateLearningpathStep: GQLLearningpathStep;
   updateLearningpathStepSeqNo: GQLLearningpathSeqNo;
   updatePersonalData: GQLMyNdlaPersonalData;
 };
@@ -1160,7 +1160,7 @@ export type GQLMyNdlaLearningpath = {
   isMyNDLAOwner: Scalars['Boolean']['output'];
   lastUpdated: Scalars['String']['output'];
   learningstepUrl: Scalars['String']['output'];
-  learningsteps: Array<GQLMyNdlaLearningpathStep>;
+  learningsteps: Array<GQLLearningpathStep>;
   madeAvailable?: Maybe<Scalars['String']['output']>;
   metaUrl: Scalars['String']['output'];
   revision: Scalars['Int']['output'];
@@ -1169,35 +1169,6 @@ export type GQLMyNdlaLearningpath = {
   tags: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
   verificationStatus: Scalars['String']['output'];
-};
-
-export type GQLMyNdlaLearningpathStep = {
-  __typename?: 'MyNdlaLearningpathStep';
-  articleId?: Maybe<Scalars['Int']['output']>;
-  canEdit: Scalars['Boolean']['output'];
-  copyright?: Maybe<GQLLearningpathCopyright>;
-  description?: Maybe<Scalars['String']['output']>;
-  embedUrl?: Maybe<GQLLearningpathStepEmbedUrl>;
-  id: Scalars['Int']['output'];
-  introduction?: Maybe<Scalars['String']['output']>;
-  license?: Maybe<GQLLicense>;
-  metaUrl: Scalars['String']['output'];
-  oembed?: Maybe<GQLLearningpathStepOembed>;
-  opengraph?: Maybe<GQLExternalOpengraph>;
-  resource?: Maybe<GQLResource>;
-  revision: Scalars['Int']['output'];
-  seqNo: Scalars['Int']['output'];
-  showTitle: Scalars['Boolean']['output'];
-  status: Scalars['String']['output'];
-  supportedLanguages: Array<Scalars['String']['output']>;
-  title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
-};
-
-
-export type GQLMyNdlaLearningpathStepResourceArgs = {
-  parentId?: InputMaybe<Scalars['String']['input']>;
-  rootId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type GQLMyNdlaPersonalData = {
@@ -2310,7 +2281,6 @@ export type GQLResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   MyNdlaGroup: ResolverTypeWrapper<GQLMyNdlaGroup>;
   MyNdlaLearningpath: ResolverTypeWrapper<GQLMyNdlaLearningpath>;
-  MyNdlaLearningpathStep: ResolverTypeWrapper<GQLMyNdlaLearningpathStep>;
   MyNdlaPersonalData: ResolverTypeWrapper<GQLMyNdlaPersonalData>;
   Name: ResolverTypeWrapper<GQLName>;
   NewFolder: ResolverTypeWrapper<GQLNewFolder>;
@@ -2476,7 +2446,6 @@ export type GQLResolversParentTypes = {
   Mutation: {};
   MyNdlaGroup: GQLMyNdlaGroup;
   MyNdlaLearningpath: GQLMyNdlaLearningpath;
-  MyNdlaLearningpathStep: GQLMyNdlaLearningpathStep;
   MyNdlaPersonalData: GQLMyNdlaPersonalData;
   Name: GQLName;
   NewFolder: GQLNewFolder;
@@ -3381,7 +3350,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   favoriteSharedFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationFavoriteSharedFolderArgs, 'folderId'>>;
   newLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'params'>>;
-  newLearningpathStep?: Resolver<GQLResolversTypes['MyNdlaLearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathStepArgs, 'learningpathId' | 'params'>>;
+  newLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathStepArgs, 'learningpathId' | 'params'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
   sortResources?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortResourcesArgs, 'parentId' | 'sortedIds'>>;
   sortSavedSharedFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortSavedSharedFoldersArgs, 'sortedIds'>>;
@@ -3392,7 +3361,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
   updateLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathArgs, 'learningpathId' | 'params'>>;
   updateLearningpathStatus?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStatusArgs, 'id' | 'status'>>;
-  updateLearningpathStep?: Resolver<GQLResolversTypes['MyNdlaLearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'learningpathId' | 'learningstepId' | 'params'>>;
+  updateLearningpathStep?: Resolver<GQLResolversTypes['LearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'learningpathId' | 'learningstepId' | 'params'>>;
   updateLearningpathStepSeqNo?: Resolver<GQLResolversTypes['LearningpathSeqNo'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepSeqNoArgs, 'learningpathId' | 'learningpathStepId' | 'seqNo'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
 };
@@ -3419,7 +3388,7 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
   isMyNDLAOwner?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   lastUpdated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   learningstepUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  learningsteps?: Resolver<Array<GQLResolversTypes['MyNdlaLearningpathStep']>, ParentType, ContextType>;
+  learningsteps?: Resolver<Array<GQLResolversTypes['LearningpathStep']>, ParentType, ContextType>;
   madeAvailable?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
@@ -3428,29 +3397,6 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   verificationStatus?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpathStep'] = GQLResolversParentTypes['MyNdlaLearningpathStep']> = {
-  articleId?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
-  canEdit?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
-  copyright?: Resolver<Maybe<GQLResolversTypes['LearningpathCopyright']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  embedUrl?: Resolver<Maybe<GQLResolversTypes['LearningpathStepEmbedUrl']>, ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  license?: Resolver<Maybe<GQLResolversTypes['License']>, ParentType, ContextType>;
-  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  oembed?: Resolver<Maybe<GQLResolversTypes['LearningpathStepOembed']>, ParentType, ContextType>;
-  opengraph?: Resolver<Maybe<GQLResolversTypes['ExternalOpengraph']>, ParentType, ContextType>;
-  resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLMyNdlaLearningpathStepResourceArgs>>;
-  revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  seqNo?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  showTitle?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
-  status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4170,7 +4116,6 @@ export type GQLResolvers<ContextType = any> = {
   Mutation?: GQLMutationResolvers<ContextType>;
   MyNdlaGroup?: GQLMyNdlaGroupResolvers<ContextType>;
   MyNdlaLearningpath?: GQLMyNdlaLearningpathResolvers<ContextType>;
-  MyNdlaLearningpathStep?: GQLMyNdlaLearningpathStepResolvers<ContextType>;
   MyNdlaPersonalData?: GQLMyNdlaPersonalDataResolvers<ContextType>;
   Name?: GQLNameResolvers<ContextType>;
   NewFolder?: GQLNewFolderResolvers<ContextType>;

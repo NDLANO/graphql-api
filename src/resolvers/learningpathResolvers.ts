@@ -39,7 +39,6 @@ import {
   GQLMutationDeleteLearningpathStepArgs,
   GQLMutationUpdateLearningpathStatusArgs,
   GQLMyNdlaLearningpath,
-  GQLMyNdlaLearningpathStep,
   GQLExternalOpengraph,
   GQLMutationCopyLearningpathArgs,
   GQLLearningpathSeqNo,
@@ -216,12 +215,6 @@ export const resolvers = {
     description: transformDescription,
     license: getLicense,
   },
-  MyNdlaLearningpathStep: {
-    oembed: getOembed,
-    resource: getResource,
-    opengraph: getOpengraph,
-    license: getLicense,
-  },
 };
 
 export const Mutations: Pick<
@@ -263,7 +256,7 @@ export const Mutations: Pick<
     _: any,
     params: GQLMutationNewLearningpathStepArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLMyNdlaLearningpathStep> {
+  ): Promise<GQLLearningpathStep> {
     const learningstep = await createLearningstep(params, context);
     return toGQLLearningstep(learningstep);
   },
@@ -271,7 +264,7 @@ export const Mutations: Pick<
     _: any,
     params: GQLMutationUpdateLearningpathStepArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLMyNdlaLearningpathStep> {
+  ): Promise<GQLLearningpathStep> {
     const learningstep = await updateLearningstep(params, context);
     return toGQLLearningstep(learningstep);
   },
