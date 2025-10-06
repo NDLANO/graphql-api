@@ -1508,6 +1508,7 @@ export type GQLQueryGroupSearchArgs = {
   query?: InputMaybe<Scalars['String']['input']>;
   resourceTypes?: InputMaybe<Scalars['String']['input']>;
   subjects?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -1636,6 +1637,7 @@ export type GQLQuerySearchArgs = {
   resultTypes?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
   subjects?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
   traits?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
@@ -1653,6 +1655,7 @@ export type GQLQuerySearchWithoutPaginationArgs = {
   resourceTypes?: InputMaybe<Scalars['String']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
   subjects?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 

@@ -1482,6 +1482,7 @@ export const typeDefs = gql`
       license: String
       resultTypes: String
       nodeTypes: String
+      tags: [String!]
     ): Search
     resourceTypes: [ResourceTypeDefinition!]
     groupSearch(
@@ -1498,6 +1499,7 @@ export const typeDefs = gql`
       aggregatePaths: [String!]
       filterInactive: Boolean
       license: String
+      tags: [String!]
     ): [GroupSearch!]
     searchWithoutPagination(
       query: String
@@ -1512,6 +1514,7 @@ export const typeDefs = gql`
       languageFilter: String
       relevance: String
       license: String
+      tags: [String!]
     ): SearchWithoutPagination
     audio(id: Int!): Audio
     podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch
