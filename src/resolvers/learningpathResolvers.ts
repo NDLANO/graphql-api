@@ -190,7 +190,10 @@ const getBasedOn = async (
   return node[0]?.url;
 };
 
-const transformDescription = async (step: GQLLearningpathStep, context: ContextWithLoaders): Promise<string | null> => {
+const transformDescription = async (
+  step: GQLLearningpathStep | GQLMyNdlaLearningpathStep,
+  context: ContextWithLoaders,
+): Promise<string | null> => {
   if (!step.description) return null;
   const res = await transformArticle(step.description, context, undefined, {});
   return res.content;
@@ -220,6 +223,7 @@ export const resolvers = {
     oembed: getOembed,
     resource: getResource,
     opengraph: getOpengraph,
+    description: transformDescription,
     license: getLicense,
   },
 };
