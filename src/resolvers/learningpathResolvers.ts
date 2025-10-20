@@ -199,6 +199,15 @@ const transformDescription = async (
   return res.content;
 };
 
+const transformIntroduction = async (
+  step: GQLLearningpathStep | GQLMyNdlaLearningpathStep,
+  context: ContextWithLoaders,
+): Promise<string | null> => {
+  if (!step.introduction) return null;
+  const res = await transformArticle(step.introduction, context, undefined, {});
+  return res.content;
+};
+
 const getLicense = async (learningstep: GQLLearningpathStep): Promise<GQLLicense | undefined> => {
   return learningstep.copyright?.license ?? undefined;
 };
@@ -207,10 +216,12 @@ export const resolvers = {
   Learningpath: {
     coverphoto: getCoverphoto,
     basedOn: getBasedOn,
+    introduction: transformIntroduction,
   },
   MyNdlaLearningpath: {
     coverphoto: getCoverphoto,
     basedOn: getBasedOn,
+    introduction: transformIntroduction,
   },
   LearningpathStep: {
     oembed: getOembed,
