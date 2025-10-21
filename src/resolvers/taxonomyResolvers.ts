@@ -170,5 +170,10 @@ export const resolvers = {
       }
       return;
     },
+    async links(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLNode[]> {
+      const links = await fetchChildren({ id: node.id, connectionType: "LINK" }, context);
+      const entities = links.map((node) => nodeToTaxonomyEntity(node, context));
+      return filterMissingArticles(entities, context);
+    },
   },
 };
