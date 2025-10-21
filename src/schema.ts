@@ -463,6 +463,7 @@ export const typeDefs = gql`
     rank: Int
     parentId: String
     children(recursive: Boolean, nodeType: String): [Node!]
+    links: [Node!]
     alternateNodes: [Node!]
     meta: Meta
     article: Article
