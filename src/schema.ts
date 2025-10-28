@@ -1257,6 +1257,7 @@ export const typeDefs = gql`
     metaImage: MetaImage
     title: String!
     description: String!
+    traits: [String!]
   }
 
   type LearningpathFolderResourceMeta implements FolderResourceMeta {

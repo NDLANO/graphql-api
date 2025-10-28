@@ -81,6 +81,7 @@ const fetchAndTransformResourceMeta = async (
               description: element.metaDescription ?? "",
               metaImage: element.metaImage,
               resourceTypes: findResourceTypes(node ?? null, context),
+              traits: element.traits,
             }
           : undefined;
       })
