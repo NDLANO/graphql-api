@@ -160,6 +160,7 @@ export function articleToMeta(article: IArticleV2DTO): GQLMeta {
     lastUpdated: article.updated,
     metaImage: article.metaImage,
     availability: article.availability,
+    traits: article.traits,
     language: article.content.language,
   };
 }

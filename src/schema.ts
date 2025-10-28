@@ -203,6 +203,7 @@ export const typeDefs = gql`
     lastUpdated: String
     availability: String
     language: String
+    traits: [String!]
   }
 
   type LearningpathStepEmbedUrl {
@@ -1256,6 +1257,7 @@ export const typeDefs = gql`
     metaImage: MetaImage
     title: String!
     description: String!
+    traits: [String!]
   }
 
   type LearningpathFolderResourceMeta implements FolderResourceMeta {

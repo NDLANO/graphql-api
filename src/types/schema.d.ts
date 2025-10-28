@@ -90,6 +90,7 @@ export type GQLArticleFolderResourceMeta = GQLFolderResourceMeta & {
   metaImage?: Maybe<GQLMetaImage>;
   resourceTypes: Array<GQLFolderResourceResourceType>;
   title: Scalars['String']['output'];
+  traits?: Maybe<Array<Scalars['String']['output']>>;
   type: Scalars['String']['output'];
 };
 
@@ -915,6 +916,7 @@ export type GQLMeta = {
   metaDescription?: Maybe<Scalars['String']['output']>;
   metaImage?: Maybe<GQLMetaImage>;
   title: Scalars['String']['output'];
+  traits?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 export type GQLMetaImage = {
@@ -2596,6 +2598,7 @@ export type GQLArticleFolderResourceMetaResolvers<ContextType = any, ParentType 
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   resourceTypes?: Resolver<Array<GQLResolversTypes['FolderResourceResourceType']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  traits?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3328,6 +3331,7 @@ export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversP
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  traits?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

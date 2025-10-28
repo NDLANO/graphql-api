@@ -81,6 +81,7 @@ const fetchAndTransformResourceMeta = async (
               description: element.metaDescription ?? "",
               metaImage: element.metaImage,
               resourceTypes: findResourceTypes(node ?? null, context),
+              traits: element.traits,
             }
           : undefined;
       })
@@ -139,7 +140,7 @@ export const fetchImageMeta = async (
       url: img.imageUrl,
       alt: img.alttext.alttext ?? "",
     },
-    resourceTypes: [{ id: "image", name: "image" }],
+    resourceTypes: [],
     title: img.title.title,
     type,
   }));
@@ -164,7 +165,7 @@ const fetchAudios = async (
         }
       : undefined,
     title: audio.title.title,
-    resourceTypes: [{ id: "audio", name: "audio" }],
+    resourceTypes: [],
     type,
   }));
 };
@@ -186,7 +187,7 @@ const fetchBrightcoves = async (
           alt: "",
         }
       : undefined,
-    resourceTypes: [{ id: "video", name: "video" }],
+    resourceTypes: [],
     title: video.name ?? "",
     type,
   }));
@@ -206,7 +207,7 @@ const fetchConceptsMeta = async (
     id: c.id.toString(),
     description: c.content.content,
     title: c.title.title,
-    resourceTypes: [{ id: "concept", name: "concept" }],
+    resourceTypes: [],
     type,
   }));
 };
