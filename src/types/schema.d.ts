@@ -915,6 +915,7 @@ export type GQLMeta = {
   metaDescription?: Maybe<Scalars['String']['output']>;
   metaImage?: Maybe<GQLMetaImage>;
   title: Scalars['String']['output'];
+  traits?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 export type GQLMetaImage = {
@@ -3328,6 +3329,7 @@ export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversP
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  traits?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

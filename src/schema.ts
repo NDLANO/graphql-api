@@ -203,6 +203,7 @@ export const typeDefs = gql`
     lastUpdated: String
     availability: String
     language: String
+    traits: [String!]
   }
 
   type LearningpathStepEmbedUrl {
