@@ -94,10 +94,22 @@ export const resolvers = {
   FolderResourceMeta: {
     // Resolves FolderResourceMeta interface
     __resolveType(folderResourceMeta: any) {
-      if (folderResourceMeta.type === "learningpath") {
-        return "LearningpathFolderResourceMeta";
+      switch (folderResourceMeta.type) {
+        case "learningpath":
+          return "LearningpathFolderResourceMeta";
+        case "image":
+          return "ImageFolderResourceMeta";
+        case "audio":
+          return "AudioFolderResourceMeta";
+        case "concept":
+          return "ConceptFolderResourceMeta";
+        case "video":
+          return "VideoFolderResourceMeta";
+        case "article":
+          return "ArticleFolderResourceMeta";
+        default:
+          return "ArticleFolderResourceMeta";
       }
-      return "ArticleFolderResourceMeta";
     },
   },
 };
