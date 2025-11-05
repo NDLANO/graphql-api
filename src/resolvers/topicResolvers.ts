@@ -6,7 +6,7 @@
  *
  */
 
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchNode, fetchNodeResources, fetchChildren } from "../api";
 import {
@@ -56,7 +56,7 @@ export const resolvers = {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       return article?.availability;
     },
-    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<IArticleV2DTO | undefined> {
+    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
       if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       }

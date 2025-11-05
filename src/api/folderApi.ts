@@ -7,11 +7,11 @@
  */
 
 import {
-  IMyNDLAUserDTO,
-  IFolderDTO,
-  IFolderDataDTO,
-  IResourceDTO,
-  IUserFolderDTO,
+  MyNDLAUserDTO,
+  FolderDTO,
+  FolderDataDTO,
+  ResourceDTO,
+  UserFolderDTO,
   ResourceType,
   openapi,
   FolderStatus,
@@ -43,7 +43,7 @@ const client = createAuthClient<openapi.paths>({ disableCache: true });
 export async function fetchFolders(
   { includeResources, includeSubfolders }: GQLQueryFoldersArgs,
   _context: Context,
-): Promise<IUserFolderDTO> {
+): Promise<UserFolderDTO> {
   return client
     .GET("/myndla-api/v1/folders", {
       params: {
@@ -59,7 +59,7 @@ export async function fetchFolders(
 export async function fetchFolder(
   { id, includeResources, includeSubfolders }: GQLQueryFolderArgs,
   _context: Context,
-): Promise<IFolderDataDTO> {
+): Promise<FolderDataDTO> {
   return client
     .GET("/myndla-api/v1/folders/{folder-id}", {
       params: {
@@ -75,7 +75,7 @@ export async function fetchFolder(
     .then(resolveJsonOATS);
 }
 
-export async function fetchSharedFolder({ id }: GQLQueryFolderArgs, _context: Context): Promise<IFolderDataDTO> {
+export async function fetchSharedFolder({ id }: GQLQueryFolderArgs, _context: Context): Promise<FolderDataDTO> {
   return client
     .GET("/myndla-api/v1/folders/shared/{folder-id}", {
       params: { path: { "folder-id": id } },
@@ -86,14 +86,14 @@ export async function fetchSharedFolder({ id }: GQLQueryFolderArgs, _context: Co
 export async function fetchAllFolderResources(
   { size }: GQLQueryAllFolderResourcesArgs,
   _context: Context,
-): Promise<IResourceDTO[]> {
+): Promise<ResourceDTO[]> {
   return client.GET("/myndla-api/v1/folders/resources", { params: { query: { size } } }).then(resolveJsonOATS);
 }
 
 export async function postFolder(
   { name, parentId, status, description }: GQLMutationAddFolderArgs,
   _context: Context,
-): Promise<IFolderDTO> {
+): Promise<FolderDTO> {
   const body = {
     name,
     parentId,
@@ -107,7 +107,7 @@ export async function postFolder(
 export async function patchFolder(
   { id, name, status, description }: GQLMutationUpdateFolderArgs,
   _context: Context,
-): Promise<IFolderDTO> {
+): Promise<FolderDTO> {
   return client
     .PATCH("/myndla-api/v1/folders/{folder-id}", {
       params: { path: { "folder-id": id } },
@@ -126,7 +126,7 @@ export async function deleteFolder({ id }: GQLMutationDeleteFolderArgs, _context
 export async function postFolderResource(
   { folderId, resourceType, path, tags, resourceId }: GQLMutationAddFolderResourceArgs,
   _context: Context,
-): Promise<IResourceDTO> {
+): Promise<ResourceDTO> {
   return client
     .POST("/myndla-api/v1/folders/{folder-id}/resources", {
       params: { path: { "folder-id": folderId } },
@@ -143,7 +143,7 @@ export async function postFolderResource(
 export async function patchFolderResource(
   { id, tags }: GQLMutationUpdateFolderResourceArgs,
   _context: Context,
-): Promise<IResourceDTO> {
+): Promise<ResourceDTO> {
   return client
     .PATCH("/myndla-api/v1/folders/resources/{resource-id}", {
       params: { path: { "resource-id": id } },
@@ -178,7 +178,7 @@ export async function deletePersonalData(_context: Context): Promise<boolean> {
   }
 }
 
-export async function getPersonalData(_context: Context): Promise<IMyNDLAUserDTO | undefined> {
+export async function getPersonalData(_context: Context): Promise<MyNDLAUserDTO | undefined> {
   try {
     return client.GET("/myndla-api/v1/users", {}).then(resolveJsonOATS);
   } catch (e) {
@@ -189,7 +189,7 @@ export async function getPersonalData(_context: Context): Promise<IMyNDLAUserDTO
 export async function patchPersonalData(
   userData: GQLMutationUpdatePersonalDataArgs,
   _context: Context,
-): Promise<IMyNDLAUserDTO> {
+): Promise<MyNDLAUserDTO> {
   return client
     .PATCH("/myndla-api/v1/users", {
       body: userData,

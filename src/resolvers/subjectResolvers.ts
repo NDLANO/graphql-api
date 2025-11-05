@@ -7,7 +7,7 @@
  */
 
 import partition from "lodash/partition";
-import { ISubjectPageDTO, IVisualElementDTO } from "@ndla/types-backend/frontpage-api";
+import { SubjectPageDTO, VisualElementDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
   GQLImageLicense,
@@ -87,7 +87,7 @@ export const resolvers = {
       });
       return filterMissingArticles(topics, context);
     },
-    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<ISubjectPageDTO | null> {
+    async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<SubjectPageDTO | null> {
       if (!subject.contentUri?.startsWith("urn:frontpage")) return null;
       return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
     },
@@ -101,21 +101,21 @@ export const resolvers = {
     },
   },
   SubjectPage: {
-    async connectedTo(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async connectedTo(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.connectedTo.map((id) => {
           return { id };
         }),
       );
     },
-    async buildsOn(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async buildsOn(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.buildsOn.map((id) => {
           return { id };
         }),
       );
     },
-    async leadsTo(subjectpage: ISubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
+    async leadsTo(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
         subjectpage.leadsTo.map((id) => {
           return { id };
@@ -125,7 +125,7 @@ export const resolvers = {
   },
   SubjectPageVisualElement: {
     async imageLicense(
-      visualElement: IVisualElementDTO,
+      visualElement: VisualElementDTO,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLImageLicense | undefined> {
@@ -138,7 +138,7 @@ export const resolvers = {
         return undefined;
       }
     },
-    async imageUrl(visualElement: IVisualElementDTO, _: any, context: ContextWithLoaders): Promise<string | null> {
+    async imageUrl(visualElement: VisualElementDTO, _: any, context: ContextWithLoaders): Promise<string | null> {
       if (visualElement.type === "image") {
         const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
         if (!imageId) return null;

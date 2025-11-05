@@ -8,9 +8,9 @@
 
 import {
   openapi,
-  IImageMetaInformationV2DTO,
-  IImageMetaInformationV3DTO,
-  ISearchResultV3DTO,
+  ImageMetaInformationV2DTO,
+  ImageMetaInformationV3DTO,
+  SearchResultV3DTO,
 } from "@ndla/types-backend/image-api";
 import { GQLImageLicense, GQLQueryImageSearchArgs } from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
@@ -18,7 +18,7 @@ import { getNumberId } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
 
-export async function fetchImage(imageId: string, context: Context): Promise<IImageMetaInformationV2DTO | null> {
+export async function fetchImage(imageId: string, context: Context): Promise<ImageMetaInformationV2DTO | null> {
   const response = await client.GET("/image-api/v2/images/{image_id}", {
     params: {
       path: {
@@ -37,7 +37,7 @@ export async function fetchImage(imageId: string, context: Context): Promise<IIm
   }
 }
 
-export async function fetchImageV3(imageId: number | string, context: Context): Promise<IImageMetaInformationV3DTO> {
+export async function fetchImageV3(imageId: number | string, context: Context): Promise<ImageMetaInformationV3DTO> {
   return client
     .GET("/image-api/v3/images/{image_id}", {
       params: {
@@ -50,7 +50,7 @@ export async function fetchImageV3(imageId: number | string, context: Context): 
     .then(resolveJsonOATS);
 }
 
-export async function searchImages(params: GQLQueryImageSearchArgs, _context: Context): Promise<ISearchResultV3DTO> {
+export async function searchImages(params: GQLQueryImageSearchArgs, _context: Context): Promise<SearchResultV3DTO> {
   return client
     .GET("/image-api/v3/images", {
       params: {
@@ -65,7 +65,7 @@ export async function searchImages(params: GQLQueryImageSearchArgs, _context: Co
     .then(resolveJsonOATS);
 }
 
-export function convertToSimpleImage(image: IImageMetaInformationV2DTO) {
+export function convertToSimpleImage(image: ImageMetaInformationV2DTO) {
   return {
     title: image.title.title,
     src: image.imageUrl,
@@ -75,7 +75,7 @@ export function convertToSimpleImage(image: IImageMetaInformationV2DTO) {
   };
 }
 
-export function convertToImageLicense(imageMeta: IImageMetaInformationV3DTO): GQLImageLicense {
+export function convertToImageLicense(imageMeta: ImageMetaInformationV3DTO): GQLImageLicense {
   return {
     id: imageMeta.id,
     title: imageMeta.title.title,

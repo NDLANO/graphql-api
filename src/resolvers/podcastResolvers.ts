@@ -7,10 +7,10 @@
  */
 
 import {
-  IAudioMetaInformationDTO,
-  IAudioSummarySearchResultDTO,
-  IPodcastMetaDTO,
-  ISeriesDTO,
+  AudioMetaInformationDTO,
+  AudioSummarySearchResultDTO,
+  PodcastMetaDTO,
+  SeriesDTO,
   SeriesSummarySearchResultDTO,
 } from "@ndla/types-backend/audio-api";
 import { fetchAudio, fetchPodcastSeries, fetchPodcastSeriesPage, fetchPodcastsPage } from "../api/audioApi";
@@ -27,21 +27,17 @@ import {
 } from "../types/schema";
 
 export const Query = {
-  async audio(
-    _: any,
-    { id }: GQLQueryAudioArgs,
-    context: ContextWithLoaders,
-  ): Promise<IAudioMetaInformationDTO | null> {
+  async audio(_: any, { id }: GQLQueryAudioArgs, context: ContextWithLoaders): Promise<AudioMetaInformationDTO | null> {
     return fetchAudio(context, id);
   },
   async podcastSearch(
     _: any,
     { pageSize, page, fallback }: GQLQueryPodcastSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<IAudioSummarySearchResultDTO> {
+  ): Promise<AudioSummarySearchResultDTO> {
     return fetchPodcastsPage(context, pageSize, page, fallback ?? false);
   },
-  async podcastSeries(_: any, { id }: GQLQueryPodcastSeriesArgs, context: ContextWithLoaders): Promise<ISeriesDTO> {
+  async podcastSeries(_: any, { id }: GQLQueryPodcastSeriesArgs, context: ContextWithLoaders): Promise<SeriesDTO> {
     return fetchPodcastSeries(context, id);
   },
   async podcastSeriesSearch(
@@ -55,7 +51,7 @@ export const Query = {
 
 export const resolvers = {
   PodcastSeriesWithEpisodes: {
-    async content(series: ISeriesDTO, _: any, context: ContextWithLoaders): Promise<GQLResourceEmbed | null> {
+    async content(series: SeriesDTO, _: any, context: ContextWithLoaders): Promise<GQLResourceEmbed | null> {
       if (!series.episodes?.length) {
         return null;
       }
@@ -66,7 +62,7 @@ export const resolvers = {
       return await fetchResourceEmbeds({ resources: embeds }, context);
     },
     async image(
-      podcastSeries: ISeriesDTO,
+      podcastSeries: SeriesDTO,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLImageMetaInformation | null> {
@@ -91,7 +87,7 @@ export const resolvers = {
   },
   PodcastMeta: {
     async image(
-      podcastMeta: IPodcastMetaDTO,
+      podcastMeta: PodcastMetaDTO,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLImageMetaInformation | null> {

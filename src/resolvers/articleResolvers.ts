@@ -7,8 +7,8 @@
  */
 
 import { load } from "cheerio";
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
+import { ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { fetchArticle, fetchOembed, fetchImageV3, fetchSubjectTopics, searchConcepts } from "../api";
 import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
 
@@ -26,7 +26,7 @@ import {
 } from "../types/schema";
 
 export const Query = {
-  async article(_: any, { id }: GQLQueryArticleArgs, context: ContextWithLoaders): Promise<IArticleV2DTO> {
+  async article(_: any, { id }: GQLQueryArticleArgs, context: ContextWithLoaders): Promise<ArticleV2DTO> {
     return fetchArticle(
       {
         articleId: id,
@@ -38,7 +38,7 @@ export const Query = {
 
 export const resolvers = {
   Article: {
-    async competenceGoals(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
+    async competenceGoals(article: ArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
       if (!(article.grepCodes ?? []).length) return [];
 
       const language =
@@ -58,7 +58,7 @@ export const resolvers = {
         };
       });
     },
-    async coreElements(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
+    async coreElements(article: ArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
       const language =
         article.supportedLanguages?.find((lang) => lang === context.language) ??
         article.supportedLanguages?.[0] ??
@@ -66,7 +66,7 @@ export const resolvers = {
       return coreElements(article.grepCodes ?? [], language, context);
     },
     async crossSubjectTopics(
-      article: IArticleV2DTO,
+      article: ArticleV2DTO,
       args: { subjectId: string },
       context: ContextWithLoaders,
     ): Promise<GQLCrossSubjectElement[]> {
@@ -90,21 +90,21 @@ export const resolvers = {
         };
       });
     },
-    async concepts(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<IConceptSummaryDTO[]> {
+    async concepts(article: ArticleV2DTO, _: any, context: ContextWithLoaders): Promise<ConceptSummaryDTO[]> {
       if (article?.conceptIds && article.conceptIds.length > 0) {
         const results = await searchConcepts({ ids: article.conceptIds }, context);
         return results.results;
       }
       return [];
     },
-    async oembed(article: IArticleV2DTO, _: any, context: ContextWithLoaders): Promise<string | undefined> {
+    async oembed(article: ArticleV2DTO, _: any, context: ContextWithLoaders): Promise<string | undefined> {
       const oembed = await fetchOembed(`${ndlaUrl}/article/${article.id}`, context);
       if (oembed?.html === undefined) return undefined;
       const parsed = load(oembed.html, null, false);
       return parsed("iframe").attr("src");
     },
     async metaImage(
-      article: IArticleV2DTO,
+      article: ArticleV2DTO,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLMetaImageWithCopyright | undefined> {
@@ -122,48 +122,48 @@ export const resolvers = {
         return undefined;
       }
     },
-    introduction(article: IArticleV2DTO): string {
+    introduction(article: ArticleV2DTO): string {
       return article.introduction?.introduction ?? "";
     },
-    htmlIntroduction(article: IArticleV2DTO): string {
+    htmlIntroduction(article: ArticleV2DTO): string {
       return article.introduction?.htmlIntroduction ?? "";
     },
-    metaDescription(article: IArticleV2DTO): string {
+    metaDescription(article: ArticleV2DTO): string {
       return article.metaDescription.metaDescription;
     },
-    title(article: IArticleV2DTO): string {
+    title(article: ArticleV2DTO): string {
       return article.title.title;
     },
-    htmlTitle(article: IArticleV2DTO): string {
+    htmlTitle(article: ArticleV2DTO): string {
       return article.title.htmlTitle;
     },
-    tags(article: IArticleV2DTO): string[] {
+    tags(article: ArticleV2DTO): string[] {
       return article.tags.tags;
     },
-    language(article: IArticleV2DTO): string {
+    language(article: ArticleV2DTO): string {
       return article.content.language;
     },
-    requiredLibraries(article: IArticleV2DTO): IArticleV2DTO["requiredLibraries"] {
+    requiredLibraries(article: ArticleV2DTO): ArticleV2DTO["requiredLibraries"] {
       return article.requiredLibraries.map((lib) =>
         lib.url.startsWith("http://") ? { ...lib, url: lib.url.replace("http://", "https://") } : lib,
       );
     },
     async transformedDisclaimer(
-      article: IArticleV2DTO,
+      article: ArticleV2DTO,
       args: GQLArticleTransformedContentArgs,
       context: ContextWithLoaders,
     ): Promise<GQLTransformedArticleContent> {
       return fetchTransformedDisclaimer(article, args, context);
     },
     async transformedContent(
-      article: IArticleV2DTO,
+      article: ArticleV2DTO,
       args: GQLArticleTransformedContentArgs,
       context: ContextWithLoaders,
     ): Promise<GQLTransformedArticleContent> {
       return fetchTransformedContent(article, args, context);
     },
     async relatedContent(
-      article: IArticleV2DTO,
+      article: ArticleV2DTO,
       args: { subjectId?: string },
       context: ContextWithLoaders,
     ): Promise<GQLRelatedContent[]> {

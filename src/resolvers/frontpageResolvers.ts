@@ -6,13 +6,13 @@
  *
  */
 
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import {
-  IFrontPageDTO,
-  ISubjectPageDTO,
-  IFilmFrontPageDTO,
-  IMovieThemeDTO,
-  IMenuDTO,
+  FrontPageDTO,
+  SubjectPageDTO,
+  FilmFrontPageDTO,
+  MovieThemeDTO,
+  MenuDTO,
 } from "@ndla/types-backend/frontpage-api";
 import { fetchFilmFrontpage } from "../api";
 import { GQLMetaImage, GQLResourceType } from "../types/schema";
@@ -23,35 +23,35 @@ interface Id {
 }
 
 export const Query = {
-  async frontpage(_: any, __: any, context: ContextWithLoaders): Promise<IFrontPageDTO> {
+  async frontpage(_: any, __: any, context: ContextWithLoaders): Promise<FrontPageDTO> {
     return context.loaders.frontpageLoader.load("frontpage");
   },
 
-  async subjectpage(_: any, { id }: Id, context: ContextWithLoaders): Promise<ISubjectPageDTO | null> {
+  async subjectpage(_: any, { id }: Id, context: ContextWithLoaders): Promise<SubjectPageDTO | null> {
     return context.loaders.subjectpageLoader.load(`${id}`);
   },
 
-  async filmfrontpage(_: any, __: any, context: ContextWithLoaders): Promise<IFilmFrontPageDTO> {
+  async filmfrontpage(_: any, __: any, context: ContextWithLoaders): Promise<FilmFrontPageDTO> {
     return fetchFilmFrontpage(context);
   },
 };
 
 export const resolvers = {
   FrontpageMenu: {
-    async article(menu: IFrontPageDTO, _: any, context: ContextWithLoaders): Promise<IArticleV2DTO | undefined> {
+    async article(menu: FrontPageDTO, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
       return context.loaders.articlesLoader.load(`${menu.articleId}`);
     },
-    async hideLevel(menu: IFrontPageDTO | IMenuDTO): Promise<boolean> {
+    async hideLevel(menu: FrontPageDTO | MenuDTO): Promise<boolean> {
       return "hideLevel" in menu ? menu.hideLevel ?? false : false;
     },
   },
 
   MovieTheme: {
-    async movies(theme: IMovieThemeDTO, _: any, context: ContextWithLoaders): Promise<string[]> {
+    async movies(theme: MovieThemeDTO, _: any, context: ContextWithLoaders): Promise<string[]> {
       const articles = await context.loaders.articlesLoader.loadMany(
         theme.movies.map((movie) => getArticleIdFromUrn(movie)),
       );
-      const nonNullArticles = articles.filter((article): article is IArticleV2DTO => !!article);
+      const nonNullArticles = articles.filter((article): article is ArticleV2DTO => !!article);
       return theme.movies.filter((movie) =>
         nonNullArticles.find((article) => `${article.id}` === getArticleIdFromUrn(movie)),
       );
@@ -95,11 +95,7 @@ export const resolvers = {
   },
 
   FilmFrontpage: {
-    async article(
-      frontpage: IFilmFrontPageDTO,
-      _: any,
-      context: ContextWithLoaders,
-    ): Promise<IArticleV2DTO | undefined> {
+    async article(frontpage: FilmFrontPageDTO, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
       if (frontpage.article) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(frontpage.article));
       }

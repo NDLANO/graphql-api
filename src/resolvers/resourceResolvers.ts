@@ -6,7 +6,7 @@
  *
  */
 
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { fetchLearningpath, fetchNode, fetchResourceTypes } from "../api";
 import {
   GQLLearningpath,
@@ -98,7 +98,7 @@ export const resolvers = {
         status: 404,
       });
     },
-    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<IArticleV2DTO | undefined> {
+    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
       if (resource.contentUri?.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));
       }

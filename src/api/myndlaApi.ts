@@ -6,12 +6,12 @@
  *
  */
 
-import { IConfigMetaRestrictedDTO, openapi, ConfigKey } from "@ndla/types-backend/myndla-api";
+import { ConfigMetaRestrictedDTO, openapi, ConfigKey } from "@ndla/types-backend/myndla-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
 const client = createAuthClient<openapi.paths>();
 
-export const fetchConfig = async (configKey: string, _context: Context): Promise<IConfigMetaRestrictedDTO> => {
+export const fetchConfig = async (configKey: string, _context: Context): Promise<ConfigMetaRestrictedDTO> => {
   return client
     .GET("/myndla-api/v1/config/{config-key}", {
       params: {
@@ -23,5 +23,5 @@ export const fetchConfig = async (configKey: string, _context: Context): Promise
     .then(resolveJsonOATS);
 };
 
-export const fetchExamLockStatus = async (context: Context): Promise<IConfigMetaRestrictedDTO> =>
+export const fetchExamLockStatus = async (context: Context): Promise<ConfigMetaRestrictedDTO> =>
   fetchConfig("MY_NDLA_WRITE_RESTRICTED", context);
