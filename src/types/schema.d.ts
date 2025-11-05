@@ -1252,6 +1252,7 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   id: Scalars['String']['output'];
   language?: Maybe<Scalars['String']['output']>;
   learningpath?: Maybe<GQLLearningpath>;
+  links?: Maybe<Array<GQLNode>>;
   meta?: Maybe<GQLMeta>;
   metadata: GQLTaxonomyMetadata;
   name: Scalars['String']['output'];
@@ -3510,6 +3511,7 @@ export type GQLNodeResolvers<ContextType = any, ParentType extends GQLResolversP
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType>;
+  links?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType>;
   meta?: Resolver<Maybe<GQLResolversTypes['Meta']>, ParentType, ContextType>;
   metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
