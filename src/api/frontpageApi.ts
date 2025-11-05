@@ -6,7 +6,7 @@
  *
  */
 
-import { openapi, IFrontPageDTO, IFilmFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { openapi, FrontPageDTO, FilmFrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
 const client = createAuthClient<openapi.paths>();
@@ -21,11 +21,11 @@ export interface IMovieMeta {
   };
 }
 
-export async function fetchFrontpage(_context: Context): Promise<IFrontPageDTO> {
+export async function fetchFrontpage(_context: Context): Promise<FrontPageDTO> {
   return client.GET("/frontpage-api/v1/frontpage").then(resolveJsonOATS);
 }
 
-export async function fetchSubjectPage(subjectPageId: number, context: Context): Promise<ISubjectPageDTO> {
+export async function fetchSubjectPage(subjectPageId: number, context: Context): Promise<SubjectPageDTO> {
   return client
     .GET("/frontpage-api/v1/subjectpage/{subjectpage-id}", {
       params: {
@@ -41,6 +41,6 @@ export async function fetchSubjectPage(subjectPageId: number, context: Context):
     .then(resolveJsonOATS);
 }
 
-export async function fetchFilmFrontpage(_context: Context): Promise<IFilmFrontPageDTO> {
+export async function fetchFilmFrontpage(_context: Context): Promise<FilmFrontPageDTO> {
   return client.GET("/frontpage-api/v1/filmfrontpage").then(resolveJsonOATS);
 }

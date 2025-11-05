@@ -7,9 +7,9 @@
  */
 
 import DataLoader from "dataloader";
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IFilmFrontPageDTO, IFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
-import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
+import { FilmFrontPageDTO, FrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import {
   fetchArticles,
@@ -25,7 +25,7 @@ import {
 import { GQLResourceTypeDefinition } from "./types/schema";
 import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 
-export function articlesLoader(context: Context): DataLoader<string, IArticleV2DTO | undefined> {
+export function articlesLoader(context: Context): DataLoader<string, ArticleV2DTO | undefined> {
   return new DataLoader(
     async (articleIds) => {
       return fetchArticles(articleIds, context);
@@ -34,27 +34,27 @@ export function articlesLoader(context: Context): DataLoader<string, IArticleV2D
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<number, ILearningPathV2DTO | undefined> {
+export function learningpathsLoader(context: Context): DataLoader<number, LearningPathV2DTO | undefined> {
   return new DataLoader(async (learningpathIds) => {
     return fetchLearningpaths(learningpathIds, context);
   });
 }
 
-export function frontpageLoader(context: Context): DataLoader<string, IFrontPageDTO> {
+export function frontpageLoader(context: Context): DataLoader<string, FrontPageDTO> {
   return new DataLoader(async () => {
     const frontpage = await fetchFrontpage(context);
     return [frontpage];
   });
 }
 
-export function filmFrontpageLoader(context: Context): DataLoader<string, IFilmFrontPageDTO> {
+export function filmFrontpageLoader(context: Context): DataLoader<string, FilmFrontPageDTO> {
   return new DataLoader(async () => {
     const filmFrontpage = await fetchFilmFrontpage(context);
     return [filmFrontpage];
   });
 }
 
-export function subjectpageLoader(context: Context): DataLoader<string, ISubjectPageDTO | null> {
+export function subjectpageLoader(context: Context): DataLoader<string, SubjectPageDTO | null> {
   return new DataLoader(async (subjectPageIds) => {
     return Promise.all(
       subjectPageIds.map((subjectPageId) => {

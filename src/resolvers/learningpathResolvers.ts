@@ -7,7 +7,7 @@
  */
 
 import { OEmbedDTO } from "@ndla/types-backend/oembed-proxy";
-import { ILearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
+import { LearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
 import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import { fetchOpengraph } from "../api/externalApi";
 import {
@@ -106,7 +106,7 @@ const getOembed = async (
 };
 
 const getResource = async (
-  learningpathStep: ILearningStepV2DTO,
+  learningpathStep: LearningStepV2DTO,
   { rootId, parentId }: GQLLearningpathStepResourceArgs,
   context: ContextWithLoaders,
 ): Promise<GQLResource | null> => {

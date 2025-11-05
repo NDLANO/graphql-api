@@ -7,9 +7,9 @@
  */
 
 import {
-  IAudioMetaInformationDTO,
-  IAudioSummarySearchResultDTO,
-  ISeriesDTO,
+  AudioMetaInformationDTO,
+  AudioSummarySearchResultDTO,
+  SeriesDTO,
   openapi,
   SeriesSummarySearchResultDTO,
 } from "@ndla/types-backend/audio-api";
@@ -18,7 +18,7 @@ import { getNumberId } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
 
-export async function fetchAudio(context: Context, audioId: number | string): Promise<IAudioMetaInformationDTO | null> {
+export async function fetchAudio(context: Context, audioId: number | string): Promise<AudioMetaInformationDTO | null> {
   const response = await client.GET("/audio-api/v1/audio/{audio-id}", {
     params: {
       path: {
@@ -36,7 +36,7 @@ export async function fetchAudio(context: Context, audioId: number | string): Pr
   }
 }
 
-export async function fetchAudioV2(context: Context, audioId: number | string): Promise<IAudioMetaInformationDTO> {
+export async function fetchAudioV2(context: Context, audioId: number | string): Promise<AudioMetaInformationDTO> {
   return client
     .GET("/audio-api/v1/audio/{audio-id}", {
       params: {
@@ -56,7 +56,7 @@ export async function fetchPodcastsPage(
   pageSize: number,
   page: number,
   fallback: boolean,
-): Promise<IAudioSummarySearchResultDTO> {
+): Promise<AudioSummarySearchResultDTO> {
   return client
     .GET("/audio-api/v1/audio", {
       params: {
@@ -72,7 +72,7 @@ export async function fetchPodcastsPage(
     .then(resolveJsonOATS);
 }
 
-export async function fetchPodcastSeries(context: Context, podcastId: number): Promise<ISeriesDTO> {
+export async function fetchPodcastSeries(context: Context, podcastId: number): Promise<SeriesDTO> {
   return client
     .GET("/audio-api/v1/series/{series-id}", {
       params: {

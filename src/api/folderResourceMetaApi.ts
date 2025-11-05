@@ -7,10 +7,10 @@
  */
 
 import groupBy from "lodash/groupBy";
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IAudioMetaInformationDTO } from "@ndla/types-backend/audio-api";
-import { IImageMetaInformationV2DTO } from "@ndla/types-backend/image-api";
-import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
+import { AudioMetaInformationDTO } from "@ndla/types-backend/audio-api";
+import { ImageMetaInformationV2DTO } from "@ndla/types-backend/image-api";
+import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { ResourceType } from "@ndla/types-backend/myndla-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchAudio } from "./audioApi";
@@ -48,11 +48,11 @@ const fetchResourceMeta = async (
     const numberIds = ids.map((id) => parseInt(id)).filter((id) => !!id);
     const learningpaths = await context.loaders.learningpathsLoader.loadMany(numberIds);
     return learningpaths
-      .filter((learningpath): learningpath is ILearningPathV2DTO => !!learningpath)
+      .filter((learningpath): learningpath is LearningPathV2DTO => !!learningpath)
       .map(learningpathToMeta);
   } else {
     const articles = await context.loaders.articlesLoader.loadMany(ids);
-    return articles.filter((article): article is IArticleV2DTO => !!article).map(articleToMeta);
+    return articles.filter((article): article is ArticleV2DTO => !!article).map(articleToMeta);
   }
 };
 
@@ -131,7 +131,7 @@ export const fetchImageMeta = async (
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   const images = await Promise.all(resources.map(async (r) => await fetchImage(r.id, context)));
-  const imagesFiltered = images.filter((i): i is IImageMetaInformationV2DTO => !!i);
+  const imagesFiltered = images.filter((i): i is ImageMetaInformationV2DTO => !!i);
 
   return imagesFiltered.map((img) => ({
     description: img.caption.caption ?? "",
@@ -153,7 +153,7 @@ const fetchAudios = async (
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
   const audios = await Promise.all(resources.map((r) => fetchAudio(context, r.id)));
-  const audiosFiltered = audios.filter((a): a is IAudioMetaInformationDTO => !!a);
+  const audiosFiltered = audios.filter((a): a is AudioMetaInformationDTO => !!a);
 
   return audiosFiltered.map((audio) => ({
     description: audio.podcastMeta?.introduction ?? "",

@@ -8,8 +8,8 @@
 
 import {
   openapi,
-  ILearningPathV2DTO,
-  ILearningStepV2DTO,
+  LearningPathV2DTO,
+  LearningStepV2DTO,
   AuthorDTO,
   CopyrightDTO,
 } from "@ndla/types-backend/learningpath-api";
@@ -33,7 +33,7 @@ const cachelessClient = createAuthClient<openapi.paths>({ disableCache: true });
 export async function fetchLearningpaths(
   learningpathIds: number[],
   context: Context,
-): Promise<Array<ILearningPathV2DTO | undefined>> {
+): Promise<Array<LearningPathV2DTO | undefined>> {
   const json = await client
     .GET("/learningpath-api/v2/learningpaths/ids", {
       params: {
@@ -55,11 +55,11 @@ export async function fetchLearningpaths(
   });
 }
 
-export async function fetchMyLearningpaths(_context: Context): Promise<Array<ILearningPathV2DTO>> {
+export async function fetchMyLearningpaths(_context: Context): Promise<Array<LearningPathV2DTO>> {
   return cachelessClient.GET("/learningpath-api/v2/learningpaths/mine").then(resolveJsonOATS);
 }
 
-export async function fetchMyLearningpath(id: string, context: Context): Promise<ILearningPathV2DTO> {
+export async function fetchMyLearningpath(id: string, context: Context): Promise<LearningPathV2DTO> {
   return cachelessClient
     .GET("/learningpath-api/v2/learningpaths/{learningpath_id}", {
       params: {
@@ -75,7 +75,7 @@ export async function fetchMyLearningpath(id: string, context: Context): Promise
     .then(resolveJsonOATS);
 }
 
-export async function fetchLearningpath(id: string, context: Context): Promise<ILearningPathV2DTO> {
+export async function fetchLearningpath(id: string, context: Context): Promise<LearningPathV2DTO> {
   return client
     .GET("/learningpath-api/v2/learningpaths/{learningpath_id}", {
       params: {
@@ -94,7 +94,7 @@ export async function fetchLearningpath(id: string, context: Context): Promise<I
 export async function updateLearningpathStatus(
   { id, status }: GQLMutationUpdateLearningpathStatusArgs,
   _context: Context,
-): Promise<ILearningPathV2DTO> {
+): Promise<LearningPathV2DTO> {
   return client
     .PUT("/learningpath-api/v2/learningpaths/{learningpath_id}/status", {
       params: { path: { learningpath_id: id } },
@@ -113,7 +113,7 @@ export async function deleteLearningpath(id: number, _context: Context): Promise
 export async function createLearningpath(
   { params }: GQLMutationNewLearningpathArgs,
   _context: Context,
-): Promise<ILearningPathV2DTO> {
+): Promise<LearningPathV2DTO> {
   return client
     .POST("/learningpath-api/v2/learningpaths", {
       body: {
@@ -130,7 +130,7 @@ export async function createLearningpath(
 export async function updateLearningpath(
   { learningpathId, params }: GQLMutationUpdateLearningpathArgs,
   _context: Context,
-): Promise<ILearningPathV2DTO> {
+): Promise<LearningPathV2DTO> {
   const copyright = params.copyright
     ? {
         ...params.copyright,
@@ -151,7 +151,7 @@ export async function updateLearningpath(
 export async function createLearningstep(
   { learningpathId, params }: GQLMutationNewLearningpathStepArgs,
   _context: Context,
-): Promise<ILearningStepV2DTO> {
+): Promise<LearningStepV2DTO> {
   return client
     .POST("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps", {
       params: { path: { learningpath_id: learningpathId } },
@@ -166,7 +166,7 @@ export async function createLearningstep(
 export async function updateLearningstep(
   { learningpathId, learningstepId, params }: GQLMutationUpdateLearningpathStepArgs,
   _context: Context,
-): Promise<ILearningStepV2DTO> {
+): Promise<LearningStepV2DTO> {
   return client
     .PATCH("/learningpath-api/v2/learningpaths/{learningpath_id}/learningsteps/{learningstep_id}", {
       params: {
@@ -204,7 +204,7 @@ export async function deleteLearningstep(
 export async function copyLearningpath(
   { learningpathId, params }: GQLMutationCopyLearningpathArgs,
   _context: Context,
-): Promise<ILearningPathV2DTO> {
+): Promise<LearningPathV2DTO> {
   const copyright = params.copyright
     ? { ...params.copyright, contributors: params.copyright.contributors as AuthorDTO[] }
     : undefined;

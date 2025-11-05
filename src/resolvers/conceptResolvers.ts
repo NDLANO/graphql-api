@@ -6,7 +6,7 @@
  *
  */
 
-import { IConceptSummaryDTO } from "@ndla/types-backend/concept-api";
+import { ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { GQLVisualElement } from "../types/schema";
 import { parseVisualElement } from "../utils/visualelementHelpers";
 
@@ -15,7 +15,7 @@ export const Query = {};
 export const resolvers = {
   Concept: {
     async visualElement(
-      concept: IConceptSummaryDTO,
+      concept: ConceptSummaryDTO,
       _: any,
       context: ContextWithLoaders,
     ): Promise<GQLVisualElement | null> {
@@ -25,16 +25,16 @@ export const resolvers = {
       }
       return null;
     },
-    title(concept: IConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
+    title(concept: ConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
       return concept.title.title;
     },
-    htmlTitle(concept: IConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
+    htmlTitle(concept: ConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
       return concept.title.htmlTitle;
     },
-    content(concept: IConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
+    content(concept: ConceptSummaryDTO, _: any, __: ContextWithLoaders): string {
       return concept.content?.content ?? "";
     },
-    tags: (concept: IConceptSummaryDTO, _: any, __: ContextWithLoaders): string[] => {
+    tags: (concept: ConceptSummaryDTO, _: any, __: ContextWithLoaders): string[] => {
       return concept.tags?.tags || [];
     },
   },

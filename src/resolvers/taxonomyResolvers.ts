@@ -8,8 +8,8 @@
 
 import partition from "lodash/partition";
 import sortBy from "lodash/sortBy";
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
+import { SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { GraphQLError } from "graphql";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchChildren, fetchLearningpath, fetchNode } from "../api";
@@ -108,7 +108,7 @@ export const Query = {
 
 export const resolvers = {
   Node: {
-    async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<IArticleV2DTO | undefined> {
+    async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
       if (node.contentUri?.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
       }
@@ -144,7 +144,7 @@ export const resolvers = {
       const entities = children.map((node) => nodeToTaxonomyEntity(node, context));
       return filterMissingArticles(entities, context);
     },
-    async subjectpage(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<ISubjectPageDTO | null> {
+    async subjectpage(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<SubjectPageDTO | null> {
       if (!node.contentUri?.startsWith("urn:frontpage")) return null;
       return context.loaders.subjectpageLoader.load(node.contentUri.replace("urn:frontpage:", ""));
     },

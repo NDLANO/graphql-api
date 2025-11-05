@@ -9,9 +9,9 @@
 import DataLoader from "dataloader";
 import { Request, Response } from "express";
 import { RequestInit, RequestCache } from "node-fetch";
-import { IArticleV2DTO } from "@ndla/types-backend/article-api";
-import { IFrontPageDTO, ISubjectPageDTO } from "@ndla/types-backend/frontpage-api";
-import { ILearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
+import { FrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import { NodeQueryParams } from "../api/taxonomyApi";
 
@@ -27,14 +27,14 @@ declare global {
   }
 
   interface Loaders {
-    articlesLoader: DataLoader<string, IArticleV2DTO | undefined>;
-    learningpathsLoader: DataLoader<number, ILearningPathV2DTO | undefined>;
+    articlesLoader: DataLoader<string, ArticleV2DTO | undefined>;
+    learningpathsLoader: DataLoader<number, LearningPathV2DTO | undefined>;
     subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
     nodeLoader: DataLoader<NodeLoaderParams, Node>;
     nodesLoader: DataLoader<NodeQueryParams, Node[]>;
     resourceTypesLoader: DataLoader<any, any>;
-    frontpageLoader: DataLoader<string, IFrontPageDTO>;
-    subjectpageLoader: DataLoader<string, ISubjectPageDTO | null>;
+    frontpageLoader: DataLoader<string, FrontPageDTO>;
+    subjectpageLoader: DataLoader<string, SubjectPageDTO | null>;
     searchNodesLoader: DataLoader<string, Node[]>;
   }
 

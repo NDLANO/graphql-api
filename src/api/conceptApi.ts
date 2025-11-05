@@ -6,7 +6,7 @@
  *
  */
 
-import { IConceptSearchResultDTO, IConceptDTO, openapi } from "@ndla/types-backend/concept-api";
+import { ConceptSearchResultDTO, ConceptDTO, openapi } from "@ndla/types-backend/concept-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getNumberId } from "../utils/apiHelpers";
 
@@ -17,7 +17,7 @@ export async function searchConcepts(
     ids?: number[];
   },
   _context: Context,
-): Promise<IConceptSearchResultDTO> {
+): Promise<ConceptSearchResultDTO> {
   return client
     .GET("/concept-api/v1/concepts", {
       params: {
@@ -30,7 +30,7 @@ export async function searchConcepts(
     .then(resolveJsonOATS);
 }
 
-export async function fetchConcept(id: string | number, context: Context): Promise<IConceptDTO | undefined> {
+export async function fetchConcept(id: string | number, context: Context): Promise<ConceptDTO | undefined> {
   const response = await client.GET("/concept-api/v1/concepts/{concept_id}", {
     params: {
       path: {
@@ -43,14 +43,14 @@ export async function fetchConcept(id: string | number, context: Context): Promi
     },
   });
   try {
-    const concept: IConceptDTO = await resolveJsonOATS(response);
+    const concept: ConceptDTO = await resolveJsonOATS(response);
     return concept;
   } catch (e) {
     return undefined;
   }
 }
 
-export const fetchEmbedConcept = async (id: string, context: Context, draftConcept: boolean): Promise<IConceptDTO> => {
+export const fetchEmbedConcept = async (id: string, context: Context, draftConcept: boolean): Promise<ConceptDTO> => {
   const options = {
     params: {
       path: { concept_id: getNumberId(id) },

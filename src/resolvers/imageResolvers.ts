@@ -6,11 +6,7 @@
  *
  */
 
-import {
-  IImageMetaInformationV2DTO,
-  IImageMetaInformationV3DTO,
-  ISearchResultV3DTO,
-} from "@ndla/types-backend/image-api";
+import { ImageMetaInformationV2DTO, ImageMetaInformationV3DTO, SearchResultV3DTO } from "@ndla/types-backend/image-api";
 import { fetchImage, fetchImageV3, searchImages } from "../api/imageApi";
 import { GQLQueryImageArgs, GQLQueryImageSearchArgs } from "../types/schema";
 
@@ -19,17 +15,17 @@ export const Query = {
     _: any,
     { id }: GQLQueryImageArgs,
     context: ContextWithLoaders,
-  ): Promise<IImageMetaInformationV2DTO | null> {
+  ): Promise<ImageMetaInformationV2DTO | null> {
     return fetchImage(id, context);
   },
   async imageV3(
     _: any,
     { id }: GQLQueryImageArgs,
     context: ContextWithLoaders,
-  ): Promise<IImageMetaInformationV3DTO | null> {
+  ): Promise<ImageMetaInformationV3DTO | null> {
     return fetchImageV3(id, context);
   },
-  async imageSearch(_: any, args: GQLQueryImageSearchArgs, context: ContextWithLoaders): Promise<ISearchResultV3DTO> {
+  async imageSearch(_: any, args: GQLQueryImageSearchArgs, context: ContextWithLoaders): Promise<SearchResultV3DTO> {
     return searchImages(args, context);
   },
 };

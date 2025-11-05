@@ -8,10 +8,10 @@
 
 import {
   openapi,
-  IGrepSearchInputDTO,
-  IGrepSearchResultsDTO,
-  IMultiSearchSummaryDTO,
-  INodeHitDTO,
+  GrepSearchInputDTO,
+  GrepSearchResultsDTO,
+  MultiSearchSummaryDTO,
+  NodeHitDTO,
   MultiSearchResultDTO,
 } from "@ndla/types-backend/search-api";
 import {
@@ -113,12 +113,12 @@ export async function searchWithoutPagination(
   const subjects = searchQuery.subjects?.split(",") || [];
   return {
     results: allResultsJson.flatMap((json) =>
-      json.results.map((result: IMultiSearchSummaryDTO | INodeHitDTO) => transformResult(result, subjects)),
+      json.results.map((result: MultiSearchSummaryDTO | NodeHitDTO) => transformResult(result, subjects)),
     ),
   };
 }
 
-const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects: string[]): GQLSearchResultUnion => {
+const transformResult = (result: MultiSearchSummaryDTO | NodeHitDTO, subjects: string[]): GQLSearchResultUnion => {
   if (result.typename === "NodeHitDTO") {
     const ret: GQLNodeSearchResult = {
       __typename: "NodeSearchResult",
@@ -148,7 +148,7 @@ const transformResult = (result: IMultiSearchSummaryDTO | INodeHitDTO, subjects:
   };
 };
 
-export const grepSearch = async (input: IGrepSearchInputDTO, _context: Context): Promise<IGrepSearchResultsDTO> =>
+export const grepSearch = async (input: GrepSearchInputDTO, _context: Context): Promise<GrepSearchResultsDTO> =>
   client.POST("/search-api/v1/search/grep", { body: input }).then(resolveJsonOATS);
 
 export const competenceGoals = async (

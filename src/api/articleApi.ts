@@ -6,7 +6,7 @@
  *
  */
 
-import { IArticleV2DTO, openapi } from "@ndla/types-backend/article-api";
+import { ArticleV2DTO, openapi } from "@ndla/types-backend/article-api";
 import { transformArticle } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
 import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
@@ -20,7 +20,7 @@ interface ArticleParams {
 const client = createAuthClient<openapi.paths>();
 
 export const fetchTransformedContent = async (
-  article: IArticleV2DTO,
+  article: ArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
   context: ContextWithLoaders,
 ): Promise<GQLTransformedArticleContent> => {
@@ -59,7 +59,7 @@ export const fetchTransformedContent = async (
 };
 
 export const fetchTransformedDisclaimer = async (
-  article: IArticleV2DTO,
+  article: ArticleV2DTO,
   _params: GQLArticleTransformedContentArgs,
   context: ContextWithLoaders,
 ): Promise<GQLTransformedArticleContent> => {
@@ -93,7 +93,7 @@ export const fetchTransformedDisclaimer = async (
 };
 
 export async function fetchRelatedContent(
-  article: IArticleV2DTO,
+  article: ArticleV2DTO,
   params: { subjectId?: string },
   context: ContextWithLoaders,
 ): Promise<GQLRelatedContent[]> {
@@ -136,7 +136,7 @@ export async function fetchRelatedContent(
   return relatedContent as GQLRelatedContent[];
 }
 
-export async function fetchArticle(params: ArticleParams, context: Context): Promise<IArticleV2DTO> {
+export async function fetchArticle(params: ArticleParams, context: Context): Promise<ArticleV2DTO> {
   const article = await fetchSimpleArticle(params.articleId, context);
   return article;
 }
@@ -146,7 +146,7 @@ export async function fetchArticlesPage(
   context: Context,
   pageSize: number,
   page: number,
-): Promise<IArticleV2DTO[]> {
+): Promise<ArticleV2DTO[]> {
   return client
     .GET("/article-api/v2/articles/ids", {
       params: {
@@ -163,7 +163,7 @@ export async function fetchArticlesPage(
     .then(resolveJsonOATS);
 }
 
-export async function fetchArticles(articleIds: string[], context: Context): Promise<(IArticleV2DTO | undefined)[]> {
+export async function fetchArticles(articleIds: string[], context: Context): Promise<(ArticleV2DTO | undefined)[]> {
   const pageSize = 100;
   const ids = articleIds.map((id) => parseInt(id)).filter((id) => isNaN(id) === false);
   const numberOfPages = Math.ceil(ids.length / pageSize);
@@ -182,7 +182,7 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
   return articleIds.map((id) => articles.find((article) => article.id.toString() === id.toString()));
 }
 
-export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<IArticleV2DTO> {
+export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<ArticleV2DTO> {
   return await client
     .GET("/article-api/v2/articles/{article_id}", {
       params: {
