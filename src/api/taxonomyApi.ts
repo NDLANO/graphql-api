@@ -76,15 +76,15 @@ export async function fetchChildren(
     id: string;
     nodeType?: string;
     recursive?: boolean;
-    connectionType?: string;
+    connectionTypes?: string;
   },
   context: Context,
 ): Promise<NodeChild[]> {
-  const { id, nodeType, recursive, connectionType } = params;
+  const { id, nodeType, recursive, connectionTypes } = params;
   const query = qs.stringify({
     nodeType,
     recursive,
-    connectionType,
+    connectionTypes,
     isVisible: true,
     includeContexts: true,
     filterProgrammes: true,
