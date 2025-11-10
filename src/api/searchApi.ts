@@ -129,7 +129,7 @@ const transformResult = (result: MultiSearchSummaryDTO | NodeHitDTO, subjects: s
       id: result.id,
       url: result.url ?? "",
       context: result.context,
-      contexts: [],
+      contexts: result.contexts,
     };
     return ret;
   }
