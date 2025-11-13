@@ -75,22 +75,13 @@ export const resolvers = {
       return article?.metaDescription.metaDescription || "";
     },
     async url(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const nodes = await context.loaders.nodesLoader.load({
-        contentURI: id,
-        rootId: "urn:subject:20",
-        includeContexts: true,
-        filterProgrammes: true,
-      });
-      return nodes[0]?.url || "";
+      const nodes = await context.loaders.searchNodesLoader.load(id);
+      const correctContext = nodes[0]?.contexts.find((c) => c.rootId === "urn:subject:20");
+      return correctContext?.url ?? "";
     },
     async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
-      const nodes = await context.loaders.nodesLoader.load({
-        contentURI: id,
-        rootId: "urn:subject:20",
-        includeContexts: true,
-        filterProgrammes: true,
-      });
-      return nodes[0]?.resourceTypes ?? [];
+      const nodes = await context.loaders.searchNodesLoader.load(id);
+      return nodes[0]?.resourceTypes || [];
     },
   },
 
