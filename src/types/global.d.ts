@@ -13,6 +13,7 @@ import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { FrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
+import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { NodeQueryParams } from "../api/taxonomyApi";
 
 declare global {
@@ -36,6 +37,7 @@ declare global {
     frontpageLoader: DataLoader<string, FrontPageDTO>;
     subjectpageLoader: DataLoader<string, SubjectPageDTO | null>;
     searchNodesLoader: DataLoader<string, Node[]>;
+    imagesLoader: DataLoader<number, ImageMetaInformationV3DTO | null>;
   }
 
   interface AuthToken {

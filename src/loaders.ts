@@ -7,10 +7,12 @@
  */
 
 import DataLoader from "dataloader";
+import keyBy from "lodash/keyBy";
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { FilmFrontPageDTO, FrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
+import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import {
   fetchArticles,
   fetchSubjectTopics,
@@ -24,6 +26,7 @@ import {
 } from "./api";
 import { GQLResourceTypeDefinition } from "./types/schema";
 import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
+import { fetchImages } from "./api/imageApi";
 
 export function articlesLoader(context: Context): DataLoader<string, ArticleV2DTO | undefined> {
   return new DataLoader(
@@ -139,5 +142,16 @@ export function searchNodesLoader(context: Context): DataLoader<string, Node[]> 
       return contentUris.map((uri) => searchResult.results.filter((n) => n.contentUri === uri));
     },
     { maxBatchSize: 100 },
+  );
+}
+
+export function imagesLoader(context: Context): DataLoader<number, IImageMetaInformationV3DTO | null> {
+  return new DataLoader(
+    async (imageIds) => {
+      const res = await fetchImages(imageIds, context);
+      const keyed = keyBy(res, (img) => img.id);
+      return imageIds.map((id) => keyed[id] ?? null);
+    },
+    { maxBatchSize: 50 },
   );
 }

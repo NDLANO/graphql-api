@@ -19,7 +19,6 @@ import {
 } from "../types/schema";
 import { filterMissingArticles } from "../utils/articleHelpers";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
-import { fetchImageV3 } from "../api";
 import { convertToImageLicense } from "../api/imageApi";
 
 export const Query = {
@@ -132,7 +131,8 @@ export const resolvers = {
       const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
       if (isNaN(imageId)) return undefined;
       try {
-        const image = await fetchImageV3(imageId, context);
+        const image = await context.loaders.imagesLoader.load(imageId);
+        if (!image) return undefined;
         return convertToImageLicense(image);
       } catch (e) {
         return undefined;
@@ -142,8 +142,8 @@ export const resolvers = {
       if (visualElement.type === "image") {
         const imageId = parseInt(visualElement.url.split("/").pop() ?? "");
         if (!imageId) return null;
-        const image = await fetchImageV3(imageId, context);
-        return image.image.imageUrl;
+        const image = await context.loaders.imagesLoader.load(imageId);
+        return image?.image?.imageUrl ?? null;
       }
       return null;
     },
