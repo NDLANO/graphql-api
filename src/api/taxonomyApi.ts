@@ -57,17 +57,21 @@ export async function fetchNode(
 }
 
 export async function searchNodes(params: { contentUris: string[] }, context: Context): Promise<SearchResult<Node>> {
-  const { contentUris } = params;
-  const query = qs.stringify({
-    language: context.language,
-    contentUris: contentUris.join(","),
-    isVisible: true,
-    includeContexts: true,
-    filterProgrammes: true,
-    page: 1,
-    pageSize: 100,
+  const response = await taxonomyFetch("/taxonomy/v1/nodes/search", context, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      language: context.language,
+      contentUris: params.contentUris,
+      isVisible: true,
+      includeContexts: true,
+      filterProgrammes: true,
+      page: 1,
+      pageSize: 100,
+    }),
   });
-  const response = await taxonomyFetch(`/taxonomy/v1/nodes/search?${query}`, context);
   return await resolveJson(response);
 }
 
