@@ -50,6 +50,19 @@ export async function fetchImageV3(imageId: number | string, context: Context): 
     .then(resolveJsonOATS);
 }
 
+export async function fetchImages(imageIds: number[], context: Context): Promise<ImageMetaInformationV3DTO[]> {
+  return client
+    .GET("/image-api/v3/images/ids", {
+      params: {
+        query: {
+          ids: imageIds,
+          language: context.language,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
+}
+
 export async function searchImages(params: GQLQueryImageSearchArgs, _context: Context): Promise<SearchResultV3DTO> {
   return client
     .GET("/image-api/v3/images", {

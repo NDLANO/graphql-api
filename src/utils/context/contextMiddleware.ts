@@ -17,6 +17,7 @@ import {
   nodeLoader,
   nodesLoader,
   searchNodesLoader,
+  imagesLoader,
 } from "../../loaders";
 import isString from "lodash/isString";
 import { defaultLanguage } from "../../config";
@@ -89,6 +90,7 @@ export function contextExpressMiddleware(req: Request, res: Response, next: Next
       frontpageLoader: frontpageLoader(defaultContext),
       subjectpageLoader: subjectpageLoader(defaultContext),
       searchNodesLoader: searchNodesLoader(defaultContext),
+      imagesLoader: imagesLoader(defaultContext),
     },
   };
 

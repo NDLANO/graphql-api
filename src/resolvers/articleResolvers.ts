@@ -9,7 +9,7 @@
 import { load } from "cheerio";
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
-import { fetchArticle, fetchOembed, fetchImageV3, fetchSubjectTopics, searchConcepts } from "../api";
+import { fetchArticle, fetchOembed, fetchSubjectTopics, searchConcepts } from "../api";
 import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
 
 import { fetchTransformedContent, fetchRelatedContent, fetchTransformedDisclaimer } from "../api/articleApi";
@@ -112,10 +112,11 @@ export const resolvers = {
       const imageId = parseInt(article.metaImage?.url?.split("/").pop() ?? "");
       if (isNaN(imageId)) return undefined;
       try {
-        const image = await fetchImageV3(imageId, context);
+        const image = await context.loaders.imagesLoader.load(imageId);
+        if (!image) return undefined;
         return {
           ...article.metaImage,
-          url: image.image?.imageUrl,
+          url: image.image.imageUrl,
           copyright: image.copyright,
         };
       } catch (error) {

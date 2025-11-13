@@ -7,7 +7,6 @@
  */
 
 import { FolderDataDTO, ResourceDTO, UserFolderDTO } from "@ndla/types-backend/myndla-api";
-import { fetchImageV3 } from "../api";
 import {
   deleteFolder,
   deleteFolderResource,
@@ -128,10 +127,10 @@ export const resolvers = {
       const imageId = parseInt(meta.metaImage.url.split("/").pop() ?? "");
       if (isNaN(imageId)) return undefined;
       try {
-        const image = await fetchImageV3(imageId, context);
+        const image = await context.loaders.imagesLoader.load(imageId);
         return {
           ...meta.metaImage,
-          url: image.image?.imageUrl,
+          url: image?.image?.imageUrl,
         };
       } catch (e) {
         return meta.metaImage;

@@ -8,7 +8,7 @@
 
 import { OEmbedDTO } from "@ndla/types-backend/oembed-proxy";
 import { LearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
-import { fetchImageV3, fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
+import { fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import { fetchOpengraph } from "../api/externalApi";
 import {
   copyLearningpath,
@@ -149,22 +149,17 @@ const getCoverphoto = async (
   context: ContextWithLoaders,
 ): Promise<GQLLearningpathCoverphoto | undefined> => {
   let url: string | undefined;
-  const imageId = learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "";
-  if (imageId) {
-    const image = await fetchImageV3(imageId, context);
-    url = image.image.imageUrl;
+  const imageId = Number(learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "");
+  if (!isNaN(imageId)) {
+    const image = await context.loaders.imagesLoader.load(imageId);
+    url = image?.image?.imageUrl;
   } else {
-    const learningStepWithResource = learningpath.learningsteps.find(
-      (learningStep) =>
-        learningStep.embedUrl &&
-        learningStep.embedUrl.url &&
-        (learningStep.embedUrl.embedType === "oembed" || learningStep.embedUrl.embedType === "iframe") &&
-        isNDLAEmbedUrl(learningStep.embedUrl.url),
-    );
-    const articleId = learningStepWithResource?.embedUrl?.url.split("/").pop();
-    const article = articleId ? await context.loaders.articlesLoader.load(articleId) : undefined;
-    const imageId = article?.metaImage?.url.split("/").pop();
-    const image = imageId ? await fetchImageV3(imageId, context) : undefined;
+    const learningStepWithArticle = learningpath.learningsteps.find((ls) => ls.articleId);
+    const article = learningStepWithArticle?.articleId
+      ? await context.loaders.articlesLoader.load(learningStepWithArticle.articleId.toString())
+      : undefined;
+    const imageId = Number(article?.metaImage?.url.split("/").pop() ?? "");
+    const image = isNaN(imageId) ? undefined : await context.loaders.imagesLoader.load(imageId);
     url = image?.image.imageUrl;
   }
 
