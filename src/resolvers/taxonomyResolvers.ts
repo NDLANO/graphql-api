@@ -23,7 +23,7 @@ import {
   GQLQueryNodesArgs,
   GQLTaxonomyEntity,
 } from "../types/schema";
-import { articleToMeta, nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
+import { articleToMeta, getNumberId, nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
 import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 
@@ -147,8 +147,9 @@ export const resolvers = {
       return filterMissingArticles(entities, context);
     },
     async subjectpage(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<SubjectPageDTO | null> {
-      if (!node.contentUri?.startsWith("urn:frontpage")) return null;
-      return context.loaders.subjectpageLoader.load(node.contentUri.replace("urn:frontpage:", ""));
+      const subjectPageId = getNumberId(node.contentUri?.replace("urn:frontpage:", ""));
+      if (!subjectPageId) return null;
+      return context.loaders.subjectpageLoader.load(subjectPageId);
     },
     async grepCodes(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<string[]> {
       if (!node.metadata?.grepCodes) {

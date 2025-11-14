@@ -29,7 +29,7 @@ declare global {
     nodeLoader: DataLoader<NodeLoaderParams, Node>;
     nodesLoader: DataLoader<NodeQueryParams, Node[]>;
     frontpageLoader: DataLoader<string, FrontPageDTO>;
-    subjectpageLoader: DataLoader<string, SubjectPageDTO | null>;
+    subjectpageLoader: DataLoader<number, SubjectPageDTO | null>;
     searchNodesLoader: DataLoader<string, Node[]>;
     imagesLoader: DataLoader<number, ImageMetaInformationV3DTO | null>;
   }

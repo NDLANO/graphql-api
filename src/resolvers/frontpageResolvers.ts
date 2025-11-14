@@ -28,7 +28,7 @@ export const Query = {
   },
 
   async subjectpage(_: any, { id }: Id, context: ContextWithLoaders): Promise<SubjectPageDTO | null> {
-    return context.loaders.subjectpageLoader.load(`${id}`);
+    return context.loaders.subjectpageLoader.load(id);
   },
 
   async filmfrontpage(_: any, __: any, context: ContextWithLoaders): Promise<FilmFrontPageDTO> {
