@@ -39,15 +39,7 @@ export const resolvers = {
   Article: {
     async competenceGoals(article: ArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCompetenceGoal[]> {
       if (!(article.grepCodes ?? []).length) return [];
-
-      const language =
-        article.supportedLanguages?.find((lang) => lang === context.language) ??
-        article.supportedLanguages?.[0] ??
-        context.language;
-      const result = await grepSearch(
-        { codes: article.grepCodes.filter((code) => code.startsWith("KM")), language: language },
-        context,
-      );
+      const result = await grepSearch({ codes: article.grepCodes.filter((code) => code.startsWith("KM")) }, context);
       return result.results.map((hit) => {
         return {
           ...hit,
@@ -58,11 +50,7 @@ export const resolvers = {
       });
     },
     async coreElements(article: ArticleV2DTO, _: any, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
-      const language =
-        article.supportedLanguages?.find((lang) => lang === context.language) ??
-        article.supportedLanguages?.[0] ??
-        context.language;
-      return coreElements(article.grepCodes ?? [], language, context);
+      return coreElements(article.grepCodes ?? [], context);
     },
     async crossSubjectTopics(
       article: ArticleV2DTO,
@@ -73,11 +61,7 @@ export const resolvers = {
       if (!crossSubjectCodes.length) {
         return [];
       }
-      const language =
-        article.supportedLanguages?.find((lang) => lang === context.language) ??
-        article.supportedLanguages?.[0] ??
-        context.language;
-      const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(crossSubjectCodes, language, context);
+      const crossSubjectTopicInfo = await fetchCrossSubjectTopicsByCode(crossSubjectCodes, context);
       const topics = await fetchSubjectTopics(args.subjectId, context);
       return crossSubjectTopicInfo.map((crossSubjectTopic) => {
         const topic = topics.find((topic) => topic.name === crossSubjectTopic.title);
