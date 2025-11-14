@@ -14,7 +14,7 @@ import {
 } from "@ndla/types-backend/image-api";
 import { GQLImageLicense, GQLQueryImageSearchArgs } from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
-import { getNumberId } from "../utils/apiHelpers";
+import { getNumberIdOrThrow } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
 
@@ -22,7 +22,7 @@ export async function fetchImage(imageId: string, context: Context): Promise<Ima
   const response = await client.GET("/image-api/v2/images/{image_id}", {
     params: {
       path: {
-        image_id: getNumberId(imageId),
+        image_id: getNumberIdOrThrow(imageId),
       },
       query: {
         language: context.language,
@@ -42,7 +42,7 @@ export async function fetchImageV3(imageId: number | string, context: Context): 
     .GET("/image-api/v3/images/{image_id}", {
       params: {
         path: {
-          image_id: getNumberId(imageId),
+          image_id: getNumberIdOrThrow(imageId),
         },
         query: { language: context.language },
       },
@@ -55,7 +55,7 @@ export async function fetchImages(imageIds: number[], context: Context): Promise
     .GET("/image-api/v3/images/ids", {
       params: {
         query: {
-          ids: imageIds,
+          ids: imageIds.slice(),
           language: context.language,
         },
       },
