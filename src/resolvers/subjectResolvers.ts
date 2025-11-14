@@ -15,9 +15,7 @@ import {
   GQLQuerySubjectCollectionArgs,
   GQLSubject,
   GQLSubjectLink,
-  GQLTopic,
 } from "../types/schema";
-import { filterMissingArticles } from "../utils/articleHelpers";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 import { convertToImageLicense } from "../api/imageApi";
 
@@ -68,24 +66,6 @@ export const Query = {
 
 export const resolvers = {
   Subject: {
-    async topics(subject: GQLSubject, args: { all: boolean }, context: ContextWithLoaders): Promise<GQLTopic[]> {
-      const topics = await context.loaders.subjectTopicsLoader.load({
-        subjectId: subject.id,
-      });
-      if (args.all) {
-        return filterMissingArticles(topics, context);
-      }
-      return filterMissingArticles(
-        topics.filter((topic: GQLTopic) => topic.parentId === subject.id),
-        context,
-      );
-    },
-    async allTopics(subject: GQLSubject, _: any, context: ContextWithLoaders) {
-      const topics = await context.loaders.subjectTopicsLoader.load({
-        subjectId: subject.id,
-      });
-      return filterMissingArticles(topics, context);
-    },
     async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<SubjectPageDTO | null> {
       if (!subject.contentUri?.startsWith("urn:frontpage")) return null;
       return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));

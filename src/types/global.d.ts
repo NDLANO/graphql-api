@@ -17,10 +17,6 @@ import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { NodeQueryParams } from "../api/taxonomyApi";
 
 declare global {
-  interface SubjectTopicsLoaderParams {
-    subjectId: string;
-  }
-
   interface NodeLoaderParams {
     id?: string;
     rootId?: string;
@@ -30,10 +26,8 @@ declare global {
   interface Loaders {
     articlesLoader: DataLoader<string, ArticleV2DTO | undefined>;
     learningpathsLoader: DataLoader<number, LearningPathV2DTO | undefined>;
-    subjectTopicsLoader: DataLoader<SubjectTopicsLoaderParams, any>;
     nodeLoader: DataLoader<NodeLoaderParams, Node>;
     nodesLoader: DataLoader<NodeQueryParams, Node[]>;
-    resourceTypesLoader: DataLoader<any, any>;
     frontpageLoader: DataLoader<string, FrontPageDTO>;
     subjectpageLoader: DataLoader<string, SubjectPageDTO | null>;
     searchNodesLoader: DataLoader<string, Node[]>;

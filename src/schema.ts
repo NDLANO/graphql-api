@@ -537,9 +537,6 @@ export const typeDefs = gql`
     availability: String
     isPrimary: Boolean
     parentId: String
-    subtopics: [Topic!]
-    coreResources(subjectId: String): [Resource!]
-    supplementaryResources(subjectId: String): [Resource!]
     alternateTopics: [Topic!]
   }
 
@@ -911,8 +908,6 @@ export const typeDefs = gql`
     language: String
     nodeType: String!
     subjectpage: SubjectPage
-    topics(all: Boolean): [Topic!]
-    allTopics: [Topic!]
     grepCodes: [String!]
   }
 
