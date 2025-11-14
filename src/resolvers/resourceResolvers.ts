@@ -7,7 +7,7 @@
  */
 
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
-import { fetchLearningpath, fetchNode, fetchResourceTypes } from "../api";
+import { fetchNode, fetchResourceTypes } from "../api";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -87,8 +87,10 @@ export const resolvers = {
     },
     async learningpath(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<GQLLearningpath | null> {
       if (resource.contentUri?.startsWith("urn:learningpath")) {
-        const learningpathId = getLearningpathIdFromUrn(resource.contentUri);
-        const learningpath = await fetchLearningpath(learningpathId, context);
+        const learningpathId = Number(getLearningpathIdFromUrn(resource.contentUri));
+        if (isNaN(learningpathId)) return null;
+        const learningpath = await context.loaders.learningpathsLoader.load(learningpathId);
+        if (!learningpath) return null;
         return toGQLLearningpath(learningpath);
       }
       if (resource.contentUri?.startsWith("urn:article")) {

@@ -12,7 +12,7 @@ import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { GraphQLError } from "graphql";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchChildren, fetchLearningpath, fetchNode } from "../api";
+import { fetchChildren, fetchNode } from "../api";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -121,8 +121,10 @@ export const resolvers = {
     },
     async learningpath(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLLearningpath | null> {
       if (node.contentUri?.startsWith("urn:learningpath")) {
-        const learningpathId = getLearningpathIdFromUrn(node.contentUri);
-        const learningpath = await fetchLearningpath(learningpathId, context);
+        const learningpathId = Number(getLearningpathIdFromUrn(node.contentUri));
+        if (isNaN(learningpathId)) return null;
+        const learningpath = await context.loaders.learningpathsLoader.load(learningpathId);
+        if (!learningpath) return null;
         return toGQLLearningpath(learningpath);
       }
       return null;
