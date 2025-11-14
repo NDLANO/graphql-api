@@ -6,10 +6,9 @@
  *
  */
 
-import { load } from "cheerio";
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
-import { fetchArticle, fetchOembed, fetchSubjectTopics, searchConcepts } from "../api";
+import { fetchArticle, fetchSubjectTopics, searchConcepts } from "../api";
 import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
 
 import { fetchTransformedContent, fetchRelatedContent, fetchTransformedDisclaimer } from "../api/articleApi";
@@ -97,11 +96,8 @@ export const resolvers = {
       }
       return [];
     },
-    async oembed(article: ArticleV2DTO, _: any, context: ContextWithLoaders): Promise<string | undefined> {
-      const oembed = await fetchOembed(`${ndlaUrl}/article/${article.id}`, context);
-      if (oembed?.html === undefined) return undefined;
-      const parsed = load(oembed.html, null, false);
-      return parsed("iframe").attr("src");
+    oembed(article: ArticleV2DTO, _: any, context: ContextWithLoaders): string {
+      return `${ndlaUrl}/article-iframe/${context.language}/article/${article.id}`;
     },
     async metaImage(
       article: ArticleV2DTO,
