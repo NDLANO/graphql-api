@@ -15,16 +15,13 @@ import { Node } from "@ndla/types-taxonomy";
 import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import {
   fetchArticles,
-  fetchSubjectTopics,
   fetchLearningpaths,
-  fetchResourceTypes,
   fetchNode,
   fetchFrontpage,
   fetchFilmFrontpage,
   fetchSubjectPage,
   queryNodes,
 } from "./api";
-import { GQLResourceTypeDefinition } from "./types/schema";
 import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 import { fetchImages } from "./api/imageApi";
 
@@ -107,32 +104,6 @@ export function nodesLoader(context: Context): DataLoader<NodeQueryParams, Node[
     },
     { cacheKeyFn: (key) => JSON.stringify(key) },
   );
-}
-
-export function subjectTopicsLoader(context: Context): DataLoader<SubjectTopicsLoaderParams, any> {
-  return new DataLoader(
-    async (ids) => {
-      return ids.map(async ({ subjectId }) => fetchSubjectTopics(subjectId, context));
-    },
-    {
-      cacheKeyFn: (key: SubjectTopicsLoaderParams) => JSON.stringify(key),
-    },
-  );
-}
-
-export function resourceTypesLoader(context: Context): DataLoader<string, any> {
-  return new DataLoader(async (resourceTypeIds) => {
-    const resourceTypes = await fetchResourceTypes<GQLResourceTypeDefinition>(context);
-
-    const allResourceTypes = resourceTypes.reduce((acc: any[], resourceType) => {
-      const subtypes = resourceType.subtypes || [];
-      return [...acc, resourceType, ...subtypes];
-    }, []);
-
-    return resourceTypeIds.map((resourceTypeId) => {
-      return allResourceTypes.find((resourceType) => resourceType.id === resourceTypeId);
-    });
-  });
 }
 
 export function searchNodesLoader(context: Context): DataLoader<string, Node[]> {

@@ -8,18 +8,10 @@
 
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchNode, fetchNodeResources, fetchChildren } from "../api";
-import {
-  GQLMeta,
-  GQLQueryTopicArgs,
-  GQLQueryTopicsArgs,
-  GQLResource,
-  GQLTopic,
-  GQLTopicCoreResourcesArgs,
-  GQLTopicSupplementaryResourcesArgs,
-} from "../types/schema";
+import { fetchNode, fetchChildren } from "../api";
+import { GQLMeta, GQLQueryTopicArgs, GQLQueryTopicsArgs, GQLTopic } from "../types/schema";
 import { articleToMeta, nodeToTaxonomyEntity } from "../utils/apiHelpers";
-import { filterMissingArticles, getArticleIdFromUrn } from "../utils/articleHelpers";
+import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async topic(_: any, { id, subjectId }: GQLQueryTopicArgs, context: ContextWithLoaders): Promise<GQLTopic> {
@@ -66,41 +58,6 @@ export const resolvers = {
       if (!topic.contentUri?.startsWith("urn:article")) return null;
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       return article ? articleToMeta(article) : null;
-    },
-    async coreResources(
-      topic: Node,
-      _: GQLTopicCoreResourcesArgs,
-      context: ContextWithLoaders,
-    ): Promise<GQLResource[]> {
-      const topicResources = await fetchNodeResources(
-        {
-          id: topic.id,
-          relevance: "urn:relevance:core",
-        },
-        context,
-      );
-      const filtered = await filterMissingArticles(topicResources, context);
-      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
-    },
-    async supplementaryResources(
-      topic: Node,
-      _args: GQLTopicSupplementaryResourcesArgs,
-      context: ContextWithLoaders,
-    ): Promise<GQLResource[]> {
-      const topicResources = await fetchNodeResources(
-        {
-          id: topic.id,
-          relevance: "urn:relevance:supplementary",
-        },
-        context,
-      );
-      const filtered = await filterMissingArticles(topicResources, context);
-      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
-    },
-    async subtopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[]> {
-      const subtopics = await fetchChildren({ id: topic.id, nodeType: "TOPIC" }, context);
-      const filtered = await filterMissingArticles(subtopics, context);
-      return filtered.map((f) => nodeToTaxonomyEntity(f, context));
     },
     async alternateTopics(topic: Node, _: any, context: ContextWithLoaders): Promise<GQLTopic[] | undefined> {
       const { contentUri, path } = topic;

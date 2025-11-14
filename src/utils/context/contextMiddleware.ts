@@ -9,8 +9,6 @@
 import { getToken } from "../../auth";
 import {
   articlesLoader,
-  subjectTopicsLoader,
-  resourceTypesLoader,
   learningpathsLoader,
   frontpageLoader,
   subjectpageLoader,
@@ -82,9 +80,7 @@ export function contextExpressMiddleware(req: Request, res: Response, next: Next
     ...defaultContext,
     loaders: {
       articlesLoader: articlesLoader(defaultContext),
-      subjectTopicsLoader: subjectTopicsLoader(defaultContext),
       learningpathsLoader: learningpathsLoader(defaultContext),
-      resourceTypesLoader: resourceTypesLoader(defaultContext),
       nodeLoader: nodeLoader(defaultContext),
       nodesLoader: nodesLoader(defaultContext),
       frontpageLoader: frontpageLoader(defaultContext),
