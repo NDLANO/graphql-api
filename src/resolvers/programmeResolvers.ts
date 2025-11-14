@@ -17,7 +17,7 @@ import {
   GQLQueryProgrammeArgs,
   GQLSubject,
 } from "../types/schema";
-import { nodeToTaxonomyEntity } from "../utils/apiHelpers";
+import { getNumberId, nodeToTaxonomyEntity } from "../utils/apiHelpers";
 
 const nodeToProgramme = (node: Node, language: string): GQLProgrammePage => {
   return {
@@ -83,10 +83,9 @@ export const resolvers = {
       __: any,
       context: ContextWithLoaders,
     ): Promise<string | undefined> {
-      if (!programme.contentUri?.startsWith("urn:frontpage")) return undefined;
-      const subjectpage = await context.loaders.subjectpageLoader.load(
-        programme.contentUri.replace("urn:frontpage:", ""),
-      );
+      const subjectPageId = getNumberId(programme.contentUri?.replace("urn:frontpage:", ""));
+      if (!subjectPageId) return undefined;
+      const subjectpage = await context.loaders.subjectpageLoader.load(subjectPageId);
       return subjectpage?.metaDescription;
     },
     async desktopImage(
@@ -94,10 +93,9 @@ export const resolvers = {
       __: any,
       context: ContextWithLoaders,
     ): Promise<GQLMetaImage | undefined> {
-      if (!programme.contentUri?.startsWith("urn:frontpage")) return undefined;
-      const subjectpage = await context.loaders.subjectpageLoader.load(
-        programme.contentUri.replace("urn:frontpage:", ""),
-      );
+      const subjectPageId = getNumberId(programme.contentUri?.replace("urn:frontpage:", ""));
+      if (!subjectPageId) return undefined;
+      const subjectpage = await context.loaders.subjectpageLoader.load(subjectPageId);
       if (!subjectpage) return undefined;
       return {
         url: subjectpage.banner.desktopUrl,
@@ -109,10 +107,9 @@ export const resolvers = {
       __: any,
       context: ContextWithLoaders,
     ): Promise<GQLMetaImage | undefined> {
-      if (!programme.contentUri?.startsWith("urn:frontpage")) return undefined;
-      const subjectpage = await context.loaders.subjectpageLoader.load(
-        programme.contentUri.replace("urn:frontpage:", ""),
-      );
+      const subjectPageId = getNumberId(programme.contentUri?.replace("urn:frontpage:", ""));
+      if (!subjectPageId) return undefined;
+      const subjectpage = await context.loaders.subjectpageLoader.load(subjectPageId);
       if (!subjectpage) return undefined;
       return {
         url: subjectpage.banner.mobileUrl || subjectpage.banner.desktopUrl,

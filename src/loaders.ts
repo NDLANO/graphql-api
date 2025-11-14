@@ -13,15 +13,8 @@ import { FilmFrontPageDTO, FrontPageDTO, SubjectPageDTO } from "@ndla/types-back
 import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
-import {
-  fetchArticles,
-  fetchLearningpaths,
-  fetchNode,
-  fetchFrontpage,
-  fetchFilmFrontpage,
-  fetchSubjectPage,
-  queryNodes,
-} from "./api";
+import { fetchArticles, fetchLearningpaths, fetchNode, fetchFrontpage, fetchFilmFrontpage, queryNodes } from "./api";
+import { fetchSubjectPages } from "./api/frontpageApi";
 import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 import { fetchImages } from "./api/imageApi";
 
@@ -54,16 +47,11 @@ export function filmFrontpageLoader(context: Context): DataLoader<string, FilmFr
   });
 }
 
-export function subjectpageLoader(context: Context): DataLoader<string, SubjectPageDTO | null> {
+export function subjectpageLoader(context: Context): DataLoader<number, SubjectPageDTO | null> {
   return new DataLoader(async (subjectPageIds) => {
-    return Promise.all(
-      subjectPageIds.map((subjectPageId) => {
-        if (!subjectPageId && !(typeof subjectPageId === "number")) {
-          throw Error("Tried to get subjectpage with bad or empty id");
-        }
-        return fetchSubjectPage(Number(subjectPageId), context);
-      }),
-    );
+    const res = await fetchSubjectPages(subjectPageIds, context);
+    const keyed = keyBy(res, (sp) => sp.id);
+    return subjectPageIds.map((id) => keyed[id] ?? null);
   });
 }
 

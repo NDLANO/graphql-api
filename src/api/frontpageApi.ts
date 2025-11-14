@@ -41,6 +41,20 @@ export async function fetchSubjectPage(subjectPageId: number, context: Context):
     .then(resolveJsonOATS);
 }
 
+export async function fetchSubjectPages(ids: readonly number[], context: Context): Promise<SubjectPageDTO[]> {
+  return client
+    .GET("/frontpage-api/v1/subjectpage/ids", {
+      params: {
+        query: {
+          ids: ids.slice(),
+          language: context.language,
+          fallback: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
+}
+
 export async function fetchFilmFrontpage(_context: Context): Promise<FilmFrontPageDTO> {
   return client.GET("/frontpage-api/v1/filmfrontpage").then(resolveJsonOATS);
 }

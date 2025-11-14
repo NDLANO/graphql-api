@@ -18,6 +18,7 @@ import {
 } from "../types/schema";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 import { convertToImageLicense } from "../api/imageApi";
+import { getNumberId } from "../utils/apiHelpers";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
@@ -67,8 +68,9 @@ export const Query = {
 export const resolvers = {
   Subject: {
     async subjectpage(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<SubjectPageDTO | null> {
-      if (!subject.contentUri?.startsWith("urn:frontpage")) return null;
-      return context.loaders.subjectpageLoader.load(subject.contentUri.replace("urn:frontpage:", ""));
+      const subjectPageId = getNumberId(subject.contentUri?.replace("urn:frontpage:", ""));
+      if (!subjectPageId) return null;
+      return context.loaders.subjectpageLoader.load(subjectPageId);
     },
     async grepCodes(subject: GQLSubject, __: any, context: ContextWithLoaders): Promise<string[]> {
       if (!subject.metadata?.grepCodes) {
