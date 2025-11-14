@@ -46,7 +46,7 @@ import {
   GQLMutationUpdateLearningpathStepSeqNoArgs,
   GQLLicense,
 } from "../types/schema";
-import { nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
+import { getNumberId, nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
 import { transformArticle } from "../api/transformArticleApi";
 import { searchNodes } from "../api/taxonomyApi";
@@ -149,8 +149,8 @@ const getCoverphoto = async (
   context: ContextWithLoaders,
 ): Promise<GQLLearningpathCoverphoto | undefined> => {
   let url: string | undefined;
-  const imageId = Number(learningpath.coverphoto?.metaUrl?.split("/").pop() ?? "");
-  if (!isNaN(imageId)) {
+  const imageId = getNumberId(learningpath.coverphoto?.metaUrl?.split("/").pop());
+  if (imageId) {
     const image = await context.loaders.imagesLoader.load(imageId);
     url = image?.image?.imageUrl;
   } else {
@@ -158,8 +158,8 @@ const getCoverphoto = async (
     const article = learningStepWithArticle?.articleId
       ? await context.loaders.articlesLoader.load(learningStepWithArticle.articleId.toString())
       : undefined;
-    const imageId = Number(article?.metaImage?.url.split("/").pop() ?? "");
-    const image = isNaN(imageId) ? undefined : await context.loaders.imagesLoader.load(imageId);
+    const imageId = getNumberId(article?.metaImage?.url.split("/").pop());
+    const image = imageId ? await context.loaders.imagesLoader.load(imageId) : undefined;
     url = image?.image.imageUrl;
   }
 

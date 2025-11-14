@@ -14,7 +14,7 @@ import {
   SeriesSummarySearchResultDTO,
 } from "@ndla/types-backend/audio-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
-import { getNumberId } from "../utils/apiHelpers";
+import { getNumberIdOrThrow } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
 
@@ -22,7 +22,7 @@ export async function fetchAudio(context: Context, audioId: number | string): Pr
   const response = await client.GET("/audio-api/v1/audio/{audio-id}", {
     params: {
       path: {
-        "audio-id": getNumberId(audioId),
+        "audio-id": getNumberIdOrThrow(audioId),
       },
       query: {
         language: context.language,
@@ -41,7 +41,7 @@ export async function fetchAudioV2(context: Context, audioId: number | string): 
     .GET("/audio-api/v1/audio/{audio-id}", {
       params: {
         path: {
-          "audio-id": getNumberId(audioId),
+          "audio-id": getNumberIdOrThrow(audioId),
         },
         query: {
           language: context.language,

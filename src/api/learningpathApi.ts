@@ -25,7 +25,7 @@ import {
   GQLMutationUpdateLearningpathStepSeqNoArgs,
 } from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
-import { getNumberId } from "../utils/apiHelpers";
+import { getNumberIdOrThrow } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
 const cachelessClient = createAuthClient<openapi.paths>({ disableCache: true });
@@ -64,7 +64,7 @@ export async function fetchMyLearningpath(id: string, context: Context): Promise
     .GET("/learningpath-api/v2/learningpaths/{learningpath_id}", {
       params: {
         path: {
-          learningpath_id: getNumberId(id),
+          learningpath_id: getNumberIdOrThrow(id),
         },
         query: {
           language: context.language,
@@ -80,7 +80,7 @@ export async function fetchLearningpath(id: string, context: Context): Promise<L
     .GET("/learningpath-api/v2/learningpaths/{learningpath_id}", {
       params: {
         path: {
-          learningpath_id: getNumberId(id),
+          learningpath_id: getNumberIdOrThrow(id),
         },
         query: {
           language: context.language,

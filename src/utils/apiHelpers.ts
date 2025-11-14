@@ -235,13 +235,27 @@ const toGQLTaxonomyCrumb = (crumb: TaxonomyCrumb, context: ContextWithLoaders): 
   };
 };
 
-export const getNumberId = (id: number | string): number => {
-  if (typeof id === "string") {
-    const numberId = parseInt(id);
-    if (isNaN(numberId)) {
-      throw new Error(`Invalid id: ${id}`);
-    }
-    return numberId;
+export const getNumberId = (id: number | string | undefined | null): number | undefined => {
+  if (typeof id === "number") {
+    return id;
   }
-  return id;
+
+  if (!id?.trim()) {
+    return undefined;
+  }
+
+  const numberId = Number(id);
+  if (isNaN(numberId) || !Number.isInteger(numberId)) {
+    return undefined;
+  }
+
+  return numberId;
+};
+
+export const getNumberIdOrThrow = (id: number | string | undefined | null): number => {
+  const numberId = getNumberId(id);
+  if (!numberId) {
+    throw new Error(`Invalid id: ${id}`);
+  }
+  return numberId;
 };

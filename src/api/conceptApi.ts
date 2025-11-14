@@ -8,7 +8,7 @@
 
 import { ConceptSearchResultDTO, ConceptDTO, openapi } from "@ndla/types-backend/concept-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
-import { getNumberId } from "../utils/apiHelpers";
+import { getNumberIdOrThrow } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
 
@@ -34,7 +34,7 @@ export async function fetchConcept(id: string | number, context: Context): Promi
   const response = await client.GET("/concept-api/v1/concepts/{concept_id}", {
     params: {
       path: {
-        concept_id: getNumberId(id),
+        concept_id: getNumberIdOrThrow(id),
       },
       query: {
         language: context.language,
@@ -53,7 +53,7 @@ export async function fetchConcept(id: string | number, context: Context): Promi
 export const fetchEmbedConcept = async (id: string, context: Context, draftConcept: boolean): Promise<ConceptDTO> => {
   const options = {
     params: {
-      path: { concept_id: getNumberId(id) },
+      path: { concept_id: getNumberIdOrThrow(id) },
       query: { language: context.language, fallback: true },
     },
   };
