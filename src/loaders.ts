@@ -12,7 +12,7 @@ import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { FilmFrontPageDTO, FrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
-import { IImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
+import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { fetchArticles, fetchLearningpaths, fetchNode, fetchFrontpage, fetchFilmFrontpage, queryNodes } from "./api";
 import { fetchSubjectPages } from "./api/frontpageApi";
 import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
@@ -104,7 +104,7 @@ export function searchNodesLoader(context: Context): DataLoader<string, Node[]> 
   );
 }
 
-export function imagesLoader(context: Context): DataLoader<number, IImageMetaInformationV3DTO | null> {
+export function imagesLoader(context: Context): DataLoader<number, ImageMetaInformationV3DTO | null> {
   return new DataLoader(
     async (imageIds) => {
       const res = await fetchImages(imageIds, context);

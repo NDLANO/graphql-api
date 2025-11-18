@@ -37,6 +37,7 @@ export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<GQ
       title: issue.title,
       number: issue.number,
       closable: !issue.labels?.find((label) => label.name === "permanent"),
+      labels: issue.labels?.map((label) => label.name) || [],
       body: parseMarkdown({
         markdown: he.decode(issue.body).replace(/<[^>]*>?/gm, ""),
       }),

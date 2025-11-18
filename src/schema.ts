@@ -1178,6 +1178,7 @@ export const typeDefs = gql`
     body: String
     number: Int!
     closable: Boolean!
+    labels: [String!]!
   }
 
   type Breadcrumb {

@@ -2066,6 +2066,7 @@ export type GQLUptimeAlert = {
   __typename?: 'UptimeAlert';
   body?: Maybe<Scalars['String']['output']>;
   closable: Scalars['Boolean']['output'];
+  labels: Array<Scalars['String']['output']>;
   number: Scalars['Int']['output'];
   title: Scalars['String']['output'];
 };
@@ -4018,6 +4019,7 @@ export type GQLUpdatedFolderResourceResolvers<ContextType = any, ParentType exte
 export type GQLUptimeAlertResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UptimeAlert'] = GQLResolversParentTypes['UptimeAlert']> = {
   body?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   closable?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  labels?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   number?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

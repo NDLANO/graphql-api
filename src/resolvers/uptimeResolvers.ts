@@ -33,6 +33,7 @@ export const Query = {
         const versionTypeAlert: GQLUptimeAlert = {
           number: -1,
           closable: false,
+          labels: [],
           title: localizedVersionHashTitle(version?.name ?? "", context.language),
         };
         return uptimeIssues.concat(versionTypeAlert);
