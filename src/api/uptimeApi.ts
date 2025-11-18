@@ -24,7 +24,7 @@ interface GithubIssue {
 }
 
 export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<GQLUptimeAlert[]> {
-  const path = `/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenance,${ndlaEnvironment}`;
+  const path = `/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=${ndlaEnvironment}`;
   const githubAuth = uptimeToken ? { Authorization: `Bearer ${uptimeToken}` } : null;
   const response = await fetch(path, context, {
     headers: { ...githubAuth },
