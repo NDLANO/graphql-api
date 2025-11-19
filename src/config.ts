@@ -73,3 +73,12 @@ export const uptimeToken = getEnvironmentVariabel("UPTIME_API_TOKEN", undefined)
 export const googleApiKey = getEnvironmentVariabel("NDLA_GOOGLE_API_KEY", undefined);
 export const slowLogTimeout = getEnvironmentVariabel("SLOW_LOG_TIMEOUT", "500");
 export const gracePeriodSeconds = parseInt(getEnvironmentVariabel("READINESS_PROBE_DETECTION_SECONDS", "7"));
+
+const unparsedIpRanges = getEnvironmentVariabel("IP_RANGES", "oslo=171.23;akershus=148.82");
+
+export const ipRanges = unparsedIpRanges.split(";").reduce<Record<string, string>>((acc, range) => {
+  const [county, ipPrefix] = range.split("=");
+  if (!county || !ipPrefix) throw new Error("Invalid IP_RANGES format");
+  acc[ipPrefix] = county;
+  return acc;
+}, {});

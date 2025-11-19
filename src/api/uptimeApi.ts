@@ -8,7 +8,6 @@
 
 import he from "he";
 import { ndlaEnvironment, uptimeOwner, uptimeRepo, uptimeToken } from "../config";
-import { GQLUptimeAlert } from "../types/schema";
 import { resolveJson } from "../utils/apiHelpers";
 import { fetch } from "../utils/fetch";
 import parseMarkdown from "../utils/parseMarkdown";
@@ -23,8 +22,12 @@ interface GithubIssue {
   labels?: GithubLabel[];
 }
 
-export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<GQLUptimeAlert[]> {
-  const path = `/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=maintenance,${ndlaEnvironment}`;
+export interface UptimeAlert extends GithubIssue {
+  closable: boolean;
+}
+
+export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<UptimeAlert[]> {
+  const path = `/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=${ndlaEnvironment}`;
   const githubAuth = uptimeToken ? { Authorization: `Bearer ${uptimeToken}` } : null;
   const response = await fetch(path, context, {
     headers: { ...githubAuth },
@@ -36,10 +39,13 @@ export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<GQ
     return {
       title: issue.title,
       number: issue.number,
+      labels: issue.labels,
       closable: !issue.labels?.find((label) => label.name === "permanent"),
-      body: parseMarkdown({
-        markdown: he.decode(issue.body).replace(/<[^>]*>?/gm, ""),
-      }),
+      body: issue.body?.length
+        ? parseMarkdown({
+            markdown: he.decode(issue.body).replace(/<[^>]*>?/gm, ""),
+          })
+        : "",
     };
   });
 }
