@@ -56,7 +56,7 @@ export async function fetchNode(
   return await resolveJson(response);
 }
 
-export async function searchNodes(params: { contentUris: string[] }, context: Context): Promise<SearchResult<Node>> {
+export async function searchNodes(params: { contentUris: string[] }, context: Context): Promise<SearchResult> {
   const response = await taxonomyFetch("/taxonomy/v1/nodes/search", context, {
     method: "POST",
     headers: {
