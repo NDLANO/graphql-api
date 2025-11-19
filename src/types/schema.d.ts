@@ -2066,8 +2066,14 @@ export type GQLUptimeAlert = {
   __typename?: 'UptimeAlert';
   body?: Maybe<Scalars['String']['output']>;
   closable: Scalars['Boolean']['output'];
+  labels: Array<GQLUptimeLabel>;
   number: Scalars['Int']['output'];
   title: Scalars['String']['output'];
+};
+
+export type GQLUptimeLabel = {
+  __typename?: 'UptimeLabel';
+  name: Scalars['String']['output'];
 };
 
 export type GQLUserFolder = {
@@ -2355,6 +2361,7 @@ export type GQLResolversTypes = {
   UpdatedFolder: ResolverTypeWrapper<GQLUpdatedFolder>;
   UpdatedFolderResource: ResolverTypeWrapper<GQLUpdatedFolderResource>;
   UptimeAlert: ResolverTypeWrapper<GQLUptimeAlert>;
+  UptimeLabel: ResolverTypeWrapper<GQLUptimeLabel>;
   UserFolder: ResolverTypeWrapper<GQLUserFolder>;
   VideoFolderResourceMeta: ResolverTypeWrapper<GQLVideoFolderResourceMeta>;
   VisualElement: ResolverTypeWrapper<GQLVisualElement>;
@@ -2521,6 +2528,7 @@ export type GQLResolversParentTypes = {
   UpdatedFolder: GQLUpdatedFolder;
   UpdatedFolderResource: GQLUpdatedFolderResource;
   UptimeAlert: GQLUptimeAlert;
+  UptimeLabel: GQLUptimeLabel;
   UserFolder: GQLUserFolder;
   VideoFolderResourceMeta: GQLVideoFolderResourceMeta;
   VisualElement: GQLVisualElement;
@@ -4018,8 +4026,14 @@ export type GQLUpdatedFolderResourceResolvers<ContextType = any, ParentType exte
 export type GQLUptimeAlertResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UptimeAlert'] = GQLResolversParentTypes['UptimeAlert']> = {
   body?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   closable?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  labels?: Resolver<Array<GQLResolversTypes['UptimeLabel']>, ParentType, ContextType>;
   number?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLUptimeLabelResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UptimeLabel'] = GQLResolversParentTypes['UptimeLabel']> = {
+  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4210,6 +4224,7 @@ export type GQLResolvers<ContextType = any> = {
   UpdatedFolder?: GQLUpdatedFolderResolvers<ContextType>;
   UpdatedFolderResource?: GQLUpdatedFolderResourceResolvers<ContextType>;
   UptimeAlert?: GQLUptimeAlertResolvers<ContextType>;
+  UptimeLabel?: GQLUptimeLabelResolvers<ContextType>;
   UserFolder?: GQLUserFolderResolvers<ContextType>;
   VideoFolderResourceMeta?: GQLVideoFolderResourceMetaResolvers<ContextType>;
   VisualElement?: GQLVisualElementResolvers<ContextType>;
