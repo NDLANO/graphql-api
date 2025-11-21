@@ -29,8 +29,19 @@ const getAlertsFromUptime = async (context: ContextWithLoaders): Promise<GQLUpti
   const uptimeIssues = uptimeResponse.filter((iss) => iss.labels?.find((label) => label.name === "maintenance"));
   alerts.push(...uptimeIssues);
 
-  const ipRange = context.req.headers["x-forwarded-for"]?.toString().split(".").slice(0, 2).join(".");
-  const county = ipRange ? ipRanges[ipRange] : undefined;
+  const clientAddress = context.req.headers["x-forwarded-for"]?.toString() ?? "";
+
+  let county = "";
+  ipRanges.forEach((value, key) => {
+    if (!value) {
+      return;
+    }
+    value.forEach((range) => {
+      if (range.contains(clientAddress)) {
+        county = key;
+      }
+    });
+  });
   if (!county) {
     return alerts;
   }
