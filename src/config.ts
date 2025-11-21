@@ -77,7 +77,7 @@ export const gracePeriodSeconds = parseInt(getEnvironmentVariabel("READINESS_PRO
 
 const unparsedIpRanges = getEnvironmentVariabel(
   "IP_RANGES",
-  "oslo=171.23.0.0/16;akershus=148.82.0.0/16;vestland=109.70.80.0/21,109.70.85.0/24",
+  "oslo=171.23.0.0/16,171.23.128.0/17;akershus=148.82.0.0/15;vestland=109.70.80.0/21,109.70.85.0/24",
 );
 
 export const ipRanges = unparsedIpRanges.split(";").reduce<Map<string, IPCIDR[]>>((acc, range) => {
