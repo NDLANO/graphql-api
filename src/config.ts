@@ -8,6 +8,7 @@
 
 import dotenv from "dotenv";
 dotenv.config();
+import IPCIDR from "ip-cidr";
 
 export function getEnvironmentVariabel(key: string, fallback: string): string;
 export function getEnvironmentVariabel(key: string, fallback: boolean): boolean;
@@ -74,11 +75,18 @@ export const googleApiKey = getEnvironmentVariabel("NDLA_GOOGLE_API_KEY", undefi
 export const slowLogTimeout = getEnvironmentVariabel("SLOW_LOG_TIMEOUT", "500");
 export const gracePeriodSeconds = parseInt(getEnvironmentVariabel("READINESS_PROBE_DETECTION_SECONDS", "7"));
 
-const unparsedIpRanges = getEnvironmentVariabel("IP_RANGES", "oslo=171.23;akershus=148.82");
+const unparsedIpRanges = getEnvironmentVariabel(
+  "IP_RANGES",
+  "oslo=171.23.0.0/16,171.23.128.0/17;akershus=148.82.0.0/15;vestland=109.70.80.0/21,109.70.85.0/24",
+);
 
-export const ipRanges = unparsedIpRanges.split(";").reduce<Record<string, string>>((acc, range) => {
-  const [county, ipPrefix] = range.split("=");
-  if (!county || !ipPrefix) throw new Error("Invalid IP_RANGES format");
-  acc[ipPrefix] = county;
+export const ipRanges = unparsedIpRanges.split(";").reduce<Map<string, IPCIDR[]>>((acc, range) => {
+  const [county, ipRange] = range.split("=");
+  if (!county || !ipRange) throw new Error("Invalid IP_RANGES format");
+  const ranges = ipRange.split(",");
+  acc.set(
+    county,
+    ranges.map((range) => new IPCIDR(range)),
+  );
   return acc;
-}, {});
+}, new Map<string, IPCIDR[]>());
