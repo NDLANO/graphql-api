@@ -64,6 +64,7 @@ const getVersionHashAlert = async (context: ContextWithLoaders): Promise<GQLUpti
     return {
       number: -1,
       closable: false,
+      labels: [],
       title: localizedVersionHashTitle(version?.name ?? "", context.language),
     };
   }

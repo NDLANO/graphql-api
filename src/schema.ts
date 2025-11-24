@@ -1173,11 +1173,16 @@ export const typeDefs = gql`
     pageSize: Int!
   }
 
+  type UptimeLabel {
+    name: String!
+  }
+
   type UptimeAlert {
     title: String!
     body: String
     number: Int!
     closable: Boolean!
+    labels: [UptimeLabel!]!
   }
 
   type Breadcrumb {

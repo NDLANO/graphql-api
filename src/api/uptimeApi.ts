@@ -19,7 +19,7 @@ interface GithubIssue {
   number: number;
   title: string;
   body: string;
-  labels?: GithubLabel[];
+  labels: GithubLabel[];
 }
 
 export interface UptimeAlert extends GithubIssue {
@@ -40,7 +40,7 @@ export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<Up
       title: issue.title,
       number: issue.number,
       labels: issue.labels,
-      closable: !issue.labels?.find((label) => label.name === "permanent"),
+      closable: !issue.labels.find((label) => label.name === "permanent"),
       body: issue.body?.length
         ? parseMarkdown({
             markdown: he.decode(issue.body).replace(/<[^>]*>?/gm, ""),
