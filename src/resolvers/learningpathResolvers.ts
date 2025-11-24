@@ -179,10 +179,10 @@ const getBasedOn = async (
   const originalId = learningpath.isBasedOn;
   if (!originalId) return undefined;
   const node = await context.loaders.searchNodesLoader.load(`urn:learningpath:${originalId}`);
-  if (node.length === 0) {
+  if (!node) {
     return `/learningpaths/${originalId}`;
   }
-  return node[0]?.url;
+  return node?.url;
 };
 
 const transformDescription = async (
