@@ -148,15 +148,18 @@ const transformResult = (result: MultiSearchSummaryDTO | NodeHitDTO, subjects: s
   };
 };
 
-export const grepSearch = async (input: GrepSearchInputDTO, _context: Context): Promise<GrepSearchResultsDTO> =>
-  client.POST("/search-api/v1/search/grep", { body: input }).then(resolveJsonOATS);
+export const grepSearch = async (input: GrepSearchInputDTO, context: Context): Promise<GrepSearchResultsDTO> =>
+  client
+    .POST("/search-api/v1/search/grep", {
+      body: {
+        language: context.language,
+        ...input,
+      },
+    })
+    .then(resolveJsonOATS);
 
-export const competenceGoals = async (
-  codes: string[],
-  language: string | undefined,
-  context: Context,
-): Promise<GQLCompetenceGoal[]> => {
-  const references = await grepSearch({ language, codes, pageSize: codes.length }, context);
+export const competenceGoals = async (codes: string[], context: Context): Promise<GQLCompetenceGoal[]> => {
+  const references = await grepSearch({ codes, pageSize: codes.length }, context);
   const competenceGoals = references.results.filter((r) => {
     return r.typename === "GrepKompetansemaalDTO";
   });
@@ -198,16 +201,12 @@ export const competenceGoals = async (
   });
 };
 
-export const coreElements = async (
-  codes: string[],
-  language: string | undefined,
-  context: Context,
-): Promise<GQLCoreElement[]> => {
+export const coreElements = async (codes: string[], context: Context): Promise<GQLCoreElement[]> => {
   if (!codes.length) return [];
   const coreElementCodes = codes.filter((c) => c.startsWith("KE"));
   if (!coreElementCodes.length) return [];
 
-  const fetched = await grepSearch({ codes: coreElementCodes, language, pageSize: 100 }, context);
+  const fetched = await grepSearch({ codes: coreElementCodes, pageSize: 100 }, context);
   const coreElements = fetched.results.filter((r) => {
     return r.typename === "GrepKjerneelementDTO";
   });
@@ -234,11 +233,10 @@ export const fetchCompetenceGoalSetCodes = async (code: string, context: Context
 
 export const fetchCrossSubjectTopicsByCode = async (
   inputCodes: string[],
-  language: string | undefined,
   context: Context,
 ): Promise<GQLReference[]> => {
   const codes = inputCodes.filter((code) => code.startsWith("TT"));
-  const fetched = await grepSearch({ codes, language, pageSize: 100 }, context);
+  const fetched = await grepSearch({ codes, pageSize: 100 }, context);
   return fetched.results
     .filter((result) => result.typename === "GrepTverrfagligTemaDTO")
     .map((result) => {
