@@ -1089,7 +1089,7 @@ export const typeDefs = gql`
 
   type Gloss {
     gloss: String!
-    wordClass: String!
+    wordClass: [String!]!
     originalLanguage: String!
     transcriptions: Transcription!
     examples: [[Examples!]!]
