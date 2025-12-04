@@ -23,7 +23,7 @@
     "tdd": "vitest"
   },
   "engines": {
-    "node": ">=20.19.1"
+    "node": ">=22"
   },
   "dependencies": {
     "@apollo/server": "^4.12.2",
