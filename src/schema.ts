@@ -12,25 +12,6 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 export const typeDefs = gql`
   scalar StringRecord
 
-  type ImageMetaInformationV2 {
-    id: String!
-    metaUrl: String!
-    title: Title!
-    alttext: ImageAltText!
-    imageUrl: String!
-    size: Int!
-    contentType: String!
-    copyright: Copyright!
-    tags: Tags!
-    caption: Caption!
-    supportedLanguages: [String!]
-    created: String!
-    createdBy: String!
-    modelRelease: String!
-    editorNotes: [EditorNote!]
-    imageDimensions: ImageDimensions
-  }
-
   type ImageDimensions {
     width: Int!
     height: Int!
@@ -590,6 +571,12 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     created: String!
     createdBy: String!
+    variants: [ImageVariant!]!
+  }
+
+  type ImageVariant {
+    size: String!
+    variantUrl: String!
   }
 
   type ImageLicense {
@@ -1531,7 +1518,7 @@ export const typeDefs = gql`
     sharedFolder(id: String!): SharedFolder!
     allFolderResources(size: Int): [FolderResource!]!
     personalData: MyNdlaPersonalData
-    image(id: String!): ImageMetaInformationV2
+    image(id: String!): ImageMetaInformationV3
     examLockStatus: ConfigMetaBoolean!
     aiEnabledOrgs: ConfigMetaStringList
     arenaEnabledOrgs: ConfigMetaStringList

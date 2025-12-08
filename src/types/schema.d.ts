@@ -518,7 +518,7 @@ export type GQLGloss = {
   gloss: Scalars['String']['output'];
   originalLanguage: Scalars['String']['output'];
   transcriptions: GQLTranscription;
-  wordClass: Scalars['String']['output'];
+  wordClass: Array<Scalars['String']['output']>;
 };
 
 export type GQLGlossLicense = {
@@ -645,6 +645,7 @@ export type GQLImageMetaInformation = {
   supportedLanguages: Array<Scalars['String']['output']>;
   tags: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
+  variants: Array<GQLImageVariant>;
 };
 
 export type GQLImageMetaInformationV2 = {
@@ -701,6 +702,12 @@ export type GQLImageV3 = {
   imageUrl: Scalars['String']['output'];
   language: Scalars['String']['output'];
   size: Scalars['Int']['output'];
+};
+
+export type GQLImageVariant = {
+  __typename?: 'ImageVariant';
+  size: Scalars['String']['output'];
+  variantUrl: Scalars['String']['output'];
 };
 
 export type GQLLearningpath = {
@@ -2272,6 +2279,7 @@ export type GQLResolversTypes = {
   ImageMetaInformationV3: ResolverTypeWrapper<GQLImageMetaInformationV3>;
   ImageSearch: ResolverTypeWrapper<GQLImageSearch>;
   ImageV3: ResolverTypeWrapper<GQLImageV3>;
+  ImageVariant: ResolverTypeWrapper<GQLImageVariant>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Learningpath: ResolverTypeWrapper<GQLLearningpath>;
   LearningpathCopyInput: GQLLearningpathCopyInput;
@@ -2439,6 +2447,7 @@ export type GQLResolversParentTypes = {
   ImageMetaInformationV3: GQLImageMetaInformationV3;
   ImageSearch: GQLImageSearch;
   ImageV3: GQLImageV3;
+  ImageVariant: GQLImageVariant;
   Int: Scalars['Int']['output'];
   Learningpath: GQLLearningpath;
   LearningpathCopyInput: GQLLearningpathCopyInput;
@@ -3005,7 +3014,7 @@ export type GQLGlossResolvers<ContextType = any, ParentType extends GQLResolvers
   gloss?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   originalLanguage?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   transcriptions?: Resolver<GQLResolversTypes['Transcription'], ParentType, ContextType>;
-  wordClass?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  wordClass?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3132,6 +3141,7 @@ export type GQLImageMetaInformationResolvers<ContextType = any, ParentType exten
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  variants?: Resolver<Array<GQLResolversTypes['ImageVariant']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3188,6 +3198,12 @@ export type GQLImageV3Resolvers<ContextType = any, ParentType extends GQLResolve
   imageUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   size?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLImageVariantResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageVariant'] = GQLResolversParentTypes['ImageVariant']> = {
+  size?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  variantUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4147,6 +4163,7 @@ export type GQLResolvers<ContextType = any> = {
   ImageMetaInformationV3?: GQLImageMetaInformationV3Resolvers<ContextType>;
   ImageSearch?: GQLImageSearchResolvers<ContextType>;
   ImageV3?: GQLImageV3Resolvers<ContextType>;
+  ImageVariant?: GQLImageVariantResolvers<ContextType>;
   Learningpath?: GQLLearningpathResolvers<ContextType>;
   LearningpathCopyright?: GQLLearningpathCopyrightResolvers<ContextType>;
   LearningpathCoverphoto?: GQLLearningpathCoverphotoResolvers<ContextType>;
