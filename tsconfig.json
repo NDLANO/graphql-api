@@ -7,7 +7,6 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "build",
-    "baseUrl": ".",
     "strict": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
@@ -20,9 +19,6 @@
     "skipLibCheck": true,
     "lib": ["es2020", "esnext.asynciterable", "DOM"],
     "types": ["vitest/globals"],
-    "paths": {
-      "*": ["node_modules/*", "src/types/*"]
-    },
     "plugins": [
       {
         "name": "typescript-strict-plugin"
