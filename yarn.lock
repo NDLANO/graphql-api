@@ -1949,24 +1949,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-backend@npm:^1.0.80":
-  version: 1.0.80
-  resolution: "@ndla/types-backend@npm:1.0.80"
-  checksum: 10c0/3fbc0d55ecaadee04e1d2153b366ea67c7f2d00422685a21190b705135fe7e79ca32ed8c6350e72a77e8cd7cd419ee4b193eabb842c9edaa730bd96627085caa
+"@ndla/types-backend@npm:^1.0.89":
+  version: 1.0.89
+  resolution: "@ndla/types-backend@npm:1.0.89"
+  checksum: 10c0/e99c4cec053fc89d1e1bcf27dc71bb301346c83b983a9cb86236448fdb45ebdde7c3e3e0cf6fca549d85607db12896638e717272009bd77ee17ff6c8d7558168
   languageName: node
   linkType: hard
 
-"@ndla/types-embed@npm:^5.0.17-alpha.0":
-  version: 5.0.17-alpha.0
-  resolution: "@ndla/types-embed@npm:5.0.17-alpha.0"
-  checksum: 10c0/c1a7c50920967cdf9e32e31ce0cb5bfddacd8735dd7bbc6fdd0e0376e76beacc6f6f3f9612f05f763c0c3c2bb8720d08026a8e8039242cca95a5711192bd3045
+"@ndla/types-embed@npm:^5.0.19-alpha.0":
+  version: 5.0.19-alpha.0
+  resolution: "@ndla/types-embed@npm:5.0.19-alpha.0"
+  checksum: 10c0/4e6bec579242b755d2eaf0c4e8823c2d710cdf8079fa007f5cd267fcc78c33655dfc062ccb6a063dcc0175a898afd97492825389487a668bea6c110dbac2253e
   languageName: node
   linkType: hard
 
-"@ndla/types-taxonomy@npm:^1.0.39":
-  version: 1.0.39
-  resolution: "@ndla/types-taxonomy@npm:1.0.39"
-  checksum: 10c0/128622b8a93a961e12e257f39ba085d7aad6ac16ec5380a2266af487debe9d3f244e7545f2092938d9942c85b2b5f136a6d5231cc0edf3c96e7b948abe8574db
+"@ndla/types-taxonomy@npm:^1.0.41":
+  version: 1.0.41
+  resolution: "@ndla/types-taxonomy@npm:1.0.41"
+  checksum: 10c0/44839c2fb565d42e51fbc99997f433ff708668f48d06e5faac1a7aa3fa8d781d12526fd6d469c04e7431c6b2e8c48acb345491d88ce9be93853183004a704eca
   languageName: node
   linkType: hard
 
@@ -6931,9 +6931,9 @@ __metadata:
     "@graphql-tools/mock": "npm:^9.0.23"
     "@graphql-tools/schema": "npm:^10.0.23"
     "@ndla/licenses": "npm:^9.0.3"
-    "@ndla/types-backend": "npm:^1.0.80"
-    "@ndla/types-embed": "npm:^5.0.17-alpha.0"
-    "@ndla/types-taxonomy": "npm:^1.0.39"
+    "@ndla/types-backend": "npm:^1.0.89"
+    "@ndla/types-embed": "npm:^5.0.19-alpha.0"
+    "@ndla/types-taxonomy": "npm:^1.0.41"
     "@types/compression": "npm:^1.7.2"
     "@types/cors": "npm:^2.8.4"
     "@types/dotenv": "npm:^6.1.0"

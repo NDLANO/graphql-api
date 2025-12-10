@@ -518,7 +518,7 @@ export type GQLGloss = {
   gloss: Scalars['String']['output'];
   originalLanguage: Scalars['String']['output'];
   transcriptions: GQLTranscription;
-  wordClass: Scalars['String']['output'];
+  wordClass: Array<Scalars['String']['output']>;
 };
 
 export type GQLGlossLicense = {
@@ -1791,6 +1791,7 @@ export type GQLSearchContext = {
   contextId: Scalars['String']['output'];
   contextType: Scalars['String']['output'];
   isActive: Scalars['Boolean']['output'];
+  isArchived: Scalars['Boolean']['output'];
   isPrimary: Scalars['Boolean']['output'];
   language: Scalars['String']['output'];
   path: Scalars['String']['output'];
@@ -1949,6 +1950,7 @@ export type GQLTaxonomyContext = {
   breadcrumbs: Array<Scalars['String']['output']>;
   contextId: Scalars['String']['output'];
   isActive: Scalars['Boolean']['output'];
+  isArchived: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   parentIds: Array<Scalars['String']['output']>;
   parents?: Maybe<Array<GQLTaxonomyCrumb>>;
@@ -3005,7 +3007,7 @@ export type GQLGlossResolvers<ContextType = any, ParentType extends GQLResolvers
   gloss?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   originalLanguage?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   transcriptions?: Resolver<GQLResolversTypes['Transcription'], ParentType, ContextType>;
-  wordClass?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  wordClass?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3753,6 +3755,7 @@ export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLR
   contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   contextType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   isActive?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  isArchived?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   isPrimary?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3919,6 +3922,7 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   contextId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   isActive?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
+  isArchived?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   parents?: Resolver<Maybe<Array<GQLResolversTypes['TaxonomyCrumb']>>, ParentType, ContextType>;
