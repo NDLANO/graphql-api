@@ -514,6 +514,7 @@ export const typeDefs = gql`
     relevance: String!
     root: String!
     isActive: Boolean!
+    isArchived: Boolean!
     parents: [TaxonomyCrumb!]
   }
 
@@ -1001,6 +1002,7 @@ export const typeDefs = gql`
     language: String!
     isPrimary: Boolean!
     isActive: Boolean!
+    isArchived: Boolean!
     contextId: String!
     url: String!
   }
