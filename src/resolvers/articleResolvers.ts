@@ -21,7 +21,7 @@ import {
   GQLTransformedArticleContent,
   GQLArticleTransformedContentArgs,
   GQLRelatedContent,
-  GQLMetaImageWithCopyright,
+  GQLImageMetaInformationV3,
 } from "../types/schema";
 
 export const Query = {
@@ -103,18 +103,14 @@ export const resolvers = {
       article: ArticleV2DTO,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLMetaImageWithCopyright | undefined> {
+    ): Promise<GQLImageMetaInformationV3 | undefined> {
       if (!article.metaImage) return undefined;
       const imageId = parseInt(article.metaImage?.url?.split("/").pop() ?? "");
       if (isNaN(imageId)) return undefined;
       try {
         const image = await context.loaders.imagesLoader.load(imageId);
         if (!image) return undefined;
-        return {
-          ...article.metaImage,
-          url: image.image.imageUrl,
-          copyright: image.copyright,
-        };
+        return image;
       } catch (error) {
         return undefined;
       }
