@@ -8,7 +8,7 @@
 
 import { load } from "cheerio";
 import { fetchH5pLicenseInformation, fetchH5pInfo } from "../api/h5pApi";
-import { convertToSimpleImage, fetchImage } from "../api/imageApi";
+import { convertToSimpleImage, fetchImageV3 } from "../api/imageApi";
 import { fetchOembed } from "../api/oembedApi";
 import { fetchVideo, fetchVideoSources } from "../api/videoApi";
 import { getBrightcoveCopyright } from "./brightcoveUtils";
@@ -134,7 +134,7 @@ interface VisualElementImage {
 }
 
 const parseImageFromEmbed = async (embedData: VisualElementImage, context: Context): Promise<GQLVisualElement> => {
-  const [image] = await Promise.all([fetchImage(embedData.resourceId, context)]);
+  const image = await fetchImageV3(embedData.resourceId, context).catch(() => null);
   const transformedImage = image && convertToSimpleImage(image);
 
   return {
