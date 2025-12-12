@@ -630,43 +630,6 @@ export type GQLImageLicense = {
   title: Scalars['String']['output'];
 };
 
-export type GQLImageMetaInformation = {
-  __typename?: 'ImageMetaInformation';
-  altText: Scalars['String']['output'];
-  caption: Scalars['String']['output'];
-  contentType: Scalars['String']['output'];
-  copyright: GQLCopyright;
-  created: Scalars['String']['output'];
-  createdBy: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  imageUrl: Scalars['String']['output'];
-  metaUrl: Scalars['String']['output'];
-  size: Scalars['Int']['output'];
-  supportedLanguages: Array<Scalars['String']['output']>;
-  tags: Array<Scalars['String']['output']>;
-  title: Scalars['String']['output'];
-};
-
-export type GQLImageMetaInformationV2 = {
-  __typename?: 'ImageMetaInformationV2';
-  alttext: GQLImageAltText;
-  caption: GQLCaption;
-  contentType: Scalars['String']['output'];
-  copyright: GQLCopyright;
-  created: Scalars['String']['output'];
-  createdBy: Scalars['String']['output'];
-  editorNotes?: Maybe<Array<GQLEditorNote>>;
-  id: Scalars['String']['output'];
-  imageDimensions?: Maybe<GQLImageDimensions>;
-  imageUrl: Scalars['String']['output'];
-  metaUrl: Scalars['String']['output'];
-  modelRelease: Scalars['String']['output'];
-  size: Scalars['Int']['output'];
-  supportedLanguages?: Maybe<Array<Scalars['String']['output']>>;
-  tags: GQLTags;
-  title: GQLTitle;
-};
-
 export type GQLImageMetaInformationV3 = {
   __typename?: 'ImageMetaInformationV3';
   alttext: GQLImageAltText;
@@ -701,6 +664,12 @@ export type GQLImageV3 = {
   imageUrl: Scalars['String']['output'];
   language: Scalars['String']['output'];
   size: Scalars['Int']['output'];
+};
+
+export type GQLImageVariant = {
+  __typename?: 'ImageVariant';
+  size: Scalars['String']['output'];
+  variantUrl: Scalars['String']['output'];
 };
 
 export type GQLLearningpath = {
@@ -1303,7 +1272,7 @@ export type GQLPodcastLicense = {
 
 export type GQLPodcastMeta = {
   __typename?: 'PodcastMeta';
-  image?: Maybe<GQLImageMetaInformation>;
+  image?: Maybe<GQLImageMetaInformationV3>;
   introduction: Scalars['String']['output'];
   language: Scalars['String']['output'];
 };
@@ -1314,7 +1283,7 @@ export type GQLPodcastSeries = GQLPodcastSeriesBase & {
   description: GQLDescription;
   hasRSS: Scalars['Boolean']['output'];
   id: Scalars['Int']['output'];
-  image: GQLImageMetaInformation;
+  image: GQLImageMetaInformationV3;
   supportedLanguages: Array<Scalars['String']['output']>;
   title: GQLTitle;
 };
@@ -1324,7 +1293,7 @@ export type GQLPodcastSeriesBase = {
   description: GQLDescription;
   hasRSS: Scalars['Boolean']['output'];
   id: Scalars['Int']['output'];
-  image: GQLImageMetaInformation;
+  image: GQLImageMetaInformationV3;
   supportedLanguages: Array<Scalars['String']['output']>;
   title: GQLTitle;
 };
@@ -1356,7 +1325,7 @@ export type GQLPodcastSeriesWithEpisodes = GQLPodcastSeriesBase & {
   episodes?: Maybe<Array<GQLAudio>>;
   hasRSS: Scalars['Boolean']['output'];
   id: Scalars['Int']['output'];
-  image: GQLImageMetaInformation;
+  image: GQLImageMetaInformationV3;
   supportedLanguages: Array<Scalars['String']['output']>;
   title: GQLTitle;
 };
@@ -1396,7 +1365,7 @@ export type GQLQuery = {
   folders: GQLUserFolder;
   frontpage?: Maybe<GQLFrontpageMenu>;
   groupSearch?: Maybe<Array<GQLGroupSearch>>;
-  image?: Maybe<GQLImageMetaInformationV2>;
+  image?: Maybe<GQLImageMetaInformationV3>;
   imageSearch: GQLImageSearch;
   imageV3?: Maybe<GQLImageMetaInformationV3>;
   learningpath?: Maybe<GQLLearningpath>;
@@ -2269,11 +2238,10 @@ export type GQLResolversTypes = {
   ImageElement: ResolverTypeWrapper<GQLImageElement>;
   ImageFolderResourceMeta: ResolverTypeWrapper<GQLImageFolderResourceMeta>;
   ImageLicense: ResolverTypeWrapper<GQLImageLicense>;
-  ImageMetaInformation: ResolverTypeWrapper<GQLImageMetaInformation>;
-  ImageMetaInformationV2: ResolverTypeWrapper<GQLImageMetaInformationV2>;
   ImageMetaInformationV3: ResolverTypeWrapper<GQLImageMetaInformationV3>;
   ImageSearch: ResolverTypeWrapper<GQLImageSearch>;
   ImageV3: ResolverTypeWrapper<GQLImageV3>;
+  ImageVariant: ResolverTypeWrapper<GQLImageVariant>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Learningpath: ResolverTypeWrapper<GQLLearningpath>;
   LearningpathCopyInput: GQLLearningpathCopyInput;
@@ -2436,11 +2404,10 @@ export type GQLResolversParentTypes = {
   ImageElement: GQLImageElement;
   ImageFolderResourceMeta: GQLImageFolderResourceMeta;
   ImageLicense: GQLImageLicense;
-  ImageMetaInformation: GQLImageMetaInformation;
-  ImageMetaInformationV2: GQLImageMetaInformationV2;
   ImageMetaInformationV3: GQLImageMetaInformationV3;
   ImageSearch: GQLImageSearch;
   ImageV3: GQLImageV3;
+  ImageVariant: GQLImageVariant;
   Int: Scalars['Int']['output'];
   Learningpath: GQLLearningpath;
   LearningpathCopyInput: GQLLearningpathCopyInput;
@@ -3120,43 +3087,6 @@ export type GQLImageLicenseResolvers<ContextType = any, ParentType extends GQLRe
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLImageMetaInformationResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageMetaInformation'] = GQLResolversParentTypes['ImageMetaInformation']> = {
-  altText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  caption?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  contentType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
-  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  createdBy?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  imageUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  size?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLImageMetaInformationV2Resolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageMetaInformationV2'] = GQLResolversParentTypes['ImageMetaInformationV2']> = {
-  alttext?: Resolver<GQLResolversTypes['ImageAltText'], ParentType, ContextType>;
-  caption?: Resolver<GQLResolversTypes['Caption'], ParentType, ContextType>;
-  contentType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
-  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  createdBy?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  editorNotes?: Resolver<Maybe<Array<GQLResolversTypes['EditorNote']>>, ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  imageDimensions?: Resolver<Maybe<GQLResolversTypes['ImageDimensions']>, ParentType, ContextType>;
-  imageUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  modelRelease?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  size?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  tags?: Resolver<GQLResolversTypes['Tags'], ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLImageMetaInformationV3Resolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageMetaInformationV3'] = GQLResolversParentTypes['ImageMetaInformationV3']> = {
   alttext?: Resolver<GQLResolversTypes['ImageAltText'], ParentType, ContextType>;
   caption?: Resolver<GQLResolversTypes['Caption'], ParentType, ContextType>;
@@ -3190,6 +3120,12 @@ export type GQLImageV3Resolvers<ContextType = any, ParentType extends GQLResolve
   imageUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   size?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLImageVariantResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageVariant'] = GQLResolversParentTypes['ImageVariant']> = {
+  size?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  variantUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3546,7 +3482,7 @@ export type GQLPodcastLicenseResolvers<ContextType = any, ParentType extends GQL
 };
 
 export type GQLPodcastMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastMeta'] = GQLResolversParentTypes['PodcastMeta']> = {
-  image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformation']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType>;
   introduction?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3557,7 +3493,7 @@ export type GQLPodcastSeriesResolvers<ContextType = any, ParentType extends GQLR
   description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
   hasRSS?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  image?: Resolver<GQLResolversTypes['ImageMetaInformation'], ParentType, ContextType>;
+  image?: Resolver<GQLResolversTypes['ImageMetaInformationV3'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3569,7 +3505,7 @@ export type GQLPodcastSeriesBaseResolvers<ContextType = any, ParentType extends 
   description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
   hasRSS?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  image?: Resolver<GQLResolversTypes['ImageMetaInformation'], ParentType, ContextType>;
+  image?: Resolver<GQLResolversTypes['ImageMetaInformationV3'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
 };
@@ -3600,7 +3536,7 @@ export type GQLPodcastSeriesWithEpisodesResolvers<ContextType = any, ParentType 
   episodes?: Resolver<Maybe<Array<GQLResolversTypes['Audio']>>, ParentType, ContextType>;
   hasRSS?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  image?: Resolver<GQLResolversTypes['ImageMetaInformation'], ParentType, ContextType>;
+  image?: Resolver<GQLResolversTypes['ImageMetaInformationV3'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3640,7 +3576,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   folders?: Resolver<GQLResolversTypes['UserFolder'], ParentType, ContextType, Partial<GQLQueryFoldersArgs>>;
   frontpage?: Resolver<Maybe<GQLResolversTypes['FrontpageMenu']>, ParentType, ContextType>;
   groupSearch?: Resolver<Maybe<Array<GQLResolversTypes['GroupSearch']>>, ParentType, ContextType, Partial<GQLQueryGroupSearchArgs>>;
-  image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV2']>, ParentType, ContextType, RequireFields<GQLQueryImageArgs, 'id'>>;
+  image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType, RequireFields<GQLQueryImageArgs, 'id'>>;
   imageSearch?: Resolver<GQLResolversTypes['ImageSearch'], ParentType, ContextType, Partial<GQLQueryImageSearchArgs>>;
   imageV3?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType, RequireFields<GQLQueryImageV3Args, 'id'>>;
   learningpath?: Resolver<Maybe<GQLResolversTypes['Learningpath']>, ParentType, ContextType, RequireFields<GQLQueryLearningpathArgs, 'pathId'>>;
@@ -4146,11 +4082,10 @@ export type GQLResolvers<ContextType = any> = {
   ImageElement?: GQLImageElementResolvers<ContextType>;
   ImageFolderResourceMeta?: GQLImageFolderResourceMetaResolvers<ContextType>;
   ImageLicense?: GQLImageLicenseResolvers<ContextType>;
-  ImageMetaInformation?: GQLImageMetaInformationResolvers<ContextType>;
-  ImageMetaInformationV2?: GQLImageMetaInformationV2Resolvers<ContextType>;
   ImageMetaInformationV3?: GQLImageMetaInformationV3Resolvers<ContextType>;
   ImageSearch?: GQLImageSearchResolvers<ContextType>;
   ImageV3?: GQLImageV3Resolvers<ContextType>;
+  ImageVariant?: GQLImageVariantResolvers<ContextType>;
   Learningpath?: GQLLearningpathResolvers<ContextType>;
   LearningpathCopyright?: GQLLearningpathCopyrightResolvers<ContextType>;
   LearningpathCoverphoto?: GQLLearningpathCoverphotoResolvers<ContextType>;

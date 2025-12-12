@@ -6,18 +6,11 @@
  *
  */
 
-import { ImageMetaInformationV2DTO, ImageMetaInformationV3DTO, SearchResultV3DTO } from "@ndla/types-backend/image-api";
-import { fetchImage, fetchImageV3, searchImages } from "../api/imageApi";
+import { ImageMetaInformationV3DTO, SearchResultV3DTO } from "@ndla/types-backend/image-api";
+import { fetchImageV3, searchImages } from "../api/imageApi";
 import { GQLQueryImageArgs, GQLQueryImageSearchArgs } from "../types/schema";
 
 export const Query = {
-  async image(
-    _: any,
-    { id }: GQLQueryImageArgs,
-    context: ContextWithLoaders,
-  ): Promise<ImageMetaInformationV2DTO | null> {
-    return fetchImage(id, context);
-  },
   async imageV3(
     _: any,
     { id }: GQLQueryImageArgs,

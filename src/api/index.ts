@@ -8,7 +8,7 @@
 
 export { fetchArticle, fetchArticles } from "./articleApi";
 export { searchConcepts, fetchConcept } from "./conceptApi";
-export { fetchImage, fetchImageV3 } from "./imageApi";
+export { fetchImageV3 } from "./imageApi";
 export { fetchFrontpage, fetchSubjectPage, fetchFilmFrontpage } from "./frontpageApi";
 export { fetchLearningpaths, fetchMyLearningpaths, fetchLearningpath } from "./learningpathApi";
 export { fetchOembed } from "./oembedApi";

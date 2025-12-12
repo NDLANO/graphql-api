@@ -9,13 +9,13 @@
 import groupBy from "lodash/groupBy";
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { AudioMetaInformationDTO } from "@ndla/types-backend/audio-api";
-import { ImageMetaInformationV2DTO } from "@ndla/types-backend/image-api";
+import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { ResourceType } from "@ndla/types-backend/myndla-api";
 import { Node } from "@ndla/types-taxonomy";
 import { fetchAudio } from "./audioApi";
 import { searchConcepts } from "./conceptApi";
-import { fetchImage } from "./imageApi";
+import { fetchImageV3 } from "./imageApi";
 import { fetchVideo } from "./videoApi";
 import { defaultLanguage } from "../config";
 import {
@@ -130,14 +130,14 @@ export const fetchImageMeta = async (
   type: ResourceType,
 ): Promise<GQLFolderResourceMeta[]> => {
   if (!resources?.length) return [];
-  const images = await Promise.all(resources.map(async (r) => await fetchImage(r.id, context)));
-  const imagesFiltered = images.filter((i): i is ImageMetaInformationV2DTO => !!i);
+  const images = await Promise.all(resources.map(async (r) => await fetchImageV3(r.id, context).catch(() => null)));
+  const imagesFiltered = images.filter((i): i is ImageMetaInformationV3DTO => !!i);
 
   return imagesFiltered.map((img) => ({
     description: img.caption.caption ?? "",
     id: img.id,
     metaImage: {
-      url: img.imageUrl,
+      url: img.image.imageUrl,
       alt: img.alttext.alttext ?? "",
     },
     resourceTypes: [],

@@ -14,10 +14,10 @@ import {
   SeriesSummarySearchResultDTO,
 } from "@ndla/types-backend/audio-api";
 import { fetchAudio, fetchPodcastSeries, fetchPodcastSeriesPage, fetchPodcastsPage } from "../api/audioApi";
-import { fetchImage } from "../api/imageApi";
+import { fetchImageV3 } from "../api/imageApi";
 import { fetchResourceEmbeds } from "../api/resourceEmbedApi";
 import {
-  GQLImageMetaInformation,
+  GQLImageMetaInformationV3,
   GQLQueryAudioArgs,
   GQLQueryPodcastSearchArgs,
   GQLQueryPodcastSeriesArgs,
@@ -65,24 +65,12 @@ export const resolvers = {
       podcastSeries: SeriesDTO,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLImageMetaInformation | null> {
+    ): Promise<GQLImageMetaInformationV3 | null> {
       const id = podcastSeries?.coverPhoto.id;
       if (!id) {
         return null;
       }
-      const image = await fetchImage(id, context);
-
-      if (!image) {
-        return null;
-      }
-
-      return {
-        ...image,
-        title: image.title.title,
-        altText: image.alttext.alttext,
-        caption: image.caption.caption,
-        tags: image.tags.tags,
-      };
+      return await fetchImageV3(id, context).catch(() => null);
     },
   },
   PodcastMeta: {
@@ -90,24 +78,12 @@ export const resolvers = {
       podcastMeta: PodcastMetaDTO,
       _: any,
       context: ContextWithLoaders,
-    ): Promise<GQLImageMetaInformation | null> {
+    ): Promise<GQLImageMetaInformationV3 | null> {
       const id = podcastMeta?.coverPhoto.id;
       if (!id) {
         return null;
       }
-      const image = await fetchImage(id, context);
-
-      if (!image) {
-        return null;
-      }
-
-      return {
-        ...image,
-        title: image.title.title,
-        altText: image.alttext.alttext,
-        caption: image.caption.caption,
-        tags: image.tags.tags,
-      };
+      return await fetchImageV3(id, context).catch(() => null);
     },
   },
 };
