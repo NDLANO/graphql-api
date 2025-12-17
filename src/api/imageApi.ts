@@ -6,36 +6,12 @@
  *
  */
 
-import {
-  openapi,
-  ImageMetaInformationV2DTO,
-  ImageMetaInformationV3DTO,
-  SearchResultV3DTO,
-} from "@ndla/types-backend/image-api";
+import { openapi, ImageMetaInformationV3DTO, SearchResultV3DTO } from "@ndla/types-backend/image-api";
 import { GQLImageLicense, GQLQueryImageSearchArgs } from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getNumberIdOrThrow } from "../utils/apiHelpers";
 
 const client = createAuthClient<openapi.paths>();
-
-export async function fetchImage(imageId: string, context: Context): Promise<ImageMetaInformationV2DTO | null> {
-  const response = await client.GET("/image-api/v2/images/{image_id}", {
-    params: {
-      path: {
-        image_id: getNumberIdOrThrow(imageId),
-      },
-      query: {
-        language: context.language,
-      },
-    },
-  });
-
-  try {
-    return await resolveJsonOATS(response);
-  } catch (e) {
-    return null;
-  }
-}
 
 export async function fetchImageV3(imageId: number | string, context: Context): Promise<ImageMetaInformationV3DTO> {
   return client
@@ -78,12 +54,12 @@ export async function searchImages(params: GQLQueryImageSearchArgs, _context: Co
     .then(resolveJsonOATS);
 }
 
-export function convertToSimpleImage(image: ImageMetaInformationV2DTO) {
+export function convertToSimpleImage(image: ImageMetaInformationV3DTO) {
   return {
     title: image.title.title,
-    src: image.imageUrl,
+    src: image.image.imageUrl,
     altText: image.alttext.alttext,
-    contentType: image.contentType,
+    contentType: image.image.contentType,
     copyright: image.copyright,
   };
 }
