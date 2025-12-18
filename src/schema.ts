@@ -1361,6 +1361,7 @@ export const typeDefs = gql`
     imageUrl: String!
     dimensions: ImageDimensions
     language: String!
+    variants: [ImageVariant!]!
   }
 
   type ImageMetaInformationV3 {

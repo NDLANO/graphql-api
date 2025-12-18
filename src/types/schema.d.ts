@@ -664,6 +664,7 @@ export type GQLImageV3 = {
   imageUrl: Scalars['String']['output'];
   language: Scalars['String']['output'];
   size: Scalars['Int']['output'];
+  variants: Array<GQLImageVariant>;
 };
 
 export type GQLImageVariant = {
@@ -3103,6 +3104,7 @@ export type GQLImageV3Resolvers<ContextType = any, ParentType extends GQLResolve
   imageUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   size?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
+  variants?: Resolver<Array<GQLResolversTypes['ImageVariant']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
