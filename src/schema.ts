@@ -244,11 +244,6 @@ export const typeDefs = gql`
     opengraph: ExternalOpengraph
   }
 
-  type LearningpathCoverphoto {
-    url: String!
-    metaUrl: String!
-  }
-
   type LearningpathCopyright {
     license: License!
     contributors: [Contributor!]!
@@ -278,7 +273,7 @@ export const typeDefs = gql`
     revision: Int!
     learningstepUrl: String!
     status: String!
-    coverphoto: LearningpathCoverphoto
+    coverphoto: ImageMetaInformationV3
     madeAvailable: String
     isMyNDLAOwner: Boolean!
   }
@@ -303,7 +298,7 @@ export const typeDefs = gql`
     revision: Int!
     learningstepUrl: String!
     status: String!
-    coverphoto: LearningpathCoverphoto
+    coverphoto: ImageMetaInformationV3
     madeAvailable: String
     isMyNDLAOwner: Boolean!
   }
@@ -666,12 +661,6 @@ export const typeDefs = gql`
     url: String!
   }
 
-  type MetaImageWithCopyright {
-    alt: String!
-    url: String!
-    copyright: Copyright!
-  }
-
   type Article {
     id: Int!
     revision: Int!
@@ -684,7 +673,7 @@ export const typeDefs = gql`
     created: String!
     updated: String!
     published: String!
-    metaImage: MetaImageWithCopyright
+    metaImage: ImageMetaInformationV3
     metaDescription: String!
     articleType: String!
     oldNdlaUrl: String

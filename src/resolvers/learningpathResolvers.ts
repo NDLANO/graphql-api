@@ -24,7 +24,6 @@ import {
 } from "../api/learningpathApi";
 import {
   GQLLearningpath,
-  GQLLearningpathCoverphoto,
   GQLLearningpathStep,
   GQLLearningpathStepOembed,
   GQLLearningpathStepResourceArgs,
@@ -45,6 +44,7 @@ import {
   GQLLearningpathSeqNo,
   GQLMutationUpdateLearningpathStepSeqNoArgs,
   GQLLicense,
+  GQLImageMetaInformationV3,
 } from "../types/schema";
 import { getNumberId, nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
@@ -147,28 +147,20 @@ const getCoverphoto = async (
   learningpath: GQLLearningpath,
   _: any,
   context: ContextWithLoaders,
-): Promise<GQLLearningpathCoverphoto | undefined> => {
-  let url: string | undefined;
+): Promise<GQLImageMetaInformationV3 | null> => {
   const imageId = getNumberId(learningpath.coverphoto?.metaUrl?.split("/").pop());
   if (imageId) {
     const image = await context.loaders.imagesLoader.load(imageId);
-    url = image?.image?.imageUrl;
+    return image;
   } else {
     const learningStepWithArticle = learningpath.learningsteps.find((ls) => ls.articleId);
     const article = learningStepWithArticle?.articleId
       ? await context.loaders.articlesLoader.load(learningStepWithArticle.articleId.toString())
       : undefined;
     const imageId = getNumberId(article?.metaImage?.url.split("/").pop());
-    const image = imageId ? await context.loaders.imagesLoader.load(imageId) : undefined;
-    url = image?.image.imageUrl;
+    if (!imageId) return null;
+    return await context.loaders.imagesLoader.load(imageId);
   }
-
-  return url
-    ? {
-        metaUrl: learningpath.coverphoto?.metaUrl ?? "",
-        url,
-      }
-    : undefined;
 };
 
 const getBasedOn = async (

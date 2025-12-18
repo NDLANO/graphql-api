@@ -45,7 +45,7 @@ export type GQLArticle = {
   introduction?: Maybe<Scalars['String']['output']>;
   language: Scalars['String']['output'];
   metaDescription: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImageWithCopyright>;
+  metaImage?: Maybe<GQLImageMetaInformationV3>;
   oembed?: Maybe<Scalars['String']['output']>;
   oldNdlaUrl?: Maybe<Scalars['String']['output']>;
   published: Scalars['String']['output'];
@@ -677,7 +677,7 @@ export type GQLLearningpath = {
   basedOn?: Maybe<Scalars['String']['output']>;
   canEdit: Scalars['Boolean']['output'];
   copyright: GQLLearningpathCopyright;
-  coverphoto?: Maybe<GQLLearningpathCoverphoto>;
+  coverphoto?: Maybe<GQLImageMetaInformationV3>;
   created: Scalars['String']['output'];
   description: Scalars['String']['output'];
   duration?: Maybe<Scalars['Int']['output']>;
@@ -717,12 +717,6 @@ export type GQLLearningpathCopyright = {
 export type GQLLearningpathCopyrightInput = {
   contributors: Array<GQLContributorInput>;
   license: GQLLicenseInput;
-};
-
-export type GQLLearningpathCoverphoto = {
-  __typename?: 'LearningpathCoverphoto';
-  metaUrl: Scalars['String']['output'];
-  url: Scalars['String']['output'];
 };
 
 export type GQLLearningpathEmbedInput = {
@@ -891,13 +885,6 @@ export type GQLMeta = {
 export type GQLMetaImage = {
   __typename?: 'MetaImage';
   alt: Scalars['String']['output'];
-  url: Scalars['String']['output'];
-};
-
-export type GQLMetaImageWithCopyright = {
-  __typename?: 'MetaImageWithCopyright';
-  alt: Scalars['String']['output'];
-  copyright: GQLCopyright;
   url: Scalars['String']['output'];
 };
 
@@ -1121,7 +1108,7 @@ export type GQLMyNdlaLearningpath = {
   basedOn?: Maybe<Scalars['String']['output']>;
   canEdit: Scalars['Boolean']['output'];
   copyright: GQLLearningpathCopyright;
-  coverphoto?: Maybe<GQLLearningpathCoverphoto>;
+  coverphoto?: Maybe<GQLImageMetaInformationV3>;
   created: Scalars['String']['output'];
   description: Scalars['String']['output'];
   duration?: Maybe<Scalars['Int']['output']>;
@@ -2247,7 +2234,6 @@ export type GQLResolversTypes = {
   LearningpathCopyInput: GQLLearningpathCopyInput;
   LearningpathCopyright: ResolverTypeWrapper<GQLLearningpathCopyright>;
   LearningpathCopyrightInput: GQLLearningpathCopyrightInput;
-  LearningpathCoverphoto: ResolverTypeWrapper<GQLLearningpathCoverphoto>;
   LearningpathEmbedInput: GQLLearningpathEmbedInput;
   LearningpathFolderResourceMeta: ResolverTypeWrapper<GQLLearningpathFolderResourceMeta>;
   LearningpathNewInput: GQLLearningpathNewInput;
@@ -2264,7 +2250,6 @@ export type GQLResolversTypes = {
   Manuscript: ResolverTypeWrapper<GQLManuscript>;
   Meta: ResolverTypeWrapper<GQLMeta>;
   MetaImage: ResolverTypeWrapper<GQLMetaImage>;
-  MetaImageWithCopyright: ResolverTypeWrapper<GQLMetaImageWithCopyright>;
   Movie: ResolverTypeWrapper<GQLMovie>;
   MovieMeta: ResolverTypeWrapper<GQLMovieMeta>;
   MovieResourceTypes: ResolverTypeWrapper<GQLMovieResourceTypes>;
@@ -2413,7 +2398,6 @@ export type GQLResolversParentTypes = {
   LearningpathCopyInput: GQLLearningpathCopyInput;
   LearningpathCopyright: GQLLearningpathCopyright;
   LearningpathCopyrightInput: GQLLearningpathCopyrightInput;
-  LearningpathCoverphoto: GQLLearningpathCoverphoto;
   LearningpathEmbedInput: GQLLearningpathEmbedInput;
   LearningpathFolderResourceMeta: GQLLearningpathFolderResourceMeta;
   LearningpathNewInput: GQLLearningpathNewInput;
@@ -2430,7 +2414,6 @@ export type GQLResolversParentTypes = {
   Manuscript: GQLManuscript;
   Meta: GQLMeta;
   MetaImage: GQLMetaImage;
-  MetaImageWithCopyright: GQLMetaImageWithCopyright;
   Movie: GQLMovie;
   MovieMeta: GQLMovieMeta;
   MovieResourceTypes: GQLMovieResourceTypes;
@@ -2531,7 +2514,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   introduction?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImageWithCopyright']>, ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType>;
   oembed?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   oldNdlaUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   published?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3133,7 +3116,7 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   basedOn?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   canEdit?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   copyright?: Resolver<GQLResolversTypes['LearningpathCopyright'], ParentType, ContextType>;
-  coverphoto?: Resolver<Maybe<GQLResolversTypes['LearningpathCoverphoto']>, ParentType, ContextType>;
+  coverphoto?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   duration?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
@@ -3158,12 +3141,6 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
 export type GQLLearningpathCopyrightResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathCopyright'] = GQLResolversParentTypes['LearningpathCopyright']> = {
   contributors?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   license?: Resolver<GQLResolversTypes['License'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type GQLLearningpathCoverphotoResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathCoverphoto'] = GQLResolversParentTypes['LearningpathCoverphoto']> = {
-  metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3268,13 +3245,6 @@ export type GQLMetaImageResolvers<ContextType = any, ParentType extends GQLResol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GQLMetaImageWithCopyrightResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MetaImageWithCopyright'] = GQLResolversParentTypes['MetaImageWithCopyright']> = {
-  alt?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLMovieResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Movie'] = GQLResolversParentTypes['Movie']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3343,7 +3313,7 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
   basedOn?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   canEdit?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   copyright?: Resolver<GQLResolversTypes['LearningpathCopyright'], ParentType, ContextType>;
-  coverphoto?: Resolver<Maybe<GQLResolversTypes['LearningpathCoverphoto']>, ParentType, ContextType>;
+  coverphoto?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   duration?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
@@ -4088,7 +4058,6 @@ export type GQLResolvers<ContextType = any> = {
   ImageVariant?: GQLImageVariantResolvers<ContextType>;
   Learningpath?: GQLLearningpathResolvers<ContextType>;
   LearningpathCopyright?: GQLLearningpathCopyrightResolvers<ContextType>;
-  LearningpathCoverphoto?: GQLLearningpathCoverphotoResolvers<ContextType>;
   LearningpathFolderResourceMeta?: GQLLearningpathFolderResourceMetaResolvers<ContextType>;
   LearningpathSearchResult?: GQLLearningpathSearchResultResolvers<ContextType>;
   LearningpathSeqNo?: GQLLearningpathSeqNoResolvers<ContextType>;
@@ -4099,7 +4068,6 @@ export type GQLResolvers<ContextType = any> = {
   Manuscript?: GQLManuscriptResolvers<ContextType>;
   Meta?: GQLMetaResolvers<ContextType>;
   MetaImage?: GQLMetaImageResolvers<ContextType>;
-  MetaImageWithCopyright?: GQLMetaImageWithCopyrightResolvers<ContextType>;
   Movie?: GQLMovieResolvers<ContextType>;
   MovieMeta?: GQLMovieMetaResolvers<ContextType>;
   MovieResourceTypes?: GQLMovieResourceTypesResolvers<ContextType>;
