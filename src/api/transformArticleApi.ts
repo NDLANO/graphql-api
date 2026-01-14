@@ -122,9 +122,8 @@ export const transformArticle = async (
     }
   });
 
-  const hasVisualElement = showVisualElement && visualElement;
-  if (hasVisualElement) {
-    html("section").prepend(`<section>${visualElement}</section>`);
+  if (visualElement) {
+    html("section").before(`<section>${visualElement}</section>`);
   }
 
   const embeds = getEmbedsFromContent(html);
@@ -164,13 +163,19 @@ export const transformArticle = async (
       });
     }),
   );
-  const metaData = toArticleMetaData(embedPromises);
-  const transformedContent = html.html();
-  const visualElementCheerio = hasVisualElement ? embeds[0]?.embed : undefined;
+  const visualElementCheerio = visualElement ? embeds[0]?.embed : undefined;
   const transformedVisEl = visualElementCheerio?.parent().html();
-  const visualElementMeta = hasVisualElement ? embedPromises[0] : undefined;
+  const visualElementMeta = visualElement ? embedPromises[0] : undefined;
   const transformedVisualElement =
     visualElementMeta?.status === "success" ? toVisualElement(visualElementMeta) : undefined;
+
+  // Remove visual element if showVisualElement is false
+  if (visualElement && !showVisualElement) {
+    embedPromises?.shift();
+    html("section").first().remove();
+  }
+  const metaData = toArticleMetaData(embedPromises);
+  const transformedContent = html.html();
 
   return {
     metaData,
