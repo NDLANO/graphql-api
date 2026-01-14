@@ -78,6 +78,7 @@ export const toVisualElement = (meta: Extract<EmbedMetaData, { status: "success"
         title: meta.data.title.title,
         copyright: meta.data.copyright,
         image: {
+          resourceid: meta.data.id,
           caption: meta.embedData.caption ?? meta.data.caption.caption,
           alt: meta.embedData.alt,
           altText: meta.data.alttext.alttext,
