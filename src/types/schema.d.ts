@@ -604,7 +604,7 @@ export type GQLImageElement = {
   focalY?: Maybe<Scalars['Float']['output']>;
   lowerRightX?: Maybe<Scalars['Float']['output']>;
   lowerRightY?: Maybe<Scalars['Float']['output']>;
-  resourceid?: Maybe<Scalars['String']['output']>;
+  resourceId?: Maybe<Scalars['String']['output']>;
   src: Scalars['String']['output'];
   upperLeftX?: Maybe<Scalars['Float']['output']>;
   upperLeftY?: Maybe<Scalars['Float']['output']>;
@@ -3047,7 +3047,7 @@ export type GQLImageElementResolvers<ContextType = any, ParentType extends GQLRe
   focalY?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
   lowerRightX?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
   lowerRightY?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
-  resourceid?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  resourceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   src?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   upperLeftX?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
   upperLeftY?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;

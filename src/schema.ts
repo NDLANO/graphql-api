@@ -993,7 +993,7 @@ export const typeDefs = gql`
   }
 
   type ImageElement {
-    resourceid: String
+    resourceId: String
     alt: String
     caption: String
     lowerRightX: Float
