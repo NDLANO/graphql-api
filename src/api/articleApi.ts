@@ -97,8 +97,7 @@ export async function fetchVisualElementEmbed(
   if (!article.visualElement?.visualElement) {
     return undefined;
   }
-  const visualElementEmbed = await transformVisualElement(article.visualElement.visualElement, context);
-  return visualElementEmbed;
+  return await transformVisualElement(article.visualElement.visualElement, context);
 }
 
 export async function fetchRelatedContent(
@@ -146,8 +145,7 @@ export async function fetchRelatedContent(
 }
 
 export async function fetchArticle(params: ArticleParams, context: Context): Promise<ArticleV2DTO> {
-  const article = await fetchSimpleArticle(params.articleId, context);
-  return article;
+  return await fetchSimpleArticle(params.articleId, context);
 }
 
 export async function fetchArticlesPage(

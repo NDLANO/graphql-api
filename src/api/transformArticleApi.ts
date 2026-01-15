@@ -124,7 +124,7 @@ export const transformArticle = async (
   });
 
   if (visualElement && showVisualElement) {
-    html("section").before(`<section>${visualElement}</section>`);
+    html("section").prepend(`<section>${visualElement}</section>`);
   }
 
   const embeds = getEmbedsFromContent(html);
