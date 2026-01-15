@@ -180,8 +180,9 @@ export const transformVisualElement = async (content: string, context: ContextWi
       return transformEmbed(embed, context, index, 0, {});
     }),
   );
+  const embedMeta = embedPromises[0];
   return {
     content: embeds[0]?.embed?.parent().html() ?? "",
-    meta: toArticleMetaData([embedPromises[0]]),
+    meta: toArticleMetaData(embedMeta ? [embedPromises[0]] : []),
   };
 };
