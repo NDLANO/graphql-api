@@ -123,7 +123,7 @@ export const transformArticle = async (
     }
   });
 
-  if (visualElement) {
+  if (visualElement && showVisualElement) {
     html("section").before(`<section>${visualElement}</section>`);
   }
 
@@ -164,30 +164,24 @@ export const transformArticle = async (
       });
     }),
   );
-  const visualElementCheerio = visualElement ? embeds[0]?.embed : undefined;
-  const transformedVisEl = visualElementCheerio?.parent().html();
-  const visualElementMeta = visualElement ? embedPromises[0] : undefined;
-  const transformedVisualElement =
-    visualElementMeta?.status === "success" ? toVisualElement(visualElementMeta) : undefined;
-
-  // Remove visual element if showVisualElement is false
-  if (visualElement && !showVisualElement) {
-    embedPromises?.shift();
-    html("section").first().remove();
-  }
-  const metaData = toArticleMetaData(embedPromises);
-  const transformedContent = html.html();
 
   return {
-    metaData,
-    content: transformedContent,
-    visualElement: transformedVisualElement,
-    visualElementEmbed:
-      !!transformedVisEl && !!visualElementMeta
-        ? {
-            content: transformedVisEl,
-            meta: toArticleMetaData([visualElementMeta]),
-          }
-        : undefined,
+    content: html.html(),
+    metaData: toArticleMetaData(embedPromises),
+  };
+};
+
+export const transformVisualElement = async (content: string, context: ContextWithLoaders) => {
+  const html = load(`<section>${content}</section>`, null, false);
+
+  const embeds = getEmbedsFromContent(html);
+  const embedPromises = await Promise.all(
+    embeds.map(async (embed, index) => {
+      return transformEmbed(embed, context, index, 0, {});
+    }),
+  );
+  return {
+    content: embeds[0]?.embed?.parent().html() ?? "",
+    meta: toArticleMetaData([embedPromises[0]]),
   };
 };
