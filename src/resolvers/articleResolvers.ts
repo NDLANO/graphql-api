@@ -28,7 +28,6 @@ import {
   GQLRelatedContent,
   GQLResourceEmbed,
   GQLTransformedArticleContent,
-  GQLVisualElement,
 } from "../types/schema";
 
 export const Query = {
@@ -175,14 +174,6 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLResourceEmbed | undefined> {
       return fetchVisualElementEmbed(article, context);
-    },
-  },
-  TransformedArticleContent: {
-    visualElement(_: any): GQLVisualElement | undefined {
-      return undefined;
-    },
-    visualElementEmbed(_: any): GQLResourceEmbed | undefined {
-      return undefined;
     },
   },
 };
