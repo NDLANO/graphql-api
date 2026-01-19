@@ -42,7 +42,7 @@ export const resolvers = {
       return context.loaders.articlesLoader.load(`${menu.articleId}`);
     },
     async hideLevel(menu: FrontPageDTO | MenuDTO): Promise<boolean> {
-      return "hideLevel" in menu ? menu.hideLevel ?? false : false;
+      return "hideLevel" in menu ? (menu.hideLevel ?? false) : false;
     },
   },
 
