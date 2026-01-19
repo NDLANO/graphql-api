@@ -1996,10 +1996,6 @@ export type GQLTransformedArticleContent = {
   __typename?: 'TransformedArticleContent';
   content: Scalars['String']['output'];
   metaData?: Maybe<GQLArticleMetaData>;
-  /** @deprecated Field no longer supported */
-  visualElement?: Maybe<GQLVisualElement>;
-  /** @deprecated Use visualElementEmbed on Article */
-  visualElementEmbed?: Maybe<GQLResourceEmbed>;
 };
 
 export type GQLTransformedArticleContentInput = {
@@ -3923,8 +3919,6 @@ export type GQLTranscriptionResolvers<ContextType = any, ParentType extends GQLR
 export type GQLTransformedArticleContentResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TransformedArticleContent'] = GQLResolversParentTypes['TransformedArticleContent']> = {
   content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaData?: Resolver<Maybe<GQLResolversTypes['ArticleMetaData']>, ParentType, ContextType>;
-  visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;
-  visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

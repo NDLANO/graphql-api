@@ -712,8 +712,6 @@ export const typeDefs = gql`
   type TransformedArticleContent {
     content: String!
     metaData: ArticleMetaData
-    visualElement: VisualElement @deprecated
-    visualElementEmbed: ResourceEmbed @deprecated(reason: "Use visualElementEmbed on Article")
   }
 
   type EmbedVisualelement {
