@@ -78,6 +78,7 @@ export const toVisualElement = (meta: Extract<EmbedMetaData, { status: "success"
         title: meta.data.title.title,
         copyright: meta.data.copyright,
         image: {
+          resourceId: meta.data.id,
           caption: meta.embedData.caption ?? meta.data.caption.caption,
           alt: meta.embedData.alt,
           altText: meta.data.alttext.alttext,
@@ -122,8 +123,7 @@ export const transformArticle = async (
     }
   });
 
-  const hasVisualElement = showVisualElement && visualElement;
-  if (hasVisualElement) {
+  if (visualElement && showVisualElement) {
     html("section").prepend(`<section>${visualElement}</section>`);
   }
 
@@ -164,24 +164,25 @@ export const transformArticle = async (
       });
     }),
   );
-  const metaData = toArticleMetaData(embedPromises);
-  const transformedContent = html.html();
-  const visualElementCheerio = hasVisualElement ? embeds[0]?.embed : undefined;
-  const transformedVisEl = visualElementCheerio?.parent().html();
-  const visualElementMeta = hasVisualElement ? embedPromises[0] : undefined;
-  const transformedVisualElement =
-    visualElementMeta?.status === "success" ? toVisualElement(visualElementMeta) : undefined;
 
   return {
-    metaData,
-    content: transformedContent,
-    visualElement: transformedVisualElement,
-    visualElementEmbed:
-      !!transformedVisEl && !!visualElementMeta
-        ? {
-            content: transformedVisEl,
-            meta: toArticleMetaData([visualElementMeta]),
-          }
-        : undefined,
+    content: html.html(),
+    metaData: toArticleMetaData(embedPromises),
+  };
+};
+
+export const transformVisualElement = async (content: string, context: ContextWithLoaders) => {
+  const html = load(`<section>${content}</section>`, null, false);
+
+  const embeds = getEmbedsFromContent(html);
+  const embedPromises = await Promise.all(
+    embeds.map(async (embed, index) => {
+      return transformEmbed(embed, context, index, 0, {});
+    }),
+  );
+  const embedMeta = embedPromises[0];
+  return {
+    content: embeds[0]?.embed?.parent().html() ?? "",
+    meta: toArticleMetaData(embedMeta ? [embedPromises[0]] : []),
   };
 };

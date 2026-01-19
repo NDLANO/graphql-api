@@ -61,6 +61,7 @@ export type GQLArticle = {
   transformedContent: GQLTransformedArticleContent;
   transformedDisclaimer: GQLTransformedArticleContent;
   updated: Scalars['String']['output'];
+  visualElementEmbed?: Maybe<GQLResourceEmbed>;
 };
 
 
@@ -603,7 +604,7 @@ export type GQLImageElement = {
   focalY?: Maybe<Scalars['Float']['output']>;
   lowerRightX?: Maybe<Scalars['Float']['output']>;
   lowerRightY?: Maybe<Scalars['Float']['output']>;
-  resourceid?: Maybe<Scalars['String']['output']>;
+  resourceId?: Maybe<Scalars['String']['output']>;
   src: Scalars['String']['output'];
   upperLeftX?: Maybe<Scalars['Float']['output']>;
   upperLeftY?: Maybe<Scalars['Float']['output']>;
@@ -1995,7 +1996,9 @@ export type GQLTransformedArticleContent = {
   __typename?: 'TransformedArticleContent';
   content: Scalars['String']['output'];
   metaData?: Maybe<GQLArticleMetaData>;
+  /** @deprecated Field no longer supported */
   visualElement?: Maybe<GQLVisualElement>;
+  /** @deprecated Use visualElementEmbed on Article */
   visualElementEmbed?: Maybe<GQLResourceEmbed>;
 };
 
@@ -2531,6 +2534,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   transformedContent?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedContentArgs>>;
   transformedDisclaimer?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedDisclaimerArgs>>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3043,7 +3047,7 @@ export type GQLImageElementResolvers<ContextType = any, ParentType extends GQLRe
   focalY?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
   lowerRightX?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
   lowerRightY?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
-  resourceid?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+  resourceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   src?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   upperLeftX?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
   upperLeftY?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;

@@ -11,17 +11,23 @@ import { ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { fetchArticle, fetchSubjectTopics, searchConcepts } from "../api";
 import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
 
-import { fetchTransformedContent, fetchRelatedContent, fetchTransformedDisclaimer } from "../api/articleApi";
+import {
+  fetchTransformedContent,
+  fetchRelatedContent,
+  fetchTransformedDisclaimer,
+  fetchVisualElementEmbed,
+} from "../api/articleApi";
 import { ndlaUrl } from "../config";
 import {
+  GQLArticleTransformedContentArgs,
   GQLCompetenceGoal,
   GQLCoreElement,
   GQLCrossSubjectElement,
-  GQLQueryArticleArgs,
-  GQLTransformedArticleContent,
-  GQLArticleTransformedContentArgs,
-  GQLRelatedContent,
   GQLImageMetaInformationV3,
+  GQLQueryArticleArgs,
+  GQLRelatedContent,
+  GQLResourceEmbed,
+  GQLTransformedArticleContent,
 } from "../types/schema";
 
 export const Query = {
@@ -161,6 +167,13 @@ export const resolvers = {
       context: ContextWithLoaders,
     ): Promise<GQLRelatedContent[]> {
       return fetchRelatedContent(article, args, context);
+    },
+    visualElementEmbed(
+      article: ArticleV2DTO,
+      _: any,
+      context: ContextWithLoaders,
+    ): Promise<GQLResourceEmbed | undefined> {
+      return fetchVisualElementEmbed(article, context);
     },
   },
 };

@@ -694,6 +694,7 @@ export const typeDefs = gql`
     transformedContent(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
     oembed: String
     transformedDisclaimer(transformArgs: TransformedArticleContentInput): TransformedArticleContent!
+    visualElementEmbed: ResourceEmbed
     traits: [String!]!
   }
 
@@ -710,9 +711,9 @@ export const typeDefs = gql`
 
   type TransformedArticleContent {
     content: String!
-    visualElement: VisualElement
     metaData: ArticleMetaData
-    visualElementEmbed: ResourceEmbed
+    visualElement: VisualElement @deprecated
+    visualElementEmbed: ResourceEmbed @deprecated(reason: "Use visualElementEmbed on Article")
   }
 
   type EmbedVisualelement {
@@ -992,7 +993,7 @@ export const typeDefs = gql`
   }
 
   type ImageElement {
-    resourceid: String
+    resourceId: String
     alt: String
     caption: String
     lowerRightX: Float

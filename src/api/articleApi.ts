@@ -7,9 +7,14 @@
  */
 
 import { ArticleV2DTO, openapi } from "@ndla/types-backend/article-api";
-import { transformArticle } from "./transformArticleApi";
+import { transformArticle, transformVisualElement } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
-import { GQLArticleTransformedContentArgs, GQLRelatedContent, GQLTransformedArticleContent } from "../types/schema";
+import {
+  GQLArticleTransformedContentArgs,
+  GQLRelatedContent,
+  GQLResourceEmbed,
+  GQLTransformedArticleContent,
+} from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
@@ -37,7 +42,7 @@ export const fetchTransformedContent = async (
       subjectId = contextRootId;
     }
   }
-  const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
+  const { content, metaData } = await transformArticle(
     article.content.content,
     context,
     article.visualElement?.visualElement,
@@ -53,8 +58,6 @@ export const fetchTransformedContent = async (
   return {
     content: (article.articleType === "standard" ? content : content === "<section></section>" ? "" : content) ?? "",
     metaData,
-    visualElement,
-    visualElementEmbed: visualElementEmbed,
   };
 };
 
@@ -77,20 +80,25 @@ export const fetchTransformedDisclaimer = async (
       subjectId = contextRootId;
     }
   }
-  const { content, metaData, visualElement, visualElementEmbed } = await transformArticle(
-    article.disclaimer.disclaimer,
-    context,
-    undefined,
-    {
-      subject: subjectId,
-      draftConcept: params.draftConcept,
-      previewH5p: params.previewH5p,
-      absoluteUrl: params.absoluteUrl,
-      showVisualElement: params.showVisualElement === "true",
-    },
-  );
-  return { content: content ?? "", metaData, visualElement, visualElementEmbed: visualElementEmbed };
+  const { content, metaData } = await transformArticle(article.disclaimer.disclaimer, context, undefined, {
+    subject: subjectId,
+    draftConcept: params.draftConcept,
+    previewH5p: params.previewH5p,
+    absoluteUrl: params.absoluteUrl,
+    showVisualElement: params.showVisualElement === "true",
+  });
+  return { content: content ?? "", metaData };
 };
+
+export async function fetchVisualElementEmbed(
+  article: ArticleV2DTO,
+  context: ContextWithLoaders,
+): Promise<GQLResourceEmbed | undefined> {
+  if (!article.visualElement?.visualElement) {
+    return undefined;
+  }
+  return await transformVisualElement(article.visualElement.visualElement, context);
+}
 
 export async function fetchRelatedContent(
   article: ArticleV2DTO,
@@ -137,8 +145,7 @@ export async function fetchRelatedContent(
 }
 
 export async function fetchArticle(params: ArticleParams, context: Context): Promise<ArticleV2DTO> {
-  const article = await fetchSimpleArticle(params.articleId, context);
-  return article;
+  return await fetchSimpleArticle(params.articleId, context);
 }
 
 export async function fetchArticlesPage(
