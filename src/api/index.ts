@@ -19,7 +19,6 @@ export {
   fetchNode,
   fetchNodeResources,
   fetchChildren,
-  queryContexts,
   queryNodes,
 } from "./taxonomyApi";
 export { fetchUptimeIssues } from "./uptimeApi";

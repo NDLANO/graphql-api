@@ -6,37 +6,41 @@
  *
  */
 
-import { Response } from "node-fetch";
-import qs from "query-string";
-import { Node, NodeChild, TaxonomyContext, Version, SearchResult } from "@ndla/types-taxonomy";
-import { GQLResourceType, GQLResourceTypeDefinition, GQLTopic } from "../types/schema";
-import { resolveJson } from "../utils/apiHelpers";
-import { fetch } from "../utils/fetch";
+import {
+  Node,
+  NodeChild,
+  Version,
+  SearchResult,
+  openapi,
+  ResourceType,
+  NodeType,
+  NodeConnectionType,
+} from "@ndla/types-taxonomy";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { withCustomContext } from "../utils/context/contextStore";
+import { apiUrl } from "../config";
 
-async function taxonomyFetch(path: string, context: Context, options?: RequestOptions): Promise<Response> {
-  return fetch(path, context, { ...options, useTaxonomyCache: true });
+const client = createAuthClient<openapi.paths>({ baseUrl: `${apiUrl}/taxonomy`, useTaxonomyCache: true });
+
+export async function fetchResourceTypes(context: Context): Promise<ResourceType[]> {
+  return client.GET("/v1/resource-types", { params: { query: { language: context.language } } }).then(resolveJsonOATS);
 }
 
-export async function fetchResourceTypes<T extends GQLResourceType | GQLResourceTypeDefinition>(
-  context: Context,
-): Promise<T[]> {
-  const query = qs.stringify({
-    language: context.language,
-  });
-  const response = await taxonomyFetch(`/taxonomy/v1/resource-types?${query}`, context);
-  return resolveJson(response);
-}
-
-export async function fetchSubjectTopics(subjectId: string, context: Context): Promise<GQLTopic[]> {
-  const query = qs.stringify({
-    recursive: true,
-    nodeType: "TOPIC",
-    language: context.language,
-    includeContexts: true,
-    filterProgrammes: true,
-  });
-  const response = await taxonomyFetch(`/taxonomy/v1/nodes/${subjectId}/nodes?${query}`, context);
-  return resolveJson(response);
+export async function fetchSubjectTopics(subjectId: string, context: Context): Promise<Node[]> {
+  return client
+    .GET("/v1/nodes/{id}/nodes", {
+      params: {
+        path: { id: subjectId },
+        query: {
+          recursive: true,
+          nodeType: ["TOPIC"],
+          language: context.language,
+          includeContexts: true,
+          filterProgrammes: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchNode(
@@ -44,35 +48,39 @@ export async function fetchNode(
   context: Context,
 ): Promise<Node> {
   const { id, rootId, parentId } = params;
-  const query = qs.stringify({
-    language: context.language,
-    isVisible: true,
-    inludeContexts: true,
-    filterProgrammes: true,
-    rootId,
-    parentId,
-  });
-  const response = await taxonomyFetch(`/taxonomy/v1/nodes/${id}?${query}`, context);
-  return await resolveJson(response);
+
+  return client
+    .GET(`/v1/nodes/{id}`, {
+      params: {
+        path: { id },
+        query: {
+          language: context.language,
+          isVisible: true,
+          includeContexts: true,
+          filterProgrammes: true,
+          rootId,
+          parentId,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function searchNodes(params: { contentUris: string[] }, context: Context): Promise<SearchResult> {
-  const response = await taxonomyFetch("/taxonomy/v1/nodes/search", context, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      language: context.language,
-      contentUris: params.contentUris,
-      isVisible: true,
-      includeContexts: true,
-      filterProgrammes: true,
-      page: 1,
-      pageSize: 100,
-    }),
-  });
-  return await resolveJson(response);
+  return client
+    .POST("/v1/nodes/search", {
+      body: {
+        language: context.language,
+        contentUris: params.contentUris,
+        // TODO: This doesn't exist?
+        // isVisible: true,
+        includeContexts: true,
+        filterProgrammes: true,
+        page: 1,
+        pageSize: 100,
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function fetchChildren(
@@ -84,18 +92,22 @@ export async function fetchChildren(
   },
   context: Context,
 ): Promise<NodeChild[]> {
-  const { id, nodeType, recursive, connectionTypes } = params;
-  const query = qs.stringify({
-    nodeType,
-    recursive,
-    connectionTypes,
-    isVisible: true,
-    includeContexts: true,
-    filterProgrammes: true,
-    language: context.language,
-  });
-  const response = await taxonomyFetch(`/taxonomy/v1/nodes/${id}/nodes?${query}`, context);
-  return resolveJson(response);
+  return client
+    .GET("/v1/nodes/{id}/nodes", {
+      params: {
+        path: { id: params.id },
+        query: {
+          nodeType: params.nodeType ? [params.nodeType as NodeType] : undefined,
+          recursive: params.recursive,
+          connectionTypes: params.connectionTypes ? [params.connectionTypes as NodeConnectionType] : undefined,
+          isVisible: true,
+          includeContexts: true,
+          filterProgrammes: true,
+          language: context.language,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 interface FetchNodeResourcesParams {
@@ -103,29 +115,35 @@ interface FetchNodeResourcesParams {
   relevance?: string;
 }
 export async function fetchNodeResources(params: FetchNodeResourcesParams, context: Context): Promise<NodeChild[]> {
-  const { id, relevance } = params;
-  const query = qs.stringify({
-    language: context.language,
-    relevance: relevance,
-    isVisible: true,
-    includeContexts: true,
-    filterProgrammes: true,
-  });
-  const response = await taxonomyFetch(`/taxonomy/v1/nodes/${id}/resources?${query}`, context);
-  return await resolveJson(response);
+  return client
+    .GET("/v1/nodes/{id}/resources", {
+      params: {
+        path: { id: params.id },
+        query: {
+          language: context.language,
+          relevance: params.relevance,
+          isVisible: true,
+          includeContexts: true,
+          filterProgrammes: true,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
-export async function queryContexts(contentURI: string, context: Context): Promise<TaxonomyContext[]> {
-  const response = await fetch(`/taxonomy/v1/queries/${contentURI}`, context);
-  return await resolveJson(response);
-}
-
-export async function fetchVersion(hash: string, context: Context): Promise<Version | undefined> {
-  const response = await fetch(`/taxonomy/v1/versions?hash=${hash}`, {
-    ...context,
-    versionHash: "default",
-  });
-  if (response.status === 404) {
+export async function fetchVersion(hash: string, _context: Context): Promise<Version | undefined> {
+  const result = await withCustomContext(
+    (ctx) => ({ ...ctx, versionHash: undefined }),
+    () =>
+      client.GET("/v1/versions", {
+        params: {
+          query: {
+            hash,
+          },
+        },
+      }),
+  );
+  if (result.response.status === 404) {
     return {
       id: "",
       versionType: "BETA",
@@ -135,7 +153,8 @@ export async function fetchVersion(hash: string, context: Context): Promise<Vers
       created: "",
     };
   }
-  const json = await resolveJson(response);
+
+  const json = await resolveJsonOATS(result);
   return json?.[0];
 }
 
@@ -160,11 +179,26 @@ export type NodeQueryParams = NodeQueryParamsBase &
   RequireAtLeastOne<{ contextId?: string; contentURI?: string; nodeType?: string }>;
 
 export const queryNodes = async (params: NodeQueryParams, context: Context): Promise<Node[]> => {
-  const query = qs.stringify({
-    language: context.language,
-    ...params,
-    ids: params.ids?.join(","),
-  });
-  const res = await taxonomyFetch(`/taxonomy/v1/nodes?${query}`, context);
-  return await resolveJson(res);
+  return client
+    .GET("/v1/nodes", {
+      params: {
+        query: {
+          language: context.language,
+          isRoot: params.isRoot,
+          isContext: params.isContext,
+          key: params.key,
+          value: params.value,
+          ids: params.ids,
+          rootId: params.rootId,
+          parentId: params.parentId,
+          isVisible: params.isVisible,
+          includeContexts: params.includeContexts,
+          filterProgrammes: params.filterProgrammes,
+          contextId: params.contextId,
+          contentURI: params.contentURI,
+          nodeType: params.nodeType ? [params.nodeType as NodeType] : undefined,
+        },
+      },
+    })
+    .then(resolveJsonOATS);
 };

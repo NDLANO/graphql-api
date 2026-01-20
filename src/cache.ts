@@ -63,9 +63,10 @@ export const setHeaderIfShouldNotCache = (response: globalThis.Response | Respon
 
 const cache = createCache();
 
-export function getCacheKey(url: string, { versionHash }: Context, options?: RequestOptions): string {
-  const { useTaxonomyCache } = options ?? {};
-  if (useTaxonomyCache && versionHash && versionHash !== "default") return `${url}_${versionHash}`;
+export function getCacheKey(url: string, { versionHash }: Context, useTaxonomyCache?: boolean): string {
+  if (useTaxonomyCache && versionHash && versionHash !== "default") {
+    return `${url}_${versionHash}`;
+  }
   return url;
 }
 
