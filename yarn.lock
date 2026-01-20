@@ -2898,12 +2898,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/open-graph-scraper@npm:^4.8.5":
-  version: 4.8.5
-  resolution: "@types/open-graph-scraper@npm:4.8.5"
+"@types/open-graph-scraper@npm:^5.2.3":
+  version: 5.2.3
+  resolution: "@types/open-graph-scraper@npm:5.2.3"
   dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/c675f5ed43b7df43476f2a15f7657bad165182ba923780cc3e31dea65421ce19ef34738cb4b9ee66e9521dafefcfa64ef290ec53ed5352f9844787c5d739fb97
+    open-graph-scraper: "npm:*"
+  checksum: 10c0/d69d176eb555a735b5e60b4584cf3262ebfaa638e22ea6df1d6c64329f8b2347a8718b01f539b3ca907a442d9316ae4dc91944e2e794fa83d559504d104b8781
   languageName: node
   linkType: hard
 
@@ -3917,7 +3917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chardet@npm:^2.0.0, chardet@npm:^2.1.1":
+"chardet@npm:^2.1.1":
   version: 2.1.1
   resolution: "chardet@npm:2.1.1"
   checksum: 10c0/d8391dd412338442b3de0d3a488aa9327f8bcf74b62b8723d6bd0b85c4084d50b731320e0a7c710edb1d44de75969995d2784b80e4c13b004a6c7a0db4c6e793
@@ -3938,22 +3938,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cheerio@npm:^1.0.0-rc.12, cheerio@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "cheerio@npm:1.1.0"
+"cheerio@npm:^1.1.0, cheerio@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "cheerio@npm:1.1.2"
   dependencies:
     cheerio-select: "npm:^2.1.0"
     dom-serializer: "npm:^2.0.0"
     domhandler: "npm:^5.0.3"
     domutils: "npm:^3.2.2"
-    encoding-sniffer: "npm:^0.2.0"
+    encoding-sniffer: "npm:^0.2.1"
     htmlparser2: "npm:^10.0.0"
     parse5: "npm:^7.3.0"
     parse5-htmlparser2-tree-adapter: "npm:^7.1.0"
     parse5-parser-stream: "npm:^7.1.2"
-    undici: "npm:^7.10.0"
+    undici: "npm:^7.12.0"
     whatwg-mimetype: "npm:^4.0.0"
-  checksum: 10c0/f7b940a89e1fe77bf6b4fe3b993f17b02a358942cc0b9d3b55ea235a0bc322829dbc47151763ef9986fd237494c00380909af759e46582c72470a10643b85abd
+  checksum: 10c0/2c6d2274666fe122f54fdca457ee76453e1a993b19563acaa23eb565bf7776f0f01e4c3800092f00e84aa13c83a161f0cf000ac0a8332d1d7f2b2387d6ecc5fc
   languageName: node
   linkType: hard
 
@@ -4625,7 +4625,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"encoding-sniffer@npm:^0.2.0":
+"encoding-sniffer@npm:^0.2.1":
   version: 0.2.1
   resolution: "encoding-sniffer@npm:0.2.1"
   dependencies:
@@ -7288,7 +7288,7 @@ __metadata:
     "@types/lodash": "npm:^4.14.118"
     "@types/node": "npm:^22.15.0"
     "@types/node-fetch": "npm:^2.1.2"
-    "@types/open-graph-scraper": "npm:^4.8.5"
+    "@types/open-graph-scraper": "npm:^5.2.3"
     "@types/prismjs": "npm:^1.26.0"
     "@types/punycode": "npm:^2.1.4"
     "@types/query-string": "npm:^6.1.1"
@@ -7313,7 +7313,7 @@ __metadata:
     lru-cache: "npm:^7.0.0"
     marked: "npm:^9.1.0"
     node-fetch: "npm:2.6.7"
-    open-graph-scraper: "npm:^6.8.3"
+    open-graph-scraper: "npm:^6.11.0"
     openapi-fetch: "npm:^0.13.5"
     prettier: "npm:^3.8.0"
     prismjs: "npm:^1.30.0"
@@ -7608,15 +7608,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"open-graph-scraper@npm:^6.8.3":
-  version: 6.8.3
-  resolution: "open-graph-scraper@npm:6.8.3"
+"open-graph-scraper@npm:*, open-graph-scraper@npm:^6.11.0":
+  version: 6.11.0
+  resolution: "open-graph-scraper@npm:6.11.0"
   dependencies:
-    chardet: "npm:^2.0.0"
-    cheerio: "npm:^1.0.0-rc.12"
-    iconv-lite: "npm:^0.6.3"
-    undici: "npm:^6.21.0"
-  checksum: 10c0/85f65f250b13b1c51ac2d88cf7fe0cc5691cc63d002ec0cf6462371736b4d2a59d386453a61bc11d7bdb568afca5dd36c43641e1e296afe924109d265ac16588
+    chardet: "npm:^2.1.1"
+    cheerio: "npm:^1.1.2"
+    iconv-lite: "npm:^0.7.0"
+    undici: "npm:^7.16.0"
+  checksum: 10c0/7265928f6b70bd720359ff7bad75b2eee48fda9e5fd6cd0135611c2a05263858c1941c663e79ab3f91221aa9f34fa49e0a69dfdcdd82a7b218556ab1d42783d3
   languageName: node
   linkType: hard
 
@@ -9351,17 +9351,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^6.21.0":
-  version: 6.21.3
-  resolution: "undici@npm:6.21.3"
-  checksum: 10c0/294da109853fad7a6ef5a172ad0ca3fb3f1f60cf34703d062a5ec967daf69ad8c03b52e6d536c5cba3bb65615769bf08e5b30798915cbccdddaca01045173dda
-  languageName: node
-  linkType: hard
-
-"undici@npm:^7.10.0":
-  version: 7.10.0
-  resolution: "undici@npm:7.10.0"
-  checksum: 10c0/756ac876a8df845bc89eb8348c35d33a0ff63c17eb45b664075c961a7fbd4a398f94f9dce438262f55fe66e4bbb0a46aa63a3fd58ce51361c616aff11a270450
+"undici@npm:^7.12.0, undici@npm:^7.16.0":
+  version: 7.18.2
+  resolution: "undici@npm:7.18.2"
+  checksum: 10c0/4ff0722799f5e06fde5d1e58d318b1d78ba9a477836ad3e7374e9ac30ca20d1ab3282952d341635bf69b8e74b5c1cf366e595b3a96810e0dbf74e622dad7b5f9
   languageName: node
   linkType: hard
 
