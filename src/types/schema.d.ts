@@ -2086,7 +2086,7 @@ export type ResolverTypeWrapper<T> = Promise<T> | T;
 export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
   resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
 };
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<TResult, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -2123,21 +2123,21 @@ export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, 
   | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
   | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
 
-export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
+export type SubscriptionResolver<TResult, TKey extends string, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> =
   | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
   | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
 
-export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
+export type TypeResolveFn<TTypes, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (
   parent: TParent,
   context: TContext,
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
-export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
+export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = Record<PropertyKey, never>, TContext = Record<PropertyKey, never>, TArgs = Record<PropertyKey, never>> = (
   next: NextResolverFn<TResult>,
   parent: TParent,
   args: TArgs,
@@ -2145,19 +2145,54 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
+
 /** Mapping of union types */
 export type GQLResolversUnionTypes<_RefType extends Record<string, unknown>> = {
-  SearchResultUnion: ( GQLArticleSearchResult ) | ( GQLLearningpathSearchResult ) | ( GQLNodeSearchResult );
+  SearchResultUnion:
+    | ( GQLArticleSearchResult )
+    | ( GQLLearningpathSearchResult )
+    | ( GQLNodeSearchResult )
+  ;
 };
 
 /** Mapping of interface types */
 export type GQLResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
-  FolderResourceMeta: ( GQLArticleFolderResourceMeta ) | ( GQLAudioFolderResourceMeta ) | ( GQLConceptFolderResourceMeta ) | ( GQLImageFolderResourceMeta ) | ( GQLLearningpathFolderResourceMeta ) | ( GQLVideoFolderResourceMeta );
-  PodcastSeriesBase: ( GQLPodcastSeries ) | ( GQLPodcastSeriesWithEpisodes );
-  SearchResult: ( GQLArticleSearchResult ) | ( GQLLearningpathSearchResult ) | ( GQLNodeSearchResult );
-  TaxBase: ( GQLNode ) | ( GQLResource ) | ( GQLSubject ) | ( GQLTaxonomyCrumb ) | ( GQLTopic );
-  TaxonomyEntity: ( GQLNode ) | ( GQLResource ) | ( GQLSubject ) | ( GQLTopic );
-  WithArticle: ( GQLNode ) | ( GQLResource ) | ( GQLTopic );
+  FolderResourceMeta:
+    | ( GQLArticleFolderResourceMeta )
+    | ( GQLAudioFolderResourceMeta )
+    | ( GQLConceptFolderResourceMeta )
+    | ( GQLImageFolderResourceMeta )
+    | ( GQLLearningpathFolderResourceMeta )
+    | ( GQLVideoFolderResourceMeta )
+  ;
+  PodcastSeriesBase:
+    | ( GQLPodcastSeries )
+    | ( GQLPodcastSeriesWithEpisodes )
+  ;
+  SearchResult:
+    | ( GQLArticleSearchResult )
+    | ( GQLLearningpathSearchResult )
+    | ( GQLNodeSearchResult )
+  ;
+  TaxBase:
+    | ( GQLNode )
+    | ( GQLResource )
+    | ( GQLSubject )
+    | ( GQLTaxonomyCrumb )
+    | ( GQLTopic )
+  ;
+  TaxonomyEntity:
+    | ( GQLNode )
+    | ( GQLResource )
+    | ( GQLSubject )
+    | ( GQLTopic )
+  ;
+  WithArticle:
+    | ( GQLNode )
+    | ( GQLResource )
+    | ( GQLTopic )
+  ;
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -2254,7 +2289,7 @@ export type GQLResolversTypes = {
   MovieMeta: ResolverTypeWrapper<GQLMovieMeta>;
   MovieResourceTypes: ResolverTypeWrapper<GQLMovieResourceTypes>;
   MovieTheme: ResolverTypeWrapper<GQLMovieTheme>;
-  Mutation: ResolverTypeWrapper<{}>;
+  Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   MyNdlaGroup: ResolverTypeWrapper<GQLMyNdlaGroup>;
   MyNdlaLearningpath: ResolverTypeWrapper<GQLMyNdlaLearningpath>;
   MyNdlaLearningpathStep: ResolverTypeWrapper<GQLMyNdlaLearningpathStep>;
@@ -2273,7 +2308,7 @@ export type GQLResolversTypes = {
   PodcastSeriesSummary: ResolverTypeWrapper<GQLPodcastSeriesSummary>;
   PodcastSeriesWithEpisodes: ResolverTypeWrapper<GQLPodcastSeriesWithEpisodes>;
   ProgrammePage: ResolverTypeWrapper<GQLProgrammePage>;
-  Query: ResolverTypeWrapper<{}>;
+  Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Reference: ResolverTypeWrapper<GQLReference>;
   RelatedContent: ResolverTypeWrapper<GQLRelatedContent>;
   Resource: ResolverTypeWrapper<GQLResource>;
@@ -2418,7 +2453,7 @@ export type GQLResolversParentTypes = {
   MovieMeta: GQLMovieMeta;
   MovieResourceTypes: GQLMovieResourceTypes;
   MovieTheme: GQLMovieTheme;
-  Mutation: {};
+  Mutation: Record<PropertyKey, never>;
   MyNdlaGroup: GQLMyNdlaGroup;
   MyNdlaLearningpath: GQLMyNdlaLearningpath;
   MyNdlaLearningpathStep: GQLMyNdlaLearningpathStep;
@@ -2437,7 +2472,7 @@ export type GQLResolversParentTypes = {
   PodcastSeriesSummary: GQLPodcastSeriesSummary;
   PodcastSeriesWithEpisodes: GQLPodcastSeriesWithEpisodes;
   ProgrammePage: GQLProgrammePage;
-  Query: {};
+  Query: Record<PropertyKey, never>;
   Reference: GQLReference;
   RelatedContent: GQLRelatedContent;
   Resource: GQLResource;
@@ -2493,7 +2528,6 @@ export type GQLAggregationResultResolvers<ContextType = any, ParentType extends 
   field?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   sumOtherDocCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   values?: Resolver<Array<GQLResolversTypes['BucketResult']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Article'] = GQLResolversParentTypes['Article']> = {
@@ -2531,7 +2565,6 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   transformedDisclaimer?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedDisclaimerArgs>>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLArticleFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleFolderResourceMeta'] = GQLResolversParentTypes['ArticleFolderResourceMeta']> = {
@@ -2556,14 +2589,12 @@ export type GQLArticleMetaDataResolvers<ContextType = any, ParentType extends GQ
   images?: Resolver<Array<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
   podcasts?: Resolver<Array<GQLResolversTypes['PodcastLicense']>, ParentType, ContextType>;
   textblocks?: Resolver<Array<GQLResolversTypes['TextblockLicense']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLArticleRequiredLibraryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleRequiredLibrary'] = GQLResolversParentTypes['ArticleRequiredLibrary']> = {
   mediaType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLArticleSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleSearchResult'] = GQLResolversParentTypes['ArticleSearchResult']> = {
@@ -2594,7 +2625,6 @@ export type GQLAudioResolvers<ContextType = any, ParentType extends GQLResolvers
   tags?: Resolver<GQLResolversTypes['Tags'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLAudioFileResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioFile'] = GQLResolversParentTypes['AudioFile']> = {
@@ -2602,7 +2632,6 @@ export type GQLAudioFileResolvers<ContextType = any, ParentType extends GQLResol
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   mimeType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLAudioFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioFolderResourceMeta'] = GQLResolversParentTypes['AudioFolderResourceMeta']> = {
@@ -2621,7 +2650,6 @@ export type GQLAudioLicenseResolvers<ContextType = any, ParentType extends GQLRe
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   src?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLAudioSearchResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioSearch'] = GQLResolversParentTypes['AudioSearch']> = {
@@ -2630,7 +2658,6 @@ export type GQLAudioSearchResolvers<ContextType = any, ParentType extends GQLRes
   pageSize?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   results?: Resolver<Array<GQLResolversTypes['AudioSummary']>, ParentType, ContextType>;
   totalCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLAudioSummaryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioSummary'] = GQLResolversParentTypes['AudioSummary']> = {
@@ -2643,20 +2670,17 @@ export type GQLAudioSummaryResolvers<ContextType = any, ParentType extends GQLRe
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLBreadcrumbResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Breadcrumb'] = GQLResolversParentTypes['Breadcrumb']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLBrightcoveCustomFieldsResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BrightcoveCustomFields'] = GQLResolversParentTypes['BrightcoveCustomFields']> = {
   accountId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   license?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   licenseInfo?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLBrightcoveElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BrightcoveElement'] = GQLResolversParentTypes['BrightcoveElement']> = {
@@ -2672,14 +2696,12 @@ export type GQLBrightcoveElementResolvers<ContextType = any, ParentType extends 
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   uploadDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   videoid?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLBrightcoveIframeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BrightcoveIframe'] = GQLResolversParentTypes['BrightcoveIframe']> = {
   height?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   src?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   width?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLBrightcoveLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BrightcoveLicense'] = GQLResolversParentTypes['BrightcoveLicense']> = {
@@ -2692,19 +2714,16 @@ export type GQLBrightcoveLicenseResolvers<ContextType = any, ParentType extends 
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   uploadDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLBucketResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BucketResult'] = GQLResolversParentTypes['BucketResult']> = {
   count?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   value?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCaptionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Caption'] = GQLResolversParentTypes['Caption']> = {
   caption?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCategoryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Category'] = GQLResolversParentTypes['Category']> = {
@@ -2712,13 +2731,11 @@ export type GQLCategoryResolvers<ContextType = any, ParentType extends GQLResolv
   isProgrammeSubject?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   subjects?: Resolver<Maybe<Array<GQLResolversTypes['Subject']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCategoryBreadcrumbResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['CategoryBreadcrumb'] = GQLResolversParentTypes['CategoryBreadcrumb']> = {
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCompetenceGoalResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['CompetenceGoal'] = GQLResolversParentTypes['CompetenceGoal']> = {
@@ -2736,7 +2753,6 @@ export type GQLCompetenceGoalResolvers<ContextType = any, ParentType extends GQL
   language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Concept'] = GQLResolversParentTypes['Concept']> = {
@@ -2752,7 +2768,6 @@ export type GQLConceptResolvers<ContextType = any, ParentType extends GQLResolve
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLConceptCopyrightResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConceptCopyright'] = GQLResolversParentTypes['ConceptCopyright']> = {
@@ -2762,7 +2777,6 @@ export type GQLConceptCopyrightResolvers<ContextType = any, ParentType extends G
   processed?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   processors?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   rightsholders?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLConceptFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConceptFolderResourceMeta'] = GQLResolversParentTypes['ConceptFolderResourceMeta']> = {
@@ -2781,25 +2795,21 @@ export type GQLConceptLicenseResolvers<ContextType = any, ParentType extends GQL
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLConfigMetaBooleanResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaBoolean'] = GQLResolversParentTypes['ConfigMetaBoolean']> = {
   key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLConfigMetaStringListResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConfigMetaStringList'] = GQLResolversParentTypes['ConfigMetaStringList']> = {
   key?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   value?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLContributorResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Contributor'] = GQLResolversParentTypes['Contributor']> = {
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCopyrightResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Copyright'] = GQLResolversParentTypes['Copyright']> = {
@@ -2809,7 +2819,6 @@ export type GQLCopyrightResolvers<ContextType = any, ParentType extends GQLResol
   processed?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   processors?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   rightsholders?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCoreElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['CoreElement'] = GQLResolversParentTypes['CoreElement']> = {
@@ -2819,14 +2828,12 @@ export type GQLCoreElementResolvers<ContextType = any, ParentType extends GQLRes
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCoverPhotoResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['CoverPhoto'] = GQLResolversParentTypes['CoverPhoto']> = {
   altText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLCrossSubjectElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['CrossSubjectElement'] = GQLResolversParentTypes['CrossSubjectElement']> = {
@@ -2834,37 +2841,31 @@ export type GQLCrossSubjectElementResolvers<ContextType = any, ParentType extend
   path?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLDescriptionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Description'] = GQLResolversParentTypes['Description']> = {
   description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLEditorNoteResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['EditorNote'] = GQLResolversParentTypes['EditorNote']> = {
   note?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   timestamp?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   updatedBy?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Element'] = GQLResolversParentTypes['Element']> = {
   reference?: Resolver<GQLResolversTypes['Reference'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLEmbedVisualelementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['EmbedVisualelement'] = GQLResolversParentTypes['EmbedVisualelement']> = {
   visualElement?: Resolver<Maybe<GQLResolversTypes['VisualElement']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLExamplesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Examples'] = GQLResolversParentTypes['Examples']> = {
   example?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   transcriptions?: Resolver<GQLResolversTypes['Transcription'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLExternalOpengraphResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ExternalOpengraph'] = GQLResolversParentTypes['ExternalOpengraph']> = {
@@ -2873,7 +2874,6 @@ export type GQLExternalOpengraphResolvers<ContextType = any, ParentType extends 
   imageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLFilmFrontpageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FilmFrontpage'] = GQLResolversParentTypes['FilmFrontpage']> = {
@@ -2882,7 +2882,6 @@ export type GQLFilmFrontpageResolvers<ContextType = any, ParentType extends GQLR
   movieThemes?: Resolver<Array<GQLResolversTypes['MovieTheme']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   slideShow?: Resolver<Array<GQLResolversTypes['Movie']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLFilmPageAboutResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FilmPageAbout'] = GQLResolversParentTypes['FilmPageAbout']> = {
@@ -2890,7 +2889,6 @@ export type GQLFilmPageAboutResolvers<ContextType = any, ParentType extends GQLR
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElement?: Resolver<GQLResolversTypes['SubjectPageVisualElement'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Folder'] = GQLResolversParentTypes['Folder']> = {
@@ -2905,7 +2903,6 @@ export type GQLFolderResolvers<ContextType = any, ParentType extends GQLResolver
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   subfolders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLFolderResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FolderResource'] = GQLResolversParentTypes['FolderResource']> = {
@@ -2915,23 +2912,15 @@ export type GQLFolderResourceResolvers<ContextType = any, ParentType extends GQL
   resourceId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   resourceType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FolderResourceMeta'] = GQLResolversParentTypes['FolderResourceMeta']> = {
   __resolveType: TypeResolveFn<'ArticleFolderResourceMeta' | 'AudioFolderResourceMeta' | 'ConceptFolderResourceMeta' | 'ImageFolderResourceMeta' | 'LearningpathFolderResourceMeta' | 'VideoFolderResourceMeta', ParentType, ContextType>;
-  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Array<GQLResolversTypes['FolderResourceResourceType']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type GQLFolderResourceResourceTypeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FolderResourceResourceType'] = GQLResolversParentTypes['FolderResourceResourceType']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLFootNoteResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FootNote'] = GQLResolversParentTypes['FootNote']> = {
@@ -2942,7 +2931,6 @@ export type GQLFootNoteResolvers<ContextType = any, ParentType extends GQLResolv
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   year?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLFrontpageMenuResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FrontpageMenu'] = GQLResolversParentTypes['FrontpageMenu']> = {
@@ -2950,7 +2938,6 @@ export type GQLFrontpageMenuResolvers<ContextType = any, ParentType extends GQLR
   articleId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   hideLevel?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   menu?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['FrontpageMenu']>>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLGlossResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Gloss'] = GQLResolversParentTypes['Gloss']> = {
@@ -2959,7 +2946,6 @@ export type GQLGlossResolvers<ContextType = any, ParentType extends GQLResolvers
   originalLanguage?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   transcriptions?: Resolver<GQLResolversTypes['Transcription'], ParentType, ContextType>;
   wordClass?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLGlossLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['GlossLicense'] = GQLResolversParentTypes['GlossLicense']> = {
@@ -2969,7 +2955,6 @@ export type GQLGlossLicenseResolvers<ContextType = any, ParentType extends GQLRe
   metaImageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLGradeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Grade'] = GQLResolversParentTypes['Grade']> = {
@@ -2977,7 +2962,6 @@ export type GQLGradeResolvers<ContextType = any, ParentType extends GQLResolvers
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLGroupSearchResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['GroupSearch'] = GQLResolversParentTypes['GroupSearch']> = {
@@ -2989,7 +2973,6 @@ export type GQLGroupSearchResolvers<ContextType = any, ParentType extends GQLRes
   resources?: Resolver<Array<GQLResolversTypes['GroupSearchResult']>, ParentType, ContextType>;
   suggestions?: Resolver<Array<GQLResolversTypes['SuggestionResult']>, ParentType, ContextType>;
   totalCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLGroupSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['GroupSearchResult'] = GQLResolversParentTypes['GroupSearchResult']> = {
@@ -3003,13 +2986,11 @@ export type GQLGroupSearchResultResolvers<ContextType = any, ParentType extends 
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   traits?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLH5pElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['H5pElement'] = GQLResolversParentTypes['H5pElement']> = {
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   thumbnail?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLH5pLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['H5pLicense'] = GQLResolversParentTypes['H5pLicense']> = {
@@ -3018,19 +2999,16 @@ export type GQLH5pLicenseResolvers<ContextType = any, ParentType extends GQLReso
   src?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   thumbnail?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLImageAltTextResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageAltText'] = GQLResolversParentTypes['ImageAltText']> = {
   alttext?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLImageDimensionsResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageDimensions'] = GQLResolversParentTypes['ImageDimensions']> = {
   height?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   width?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLImageElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageElement'] = GQLResolversParentTypes['ImageElement']> = {
@@ -3047,7 +3025,6 @@ export type GQLImageElementResolvers<ContextType = any, ParentType extends GQLRe
   src?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   upperLeftX?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
   upperLeftY?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLImageFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageFolderResourceMeta'] = GQLResolversParentTypes['ImageFolderResourceMeta']> = {
@@ -3068,7 +3045,6 @@ export type GQLImageLicenseResolvers<ContextType = any, ParentType extends GQLRe
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   src?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLImageMetaInformationV3Resolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageMetaInformationV3'] = GQLResolversParentTypes['ImageMetaInformationV3']> = {
@@ -3085,7 +3061,6 @@ export type GQLImageMetaInformationV3Resolvers<ContextType = any, ParentType ext
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<GQLResolversTypes['Tags'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLImageSearchResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageSearch'] = GQLResolversParentTypes['ImageSearch']> = {
@@ -3094,7 +3069,6 @@ export type GQLImageSearchResolvers<ContextType = any, ParentType extends GQLRes
   pageSize?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   results?: Resolver<Array<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType>;
   totalCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLImageV3Resolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageV3'] = GQLResolversParentTypes['ImageV3']> = {
@@ -3105,13 +3079,11 @@ export type GQLImageV3Resolvers<ContextType = any, ParentType extends GQLResolve
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   size?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   variants?: Resolver<Array<GQLResolversTypes['ImageVariant']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLImageVariantResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageVariant'] = GQLResolversParentTypes['ImageVariant']> = {
   size?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   variantUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Learningpath'] = GQLResolversParentTypes['Learningpath']> = {
@@ -3137,13 +3109,11 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   verificationStatus?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathCopyrightResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathCopyright'] = GQLResolversParentTypes['LearningpathCopyright']> = {
   contributors?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   license?: Resolver<GQLResolversTypes['License'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathFolderResourceMeta'] = GQLResolversParentTypes['LearningpathFolderResourceMeta']> = {
@@ -3172,7 +3142,6 @@ export type GQLLearningpathSearchResultResolvers<ContextType = any, ParentType e
 
 export type GQLLearningpathSeqNoResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathSeqNo'] = GQLResolversParentTypes['LearningpathSeqNo']> = {
   seqNo?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathStep'] = GQLResolversParentTypes['LearningpathStep']> = {
@@ -3195,13 +3164,11 @@ export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends G
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathStepEmbedUrlResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathStepEmbedUrl'] = GQLResolversParentTypes['LearningpathStepEmbedUrl']> = {
   embedType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathStepOembedResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathStepOembed'] = GQLResolversParentTypes['LearningpathStepOembed']> = {
@@ -3210,20 +3177,17 @@ export type GQLLearningpathStepOembedResolvers<ContextType = any, ParentType ext
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   version?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   width?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['License'] = GQLResolversParentTypes['License']> = {
   description?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   license?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLManuscriptResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Manuscript'] = GQLResolversParentTypes['Manuscript']> = {
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   manuscript?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Meta'] = GQLResolversParentTypes['Meta']> = {
@@ -3238,13 +3202,11 @@ export type GQLMetaResolvers<ContextType = any, ParentType extends GQLResolversP
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   traits?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMetaImageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MetaImage'] = GQLResolversParentTypes['MetaImage']> = {
   alt?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMovieResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Movie'] = GQLResolversParentTypes['Movie']> = {
@@ -3254,25 +3216,21 @@ export type GQLMovieResolvers<ContextType = any, ParentType extends GQLResolvers
   resourceTypes?: Resolver<Array<GQLResolversTypes['ResourceType']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMovieMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MovieMeta'] = GQLResolversParentTypes['MovieMeta']> = {
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMovieResourceTypesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MovieResourceTypes'] = GQLResolversParentTypes['MovieResourceTypes']> = {
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMovieThemeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MovieTheme'] = GQLResolversParentTypes['MovieTheme']> = {
   movies?: Resolver<Array<GQLResolversTypes['Movie']>, ParentType, ContextType>;
   name?: Resolver<Array<GQLResolversTypes['Name']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation']> = {
@@ -3308,7 +3266,6 @@ export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLRes
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   isPrimarySchool?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpath'] = GQLResolversParentTypes['MyNdlaLearningpath']> = {
@@ -3334,7 +3291,6 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   verificationStatus?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpathStep'] = GQLResolversParentTypes['MyNdlaLearningpathStep']> = {
@@ -3357,7 +3313,6 @@ export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType ext
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
@@ -3371,27 +3326,23 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   organization?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLNameResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Name'] = GQLResolversParentTypes['Name']> = {
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLNewFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['NewFolder'] = GQLResolversParentTypes['NewFolder']> = {
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLNewFolderResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['NewFolderResource'] = GQLResolversParentTypes['NewFolderResource']> = {
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   resourceType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLNodeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Node'] = GQLResolversParentTypes['Node']> = {
@@ -3439,7 +3390,6 @@ export type GQLNodeSearchResultResolvers<ContextType = any, ParentType extends G
 
 export type GQLOwnerResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Owner'] = GQLResolversParentTypes['Owner']> = {
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLPodcastLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastLicense'] = GQLResolversParentTypes['PodcastLicense']> = {
@@ -3450,14 +3400,12 @@ export type GQLPodcastLicenseResolvers<ContextType = any, ParentType extends GQL
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   src?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLPodcastMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastMeta'] = GQLResolversParentTypes['PodcastMeta']> = {
   image?: Resolver<Maybe<GQLResolversTypes['ImageMetaInformationV3']>, ParentType, ContextType>;
   introduction?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLPodcastSeriesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastSeries'] = GQLResolversParentTypes['PodcastSeries']> = {
@@ -3473,13 +3421,6 @@ export type GQLPodcastSeriesResolvers<ContextType = any, ParentType extends GQLR
 
 export type GQLPodcastSeriesBaseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastSeriesBase'] = GQLResolversParentTypes['PodcastSeriesBase']> = {
   __resolveType: TypeResolveFn<'PodcastSeries' | 'PodcastSeriesWithEpisodes', ParentType, ContextType>;
-  coverPhoto?: Resolver<GQLResolversTypes['CoverPhoto'], ParentType, ContextType>;
-  description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
-  hasRSS?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  image?: Resolver<GQLResolversTypes['ImageMetaInformationV3'], ParentType, ContextType>;
-  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
 };
 
 export type GQLPodcastSeriesSearchResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastSeriesSearch'] = GQLResolversParentTypes['PodcastSeriesSearch']> = {
@@ -3488,7 +3429,6 @@ export type GQLPodcastSeriesSearchResolvers<ContextType = any, ParentType extend
   pageSize?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   results?: Resolver<Array<GQLResolversTypes['PodcastSeriesSummary']>, ParentType, ContextType>;
   totalCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLPodcastSeriesSummaryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastSeriesSummary'] = GQLResolversParentTypes['PodcastSeriesSummary']> = {
@@ -3498,7 +3438,6 @@ export type GQLPodcastSeriesSummaryResolvers<ContextType = any, ParentType exten
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLPodcastSeriesWithEpisodesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['PodcastSeriesWithEpisodes'] = GQLResolversParentTypes['PodcastSeriesWithEpisodes']> = {
@@ -3525,7 +3464,6 @@ export type GQLProgrammePageResolvers<ContextType = any, ParentType extends GQLR
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
@@ -3584,13 +3522,11 @@ export type GQLReferenceResolvers<ContextType = any, ParentType extends GQLResol
   code?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLRelatedContentResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['RelatedContent'] = GQLResolversParentTypes['RelatedContent']> = {
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Resource'] = GQLResolversParentTypes['Resource']> = {
@@ -3620,7 +3556,6 @@ export type GQLResourceResolvers<ContextType = any, ParentType extends GQLResolv
 export type GQLResourceEmbedResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceEmbed'] = GQLResolversParentTypes['ResourceEmbed']> = {
   content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   meta?: Resolver<GQLResolversTypes['ResourceMetaData'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLResourceMetaDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceMetaData'] = GQLResolversParentTypes['ResourceMetaData']> = {
@@ -3631,20 +3566,17 @@ export type GQLResourceMetaDataResolvers<ContextType = any, ParentType extends G
   h5ps?: Resolver<Array<GQLResolversTypes['H5pLicense']>, ParentType, ContextType>;
   images?: Resolver<Array<GQLResolversTypes['ImageLicense']>, ParentType, ContextType>;
   podcasts?: Resolver<Array<GQLResolversTypes['PodcastLicense']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLResourceTypeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceType'] = GQLResolversParentTypes['ResourceType']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLResourceTypeDefinitionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ResourceTypeDefinition'] = GQLResolversParentTypes['ResourceTypeDefinition']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   subtypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSearchResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Search'] = GQLResolversParentTypes['Search']> = {
@@ -3655,7 +3587,6 @@ export type GQLSearchResolvers<ContextType = any, ParentType extends GQLResolver
   results?: Resolver<Array<GQLResolversTypes['SearchResult']>, ParentType, ContextType>;
   suggestions?: Resolver<Array<GQLResolversTypes['SuggestionResult']>, ParentType, ContextType>;
   totalCount?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchContext'] = GQLResolversParentTypes['SearchContext']> = {
@@ -3674,25 +3605,16 @@ export type GQLSearchContextResolvers<ContextType = any, ParentType extends GQLR
   root?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   rootId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSearchContextResourceTypesResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchContextResourceTypes'] = GQLResolversParentTypes['SearchContextResourceTypes']> = {
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchResult'] = GQLResolversParentTypes['SearchResult']> = {
   __resolveType: TypeResolveFn<'ArticleSearchResult' | 'LearningpathSearchResult' | 'NodeSearchResult', ParentType, ContextType>;
-  context?: Resolver<Maybe<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
-  contexts?: Resolver<Array<GQLResolversTypes['SearchContext']>, ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaDescription?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type GQLSearchResultUnionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchResultUnion'] = GQLResolversParentTypes['SearchResultUnion']> = {
@@ -3704,12 +3626,10 @@ export type GQLSearchSuggestionResolvers<ContextType = any, ParentType extends G
   offset?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   options?: Resolver<Array<GQLResolversTypes['SuggestOption']>, ParentType, ContextType>;
   text?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSearchWithoutPaginationResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SearchWithoutPagination'] = GQLResolversParentTypes['SearchWithoutPagination']> = {
   results?: Resolver<Array<GQLResolversTypes['SearchResult']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSharedFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SharedFolder'] = GQLResolversParentTypes['SharedFolder']> = {
@@ -3724,13 +3644,11 @@ export type GQLSharedFolderResolvers<ContextType = any, ParentType extends GQLRe
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   subfolders?: Resolver<Array<GQLResolversTypes['SharedFolder']>, ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSortResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SortResult'] = GQLResolversParentTypes['SortResult']> = {
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   sortedIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface GQLStringRecordScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['StringRecord'], any> {
@@ -3761,7 +3679,6 @@ export type GQLSubjectLinkResolvers<ContextType = any, ParentType extends GQLRes
   name?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   path?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSubjectPageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectPage'] = GQLResolversParentTypes['SubjectPage']> = {
@@ -3774,14 +3691,12 @@ export type GQLSubjectPageResolvers<ContextType = any, ParentType extends GQLRes
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSubjectPageAboutResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectPageAbout'] = GQLResolversParentTypes['SubjectPageAbout']> = {
   description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElement?: Resolver<GQLResolversTypes['SubjectPageVisualElement'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSubjectPageBannerResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectPageBanner'] = GQLResolversParentTypes['SubjectPageBanner']> = {
@@ -3789,7 +3704,6 @@ export type GQLSubjectPageBannerResolvers<ContextType = any, ParentType extends 
   desktopUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   mobileId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   mobileUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSubjectPageVisualElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectPageVisualElement'] = GQLResolversParentTypes['SubjectPageVisualElement']> = {
@@ -3798,32 +3712,25 @@ export type GQLSubjectPageVisualElementResolvers<ContextType = any, ParentType e
   imageUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSuggestOptionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SuggestOption'] = GQLResolversParentTypes['SuggestOption']> = {
   score?: Resolver<GQLResolversTypes['Float'], ParentType, ContextType>;
   text?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLSuggestionResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SuggestionResult'] = GQLResolversParentTypes['SuggestionResult']> = {
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   suggestions?: Resolver<Array<GQLResolversTypes['SearchSuggestion']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLTagsResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Tags'] = GQLResolversParentTypes['Tags']> = {
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLTaxBaseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxBase'] = GQLResolversParentTypes['TaxBase']> = {
   __resolveType: TypeResolveFn<'Node' | 'Resource' | 'Subject' | 'TaxonomyCrumb' | 'Topic', ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyContext'] = GQLResolversParentTypes['TaxonomyContext']> = {
@@ -3838,7 +3745,6 @@ export type GQLTaxonomyContextResolvers<ContextType = any, ParentType extends GQ
   root?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   rootId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLTaxonomyCrumbResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyCrumb'] = GQLResolversParentTypes['TaxonomyCrumb']> = {
@@ -3851,39 +3757,22 @@ export type GQLTaxonomyCrumbResolvers<ContextType = any, ParentType extends GQLR
 
 export type GQLTaxonomyEntityResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyEntity'] = GQLResolversParentTypes['TaxonomyEntity']> = {
   __resolveType: TypeResolveFn<'Node' | 'Resource' | 'Subject' | 'Topic', ParentType, ContextType>;
-  breadcrumbs?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  context?: Resolver<Maybe<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
-  contextId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  contexts?: Resolver<Array<GQLResolversTypes['TaxonomyContext']>, ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  language?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  metadata?: Resolver<GQLResolversTypes['TaxonomyMetadata'], ParentType, ContextType>;
-  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  nodeType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
-  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-  url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type GQLTaxonomyMetadataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TaxonomyMetadata'] = GQLResolversParentTypes['TaxonomyMetadata']> = {
   customFields?: Resolver<GQLResolversTypes['StringRecord'], ParentType, ContextType>;
   grepCodes?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   visible?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLTextblockLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TextblockLicense'] = GQLResolversParentTypes['TextblockLicense']> = {
   copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
   title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLTitleResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Title'] = GQLResolversParentTypes['Title']> = {
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Topic'] = GQLResolversParentTypes['Topic']> = {
@@ -3913,24 +3802,20 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
 export type GQLTranscriptionResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Transcription'] = GQLResolversParentTypes['Transcription']> = {
   pinyin?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   traditional?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLTransformedArticleContentResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['TransformedArticleContent'] = GQLResolversParentTypes['TransformedArticleContent']> = {
   content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   metaData?: Resolver<Maybe<GQLResolversTypes['ArticleMetaData']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLUpdatedFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UpdatedFolder'] = GQLResolversParentTypes['UpdatedFolder']> = {
   name?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLUpdatedFolderResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UpdatedFolderResource'] = GQLResolversParentTypes['UpdatedFolderResource']> = {
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLUptimeAlertResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UptimeAlert'] = GQLResolversParentTypes['UptimeAlert']> = {
@@ -3939,18 +3824,15 @@ export type GQLUptimeAlertResolvers<ContextType = any, ParentType extends GQLRes
   labels?: Resolver<Array<GQLResolversTypes['UptimeLabel']>, ParentType, ContextType>;
   number?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLUptimeLabelResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UptimeLabel'] = GQLResolversParentTypes['UptimeLabel']> = {
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLUserFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UserFolder'] = GQLResolversParentTypes['UserFolder']> = {
   folders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType>;
   sharedFolders?: Resolver<Array<GQLResolversTypes['SharedFolder']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLVideoFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['VideoFolderResourceMeta'] = GQLResolversParentTypes['VideoFolderResourceMeta']> = {
@@ -3974,22 +3856,16 @@ export type GQLVisualElementResolvers<ContextType = any, ParentType extends GQLR
   resource?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLVisualElementOembedResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['VisualElementOembed'] = GQLResolversParentTypes['VisualElementOembed']> = {
   fullscreen?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
   html?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLWithArticleResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['WithArticle'] = GQLResolversParentTypes['WithArticle']> = {
   __resolveType: TypeResolveFn<'Node' | 'Resource' | 'Topic', ParentType, ContextType>;
-  article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType>;
-  availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  contentUri?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  meta?: Resolver<Maybe<GQLResolversTypes['Meta']>, ParentType, ContextType>;
 };
 
 export type GQLResolvers<ContextType = any> = {

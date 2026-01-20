@@ -28,7 +28,7 @@
   "dependencies": {
     "@apollo/server": "^4.12.2",
     "@googleapis/youtube": "^24.0.0",
-    "@graphql-tools/schema": "^10.0.23",
+    "@graphql-tools/schema": "^10.0.31",
     "@ndla/licenses": "^9.0.3",
     "cheerio": "^1.1.0",
     "compression": "^1.7.4",
@@ -56,12 +56,12 @@
     "winston": "^3.13.0"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.7",
-    "@graphql-codegen/schema-ast": "^4.1.0",
-    "@graphql-codegen/typescript-operations": "^4.6.1",
-    "@graphql-codegen/typescript-resolvers": "^4.5.1",
+    "@graphql-codegen/cli": "^6.1.1",
+    "@graphql-codegen/schema-ast": "^5.0.0",
+    "@graphql-codegen/typescript-operations": "^5.0.7",
+    "@graphql-codegen/typescript-resolvers": "^5.1.5",
     "@graphql-eslint/eslint-plugin": "^4.4.0",
-    "@graphql-tools/mock": "^9.0.23",
+    "@graphql-tools/mock": "^9.1.5",
     "@ndla/types-backend": "^1.0.89",
     "@ndla/types-embed": "^5.0.19-alpha.0",
     "@ndla/types-taxonomy": "^1.0.41",
@@ -80,14 +80,14 @@
     "@types/query-string": "^6.1.1",
     "@types/sanitize-html": "^2.11.0",
     "@types/source-map-support": "^0",
-    "@vercel/ncc": "^0.34.0",
-    "concurrently": "^9.1.0",
-    "eslint": "^9.16.0",
-    "eslint-config-ndla": "^6.0.0-alpha.0",
+    "@vercel/ncc": "^0.38.4",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.2",
+    "eslint-config-ndla": "^6.0.11-alpha.0",
     "prettier": "^3.8.0",
-    "typescript": "^5.8.2",
-    "typescript-eslint": "^8.17.0",
-    "vitest": "^3.2.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.1",
+    "vitest": "^4.0.17"
   },
   "packageManager": "yarn@4.9.2"
 }
