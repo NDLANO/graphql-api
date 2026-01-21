@@ -132,7 +132,7 @@ export async function fetchNodeResources(params: FetchNodeResourcesParams, conte
 }
 
 export async function fetchVersion(hash: string, context: ContextWithLoaders): Promise<Version | undefined> {
-  const result = await withCustomContext({ ...context, versionHash: undefined }, () =>
+  const result = await withCustomContext({ ...context, versionHash: "default" }, () =>
     client.GET("/v1/versions", {
       params: {
         query: {
