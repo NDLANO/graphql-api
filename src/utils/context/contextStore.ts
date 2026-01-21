@@ -21,14 +21,9 @@ export function getContextOrThrow(): ContextWithLoaders {
   return ctx;
 }
 
-export function withCustomContext<T>(
-  contextFunction: (ctx: ContextWithLoaders) => ContextWithLoaders,
-  func: () => T,
-): T {
-  const ctx = getContextOrThrow();
-  const customContext = contextFunction(ctx);
-  return asyncContextStorage.run(customContext, () => {
-    return func();
+export function withCustomContext<T>(ctx: ContextWithLoaders, func: (ctx: ContextWithLoaders) => T): T {
+  return asyncContextStorage.run(ctx, () => {
+    return func(ctx);
   });
 }
 

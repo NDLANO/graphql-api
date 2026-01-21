@@ -131,17 +131,15 @@ export async function fetchNodeResources(params: FetchNodeResourcesParams, conte
     .then(resolveJsonOATS);
 }
 
-export async function fetchVersion(hash: string, _context: Context): Promise<Version | undefined> {
-  const result = await withCustomContext(
-    (ctx) => ({ ...ctx, versionHash: undefined }),
-    () =>
-      client.GET("/v1/versions", {
-        params: {
-          query: {
-            hash,
-          },
+export async function fetchVersion(hash: string, context: ContextWithLoaders): Promise<Version | undefined> {
+  const result = await withCustomContext({ ...context, versionHash: undefined }, () =>
+    client.GET("/v1/versions", {
+      params: {
+        query: {
+          hash,
         },
-      }),
+      },
+    }),
   );
   if (result.response.status === 404) {
     return {
