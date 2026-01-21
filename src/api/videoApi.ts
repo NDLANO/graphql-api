@@ -9,7 +9,7 @@
 import { BrightcoveApiType, BrightcoveVideoSource } from "@ndla/types-embed";
 import { getEnvironmentVariabel } from "../config";
 import { resolveJson } from "../utils/apiHelpers";
-import { fetch } from "../utils/fetch";
+import { externalFetch } from "../utils/fetch";
 
 const b64EncodeUnicode = (str: string) =>
   btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(Number(`0x${p1}`))));
@@ -60,18 +60,20 @@ export const fetchWithBrightcoveToken = async (url: string, context: Context, ha
   if (!token || !tokenExpires || tokenExpires < Date.now() - 10 * 1000) {
     await refetchAccessToken(context);
   }
-  return await fetch(url, { ...context, token: token }).catch((e) => {
-    if (e.status === 401 && !hasRetried) {
-      token = undefined;
-      tokenExpires = undefined;
-      return fetchWithBrightcoveToken(url, context, true);
-    }
-    throw e;
-  });
+  return await externalFetch(url, context, { headers: { Authorization: `Bearer ${token?.access_token}` } }).catch(
+    (e) => {
+      if (e.status === 401 && !hasRetried) {
+        token = undefined;
+        tokenExpires = undefined;
+        return fetchWithBrightcoveToken(url, context, true);
+      }
+      throw e;
+    },
+  );
 };
 
 const fetchBrightcoveAccessToken = async (context: Context): Promise<Token> =>
-  await fetch(brightcoveTokenUrl, context, {
+  await externalFetch(brightcoveTokenUrl, context, {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
       Authorization: `Basic ${b64EncodeUnicode(clientIdSecret)}`,

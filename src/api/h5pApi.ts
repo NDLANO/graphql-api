@@ -16,12 +16,18 @@ import {
 } from "@ndla/types-embed";
 import { h5pHostUrl } from "../config";
 import { resolveJson } from "../utils/apiHelpers";
-import { fetch } from "../utils/fetch";
+import { externalFetch } from "../utils/fetch";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { openapi } from "@ndla/types-backend/oembed-proxy";
+
+const client = createAuthClient<openapi.paths>();
+
+const H5P_HOST_URL = h5pHostUrl();
 
 const fetchPreviewOembed = async (embed: H5pEmbedData, context: Context): Promise<H5pPreviewResponse> => {
   const params = new URLSearchParams({ url: embed.url }).toString();
-  const url = `${h5pHostUrl()}/oembed/preview?${params}`;
-  const res = await fetch(url, context).then(resolveJson);
+  const url = `${H5P_HOST_URL}/oembed/preview?${params}`;
+  const res = await externalFetch(url, context).then(resolveJson);
 
   return {
     type: "preview",
@@ -29,10 +35,13 @@ const fetchPreviewOembed = async (embed: H5pEmbedData, context: Context): Promis
   };
 };
 
-const fetchOembed = async (embed: H5pEmbedData, context: Context): Promise<OembedProxyData> => {
-  const params = new URLSearchParams({ url: embed.url }).toString();
-  const url = `/oembed-proxy/v1/oembed?${params}`;
-  const res = await fetch(url, context).then(resolveJson);
+const fetchOembed = async (embed: H5pEmbedData): Promise<OembedProxyData> => {
+  const res = await client
+    .GET("/oembed-proxy/v1/oembed", {
+      params: { query: { url: embed.url } },
+    })
+    .then(resolveJsonOATS);
+
   return {
     ...res,
     type: "proxy",
@@ -47,7 +56,7 @@ export const fetchH5pOembed = async (
   if (preview) {
     return fetchPreviewOembed(embed, context);
   } else {
-    return fetchOembed(embed, context);
+    return fetchOembed(embed);
   }
 };
 
@@ -56,9 +65,9 @@ export const fetchH5pLicenseInformation = async (
   context: Context,
 ): Promise<H5pLicenseInformation | undefined> => {
   if (!id) return undefined;
-  const url = `${h5pHostUrl()}/v2/resource/${id}/copyright`;
+  const url = `${H5P_HOST_URL}/v2/resource/${id}/copyright`;
   try {
-    const response = await fetch(url, context);
+    const response = await externalFetch(url, context);
     const oembed = await resolveJson(response);
     return oembed;
   } catch (e) {
@@ -68,9 +77,9 @@ export const fetchH5pLicenseInformation = async (
 
 export const fetchH5pInfo = async (id: string | undefined, context: Context): Promise<H5pInfo | undefined> => {
   if (!id) return undefined;
-  const infoUrl = `${h5pHostUrl()}/v1/resource/${id}/info`;
+  const infoUrl = `${H5P_HOST_URL}/v1/resource/${id}/info`;
   try {
-    const response = await fetch(infoUrl, context);
+    const response = await externalFetch(infoUrl, context);
     return await resolveJson(response);
   } catch (e) {
     return undefined;

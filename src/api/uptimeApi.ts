@@ -9,7 +9,7 @@
 import he from "he";
 import { ndlaEnvironment, uptimeOwner, uptimeRepo, uptimeToken } from "../config";
 import { resolveJson } from "../utils/apiHelpers";
-import { fetch } from "../utils/fetch";
+import { externalFetch } from "../utils/fetch";
 import parseMarkdown from "../utils/parseMarkdown";
 
 interface GithubLabel {
@@ -29,9 +29,9 @@ export interface UptimeAlert extends GithubIssue {
 export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<UptimeAlert[]> {
   const path = `/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=${ndlaEnvironment}`;
   const githubAuth = uptimeToken ? { Authorization: `Bearer ${uptimeToken}` } : null;
-  const response = await fetch(path, context, {
+  const response = await externalFetch(path, context, {
     headers: { ...githubAuth },
-    timeout: 3000,
+    signal: AbortSignal.timeout(3000),
   });
   const issues: GithubIssue[] = await resolveJson(response);
 

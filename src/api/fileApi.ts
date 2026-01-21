@@ -6,9 +6,9 @@
  *
  */
 
-import { fetch } from "../utils/fetch";
+import { externalFetch } from "../utils/fetch";
 
 export const checkIfFileExists = async (fileUrl: string, context: Context): Promise<boolean> => {
-  const response = await fetch(fileUrl, context, { method: "HEAD" });
+  const response = await externalFetch(fileUrl, context, { method: "HEAD" });
   return response.status === 200;
 };

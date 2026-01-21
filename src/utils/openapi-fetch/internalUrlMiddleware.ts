@@ -17,7 +17,7 @@ export const OATSInternalUrlMiddleware: Middleware = {
     const withoutHost = url.toString().replace(url.origin, "");
     if (url.hostname === environmentApiHost) {
       const newUrl = apiResourceUrl(withoutHost);
-      return new globalThis.Request(newUrl, request);
+      return new Request(newUrl, request);
     }
     return request;
   },
