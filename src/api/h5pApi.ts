@@ -6,7 +6,6 @@
  *
  */
 
-import queryString from "query-string";
 import {
   H5pEmbedData,
   H5pPreviewResponse,
@@ -20,9 +19,8 @@ import { resolveJson } from "../utils/apiHelpers";
 import { fetch } from "../utils/fetch";
 
 const fetchPreviewOembed = async (embed: H5pEmbedData, context: Context): Promise<H5pPreviewResponse> => {
-  const url = `${h5pHostUrl()}/oembed/preview?${queryString.stringify({
-    url: embed.url,
-  })}`;
+  const params = new URLSearchParams({ url: embed.url }).toString();
+  const url = `${h5pHostUrl()}/oembed/preview?${params}`;
   const res = await fetch(url, context).then(resolveJson);
 
   return {
@@ -32,7 +30,7 @@ const fetchPreviewOembed = async (embed: H5pEmbedData, context: Context): Promis
 };
 
 const fetchOembed = async (embed: H5pEmbedData, context: Context): Promise<OembedProxyData> => {
-  const params = queryString.stringify({ url: embed.url });
+  const params = new URLSearchParams({ url: embed.url }).toString();
   const url = `/oembed-proxy/v1/oembed?${params}`;
   const res = await fetch(url, context).then(resolveJson);
   return {
