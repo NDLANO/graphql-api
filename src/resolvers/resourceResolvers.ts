@@ -53,7 +53,7 @@ export const Query = {
     return nodeToTaxonomyEntity(resource, context);
   },
   async resourceTypes(_: any, __: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
-    return fetchResourceTypes<GQLResourceType>(context);
+    return fetchResourceTypes(context);
   },
 };
 

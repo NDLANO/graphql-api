@@ -66,7 +66,7 @@ export default function createFetch(options: { cache: IKeyValueCache; disableCac
       const body = await response.text();
 
       if (shouldCache) {
-        const cacheKey = getCacheKey(url, ctx, reqOptions);
+        const cacheKey = getCacheKey(url, ctx);
         await cache.set(
           cacheKey,
           JSON.stringify({
@@ -95,7 +95,7 @@ export default function createFetch(options: { cache: IKeyValueCache; disableCac
     if (!isCachable || options.disableCache === true) {
       return pureFetch(url, ctx, reqOptions).then((r) => r.response);
     }
-    const cacheKey = getCacheKey(url, ctx, reqOptions);
+    const cacheKey = getCacheKey(url, ctx);
     const data = await cache.get(cacheKey);
     const cached = cachedResponse(url, data);
     if (cached) return cached;

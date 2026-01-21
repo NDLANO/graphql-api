@@ -38,11 +38,13 @@ export const resolveJsonOATS = async <A extends Record<string | number, any>, B,
 
 export interface ClientCreateOptions {
   disableCache?: boolean;
+  baseUrl?: string;
+  useTaxonomyCache?: boolean;
 }
 
 export function createAuthClient<T extends {}>(options?: ClientCreateOptions) {
   const client = createClient<T>({
-    baseUrl: apiUrl,
+    baseUrl: options?.baseUrl ?? apiUrl,
     fetch: fetchFunction,
     querySerializer: {
       array: {
@@ -52,7 +54,7 @@ export function createAuthClient<T extends {}>(options?: ClientCreateOptions) {
     },
   });
 
-  if (!options?.disableCache) client.use(OATSCacheMiddleware);
+  if (!options?.disableCache) client.use(OATSCacheMiddleware(options?.useTaxonomyCache));
   client.use(OATSInternalUrlMiddleware);
 
   return client;

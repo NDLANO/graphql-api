@@ -20,7 +20,7 @@ export function cachedResponse(data: string | undefined): globalThis.Response | 
   });
 }
 
-export const OATSCacheMiddleware: Middleware = {
+export const OATSCacheMiddleware = (useTaxonomyCache?: boolean): Middleware => ({
   async onRequest({ request }) {
     const cacheControl = request.headers.get("Cache-Control");
 
@@ -32,7 +32,7 @@ export const OATSCacheMiddleware: Middleware = {
     if (!isCacheable) return request;
 
     const ctx = getContextOrThrow();
-    const cacheKey = getCacheKey(request.url, ctx);
+    const cacheKey = getCacheKey(request.url, ctx, useTaxonomyCache);
     const data = await getCache().get(cacheKey);
     const cached = cachedResponse(data);
     if (cached) return cached;
@@ -43,7 +43,7 @@ export const OATSCacheMiddleware: Middleware = {
     const shouldCache = setHeaderIfShouldNotCache(response, ctx);
     if (response.status !== 200 || !shouldCache || request.method !== "GET") return;
 
-    const cacheKey = getCacheKey(request.url, ctx);
+    const cacheKey = getCacheKey(request.url, ctx, useTaxonomyCache);
     const headers: Record<string, unknown> = {};
     const body = await response.text();
     response.headers.forEach((value, key) => (headers[key] = value));
@@ -65,4 +65,4 @@ export const OATSCacheMiddleware: Middleware = {
     if (!body) return new globalThis.Response(null, responseOpts);
     else return new globalThis.Response(body, responseOpts);
   },
-};
+});

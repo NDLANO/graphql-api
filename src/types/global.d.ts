@@ -56,6 +56,5 @@ declare global {
 
   interface RequestOptions extends RequestInit {
     cache?: RequestCache;
-    useTaxonomyCache?: boolean;
   }
 }
