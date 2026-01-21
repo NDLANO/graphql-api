@@ -2783,15 +2783,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/dotenv@npm:^6.1.0":
-  version: 6.1.1
-  resolution: "@types/dotenv@npm:6.1.1"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/74f802d3bec395d4b368a0235178c71d72fb4ba537109912255ebb1bdc29c7d1fef0edc4d7d4b211682f6f440fffccfe0d5523d831d586a9269ac9e4b47a5d2a
-  languageName: node
-  linkType: hard
-
 "@types/estree@npm:1.0.8, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.6":
   version: 1.0.8
   resolution: "@types/estree@npm:1.0.8"
@@ -4532,13 +4523,6 @@ __metadata:
     no-case: "npm:^3.0.4"
     tslib: "npm:^2.0.3"
   checksum: 10c0/5b859ea65097a7ea870e2c91b5768b72ddf7fa947223fd29e167bcdff58fe731d941c48e47a38ec8aa8e43044c8fbd15cd8fa21689a526bc34b6548197cd5b05
-  languageName: node
-  linkType: hard
-
-"dotenv@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "dotenv@npm:6.2.0"
-  checksum: 10c0/56886938622c34255c89ec24d584460668a5ca035afe37da7b16bfbac36f8b352d20a6dde51000b30db04fa5cac7b03caf165919fe5e9bd8c91a2735fd61c649
   languageName: node
   linkType: hard
 
@@ -7281,7 +7265,6 @@ __metadata:
     "@ndla/types-taxonomy": "npm:^1.0.41"
     "@types/compression": "npm:^1.7.2"
     "@types/cors": "npm:^2.8.4"
-    "@types/dotenv": "npm:^6.1.0"
     "@types/express": "npm:^4.17.21"
     "@types/graphql": "npm:^14.2.3"
     "@types/he": "npm:^1.1.1"
@@ -7299,7 +7282,6 @@ __metadata:
     compression: "npm:^1.7.4"
     concurrently: "npm:^9.2.1"
     dataloader: "npm:^1.4.0"
-    dotenv: "npm:^6.2.0"
     eslint: "npm:^9.39.2"
     eslint-config-ndla: "npm:^6.0.11-alpha.0"
     express: "npm:^4.21.2"
