@@ -41,7 +41,7 @@
     "graphql-tag": "^2.12.6",
     "he": "^1.2.0",
     "ip-cidr": "^4.0.2",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "lru-cache": "^7.0.0",
     "marked": "^17.0.1",
     "node-fetch": "2.6.7",
