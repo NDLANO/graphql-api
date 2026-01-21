@@ -6,8 +6,6 @@
  *
  */
 
-import dotenv from "dotenv";
-dotenv.config();
 import IPCIDR from "ip-cidr";
 
 export function getEnvironmentVariabel(key: string, fallback: string): string;
