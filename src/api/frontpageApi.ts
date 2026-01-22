@@ -48,6 +48,7 @@ export async function fetchSubjectPages(ids: readonly number[], context: Context
         query: {
           ids: ids.slice(),
           language: context.language,
+          "page-size": ids.length,
           fallback: true,
         },
       },
