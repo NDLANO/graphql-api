@@ -2817,10 +2817,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.118":
-  version: 4.14.158
-  resolution: "@types/lodash@npm:4.14.158"
-  checksum: 10c0/3bcd51ed9cdbf2ef2d6cdfbcb0afef213bd40f33c652b8763e9bbbdcfe56e304d465114fab65a5f0b13d53e67bbc1642bd2c12f1359975c80aeec2475168be6a
+"@types/lodash@npm:^4.17.23":
+  version: 4.17.23
+  resolution: "@types/lodash@npm:4.17.23"
+  checksum: 10c0/9d9cbfb684e064a2b78aab9e220d398c9c2a7d36bc51a07b184ff382fa043a99b3d00c16c7f109b4eb8614118f4869678dbae7d5c6700ed16fb9340e26cc0bf6
   languageName: node
   linkType: hard
 
@@ -6767,10 +6767,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.21, lodash@npm:~4.17.0":
-  version: 4.17.21
-  resolution: "lodash@npm:4.17.21"
-  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
+"lodash@npm:^4.17.23, lodash@npm:~4.17.0":
+  version: 4.17.23
+  resolution: "lodash@npm:4.17.23"
+  checksum: 10c0/1264a90469f5bb95d4739c43eb6277d15b6d9e186df4ac68c3620443160fc669e2f14c11e7d8b2ccf078b81d06147c01a8ccced9aab9f9f63d50dcf8cace6bf6
   languageName: node
   linkType: hard
 
@@ -7179,7 +7179,7 @@ __metadata:
     "@types/cors": "npm:^2.8.19"
     "@types/graphql": "npm:^14.2.3"
     "@types/he": "npm:^1.1.1"
-    "@types/lodash": "npm:^4.14.118"
+    "@types/lodash": "npm:^4.17.23"
     "@types/node": "npm:^22.15.0"
     "@types/node-fetch": "npm:^2.1.2"
     "@types/open-graph-scraper": "npm:^5.2.3"
@@ -7201,7 +7201,7 @@ __metadata:
     graphql-tag: "npm:^2.12.6"
     he: "npm:^1.2.0"
     ip-cidr: "npm:^4.0.2"
-    lodash: "npm:^4.17.21"
+    lodash: "npm:^4.17.23"
     lru-cache: "npm:^7.0.0"
     marked: "npm:^17.0.1"
     node-fetch: "npm:2.6.7"
