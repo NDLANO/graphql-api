@@ -24,13 +24,13 @@ declare global {
   }
 
   interface Loaders {
-    articlesLoader: DataLoader<string, ArticleV2DTO | undefined>;
-    learningpathsLoader: DataLoader<number, LearningPathV2DTO | undefined>;
+    articlesLoader: DataLoader<string, ArticleV2DTO | null>;
+    learningpathsLoader: DataLoader<number, LearningPathV2DTO | null>;
     nodeLoader: DataLoader<NodeLoaderParams, Node>;
     nodesLoader: DataLoader<NodeQueryParams, Node[]>;
     frontpageLoader: DataLoader<string, FrontPageDTO>;
     subjectpageLoader: DataLoader<number, SubjectPageDTO | null>;
-    searchNodesLoader: DataLoader<string, Node[]>;
+    searchNodesLoader: DataLoader<string, Node | null>;
     imagesLoader: DataLoader<number, ImageMetaInformationV3DTO | null>;
   }
 

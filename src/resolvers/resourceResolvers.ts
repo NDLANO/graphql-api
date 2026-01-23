@@ -100,12 +100,12 @@ export const resolvers = {
         status: 404,
       });
     },
-    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
+    async article(resource: GQLResource, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | null> {
       if (resource.contentUri?.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(resource.contentUri));
       }
       if (resource.contentUri?.startsWith("urn:learningpath")) {
-        return undefined;
+        return null;
       }
       throw Object.assign(new Error("Missing article contentUri for resource with id: " + resource.id), {
         status: 404,

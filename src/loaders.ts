@@ -18,18 +18,22 @@ import { fetchSubjectPages } from "./api/frontpageApi";
 import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 import { fetchImages } from "./api/imageApi";
 
-export function articlesLoader(context: Context): DataLoader<string, ArticleV2DTO | undefined> {
+export function articlesLoader(context: Context): DataLoader<string, ArticleV2DTO | null> {
   return new DataLoader(
     async (articleIds) => {
-      return fetchArticles(articleIds, context);
+      const articles = await fetchArticles(articleIds, context);
+      const keyed = keyBy(articles, (article) => article?.id?.toString() ?? "never");
+      return articleIds.map((id) => keyed[id] ?? null);
     },
     { maxBatchSize: 100 },
   );
 }
 
-export function learningpathsLoader(context: Context): DataLoader<number, LearningPathV2DTO | undefined> {
+export function learningpathsLoader(context: Context): DataLoader<number, LearningPathV2DTO | null> {
   return new DataLoader(async (learningpathIds) => {
-    return fetchLearningpaths(learningpathIds, context);
+    const learningpaths = await fetchLearningpaths(learningpathIds, context);
+    const keyed = keyBy(learningpaths, (lp) => lp?.id ?? "never");
+    return learningpathIds.map((id) => keyed[id] ?? null);
   });
 }
 
@@ -94,11 +98,12 @@ export function nodesLoader(context: Context): DataLoader<NodeQueryParams, Node[
   );
 }
 
-export function searchNodesLoader(context: Context): DataLoader<string, Node[]> {
+export function searchNodesLoader(context: Context): DataLoader<string, Node | null> {
   return new DataLoader(
     async (contentUris) => {
       const searchResult = await searchNodes({ contentUris }, context);
-      return contentUris.map((uri) => searchResult.results.filter((n) => n.contentUri === uri));
+      const keyed = keyBy(searchResult.results, (res) => res.contentUri ?? "never");
+      return contentUris.map((uri) => keyed[uri] ?? null);
     },
     { maxBatchSize: 100 },
   );
