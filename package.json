@@ -42,7 +42,7 @@
     "he": "^1.2.0",
     "ip-cidr": "^4.0.2",
     "lodash": "^4.17.23",
-    "lru-cache": "^7.0.0",
+    "lru-cache": "^11.2.5",
     "marked": "^17.0.1",
     "open-graph-scraper": "^6.11.0",
     "openapi-fetch": "^0.15.0",

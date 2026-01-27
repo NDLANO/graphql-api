@@ -6,7 +6,7 @@
  *
  */
 
-import LRUCache from "lru-cache";
+import { LRUCache } from "lru-cache";
 
 export interface IKeyValueCache {
   get(key: string): Promise<string | undefined>;
