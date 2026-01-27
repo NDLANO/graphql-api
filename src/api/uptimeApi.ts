@@ -7,7 +7,7 @@
  */
 
 import he from "he";
-import { ndlaEnvironment, uptimeOwner, uptimeRepo, uptimeToken } from "../config";
+import { apiUrl, ndlaEnvironment, uptimeOwner, uptimeRepo, uptimeToken } from "../config";
 import { resolveJson } from "../utils/apiHelpers";
 import { externalFetch } from "../utils/fetch";
 import parseMarkdown from "../utils/parseMarkdown";
@@ -27,7 +27,7 @@ export interface UptimeAlert extends GithubIssue {
 }
 
 export async function fetchUptimeIssues(context: ContextWithLoaders): Promise<UptimeAlert[]> {
-  const path = `/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=${ndlaEnvironment}`;
+  const path = `${apiUrl}/repos/${uptimeOwner}/${uptimeRepo}/issues?state=open&labels=${ndlaEnvironment}`;
   const githubAuth = uptimeToken ? { Authorization: `Bearer ${uptimeToken}` } : null;
   const response = await externalFetch(path, context, {
     headers: { ...githubAuth },
