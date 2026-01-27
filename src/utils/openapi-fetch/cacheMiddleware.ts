@@ -10,11 +10,11 @@ import { Middleware } from "openapi-fetch";
 import { getContextOrThrow } from "../context/contextStore";
 import { cacheTime, getCache, getCacheKey, setHeaderIfShouldNotCache } from "../../cache";
 
-export function cachedResponse(data: string | undefined): globalThis.Response | null {
+export function cachedResponse(data: string | undefined): Response | null {
   if (!data) return null;
 
   const { body, headers } = JSON.parse(data);
-  return new globalThis.Response(body, {
+  return new Response(body, {
     headers,
     status: 200,
   });
@@ -62,7 +62,7 @@ export const OATSCacheMiddleware = (useTaxonomyCache?: boolean): Middleware => (
       status: response.status,
     };
 
-    if (!body) return new globalThis.Response(null, responseOpts);
-    else return new globalThis.Response(body, responseOpts);
+    if (!body) return new Response(null, responseOpts);
+    else return new Response(body, responseOpts);
   },
 });

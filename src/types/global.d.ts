@@ -8,7 +8,6 @@
 
 import DataLoader from "dataloader";
 import { Request, Response } from "express";
-import { RequestInit, RequestCache } from "node-fetch";
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { FrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
@@ -52,9 +51,5 @@ declare global {
 
   interface ContextWithLoaders extends Context {
     loaders: Loaders;
-  }
-
-  interface RequestOptions extends RequestInit {
-    cache?: RequestCache;
   }
 }

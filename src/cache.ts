@@ -7,7 +7,6 @@
  */
 
 import LRUCache from "lru-cache";
-import { Response } from "node-fetch";
 
 export interface IKeyValueCache {
   get(key: string): Promise<string | undefined>;
@@ -47,7 +46,7 @@ const getCacheStrictness = (cacheControlValue: string | number | string[] | unde
 };
 
 /** Returns `true` if the response can be cached, and `false` if the result shouldn't be cached. */
-export const setHeaderIfShouldNotCache = (response: globalThis.Response | Response, context: Context): boolean => {
+export const setHeaderIfShouldNotCache = (response: Response, context: Context): boolean => {
   const cacheControlResponse = response.headers.get("cache-control")?.toLowerCase();
 
   const presetHeader = context.res.getHeader("cache-control");

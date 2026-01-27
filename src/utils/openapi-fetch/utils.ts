@@ -62,7 +62,7 @@ export function createAuthClient<T extends {}>(options?: ClientCreateOptions) {
 
 const slowLogTimeout = parseInt(configSlowLogTimeout);
 
-async function fetchFunction(req: globalThis.Request): Promise<globalThis.Response> {
+async function fetchFunction(req: Request): Promise<Response> {
   const startTime = performance.now();
 
   const ctx = getContextOrThrow();
