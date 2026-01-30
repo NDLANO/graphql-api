@@ -1371,6 +1371,7 @@ export type GQLQuery = {
   podcastSeriesSearch?: Maybe<GQLPodcastSeriesSearch>;
   programme?: Maybe<GQLProgrammePage>;
   programmes?: Maybe<Array<GQLProgrammePage>>;
+  recentlyFavoritedResources: Array<GQLFolderResource>;
   resource?: Maybe<GQLResource>;
   resourceEmbed: GQLResourceEmbed;
   resourceEmbeds: GQLResourceEmbed;
@@ -1557,6 +1558,11 @@ export type GQLQueryPodcastSeriesSearchArgs = {
 export type GQLQueryProgrammeArgs = {
   contextId?: InputMaybe<Scalars['String']['input']>;
   path?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type GQLQueryRecentlyFavoritedResourcesArgs = {
+  size?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -3503,6 +3509,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   podcastSeriesSearch?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesSearchArgs, 'page' | 'pageSize'>>;
   programme?: Resolver<Maybe<GQLResolversTypes['ProgrammePage']>, ParentType, ContextType, Partial<GQLQueryProgrammeArgs>>;
   programmes?: Resolver<Maybe<Array<GQLResolversTypes['ProgrammePage']>>, ParentType, ContextType>;
+  recentlyFavoritedResources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType, Partial<GQLQueryRecentlyFavoritedResourcesArgs>>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, RequireFields<GQLQueryResourceArgs, 'id'>>;
   resourceEmbed?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedArgs, 'id' | 'type'>>;
   resourceEmbeds?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedsArgs, 'resources'>>;

@@ -34,6 +34,7 @@ import {
   GQLQueryAllFolderResourcesArgs,
   GQLQueryFolderArgs,
   GQLQueryFoldersArgs,
+  GQLQueryRecentlyFavoritedResourcesArgs,
   GQLSortResult,
 } from "../types/schema";
 import { createAuthClient, resolveJsonOATS, resolveOATS } from "../utils/openapi-fetch/utils";
@@ -81,6 +82,13 @@ export async function fetchSharedFolder({ id }: GQLQueryFolderArgs, _context: Co
       params: { path: { "folder-id": id } },
     })
     .then(resolveJsonOATS);
+}
+
+export async function fetchRecentlyFavoritedResources(
+  { size }: GQLQueryRecentlyFavoritedResourcesArgs,
+  _context: Context,
+): Promise<ResourceDTO[]> {
+  return client.GET("/myndla-api/v1/folders/resources/recent", { params: { query: { size } } }).then(resolveJsonOATS);
 }
 
 export async function fetchAllFolderResources(
