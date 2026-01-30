@@ -28,6 +28,7 @@ import {
   favoriteSharedFolder,
   unFavoriteSharedFolder,
   sortSavedSharedFolders,
+  fetchRecentlyFavoritedResources,
 } from "../api/folderApi";
 import { fetchFolderResourceMeta, fetchFolderResourcesMetaData } from "../api/folderResourceMetaApi";
 import {
@@ -55,6 +56,7 @@ import {
   GQLMutationFavoriteSharedFolderArgs,
   GQLMutationUnFavoriteSharedFolderArgs,
   GQLMutationSortSavedSharedFoldersArgs,
+  GQLQueryRecentlyFavoritedResourcesArgs,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -66,6 +68,7 @@ export const Query: Pick<
   | "folderResourceMetaSearch"
   | "folderResourceMeta"
   | "personalData"
+  | "recentlyFavoritedResources"
 > = {
   async folders(_: any, params: GQLQueryFoldersArgs, context: ContextWithLoaders): Promise<UserFolderDTO> {
     return fetchFolders(params, context);
@@ -82,6 +85,13 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<ResourceDTO[]> {
     return fetchAllFolderResources(params, context);
+  },
+  async recentlyFavoritedResources(
+    _: any,
+    params: GQLQueryRecentlyFavoritedResourcesArgs,
+    context: ContextWithLoaders,
+  ): Promise<ResourceDTO[]> {
+    return fetchRecentlyFavoritedResources(params, context);
   },
   async folderResourceMetaSearch(
     _: any,
