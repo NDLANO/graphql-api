@@ -68,7 +68,7 @@
     "@types/graphql": "^14.5.0",
     "@types/he": "^1.1.1",
     "@types/lodash": "^4.17.23",
-    "@types/node": "^22.15.0",
+    "@types/node": "^24.0",
     "@types/open-graph-scraper": "^5.2.3",
     "@types/prismjs": "^1.26.0",
     "@types/punycode": "^2.1.4",
