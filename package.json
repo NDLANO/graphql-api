@@ -31,7 +31,7 @@
     "@googleapis/youtube": "^24.0.0",
     "@graphql-tools/schema": "^10.0.31",
     "@ndla/licenses": "^9.0.3",
-    "cheerio": "^1.1.0",
+    "cheerio": "^1.2.0",
     "compression": "^1.8.1",
     "dataloader": "^1.4.0",
     "express": "^5.2.1",
