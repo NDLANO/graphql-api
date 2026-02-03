@@ -7,8 +7,8 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { withCustomContext } from "../context/contextStore";
 import { getCacheKey } from "../../cache";
+import { withCustomContext } from "../context/contextStore";
 
 describe("Cache", () => {
   it("should include version hash in cache key when provided in taxonomy calls", () => {

@@ -6,7 +6,10 @@
  *
  */
 
+import { NextFunction, Request, Response } from "express";
+import isString from "lodash/isString";
 import { getToken } from "../../auth";
+import { defaultLanguage } from "../../config";
 import {
   articlesLoader,
   learningpathsLoader,
@@ -17,9 +20,6 @@ import {
   searchNodesLoader,
   imagesLoader,
 } from "../../loaders";
-import isString from "lodash/isString";
-import { defaultLanguage } from "../../config";
-import { NextFunction, Request, Response } from "express";
 import { getAsyncContextStorage } from "./contextStore";
 
 function getShouldUseCache(request: Request): boolean {

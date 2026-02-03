@@ -6,8 +6,8 @@
  *
  */
 
-import { OEmbedDTO } from "@ndla/types-backend/oembed-proxy";
 import { LearningStepV2DTO } from "@ndla/types-backend/learningpath-api";
+import { OEmbedDTO } from "@ndla/types-backend/oembed-proxy";
 import { fetchLearningpath, fetchMyLearningpaths, fetchNode, fetchOembed } from "../api";
 import { fetchOpengraph } from "../api/externalApi";
 import {
@@ -22,6 +22,8 @@ import {
   updateLearningpathStepSeqNo,
   updateLearningstep,
 } from "../api/learningpathApi";
+import { searchNodes } from "../api/taxonomyApi";
+import { transformArticle } from "../api/transformArticleApi";
 import {
   GQLLearningpath,
   GQLLearningpathStep,
@@ -48,8 +50,6 @@ import {
 } from "../types/schema";
 import { getNumberId, nodeToTaxonomyEntity, toGQLLearningpath, toGQLLearningstep } from "../utils/apiHelpers";
 import { isNDLAEmbedUrl } from "../utils/articleHelpers";
-import { transformArticle } from "../api/transformArticleApi";
-import { searchNodes } from "../api/taxonomyApi";
 
 export const Query = {
   async learningpath(

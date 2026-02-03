@@ -6,15 +6,15 @@
  *
  */
 
-import createClient, { FetchResponse } from "openapi-fetch";
 import type { MediaType } from "openapi-typescript-helpers";
+import { GraphQLError } from "graphql";
+import createClient, { FetchResponse } from "openapi-fetch";
+import { apiUrl, slowLogTimeout as configSlowLogTimeout } from "../../config";
+import { getHeadersFromContext } from "../apiHelpers";
+import { getContextOrThrow } from "../context/contextStore";
+import getLogger from "../logger";
 import { OATSCacheMiddleware } from "./cacheMiddleware";
 import { OATSInternalUrlMiddleware } from "./internalUrlMiddleware";
-import { getHeadersFromContext } from "../apiHelpers";
-import getLogger from "../logger";
-import { GraphQLError } from "graphql";
-import { apiUrl, slowLogTimeout as configSlowLogTimeout } from "../../config";
-import { getContextOrThrow } from "../context/contextStore";
 
 export const resolveOATS = async <A extends Record<string | number, any>, B, C extends MediaType>(
   res: FetchResponse<A, B, C>,

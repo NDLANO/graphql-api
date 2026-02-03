@@ -6,9 +6,11 @@
  *
  */
 
-import partition from "lodash/partition";
 import { SubjectPageDTO, VisualElementDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
+import partition from "lodash/partition";
+import { convertToImageLicense } from "../api/imageApi";
+import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 import {
   GQLImageLicense,
   GQLQuerySubjectArgs,
@@ -16,8 +18,6 @@ import {
   GQLSubject,
   GQLSubjectLink,
 } from "../types/schema";
-import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
-import { convertToImageLicense } from "../api/imageApi";
 import { getNumberId } from "../utils/apiHelpers";
 
 export const Query = {

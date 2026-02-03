@@ -13,8 +13,8 @@ import {
   openapi,
   SeriesSummarySearchResultDTO,
 } from "@ndla/types-backend/audio-api";
-import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getNumberIdOrThrow } from "../utils/apiHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
 const client = createAuthClient<openapi.paths>();
 

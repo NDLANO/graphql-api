@@ -7,7 +7,6 @@
  */
 
 import { ArticleV2DTO, openapi } from "@ndla/types-backend/article-api";
-import { transformArticle, transformVisualElement } from "./transformArticleApi";
 import { ndlaUrl } from "../config";
 import {
   GQLArticleTransformedContentArgs,
@@ -15,8 +14,9 @@ import {
   GQLResourceEmbed,
   GQLTransformedArticleContent,
 } from "../types/schema";
-import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
+import { transformArticle, transformVisualElement } from "./transformArticleApi";
 
 interface ArticleParams {
   articleId: string;

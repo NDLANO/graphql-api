@@ -6,17 +6,13 @@
  *
  */
 
-import groupBy from "lodash/groupBy";
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { AudioMetaInformationDTO } from "@ndla/types-backend/audio-api";
 import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { ResourceType } from "@ndla/types-backend/myndla-api";
 import { Node } from "@ndla/types-taxonomy";
-import { fetchAudio } from "./audioApi";
-import { searchConcepts } from "./conceptApi";
-import { fetchImageV3 } from "./imageApi";
-import { fetchVideo } from "./videoApi";
+import groupBy from "lodash/groupBy";
 import { defaultLanguage } from "../config";
 import {
   GQLFolderResourceMeta,
@@ -28,6 +24,10 @@ import {
 } from "../types/schema";
 import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
 import getLogger from "../utils/logger";
+import { fetchAudio } from "./audioApi";
+import { searchConcepts } from "./conceptApi";
+import { fetchImageV3 } from "./imageApi";
+import { fetchVideo } from "./videoApi";
 
 const findResourceTypes = (result: Node | null, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
   const ctx = result?.contexts?.[0];

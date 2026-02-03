@@ -6,11 +6,10 @@
  *
  */
 
-import { graphql } from "graphql";
-import { expect, test } from "vitest";
 import { addMocksToSchema } from "@graphql-tools/mock";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-
+import { graphql } from "graphql";
+import { expect, test } from "vitest";
 import { typeDefs } from "../schema";
 
 test("can run query on schema", async () => {

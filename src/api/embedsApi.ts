@@ -6,9 +6,6 @@
  *
  */
 
-import { toUnicode } from "punycode/";
-import { load } from "cheerio";
-import he from "he";
 import { FrontPageDTO, MenuDTO } from "@ndla/types-backend/frontpage-api";
 import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import {
@@ -33,6 +30,14 @@ import {
   CampaignBlockMetaData,
   ConceptData,
 } from "@ndla/types-embed";
+import { load } from "cheerio";
+import he from "he";
+import { toUnicode } from "punycode/";
+import { ndlaUrl } from "../config";
+import { getBrightcoveCopyright } from "../utils/brightcoveUtils";
+import { CheerioEmbed, getEmbedsFromContent } from "../utils/getEmbedsFromContent";
+import highlightCode from "../utils/highlightCode";
+import parseMarkdown from "../utils/parseMarkdown";
 import { fetchSimpleArticle } from "./articleApi";
 import { fetchAudioV2 } from "./audioApi";
 import { fetchEmbedConcept } from "./conceptApi";
@@ -41,11 +46,6 @@ import { checkIfFileExists } from "./fileApi";
 import { fetchH5pLicenseInformation, fetchH5pOembed, fetchH5pInfo } from "./h5pApi";
 import { fetchImageV3 } from "./imageApi";
 import { fetchVideo, fetchVideoSources } from "./videoApi";
-import { ndlaUrl } from "../config";
-import { getBrightcoveCopyright } from "../utils/brightcoveUtils";
-import { CheerioEmbed, getEmbedsFromContent } from "../utils/getEmbedsFromContent";
-import highlightCode from "../utils/highlightCode";
-import parseMarkdown from "../utils/parseMarkdown";
 
 const URL_DOMAIN_REGEX = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/\n]+)/im;
 

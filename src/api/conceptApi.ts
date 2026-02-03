@@ -7,8 +7,8 @@
  */
 
 import { ConceptSearchResultDTO, ConceptDTO, openapi } from "@ndla/types-backend/concept-api";
-import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getNumberIdOrThrow } from "../utils/apiHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
 const client = createAuthClient<openapi.paths>();
 
