@@ -11,8 +11,8 @@ import { fetchH5pLicenseInformation, fetchH5pInfo } from "../api/h5pApi";
 import { convertToSimpleImage, fetchImageV3 } from "../api/imageApi";
 import { fetchOembed } from "../api/oembedApi";
 import { fetchVideo, fetchVideoSources } from "../api/videoApi";
-import { getBrightcoveCopyright } from "./brightcoveUtils";
 import { GQLCopyright, GQLVisualElement } from "../types/schema";
+import { getBrightcoveCopyright } from "./brightcoveUtils";
 
 export async function parseVisualElement(
   visualElementEmbed: string,

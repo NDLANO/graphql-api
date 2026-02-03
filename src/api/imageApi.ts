@@ -8,8 +8,8 @@
 
 import { openapi, ImageMetaInformationV3DTO, SearchResultV3DTO } from "@ndla/types-backend/image-api";
 import { GQLImageLicense, GQLQueryImageSearchArgs } from "../types/schema";
-import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getNumberIdOrThrow } from "../utils/apiHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
 const client = createAuthClient<openapi.paths>();
 

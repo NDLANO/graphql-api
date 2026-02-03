@@ -6,12 +6,11 @@
  *
  */
 
-import sortBy from "lodash/sortBy";
-import uniqBy from "lodash/uniqBy";
 import { ConceptDTO, ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { ConceptVisualElementMeta, EmbedMetaData } from "@ndla/types-embed";
-import { licenseFixer, roleMapper } from "./apiHelpers";
+import sortBy from "lodash/sortBy";
+import uniqBy from "lodash/uniqBy";
 import { ndlaUrl } from "../config";
 import {
   GQLArticleMetaData,
@@ -26,6 +25,7 @@ import {
   GQLImageLicense,
   GQLPodcastLicense,
 } from "../types/schema";
+import { licenseFixer, roleMapper } from "./apiHelpers";
 import { unreachable } from "./unreachable";
 
 type Success<T extends EmbedMetaData["resource"]> = Extract<EmbedMetaData, { resource: T; status: "success" }>;

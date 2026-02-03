@@ -16,9 +16,9 @@ import {
   NodeType,
   NodeConnectionType,
 } from "@ndla/types-taxonomy";
-import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
-import { withCustomContext } from "../utils/context/contextStore";
 import { apiUrl } from "../config";
+import { withCustomContext } from "../utils/context/contextStore";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
 const client = createAuthClient<openapi.paths>({ baseUrl: `${apiUrl}/taxonomy`, useTaxonomyCache: true });
 

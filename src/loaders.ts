@@ -6,17 +6,17 @@
  *
  */
 
-import DataLoader from "dataloader";
-import keyBy from "lodash/keyBy";
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { FilmFrontPageDTO, FrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
 import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
-import { ImageMetaInformationV3DTO } from "@ndla/types-backend/image-api";
+import DataLoader from "dataloader";
+import keyBy from "lodash/keyBy";
 import { fetchArticles, fetchLearningpaths, fetchNode, fetchFrontpage, fetchFilmFrontpage, queryNodes } from "./api";
 import { fetchSubjectPages } from "./api/frontpageApi";
-import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 import { fetchImages } from "./api/imageApi";
+import { NodeQueryParams, searchNodes } from "./api/taxonomyApi";
 
 export function articlesLoader(context: Context): DataLoader<string, ArticleV2DTO | undefined> {
   return new DataLoader(

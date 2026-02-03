@@ -6,13 +6,14 @@
  *
  */
 
-import partition from "lodash/partition";
-import sortBy from "lodash/sortBy";
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
-import { GraphQLError } from "graphql";
 import { Node } from "@ndla/types-taxonomy";
+import { GraphQLError } from "graphql";
+import partition from "lodash/partition";
+import sortBy from "lodash/sortBy";
 import { fetchChildren, fetchNode } from "../api";
+import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 import {
   GQLLearningpath,
   GQLMeta,
@@ -25,7 +26,6 @@ import {
 } from "../types/schema";
 import { articleToMeta, getNumberId, nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
 import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
-import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 
 export const Query = {
   async node(

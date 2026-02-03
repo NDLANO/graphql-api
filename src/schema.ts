@@ -6,8 +6,8 @@
  *
  */
 
-import { gql } from "graphql-tag";
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
   scalar StringRecord

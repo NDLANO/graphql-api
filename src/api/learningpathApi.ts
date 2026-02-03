@@ -24,8 +24,8 @@ import {
   GQLMutationUpdateLearningpathStepArgs,
   GQLMutationUpdateLearningpathStepSeqNoArgs,
 } from "../types/schema";
-import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { getNumberIdOrThrow } from "../utils/apiHelpers";
+import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
 const client = createAuthClient<openapi.paths>();
 const cachelessClient = createAuthClient<openapi.paths>({ disableCache: true });

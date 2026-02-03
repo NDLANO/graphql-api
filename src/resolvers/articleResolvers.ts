@@ -9,14 +9,13 @@
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { fetchArticle, fetchSubjectTopics, searchConcepts } from "../api";
-import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
-
 import {
   fetchTransformedContent,
   fetchRelatedContent,
   fetchTransformedDisclaimer,
   fetchVisualElementEmbed,
 } from "../api/articleApi";
+import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
 import { ndlaUrl } from "../config";
 import {
   GQLArticleTransformedContentArgs,

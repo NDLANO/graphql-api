@@ -7,10 +7,10 @@
  */
 
 import { ApolloServer } from "@apollo/server";
+import { Server } from "http";
 import { gracePeriodSeconds } from "../config";
 import { getActiveRequests } from "./activeRequestsMiddleware";
 import { getIsShuttingDown, setIsShuttingDown } from "./healthRouter";
-import { Server } from "http";
 import getLogger from "./logger";
 
 async function waitForActiveRequests() {

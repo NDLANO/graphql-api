@@ -6,24 +6,24 @@
  *
  */
 
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@as-integrations/express5";
 import compression from "compression";
 import cors from "cors";
 import express, { json } from "express";
 import promBundle from "express-prom-bundle";
-import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@as-integrations/express5";
+import { Server } from "http";
 import { port } from "./config";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
-import correlationIdMiddleware from "./utils/correlationIdMiddleware";
-import { getLogger, logError } from "./utils/logger";
-import loggerMiddleware from "./utils/loggerMiddleware";
+import { activeRequestsMiddleware } from "./utils/activeRequestsMiddleware";
 import { contextExpressMiddleware } from "./utils/context/contextMiddleware";
 import { getContextOrThrow } from "./utils/context/contextStore";
-import { Server } from "http";
-import { healthRouter } from "./utils/healthRouter";
-import { activeRequestsMiddleware } from "./utils/activeRequestsMiddleware";
+import correlationIdMiddleware from "./utils/correlationIdMiddleware";
 import { gracefulShutdown } from "./utils/gracefulShutdown";
+import { healthRouter } from "./utils/healthRouter";
+import { getLogger, logError } from "./utils/logger";
+import loggerMiddleware from "./utils/loggerMiddleware";
 
 const GRAPHQL_PORT = port;
 

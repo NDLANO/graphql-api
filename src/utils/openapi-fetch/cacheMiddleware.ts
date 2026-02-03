@@ -7,8 +7,8 @@
  */
 
 import { Middleware } from "openapi-fetch";
-import { getContextOrThrow } from "../context/contextStore";
 import { cacheTime, getCache, getCacheKey, setHeaderIfShouldNotCache } from "../../cache";
+import { getContextOrThrow } from "../context/contextStore";
 
 export function cachedResponse(data: string | undefined): Response | null {
   if (!data) return null;

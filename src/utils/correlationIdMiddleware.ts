@@ -6,8 +6,8 @@
  *
  */
 
-import { AsyncLocalStorage } from "node:async_hooks";
 import { NextFunction, Request, Response } from "express";
+import { AsyncLocalStorage } from "node:async_hooks";
 import uuid from "./uuid";
 
 const asyncLocalStorage = new AsyncLocalStorage<string>();
