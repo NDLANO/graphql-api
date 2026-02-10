@@ -39,6 +39,7 @@ export async function fetchLearningpaths(
       params: {
         query: {
           ids: learningpathIds,
+          "page-size": learningpathIds.length,
           language: context.language,
           fallback: true,
         },
