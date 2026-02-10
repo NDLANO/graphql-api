@@ -45,17 +45,25 @@ export const getYoutubeVideoId = (url: string) => {
 
 export const fetchOpengraph = async (url: string): Promise<GQLExternalOpengraph | null> => {
   if (!url.includes("youtu")) {
-    const ogs = await openGraph({ url });
-    if (ogs.error) {
-      return null;
+    try {
+      const ogs = await openGraph({ url });
+      if (ogs.error) {
+        return {
+          url,
+        };
+      }
+      return {
+        title: ogs.result.ogTitle,
+        description: ogs.result.ogDescription,
+        imageUrl: ogs.result.ogImage?.[0]?.url,
+        imageAlt: ogs.result.ogImage?.[0]?.alt,
+        url: ogs.result.ogUrl,
+      };
+    } catch (_) {
+      return {
+        url,
+      };
     }
-    return {
-      title: ogs.result.ogTitle,
-      description: ogs.result.ogDescription,
-      imageUrl: ogs.result.ogImage?.[0]?.url,
-      imageAlt: ogs.result.ogImage?.[0]?.alt,
-      url: ogs.result.ogUrl,
-    };
   } else {
     const videoId = getYoutubeVideoId(url);
     const yt_metadata = await youtube({
