@@ -9,9 +9,7 @@
 import { FolderDataDTO, ResourceDTO, UserFolderDTO } from "@ndla/types-backend/myndla-api";
 import {
   deleteFolder,
-  deleteFolderResource,
   deletePersonalData,
-  fetchAllFolderResources,
   fetchFolder,
   fetchFolders,
   fetchSharedFolder,
@@ -20,35 +18,30 @@ import {
   updateFolderStatus,
   patchPersonalData,
   postFolder,
-  postFolderResource,
   sortFolders,
   sortResources,
-  patchFolderResource,
   copySharedFolder,
   favoriteSharedFolder,
   unFavoriteSharedFolder,
   sortSavedSharedFolders,
   fetchRecentlyFavoritedResources,
+  fetchAllMyNdlaResources,
+  postMyNdlaResource,
+  patchMyNdlaResource,
+  deleteMyNdlaResource,
 } from "../api/folderApi";
-import { fetchFolderResourceMeta, fetchFolderResourcesMetaData } from "../api/folderResourceMetaApi";
+import { fetchMyNdlaResourceMeta, fetchMyNdlaResourcesMeta } from "../api/myNdlaResourceMetaApi";
 import {
-  GQLFolderResourceMeta,
   GQLMutationAddFolderArgs,
-  GQLMutationAddFolderResourceArgs,
   GQLMutationDeleteFolderArgs,
-  GQLMutationDeleteFolderResourceArgs,
   GQLMutationResolvers,
   GQLMutationSortFoldersArgs,
   GQLMutationSortResourcesArgs,
   GQLMutationUpdateFolderArgs,
-  GQLMutationUpdateFolderResourceArgs,
   GQLMutationUpdateFolderStatusArgs,
   GQLMutationUpdatePersonalDataArgs,
   GQLMyNdlaPersonalData,
-  GQLQueryAllFolderResourcesArgs,
   GQLQueryFolderArgs,
-  GQLQueryFolderResourceMetaArgs,
-  GQLQueryFolderResourceMetaSearchArgs,
   GQLQueryFoldersArgs,
   GQLQueryResolvers,
   GQLQuerySharedFolderArgs,
@@ -57,6 +50,13 @@ import {
   GQLMutationUnFavoriteSharedFolderArgs,
   GQLMutationSortSavedSharedFoldersArgs,
   GQLQueryRecentlyFavoritedResourcesArgs,
+  GQLQueryAllMyNdlaResourcesArgs,
+  GQLQueryMyNdlaResourceMetaSearchArgs,
+  GQLMyNdlaResourceMeta,
+  GQLQueryMyNdlaResourceMetaArgs,
+  GQLMutationAddMyNdlaResourceArgs,
+  GQLMutationUpdateMyNdlaResourceArgs,
+  GQLMutationDeleteMyNdlaResourceArgs,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -64,9 +64,9 @@ export const Query: Pick<
   | "folders"
   | "folder"
   | "sharedFolder"
-  | "allFolderResources"
-  | "folderResourceMetaSearch"
-  | "folderResourceMeta"
+  | "allMyNdlaResources"
+  | "myNdlaResourceMetaSearch"
+  | "myNdlaResourceMeta"
   | "personalData"
   | "recentlyFavoritedResources"
 > = {
@@ -79,12 +79,12 @@ export const Query: Pick<
   async sharedFolder(_: any, params: GQLQuerySharedFolderArgs, context: ContextWithLoaders): Promise<FolderDataDTO> {
     return fetchSharedFolder(params, context);
   },
-  async allFolderResources(
+  async allMyNdlaResources(
     _: any,
-    params: GQLQueryAllFolderResourcesArgs,
+    params: GQLQueryAllMyNdlaResourcesArgs,
     context: ContextWithLoaders,
   ): Promise<ResourceDTO[]> {
-    return fetchAllFolderResources(params, context);
+    return fetchAllMyNdlaResources(params, context);
   },
   async recentlyFavoritedResources(
     _: any,
@@ -93,20 +93,20 @@ export const Query: Pick<
   ): Promise<ResourceDTO[]> {
     return fetchRecentlyFavoritedResources(params, context);
   },
-  async folderResourceMetaSearch(
+  async myNdlaResourceMetaSearch(
     _: any,
-    params: GQLQueryFolderResourceMetaSearchArgs,
+    params: GQLQueryMyNdlaResourceMetaSearchArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLFolderResourceMeta[]> {
-    return fetchFolderResourcesMetaData(params, context);
+  ): Promise<GQLMyNdlaResourceMeta[]> {
+    return fetchMyNdlaResourcesMeta(params, context);
   },
-  async folderResourceMeta(
+  async myNdlaResourceMeta(
     _: any,
-    params: GQLQueryFolderResourceMetaArgs,
+    params: GQLQueryMyNdlaResourceMetaArgs,
     context: ContextWithLoaders,
-  ): Promise<GQLFolderResourceMeta> {
+  ): Promise<GQLMyNdlaResourceMeta> {
     //@ts-expect-error This refuses to acknowledge that null is a valid return value. It is.
-    return await fetchFolderResourceMeta(params, context);
+    return await fetchMyNdlaResourceMeta(params, context);
   },
   async personalData(_: any, __: any, context: ContextWithLoaders): Promise<GQLMyNdlaPersonalData> {
     return getPersonalData(context) as unknown as GQLMyNdlaPersonalData;
@@ -119,18 +119,18 @@ export const resolvers = {
       return folder.id.toString();
     },
   },
-  FolderResource: {
+  MyNdlaResource: {
     async id(resource: ResourceDTO) {
       return resource.id.toString();
     },
   },
-  FolderResourceMeta: {
-    async id(meta: GQLFolderResourceMeta) {
+  MyNdlaResourceMeta: {
+    async id(meta: GQLMyNdlaResourceMeta) {
       return meta.id.toString();
     },
   },
-  ArticleFolderResourceMeta: {
-    async metaImage(meta: GQLFolderResourceMeta, _: any, context: ContextWithLoaders) {
+  MyNdlaArticleResourceMeta: {
+    async metaImage(meta: GQLMyNdlaResourceMeta, _: any, context: ContextWithLoaders) {
       if (!meta.metaImage?.url) {
         return undefined;
       }
@@ -154,9 +154,9 @@ export const Mutations: Pick<
   | "addFolder"
   | "updateFolder"
   | "deleteFolder"
-  | "addFolderResource"
-  | "updateFolderResource"
-  | "deleteFolderResource"
+  | "addMyNdlaResource"
+  | "updateMyNdlaResource"
+  | "deleteMyNdlaResource"
   | "deletePersonalData"
   | "sortFolders"
   | "sortResources"
@@ -176,26 +176,26 @@ export const Mutations: Pick<
   async deleteFolder(_: any, params: GQLMutationDeleteFolderArgs, context: ContextWithLoaders): Promise<string> {
     return deleteFolder(params, context);
   },
-  async addFolderResource(
+  async addMyNdlaResource(
     _: any,
-    params: GQLMutationAddFolderResourceArgs,
+    params: GQLMutationAddMyNdlaResourceArgs,
     context: ContextWithLoaders,
   ): Promise<ResourceDTO> {
-    return postFolderResource(params, context);
+    return postMyNdlaResource(params, context);
   },
-  async updateFolderResource(
+  async updateMyNdlaResource(
     _: any,
-    params: GQLMutationUpdateFolderResourceArgs,
+    params: GQLMutationUpdateMyNdlaResourceArgs,
     context: ContextWithLoaders,
   ): Promise<ResourceDTO> {
-    return patchFolderResource(params, context);
+    return patchMyNdlaResource(params, context);
   },
-  async deleteFolderResource(
+  async deleteMyNdlaResource(
     _: any,
-    params: GQLMutationDeleteFolderResourceArgs,
+    params: GQLMutationDeleteMyNdlaResourceArgs,
     context: ContextWithLoaders,
   ): Promise<string> {
-    return deleteFolderResource(params, context);
+    return deleteMyNdlaResource(params, context);
   },
   async deletePersonalData(_: any, __: any, context: ContextWithLoaders) {
     return deletePersonalData(context);

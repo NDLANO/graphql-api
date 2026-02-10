@@ -18,20 +18,20 @@ import {
 } from "@ndla/types-backend/myndla-api";
 import {
   GQLMutationAddFolderArgs,
-  GQLMutationAddFolderResourceArgs,
+  GQLMutationAddMyNdlaResourceArgs,
   GQLMutationCopySharedFolderArgs,
   GQLMutationDeleteFolderArgs,
-  GQLMutationDeleteFolderResourceArgs,
+  GQLMutationDeleteMyNdlaResourceArgs,
   GQLMutationFavoriteSharedFolderArgs,
   GQLMutationSortFoldersArgs,
   GQLMutationSortResourcesArgs,
   GQLMutationSortSavedSharedFoldersArgs,
   GQLMutationUnFavoriteSharedFolderArgs,
   GQLMutationUpdateFolderArgs,
-  GQLMutationUpdateFolderResourceArgs,
   GQLMutationUpdateFolderStatusArgs,
+  GQLMutationUpdateMyNdlaResourceArgs,
   GQLMutationUpdatePersonalDataArgs,
-  GQLQueryAllFolderResourcesArgs,
+  GQLQueryAllMyNdlaResourcesArgs,
   GQLQueryFolderArgs,
   GQLQueryFoldersArgs,
   GQLQueryRecentlyFavoritedResourcesArgs,
@@ -91,8 +91,8 @@ export async function fetchRecentlyFavoritedResources(
   return client.GET("/myndla-api/v1/folders/resources/recent", { params: { query: { size } } }).then(resolveJsonOATS);
 }
 
-export async function fetchAllFolderResources(
-  { size }: GQLQueryAllFolderResourcesArgs,
+export async function fetchAllMyNdlaResources(
+  { size }: GQLQueryAllMyNdlaResourcesArgs,
   _context: Context,
 ): Promise<ResourceDTO[]> {
   return client.GET("/myndla-api/v1/folders/resources", { params: { query: { size } } }).then(resolveJsonOATS);
@@ -131,8 +131,8 @@ export async function deleteFolder({ id }: GQLMutationDeleteFolderArgs, _context
   return id;
 }
 
-export async function postFolderResource(
-  { folderId, resourceType, path, tags, resourceId }: GQLMutationAddFolderResourceArgs,
+export async function postMyNdlaResource(
+  { folderId, resourceType, path, tags, resourceId }: GQLMutationAddMyNdlaResourceArgs,
   _context: Context,
 ): Promise<ResourceDTO> {
   return client
@@ -148,8 +148,8 @@ export async function postFolderResource(
     .then(resolveJsonOATS);
 }
 
-export async function patchFolderResource(
-  { id, tags }: GQLMutationUpdateFolderResourceArgs,
+export async function patchMyNdlaResource(
+  { id, tags }: GQLMutationUpdateMyNdlaResourceArgs,
   _context: Context,
 ): Promise<ResourceDTO> {
   return client
@@ -160,8 +160,8 @@ export async function patchFolderResource(
     .then(resolveJsonOATS);
 }
 
-export async function deleteFolderResource(
-  { folderId, resourceId }: GQLMutationDeleteFolderResourceArgs,
+export async function deleteMyNdlaResource(
+  { folderId, resourceId }: GQLMutationDeleteMyNdlaResourceArgs,
   _context: Context,
 ): Promise<string> {
   await client

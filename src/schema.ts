@@ -1158,7 +1158,7 @@ export const typeDefs = gql`
     breadcrumbs: [Breadcrumb!]!
     parentId: String
     subfolders: [Folder!]!
-    resources: [FolderResource!]!
+    resources: [MyNdlaResource!]!
     created: String!
     updated: String!
     owner: Owner
@@ -1176,13 +1176,13 @@ export const typeDefs = gql`
     breadcrumbs: [Breadcrumb!]!
     parentId: String
     subfolders: [SharedFolder!]!
-    resources: [FolderResource!]!
+    resources: [MyNdlaResource!]!
     created: String!
     updated: String!
     owner: Owner
   }
 
-  type FolderResource {
+  type MyNdlaResource {
     id: String!
     resourceId: String!
     resourceType: String!
@@ -1191,76 +1191,76 @@ export const typeDefs = gql`
     tags: [String!]!
   }
 
-  input FolderResourceMetaSearchInput {
+  input MyNdlaResourceMetaSearchInput {
     id: String!
     resourceType: String!
     path: String!
   }
 
-  type FolderResourceResourceType {
+  type MyNdlaResourceResourceType {
     id: String!
     name: String!
   }
 
-  interface FolderResourceMeta {
+  interface MyNdlaResourceMeta {
     id: String!
     type: String!
-    resourceTypes: [FolderResourceResourceType!]!
+    resourceTypes: [MyNdlaResourceResourceType!]!
     metaImage: MetaImage
     title: String!
     description: String!
   }
 
-  type ArticleFolderResourceMeta implements FolderResourceMeta {
+  type MyNdlaArticleResourceMeta implements MyNdlaResourceMeta {
     id: String!
     type: String!
-    resourceTypes: [FolderResourceResourceType!]!
+    resourceTypes: [MyNdlaResourceResourceType!]!
     metaImage: MetaImage
     title: String!
     description: String!
     traits: [String!]
   }
 
-  type LearningpathFolderResourceMeta implements FolderResourceMeta {
+  type MyNdlaLearningpathResourceMeta implements MyNdlaResourceMeta {
     id: String!
     type: String!
-    resourceTypes: [FolderResourceResourceType!]!
+    resourceTypes: [MyNdlaResourceResourceType!]!
     metaImage: MetaImage
     title: String!
     description: String!
   }
 
-  type ConceptFolderResourceMeta implements FolderResourceMeta {
+  type MyNdlaConceptResourceMeta implements MyNdlaResourceMeta {
     id: String!
     type: String!
-    resourceTypes: [FolderResourceResourceType!]!
+    resourceTypes: [MyNdlaResourceResourceType!]!
     metaImage: MetaImage
     title: String!
     description: String!
   }
 
-  type ImageFolderResourceMeta implements FolderResourceMeta {
+  type MyNdlaImageResourceMeta implements MyNdlaResourceMeta {
     id: String!
     type: String!
-    resourceTypes: [FolderResourceResourceType!]!
+    resourceTypes: [MyNdlaResourceResourceType!]!
     metaImage: MetaImage
     title: String!
     description: String!
   }
 
-  type AudioFolderResourceMeta implements FolderResourceMeta {
+  type MyNdlaAudioResourceMeta implements MyNdlaResourceMeta {
     id: String!
     type: String!
-    resourceTypes: [FolderResourceResourceType!]!
+    resourceTypes: [MyNdlaResourceResourceType!]!
     metaImage: MetaImage
     title: String!
     description: String!
   }
 
-  type VideoFolderResourceMeta implements FolderResourceMeta {
+  type MyNdlaVideoResourceMeta implements MyNdlaResourceMeta {
     id: String!
     type: String!
-    resourceTypes: [FolderResourceResourceType!]!
+    resourceTypes: [MyNdlaResourceResourceType!]!
     metaImage: MetaImage
     title: String!
     description: String!
@@ -1272,7 +1272,7 @@ export const typeDefs = gql`
     status: String
   }
 
-  type NewFolderResource {
+  type NewMyNdlaResource {
     resourceType: String!
     path: String!
     tags: [String!]
@@ -1283,7 +1283,7 @@ export const typeDefs = gql`
     status: String
   }
 
-  type UpdatedFolderResource {
+  type UpdatedMyNdlaResource {
     tags: [String!]
   }
 
@@ -1486,12 +1486,12 @@ export const typeDefs = gql`
     podcastSeriesSearch(page: Int!, pageSize: Int!, fallback: Boolean): PodcastSeriesSearch
     alerts: [UptimeAlert]
     folders(includeSubfolders: Boolean, includeResources: Boolean): UserFolder!
-    folderResourceMeta(resource: FolderResourceMetaSearchInput!): FolderResourceMeta
-    folderResourceMetaSearch(resources: [FolderResourceMetaSearchInput!]!): [FolderResourceMeta!]!
+    myNdlaResourceMeta(resource: MyNdlaResourceMetaSearchInput!): MyNdlaResourceMeta
+    myNdlaResourceMetaSearch(resources: [MyNdlaResourceMetaSearchInput!]!): [MyNdlaResourceMeta!]!
     folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
     sharedFolder(id: String!): SharedFolder!
-    allFolderResources(size: Int): [FolderResource!]!
-    recentlyFavoritedResources(size: Int): [FolderResource!]!
+    allMyNdlaResources(size: Int): [MyNdlaResource!]!
+    recentlyFavoritedResources(size: Int): [MyNdlaResource!]!
     personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV3
     examLockStatus: ConfigMetaBoolean!
@@ -1510,15 +1510,15 @@ export const typeDefs = gql`
     addFolder(name: String!, parentId: String, status: String, description: String): Folder!
     updateFolder(id: String!, name: String, status: String, description: String): Folder!
     deleteFolder(id: String!): String!
-    addFolderResource(
+    addMyNdlaResource(
       resourceId: String!
       folderId: String!
       resourceType: String!
       path: String!
       tags: [String!]
-    ): FolderResource!
-    updateFolderResource(id: String!, tags: [String!]): FolderResource!
-    deleteFolderResource(folderId: String!, resourceId: String!): String!
+    ): MyNdlaResource!
+    updateMyNdlaResource(id: String!, tags: [String!]): MyNdlaResource!
+    deleteMyNdlaResource(folderId: String!, resourceId: String!): String!
     deletePersonalData: Boolean!
     updatePersonalData(favoriteSubjects: [String]): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
