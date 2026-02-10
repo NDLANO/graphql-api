@@ -23,6 +23,7 @@ export async function searchConcepts(
       params: {
         query: {
           ids: params.ids,
+          "page-size": params.ids?.length,
           sort: "title",
         },
       },

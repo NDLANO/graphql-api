@@ -32,6 +32,7 @@ export async function fetchImages(imageIds: number[], context: Context): Promise
       params: {
         query: {
           ids: imageIds.slice(),
+          "page-size": imageIds.length,
           language: context.language,
         },
       },
