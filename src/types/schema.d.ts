@@ -84,17 +84,6 @@ export type GQLArticleTransformedDisclaimerArgs = {
   transformArgs?: InputMaybe<GQLTransformedArticleContentInput>;
 };
 
-export type GQLArticleFolderResourceMeta = GQLFolderResourceMeta & {
-  __typename?: 'ArticleFolderResourceMeta';
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImage>;
-  resourceTypes: Array<GQLFolderResourceResourceType>;
-  title: Scalars['String']['output'];
-  traits?: Maybe<Array<Scalars['String']['output']>>;
-  type: Scalars['String']['output'];
-};
-
 export type GQLArticleMetaData = {
   __typename?: 'ArticleMetaData';
   audios: Array<GQLAudioLicense>;
@@ -153,16 +142,6 @@ export type GQLAudioFile = {
   language: Scalars['String']['output'];
   mimeType: Scalars['String']['output'];
   url: Scalars['String']['output'];
-};
-
-export type GQLAudioFolderResourceMeta = GQLFolderResourceMeta & {
-  __typename?: 'AudioFolderResourceMeta';
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImage>;
-  resourceTypes: Array<GQLFolderResourceResourceType>;
-  title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
 };
 
 export type GQLAudioLicense = {
@@ -315,16 +294,6 @@ export type GQLConceptCopyright = {
   rightsholders: Array<GQLContributor>;
 };
 
-export type GQLConceptFolderResourceMeta = GQLFolderResourceMeta & {
-  __typename?: 'ConceptFolderResourceMeta';
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImage>;
-  resourceTypes: Array<GQLFolderResourceResourceType>;
-  title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
-};
-
 export type GQLConceptLicense = {
   __typename?: 'ConceptLicense';
   content?: Maybe<Scalars['String']['output']>;
@@ -457,41 +426,10 @@ export type GQLFolder = {
   name: Scalars['String']['output'];
   owner?: Maybe<GQLOwner>;
   parentId?: Maybe<Scalars['String']['output']>;
-  resources: Array<GQLFolderResource>;
+  resources: Array<GQLMyNdlaResource>;
   status: Scalars['String']['output'];
   subfolders: Array<GQLFolder>;
   updated: Scalars['String']['output'];
-};
-
-export type GQLFolderResource = {
-  __typename?: 'FolderResource';
-  created: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  path: Scalars['String']['output'];
-  resourceId: Scalars['String']['output'];
-  resourceType: Scalars['String']['output'];
-  tags: Array<Scalars['String']['output']>;
-};
-
-export type GQLFolderResourceMeta = {
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImage>;
-  resourceTypes: Array<GQLFolderResourceResourceType>;
-  title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
-};
-
-export type GQLFolderResourceMetaSearchInput = {
-  id: Scalars['String']['input'];
-  path: Scalars['String']['input'];
-  resourceType: Scalars['String']['input'];
-};
-
-export type GQLFolderResourceResourceType = {
-  __typename?: 'FolderResourceResourceType';
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
 };
 
 export type GQLFootNote = {
@@ -610,16 +548,6 @@ export type GQLImageElement = {
   upperLeftY?: Maybe<Scalars['Float']['output']>;
 };
 
-export type GQLImageFolderResourceMeta = GQLFolderResourceMeta & {
-  __typename?: 'ImageFolderResourceMeta';
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImage>;
-  resourceTypes: Array<GQLFolderResourceResourceType>;
-  title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
-};
-
 export type GQLImageLicense = {
   __typename?: 'ImageLicense';
   altText: Scalars['String']['output'];
@@ -724,16 +652,6 @@ export type GQLLearningpathCopyrightInput = {
 export type GQLLearningpathEmbedInput = {
   embedType: Scalars['String']['input'];
   url: Scalars['String']['input'];
-};
-
-export type GQLLearningpathFolderResourceMeta = GQLFolderResourceMeta & {
-  __typename?: 'LearningpathFolderResourceMeta';
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImage>;
-  resourceTypes: Array<GQLFolderResourceResourceType>;
-  title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
 };
 
 export type GQLLearningpathNewInput = {
@@ -921,13 +839,13 @@ export type GQLMovieTheme = {
 export type GQLMutation = {
   __typename?: 'Mutation';
   addFolder: GQLFolder;
-  addFolderResource: GQLFolderResource;
+  addMyNdlaResource: GQLMyNdlaResource;
   copyLearningpath: GQLMyNdlaLearningpath;
   copySharedFolder: GQLFolder;
   deleteFolder: Scalars['String']['output'];
-  deleteFolderResource: Scalars['String']['output'];
   deleteLearningpath?: Maybe<Scalars['Boolean']['output']>;
   deleteLearningpathStep?: Maybe<Scalars['Boolean']['output']>;
+  deleteMyNdlaResource: Scalars['String']['output'];
   deletePersonalData: Scalars['Boolean']['output'];
   favoriteSharedFolder: Scalars['String']['output'];
   newLearningpath: GQLMyNdlaLearningpath;
@@ -938,12 +856,12 @@ export type GQLMutation = {
   transformArticleContent: Scalars['String']['output'];
   unFavoriteSharedFolder: Scalars['String']['output'];
   updateFolder: GQLFolder;
-  updateFolderResource: GQLFolderResource;
   updateFolderStatus: Array<Scalars['String']['output']>;
   updateLearningpath: GQLMyNdlaLearningpath;
   updateLearningpathStatus: GQLMyNdlaLearningpath;
   updateLearningpathStep: GQLMyNdlaLearningpathStep;
   updateLearningpathStepSeqNo: GQLLearningpathSeqNo;
+  updateMyNdlaResource: GQLMyNdlaResource;
   updatePersonalData: GQLMyNdlaPersonalData;
 };
 
@@ -956,7 +874,7 @@ export type GQLMutationAddFolderArgs = {
 };
 
 
-export type GQLMutationAddFolderResourceArgs = {
+export type GQLMutationAddMyNdlaResourceArgs = {
   folderId: Scalars['String']['input'];
   path: Scalars['String']['input'];
   resourceId: Scalars['String']['input'];
@@ -982,12 +900,6 @@ export type GQLMutationDeleteFolderArgs = {
 };
 
 
-export type GQLMutationDeleteFolderResourceArgs = {
-  folderId: Scalars['String']['input'];
-  resourceId: Scalars['String']['input'];
-};
-
-
 export type GQLMutationDeleteLearningpathArgs = {
   id: Scalars['Int']['input'];
 };
@@ -996,6 +908,12 @@ export type GQLMutationDeleteLearningpathArgs = {
 export type GQLMutationDeleteLearningpathStepArgs = {
   learningpathId: Scalars['Int']['input'];
   learningstepId: Scalars['Int']['input'];
+};
+
+
+export type GQLMutationDeleteMyNdlaResourceArgs = {
+  folderId: Scalars['String']['input'];
+  resourceId: Scalars['String']['input'];
 };
 
 
@@ -1055,12 +973,6 @@ export type GQLMutationUpdateFolderArgs = {
 };
 
 
-export type GQLMutationUpdateFolderResourceArgs = {
-  id: Scalars['String']['input'];
-  tags?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
-
 export type GQLMutationUpdateFolderStatusArgs = {
   folderId: Scalars['String']['input'];
   status: Scalars['String']['input'];
@@ -1093,8 +1005,45 @@ export type GQLMutationUpdateLearningpathStepSeqNoArgs = {
 };
 
 
+export type GQLMutationUpdateMyNdlaResourceArgs = {
+  id: Scalars['String']['input'];
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+
 export type GQLMutationUpdatePersonalDataArgs = {
   favoriteSubjects?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type GQLMyNdlaArticleResourceMeta = GQLMyNdlaResourceMeta & {
+  __typename?: 'MyNdlaArticleResourceMeta';
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  metaImage?: Maybe<GQLMetaImage>;
+  resourceTypes: Array<GQLMyNdlaResourceResourceType>;
+  title: Scalars['String']['output'];
+  traits?: Maybe<Array<Scalars['String']['output']>>;
+  type: Scalars['String']['output'];
+};
+
+export type GQLMyNdlaAudioResourceMeta = GQLMyNdlaResourceMeta & {
+  __typename?: 'MyNdlaAudioResourceMeta';
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  metaImage?: Maybe<GQLMetaImage>;
+  resourceTypes: Array<GQLMyNdlaResourceResourceType>;
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type GQLMyNdlaConceptResourceMeta = GQLMyNdlaResourceMeta & {
+  __typename?: 'MyNdlaConceptResourceMeta';
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  metaImage?: Maybe<GQLMetaImage>;
+  resourceTypes: Array<GQLMyNdlaResourceResourceType>;
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type GQLMyNdlaGroup = {
@@ -1103,6 +1052,16 @@ export type GQLMyNdlaGroup = {
   id: Scalars['String']['output'];
   isPrimarySchool: Scalars['Boolean']['output'];
   parentId?: Maybe<Scalars['String']['output']>;
+};
+
+export type GQLMyNdlaImageResourceMeta = GQLMyNdlaResourceMeta & {
+  __typename?: 'MyNdlaImageResourceMeta';
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  metaImage?: Maybe<GQLMetaImage>;
+  resourceTypes: Array<GQLMyNdlaResourceResourceType>;
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type GQLMyNdlaLearningpath = {
@@ -1129,6 +1088,16 @@ export type GQLMyNdlaLearningpath = {
   tags: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
   verificationStatus: Scalars['String']['output'];
+};
+
+export type GQLMyNdlaLearningpathResourceMeta = GQLMyNdlaResourceMeta & {
+  __typename?: 'MyNdlaLearningpathResourceMeta';
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  metaImage?: Maybe<GQLMetaImage>;
+  resourceTypes: Array<GQLMyNdlaResourceResourceType>;
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type GQLMyNdlaLearningpathStep = {
@@ -1174,6 +1143,47 @@ export type GQLMyNdlaPersonalData = {
   username: Scalars['String']['output'];
 };
 
+export type GQLMyNdlaResource = {
+  __typename?: 'MyNdlaResource';
+  created: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  path: Scalars['String']['output'];
+  resourceId: Scalars['String']['output'];
+  resourceType: Scalars['String']['output'];
+  tags: Array<Scalars['String']['output']>;
+};
+
+export type GQLMyNdlaResourceMeta = {
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  metaImage?: Maybe<GQLMetaImage>;
+  resourceTypes: Array<GQLMyNdlaResourceResourceType>;
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type GQLMyNdlaResourceMetaSearchInput = {
+  id: Scalars['String']['input'];
+  path: Scalars['String']['input'];
+  resourceType: Scalars['String']['input'];
+};
+
+export type GQLMyNdlaResourceResourceType = {
+  __typename?: 'MyNdlaResourceResourceType';
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type GQLMyNdlaVideoResourceMeta = GQLMyNdlaResourceMeta & {
+  __typename?: 'MyNdlaVideoResourceMeta';
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  metaImage?: Maybe<GQLMetaImage>;
+  resourceTypes: Array<GQLMyNdlaResourceResourceType>;
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
 export type GQLName = {
   __typename?: 'Name';
   language: Scalars['String']['output'];
@@ -1187,8 +1197,8 @@ export type GQLNewFolder = {
   status?: Maybe<Scalars['String']['output']>;
 };
 
-export type GQLNewFolderResource = {
-  __typename?: 'NewFolderResource';
+export type GQLNewMyNdlaResource = {
+  __typename?: 'NewMyNdlaResource';
   path: Scalars['String']['output'];
   resourceType: Scalars['String']['output'];
   tags?: Maybe<Array<Scalars['String']['output']>>;
@@ -1337,7 +1347,7 @@ export type GQLQuery = {
   __typename?: 'Query';
   aiEnabledOrgs?: Maybe<GQLConfigMetaStringList>;
   alerts?: Maybe<Array<Maybe<GQLUptimeAlert>>>;
-  allFolderResources: Array<GQLFolderResource>;
+  allMyNdlaResources: Array<GQLMyNdlaResource>;
   arenaEnabledOrgs?: Maybe<GQLConfigMetaStringList>;
   article?: Maybe<GQLArticle>;
   articleResource?: Maybe<GQLResource>;
@@ -1349,8 +1359,6 @@ export type GQLQuery = {
   examLockStatus: GQLConfigMetaBoolean;
   filmfrontpage?: Maybe<GQLFilmFrontpage>;
   folder: GQLFolder;
-  folderResourceMeta?: Maybe<GQLFolderResourceMeta>;
-  folderResourceMetaSearch: Array<GQLFolderResourceMeta>;
   folders: GQLUserFolder;
   frontpage?: Maybe<GQLFrontpageMenu>;
   groupSearch?: Maybe<Array<GQLGroupSearch>>;
@@ -1361,6 +1369,8 @@ export type GQLQuery = {
   learningpathStepOembed: GQLLearningpathStepOembed;
   myLearningpaths?: Maybe<Array<GQLMyNdlaLearningpath>>;
   myNdlaLearningpath?: Maybe<GQLMyNdlaLearningpath>;
+  myNdlaResourceMeta?: Maybe<GQLMyNdlaResourceMeta>;
+  myNdlaResourceMetaSearch: Array<GQLMyNdlaResourceMeta>;
   node?: Maybe<GQLNode>;
   nodeByArticleId?: Maybe<GQLNode>;
   nodes?: Maybe<Array<GQLNode>>;
@@ -1371,7 +1381,7 @@ export type GQLQuery = {
   podcastSeriesSearch?: Maybe<GQLPodcastSeriesSearch>;
   programme?: Maybe<GQLProgrammePage>;
   programmes?: Maybe<Array<GQLProgrammePage>>;
-  recentlyFavoritedResources: Array<GQLFolderResource>;
+  recentlyFavoritedResources: Array<GQLMyNdlaResource>;
   resource?: Maybe<GQLResource>;
   resourceEmbed: GQLResourceEmbed;
   resourceEmbeds: GQLResourceEmbed;
@@ -1388,7 +1398,7 @@ export type GQLQuery = {
 };
 
 
-export type GQLQueryAllFolderResourcesArgs = {
+export type GQLQueryAllMyNdlaResourcesArgs = {
   size?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -1437,16 +1447,6 @@ export type GQLQueryFolderArgs = {
   id: Scalars['String']['input'];
   includeResources?: InputMaybe<Scalars['Boolean']['input']>;
   includeSubfolders?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
-export type GQLQueryFolderResourceMetaArgs = {
-  resource: GQLFolderResourceMetaSearchInput;
-};
-
-
-export type GQLQueryFolderResourceMetaSearchArgs = {
-  resources: Array<GQLFolderResourceMetaSearchInput>;
 };
 
 
@@ -1504,6 +1504,16 @@ export type GQLQueryLearningpathStepOembedArgs = {
 
 export type GQLQueryMyNdlaLearningpathArgs = {
   pathId: Scalars['String']['input'];
+};
+
+
+export type GQLQueryMyNdlaResourceMetaArgs = {
+  resource: GQLMyNdlaResourceMetaSearchInput;
+};
+
+
+export type GQLQueryMyNdlaResourceMetaSearchArgs = {
+  resources: Array<GQLMyNdlaResourceMetaSearchInput>;
 };
 
 
@@ -1809,7 +1819,7 @@ export type GQLSharedFolder = {
   name: Scalars['String']['output'];
   owner?: Maybe<GQLOwner>;
   parentId?: Maybe<Scalars['String']['output']>;
-  resources: Array<GQLFolderResource>;
+  resources: Array<GQLMyNdlaResource>;
   status: Scalars['String']['output'];
   subfolders: Array<GQLSharedFolder>;
   updated: Scalars['String']['output'];
@@ -2021,8 +2031,8 @@ export type GQLUpdatedFolder = {
   status?: Maybe<Scalars['String']['output']>;
 };
 
-export type GQLUpdatedFolderResource = {
-  __typename?: 'UpdatedFolderResource';
+export type GQLUpdatedMyNdlaResource = {
+  __typename?: 'UpdatedMyNdlaResource';
   tags?: Maybe<Array<Scalars['String']['output']>>;
 };
 
@@ -2044,16 +2054,6 @@ export type GQLUserFolder = {
   __typename?: 'UserFolder';
   folders: Array<GQLFolder>;
   sharedFolders: Array<GQLSharedFolder>;
-};
-
-export type GQLVideoFolderResourceMeta = GQLFolderResourceMeta & {
-  __typename?: 'VideoFolderResourceMeta';
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  metaImage?: Maybe<GQLMetaImage>;
-  resourceTypes: Array<GQLFolderResourceResourceType>;
-  title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
 };
 
 export type GQLVisualElement = {
@@ -2164,13 +2164,13 @@ export type GQLResolversUnionTypes<_RefType extends Record<string, unknown>> = {
 
 /** Mapping of interface types */
 export type GQLResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
-  FolderResourceMeta:
-    | ( GQLArticleFolderResourceMeta )
-    | ( GQLAudioFolderResourceMeta )
-    | ( GQLConceptFolderResourceMeta )
-    | ( GQLImageFolderResourceMeta )
-    | ( GQLLearningpathFolderResourceMeta )
-    | ( GQLVideoFolderResourceMeta )
+  MyNdlaResourceMeta:
+    | ( GQLMyNdlaArticleResourceMeta )
+    | ( GQLMyNdlaAudioResourceMeta )
+    | ( GQLMyNdlaConceptResourceMeta )
+    | ( GQLMyNdlaImageResourceMeta )
+    | ( GQLMyNdlaLearningpathResourceMeta )
+    | ( GQLMyNdlaVideoResourceMeta )
   ;
   PodcastSeriesBase:
     | ( GQLPodcastSeries )
@@ -2205,13 +2205,11 @@ export type GQLResolversInterfaceTypes<_RefType extends Record<string, unknown>>
 export type GQLResolversTypes = {
   AggregationResult: ResolverTypeWrapper<GQLAggregationResult>;
   Article: ResolverTypeWrapper<GQLArticle>;
-  ArticleFolderResourceMeta: ResolverTypeWrapper<GQLArticleFolderResourceMeta>;
   ArticleMetaData: ResolverTypeWrapper<GQLArticleMetaData>;
   ArticleRequiredLibrary: ResolverTypeWrapper<GQLArticleRequiredLibrary>;
   ArticleSearchResult: ResolverTypeWrapper<GQLArticleSearchResult>;
   Audio: ResolverTypeWrapper<GQLAudio>;
   AudioFile: ResolverTypeWrapper<GQLAudioFile>;
-  AudioFolderResourceMeta: ResolverTypeWrapper<GQLAudioFolderResourceMeta>;
   AudioLicense: ResolverTypeWrapper<GQLAudioLicense>;
   AudioSearch: ResolverTypeWrapper<GQLAudioSearch>;
   AudioSummary: ResolverTypeWrapper<GQLAudioSummary>;
@@ -2228,7 +2226,6 @@ export type GQLResolversTypes = {
   CompetenceGoal: ResolverTypeWrapper<GQLCompetenceGoal>;
   Concept: ResolverTypeWrapper<GQLConcept>;
   ConceptCopyright: ResolverTypeWrapper<GQLConceptCopyright>;
-  ConceptFolderResourceMeta: ResolverTypeWrapper<GQLConceptFolderResourceMeta>;
   ConceptLicense: ResolverTypeWrapper<GQLConceptLicense>;
   ConfigMetaBoolean: ResolverTypeWrapper<GQLConfigMetaBoolean>;
   ConfigMetaStringList: ResolverTypeWrapper<GQLConfigMetaStringList>;
@@ -2248,10 +2245,6 @@ export type GQLResolversTypes = {
   FilmPageAbout: ResolverTypeWrapper<GQLFilmPageAbout>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Folder: ResolverTypeWrapper<GQLFolder>;
-  FolderResource: ResolverTypeWrapper<GQLFolderResource>;
-  FolderResourceMeta: ResolverTypeWrapper<GQLResolversInterfaceTypes<GQLResolversTypes>['FolderResourceMeta']>;
-  FolderResourceMetaSearchInput: GQLFolderResourceMetaSearchInput;
-  FolderResourceResourceType: ResolverTypeWrapper<GQLFolderResourceResourceType>;
   FootNote: ResolverTypeWrapper<GQLFootNote>;
   FrontpageMenu: ResolverTypeWrapper<GQLFrontpageMenu>;
   Gloss: ResolverTypeWrapper<GQLGloss>;
@@ -2264,7 +2257,6 @@ export type GQLResolversTypes = {
   ImageAltText: ResolverTypeWrapper<GQLImageAltText>;
   ImageDimensions: ResolverTypeWrapper<GQLImageDimensions>;
   ImageElement: ResolverTypeWrapper<GQLImageElement>;
-  ImageFolderResourceMeta: ResolverTypeWrapper<GQLImageFolderResourceMeta>;
   ImageLicense: ResolverTypeWrapper<GQLImageLicense>;
   ImageMetaInformationV3: ResolverTypeWrapper<GQLImageMetaInformationV3>;
   ImageSearch: ResolverTypeWrapper<GQLImageSearch>;
@@ -2276,7 +2268,6 @@ export type GQLResolversTypes = {
   LearningpathCopyright: ResolverTypeWrapper<GQLLearningpathCopyright>;
   LearningpathCopyrightInput: GQLLearningpathCopyrightInput;
   LearningpathEmbedInput: GQLLearningpathEmbedInput;
-  LearningpathFolderResourceMeta: ResolverTypeWrapper<GQLLearningpathFolderResourceMeta>;
   LearningpathNewInput: GQLLearningpathNewInput;
   LearningpathSearchResult: ResolverTypeWrapper<GQLLearningpathSearchResult>;
   LearningpathSeqNo: ResolverTypeWrapper<GQLLearningpathSeqNo>;
@@ -2296,13 +2287,23 @@ export type GQLResolversTypes = {
   MovieResourceTypes: ResolverTypeWrapper<GQLMovieResourceTypes>;
   MovieTheme: ResolverTypeWrapper<GQLMovieTheme>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  MyNdlaArticleResourceMeta: ResolverTypeWrapper<GQLMyNdlaArticleResourceMeta>;
+  MyNdlaAudioResourceMeta: ResolverTypeWrapper<GQLMyNdlaAudioResourceMeta>;
+  MyNdlaConceptResourceMeta: ResolverTypeWrapper<GQLMyNdlaConceptResourceMeta>;
   MyNdlaGroup: ResolverTypeWrapper<GQLMyNdlaGroup>;
+  MyNdlaImageResourceMeta: ResolverTypeWrapper<GQLMyNdlaImageResourceMeta>;
   MyNdlaLearningpath: ResolverTypeWrapper<GQLMyNdlaLearningpath>;
+  MyNdlaLearningpathResourceMeta: ResolverTypeWrapper<GQLMyNdlaLearningpathResourceMeta>;
   MyNdlaLearningpathStep: ResolverTypeWrapper<GQLMyNdlaLearningpathStep>;
   MyNdlaPersonalData: ResolverTypeWrapper<GQLMyNdlaPersonalData>;
+  MyNdlaResource: ResolverTypeWrapper<GQLMyNdlaResource>;
+  MyNdlaResourceMeta: ResolverTypeWrapper<GQLResolversInterfaceTypes<GQLResolversTypes>['MyNdlaResourceMeta']>;
+  MyNdlaResourceMetaSearchInput: GQLMyNdlaResourceMetaSearchInput;
+  MyNdlaResourceResourceType: ResolverTypeWrapper<GQLMyNdlaResourceResourceType>;
+  MyNdlaVideoResourceMeta: ResolverTypeWrapper<GQLMyNdlaVideoResourceMeta>;
   Name: ResolverTypeWrapper<GQLName>;
   NewFolder: ResolverTypeWrapper<GQLNewFolder>;
-  NewFolderResource: ResolverTypeWrapper<GQLNewFolderResource>;
+  NewMyNdlaResource: ResolverTypeWrapper<GQLNewMyNdlaResource>;
   Node: ResolverTypeWrapper<GQLNode>;
   NodeSearchResult: ResolverTypeWrapper<GQLNodeSearchResult>;
   Owner: ResolverTypeWrapper<GQLOwner>;
@@ -2355,11 +2356,10 @@ export type GQLResolversTypes = {
   TransformedArticleContent: ResolverTypeWrapper<GQLTransformedArticleContent>;
   TransformedArticleContentInput: GQLTransformedArticleContentInput;
   UpdatedFolder: ResolverTypeWrapper<GQLUpdatedFolder>;
-  UpdatedFolderResource: ResolverTypeWrapper<GQLUpdatedFolderResource>;
+  UpdatedMyNdlaResource: ResolverTypeWrapper<GQLUpdatedMyNdlaResource>;
   UptimeAlert: ResolverTypeWrapper<GQLUptimeAlert>;
   UptimeLabel: ResolverTypeWrapper<GQLUptimeLabel>;
   UserFolder: ResolverTypeWrapper<GQLUserFolder>;
-  VideoFolderResourceMeta: ResolverTypeWrapper<GQLVideoFolderResourceMeta>;
   VisualElement: ResolverTypeWrapper<GQLVisualElement>;
   VisualElementOembed: ResolverTypeWrapper<GQLVisualElementOembed>;
   WithArticle: ResolverTypeWrapper<GQLResolversInterfaceTypes<GQLResolversTypes>['WithArticle']>;
@@ -2369,13 +2369,11 @@ export type GQLResolversTypes = {
 export type GQLResolversParentTypes = {
   AggregationResult: GQLAggregationResult;
   Article: GQLArticle;
-  ArticleFolderResourceMeta: GQLArticleFolderResourceMeta;
   ArticleMetaData: GQLArticleMetaData;
   ArticleRequiredLibrary: GQLArticleRequiredLibrary;
   ArticleSearchResult: GQLArticleSearchResult;
   Audio: GQLAudio;
   AudioFile: GQLAudioFile;
-  AudioFolderResourceMeta: GQLAudioFolderResourceMeta;
   AudioLicense: GQLAudioLicense;
   AudioSearch: GQLAudioSearch;
   AudioSummary: GQLAudioSummary;
@@ -2392,7 +2390,6 @@ export type GQLResolversParentTypes = {
   CompetenceGoal: GQLCompetenceGoal;
   Concept: GQLConcept;
   ConceptCopyright: GQLConceptCopyright;
-  ConceptFolderResourceMeta: GQLConceptFolderResourceMeta;
   ConceptLicense: GQLConceptLicense;
   ConfigMetaBoolean: GQLConfigMetaBoolean;
   ConfigMetaStringList: GQLConfigMetaStringList;
@@ -2412,10 +2409,6 @@ export type GQLResolversParentTypes = {
   FilmPageAbout: GQLFilmPageAbout;
   Float: Scalars['Float']['output'];
   Folder: GQLFolder;
-  FolderResource: GQLFolderResource;
-  FolderResourceMeta: GQLResolversInterfaceTypes<GQLResolversParentTypes>['FolderResourceMeta'];
-  FolderResourceMetaSearchInput: GQLFolderResourceMetaSearchInput;
-  FolderResourceResourceType: GQLFolderResourceResourceType;
   FootNote: GQLFootNote;
   FrontpageMenu: GQLFrontpageMenu;
   Gloss: GQLGloss;
@@ -2428,7 +2421,6 @@ export type GQLResolversParentTypes = {
   ImageAltText: GQLImageAltText;
   ImageDimensions: GQLImageDimensions;
   ImageElement: GQLImageElement;
-  ImageFolderResourceMeta: GQLImageFolderResourceMeta;
   ImageLicense: GQLImageLicense;
   ImageMetaInformationV3: GQLImageMetaInformationV3;
   ImageSearch: GQLImageSearch;
@@ -2440,7 +2432,6 @@ export type GQLResolversParentTypes = {
   LearningpathCopyright: GQLLearningpathCopyright;
   LearningpathCopyrightInput: GQLLearningpathCopyrightInput;
   LearningpathEmbedInput: GQLLearningpathEmbedInput;
-  LearningpathFolderResourceMeta: GQLLearningpathFolderResourceMeta;
   LearningpathNewInput: GQLLearningpathNewInput;
   LearningpathSearchResult: GQLLearningpathSearchResult;
   LearningpathSeqNo: GQLLearningpathSeqNo;
@@ -2460,13 +2451,23 @@ export type GQLResolversParentTypes = {
   MovieResourceTypes: GQLMovieResourceTypes;
   MovieTheme: GQLMovieTheme;
   Mutation: Record<PropertyKey, never>;
+  MyNdlaArticleResourceMeta: GQLMyNdlaArticleResourceMeta;
+  MyNdlaAudioResourceMeta: GQLMyNdlaAudioResourceMeta;
+  MyNdlaConceptResourceMeta: GQLMyNdlaConceptResourceMeta;
   MyNdlaGroup: GQLMyNdlaGroup;
+  MyNdlaImageResourceMeta: GQLMyNdlaImageResourceMeta;
   MyNdlaLearningpath: GQLMyNdlaLearningpath;
+  MyNdlaLearningpathResourceMeta: GQLMyNdlaLearningpathResourceMeta;
   MyNdlaLearningpathStep: GQLMyNdlaLearningpathStep;
   MyNdlaPersonalData: GQLMyNdlaPersonalData;
+  MyNdlaResource: GQLMyNdlaResource;
+  MyNdlaResourceMeta: GQLResolversInterfaceTypes<GQLResolversParentTypes>['MyNdlaResourceMeta'];
+  MyNdlaResourceMetaSearchInput: GQLMyNdlaResourceMetaSearchInput;
+  MyNdlaResourceResourceType: GQLMyNdlaResourceResourceType;
+  MyNdlaVideoResourceMeta: GQLMyNdlaVideoResourceMeta;
   Name: GQLName;
   NewFolder: GQLNewFolder;
-  NewFolderResource: GQLNewFolderResource;
+  NewMyNdlaResource: GQLNewMyNdlaResource;
   Node: GQLNode;
   NodeSearchResult: GQLNodeSearchResult;
   Owner: GQLOwner;
@@ -2519,11 +2520,10 @@ export type GQLResolversParentTypes = {
   TransformedArticleContent: GQLTransformedArticleContent;
   TransformedArticleContentInput: GQLTransformedArticleContentInput;
   UpdatedFolder: GQLUpdatedFolder;
-  UpdatedFolderResource: GQLUpdatedFolderResource;
+  UpdatedMyNdlaResource: GQLUpdatedMyNdlaResource;
   UptimeAlert: GQLUptimeAlert;
   UptimeLabel: GQLUptimeLabel;
   UserFolder: GQLUserFolder;
-  VideoFolderResourceMeta: GQLVideoFolderResourceMeta;
   VisualElement: GQLVisualElement;
   VisualElementOembed: GQLVisualElementOembed;
   WithArticle: GQLResolversInterfaceTypes<GQLResolversParentTypes>['WithArticle'];
@@ -2571,17 +2571,6 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   transformedDisclaimer?: Resolver<GQLResolversTypes['TransformedArticleContent'], ParentType, ContextType, Partial<GQLArticleTransformedDisclaimerArgs>>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   visualElementEmbed?: Resolver<Maybe<GQLResolversTypes['ResourceEmbed']>, ParentType, ContextType>;
-};
-
-export type GQLArticleFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleFolderResourceMeta'] = GQLResolversParentTypes['ArticleFolderResourceMeta']> = {
-  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Array<GQLResolversTypes['FolderResourceResourceType']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  traits?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLArticleMetaDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleMetaData'] = GQLResolversParentTypes['ArticleMetaData']> = {
@@ -2638,16 +2627,6 @@ export type GQLAudioFileResolvers<ContextType = any, ParentType extends GQLResol
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   mimeType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-};
-
-export type GQLAudioFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioFolderResourceMeta'] = GQLResolversParentTypes['AudioFolderResourceMeta']> = {
-  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Array<GQLResolversTypes['FolderResourceResourceType']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLAudioLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['AudioLicense'] = GQLResolversParentTypes['AudioLicense']> = {
@@ -2785,16 +2764,6 @@ export type GQLConceptCopyrightResolvers<ContextType = any, ParentType extends G
   rightsholders?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
 };
 
-export type GQLConceptFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConceptFolderResourceMeta'] = GQLResolversParentTypes['ConceptFolderResourceMeta']> = {
-  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Array<GQLResolversTypes['FolderResourceResourceType']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLConceptLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ConceptLicense'] = GQLResolversParentTypes['ConceptLicense']> = {
   content?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   copyright?: Resolver<Maybe<GQLResolversTypes['ConceptCopyright']>, ParentType, ContextType>;
@@ -2905,28 +2874,10 @@ export type GQLFolderResolvers<ContextType = any, ParentType extends GQLResolver
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<Maybe<GQLResolversTypes['Owner']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  resources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType>;
+  resources?: Resolver<Array<GQLResolversTypes['MyNdlaResource']>, ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   subfolders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-};
-
-export type GQLFolderResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FolderResource'] = GQLResolversParentTypes['FolderResource']> = {
-  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  resourceId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  resourceType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
-};
-
-export type GQLFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FolderResourceMeta'] = GQLResolversParentTypes['FolderResourceMeta']> = {
-  __resolveType: TypeResolveFn<'ArticleFolderResourceMeta' | 'AudioFolderResourceMeta' | 'ConceptFolderResourceMeta' | 'ImageFolderResourceMeta' | 'LearningpathFolderResourceMeta' | 'VideoFolderResourceMeta', ParentType, ContextType>;
-};
-
-export type GQLFolderResourceResourceTypeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FolderResourceResourceType'] = GQLResolversParentTypes['FolderResourceResourceType']> = {
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type GQLFootNoteResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['FootNote'] = GQLResolversParentTypes['FootNote']> = {
@@ -3033,16 +2984,6 @@ export type GQLImageElementResolvers<ContextType = any, ParentType extends GQLRe
   upperLeftY?: Resolver<Maybe<GQLResolversTypes['Float']>, ParentType, ContextType>;
 };
 
-export type GQLImageFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageFolderResourceMeta'] = GQLResolversParentTypes['ImageFolderResourceMeta']> = {
-  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Array<GQLResolversTypes['FolderResourceResourceType']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type GQLImageLicenseResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ImageLicense'] = GQLResolversParentTypes['ImageLicense']> = {
   altText?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   contentType?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3120,16 +3061,6 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
 export type GQLLearningpathCopyrightResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathCopyright'] = GQLResolversParentTypes['LearningpathCopyright']> = {
   contributors?: Resolver<Array<GQLResolversTypes['Contributor']>, ParentType, ContextType>;
   license?: Resolver<GQLResolversTypes['License'], ParentType, ContextType>;
-};
-
-export type GQLLearningpathFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathFolderResourceMeta'] = GQLResolversParentTypes['LearningpathFolderResourceMeta']> = {
-  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Array<GQLResolversTypes['FolderResourceResourceType']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathSearchResult'] = GQLResolversParentTypes['LearningpathSearchResult']> = {
@@ -3241,13 +3172,13 @@ export type GQLMovieThemeResolvers<ContextType = any, ParentType extends GQLReso
 
 export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Mutation'] = GQLResolversParentTypes['Mutation']> = {
   addFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationAddFolderArgs, 'name'>>;
-  addFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationAddFolderResourceArgs, 'folderId' | 'path' | 'resourceId' | 'resourceType'>>;
+  addMyNdlaResource?: Resolver<GQLResolversTypes['MyNdlaResource'], ParentType, ContextType, RequireFields<GQLMutationAddMyNdlaResourceArgs, 'folderId' | 'path' | 'resourceId' | 'resourceType'>>;
   copyLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationCopyLearningpathArgs, 'learningpathId' | 'params'>>;
   copySharedFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationCopySharedFolderArgs, 'folderId'>>;
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
-  deleteFolderResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderResourceArgs, 'folderId' | 'resourceId'>>;
   deleteLearningpath?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathArgs, 'id'>>;
   deleteLearningpathStep?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathStepArgs, 'learningpathId' | 'learningstepId'>>;
+  deleteMyNdlaResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteMyNdlaResourceArgs, 'folderId' | 'resourceId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   favoriteSharedFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationFavoriteSharedFolderArgs, 'folderId'>>;
   newLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'params'>>;
@@ -3258,13 +3189,44 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   transformArticleContent?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationTransformArticleContentArgs, 'content'>>;
   unFavoriteSharedFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationUnFavoriteSharedFolderArgs, 'folderId'>>;
   updateFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderArgs, 'id'>>;
-  updateFolderResource?: Resolver<GQLResolversTypes['FolderResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateFolderResourceArgs, 'id'>>;
   updateFolderStatus?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType, RequireFields<GQLMutationUpdateFolderStatusArgs, 'folderId' | 'status'>>;
   updateLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathArgs, 'learningpathId' | 'params'>>;
   updateLearningpathStatus?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStatusArgs, 'id' | 'status'>>;
   updateLearningpathStep?: Resolver<GQLResolversTypes['MyNdlaLearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepArgs, 'learningpathId' | 'learningstepId' | 'params'>>;
   updateLearningpathStepSeqNo?: Resolver<GQLResolversTypes['LearningpathSeqNo'], ParentType, ContextType, RequireFields<GQLMutationUpdateLearningpathStepSeqNoArgs, 'learningpathId' | 'learningpathStepId' | 'seqNo'>>;
+  updateMyNdlaResource?: Resolver<GQLResolversTypes['MyNdlaResource'], ParentType, ContextType, RequireFields<GQLMutationUpdateMyNdlaResourceArgs, 'id'>>;
   updatePersonalData?: Resolver<GQLResolversTypes['MyNdlaPersonalData'], ParentType, ContextType, Partial<GQLMutationUpdatePersonalDataArgs>>;
+};
+
+export type GQLMyNdlaArticleResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaArticleResourceMeta'] = GQLResolversParentTypes['MyNdlaArticleResourceMeta']> = {
+  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['MyNdlaResourceResourceType']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  traits?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMyNdlaAudioResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaAudioResourceMeta'] = GQLResolversParentTypes['MyNdlaAudioResourceMeta']> = {
+  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['MyNdlaResourceResourceType']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GQLMyNdlaConceptResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaConceptResourceMeta'] = GQLResolversParentTypes['MyNdlaConceptResourceMeta']> = {
+  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['MyNdlaResourceResourceType']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaGroup'] = GQLResolversParentTypes['MyNdlaGroup']> = {
@@ -3272,6 +3234,16 @@ export type GQLMyNdlaGroupResolvers<ContextType = any, ParentType extends GQLRes
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   isPrimarySchool?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
+};
+
+export type GQLMyNdlaImageResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaImageResourceMeta'] = GQLResolversParentTypes['MyNdlaImageResourceMeta']> = {
+  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['MyNdlaResourceResourceType']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpath'] = GQLResolversParentTypes['MyNdlaLearningpath']> = {
@@ -3297,6 +3269,16 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   verificationStatus?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type GQLMyNdlaLearningpathResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpathResourceMeta'] = GQLResolversParentTypes['MyNdlaLearningpathResourceMeta']> = {
+  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['MyNdlaResourceResourceType']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpathStep'] = GQLResolversParentTypes['MyNdlaLearningpathStep']> = {
@@ -3334,6 +3316,34 @@ export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends
   username?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
 };
 
+export type GQLMyNdlaResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaResource'] = GQLResolversParentTypes['MyNdlaResource']> = {
+  created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  resourceId?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  resourceType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
+};
+
+export type GQLMyNdlaResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaResourceMeta'] = GQLResolversParentTypes['MyNdlaResourceMeta']> = {
+  __resolveType: TypeResolveFn<'MyNdlaArticleResourceMeta' | 'MyNdlaAudioResourceMeta' | 'MyNdlaConceptResourceMeta' | 'MyNdlaImageResourceMeta' | 'MyNdlaLearningpathResourceMeta' | 'MyNdlaVideoResourceMeta', ParentType, ContextType>;
+};
+
+export type GQLMyNdlaResourceResourceTypeResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaResourceResourceType'] = GQLResolversParentTypes['MyNdlaResourceResourceType']> = {
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type GQLMyNdlaVideoResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaVideoResourceMeta'] = GQLResolversParentTypes['MyNdlaVideoResourceMeta']> = {
+  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['MyNdlaResourceResourceType']>, ParentType, ContextType>;
+  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GQLNameResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Name'] = GQLResolversParentTypes['Name']> = {
   language?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3345,7 +3355,7 @@ export type GQLNewFolderResolvers<ContextType = any, ParentType extends GQLResol
   status?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
 };
 
-export type GQLNewFolderResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['NewFolderResource'] = GQLResolversParentTypes['NewFolderResource']> = {
+export type GQLNewMyNdlaResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['NewMyNdlaResource'] = GQLResolversParentTypes['NewMyNdlaResource']> = {
   path?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   resourceType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
@@ -3475,7 +3485,7 @@ export type GQLProgrammePageResolvers<ContextType = any, ParentType extends GQLR
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
   aiEnabledOrgs?: Resolver<Maybe<GQLResolversTypes['ConfigMetaStringList']>, ParentType, ContextType>;
   alerts?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['UptimeAlert']>>>, ParentType, ContextType>;
-  allFolderResources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType, Partial<GQLQueryAllFolderResourcesArgs>>;
+  allMyNdlaResources?: Resolver<Array<GQLResolversTypes['MyNdlaResource']>, ParentType, ContextType, Partial<GQLQueryAllMyNdlaResourcesArgs>>;
   arenaEnabledOrgs?: Resolver<Maybe<GQLResolversTypes['ConfigMetaStringList']>, ParentType, ContextType>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
   articleResource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLQueryArticleResourceArgs>>;
@@ -3487,8 +3497,6 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   examLockStatus?: Resolver<GQLResolversTypes['ConfigMetaBoolean'], ParentType, ContextType>;
   filmfrontpage?: Resolver<Maybe<GQLResolversTypes['FilmFrontpage']>, ParentType, ContextType>;
   folder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLQueryFolderArgs, 'id'>>;
-  folderResourceMeta?: Resolver<Maybe<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaArgs, 'resource'>>;
-  folderResourceMetaSearch?: Resolver<Array<GQLResolversTypes['FolderResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryFolderResourceMetaSearchArgs, 'resources'>>;
   folders?: Resolver<GQLResolversTypes['UserFolder'], ParentType, ContextType, Partial<GQLQueryFoldersArgs>>;
   frontpage?: Resolver<Maybe<GQLResolversTypes['FrontpageMenu']>, ParentType, ContextType>;
   groupSearch?: Resolver<Maybe<Array<GQLResolversTypes['GroupSearch']>>, ParentType, ContextType, Partial<GQLQueryGroupSearchArgs>>;
@@ -3499,6 +3507,8 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   learningpathStepOembed?: Resolver<GQLResolversTypes['LearningpathStepOembed'], ParentType, ContextType, RequireFields<GQLQueryLearningpathStepOembedArgs, 'url'>>;
   myLearningpaths?: Resolver<Maybe<Array<GQLResolversTypes['MyNdlaLearningpath']>>, ParentType, ContextType>;
   myNdlaLearningpath?: Resolver<Maybe<GQLResolversTypes['MyNdlaLearningpath']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaLearningpathArgs, 'pathId'>>;
+  myNdlaResourceMeta?: Resolver<Maybe<GQLResolversTypes['MyNdlaResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceMetaArgs, 'resource'>>;
+  myNdlaResourceMetaSearch?: Resolver<Array<GQLResolversTypes['MyNdlaResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceMetaSearchArgs, 'resources'>>;
   node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeArgs>>;
   nodeByArticleId?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeByArticleIdArgs>>;
   nodes?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType, Partial<GQLQueryNodesArgs>>;
@@ -3509,7 +3519,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   podcastSeriesSearch?: Resolver<Maybe<GQLResolversTypes['PodcastSeriesSearch']>, ParentType, ContextType, RequireFields<GQLQueryPodcastSeriesSearchArgs, 'page' | 'pageSize'>>;
   programme?: Resolver<Maybe<GQLResolversTypes['ProgrammePage']>, ParentType, ContextType, Partial<GQLQueryProgrammeArgs>>;
   programmes?: Resolver<Maybe<Array<GQLResolversTypes['ProgrammePage']>>, ParentType, ContextType>;
-  recentlyFavoritedResources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType, Partial<GQLQueryRecentlyFavoritedResourcesArgs>>;
+  recentlyFavoritedResources?: Resolver<Array<GQLResolversTypes['MyNdlaResource']>, ParentType, ContextType, Partial<GQLQueryRecentlyFavoritedResourcesArgs>>;
   resource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, RequireFields<GQLQueryResourceArgs, 'id'>>;
   resourceEmbed?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedArgs, 'id' | 'type'>>;
   resourceEmbeds?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedsArgs, 'resources'>>;
@@ -3647,7 +3657,7 @@ export type GQLSharedFolderResolvers<ContextType = any, ParentType extends GQLRe
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   owner?: Resolver<Maybe<GQLResolversTypes['Owner']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  resources?: Resolver<Array<GQLResolversTypes['FolderResource']>, ParentType, ContextType>;
+  resources?: Resolver<Array<GQLResolversTypes['MyNdlaResource']>, ParentType, ContextType>;
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   subfolders?: Resolver<Array<GQLResolversTypes['SharedFolder']>, ParentType, ContextType>;
   updated?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
@@ -3821,7 +3831,7 @@ export type GQLUpdatedFolderResolvers<ContextType = any, ParentType extends GQLR
   status?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
 };
 
-export type GQLUpdatedFolderResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UpdatedFolderResource'] = GQLResolversParentTypes['UpdatedFolderResource']> = {
+export type GQLUpdatedMyNdlaResourceResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UpdatedMyNdlaResource'] = GQLResolversParentTypes['UpdatedMyNdlaResource']> = {
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
 };
 
@@ -3840,16 +3850,6 @@ export type GQLUptimeLabelResolvers<ContextType = any, ParentType extends GQLRes
 export type GQLUserFolderResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['UserFolder'] = GQLResolversParentTypes['UserFolder']> = {
   folders?: Resolver<Array<GQLResolversTypes['Folder']>, ParentType, ContextType>;
   sharedFolders?: Resolver<Array<GQLResolversTypes['SharedFolder']>, ParentType, ContextType>;
-};
-
-export type GQLVideoFolderResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['VideoFolderResourceMeta'] = GQLResolversParentTypes['VideoFolderResourceMeta']> = {
-  description?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  metaImage?: Resolver<Maybe<GQLResolversTypes['MetaImage']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Array<GQLResolversTypes['FolderResourceResourceType']>, ParentType, ContextType>;
-  title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLVisualElementResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['VisualElement'] = GQLResolversParentTypes['VisualElement']> = {
@@ -3878,13 +3878,11 @@ export type GQLWithArticleResolvers<ContextType = any, ParentType extends GQLRes
 export type GQLResolvers<ContextType = any> = {
   AggregationResult?: GQLAggregationResultResolvers<ContextType>;
   Article?: GQLArticleResolvers<ContextType>;
-  ArticleFolderResourceMeta?: GQLArticleFolderResourceMetaResolvers<ContextType>;
   ArticleMetaData?: GQLArticleMetaDataResolvers<ContextType>;
   ArticleRequiredLibrary?: GQLArticleRequiredLibraryResolvers<ContextType>;
   ArticleSearchResult?: GQLArticleSearchResultResolvers<ContextType>;
   Audio?: GQLAudioResolvers<ContextType>;
   AudioFile?: GQLAudioFileResolvers<ContextType>;
-  AudioFolderResourceMeta?: GQLAudioFolderResourceMetaResolvers<ContextType>;
   AudioLicense?: GQLAudioLicenseResolvers<ContextType>;
   AudioSearch?: GQLAudioSearchResolvers<ContextType>;
   AudioSummary?: GQLAudioSummaryResolvers<ContextType>;
@@ -3900,7 +3898,6 @@ export type GQLResolvers<ContextType = any> = {
   CompetenceGoal?: GQLCompetenceGoalResolvers<ContextType>;
   Concept?: GQLConceptResolvers<ContextType>;
   ConceptCopyright?: GQLConceptCopyrightResolvers<ContextType>;
-  ConceptFolderResourceMeta?: GQLConceptFolderResourceMetaResolvers<ContextType>;
   ConceptLicense?: GQLConceptLicenseResolvers<ContextType>;
   ConfigMetaBoolean?: GQLConfigMetaBooleanResolvers<ContextType>;
   ConfigMetaStringList?: GQLConfigMetaStringListResolvers<ContextType>;
@@ -3918,9 +3915,6 @@ export type GQLResolvers<ContextType = any> = {
   FilmFrontpage?: GQLFilmFrontpageResolvers<ContextType>;
   FilmPageAbout?: GQLFilmPageAboutResolvers<ContextType>;
   Folder?: GQLFolderResolvers<ContextType>;
-  FolderResource?: GQLFolderResourceResolvers<ContextType>;
-  FolderResourceMeta?: GQLFolderResourceMetaResolvers<ContextType>;
-  FolderResourceResourceType?: GQLFolderResourceResourceTypeResolvers<ContextType>;
   FootNote?: GQLFootNoteResolvers<ContextType>;
   FrontpageMenu?: GQLFrontpageMenuResolvers<ContextType>;
   Gloss?: GQLGlossResolvers<ContextType>;
@@ -3933,7 +3927,6 @@ export type GQLResolvers<ContextType = any> = {
   ImageAltText?: GQLImageAltTextResolvers<ContextType>;
   ImageDimensions?: GQLImageDimensionsResolvers<ContextType>;
   ImageElement?: GQLImageElementResolvers<ContextType>;
-  ImageFolderResourceMeta?: GQLImageFolderResourceMetaResolvers<ContextType>;
   ImageLicense?: GQLImageLicenseResolvers<ContextType>;
   ImageMetaInformationV3?: GQLImageMetaInformationV3Resolvers<ContextType>;
   ImageSearch?: GQLImageSearchResolvers<ContextType>;
@@ -3941,7 +3934,6 @@ export type GQLResolvers<ContextType = any> = {
   ImageVariant?: GQLImageVariantResolvers<ContextType>;
   Learningpath?: GQLLearningpathResolvers<ContextType>;
   LearningpathCopyright?: GQLLearningpathCopyrightResolvers<ContextType>;
-  LearningpathFolderResourceMeta?: GQLLearningpathFolderResourceMetaResolvers<ContextType>;
   LearningpathSearchResult?: GQLLearningpathSearchResultResolvers<ContextType>;
   LearningpathSeqNo?: GQLLearningpathSeqNoResolvers<ContextType>;
   LearningpathStep?: GQLLearningpathStepResolvers<ContextType>;
@@ -3956,13 +3948,22 @@ export type GQLResolvers<ContextType = any> = {
   MovieResourceTypes?: GQLMovieResourceTypesResolvers<ContextType>;
   MovieTheme?: GQLMovieThemeResolvers<ContextType>;
   Mutation?: GQLMutationResolvers<ContextType>;
+  MyNdlaArticleResourceMeta?: GQLMyNdlaArticleResourceMetaResolvers<ContextType>;
+  MyNdlaAudioResourceMeta?: GQLMyNdlaAudioResourceMetaResolvers<ContextType>;
+  MyNdlaConceptResourceMeta?: GQLMyNdlaConceptResourceMetaResolvers<ContextType>;
   MyNdlaGroup?: GQLMyNdlaGroupResolvers<ContextType>;
+  MyNdlaImageResourceMeta?: GQLMyNdlaImageResourceMetaResolvers<ContextType>;
   MyNdlaLearningpath?: GQLMyNdlaLearningpathResolvers<ContextType>;
+  MyNdlaLearningpathResourceMeta?: GQLMyNdlaLearningpathResourceMetaResolvers<ContextType>;
   MyNdlaLearningpathStep?: GQLMyNdlaLearningpathStepResolvers<ContextType>;
   MyNdlaPersonalData?: GQLMyNdlaPersonalDataResolvers<ContextType>;
+  MyNdlaResource?: GQLMyNdlaResourceResolvers<ContextType>;
+  MyNdlaResourceMeta?: GQLMyNdlaResourceMetaResolvers<ContextType>;
+  MyNdlaResourceResourceType?: GQLMyNdlaResourceResourceTypeResolvers<ContextType>;
+  MyNdlaVideoResourceMeta?: GQLMyNdlaVideoResourceMetaResolvers<ContextType>;
   Name?: GQLNameResolvers<ContextType>;
   NewFolder?: GQLNewFolderResolvers<ContextType>;
-  NewFolderResource?: GQLNewFolderResourceResolvers<ContextType>;
+  NewMyNdlaResource?: GQLNewMyNdlaResourceResolvers<ContextType>;
   Node?: GQLNodeResolvers<ContextType>;
   NodeSearchResult?: GQLNodeSearchResultResolvers<ContextType>;
   Owner?: GQLOwnerResolvers<ContextType>;
@@ -4012,11 +4013,10 @@ export type GQLResolvers<ContextType = any> = {
   Transcription?: GQLTranscriptionResolvers<ContextType>;
   TransformedArticleContent?: GQLTransformedArticleContentResolvers<ContextType>;
   UpdatedFolder?: GQLUpdatedFolderResolvers<ContextType>;
-  UpdatedFolderResource?: GQLUpdatedFolderResourceResolvers<ContextType>;
+  UpdatedMyNdlaResource?: GQLUpdatedMyNdlaResourceResolvers<ContextType>;
   UptimeAlert?: GQLUptimeAlertResolvers<ContextType>;
   UptimeLabel?: GQLUptimeLabelResolvers<ContextType>;
   UserFolder?: GQLUserFolderResolvers<ContextType>;
-  VideoFolderResourceMeta?: GQLVideoFolderResourceMetaResolvers<ContextType>;
   VisualElement?: GQLVisualElementResolvers<ContextType>;
   VisualElementOembed?: GQLVisualElementOembedResolvers<ContextType>;
   WithArticle?: GQLWithArticleResolvers<ContextType>;

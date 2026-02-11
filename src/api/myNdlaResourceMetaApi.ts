@@ -15,12 +15,12 @@ import { Node } from "@ndla/types-taxonomy";
 import groupBy from "lodash/groupBy";
 import { defaultLanguage } from "../config";
 import {
-  GQLFolderResourceMeta,
-  GQLFolderResourceMetaSearchInput,
-  GQLFolderResourceResourceType,
   GQLMeta,
-  GQLQueryFolderResourceMetaArgs,
-  GQLQueryFolderResourceMetaSearchArgs,
+  GQLMyNdlaResourceMeta,
+  GQLMyNdlaResourceMetaSearchInput,
+  GQLMyNdlaResourceResourceType,
+  GQLQueryMyNdlaResourceMetaArgs,
+  GQLQueryMyNdlaResourceMetaSearchArgs,
 } from "../types/schema";
 import { articleToMeta, learningpathToMeta } from "../utils/apiHelpers";
 import getLogger from "../utils/logger";
@@ -29,7 +29,7 @@ import { searchConcepts } from "./conceptApi";
 import { fetchImageV3 } from "./imageApi";
 import { fetchVideo } from "./videoApi";
 
-const findResourceTypes = (result: Node | null, context: ContextWithLoaders): GQLFolderResourceResourceType[] => {
+const findResourceTypes = (result: Node | null, context: ContextWithLoaders): GQLMyNdlaResourceResourceType[] => {
   const ctx = result?.contexts?.[0];
   const resourceTypes = ctx?.resourceTypes.map((t) => ({
     id: t.id,
@@ -57,10 +57,10 @@ const fetchResourceMeta = async (
 };
 
 const fetchAndTransformResourceMeta = async (
-  resources: GQLFolderResourceMetaSearchInput[] | undefined,
+  resources: GQLMyNdlaResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
   type: "article" | "multidisciplinary" | "learningpath" | "topic",
-): Promise<GQLFolderResourceMeta[]> => {
+): Promise<GQLMyNdlaResourceMeta[]> => {
   if (!resources?.length) return [];
   try {
     const nodeType = type === "learningpath" ? type : "article";
@@ -92,10 +92,10 @@ const fetchAndTransformResourceMeta = async (
   }
 };
 
-export const fetchFolderResourceMeta = async (
-  { resource }: GQLQueryFolderResourceMetaArgs,
+export const fetchMyNdlaResourceMeta = async (
+  { resource }: GQLQueryMyNdlaResourceMetaArgs,
   context: ContextWithLoaders,
-): Promise<GQLFolderResourceMeta | null> => {
+): Promise<GQLMyNdlaResourceMeta | null> => {
   if (resource.resourceType === "article") {
     const res = await fetchAndTransformResourceMeta([resource], context, "article");
     return res[0] ?? null;
@@ -125,10 +125,10 @@ export const fetchFolderResourceMeta = async (
 };
 
 export const fetchImageMeta = async (
-  resources: GQLFolderResourceMetaSearchInput[] | undefined,
+  resources: GQLMyNdlaResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
   type: ResourceType,
-): Promise<GQLFolderResourceMeta[]> => {
+): Promise<GQLMyNdlaResourceMeta[]> => {
   if (!resources?.length) return [];
   const images = await Promise.all(resources.map(async (r) => await fetchImageV3(r.id, context).catch(() => null)));
   const imagesFiltered = images.filter((i): i is ImageMetaInformationV3DTO => !!i);
@@ -147,10 +147,10 @@ export const fetchImageMeta = async (
 };
 
 const fetchAudios = async (
-  resources: GQLFolderResourceMetaSearchInput[] | undefined,
+  resources: GQLMyNdlaResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
   type: ResourceType,
-): Promise<GQLFolderResourceMeta[]> => {
+): Promise<GQLMyNdlaResourceMeta[]> => {
   if (!resources?.length) return [];
   const audios = await Promise.all(resources.map((r) => fetchAudio(context, r.id)));
   const audiosFiltered = audios.filter((a): a is AudioMetaInformationDTO => !!a);
@@ -171,10 +171,10 @@ const fetchAudios = async (
 };
 
 const fetchBrightcoves = async (
-  resources: GQLFolderResourceMetaSearchInput[] | undefined,
+  resources: GQLMyNdlaResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
   type: ResourceType,
-): Promise<GQLFolderResourceMeta[]> => {
+): Promise<GQLMyNdlaResourceMeta[]> => {
   if (!resources?.length) return [];
   const brightcoves = await Promise.all(resources.map((r) => fetchVideo(r.id.toString(), undefined, context)));
 
@@ -194,10 +194,10 @@ const fetchBrightcoves = async (
 };
 
 const fetchConceptsMeta = async (
-  resources: GQLFolderResourceMetaSearchInput[] | undefined,
+  resources: GQLMyNdlaResourceMetaSearchInput[] | undefined,
   context: ContextWithLoaders,
   type: ResourceType,
-): Promise<GQLFolderResourceMeta[]> => {
+): Promise<GQLMyNdlaResourceMeta[]> => {
   const ids = resources?.map((r) => parseInt(r.id))?.filter((id) => !!id);
   if (!ids?.length) return [];
 
@@ -212,10 +212,10 @@ const fetchConceptsMeta = async (
   }));
 };
 
-export const fetchFolderResourcesMetaData = async (
-  { resources }: GQLQueryFolderResourceMetaSearchArgs,
+export const fetchMyNdlaResourcesMeta = async (
+  { resources }: GQLQueryMyNdlaResourceMetaSearchArgs,
   context: ContextWithLoaders,
-): Promise<GQLFolderResourceMeta[]> => {
+): Promise<GQLMyNdlaResourceMeta[]> => {
   const { article, learningpath, topic, multidisciplinary, concept, image, audio, video } = groupBy(
     resources,
     (r) => r.resourceType,
