@@ -29,6 +29,7 @@ import {
   postMyNdlaResource,
   patchMyNdlaResource,
   deleteMyNdlaResource,
+  fetchMyNdlaRootResources,
 } from "../api/folderApi";
 import { fetchMyNdlaResourceMeta, fetchMyNdlaResourcesMeta } from "../api/myNdlaResourceMetaApi";
 import {
@@ -69,6 +70,7 @@ export const Query: Pick<
   | "myNdlaResourceMeta"
   | "personalData"
   | "recentlyFavoritedResources"
+  | "myNdlaRootResources"
 > = {
   async folders(_: any, params: GQLQueryFoldersArgs, context: ContextWithLoaders): Promise<UserFolderDTO> {
     return fetchFolders(params, context);
@@ -110,6 +112,9 @@ export const Query: Pick<
   },
   async personalData(_: any, __: any, context: ContextWithLoaders): Promise<GQLMyNdlaPersonalData> {
     return getPersonalData(context) as unknown as GQLMyNdlaPersonalData;
+  },
+  async myNdlaRootResources(_: any, __: any, context: ContextWithLoaders): Promise<ResourceDTO[]> {
+    return fetchMyNdlaRootResources(context);
   },
 };
 

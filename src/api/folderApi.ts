@@ -98,6 +98,10 @@ export async function fetchAllMyNdlaResources(
   return client.GET("/myndla-api/v1/folders/resources", { params: { query: { size } } }).then(resolveJsonOATS);
 }
 
+export async function fetchMyNdlaRootResources(_context: Context): Promise<ResourceDTO[]> {
+  return client.GET("/myndla-api/v1/folders/resources/root").then(resolveJsonOATS);
+}
+
 export async function postFolder(
   { name, parentId, status, description }: GQLMutationAddFolderArgs,
   _context: Context,
@@ -135,17 +139,30 @@ export async function postMyNdlaResource(
   { folderId, resourceType, path, tags, resourceId }: GQLMutationAddMyNdlaResourceArgs,
   _context: Context,
 ): Promise<ResourceDTO> {
-  return client
-    .POST("/myndla-api/v1/folders/{folder-id}/resources", {
-      params: { path: { "folder-id": folderId } },
-      body: {
-        resourceType: resourceType as ResourceType,
-        path,
-        tags,
-        resourceId,
-      },
-    })
-    .then(resolveJsonOATS);
+  if (folderId) {
+    return client
+      .POST("/myndla-api/v1/folders/{folder-id}/resources", {
+        params: { path: { "folder-id": folderId } },
+        body: {
+          resourceType: resourceType as ResourceType,
+          path,
+          tags,
+          resourceId,
+        },
+      })
+      .then(resolveJsonOATS);
+  } else {
+    return client
+      .POST("/myndla-api/v1/folders/resources/root", {
+        body: {
+          resourceType: resourceType as ResourceType,
+          path,
+          tags,
+          resourceId,
+        },
+      })
+      .then(resolveJsonOATS);
+  }
 }
 
 export async function patchMyNdlaResource(
@@ -164,16 +181,26 @@ export async function deleteMyNdlaResource(
   { folderId, resourceId }: GQLMutationDeleteMyNdlaResourceArgs,
   _context: Context,
 ): Promise<string> {
-  await client
-    .DELETE("/myndla-api/v1/folders/{folder-id}/resources/{resource-id}", {
-      params: {
-        path: {
-          "folder-id": folderId,
-          "resource-id": resourceId,
+  if (folderId) {
+    await client
+      .DELETE("/myndla-api/v1/folders/{folder-id}/resources/{resource-id}", {
+        params: {
+          path: {
+            "folder-id": folderId,
+            "resource-id": resourceId,
+          },
         },
-      },
-    })
-    .then(resolveOATS);
+      })
+      .then(resolveOATS);
+  } else {
+    await client
+      .DELETE("/myndla-api/v1/folders/resources/root/{resource-id}", {
+        params: {
+          path: { "resource-id": resourceId },
+        },
+      })
+      .then(resolveOATS);
+  }
   return resourceId;
 }
 
@@ -227,12 +254,20 @@ export async function sortResources(
   { parentId, sortedIds }: GQLMutationSortResourcesArgs,
   _context: Context,
 ): Promise<GQLSortResult> {
-  await client
-    .PUT("/myndla-api/v1/folders/sort-resources/{folder-id}", {
-      params: { path: { "folder-id": parentId } },
-      body: { sortedIds },
-    })
-    .then(resolveOATS);
+  if (parentId) {
+    await client
+      .PUT("/myndla-api/v1/folders/sort-resources/{folder-id}", {
+        params: { path: { "folder-id": parentId } },
+        body: { sortedIds },
+      })
+      .then(resolveOATS);
+  } else {
+    await client
+      .PUT("/myndla-api/v1/folders/sort-resources/root", {
+        body: { sortedIds },
+      })
+      .then(resolveOATS);
+  }
   return { parentId, sortedIds };
 }
 
