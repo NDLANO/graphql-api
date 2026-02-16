@@ -1490,6 +1490,7 @@ export const typeDefs = gql`
     myNdlaResourceMetaSearch(resources: [MyNdlaResourceMetaSearchInput!]!): [MyNdlaResourceMeta!]!
     folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
     sharedFolder(id: String!): SharedFolder!
+    myNdlaRootResources(folderId: String): [MyNdlaResource!]!
     allMyNdlaResources(size: Int): [MyNdlaResource!]!
     recentlyFavoritedResources(size: Int): [MyNdlaResource!]!
     personalData: MyNdlaPersonalData
@@ -1512,17 +1513,17 @@ export const typeDefs = gql`
     deleteFolder(id: String!): String!
     addMyNdlaResource(
       resourceId: String!
-      folderId: String!
+      folderId: String
       resourceType: String!
       path: String!
       tags: [String!]
     ): MyNdlaResource!
     updateMyNdlaResource(id: String!, tags: [String!]): MyNdlaResource!
-    deleteMyNdlaResource(folderId: String!, resourceId: String!): String!
+    deleteMyNdlaResource(folderId: String, resourceId: String!): String!
     deletePersonalData: Boolean!
     updatePersonalData(favoriteSubjects: [String]): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
-    sortResources(parentId: String!, sortedIds: [String!]!): SortResult!
+    sortResources(parentId: String, sortedIds: [String!]!): SortResult!
     sortSavedSharedFolders(sortedIds: [String!]!): SortResult!
     updateFolderStatus(folderId: String!, status: String!): [String!]!
     copySharedFolder(folderId: String!, destinationFolderId: String): Folder!
