@@ -91,24 +91,24 @@ export const resolvers = {
       return "Resource";
     },
   },
-  FolderResourceMeta: {
-    // Resolves FolderResourceMeta interface
-    __resolveType(folderResourceMeta: any) {
-      switch (folderResourceMeta.type) {
+  MyNdlaResourceMeta: {
+    // Resolves MyNdlaResourceMeta interface
+    __resolveType(resourceMeta: any) {
+      switch (resourceMeta.type) {
         case "learningpath":
-          return "LearningpathFolderResourceMeta";
+          return "MyNdlaLearningpathResourceMeta";
         case "image":
-          return "ImageFolderResourceMeta";
+          return "MyNdlaImageResourceMeta";
         case "audio":
-          return "AudioFolderResourceMeta";
+          return "MyNdlaAudioResourceMeta";
         case "concept":
-          return "ConceptFolderResourceMeta";
+          return "MyNdlaConceptResourceMeta";
         case "video":
-          return "VideoFolderResourceMeta";
+          return "MyNdlaVideoResourceMeta";
         case "article":
-          return "ArticleFolderResourceMeta";
+          return "MyNdlaArticleResourceMeta";
         default:
-          return "ArticleFolderResourceMeta";
+          return "MyNdlaArticleResourceMeta";
       }
     },
   },
