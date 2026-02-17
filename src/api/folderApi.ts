@@ -15,6 +15,7 @@ import {
   ResourceType,
   openapi,
   FolderStatus,
+  ResourceConnectionDTO,
 } from "@ndla/types-backend/myndla-api";
 import {
   GQLMutationAddFolderArgs,
@@ -34,6 +35,7 @@ import {
   GQLQueryAllMyNdlaResourcesArgs,
   GQLQueryFolderArgs,
   GQLQueryFoldersArgs,
+  GQLQueryMyNdlaResourceConnectionsArgs,
   GQLQueryRecentlyFavoritedResourcesArgs,
   GQLSortResult,
 } from "../types/schema";
@@ -100,6 +102,19 @@ export async function fetchAllMyNdlaResources(
 
 export async function fetchMyNdlaRootResources(_context: Context): Promise<ResourceDTO[]> {
   return client.GET("/myndla-api/v1/folders/resources/root").then(resolveJsonOATS);
+}
+
+export async function getMyNdlaResourceConnections(
+  { path }: GQLQueryMyNdlaResourceConnectionsArgs,
+  _context: Context,
+): Promise<ResourceConnectionDTO[]> {
+  return client
+    .GET("/myndla-api/v1/folders/resources/connections", {
+      params: {
+        query: { path },
+      },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function postFolder(

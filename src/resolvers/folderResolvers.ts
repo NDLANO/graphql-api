@@ -6,7 +6,7 @@
  *
  */
 
-import { FolderDataDTO, ResourceDTO, UserFolderDTO } from "@ndla/types-backend/myndla-api";
+import { FolderDataDTO, ResourceConnectionDTO, ResourceDTO, UserFolderDTO } from "@ndla/types-backend/myndla-api";
 import {
   deleteFolder,
   deletePersonalData,
@@ -30,6 +30,7 @@ import {
   patchMyNdlaResource,
   deleteMyNdlaResource,
   fetchMyNdlaRootResources,
+  getMyNdlaResourceConnections,
 } from "../api/folderApi";
 import { fetchMyNdlaResourceMeta, fetchMyNdlaResourcesMeta } from "../api/myNdlaResourceMetaApi";
 import {
@@ -58,6 +59,7 @@ import {
   GQLMutationAddMyNdlaResourceArgs,
   GQLMutationUpdateMyNdlaResourceArgs,
   GQLMutationDeleteMyNdlaResourceArgs,
+  GQLQueryMyNdlaResourceConnectionsArgs,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -71,6 +73,7 @@ export const Query: Pick<
   | "personalData"
   | "recentlyFavoritedResources"
   | "myNdlaRootResources"
+  | "myNdlaResourceConnections"
 > = {
   async folders(_: any, params: GQLQueryFoldersArgs, context: ContextWithLoaders): Promise<UserFolderDTO> {
     return fetchFolders(params, context);
@@ -115,6 +118,13 @@ export const Query: Pick<
   },
   async myNdlaRootResources(_: any, __: any, context: ContextWithLoaders): Promise<ResourceDTO[]> {
     return fetchMyNdlaRootResources(context);
+  },
+  async myNdlaResourceConnections(
+    _: any,
+    params: GQLQueryMyNdlaResourceConnectionsArgs,
+    context: ContextWithLoaders,
+  ): Promise<ResourceConnectionDTO[]> {
+    return getMyNdlaResourceConnections(params, context);
   },
 };
 

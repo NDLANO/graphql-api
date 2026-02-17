@@ -1191,6 +1191,11 @@ export const typeDefs = gql`
     tags: [String!]!
   }
 
+  type MyNdlaResourceConnection {
+    resourceId: String!
+    folderId: String
+  }
+
   input MyNdlaResourceMetaSearchInput {
     id: String!
     resourceType: String!
@@ -1488,6 +1493,7 @@ export const typeDefs = gql`
     folders(includeSubfolders: Boolean, includeResources: Boolean): UserFolder!
     myNdlaResourceMeta(resource: MyNdlaResourceMetaSearchInput!): MyNdlaResourceMeta
     myNdlaResourceMetaSearch(resources: [MyNdlaResourceMetaSearchInput!]!): [MyNdlaResourceMeta!]!
+    myNdlaResourceConnections(path: String!): [MyNdlaResourceConnection!]!
     folder(id: String!, includeSubfolders: Boolean, includeResources: Boolean): Folder!
     sharedFolder(id: String!): SharedFolder!
     myNdlaRootResources(folderId: String): [MyNdlaResource!]!
