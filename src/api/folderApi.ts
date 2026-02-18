@@ -371,3 +371,7 @@ export async function unFavoriteSharedFolder(
     .then(resolveOATS);
   return folderId;
 }
+
+export async function getResourceTags(_context: Context): Promise<string[]> {
+  return await client.GET("/myndla-api/v1/folders/resources/tags", {}).then(resolveJsonOATS);
+}

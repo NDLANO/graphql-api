@@ -1379,6 +1379,7 @@ export type GQLQuery = {
   myNdlaResourceConnections: Array<GQLMyNdlaResourceConnection>;
   myNdlaResourceMeta?: Maybe<GQLMyNdlaResourceMeta>;
   myNdlaResourceMetaSearch: Array<GQLMyNdlaResourceMeta>;
+  myNdlaResourceTags: Array<Scalars['String']['output']>;
   myNdlaRootResources: Array<GQLMyNdlaResource>;
   node?: Maybe<GQLNode>;
   nodeByArticleId?: Maybe<GQLNode>;
@@ -3542,6 +3543,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   myNdlaResourceConnections?: Resolver<Array<GQLResolversTypes['MyNdlaResourceConnection']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceConnectionsArgs, 'path'>>;
   myNdlaResourceMeta?: Resolver<Maybe<GQLResolversTypes['MyNdlaResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceMetaArgs, 'resource'>>;
   myNdlaResourceMetaSearch?: Resolver<Array<GQLResolversTypes['MyNdlaResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceMetaSearchArgs, 'resources'>>;
+  myNdlaResourceTags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   myNdlaRootResources?: Resolver<Array<GQLResolversTypes['MyNdlaResource']>, ParentType, ContextType, Partial<GQLQueryMyNdlaRootResourcesArgs>>;
   node?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeArgs>>;
   nodeByArticleId?: Resolver<Maybe<GQLResolversTypes['Node']>, ParentType, ContextType, Partial<GQLQueryNodeByArticleIdArgs>>;
