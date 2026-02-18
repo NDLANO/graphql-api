@@ -31,6 +31,7 @@ import {
   deleteMyNdlaResource,
   fetchMyNdlaRootResources,
   getMyNdlaResourceConnections,
+  fetchMyNdlaResource,
 } from "../api/folderApi";
 import { fetchMyNdlaResourceMeta, fetchMyNdlaResourcesMeta } from "../api/myNdlaResourceMetaApi";
 import {
@@ -60,6 +61,7 @@ import {
   GQLMutationUpdateMyNdlaResourceArgs,
   GQLMutationDeleteMyNdlaResourceArgs,
   GQLQueryMyNdlaResourceConnectionsArgs,
+  GQLQueryMyNdlaResourceArgs,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -72,6 +74,7 @@ export const Query: Pick<
   | "myNdlaResourceMeta"
   | "personalData"
   | "recentlyFavoritedResources"
+  | "myNdlaResource"
   | "myNdlaRootResources"
   | "myNdlaResourceConnections"
 > = {
@@ -125,6 +128,9 @@ export const Query: Pick<
     context: ContextWithLoaders,
   ): Promise<ResourceConnectionDTO[]> {
     return getMyNdlaResourceConnections(params, context);
+  },
+  async myNdlaResource(_: any, params: GQLQueryMyNdlaResourceArgs, context: ContextWithLoaders): Promise<ResourceDTO> {
+    return fetchMyNdlaResource(params, context);
   },
 };
 
