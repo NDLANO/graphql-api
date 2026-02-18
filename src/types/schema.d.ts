@@ -1375,6 +1375,7 @@ export type GQLQuery = {
   learningpathStepOembed: GQLLearningpathStepOembed;
   myLearningpaths?: Maybe<Array<GQLMyNdlaLearningpath>>;
   myNdlaLearningpath?: Maybe<GQLMyNdlaLearningpath>;
+  myNdlaResource?: Maybe<GQLMyNdlaResource>;
   myNdlaResourceConnections: Array<GQLMyNdlaResourceConnection>;
   myNdlaResourceMeta?: Maybe<GQLMyNdlaResourceMeta>;
   myNdlaResourceMetaSearch: Array<GQLMyNdlaResourceMeta>;
@@ -1512,6 +1513,11 @@ export type GQLQueryLearningpathStepOembedArgs = {
 
 export type GQLQueryMyNdlaLearningpathArgs = {
   pathId: Scalars['String']['input'];
+};
+
+
+export type GQLQueryMyNdlaResourceArgs = {
+  path: Scalars['String']['input'];
 };
 
 
@@ -3532,6 +3538,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   learningpathStepOembed?: Resolver<GQLResolversTypes['LearningpathStepOembed'], ParentType, ContextType, RequireFields<GQLQueryLearningpathStepOembedArgs, 'url'>>;
   myLearningpaths?: Resolver<Maybe<Array<GQLResolversTypes['MyNdlaLearningpath']>>, ParentType, ContextType>;
   myNdlaLearningpath?: Resolver<Maybe<GQLResolversTypes['MyNdlaLearningpath']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaLearningpathArgs, 'pathId'>>;
+  myNdlaResource?: Resolver<Maybe<GQLResolversTypes['MyNdlaResource']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceArgs, 'path'>>;
   myNdlaResourceConnections?: Resolver<Array<GQLResolversTypes['MyNdlaResourceConnection']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceConnectionsArgs, 'path'>>;
   myNdlaResourceMeta?: Resolver<Maybe<GQLResolversTypes['MyNdlaResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceMetaArgs, 'resource'>>;
   myNdlaResourceMetaSearch?: Resolver<Array<GQLResolversTypes['MyNdlaResourceMeta']>, ParentType, ContextType, RequireFields<GQLQueryMyNdlaResourceMetaSearchArgs, 'resources'>>;

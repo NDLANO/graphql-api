@@ -1491,6 +1491,7 @@ export const typeDefs = gql`
     podcastSeriesSearch(page: Int!, pageSize: Int!, fallback: Boolean): PodcastSeriesSearch
     alerts: [UptimeAlert]
     folders(includeSubfolders: Boolean, includeResources: Boolean): UserFolder!
+    myNdlaResource(path: String!): MyNdlaResource
     myNdlaResourceMeta(resource: MyNdlaResourceMetaSearchInput!): MyNdlaResourceMeta
     myNdlaResourceMetaSearch(resources: [MyNdlaResourceMetaSearchInput!]!): [MyNdlaResourceMeta!]!
     myNdlaResourceConnections(path: String!): [MyNdlaResourceConnection!]!

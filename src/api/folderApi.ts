@@ -35,6 +35,7 @@ import {
   GQLQueryAllMyNdlaResourcesArgs,
   GQLQueryFolderArgs,
   GQLQueryFoldersArgs,
+  GQLQueryMyNdlaResourceArgs,
   GQLQueryMyNdlaResourceConnectionsArgs,
   GQLQueryRecentlyFavoritedResourcesArgs,
   GQLSortResult,
@@ -102,6 +103,13 @@ export async function fetchAllMyNdlaResources(
 
 export async function fetchMyNdlaRootResources(_context: Context): Promise<ResourceDTO[]> {
   return client.GET("/myndla-api/v1/folders/resources/root").then(resolveJsonOATS);
+}
+
+export async function fetchMyNdlaResource(
+  { path }: GQLQueryMyNdlaResourceArgs,
+  _context: Context,
+): Promise<ResourceDTO> {
+  return client.GET("/myndla-api/v1/folders/resources/path", { params: { query: { path } } }).then(resolveJsonOATS);
 }
 
 export async function getMyNdlaResourceConnections(
