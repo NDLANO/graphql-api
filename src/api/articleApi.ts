@@ -6,7 +6,7 @@
  *
  */
 
-import { ArticleV2DTO, openapi } from "@ndla/types-backend/article-api";
+import { paths, ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ndlaUrl } from "../config";
 import {
   GQLArticleTransformedContentArgs,
@@ -22,7 +22,7 @@ interface ArticleParams {
   articleId: string;
 }
 
-const client = createAuthClient<openapi.paths>();
+const client = createAuthClient<paths>();
 
 export const fetchTransformedContent = async (
   article: ArticleV2DTO,

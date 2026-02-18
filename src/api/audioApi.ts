@@ -7,16 +7,16 @@
  */
 
 import {
+  paths,
   AudioMetaInformationDTO,
   AudioSummarySearchResultDTO,
   SeriesDTO,
-  openapi,
   SeriesSummarySearchResultDTO,
 } from "@ndla/types-backend/audio-api";
 import { getNumberIdOrThrow } from "../utils/apiHelpers";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>();
+const client = createAuthClient<paths>();
 
 export async function fetchAudio(context: Context, audioId: number | string): Promise<AudioMetaInformationDTO | null> {
   const response = await client.GET("/audio-api/v1/audio/{audio-id}", {

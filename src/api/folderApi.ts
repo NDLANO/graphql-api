@@ -7,13 +7,13 @@
  */
 
 import {
+  paths,
   MyNDLAUserDTO,
   FolderDTO,
   FolderDataDTO,
   ResourceDTO,
   UserFolderDTO,
   ResourceType,
-  openapi,
   FolderStatus,
   ResourceConnectionDTO,
 } from "@ndla/types-backend/myndla-api";
@@ -42,7 +42,7 @@ import {
 } from "../types/schema";
 import { createAuthClient, resolveJsonOATS, resolveOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>({ disableCache: true });
+const client = createAuthClient<paths>({ disableCache: true });
 
 export async function fetchFolders(
   { includeResources, includeSubfolders }: GQLQueryFoldersArgs,

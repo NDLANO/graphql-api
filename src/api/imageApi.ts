@@ -6,12 +6,12 @@
  *
  */
 
-import { openapi, ImageMetaInformationV3DTO, SearchResultV3DTO } from "@ndla/types-backend/image-api";
+import { paths, ImageMetaInformationV3DTO, SearchResultV3DTO } from "@ndla/types-backend/image-api";
 import { GQLImageLicense, GQLQueryImageSearchArgs } from "../types/schema";
 import { getNumberIdOrThrow } from "../utils/apiHelpers";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>();
+const client = createAuthClient<paths>();
 
 export async function fetchImageV3(imageId: number | string, context: Context): Promise<ImageMetaInformationV3DTO> {
   return client

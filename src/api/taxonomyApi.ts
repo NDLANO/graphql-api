@@ -7,11 +7,11 @@
  */
 
 import {
+  paths,
   Node,
   NodeChild,
   Version,
   SearchResult,
-  openapi,
   ResourceType,
   NodeType,
   NodeConnectionType,
@@ -20,7 +20,7 @@ import { apiUrl } from "../config";
 import { withCustomContext } from "../utils/context/contextStore";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>({ baseUrl: `${apiUrl}/taxonomy`, useTaxonomyCache: true });
+const client = createAuthClient<paths>({ baseUrl: `${apiUrl}/taxonomy`, useTaxonomyCache: true });
 
 export async function fetchResourceTypes(context: Context): Promise<ResourceType[]> {
   return client.GET("/v1/resource-types", { params: { query: { language: context.language } } }).then(resolveJsonOATS);
