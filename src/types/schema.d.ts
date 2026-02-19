@@ -175,6 +175,59 @@ export type GQLAudioSummary = {
   url: Scalars['String']['output'];
 };
 
+export type GQLBaseLearningpath = {
+  basedOn?: Maybe<Scalars['String']['output']>;
+  canEdit: Scalars['Boolean']['output'];
+  copyright: GQLLearningpathCopyright;
+  coverphoto?: Maybe<GQLImageMetaInformationV3>;
+  created: Scalars['String']['output'];
+  description: Scalars['String']['output'];
+  duration?: Maybe<Scalars['Int']['output']>;
+  id: Scalars['Int']['output'];
+  introduction?: Maybe<Scalars['String']['output']>;
+  isBasedOn?: Maybe<Scalars['Int']['output']>;
+  isMyNDLAOwner: Scalars['Boolean']['output'];
+  lastUpdated: Scalars['String']['output'];
+  learningstepUrl: Scalars['String']['output'];
+  learningsteps: Array<GQLBaseLearningpathStep>;
+  madeAvailable?: Maybe<Scalars['String']['output']>;
+  metaUrl: Scalars['String']['output'];
+  revision: Scalars['Int']['output'];
+  status: Scalars['String']['output'];
+  supportedLanguages: Array<Scalars['String']['output']>;
+  tags: Array<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+  verificationStatus: Scalars['String']['output'];
+};
+
+export type GQLBaseLearningpathStep = {
+  articleId?: Maybe<Scalars['Int']['output']>;
+  canEdit: Scalars['Boolean']['output'];
+  copyright?: Maybe<GQLLearningpathCopyright>;
+  description?: Maybe<Scalars['String']['output']>;
+  embedUrl?: Maybe<GQLLearningpathStepEmbedUrl>;
+  id: Scalars['Int']['output'];
+  introduction?: Maybe<Scalars['String']['output']>;
+  license?: Maybe<GQLLicense>;
+  metaUrl: Scalars['String']['output'];
+  oembed?: Maybe<GQLLearningpathStepOembed>;
+  opengraph?: Maybe<GQLExternalOpengraph>;
+  resource?: Maybe<GQLResource>;
+  revision: Scalars['Int']['output'];
+  seqNo: Scalars['Int']['output'];
+  showTitle: Scalars['Boolean']['output'];
+  status: Scalars['String']['output'];
+  supportedLanguages: Array<Scalars['String']['output']>;
+  title: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+
+export type GQLBaseLearningpathStepResourceArgs = {
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  rootId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type GQLBreadcrumb = {
   __typename?: 'Breadcrumb';
   id: Scalars['String']['output'];
@@ -602,7 +655,7 @@ export type GQLImageVariant = {
   variantUrl: Scalars['String']['output'];
 };
 
-export type GQLLearningpath = {
+export type GQLLearningpath = GQLBaseLearningpath & {
   __typename?: 'Learningpath';
   basedOn?: Maybe<Scalars['String']['output']>;
   canEdit: Scalars['Boolean']['output'];
@@ -684,7 +737,7 @@ export type GQLLearningpathSeqNo = {
   seqNo: Scalars['Int']['output'];
 };
 
-export type GQLLearningpathStep = {
+export type GQLLearningpathStep = GQLBaseLearningpathStep & {
   __typename?: 'LearningpathStep';
   articleId?: Maybe<Scalars['Int']['output']>;
   canEdit: Scalars['Boolean']['output'];
@@ -1064,7 +1117,7 @@ export type GQLMyNdlaImageResourceMeta = GQLMyNdlaResourceMeta & {
   type: Scalars['String']['output'];
 };
 
-export type GQLMyNdlaLearningpath = {
+export type GQLMyNdlaLearningpath = GQLBaseLearningpath & {
   __typename?: 'MyNdlaLearningpath';
   basedOn?: Maybe<Scalars['String']['output']>;
   canEdit: Scalars['Boolean']['output'];
@@ -1100,7 +1153,7 @@ export type GQLMyNdlaLearningpathResourceMeta = GQLMyNdlaResourceMeta & {
   type: Scalars['String']['output'];
 };
 
-export type GQLMyNdlaLearningpathStep = {
+export type GQLMyNdlaLearningpathStep = GQLBaseLearningpathStep & {
   __typename?: 'MyNdlaLearningpathStep';
   articleId?: Maybe<Scalars['Int']['output']>;
   canEdit: Scalars['Boolean']['output'];
@@ -2189,6 +2242,14 @@ export type GQLResolversUnionTypes<_RefType extends Record<string, unknown>> = {
 
 /** Mapping of interface types */
 export type GQLResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
+  BaseLearningpath:
+    | ( GQLLearningpath )
+    | ( GQLMyNdlaLearningpath )
+  ;
+  BaseLearningpathStep:
+    | ( GQLLearningpathStep )
+    | ( GQLMyNdlaLearningpathStep )
+  ;
   MyNdlaResourceMeta:
     | ( GQLMyNdlaArticleResourceMeta )
     | ( GQLMyNdlaAudioResourceMeta )
@@ -2238,6 +2299,8 @@ export type GQLResolversTypes = {
   AudioLicense: ResolverTypeWrapper<GQLAudioLicense>;
   AudioSearch: ResolverTypeWrapper<GQLAudioSearch>;
   AudioSummary: ResolverTypeWrapper<GQLAudioSummary>;
+  BaseLearningpath: ResolverTypeWrapper<GQLResolversInterfaceTypes<GQLResolversTypes>['BaseLearningpath']>;
+  BaseLearningpathStep: ResolverTypeWrapper<GQLResolversInterfaceTypes<GQLResolversTypes>['BaseLearningpathStep']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Breadcrumb: ResolverTypeWrapper<GQLBreadcrumb>;
   BrightcoveCustomFields: ResolverTypeWrapper<GQLBrightcoveCustomFields>;
@@ -2403,6 +2466,8 @@ export type GQLResolversParentTypes = {
   AudioLicense: GQLAudioLicense;
   AudioSearch: GQLAudioSearch;
   AudioSummary: GQLAudioSummary;
+  BaseLearningpath: GQLResolversInterfaceTypes<GQLResolversParentTypes>['BaseLearningpath'];
+  BaseLearningpathStep: GQLResolversInterfaceTypes<GQLResolversParentTypes>['BaseLearningpathStep'];
   Boolean: Scalars['Boolean']['output'];
   Breadcrumb: GQLBreadcrumb;
   BrightcoveCustomFields: GQLBrightcoveCustomFields;
@@ -2682,6 +2747,14 @@ export type GQLAudioSummaryResolvers<ContextType = any, ParentType extends GQLRe
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type GQLBaseLearningpathResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BaseLearningpath'] = GQLResolversParentTypes['BaseLearningpath']> = {
+  __resolveType: TypeResolveFn<'Learningpath' | 'MyNdlaLearningpath', ParentType, ContextType>;
+};
+
+export type GQLBaseLearningpathStepResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['BaseLearningpathStep'] = GQLResolversParentTypes['BaseLearningpathStep']> = {
+  __resolveType: TypeResolveFn<'LearningpathStep' | 'MyNdlaLearningpathStep', ParentType, ContextType>;
 };
 
 export type GQLBreadcrumbResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Breadcrumb'] = GQLResolversParentTypes['Breadcrumb']> = {
@@ -3083,6 +3156,7 @@ export type GQLLearningpathResolvers<ContextType = any, ParentType extends GQLRe
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   verificationStatus?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathCopyrightResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathCopyright'] = GQLResolversParentTypes['LearningpathCopyright']> = {
@@ -3128,6 +3202,7 @@ export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends G
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLLearningpathStepEmbedUrlResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['LearningpathStepEmbedUrl'] = GQLResolversParentTypes['LearningpathStepEmbedUrl']> = {
@@ -3296,6 +3371,7 @@ export type GQLMyNdlaLearningpathResolvers<ContextType = any, ParentType extends
   tags?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   verificationStatus?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMyNdlaLearningpathResourceMetaResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaLearningpathResourceMeta'] = GQLResolversParentTypes['MyNdlaLearningpathResourceMeta']> = {
@@ -3328,6 +3404,7 @@ export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType ext
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type GQLMyNdlaPersonalDataResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['MyNdlaPersonalData'] = GQLResolversParentTypes['MyNdlaPersonalData']> = {
@@ -3922,6 +3999,8 @@ export type GQLResolvers<ContextType = any> = {
   AudioLicense?: GQLAudioLicenseResolvers<ContextType>;
   AudioSearch?: GQLAudioSearchResolvers<ContextType>;
   AudioSummary?: GQLAudioSummaryResolvers<ContextType>;
+  BaseLearningpath?: GQLBaseLearningpathResolvers<ContextType>;
+  BaseLearningpathStep?: GQLBaseLearningpathStepResolvers<ContextType>;
   Breadcrumb?: GQLBreadcrumbResolvers<ContextType>;
   BrightcoveCustomFields?: GQLBrightcoveCustomFieldsResolvers<ContextType>;
   BrightcoveElement?: GQLBrightcoveElementResolvers<ContextType>;
