@@ -200,7 +200,7 @@ export const typeDefs = gql`
     width: Int!
   }
 
-  type LearningpathStep {
+  interface BaseLearningpathStep {
     id: Int!
     title: String!
     seqNo: Int!
@@ -222,7 +222,29 @@ export const typeDefs = gql`
     opengraph: ExternalOpengraph
   }
 
-  type MyNdlaLearningpathStep {
+  type LearningpathStep implements BaseLearningpathStep {
+    id: Int!
+    title: String!
+    seqNo: Int!
+    canEdit: Boolean!
+    description: String
+    introduction: String
+    embedUrl: LearningpathStepEmbedUrl
+    license: License
+    copyright: LearningpathCopyright
+    metaUrl: String!
+    revision: Int!
+    status: String!
+    supportedLanguages: [String!]!
+    type: String!
+    articleId: Int
+    resource(rootId: String, parentId: String): Resource
+    showTitle: Boolean!
+    oembed: LearningpathStepOembed
+    opengraph: ExternalOpengraph
+  }
+
+  type MyNdlaLearningpathStep implements BaseLearningpathStep {
     id: Int!
     title: String!
     seqNo: Int!
@@ -253,7 +275,32 @@ export const typeDefs = gql`
     seqNo: Int!
   }
 
-  type Learningpath {
+  interface BaseLearningpath {
+    id: Int!
+    title: String!
+    description: String!
+    introduction: String
+    copyright: LearningpathCopyright!
+    duration: Int
+    canEdit: Boolean!
+    verificationStatus: String!
+    created: String!
+    lastUpdated: String!
+    tags: [String!]!
+    supportedLanguages: [String!]!
+    isBasedOn: Int
+    basedOn: String
+    learningsteps: [BaseLearningpathStep!]!
+    metaUrl: String!
+    revision: Int!
+    learningstepUrl: String!
+    status: String!
+    coverphoto: ImageMetaInformationV3
+    madeAvailable: String
+    isMyNDLAOwner: Boolean!
+  }
+
+  type Learningpath implements BaseLearningpath {
     id: Int!
     title: String!
     description: String!
@@ -278,7 +325,7 @@ export const typeDefs = gql`
     isMyNDLAOwner: Boolean!
   }
 
-  type MyNdlaLearningpath {
+  type MyNdlaLearningpath implements BaseLearningpath {
     id: Int!
     title: String!
     introduction: String
