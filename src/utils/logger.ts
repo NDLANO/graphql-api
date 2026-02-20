@@ -6,9 +6,9 @@
  *
  */
 
-import { GraphQLFormattedError } from "graphql/error/GraphQLError";
 import { AsyncLocalStorage } from "node:async_hooks";
 import { IncomingHttpHeaders } from "node:http2";
+import { GraphQLFormattedError } from "graphql/error/GraphQLError";
 import "source-map-support/register";
 import { createLogger, transports, format, Logger } from "winston";
 import { getContext } from "./context/contextStore";

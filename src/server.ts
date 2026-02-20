@@ -6,13 +6,13 @@
  *
  */
 
+import { Server } from "http";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
 import compression from "compression";
 import cors from "cors";
 import express, { json } from "express";
 import promBundle from "express-prom-bundle";
-import { Server } from "http";
 import { port } from "./config";
 import { resolvers } from "./resolvers";
 import { typeDefs } from "./schema";
