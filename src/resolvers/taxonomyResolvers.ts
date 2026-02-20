@@ -108,11 +108,11 @@ export const Query = {
 
 export const resolvers = {
   Node: {
-    async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
+    async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | null> {
       if (node.contentUri?.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
       }
-      return undefined;
+      return null;
     },
     async availability(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders) {
       if (!node.contentUri) return undefined;

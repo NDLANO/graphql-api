@@ -38,7 +38,7 @@ export const Query = {
 
 export const resolvers = {
   FrontpageMenu: {
-    async article(menu: FrontPageDTO, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
+    async article(menu: FrontPageDTO, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | null> {
       return context.loaders.articlesLoader.load(`${menu.articleId}`);
     },
     async hideLevel(menu: FrontPageDTO | MenuDTO): Promise<boolean> {
@@ -75,22 +75,22 @@ export const resolvers = {
       return article?.metaDescription.metaDescription || "";
     },
     async url(id: string, _: any, context: ContextWithLoaders): Promise<string> {
-      const nodes = await context.loaders.searchNodesLoader.load(id);
-      const correctContext = nodes[0]?.contexts.find((c) => c.rootId === "urn:subject:20");
+      const node = await context.loaders.searchNodesLoader.load(id);
+      const correctContext = node?.contexts.find((c) => c.rootId === "urn:subject:20");
       return correctContext?.url ?? "";
     },
     async resourceTypes(id: string, _: any, context: ContextWithLoaders): Promise<GQLResourceType[]> {
-      const nodes = await context.loaders.searchNodesLoader.load(id);
-      return nodes[0]?.resourceTypes || [];
+      const node = await context.loaders.searchNodesLoader.load(id);
+      return node?.resourceTypes || [];
     },
   },
 
   FilmFrontpage: {
-    async article(frontpage: FilmFrontPageDTO, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
+    async article(frontpage: FilmFrontPageDTO, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | null> {
       if (frontpage.article) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(frontpage.article));
       }
-      return undefined;
+      return null;
     },
   },
 };

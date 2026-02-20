@@ -48,7 +48,7 @@ export const resolvers = {
       const article = await context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       return article?.availability;
     },
-    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
+    async article(topic: Node, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | null> {
       if (topic.contentUri && topic.contentUri.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(topic.contentUri));
       }
