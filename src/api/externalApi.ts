@@ -54,10 +54,10 @@ export const fetchOpengraph = async (url: string): Promise<GQLExternalOpengraph 
       }
       return {
         title: ogs.result.ogTitle,
-        description: ogs.result.ogDescription,
+        description: ogs.result.ogDescription ?? ogs.result.ogTitle,
         imageUrl: ogs.result.ogImage?.[0]?.url,
         imageAlt: ogs.result.ogImage?.[0]?.alt,
-        url: ogs.result.ogUrl,
+        url: ogs.result.ogUrl ?? ogs.result.requestUrl ?? url,
       };
     } catch (_) {
       return {
