@@ -12,17 +12,13 @@ import { GQLCompetenceGoal, GQLCoreElement } from "../types/schema";
 export const Query = {
   async competenceGoals(
     _: any,
-    { codes, language }: { codes: string[]; language?: string },
+    { codes }: { codes: string[] },
     context: ContextWithLoaders,
   ): Promise<GQLCompetenceGoal[]> {
-    return competenceGoals(codes, language, context);
+    return competenceGoals(codes, context);
   },
-  async coreElements(
-    _: any,
-    { codes, language }: { codes: string[]; language?: string },
-    context: ContextWithLoaders,
-  ): Promise<GQLCoreElement[]> {
-    return coreElements(codes, language, context);
+  async coreElements(_: any, { codes }: { codes: string[] }, context: ContextWithLoaders): Promise<GQLCoreElement[]> {
+    return coreElements(codes, context);
   },
 };
 
