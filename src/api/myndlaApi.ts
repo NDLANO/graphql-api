@@ -6,10 +6,10 @@
  *
  */
 
-import { ConfigMetaRestrictedDTO, openapi, ConfigKey } from "@ndla/types-backend/myndla-api";
+import { paths, ConfigMetaRestrictedDTO, ConfigKey } from "@ndla/types-backend/myndla-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>();
+const client = createAuthClient<paths>();
 
 export const fetchConfig = async (configKey: string, _context: Context): Promise<ConfigMetaRestrictedDTO> => {
   return client

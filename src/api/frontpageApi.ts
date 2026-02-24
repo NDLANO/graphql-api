@@ -6,10 +6,10 @@
  *
  */
 
-import { openapi, FrontPageDTO, FilmFrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { paths, FrontPageDTO, FilmFrontPageDTO, SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>();
+const client = createAuthClient<paths>();
 
 export interface IMovieMeta {
   title: string;

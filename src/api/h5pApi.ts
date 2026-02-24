@@ -6,7 +6,7 @@
  *
  */
 
-import { openapi } from "@ndla/types-backend/oembed-proxy";
+import { paths } from "@ndla/types-backend/oembed-proxy";
 import {
   H5pEmbedData,
   H5pPreviewResponse,
@@ -20,7 +20,7 @@ import { resolveJson } from "../utils/apiHelpers";
 import { externalFetch } from "../utils/fetch";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>();
+const client = createAuthClient<paths>();
 
 const H5P_HOST_URL = h5pHostUrl();
 

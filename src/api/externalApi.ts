@@ -7,14 +7,14 @@
  */
 
 import { youtube } from "@googleapis/youtube";
-import { openapi } from "@ndla/types-backend/oembed-proxy";
+import { paths } from "@ndla/types-backend/oembed-proxy";
 import { OembedEmbedData, OembedProxyData } from "@ndla/types-embed";
 import openGraph from "open-graph-scraper";
 import { googleApiKey } from "../config";
 import { GQLExternalOpengraph } from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>();
+const client = createAuthClient<paths>();
 
 export const fetchExternalOembed = async (embed: OembedEmbedData, context: Context): Promise<OembedProxyData> => {
   return await fetchOembedUrl(embed.url, context);

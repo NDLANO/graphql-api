@@ -7,7 +7,7 @@
  */
 
 import {
-  openapi,
+  paths,
   LearningPathV2DTO,
   LearningStepV2DTO,
   AuthorDTO,
@@ -27,8 +27,8 @@ import {
 import { getNumberIdOrThrow } from "../utils/apiHelpers";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>();
-const cachelessClient = createAuthClient<openapi.paths>({ disableCache: true });
+const client = createAuthClient<paths>();
+const cachelessClient = createAuthClient<paths>({ disableCache: true });
 
 export async function fetchLearningpaths(
   learningpathIds: number[],

@@ -7,7 +7,8 @@
  */
 
 import {
-  openapi,
+  paths,
+  operations,
   GrepSearchInputDTO,
   GrepSearchResultsDTO,
   MultiSearchSummaryDTO,
@@ -28,7 +29,7 @@ import {
 } from "../types/schema";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 
-const client = createAuthClient<openapi.paths>();
+const client = createAuthClient<paths>();
 
 function commaSeparatedStringToArray(input: string | string[] | undefined): string[] | undefined {
   if (!input) return;
@@ -36,7 +37,7 @@ function commaSeparatedStringToArray(input: string | string[] | undefined): stri
   return input.split(",").map((s) => s.trim());
 }
 
-type SearchQueryParams = openapi.operations["getSearch-apiV1Search"]["parameters"]["query"];
+type SearchQueryParams = operations["getSearch-apiV1Search"]["parameters"]["query"];
 
 const convertQuery = (searchQuery: GQLQuerySearchArgs): SearchQueryParams => {
   return {
