@@ -7,7 +7,9 @@
  */
 
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
+import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { NodeChild } from "@ndla/types-taxonomy";
+import keyBy from "lodash/keyBy";
 import { GQLTaxonomyEntity } from "../types/schema";
 
 export function isNDLAEmbedUrl(url: string) {
@@ -32,7 +34,12 @@ export function stripUrn(str: string): string {
   return str.replace("urn:", "");
 }
 
-export async function filterMissingArticles<T extends GQLTaxonomyEntity | NodeChild>(
+interface Partitioned<T> {
+  articleResources: T[];
+  learningpathResources: T[];
+}
+
+export async function filterMissingResources<T extends GQLTaxonomyEntity | NodeChild>(
   entities: T[],
   context: ContextWithLoaders,
 ): Promise<T[]> {
@@ -42,31 +49,54 @@ export async function filterMissingArticles<T extends GQLTaxonomyEntity | NodeCh
 
   const entitiesWithContentUri = visibleEntities.filter((taxonomyEntity) => !!taxonomyEntity.contentUri);
 
-  const learningpathResources = entitiesWithContentUri.filter((taxonomyEntity) =>
-    taxonomyEntity.contentUri?.includes("urn:learningpath"),
+  const { articleResources, learningpathResources } = entitiesWithContentUri.reduce<Partitioned<T>>(
+    (acc, taxonomyEntity) => {
+      if (taxonomyEntity.contentUri?.includes("urn:learningpath")) {
+        acc.learningpathResources.push(taxonomyEntity);
+      } else if (taxonomyEntity.contentUri?.includes("urn:article")) {
+        acc.articleResources.push(taxonomyEntity);
+      }
+      return acc;
+    },
+    { articleResources: [], learningpathResources: [] },
   );
 
-  const articleResources = entitiesWithContentUri.filter((taxonomyEntity) =>
-    taxonomyEntity.contentUri?.includes("urn:article"),
+  const articlesPromise = context.loaders.articlesLoader.loadMany(
+    articleResources.map((node) => getArticleIdFromUrn(node.contentUri ?? "")),
   );
 
-  const articles = await context.loaders.articlesLoader.loadMany(
-    articleResources.map((taxonomyEntity) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "")),
-  );
-  const nonNullArticles = articles.filter((article): article is ArticleV2DTO => !!article);
-
-  const activeResources = articleResources.filter((taxonomyEntity) =>
-    nonNullArticles.find((article) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "") === `${article.id}`),
+  const learningpathsPromise = context.loaders.learningpathsLoader.loadMany(
+    learningpathResources.map((node) => Number(getLearningpathIdFromUrn(node.contentUri ?? ""))),
   );
 
-  const withAvailabilityAndLanguage = activeResources.map((taxonomyEntity) => {
-    const article = nonNullArticles.find((a) => getArticleIdFromUrn(taxonomyEntity.contentUri ?? "") === `${a.id}`);
-    return {
-      ...taxonomyEntity,
-      availability: article?.availability,
-      language: article?.content.language ?? taxonomyEntity.language,
-    };
-  });
+  const [articles, learningpaths] = await Promise.all([articlesPromise, learningpathsPromise]);
 
-  return [...learningpathResources, ...withAvailabilityAndLanguage];
+  const keyedArticles = keyBy<ArticleV2DTO | undefined>(articles, (article) => article?.id ?? "never");
+  const keyedLearningpaths = keyBy<LearningPathV2DTO | undefined>(
+    learningpaths,
+    (learningpath) => learningpath?.id ?? "never",
+  );
+
+  const activeArticles = articleResources.reduce<T[]>((acc, node) => {
+    const article = keyedArticles[getArticleIdFromUrn(node.contentUri ?? "")];
+    if (article) {
+      acc.push({
+        ...node,
+        article: article,
+        availability: article.availability,
+        language: article.content.language ?? node.language,
+      });
+    }
+    return acc;
+  }, []);
+
+  const activeLearningpaths = learningpathResources.reduce<T[]>((acc, node) => {
+    const lp = keyedLearningpaths[Number(getLearningpathIdFromUrn(node.contentUri ?? ""))];
+    if (lp) {
+      acc.push({ ...node, learningpath: lp });
+    }
+    return acc;
+  }, []);
+
+  return activeLearningpaths.concat(activeArticles);
 }
