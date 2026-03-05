@@ -8,6 +8,7 @@
 
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { SubjectPageDTO } from "@ndla/types-backend/frontpage-api";
+import { LearningPathV2DTO } from "@ndla/types-backend/learningpath-api";
 import { Node } from "@ndla/types-taxonomy";
 import { GraphQLError } from "graphql";
 import partition from "lodash/partition";
@@ -25,7 +26,7 @@ import {
   GQLTaxonomyEntity,
 } from "../types/schema";
 import { articleToMeta, getNumberId, nodeToTaxonomyEntity, toGQLLearningpath } from "../utils/apiHelpers";
-import { filterMissingArticles, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
+import { filterMissingResources, getArticleIdFromUrn, getLearningpathIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async node(
@@ -109,6 +110,10 @@ export const Query = {
 export const resolvers = {
   Node: {
     async article(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO | undefined> {
+      // filterMissingResources fetches and attaches articles and learningpaths to the node, so we can check for them before trying to load again
+      if ("article" in node && !!node.article) {
+        return node.article as ArticleV2DTO;
+      }
       if (node.contentUri?.startsWith("urn:article")) {
         return context.loaders.articlesLoader.load(getArticleIdFromUrn(node.contentUri));
       }
@@ -120,6 +125,10 @@ export const resolvers = {
       return article?.availability;
     },
     async learningpath(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLLearningpath | null> {
+      // filterMissingResources fetches and attaches articles and learningpaths to the node, so we can check for them before trying to load again
+      if ("learningpath" in node && !!node.learningpath) {
+        return toGQLLearningpath(node.learningpath as LearningPathV2DTO);
+      }
       if (node.contentUri?.startsWith("urn:learningpath")) {
         const learningpathId = Number(getLearningpathIdFromUrn(node.contentUri));
         if (isNaN(learningpathId)) return null;
@@ -144,7 +153,7 @@ export const resolvers = {
         context,
       );
       const entities = children.map((node) => nodeToTaxonomyEntity(node, context));
-      return filterMissingArticles(entities, context);
+      return filterMissingResources(entities, context);
     },
     async subjectpage(node: GQLTaxonomyEntity, __: any, context: ContextWithLoaders): Promise<SubjectPageDTO | null> {
       const subjectPageId = getNumberId(node.contentUri?.replace("urn:frontpage:", ""));
@@ -176,7 +185,7 @@ export const resolvers = {
     async links(node: GQLTaxonomyEntity, _: any, context: ContextWithLoaders): Promise<GQLNode[]> {
       const links = await fetchChildren({ id: node.id, connectionTypes: "LINK" }, context);
       const entities = links.map((node) => nodeToTaxonomyEntity(node, context));
-      return filterMissingArticles(entities, context);
+      return filterMissingResources(entities, context);
     },
   },
 };
