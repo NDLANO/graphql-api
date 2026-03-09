@@ -154,9 +154,9 @@ export const resolvers = {
         // Pick the context that is the subjects own root context to avoid getting paths starting with /programme:
         const context = child.contexts.find((c) => c.rootId === child.id) || child.contexts[0];
         const url = context?.url ?? child.url;
-        return { ...child, url };
+        return { ...child, context, url };
       });
-      return nodes.map((node) => nodeToTaxonomyEntity(node, context));
+      return nodes.filter((node) => node.context?.isVisible).map((node) => nodeToTaxonomyEntity(node, context));
     },
   },
 };
