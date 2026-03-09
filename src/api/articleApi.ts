@@ -18,10 +18,6 @@ import { getArticleIdFromUrn } from "../utils/articleHelpers";
 import { createAuthClient, resolveJsonOATS } from "../utils/openapi-fetch/utils";
 import { transformArticle, transformVisualElement } from "./transformArticleApi";
 
-interface ArticleParams {
-  articleId: string;
-}
-
 const client = createAuthClient<paths>();
 
 export const fetchTransformedContent = async (
@@ -114,7 +110,7 @@ export async function fetchRelatedContent(
         };
       }
       try {
-        const related = await fetchSimpleArticle(`urn:article:${rc}`, context);
+        const related = await fetchArticle(`urn:article:${rc}`, undefined, context);
         const nodes = await context.loaders.nodesLoader.load({
           contentURI: `urn:article:${related.id}`,
           language: context.language,
@@ -142,10 +138,6 @@ export async function fetchRelatedContent(
   );
   const relatedContent = nullableRelatedContent.filter((rc: any) => !!rc);
   return relatedContent as GQLRelatedContent[];
-}
-
-export async function fetchArticle(params: ArticleParams, context: Context): Promise<ArticleV2DTO> {
-  return await fetchSimpleArticle(params.articleId, context);
 }
 
 export async function fetchArticlesPage(
@@ -189,7 +181,11 @@ export async function fetchArticles(articleIds: string[], context: Context): Pro
   return articleIds.map((id) => articles.find((article) => article.id.toString() === id.toString()));
 }
 
-export async function fetchSimpleArticle(articleUrn: string, context: Context): Promise<ArticleV2DTO> {
+export async function fetchArticle(
+  articleUrn: string,
+  revision: number | undefined,
+  context: Context,
+): Promise<ArticleV2DTO> {
   return await client
     .GET("/article-api/v2/articles/{article_id}", {
       params: {
@@ -198,6 +194,7 @@ export async function fetchSimpleArticle(articleUrn: string, context: Context): 
         },
         query: {
           language: context.language,
+          revision,
           license: "all",
           fallback: true,
         },

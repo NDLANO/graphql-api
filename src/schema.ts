@@ -1460,7 +1460,7 @@ export const typeDefs = gql`
     nodeByArticleId(articleId: String, nodeId: String): Node
     resource(id: String!, subjectId: String, topicId: String): Resource
     articleResource(articleId: String, taxonomyId: String): Resource
-    article(id: String!): Article
+    article(id: String!, revision: Int): Article
     subject(id: String!): Subject
     subjectpage(id: Int!): SubjectPage
     filmfrontpage: FilmFrontpage

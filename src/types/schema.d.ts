@@ -1469,6 +1469,7 @@ export type GQLQueryAllMyNdlaResourcesArgs = {
 
 export type GQLQueryArticleArgs = {
   id: Scalars['String']['input'];
+  revision?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
