@@ -205,3 +205,13 @@ export async function fetchSimpleArticle(articleUrn: string, context: Context): 
     })
     .then(resolveJsonOATS);
 }
+
+export async function fetchRevisions(articleId: number, _: Context): Promise<number[]> {
+  return await client
+    .GET("/article-api/v2/articles/{article_id}/revisions", {
+      params: {
+        path: { article_id: articleId },
+      },
+    })
+    .then(resolveJsonOATS);
+}

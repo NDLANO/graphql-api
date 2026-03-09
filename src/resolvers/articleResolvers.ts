@@ -14,6 +14,7 @@ import {
   fetchRelatedContent,
   fetchTransformedDisclaimer,
   fetchVisualElementEmbed,
+  fetchRevisions,
 } from "../api/articleApi";
 import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
 import { ndlaUrl } from "../config";
@@ -24,6 +25,7 @@ import {
   GQLCrossSubjectElement,
   GQLImageMetaInformationV3,
   GQLQueryArticleArgs,
+  GQLQueryRevisionsArgs,
   GQLRelatedContent,
   GQLResourceEmbed,
   GQLTransformedArticleContent,
@@ -37,6 +39,9 @@ export const Query = {
       },
       context,
     );
+  },
+  async revisions(_: any, { articleId }: GQLQueryRevisionsArgs, context: ContextWithLoaders): Promise<number[]> {
+    return fetchRevisions(articleId, context);
   },
 };
 

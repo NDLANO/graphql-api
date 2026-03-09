@@ -1548,6 +1548,7 @@ export const typeDefs = gql`
     myNdlaRootResources(folderId: String): [MyNdlaResource!]!
     allMyNdlaResources(size: Int): [MyNdlaResource!]!
     recentlyFavoritedResources(size: Int): [MyNdlaResource!]!
+    revisions(articleId: Int!): [Int!]!
     personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV3
     examLockStatus: ConfigMetaBoolean!

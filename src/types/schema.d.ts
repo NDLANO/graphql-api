@@ -1449,6 +1449,7 @@ export type GQLQuery = {
   resourceEmbed: GQLResourceEmbed;
   resourceEmbeds: GQLResourceEmbed;
   resourceTypes?: Maybe<Array<GQLResourceTypeDefinition>>;
+  revisions: Array<Scalars['Int']['output']>;
   search?: Maybe<GQLSearch>;
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
   sharedFolder: GQLSharedFolder;
@@ -1669,6 +1670,11 @@ export type GQLQueryResourceEmbedArgs = {
 
 export type GQLQueryResourceEmbedsArgs = {
   resources: Array<GQLResourceEmbedInput>;
+};
+
+
+export type GQLQueryRevisionsArgs = {
+  articleId: Scalars['Int']['input'];
 };
 
 
@@ -3637,6 +3643,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   resourceEmbed?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedArgs, 'id' | 'type'>>;
   resourceEmbeds?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedsArgs, 'resources'>>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
+  revisions?: Resolver<Array<GQLResolversTypes['Int']>, ParentType, ContextType, RequireFields<GQLQueryRevisionsArgs, 'articleId'>>;
   search?: Resolver<Maybe<GQLResolversTypes['Search']>, ParentType, ContextType, Partial<GQLQuerySearchArgs>>;
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
   sharedFolder?: Resolver<GQLResolversTypes['SharedFolder'], ParentType, ContextType, RequireFields<GQLQuerySharedFolderArgs, 'id'>>;
