@@ -8,13 +8,14 @@
 
 import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
-import { fetchArticle, fetchSubjectTopics, searchConcepts } from "../api";
+import { fetchSubjectTopics, searchConcepts } from "../api";
 import {
   fetchTransformedContent,
   fetchRelatedContent,
   fetchTransformedDisclaimer,
   fetchVisualElementEmbed,
   fetchRevisions,
+  fetchArticle,
 } from "../api/articleApi";
 import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
 import { ndlaUrl } from "../config";
@@ -32,13 +33,8 @@ import {
 } from "../types/schema";
 
 export const Query = {
-  async article(_: any, { id }: GQLQueryArticleArgs, context: ContextWithLoaders): Promise<ArticleV2DTO> {
-    return fetchArticle(
-      {
-        articleId: id,
-      },
-      context,
-    );
+  async article(_: any, { id, revision }: GQLQueryArticleArgs, context: ContextWithLoaders): Promise<ArticleV2DTO> {
+    return fetchArticle(id, revision, context);
   },
   async revisions(_: any, { articleId }: GQLQueryRevisionsArgs, context: ContextWithLoaders): Promise<number[]> {
     return fetchRevisions(articleId, context);

@@ -38,7 +38,7 @@ import { getBrightcoveCopyright } from "../utils/brightcoveUtils";
 import { CheerioEmbed, getEmbedsFromContent } from "../utils/getEmbedsFromContent";
 import highlightCode from "../utils/highlightCode";
 import parseMarkdown from "../utils/parseMarkdown";
-import { fetchSimpleArticle } from "./articleApi";
+import { fetchArticle } from "./articleApi";
 import { fetchAudioV2 } from "./audioApi";
 import { fetchEmbedConcept } from "./conceptApi";
 import { fetchExternalOembed } from "./externalApi";
@@ -235,7 +235,7 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
   const articleId = embedData.articleId;
   if (typeof articleId === "string" || typeof articleId === "number") {
     const [article, resources] = await Promise.all([
-      fetchSimpleArticle(`urn:article:${articleId}`, context),
+      fetchArticle(`urn:article:${articleId}`, undefined, context),
       context.loaders.nodesLoader.load({
         contentURI: `urn:article:${articleId}`,
         language: context.language,
