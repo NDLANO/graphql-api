@@ -709,7 +709,7 @@ export const typeDefs = gql`
   }
 
   type ArticleRevisionHistory {
-    revision: [Article!]!
+    revisions: [Article!]!
   }
 
   type Article {

@@ -107,7 +107,7 @@ export type GQLArticleRequiredLibrary = {
 
 export type GQLArticleRevisionHistory = {
   __typename?: 'ArticleRevisionHistory';
-  revision: Array<GQLArticle>;
+  revisions: Array<GQLArticle>;
 };
 
 export type GQLArticleSearchResult = GQLSearchResult & {
@@ -2705,7 +2705,7 @@ export type GQLArticleRequiredLibraryResolvers<ContextType = any, ParentType ext
 };
 
 export type GQLArticleRevisionHistoryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleRevisionHistory'] = GQLResolversParentTypes['ArticleRevisionHistory']> = {
-  revision?: Resolver<Array<GQLResolversTypes['Article']>, ParentType, ContextType>;
+  revisions?: Resolver<Array<GQLResolversTypes['Article']>, ParentType, ContextType>;
 };
 
 export type GQLArticleSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleSearchResult'] = GQLResolversParentTypes['ArticleSearchResult']> = {
