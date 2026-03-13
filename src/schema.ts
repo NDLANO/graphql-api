@@ -708,6 +708,10 @@ export const typeDefs = gql`
     url: String!
   }
 
+  type ArticleRevisionHistory {
+    revision: [Article!]!
+  }
+
   type Article {
     id: Int!
     revision: Int!
@@ -1549,6 +1553,7 @@ export const typeDefs = gql`
     allMyNdlaResources(size: Int): [MyNdlaResource!]!
     recentlyFavoritedResources(size: Int): [MyNdlaResource!]!
     revisions(articleId: Int!): [Int!]!
+    revisionHistory(id: Int!): ArticleRevisionHistory
     personalData: MyNdlaPersonalData
     image(id: String!): ImageMetaInformationV3
     examLockStatus: ConfigMetaBoolean!
