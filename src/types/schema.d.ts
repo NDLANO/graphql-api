@@ -105,6 +105,11 @@ export type GQLArticleRequiredLibrary = {
   url: Scalars['String']['output'];
 };
 
+export type GQLArticleRevisionHistory = {
+  __typename?: 'ArticleRevisionHistory';
+  revision: Array<GQLArticle>;
+};
+
 export type GQLArticleSearchResult = GQLSearchResult & {
   __typename?: 'ArticleSearchResult';
   context?: Maybe<GQLSearchContext>;
@@ -1449,6 +1454,7 @@ export type GQLQuery = {
   resourceEmbed: GQLResourceEmbed;
   resourceEmbeds: GQLResourceEmbed;
   resourceTypes?: Maybe<Array<GQLResourceTypeDefinition>>;
+  revisionHistory?: Maybe<GQLArticleRevisionHistory>;
   revisions: Array<Scalars['Int']['output']>;
   search?: Maybe<GQLSearch>;
   searchWithoutPagination?: Maybe<GQLSearchWithoutPagination>;
@@ -1671,6 +1677,11 @@ export type GQLQueryResourceEmbedArgs = {
 
 export type GQLQueryResourceEmbedsArgs = {
   resources: Array<GQLResourceEmbedInput>;
+};
+
+
+export type GQLQueryRevisionHistoryArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -2300,6 +2311,7 @@ export type GQLResolversTypes = {
   Article: ResolverTypeWrapper<GQLArticle>;
   ArticleMetaData: ResolverTypeWrapper<GQLArticleMetaData>;
   ArticleRequiredLibrary: ResolverTypeWrapper<GQLArticleRequiredLibrary>;
+  ArticleRevisionHistory: ResolverTypeWrapper<GQLArticleRevisionHistory>;
   ArticleSearchResult: ResolverTypeWrapper<GQLArticleSearchResult>;
   Audio: ResolverTypeWrapper<GQLAudio>;
   AudioFile: ResolverTypeWrapper<GQLAudioFile>;
@@ -2467,6 +2479,7 @@ export type GQLResolversParentTypes = {
   Article: GQLArticle;
   ArticleMetaData: GQLArticleMetaData;
   ArticleRequiredLibrary: GQLArticleRequiredLibrary;
+  ArticleRevisionHistory: GQLArticleRevisionHistory;
   ArticleSearchResult: GQLArticleSearchResult;
   Audio: GQLAudio;
   AudioFile: GQLAudioFile;
@@ -2689,6 +2702,10 @@ export type GQLArticleRequiredLibraryResolvers<ContextType = any, ParentType ext
   mediaType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   url?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type GQLArticleRevisionHistoryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleRevisionHistory'] = GQLResolversParentTypes['ArticleRevisionHistory']> = {
+  revision?: Resolver<Array<GQLResolversTypes['Article']>, ParentType, ContextType>;
 };
 
 export type GQLArticleSearchResultResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['ArticleSearchResult'] = GQLResolversParentTypes['ArticleSearchResult']> = {
@@ -3644,6 +3661,7 @@ export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolvers
   resourceEmbed?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedArgs, 'id' | 'type'>>;
   resourceEmbeds?: Resolver<GQLResolversTypes['ResourceEmbed'], ParentType, ContextType, RequireFields<GQLQueryResourceEmbedsArgs, 'resources'>>;
   resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceTypeDefinition']>>, ParentType, ContextType>;
+  revisionHistory?: Resolver<Maybe<GQLResolversTypes['ArticleRevisionHistory']>, ParentType, ContextType, RequireFields<GQLQueryRevisionHistoryArgs, 'id'>>;
   revisions?: Resolver<Array<GQLResolversTypes['Int']>, ParentType, ContextType, RequireFields<GQLQueryRevisionsArgs, 'articleId'>>;
   search?: Resolver<Maybe<GQLResolversTypes['Search']>, ParentType, ContextType, Partial<GQLQuerySearchArgs>>;
   searchWithoutPagination?: Resolver<Maybe<GQLResolversTypes['SearchWithoutPagination']>, ParentType, ContextType, Partial<GQLQuerySearchWithoutPaginationArgs>>;
@@ -4001,6 +4019,7 @@ export type GQLResolvers<ContextType = any> = {
   Article?: GQLArticleResolvers<ContextType>;
   ArticleMetaData?: GQLArticleMetaDataResolvers<ContextType>;
   ArticleRequiredLibrary?: GQLArticleRequiredLibraryResolvers<ContextType>;
+  ArticleRevisionHistory?: GQLArticleRevisionHistoryResolvers<ContextType>;
   ArticleSearchResult?: GQLArticleSearchResultResolvers<ContextType>;
   Audio?: GQLAudioResolvers<ContextType>;
   AudioFile?: GQLAudioFileResolvers<ContextType>;

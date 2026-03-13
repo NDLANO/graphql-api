@@ -6,7 +6,7 @@
  *
  */
 
-import { paths, ArticleV2DTO } from "@ndla/types-backend/article-api";
+import { paths, ArticleV2DTO, ArticleRevisionHistoryDTO } from "@ndla/types-backend/article-api";
 import { ndlaUrl } from "../config";
 import {
   GQLArticleTransformedContentArgs,
@@ -206,6 +206,16 @@ export async function fetchArticle(
 export async function fetchRevisions(articleId: number, _: Context): Promise<number[]> {
   return await client
     .GET("/article-api/v2/articles/{article_id}/revisions", {
+      params: {
+        path: { article_id: articleId },
+      },
+    })
+    .then(resolveJsonOATS);
+}
+
+export async function fetchRevisionHistory(articleId: number, _: Context): Promise<ArticleRevisionHistoryDTO> {
+  return await client
+    .GET("/article-api/v2/articles/{article_id}/revision-history", {
       params: {
         path: { article_id: articleId },
       },

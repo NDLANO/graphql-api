@@ -6,7 +6,7 @@
  *
  */
 
-import { ArticleV2DTO } from "@ndla/types-backend/article-api";
+import { ArticleV2DTO, ArticleRevisionHistoryDTO } from "@ndla/types-backend/article-api";
 import { ConceptSummaryDTO } from "@ndla/types-backend/concept-api";
 import { fetchSubjectTopics, searchConcepts } from "../api";
 import {
@@ -16,6 +16,7 @@ import {
   fetchVisualElementEmbed,
   fetchRevisions,
   fetchArticle,
+  fetchRevisionHistory,
 } from "../api/articleApi";
 import { coreElements, fetchCrossSubjectTopicsByCode, grepSearch } from "../api/searchApi";
 import { ndlaUrl } from "../config";
@@ -26,6 +27,7 @@ import {
   GQLCrossSubjectElement,
   GQLImageMetaInformationV3,
   GQLQueryArticleArgs,
+  GQLQueryRevisionHistoryArgs,
   GQLQueryRevisionsArgs,
   GQLRelatedContent,
   GQLResourceEmbed,
@@ -38,6 +40,13 @@ export const Query = {
   },
   async revisions(_: any, { articleId }: GQLQueryRevisionsArgs, context: ContextWithLoaders): Promise<number[]> {
     return fetchRevisions(articleId, context);
+  },
+  async revisionHistory(
+    _: any,
+    { id }: GQLQueryRevisionHistoryArgs,
+    context: ContextWithLoaders,
+  ): Promise<ArticleRevisionHistoryDTO> {
+    return fetchRevisionHistory(id, context);
   },
 };
 
