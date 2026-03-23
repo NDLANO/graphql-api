@@ -10,3 +10,5 @@ config:
   maybeValue: T
   typesPrefix: GQL
   inlineFragmentTypes: combine
+  scalars:
+    StringOrNull: "string | null"

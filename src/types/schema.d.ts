@@ -15,6 +15,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  StringOrNull: { input: string | null; output: string | null; }
   StringRecord: { input: any; output: any; }
 };
 
@@ -906,6 +907,7 @@ export type GQLMutation = {
   deleteMyNdlaResource: Scalars['String']['output'];
   deletePersonalData: Scalars['Boolean']['output'];
   favoriteSharedFolder: Scalars['String']['output'];
+  moveFolder: GQLFolder;
   newLearningpath: GQLMyNdlaLearningpath;
   newLearningpathStep: GQLMyNdlaLearningpathStep;
   sortFolders: GQLSortResult;
@@ -977,6 +979,12 @@ export type GQLMutationDeleteMyNdlaResourceArgs = {
 
 export type GQLMutationFavoriteSharedFolderArgs = {
   folderId: Scalars['String']['input'];
+};
+
+
+export type GQLMutationMoveFolderArgs = {
+  id: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['StringOrNull']['input']>;
 };
 
 
@@ -2442,6 +2450,7 @@ export type GQLResolversTypes = {
   SharedFolder: ResolverTypeWrapper<GQLSharedFolder>;
   SortResult: ResolverTypeWrapper<GQLSortResult>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  StringOrNull: ResolverTypeWrapper<Scalars['StringOrNull']['output']>;
   StringRecord: ResolverTypeWrapper<Scalars['StringRecord']['output']>;
   Subject: ResolverTypeWrapper<GQLSubject>;
   SubjectLink: ResolverTypeWrapper<GQLSubjectLink>;
@@ -2610,6 +2619,7 @@ export type GQLResolversParentTypes = {
   SharedFolder: GQLSharedFolder;
   SortResult: GQLSortResult;
   String: Scalars['String']['output'];
+  StringOrNull: Scalars['StringOrNull']['output'];
   StringRecord: Scalars['StringRecord']['output'];
   Subject: GQLSubject;
   SubjectLink: GQLSubjectLink;
@@ -3307,6 +3317,7 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   deleteMyNdlaResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteMyNdlaResourceArgs, 'resourceId'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   favoriteSharedFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationFavoriteSharedFolderArgs, 'folderId'>>;
+  moveFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationMoveFolderArgs, 'id'>>;
   newLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'params'>>;
   newLearningpathStep?: Resolver<GQLResolversTypes['MyNdlaLearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathStepArgs, 'learningpathId' | 'params'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;
@@ -3807,6 +3818,10 @@ export type GQLSortResultResolvers<ContextType = any, ParentType extends GQLReso
   sortedIds?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
 };
 
+export interface GQLStringOrNullScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['StringOrNull'], any> {
+  name: 'StringOrNull';
+}
+
 export interface GQLStringRecordScalarConfig extends GraphQLScalarTypeConfig<GQLResolversTypes['StringRecord'], any> {
   name: 'StringRecord';
 }
@@ -4135,6 +4150,7 @@ export type GQLResolvers<ContextType = any> = {
   SearchWithoutPagination?: GQLSearchWithoutPaginationResolvers<ContextType>;
   SharedFolder?: GQLSharedFolderResolvers<ContextType>;
   SortResult?: GQLSortResultResolvers<ContextType>;
+  StringOrNull?: GraphQLScalarType;
   StringRecord?: GraphQLScalarType;
   Subject?: GQLSubjectResolvers<ContextType>;
   SubjectLink?: GQLSubjectLinkResolvers<ContextType>;
