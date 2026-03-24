@@ -11,6 +11,7 @@ import { gql } from "graphql-tag";
 
 export const typeDefs = gql`
   scalar StringRecord
+  scalar StringOrNull
 
   type ImageDimensions {
     width: Int!
@@ -1571,6 +1572,7 @@ export const typeDefs = gql`
   type Mutation {
     addFolder(name: String!, parentId: String, status: String, description: String): Folder!
     updateFolder(id: String!, name: String, status: String, description: String): Folder!
+    moveFolder(id: String!, parentId: StringOrNull): Folder!
     deleteFolder(id: String!): String!
     addMyNdlaResource(
       resourceId: String!

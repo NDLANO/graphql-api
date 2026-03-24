@@ -24,6 +24,7 @@ import {
   GQLMutationDeleteFolderArgs,
   GQLMutationDeleteMyNdlaResourceArgs,
   GQLMutationFavoriteSharedFolderArgs,
+  GQLMutationMoveFolderArgs,
   GQLMutationSortFoldersArgs,
   GQLMutationSortResourcesArgs,
   GQLMutationSortSavedSharedFoldersArgs,
@@ -137,6 +138,15 @@ export async function postFolder(
   };
 
   return client.POST("/myndla-api/v1/folders", { body }).then(resolveJsonOATS);
+}
+
+export async function moveFolder({ id, parentId }: GQLMutationMoveFolderArgs, _context: Context): Promise<FolderDTO> {
+  return client
+    .PATCH("/myndla-api/v1/folders/{folder-id}", {
+      params: { path: { "folder-id": id } },
+      body: { parentId },
+    })
+    .then(resolveJsonOATS);
 }
 
 export async function patchFolder(
