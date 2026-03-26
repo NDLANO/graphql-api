@@ -1581,6 +1581,7 @@ export const typeDefs = gql`
       path: String!
       tags: [String!]
     ): MyNdlaResource!
+    moveMyNdlaResource(id: String!, fromFolderId: StringOrNull, toFolderId: StringOrNull): Boolean
     updateMyNdlaResource(id: String!, tags: [String!]): MyNdlaResource!
     deleteMyNdlaResource(folderId: String, resourceId: String!): String!
     deletePersonalData: Boolean!

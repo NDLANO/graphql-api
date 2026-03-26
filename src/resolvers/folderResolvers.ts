@@ -34,6 +34,7 @@ import {
   fetchMyNdlaResource,
   getResourceTags,
   moveFolder,
+  moveMyNdlaResource,
 } from "../api/folderApi";
 import { fetchMyNdlaResourceMeta, fetchMyNdlaResourcesMeta } from "../api/myNdlaResourceMetaApi";
 import {
@@ -195,6 +196,7 @@ export const Mutations: Pick<
   | "favoriteSharedFolder"
   | "unFavoriteSharedFolder"
   | "moveFolder"
+  | "moveMyNdlaResource"
 > = {
   async addFolder(_: any, params: GQLMutationAddFolderArgs, context: ContextWithLoaders): Promise<FolderDataDTO> {
     return postFolder(params, context);
@@ -228,6 +230,9 @@ export const Mutations: Pick<
     context: ContextWithLoaders,
   ): Promise<string> {
     return deleteMyNdlaResource(params, context);
+  },
+  async moveMyNdlaResource(_: any, params, context): Promise<boolean> {
+    return moveMyNdlaResource(params, context);
   },
   async deletePersonalData(_: any, __: any, context: ContextWithLoaders) {
     return deletePersonalData(context);
