@@ -1639,10 +1639,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-backend@npm:^1.0.107":
-  version: 1.0.107
-  resolution: "@ndla/types-backend@npm:1.0.107"
-  checksum: 10c0/9c24f97311e319eef76d46d18127734228df7b42bffa531d024f1fe6fec72fa38394e1b9f890bcc82fa709b5d4d0ec12b8008ebb909b274935d991d6cfcbdb98
+"@ndla/types-backend@npm:^1.0.114":
+  version: 1.0.114
+  resolution: "@ndla/types-backend@npm:1.0.114"
+  checksum: 10c0/2f280b4cf286a9e9cd1bf1470023bbb667beedfd557d49ba2456619229cb611408f20cc780178c2d4245570b7d7ae08c30be1986b1817e5c62309277ef761409
   languageName: node
   linkType: hard
 
@@ -1653,10 +1653,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-taxonomy@npm:^1.0.50":
-  version: 1.0.50
-  resolution: "@ndla/types-taxonomy@npm:1.0.50"
-  checksum: 10c0/849d371760d7f0110e49ed2da79ba786162f49b173b8d3bfbf709d8f75c7b99fe513a1d422f2a807542c2c5217ef2ac003203c68a078e7ff608467b0d1e25f08
+"@ndla/types-taxonomy@npm:^1.0.51":
+  version: 1.0.51
+  resolution: "@ndla/types-taxonomy@npm:1.0.51"
+  checksum: 10c0/cacff6ba938e842a4ff36225dd00e28ee3f0b2a6e229fd0ff9ce31a261f2fdab8cb97bbb5b434ea74c4e015dfed031e0d4dfa5d471aed2d91d99c370245e9769
   languageName: node
   linkType: hard
 
@@ -6325,9 +6325,9 @@ __metadata:
     "@graphql-tools/mock": "npm:^9.1.5"
     "@graphql-tools/schema": "npm:^10.0.31"
     "@ndla/licenses": "npm:^9.0.3"
-    "@ndla/types-backend": "npm:^1.0.107"
+    "@ndla/types-backend": "npm:^1.0.114"
     "@ndla/types-embed": "npm:^5.0.21-alpha.0"
-    "@ndla/types-taxonomy": "npm:^1.0.50"
+    "@ndla/types-taxonomy": "npm:^1.0.51"
     "@types/compression": "npm:^1.8.1"
     "@types/cors": "npm:^2.8.19"
     "@types/graphql": "npm:^14.5.0"

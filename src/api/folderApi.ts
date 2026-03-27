@@ -25,6 +25,7 @@ import {
   GQLMutationDeleteMyNdlaResourceArgs,
   GQLMutationFavoriteSharedFolderArgs,
   GQLMutationMoveFolderArgs,
+  GQLMutationMoveMyNdlaResourceArgs,
   GQLMutationSortFoldersArgs,
   GQLMutationSortResourcesArgs,
   GQLMutationSortSavedSharedFoldersArgs,
@@ -208,6 +209,24 @@ export async function patchMyNdlaResource(
       body: { tags },
     })
     .then(resolveJsonOATS);
+}
+
+export async function moveMyNdlaResource(
+  { id, fromFolderId, toFolderId }: GQLMutationMoveMyNdlaResourceArgs,
+  _context: Context,
+): Promise<boolean> {
+  if (fromFolderId === undefined || toFolderId === undefined) {
+    throw new Error("Both fromFolderId and toFolderId must be provided to move a resource");
+  }
+  const res = await client.PUT("/myndla-api/v1/folders/resources/move", {
+    body: {
+      fromFolderId,
+      toFolderId,
+      resourceId: id,
+    },
+  });
+
+  return res.response.status === 204;
 }
 
 export async function deleteMyNdlaResource(
