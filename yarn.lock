@@ -1653,10 +1653,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-taxonomy@npm:^1.0.51":
-  version: 1.0.51
-  resolution: "@ndla/types-taxonomy@npm:1.0.51"
-  checksum: 10c0/cacff6ba938e842a4ff36225dd00e28ee3f0b2a6e229fd0ff9ce31a261f2fdab8cb97bbb5b434ea74c4e015dfed031e0d4dfa5d471aed2d91d99c370245e9769
+"@ndla/types-taxonomy@npm:^1.0.54":
+  version: 1.0.54
+  resolution: "@ndla/types-taxonomy@npm:1.0.54"
+  checksum: 10c0/585fd0901081f7b5ad8bfe16567486f43e6407f4f58f9ec2bbb08e17701f2f19c21a68818b21dcb457005112387786146f34cfe422df904e41c33ff73a097097
   languageName: node
   linkType: hard
 
@@ -6327,7 +6327,7 @@ __metadata:
     "@ndla/licenses": "npm:^9.0.3"
     "@ndla/types-backend": "npm:^1.0.114"
     "@ndla/types-embed": "npm:^5.0.21-alpha.0"
-    "@ndla/types-taxonomy": "npm:^1.0.51"
+    "@ndla/types-taxonomy": "npm:^1.0.54"
     "@types/compression": "npm:^1.8.1"
     "@types/cors": "npm:^2.8.19"
     "@types/graphql": "npm:^14.5.0"

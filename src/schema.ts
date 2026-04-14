@@ -443,6 +443,7 @@ export const typeDefs = gql`
     id: String!
     name: String!
     url: String
+    defaultUrl: String
   }
 
   interface TaxonomyEntity {
@@ -458,6 +459,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    defaultUrl: String
     language: String
     nodeType: String!
   }
@@ -482,6 +484,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    defaultUrl: String
     language: String
     nodeType: String!
     connectionId: String
@@ -511,6 +514,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    defaultUrl: String
     language: String
     nodeType: String!
     rank: Int
@@ -526,6 +530,7 @@ export const typeDefs = gql`
     contextId: String!
     name: String!
     url: String!
+    defaultUrl: String
   }
 
   type TaxonomyContext {
@@ -533,6 +538,7 @@ export const typeDefs = gql`
     breadcrumbs: [String!]!
     name: String!
     url: String!
+    defaultUrl: String!
     parentIds: [String!]!
     rootId: String!
     relevance: String!
@@ -555,6 +561,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    defaultUrl: String
     language: String
     nodeType: String!
     meta: Meta
@@ -916,6 +923,7 @@ export const typeDefs = gql`
     supportedLanguages: [String!]!
     resourceTypes: [ResourceType!]
     url: String
+    defaultUrl: String
     language: String
     nodeType: String!
     subjectpage: SubjectPage
@@ -927,6 +935,7 @@ export const typeDefs = gql`
     contextId: String
     title: Title!
     url: String
+    defaultUrl: String
     contentUri: String
     metaDescription: String
     desktopImage: MetaImage
