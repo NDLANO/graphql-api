@@ -1582,8 +1582,11 @@ export const typeDefs = gql`
       tags: [String!]
     ): MyNdlaResource!
     moveMyNdlaResource(id: String!, fromFolderId: StringOrNull, toFolderId: StringOrNull): Boolean
+    moveMyNdlaResources(resourceIds: [String!]!, fromFolderId: StringOrNull, toFolderId: StringOrNull): Boolean!
+    copyMyNdlaResources(resourceIds: [String!]!, toFolderId: StringOrNull): Boolean!
     updateMyNdlaResource(id: String!, tags: [String!]): MyNdlaResource!
     deleteMyNdlaResource(folderId: String, resourceId: String!): String!
+    deleteMyNdlaResources(folderId: StringOrNull, resourceIds: [String!]!): Boolean!
     deletePersonalData: Boolean!
     updatePersonalData(favoriteSubjects: [String]): MyNdlaPersonalData!
     sortFolders(parentId: String, sortedIds: [String!]!): SortResult!
