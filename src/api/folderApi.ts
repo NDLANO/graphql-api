@@ -20,12 +20,15 @@ import {
 import {
   GQLMutationAddFolderArgs,
   GQLMutationAddMyNdlaResourceArgs,
+  GQLMutationCopyMyNdlaResourcesArgs,
   GQLMutationCopySharedFolderArgs,
   GQLMutationDeleteFolderArgs,
   GQLMutationDeleteMyNdlaResourceArgs,
+  GQLMutationDeleteMyNdlaResourcesArgs,
   GQLMutationFavoriteSharedFolderArgs,
   GQLMutationMoveFolderArgs,
   GQLMutationMoveMyNdlaResourceArgs,
+  GQLMutationMoveMyNdlaResourcesArgs,
   GQLMutationSortFoldersArgs,
   GQLMutationSortResourcesArgs,
   GQLMutationSortSavedSharedFoldersArgs,
@@ -403,4 +406,70 @@ export async function unFavoriteSharedFolder(
 
 export async function getResourceTags(_context: Context): Promise<string[]> {
   return await client.GET("/myndla-api/v1/folders/resources/tags", {}).then(resolveJsonOATS);
+}
+
+export async function moveMyNdlaResources(
+  { fromFolderId, toFolderId, resourceIds }: GQLMutationMoveMyNdlaResourcesArgs,
+  _context: Context,
+): Promise<boolean> {
+  if (fromFolderId === undefined || toFolderId === undefined) {
+    throw new Error("fromFolderId and toFolderId must be provided to move resources");
+  }
+  const res = await client.PUT("/myndla-api/v1/folders/resources/move/batch", {
+    body: {
+      fromFolderId,
+      toFolderId,
+      resourceIds,
+    },
+  });
+
+  return res.response.status === 204;
+}
+
+export async function copyMyNdlaResources(
+  { toFolderId, resourceIds }: GQLMutationCopyMyNdlaResourcesArgs,
+  _context: Context,
+): Promise<boolean> {
+  if (toFolderId === undefined) {
+    throw new Error("toFolderId must be null or a folder UUID");
+  }
+
+  const res = await client.PUT("/myndla-api/v1/folders/resources/copy/batch", {
+    body: {
+      toFolderId,
+      resourceIds,
+    },
+  });
+
+  return res.response.status === 204;
+}
+
+async function deleteRootResources(resourceIds: string[]): Promise<boolean> {
+  const res = await client.DELETE("/myndla-api/v1/folders/resources/root/batch", {
+    body: resourceIds,
+  });
+
+  return res.response.status === 204;
+}
+
+async function deleteFolderResources(folderId: string, resourceIds: string[]): Promise<boolean> {
+  const res = await client.DELETE("/myndla-api/v1/folders/{folder-id}/resources/batch", {
+    params: {
+      path: { "folder-id": folderId },
+    },
+    body: resourceIds,
+  });
+
+  return res.response.status === 204;
+}
+
+export async function deleteMyNdlaResources(
+  { folderId, resourceIds }: GQLMutationDeleteMyNdlaResourcesArgs,
+  _context: Context,
+): Promise<boolean> {
+  if (folderId === undefined) {
+    throw new Error("folderId must be either null or a folder UUID");
+  } else if (folderId === null) {
+    return await deleteRootResources(resourceIds);
+  } else return await deleteFolderResources(folderId, resourceIds);
 }

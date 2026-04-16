@@ -900,15 +900,18 @@ export type GQLMutation = {
   addFolder: GQLFolder;
   addMyNdlaResource: GQLMyNdlaResource;
   copyLearningpath: GQLMyNdlaLearningpath;
+  copyMyNdlaResources: Scalars['Boolean']['output'];
   copySharedFolder: GQLFolder;
   deleteFolder: Scalars['String']['output'];
   deleteLearningpath?: Maybe<Scalars['Boolean']['output']>;
   deleteLearningpathStep?: Maybe<Scalars['Boolean']['output']>;
   deleteMyNdlaResource: Scalars['String']['output'];
+  deleteMyNdlaResources: Scalars['Boolean']['output'];
   deletePersonalData: Scalars['Boolean']['output'];
   favoriteSharedFolder: Scalars['String']['output'];
   moveFolder: GQLFolder;
   moveMyNdlaResource?: Maybe<Scalars['Boolean']['output']>;
+  moveMyNdlaResources: Scalars['Boolean']['output'];
   newLearningpath: GQLMyNdlaLearningpath;
   newLearningpathStep: GQLMyNdlaLearningpathStep;
   sortFolders: GQLSortResult;
@@ -950,6 +953,12 @@ export type GQLMutationCopyLearningpathArgs = {
 };
 
 
+export type GQLMutationCopyMyNdlaResourcesArgs = {
+  resourceIds: Array<Scalars['String']['input']>;
+  toFolderId?: InputMaybe<Scalars['StringOrNull']['input']>;
+};
+
+
 export type GQLMutationCopySharedFolderArgs = {
   destinationFolderId?: InputMaybe<Scalars['String']['input']>;
   folderId: Scalars['String']['input'];
@@ -978,6 +987,12 @@ export type GQLMutationDeleteMyNdlaResourceArgs = {
 };
 
 
+export type GQLMutationDeleteMyNdlaResourcesArgs = {
+  folderId?: InputMaybe<Scalars['StringOrNull']['input']>;
+  resourceIds: Array<Scalars['String']['input']>;
+};
+
+
 export type GQLMutationFavoriteSharedFolderArgs = {
   folderId: Scalars['String']['input'];
 };
@@ -992,6 +1007,13 @@ export type GQLMutationMoveFolderArgs = {
 export type GQLMutationMoveMyNdlaResourceArgs = {
   fromFolderId?: InputMaybe<Scalars['StringOrNull']['input']>;
   id: Scalars['String']['input'];
+  toFolderId?: InputMaybe<Scalars['StringOrNull']['input']>;
+};
+
+
+export type GQLMutationMoveMyNdlaResourcesArgs = {
+  fromFolderId?: InputMaybe<Scalars['StringOrNull']['input']>;
+  resourceIds: Array<Scalars['String']['input']>;
   toFolderId?: InputMaybe<Scalars['StringOrNull']['input']>;
 };
 
@@ -3318,15 +3340,18 @@ export type GQLMutationResolvers<ContextType = any, ParentType extends GQLResolv
   addFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationAddFolderArgs, 'name'>>;
   addMyNdlaResource?: Resolver<GQLResolversTypes['MyNdlaResource'], ParentType, ContextType, RequireFields<GQLMutationAddMyNdlaResourceArgs, 'path' | 'resourceId' | 'resourceType'>>;
   copyLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationCopyLearningpathArgs, 'learningpathId' | 'params'>>;
+  copyMyNdlaResources?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLMutationCopyMyNdlaResourcesArgs, 'resourceIds'>>;
   copySharedFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationCopySharedFolderArgs, 'folderId'>>;
   deleteFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteFolderArgs, 'id'>>;
   deleteLearningpath?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathArgs, 'id'>>;
   deleteLearningpathStep?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<GQLMutationDeleteLearningpathStepArgs, 'learningpathId' | 'learningstepId'>>;
   deleteMyNdlaResource?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationDeleteMyNdlaResourceArgs, 'resourceId'>>;
+  deleteMyNdlaResources?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLMutationDeleteMyNdlaResourcesArgs, 'resourceIds'>>;
   deletePersonalData?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   favoriteSharedFolder?: Resolver<GQLResolversTypes['String'], ParentType, ContextType, RequireFields<GQLMutationFavoriteSharedFolderArgs, 'folderId'>>;
   moveFolder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLMutationMoveFolderArgs, 'id'>>;
   moveMyNdlaResource?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<GQLMutationMoveMyNdlaResourceArgs, 'id'>>;
+  moveMyNdlaResources?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType, RequireFields<GQLMutationMoveMyNdlaResourcesArgs, 'resourceIds'>>;
   newLearningpath?: Resolver<GQLResolversTypes['MyNdlaLearningpath'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathArgs, 'params'>>;
   newLearningpathStep?: Resolver<GQLResolversTypes['MyNdlaLearningpathStep'], ParentType, ContextType, RequireFields<GQLMutationNewLearningpathStepArgs, 'learningpathId' | 'params'>>;
   sortFolders?: Resolver<GQLResolversTypes['SortResult'], ParentType, ContextType, RequireFields<GQLMutationSortFoldersArgs, 'sortedIds'>>;

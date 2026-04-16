@@ -35,6 +35,9 @@ import {
   getResourceTags,
   moveFolder,
   moveMyNdlaResource,
+  moveMyNdlaResources,
+  copyMyNdlaResources,
+  deleteMyNdlaResources,
 } from "../api/folderApi";
 import { fetchMyNdlaResourceMeta, fetchMyNdlaResourcesMeta } from "../api/myNdlaResourceMetaApi";
 import {
@@ -66,6 +69,8 @@ import {
   GQLQueryMyNdlaResourceConnectionsArgs,
   GQLQueryMyNdlaResourceArgs,
   GQLMutationMoveFolderArgs,
+  GQLMutationCopyMyNdlaResourcesArgs,
+  GQLMutationMoveMyNdlaResourcesArgs,
 } from "../types/schema";
 
 export const Query: Pick<
@@ -197,6 +202,9 @@ export const Mutations: Pick<
   | "unFavoriteSharedFolder"
   | "moveFolder"
   | "moveMyNdlaResource"
+  | "moveMyNdlaResources"
+  | "copyMyNdlaResources"
+  | "deleteMyNdlaResources"
 > = {
   async addFolder(_: any, params: GQLMutationAddFolderArgs, context: ContextWithLoaders): Promise<FolderDataDTO> {
     return postFolder(params, context);
@@ -260,5 +268,14 @@ export const Mutations: Pick<
   },
   async unFavoriteSharedFolder(_: any, params: GQLMutationUnFavoriteSharedFolderArgs, context: ContextWithLoaders) {
     return unFavoriteSharedFolder(params, context);
+  },
+  async moveMyNdlaResources(_: any, params: GQLMutationMoveMyNdlaResourcesArgs, context: ContextWithLoaders) {
+    return moveMyNdlaResources(params, context);
+  },
+  async copyMyNdlaResources(_: any, params: GQLMutationCopyMyNdlaResourcesArgs, context: ContextWithLoaders) {
+    return copyMyNdlaResources(params, context);
+  },
+  async deleteMyNdlaResources(_: any, params, context) {
+    return deleteMyNdlaResources(params, context);
   },
 };
