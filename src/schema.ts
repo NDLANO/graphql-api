@@ -201,6 +201,12 @@ export const typeDefs = gql`
     width: Int!
   }
 
+  enum LearningpathStepType {
+    ARTICLE
+    EXTERNAL
+    TEXT
+  }
+
   interface BaseLearningpathStep {
     id: Int!
     title: String!
@@ -215,7 +221,7 @@ export const typeDefs = gql`
     revision: Int!
     status: String!
     supportedLanguages: [String!]!
-    type: String!
+    type: LearningpathStepType!
     articleId: Int
     resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
@@ -237,7 +243,7 @@ export const typeDefs = gql`
     revision: Int!
     status: String!
     supportedLanguages: [String!]!
-    type: String!
+    type: LearningpathStepType!
     articleId: Int
     resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
@@ -259,7 +265,7 @@ export const typeDefs = gql`
     revision: Int!
     status: String!
     supportedLanguages: [String!]!
-    type: String!
+    type: LearningpathStepType!
     articleId: Int
     resource(rootId: String, parentId: String): Resource
     showTitle: Boolean!
@@ -414,7 +420,7 @@ export const typeDefs = gql`
     language: String!
     embedUrl: LearningpathEmbedInput
     showTitle: Boolean!
-    type: String!
+    type: LearningpathStepType!
     license: String
     copyright: LearningpathCopyrightInput
   }
@@ -428,7 +434,7 @@ export const typeDefs = gql`
     description: String
     embedUrl: LearningpathEmbedInput
     showTitle: Boolean
-    type: String
+    type: LearningpathStepType
     license: String
     copyright: LearningpathCopyrightInput
   }

@@ -10,5 +10,6 @@ config:
   maybeValue: T
   typesPrefix: GQL
   inlineFragmentTypes: combine
+  enumsAsTypes: true
   scalars:
     StringOrNull: "string | null"
