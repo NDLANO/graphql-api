@@ -225,7 +225,7 @@ export type GQLBaseLearningpathStep = {
   status: Scalars['String']['output'];
   supportedLanguages: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: GQLLearningpathStepType;
 };
 
 
@@ -763,7 +763,7 @@ export type GQLLearningpathStep = GQLBaseLearningpathStep & {
   status: Scalars['String']['output'];
   supportedLanguages: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: GQLLearningpathStepType;
 };
 
 
@@ -788,7 +788,7 @@ export type GQLLearningpathStepNewInput = {
   license?: InputMaybe<Scalars['String']['input']>;
   showTitle: Scalars['Boolean']['input'];
   title: Scalars['String']['input'];
-  type: Scalars['String']['input'];
+  type: GQLLearningpathStepType;
 };
 
 export type GQLLearningpathStepOembed = {
@@ -799,6 +799,11 @@ export type GQLLearningpathStepOembed = {
   version: Scalars['String']['output'];
   width: Scalars['Int']['output'];
 };
+
+export type GQLLearningpathStepType =
+  | 'ARTICLE'
+  | 'EXTERNAL'
+  | 'TEXT';
 
 export type GQLLearningpathStepUpdateInput = {
   articleId?: InputMaybe<Scalars['Int']['input']>;
@@ -811,7 +816,7 @@ export type GQLLearningpathStepUpdateInput = {
   revision: Scalars['Int']['input'];
   showTitle?: InputMaybe<Scalars['Boolean']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<GQLLearningpathStepType>;
 };
 
 export type GQLLearningpathUpdateInput = {
@@ -1216,7 +1221,7 @@ export type GQLMyNdlaLearningpathStep = GQLBaseLearningpathStep & {
   status: Scalars['String']['output'];
   supportedLanguages: Array<Scalars['String']['output']>;
   title: Scalars['String']['output'];
-  type: Scalars['String']['output'];
+  type: GQLLearningpathStepType;
 };
 
 
@@ -2420,6 +2425,7 @@ export type GQLResolversTypes = {
   LearningpathStepEmbedUrl: ResolverTypeWrapper<GQLLearningpathStepEmbedUrl>;
   LearningpathStepNewInput: GQLLearningpathStepNewInput;
   LearningpathStepOembed: ResolverTypeWrapper<GQLLearningpathStepOembed>;
+  LearningpathStepType: GQLLearningpathStepType;
   LearningpathStepUpdateInput: GQLLearningpathStepUpdateInput;
   LearningpathUpdateInput: GQLLearningpathUpdateInput;
   License: ResolverTypeWrapper<GQLLicense>;
@@ -3265,7 +3271,7 @@ export type GQLLearningpathStepResolvers<ContextType = any, ParentType extends G
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['LearningpathStepType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -3472,7 +3478,7 @@ export type GQLMyNdlaLearningpathStepResolvers<ContextType = any, ParentType ext
   status?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  type?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<GQLResolversTypes['LearningpathStepType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
