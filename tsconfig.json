@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
     "esModuleInterop": true,
-    "target": "ES2019",
+    "target": "esnext",
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "sourceMap": true,
     "outDir": "build",
     "strict": true,
@@ -17,13 +17,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "skipLibCheck": true,
+    "rootDir": "src",
     "lib": ["es2020", "esnext.asynciterable", "DOM"],
-    "types": ["vitest/globals"],
-    "plugins": [
-      {
-        "name": "typescript-strict-plugin"
-      }
-    ]
+    "types": ["vitest/globals"]
   },
   "include": ["src/**/*"],
   "exclude": ["**/*-test.ts"]
