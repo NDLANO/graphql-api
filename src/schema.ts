@@ -738,6 +738,7 @@ export const typeDefs = gql`
     created: String!
     updated: String!
     published: String!
+    revised: String!
     metaImage: ImageMetaInformationV3
     metaDescription: String!
     articleType: String!
