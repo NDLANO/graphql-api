@@ -52,6 +52,7 @@ export type GQLArticle = {
   published: Scalars['String']['output'];
   relatedContent?: Maybe<Array<GQLRelatedContent>>;
   requiredLibraries?: Maybe<Array<GQLArticleRequiredLibrary>>;
+  revised: Scalars['String']['output'];
   revision: Scalars['Int']['output'];
   revisionDate?: Maybe<Scalars['String']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
@@ -2727,6 +2728,7 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   published?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   relatedContent?: Resolver<Maybe<Array<GQLResolversTypes['RelatedContent']>>, ParentType, ContextType, Partial<GQLArticleRelatedContentArgs>>;
   requiredLibraries?: Resolver<Maybe<Array<GQLResolversTypes['ArticleRequiredLibrary']>>, ParentType, ContextType>;
+  revised?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   revisionDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;

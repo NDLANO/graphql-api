@@ -60,7 +60,7 @@
     "@graphql-codegen/typescript-resolvers": "^5.1.8",
     "@graphql-eslint/eslint-plugin": "^4.4.0",
     "@graphql-tools/mock": "^9.1.6",
-    "@ndla/types-backend": "^1.0.117",
+    "@ndla/types-backend": "^1.0.123",
     "@ndla/types-embed": "^5.0.21-alpha.0",
     "@ndla/types-taxonomy": "^1.0.54",
     "@types/compression": "^1.8.1",

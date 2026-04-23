@@ -151,6 +151,10 @@ export const resolvers = {
     language(article: ArticleV2DTO): string {
       return article.content.language;
     },
+    revised(article: ArticleV2DTO): string {
+      // Temporary until revised field is available in environment
+      return article.revised ?? article.published;
+    },
     requiredLibraries(article: ArticleV2DTO): ArticleV2DTO["requiredLibraries"] {
       return article.requiredLibraries.map((lib) =>
         lib.url.startsWith("http://") ? { ...lib, url: lib.url.replace("http://", "https://") } : lib,
