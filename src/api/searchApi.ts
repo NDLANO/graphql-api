@@ -120,6 +120,9 @@ export async function searchWithoutPagination(
 }
 
 const transformResult = (result: MultiSearchSummaryDTO | NodeHitDTO, subjects: string[]): GQLSearchResultUnion => {
+  const searchCtx = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
+  const url = searchCtx?.url ?? result.contexts?.[0]?.url;
+
   if (result.typename === "NodeHitDTO") {
     const ret: GQLNodeSearchResult = {
       __typename: "NodeSearchResult",
@@ -128,14 +131,13 @@ const transformResult = (result: MultiSearchSummaryDTO | NodeHitDTO, subjects: s
       supportedLanguages: [],
       metaDescription: result.subjectPage?.metaDescription.metaDescription ?? "",
       id: result.id,
-      url: result.url ?? "",
-      context: result.context,
+      url: searchCtx?.url ?? result.url ?? "",
+      context: searchCtx ? { ...searchCtx } : undefined,
       contexts: result.contexts,
     };
     return ret;
   }
-  const searchCtx = result.contexts.find((c) => (subjects.length === 1 ? c.rootId === subjects[0] : c.isPrimary));
-  const url = searchCtx?.url ?? result.contexts?.[0]?.url;
+
   const isLearningpath = result.learningResourceType === "learningpath";
   return {
     ...result,
