@@ -216,7 +216,7 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   }
 
   const node = nodes.find((n) => !!n.context);
-  const ctx = opts.subject ? node?.contexts?.find((c) => c.rootId === opts.subject) : node?.context;
+  const ctx = opts.subject ? (node?.contexts?.find((c) => c.rootId === opts.subject) ?? node?.context) : node?.context;
   let url = `${baseUrl}/${contentType}/${embedData.contentId}`;
 
   if (!ctx?.isVisible) {
