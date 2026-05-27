@@ -31,8 +31,6 @@ export const Query = {
     const nodes = await context.loaders.nodesLoader.load({
       contentURI: contentUri,
       isVisible: filterVisible,
-      includeContexts: true,
-      filterProgrammes: true,
       language: context.language,
     });
     return nodes.map((node) => {
@@ -64,8 +62,6 @@ export const resolvers = {
       if (!path && contentUri) {
         const nodes = await context.loaders.nodesLoader.load({
           contentURI: contentUri,
-          includeContexts: true,
-          filterProgrammes: true,
           isVisible: true,
           language: context.language,
         });

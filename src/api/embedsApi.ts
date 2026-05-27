@@ -203,8 +203,6 @@ const contentLinkMeta: Fetch<ContentLinkMetaData> = async ({ embedData, context,
   const nodes = await context.loaders.nodesLoader.load({
     contentURI,
     language: context.language,
-    includeContexts: true,
-    filterProgrammes: true,
     isVisible: true,
   });
 
@@ -239,8 +237,6 @@ const relatedContentMeta: Fetch<RelatedContentMetaData> = async ({ embedData, co
       context.loaders.nodesLoader.load({
         contentURI: `urn:article:${articleId}`,
         language: context.language,
-        filterProgrammes: true,
-        includeContexts: true,
         isVisible: true,
         rootId: opts.subject,
       }),

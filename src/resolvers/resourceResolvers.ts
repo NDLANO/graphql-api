@@ -31,8 +31,6 @@ export const Query = {
           .load({
             contentURI: `urn:article:${articleId}`,
             language: context.language,
-            includeContexts: true,
-            filterProgrammes: true,
             isVisible: true,
           })
           .then((nodes) => nodes[0])

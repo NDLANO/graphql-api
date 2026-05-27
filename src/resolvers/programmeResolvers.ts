@@ -66,7 +66,6 @@ export const Query = {
       contextId: id,
       language: context.language,
       filterProgrammes: false,
-      includeContexts: true,
     });
     if (!node[0]) {
       throw new GraphQLError(`No programme found with contextId: ${contextId}`, {

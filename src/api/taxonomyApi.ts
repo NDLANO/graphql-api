@@ -35,8 +35,6 @@ export async function fetchSubjectTopics(subjectId: string, context: Context): P
           recursive: true,
           nodeType: ["TOPIC"],
           language: context.language,
-          includeContexts: true,
-          filterProgrammes: true,
         },
       },
     })
@@ -56,8 +54,6 @@ export async function fetchNode(
         query: {
           language: context.language,
           isVisible: true,
-          includeContexts: true,
-          filterProgrammes: true,
           rootId,
           parentId,
         },
@@ -74,8 +70,6 @@ export async function searchNodes(params: { contentUris: string[] }, context: Co
         contentUris: params.contentUris,
         // TODO: This doesn't exist?
         // isVisible: true,
-        includeContexts: true,
-        filterProgrammes: true,
         page: 1,
         pageSize: 100,
       },
@@ -101,8 +95,6 @@ export async function fetchChildren(
           recursive: params.recursive,
           connectionTypes: params.connectionTypes ? [params.connectionTypes as NodeConnectionType] : undefined,
           isVisible: true,
-          includeContexts: true,
-          filterProgrammes: true,
           language: context.language,
         },
       },
@@ -123,8 +115,6 @@ export async function fetchNodeResources(params: FetchNodeResourcesParams, conte
           language: context.language,
           relevance: params.relevance,
           isVisible: true,
-          includeContexts: true,
-          filterProgrammes: true,
         },
       },
     })

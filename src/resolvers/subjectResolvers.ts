@@ -39,8 +39,6 @@ export const Query = {
     return context.loaders.nodesLoader.load({
       language: context.language,
       nodeType: "SUBJECT",
-      includeContexts: true,
-      filterProgrammes: true,
       key: input?.metadataFilterKey,
       value: input?.metadataFilterValue,
       isVisible: input?.filterVisible,
@@ -58,8 +56,6 @@ export const Query = {
         key: "language",
         value: language,
         nodeType: "SUBJECT",
-        includeContexts: true,
-        filterProgrammes: true,
       })
       .then((s) => s.sort((a, b) => (a.name < b.name ? -1 : 1)));
   },
