@@ -9,29 +9,8 @@
 import { Server } from "http";
 import { ApolloServer } from "@apollo/server";
 import { gracePeriodSeconds } from "../config";
-import { getActiveRequests } from "./activeRequestsMiddleware";
 import { getIsShuttingDown, setIsShuttingDown } from "./healthRouter";
 import getLogger from "./logger";
-
-async function waitForActiveRequests() {
-  const timeout = 30000;
-  const pollInterval = 250;
-  const start = Date.now();
-
-  const activeRequests = getActiveRequests();
-  getLogger().info(`Waiting for ${activeRequests} active requests to finish...`);
-  while (getActiveRequests() > 0 && Date.now() - start < timeout) {
-    await new Promise((resolve) => setTimeout(resolve, pollInterval));
-  }
-
-  if (getActiveRequests() > 0) {
-    getLogger().warn(
-      `Timeout reached while waiting for active requests to finish. Active requests: ${getActiveRequests()}`,
-    );
-  } else {
-    getLogger().info("All active requests have finished processing.");
-  }
-}
 
 export async function gracefulShutdown(server: Server, apolloServer: ApolloServer<ContextWithLoaders>) {
   const logger = getLogger();
@@ -42,9 +21,8 @@ export async function gracefulShutdown(server: Server, apolloServer: ApolloServe
   );
   setTimeout(async () => {
     logger.info("Shutting down gracefully...");
-    await waitForActiveRequests();
-    if (server) server.close();
     if (apolloServer) await apolloServer.stop();
+    if (server) server.close();
     process.exit(0);
   }, gracePeriodSeconds * 1000);
 }
