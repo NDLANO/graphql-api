@@ -24,6 +24,7 @@ import { gracefulShutdown } from "./utils/gracefulShutdown";
 import { healthRouter } from "./utils/healthRouter";
 import { getLogger, logError } from "./utils/logger";
 import loggerMiddleware from "./utils/loggerMiddleware";
+import { spanNamingMiddleware } from "./utils/tracingMiddleware";
 
 const GRAPHQL_PORT = port;
 
@@ -74,6 +75,7 @@ async function startApolloServer(): Promise<void> {
     "/graphql-api/graphql",
     cors(),
     json(),
+    spanNamingMiddleware("/graphql-api/graphql"),
     correlationIdMiddleware,
     contextExpressMiddleware,
     loggerMiddleware,
