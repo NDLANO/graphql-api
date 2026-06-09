@@ -865,6 +865,7 @@ export const typeDefs = gql`
     connectedTo: [SubjectLink]!
     buildsOn: [SubjectLink]!
     leadsTo: [SubjectLink]!
+    popularArticles: [SubjectLink]!
   }
 
   type SubjectLink {
