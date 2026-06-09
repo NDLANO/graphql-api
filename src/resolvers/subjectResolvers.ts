@@ -104,11 +104,23 @@ export const resolvers = {
       );
     },
     async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.nodeLoader.loadMany(
-        subjectpage.popularArticles.map((article) => {
-          return { id: article.contextId };
+      const nodes = await Promise.all(
+        subjectpage.popularArticles.map(async (article) => {
+          const matches = await context.loaders.nodesLoader.load({
+            contextId: article.contextId,
+            includeContexts: true,
+            filterProgrammes: true,
+          });
+          return matches[0];
         }),
       );
+      return nodes
+        .filter((node): node is Node => !!node)
+        .map((node) => ({
+          name: node.name,
+          path: node.url,
+          url: node.url,
+        }));
     },
   },
   SubjectPageVisualElement: {
