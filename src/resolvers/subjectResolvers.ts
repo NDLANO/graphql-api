@@ -105,8 +105,8 @@ export const resolvers = {
     },
     async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
       return await context.loaders.nodeLoader.loadMany(
-        subjectpage.popularArticles.map((id) => {
-          return { id };
+        subjectpage.popularArticles.map((article) => {
+          return { id: article.contextId };
         }),
       );
     },
