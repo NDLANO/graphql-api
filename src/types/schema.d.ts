@@ -2012,7 +2012,7 @@ export type GQLSubjectPage = {
   leadsTo: Array<Maybe<GQLSubjectLink>>;
   metaDescription?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
-  popularArticles: Array<Maybe<GQLSubjectLink>>;
+  popularArticles: Array<Maybe<GQLArticle>>;
   supportedLanguages: Array<Scalars['String']['output']>;
 };
 
