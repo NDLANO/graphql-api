@@ -41,8 +41,6 @@ export const Query = {
     if (contextId) {
       const nodes = await context.loaders.nodesLoader.load({
         contextId,
-        includeContexts: true,
-        filterProgrammes: true,
       });
       if (nodes.length === 0) {
         throw new GraphQLError(`No node found with contextId: ${contextId}`, {
@@ -66,8 +64,6 @@ export const Query = {
       key: metadataFilterKey,
       value: metadataFilterValue,
       isVisible: filterVisible,
-      includeContexts: true,
-      filterProgrammes: true,
       language: context.language,
     };
     let nodes: Node[] = [];
@@ -94,8 +90,6 @@ export const Query = {
       const res = await context.loaders.nodesLoader.load({
         contentURI: `urn:article:${articleId}`,
         language: context.language,
-        includeContexts: true,
-        filterProgrammes: true,
         isVisible: true,
       });
       node = res[0];
@@ -173,8 +167,6 @@ export const resolvers = {
       if (!url && contentUri) {
         const nodes = await context.loaders.nodesLoader.load({
           contentURI: contentUri,
-          includeContexts: true,
-          filterProgrammes: true,
           isVisible: true,
           language: context.language,
         });

@@ -30,8 +30,6 @@ export const fetchTransformedContent = async (
   if (params.contextId && !subjectId) {
     const contextNode = await context.loaders.nodesLoader.load({
       contextId: params.contextId,
-      includeContexts: true,
-      filterProgrammes: true,
     });
     const contextRootId = contextNode[0]?.context?.rootId;
     if (contextRootId) {
@@ -68,8 +66,6 @@ export const fetchTransformedDisclaimer = async (
   if (params.contextId && !subjectId) {
     const contextNode = await context.loaders.nodesLoader.load({
       contextId: params.contextId,
-      includeContexts: true,
-      filterProgrammes: true,
     });
     const contextRootId = contextNode[0]?.context?.rootId;
     if (contextRootId) {
@@ -114,8 +110,6 @@ export async function fetchRelatedContent(
         const nodes = await context.loaders.nodesLoader.load({
           contentURI: `urn:article:${related.id}`,
           language: context.language,
-          includeContexts: true,
-          filterProgrammes: true,
         });
         const node = nodes?.[0];
         if (node) {

@@ -79,14 +79,7 @@ export function nodesLoader(context: Context): DataLoader<NodeQueryParams, Node[
           if (!input) {
             throw Error("Tried to get node with no params");
           }
-          return queryNodes(
-            {
-              includeContexts: true,
-              filterProgrammes: true,
-              ...input,
-            },
-            context,
-          );
+          return queryNodes(input, context);
         }),
       );
     },
