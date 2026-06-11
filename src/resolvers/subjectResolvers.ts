@@ -6,13 +6,13 @@
  *
  */
 
+import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { SubjectPageDTO, VisualElementDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import partition from "lodash/partition";
 import { convertToImageLicense } from "../api/imageApi";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 import {
-  GQLArticle,
   GQLImageLicense,
   GQLQuerySubjectArgs,
   GQLQuerySubjectCollectionArgs,
@@ -21,7 +21,6 @@ import {
 } from "../types/schema";
 import { getNumberId } from "../utils/apiHelpers";
 import { getArticleIdFromUrn } from "../utils/articleHelpers";
-import { ArticleV2DTO } from "@ndla/types-backend/build/article-api";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
@@ -31,11 +30,11 @@ export const Query = {
     _: any,
     input:
       | {
-        metadataFilterKey?: string;
-        metadataFilterValue?: string;
-        filterVisible?: boolean;
-        ids?: string[];
-      }
+          metadataFilterKey?: string;
+          metadataFilterValue?: string;
+          filterVisible?: boolean;
+          ids?: string[];
+        }
       | undefined,
     context: ContextWithLoaders,
   ): Promise<Node[]> {
@@ -107,15 +106,17 @@ export const resolvers = {
       );
     },
     async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO[]> {
-      const promises = subjectpage.popularArticles.map(art => context.loaders.nodesLoader.load({ contextId: art.contextId }));
+      const promises = subjectpage.popularArticles.map((art) =>
+        context.loaders.nodesLoader.load({ contextId: art.contextId }),
+      );
       const nodes = await Promise.all(promises);
 
-      const articleIds = nodes.flat().map(node => getArticleIdFromUrn(node.contentUri ?? ""));
+      const articleIds = nodes.flat().map((node) => getArticleIdFromUrn(node.contentUri ?? ""));
       const res = await context.loaders.articlesLoader.loadMany(articleIds);
-      return res.filter(r => !!r) as ArticleV2DTO[];
+      return res.filter((r) => !!r) as ArticleV2DTO[];
     },
   },
-    SubjectPageVisualElement: {
+  SubjectPageVisualElement: {
     async imageLicense(
       visualElement: VisualElementDTO,
       _: any,
