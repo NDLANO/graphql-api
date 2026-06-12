@@ -6,7 +6,6 @@
  *
  */
 
-import { ArticleV2DTO } from "@ndla/types-backend/article-api";
 import { SubjectPageDTO, VisualElementDTO } from "@ndla/types-backend/frontpage-api";
 import { Node } from "@ndla/types-taxonomy";
 import partition from "lodash/partition";
@@ -20,7 +19,6 @@ import {
   GQLSubjectLink,
 } from "../types/schema";
 import { getNumberId } from "../utils/apiHelpers";
-import { getArticleIdFromUrn } from "../utils/articleHelpers";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
