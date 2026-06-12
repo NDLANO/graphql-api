@@ -105,15 +105,12 @@ export const resolvers = {
         }),
       );
     },
-    async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<ArticleV2DTO[]> {
+    async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<Node[]> {
       const promises = subjectpage.popularArticles.map((art) =>
         context.loaders.nodesLoader.load({ contextId: art.contextId }),
       );
-      const nodes = await Promise.all(promises);
-
-      const articleIds = nodes.flat().map((node) => getArticleIdFromUrn(node.contentUri ?? ""));
-      const res = await context.loaders.articlesLoader.loadMany(articleIds);
-      return res.filter((r) => !!r) as ArticleV2DTO[];
+      const nodeArrays = await Promise.all(promises);
+      return nodeArrays.flat().filter((node): node is Node => !!node);
     },
   },
   SubjectPageVisualElement: {

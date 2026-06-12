@@ -2012,7 +2012,7 @@ export type GQLSubjectPage = {
   leadsTo: Array<Maybe<GQLSubjectLink>>;
   metaDescription?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
-  popularArticles: Array<Maybe<GQLArticle>>;
+  popularArticles?: Maybe<Array<GQLNode>>;
   supportedLanguages: Array<Scalars['String']['output']>;
 };
 
@@ -3917,7 +3917,7 @@ export type GQLSubjectPageResolvers<ContextType = any, ParentType extends GQLRes
   leadsTo?: Resolver<Array<Maybe<GQLResolversTypes['SubjectLink']>>, ParentType, ContextType>;
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
-  popularArticles?: Resolver<Array<Maybe<GQLResolversTypes['Article']>>, ParentType, ContextType>;
+  popularArticles?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
 };
 
