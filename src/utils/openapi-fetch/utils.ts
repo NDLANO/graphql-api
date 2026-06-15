@@ -12,6 +12,7 @@ import type { MediaType } from "openapi-typescript-helpers";
 import { apiUrl, slowLogTimeout as configSlowLogTimeout } from "../../config";
 import { getHeadersFromContext } from "../apiHelpers";
 import { getContextOrThrow } from "../context/contextStore";
+import { getCorrelationId } from "../correlationIdMiddleware";
 import getLogger from "../logger";
 import { OATSCacheMiddleware } from "./cacheMiddleware";
 import { OATSInternalUrlMiddleware } from "./internalUrlMiddleware";
@@ -71,6 +72,9 @@ async function fetchFunction(req: Request): Promise<Response> {
   for (const [key, value] of Object.entries(headers)) {
     if (value !== undefined && value !== null) req.headers.set(key, value);
   }
+
+  const correlationId = getCorrelationId();
+  if (correlationId) req.headers.set("x-correlation-id", correlationId);
 
   const response = await globalThis.fetch(req);
 

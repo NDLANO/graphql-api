@@ -24,7 +24,7 @@ RUN yarn ncc
 FROM node:22.21.1-alpine3.21
 
 WORKDIR /home/app/graphql-api
-COPY --from=builder /home/app/graphql-api/build/index.js index.js
+COPY --from=builder /home/app/graphql-api/build/ ./
 
 ENV NODE_ENV=production
 
