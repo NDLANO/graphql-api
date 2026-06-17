@@ -100,12 +100,10 @@ export const resolvers = {
       );
     },
     async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<Node[]> {
-      const nodeArrays = await Promise.all(
-        subjectpage.popularArticles
-          .slice(0, 9)
-          .map((art) => context.loaders.nodesLoader.load({ contextId: art.contextId })),
-      );
-      return nodeArrays.flat().filter((node): node is Node => !!node);
+      const nodes = await context.loaders.nodesLoader.load({
+        contextIds: subjectpage.popularArticles.slice(0, 9).map((art) => art.contextId),
+      });
+      return nodes.flat().filter((node): node is Node => !!node);
     },
   },
   SubjectPageVisualElement: {
