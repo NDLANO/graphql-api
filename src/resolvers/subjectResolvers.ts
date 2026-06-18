@@ -79,25 +79,16 @@ export const resolvers = {
   },
   SubjectPage: {
     async connectedTo(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.nodeLoader.loadMany(
-        subjectpage.connectedTo.map((id) => {
-          return { id };
-        }),
-      );
+      const res = await context.loaders.nodeLoader.loadMany(subjectpage.connectedTo.map((id) => ({ id })));
+      return res.filter((node): node is Node => !!node);
     },
     async buildsOn(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.nodeLoader.loadMany(
-        subjectpage.buildsOn.map((id) => {
-          return { id };
-        }),
-      );
+      const res = await context.loaders.nodeLoader.loadMany(subjectpage.buildsOn.map((id) => ({ id })));
+      return res.filter((node): node is Node => !!node);
     },
     async leadsTo(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLSubjectLink[]> {
-      return await context.loaders.nodeLoader.loadMany(
-        subjectpage.leadsTo.map((id) => {
-          return { id };
-        }),
-      );
+      const res = await context.loaders.nodeLoader.loadMany(subjectpage.leadsTo.map((id) => ({ id })));
+      return res.filter((node): node is Node => !!node);
     },
     async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<Node[]> {
       const nodeArrays = await Promise.all(
