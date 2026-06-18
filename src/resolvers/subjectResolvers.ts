@@ -104,10 +104,7 @@ export const resolvers = {
       const nodes = await context.loaders.nodesLoader.load({
         contextIds: subjectpage.popularArticles.slice(0, 9).map((art) => art.contextId),
       });
-      return nodes
-        .flat()
-        .filter((node): node is Node => !!node)
-        .map((node) => nodeToTaxonomyEntity(node, context));
+      return nodes.map((node) => nodeToTaxonomyEntity(node, context));
     },
   },
   SubjectPageVisualElement: {
