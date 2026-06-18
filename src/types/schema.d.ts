@@ -31,12 +31,12 @@ export type GQLArticle = {
   __typename?: 'Article';
   articleType: Scalars['String']['output'];
   availability?: Maybe<Scalars['String']['output']>;
-  competenceGoals?: Maybe<Array<GQLCompetenceGoal>>;
+  competenceGoals: Array<GQLCompetenceGoal>;
   conceptIds?: Maybe<Array<Scalars['Int']['output']>>;
   concepts?: Maybe<Array<GQLConcept>>;
   content: Scalars['String']['output'];
   copyright: GQLCopyright;
-  coreElements?: Maybe<Array<GQLCoreElement>>;
+  coreElements: Array<GQLCoreElement>;
   created: Scalars['String']['output'];
   crossSubjectTopics?: Maybe<Array<GQLCrossSubjectElement>>;
   grepCodes?: Maybe<Array<Scalars['String']['output']>>;
@@ -51,12 +51,12 @@ export type GQLArticle = {
   oldNdlaUrl?: Maybe<Scalars['String']['output']>;
   published: Scalars['String']['output'];
   relatedContent?: Maybe<Array<GQLRelatedContent>>;
-  requiredLibraries?: Maybe<Array<GQLArticleRequiredLibrary>>;
+  requiredLibraries: Array<GQLArticleRequiredLibrary>;
   revised: Scalars['String']['output'];
   revision: Scalars['Int']['output'];
   revisionDate?: Maybe<Scalars['String']['output']>;
   slug?: Maybe<Scalars['String']['output']>;
-  supportedLanguages?: Maybe<Array<Scalars['String']['output']>>;
+  supportedLanguages: Array<Scalars['String']['output']>;
   tags?: Maybe<Array<Scalars['String']['output']>>;
   title: Scalars['String']['output'];
   traits: Array<Scalars['String']['output']>;
@@ -508,7 +508,7 @@ export type GQLFrontpageMenu = {
   article: GQLArticle;
   articleId: Scalars['Int']['output'];
   hideLevel?: Maybe<Scalars['Boolean']['output']>;
-  menu?: Maybe<Array<Maybe<GQLFrontpageMenu>>>;
+  menu: Array<GQLFrontpageMenu>;
 };
 
 export type GQLGloss = {
@@ -629,6 +629,7 @@ export type GQLImageMetaInformationV3 = {
   editorNotes?: Maybe<Array<GQLEditorNote>>;
   id: Scalars['String']['output'];
   image: GQLImageV3;
+  inactive: Scalars['Boolean']['output'];
   metaUrl: Scalars['String']['output'];
   modelRelease: Scalars['String']['output'];
   supportedLanguages: Array<Scalars['String']['output']>;
@@ -1337,7 +1338,7 @@ export type GQLNode = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   parentId?: Maybe<Scalars['String']['output']>;
   rank?: Maybe<Scalars['Int']['output']>;
   relevanceId?: Maybe<Scalars['String']['output']>;
-  resourceTypes?: Maybe<Array<GQLResourceType>>;
+  resourceTypes: Array<GQLResourceType>;
   subjectpage?: Maybe<GQLSubjectPage>;
   supportedLanguages: Array<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
@@ -1421,7 +1422,7 @@ export type GQLPodcastSeriesSummary = {
   description: GQLDescription;
   episodes?: Maybe<Array<GQLAudioSummary>>;
   id: Scalars['Int']['output'];
-  supportedLanguages?: Maybe<Array<Scalars['String']['output']>>;
+  supportedLanguages: Array<Scalars['String']['output']>;
   title: GQLTitle;
 };
 
@@ -1456,16 +1457,16 @@ export type GQLProgrammePage = {
 export type GQLQuery = {
   __typename?: 'Query';
   aiEnabledOrgs?: Maybe<GQLConfigMetaStringList>;
-  alerts?: Maybe<Array<Maybe<GQLUptimeAlert>>>;
+  alerts?: Maybe<Array<GQLUptimeAlert>>;
   allMyNdlaResources: Array<GQLMyNdlaResource>;
   arenaEnabledOrgs?: Maybe<GQLConfigMetaStringList>;
   article?: Maybe<GQLArticle>;
   articleResource?: Maybe<GQLResource>;
   audio?: Maybe<GQLAudio>;
   competenceGoal?: Maybe<GQLCompetenceGoal>;
-  competenceGoals?: Maybe<Array<GQLCompetenceGoal>>;
+  competenceGoals: Array<GQLCompetenceGoal>;
   coreElement?: Maybe<GQLCoreElement>;
-  coreElements?: Maybe<Array<GQLCoreElement>>;
+  coreElements: Array<GQLCoreElement>;
   examLockStatus: GQLConfigMetaBoolean;
   filmfrontpage?: Maybe<GQLFilmFrontpage>;
   folder: GQLFolder;
@@ -1850,7 +1851,7 @@ export type GQLResource = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   parents?: Maybe<Array<GQLTopic>>;
   rank?: Maybe<Scalars['Int']['output']>;
   relevanceId?: Maybe<Scalars['String']['output']>;
-  resourceTypes?: Maybe<Array<GQLResourceType>>;
+  resourceTypes: Array<GQLResourceType>;
   supportedLanguages: Array<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
 };
@@ -1989,7 +1990,7 @@ export type GQLSubject = GQLTaxBase & GQLTaxonomyEntity & {
   name: Scalars['String']['output'];
   nodeType: Scalars['String']['output'];
   relevanceId?: Maybe<Scalars['String']['output']>;
-  resourceTypes?: Maybe<Array<GQLResourceType>>;
+  resourceTypes: Array<GQLResourceType>;
   subjectpage?: Maybe<GQLSubjectPage>;
   supportedLanguages: Array<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
@@ -2006,10 +2007,10 @@ export type GQLSubjectPage = {
   __typename?: 'SubjectPage';
   about?: Maybe<GQLSubjectPageAbout>;
   banner: GQLSubjectPageBanner;
-  buildsOn: Array<Maybe<GQLSubjectLink>>;
-  connectedTo: Array<Maybe<GQLSubjectLink>>;
+  buildsOn: Array<GQLSubjectLink>;
+  connectedTo: Array<GQLSubjectLink>;
   id: Scalars['Int']['output'];
-  leadsTo: Array<Maybe<GQLSubjectLink>>;
+  leadsTo: Array<GQLSubjectLink>;
   metaDescription?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   popularArticles?: Maybe<Array<GQLNode>>;
@@ -2103,7 +2104,7 @@ export type GQLTaxonomyEntity = {
   name: Scalars['String']['output'];
   nodeType: Scalars['String']['output'];
   relevanceId?: Maybe<Scalars['String']['output']>;
-  resourceTypes?: Maybe<Array<GQLResourceType>>;
+  resourceTypes: Array<GQLResourceType>;
   supportedLanguages: Array<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
 };
@@ -2147,7 +2148,7 @@ export type GQLTopic = GQLTaxBase & GQLTaxonomyEntity & GQLWithArticle & {
   nodeType: Scalars['String']['output'];
   parentId?: Maybe<Scalars['String']['output']>;
   relevanceId?: Maybe<Scalars['String']['output']>;
-  resourceTypes?: Maybe<Array<GQLResourceType>>;
+  resourceTypes: Array<GQLResourceType>;
   supportedLanguages: Array<Scalars['String']['output']>;
   url?: Maybe<Scalars['String']['output']>;
 };
@@ -2708,12 +2709,12 @@ export type GQLAggregationResultResolvers<ContextType = any, ParentType extends 
 export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Article'] = GQLResolversParentTypes['Article']> = {
   articleType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   availability?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  competenceGoals?: Resolver<Maybe<Array<GQLResolversTypes['CompetenceGoal']>>, ParentType, ContextType>;
+  competenceGoals?: Resolver<Array<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType>;
   conceptIds?: Resolver<Maybe<Array<GQLResolversTypes['Int']>>, ParentType, ContextType>;
   concepts?: Resolver<Maybe<Array<GQLResolversTypes['Concept']>>, ParentType, ContextType>;
   content?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   copyright?: Resolver<GQLResolversTypes['Copyright'], ParentType, ContextType>;
-  coreElements?: Resolver<Maybe<Array<GQLResolversTypes['CoreElement']>>, ParentType, ContextType>;
+  coreElements?: Resolver<Array<GQLResolversTypes['CoreElement']>, ParentType, ContextType>;
   created?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   crossSubjectTopics?: Resolver<Maybe<Array<GQLResolversTypes['CrossSubjectElement']>>, ParentType, ContextType, Partial<GQLArticleCrossSubjectTopicsArgs>>;
   grepCodes?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
@@ -2728,12 +2729,12 @@ export type GQLArticleResolvers<ContextType = any, ParentType extends GQLResolve
   oldNdlaUrl?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   published?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   relatedContent?: Resolver<Maybe<Array<GQLResolversTypes['RelatedContent']>>, ParentType, ContextType, Partial<GQLArticleRelatedContentArgs>>;
-  requiredLibraries?: Resolver<Maybe<Array<GQLResolversTypes['ArticleRequiredLibrary']>>, ParentType, ContextType>;
+  requiredLibraries?: Resolver<Array<GQLResolversTypes['ArticleRequiredLibrary']>, ParentType, ContextType>;
   revised?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   revision?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   revisionDate?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   slug?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   traits?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3076,7 +3077,7 @@ export type GQLFrontpageMenuResolvers<ContextType = any, ParentType extends GQLR
   article?: Resolver<GQLResolversTypes['Article'], ParentType, ContextType>;
   articleId?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
   hideLevel?: Resolver<Maybe<GQLResolversTypes['Boolean']>, ParentType, ContextType>;
-  menu?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['FrontpageMenu']>>>, ParentType, ContextType>;
+  menu?: Resolver<Array<GQLResolversTypes['FrontpageMenu']>, ParentType, ContextType>;
 };
 
 export type GQLGlossResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Gloss'] = GQLResolversParentTypes['Gloss']> = {
@@ -3185,6 +3186,7 @@ export type GQLImageMetaInformationV3Resolvers<ContextType = any, ParentType ext
   editorNotes?: Resolver<Maybe<Array<GQLResolversTypes['EditorNote']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   image?: Resolver<GQLResolversTypes['ImageV3'], ParentType, ContextType>;
+  inactive?: Resolver<GQLResolversTypes['Boolean'], ParentType, ContextType>;
   metaUrl?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   modelRelease?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3581,7 +3583,7 @@ export type GQLNodeResolvers<ContextType = any, ParentType extends GQLResolversP
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   rank?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['ResourceType']>, ParentType, ContextType>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3649,7 +3651,7 @@ export type GQLPodcastSeriesSummaryResolvers<ContextType = any, ParentType exten
   description?: Resolver<GQLResolversTypes['Description'], ParentType, ContextType>;
   episodes?: Resolver<Maybe<Array<GQLResolversTypes['AudioSummary']>>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  supportedLanguages?: Resolver<Maybe<Array<GQLResolversTypes['String']>>, ParentType, ContextType>;
+  supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<GQLResolversTypes['Title'], ParentType, ContextType>;
 };
 
@@ -3682,16 +3684,16 @@ export type GQLProgrammePageResolvers<ContextType = any, ParentType extends GQLR
 
 export type GQLQueryResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['Query'] = GQLResolversParentTypes['Query']> = {
   aiEnabledOrgs?: Resolver<Maybe<GQLResolversTypes['ConfigMetaStringList']>, ParentType, ContextType>;
-  alerts?: Resolver<Maybe<Array<Maybe<GQLResolversTypes['UptimeAlert']>>>, ParentType, ContextType>;
+  alerts?: Resolver<Maybe<Array<GQLResolversTypes['UptimeAlert']>>, ParentType, ContextType>;
   allMyNdlaResources?: Resolver<Array<GQLResolversTypes['MyNdlaResource']>, ParentType, ContextType, Partial<GQLQueryAllMyNdlaResourcesArgs>>;
   arenaEnabledOrgs?: Resolver<Maybe<GQLResolversTypes['ConfigMetaStringList']>, ParentType, ContextType>;
   article?: Resolver<Maybe<GQLResolversTypes['Article']>, ParentType, ContextType, RequireFields<GQLQueryArticleArgs, 'id'>>;
   articleResource?: Resolver<Maybe<GQLResolversTypes['Resource']>, ParentType, ContextType, Partial<GQLQueryArticleResourceArgs>>;
   audio?: Resolver<Maybe<GQLResolversTypes['Audio']>, ParentType, ContextType, RequireFields<GQLQueryAudioArgs, 'id'>>;
   competenceGoal?: Resolver<Maybe<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, RequireFields<GQLQueryCompetenceGoalArgs, 'code'>>;
-  competenceGoals?: Resolver<Maybe<Array<GQLResolversTypes['CompetenceGoal']>>, ParentType, ContextType, Partial<GQLQueryCompetenceGoalsArgs>>;
+  competenceGoals?: Resolver<Array<GQLResolversTypes['CompetenceGoal']>, ParentType, ContextType, Partial<GQLQueryCompetenceGoalsArgs>>;
   coreElement?: Resolver<Maybe<GQLResolversTypes['CoreElement']>, ParentType, ContextType, RequireFields<GQLQueryCoreElementArgs, 'code'>>;
-  coreElements?: Resolver<Maybe<Array<GQLResolversTypes['CoreElement']>>, ParentType, ContextType, Partial<GQLQueryCoreElementsArgs>>;
+  coreElements?: Resolver<Array<GQLResolversTypes['CoreElement']>, ParentType, ContextType, Partial<GQLQueryCoreElementsArgs>>;
   examLockStatus?: Resolver<GQLResolversTypes['ConfigMetaBoolean'], ParentType, ContextType>;
   filmfrontpage?: Resolver<Maybe<GQLResolversTypes['FilmFrontpage']>, ParentType, ContextType>;
   folder?: Resolver<GQLResolversTypes['Folder'], ParentType, ContextType, RequireFields<GQLQueryFolderArgs, 'id'>>;
@@ -3769,7 +3771,7 @@ export type GQLResourceResolvers<ContextType = any, ParentType extends GQLResolv
   parents?: Resolver<Maybe<Array<GQLResolversTypes['Topic']>>, ParentType, ContextType>;
   rank?: Resolver<Maybe<GQLResolversTypes['Int']>, ParentType, ContextType>;
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['ResourceType']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3895,7 +3897,7 @@ export type GQLSubjectResolvers<ContextType = any, ParentType extends GQLResolve
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   nodeType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['ResourceType']>, ParentType, ContextType>;
   subjectpage?: Resolver<Maybe<GQLResolversTypes['SubjectPage']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
@@ -3911,10 +3913,10 @@ export type GQLSubjectLinkResolvers<ContextType = any, ParentType extends GQLRes
 export type GQLSubjectPageResolvers<ContextType = any, ParentType extends GQLResolversParentTypes['SubjectPage'] = GQLResolversParentTypes['SubjectPage']> = {
   about?: Resolver<Maybe<GQLResolversTypes['SubjectPageAbout']>, ParentType, ContextType>;
   banner?: Resolver<GQLResolversTypes['SubjectPageBanner'], ParentType, ContextType>;
-  buildsOn?: Resolver<Array<Maybe<GQLResolversTypes['SubjectLink']>>, ParentType, ContextType>;
-  connectedTo?: Resolver<Array<Maybe<GQLResolversTypes['SubjectLink']>>, ParentType, ContextType>;
+  buildsOn?: Resolver<Array<GQLResolversTypes['SubjectLink']>, ParentType, ContextType>;
+  connectedTo?: Resolver<Array<GQLResolversTypes['SubjectLink']>, ParentType, ContextType>;
   id?: Resolver<GQLResolversTypes['Int'], ParentType, ContextType>;
-  leadsTo?: Resolver<Array<Maybe<GQLResolversTypes['SubjectLink']>>, ParentType, ContextType>;
+  leadsTo?: Resolver<Array<GQLResolversTypes['SubjectLink']>, ParentType, ContextType>;
   metaDescription?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   popularArticles?: Resolver<Maybe<Array<GQLResolversTypes['Node']>>, ParentType, ContextType>;
@@ -4024,7 +4026,7 @@ export type GQLTopicResolvers<ContextType = any, ParentType extends GQLResolvers
   nodeType?: Resolver<GQLResolversTypes['String'], ParentType, ContextType>;
   parentId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   relevanceId?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
-  resourceTypes?: Resolver<Maybe<Array<GQLResolversTypes['ResourceType']>>, ParentType, ContextType>;
+  resourceTypes?: Resolver<Array<GQLResolversTypes['ResourceType']>, ParentType, ContextType>;
   supportedLanguages?: Resolver<Array<GQLResolversTypes['String']>, ParentType, ContextType>;
   url?: Resolver<Maybe<GQLResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

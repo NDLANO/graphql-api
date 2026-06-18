@@ -145,7 +145,7 @@ export const typeDefs = gql`
     id: Int!
     title: Title!
     description: Description!
-    supportedLanguages: [String!]
+    supportedLanguages: [String!]!
     episodes: [AudioSummary!]
     coverPhoto: CoverPhoto!
   }
@@ -463,7 +463,7 @@ export const typeDefs = gql`
     context: TaxonomyContext
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
-    resourceTypes: [ResourceType!]
+    resourceTypes: [ResourceType!]!
     url: String
     defaultUrl: String
     language: String
@@ -488,7 +488,7 @@ export const typeDefs = gql`
     context: TaxonomyContext
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
-    resourceTypes: [ResourceType!]
+    resourceTypes: [ResourceType!]!
     url: String
     defaultUrl: String
     language: String
@@ -518,7 +518,7 @@ export const typeDefs = gql`
     contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
-    resourceTypes: [ResourceType!]
+    resourceTypes: [ResourceType!]!
     url: String
     defaultUrl: String
     language: String
@@ -565,7 +565,7 @@ export const typeDefs = gql`
     contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
-    resourceTypes: [ResourceType!]
+    resourceTypes: [ResourceType!]!
     url: String
     defaultUrl: String
     language: String
@@ -743,13 +743,13 @@ export const typeDefs = gql`
     metaDescription: String!
     articleType: String!
     oldNdlaUrl: String
-    requiredLibraries: [ArticleRequiredLibrary!]
-    supportedLanguages: [String!]
+    requiredLibraries: [ArticleRequiredLibrary!]!
+    supportedLanguages: [String!]!
     copyright: Copyright!
     tags: [String!]
     grepCodes: [String!]
-    competenceGoals: [CompetenceGoal!]
-    coreElements: [CoreElement!]
+    competenceGoals: [CompetenceGoal!]!
+    coreElements: [CoreElement!]!
     crossSubjectTopics(subjectId: String): [CrossSubjectElement!]
     conceptIds: [Int!]
     concepts: [Concept!]
@@ -830,7 +830,7 @@ export const typeDefs = gql`
   type FrontpageMenu {
     articleId: Int!
     article: Article!
-    menu: [FrontpageMenu]
+    menu: [FrontpageMenu!]!
     hideLevel: Boolean
   }
 
@@ -862,9 +862,9 @@ export const typeDefs = gql`
     about: SubjectPageAbout
     metaDescription: String
     supportedLanguages: [String!]!
-    connectedTo: [SubjectLink]!
-    buildsOn: [SubjectLink]!
-    leadsTo: [SubjectLink]!
+    connectedTo: [SubjectLink!]!
+    buildsOn: [SubjectLink!]!
+    leadsTo: [SubjectLink!]!
     popularArticles: [Node!]
   }
 
@@ -929,7 +929,7 @@ export const typeDefs = gql`
     contextId: String
     breadcrumbs: [String!]!
     supportedLanguages: [String!]!
-    resourceTypes: [ResourceType!]
+    resourceTypes: [ResourceType!]!
     url: String
     defaultUrl: String
     language: String
@@ -1450,6 +1450,7 @@ export const typeDefs = gql`
     createdBy: String!
     modelRelease: String!
     editorNotes: [EditorNote!]
+    inactive: Boolean!
     image: ImageV3!
   }
 
@@ -1495,9 +1496,9 @@ export const typeDefs = gql`
     topic(id: String!, subjectId: String): Topic
     topics(contentUri: String!, filterVisible: Boolean): [Topic!]
     frontpage: FrontpageMenu
-    competenceGoals(codes: [String], language: String): [CompetenceGoal!]
+    competenceGoals(codes: [String], language: String): [CompetenceGoal!]!
     competenceGoal(code: String!, language: String): CompetenceGoal
-    coreElements(codes: [String], language: String): [CoreElement!]
+    coreElements(codes: [String], language: String): [CoreElement!]!
     coreElement(code: String!, language: String): CoreElement
     search(
       query: String
@@ -1558,7 +1559,7 @@ export const typeDefs = gql`
     podcastSearch(page: Int!, pageSize: Int!, fallback: Boolean): AudioSearch
     podcastSeries(id: Int!): PodcastSeriesWithEpisodes
     podcastSeriesSearch(page: Int!, pageSize: Int!, fallback: Boolean): PodcastSeriesSearch
-    alerts: [UptimeAlert]
+    alerts: [UptimeAlert!]
     folders(includeSubfolders: Boolean, includeResources: Boolean): UserFolder!
     myNdlaResourceTags: [String!]!
     myNdlaResource(path: String!): MyNdlaResource
