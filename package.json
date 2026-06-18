@@ -30,6 +30,7 @@
     "@googleapis/youtube": "^24.0.0",
     "@graphql-tools/schema": "^10.0.33",
     "@ndla/licenses": "^9.0.3",
+    "@opentelemetry/api": "^1.9.1",
     "cheerio": "^1.2.0",
     "compression": "^1.8.1",
     "dataloader": "^1.4.0",

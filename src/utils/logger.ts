@@ -8,6 +8,7 @@
 
 import { AsyncLocalStorage } from "node:async_hooks";
 import { IncomingHttpHeaders } from "node:http2";
+import { isSpanContextValid, trace } from "@opentelemetry/api";
 import { GraphQLFormattedError } from "graphql/error/GraphQLError";
 import "source-map-support/register";
 import { createLogger, transports, format, Logger } from "winston";
@@ -31,11 +32,21 @@ const developmentErrFormat = format.printf(({ level, message, stack, requestPath
 const developmentFormat = format.combine(format.timestamp(), developmentErrFormat);
 const jsonFormat = format.combine(format.timestamp(), format.errors({ stack: true }), format.json());
 
+const traceContextFormat = format((info) => {
+  const ctx = trace.getActiveSpan()?.spanContext();
+  if (ctx && isSpanContextValid(ctx)) {
+    info.trace_id = ctx.traceId;
+    info.span_id = ctx.spanId;
+    info.trace_flags = ctx.traceFlags.toString(16).padStart(2, "0");
+  }
+  return info;
+});
+
 export const buildLogger = (extraMeta: Record<string, string>) => {
   const fmt = process.env.NODE_ENV === "production" ? jsonFormat : developmentFormat;
   return createLogger({
     defaultMeta: { service: "graphql-api", ...extraMeta },
-    format: fmt,
+    format: format.combine(traceContextFormat(), fmt),
     transports: [new transports.Console()],
   });
 };
