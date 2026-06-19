@@ -1639,10 +1639,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ndla/types-backend@npm:^1.0.154":
-  version: 1.0.154
-  resolution: "@ndla/types-backend@npm:1.0.154"
-  checksum: 10c0/55c1c945698d77f405ff1c6f8c406d24bbf3c8a9d57ee93bae093e1180b91d2c2eefa861e118ab3ec156a9587d34398600dbc3bcf35594b74e57d955be1145c8
+"@ndla/types-backend@npm:^1.0.156":
+  version: 1.0.156
+  resolution: "@ndla/types-backend@npm:1.0.156"
+  checksum: 10c0/d53c90a9e6adf8b6c54bc9a74e726a2dbfd18e81860d536981d813ea9950a246aa3c1918ac26adc95b9aa1552e6261094219a60a58859fae761bbe02cefb132f
   languageName: node
   linkType: hard
 
@@ -6334,7 +6334,7 @@ __metadata:
     "@graphql-tools/mock": "npm:^9.1.7"
     "@graphql-tools/schema": "npm:^10.0.33"
     "@ndla/licenses": "npm:^9.0.3"
-    "@ndla/types-backend": "npm:^1.0.154"
+    "@ndla/types-backend": "npm:^1.0.156"
     "@ndla/types-embed": "npm:^5.0.21-alpha.0"
     "@ndla/types-taxonomy": "npm:^1.0.54"
     "@opentelemetry/api": "npm:^1.9.1"

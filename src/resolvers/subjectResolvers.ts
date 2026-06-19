@@ -13,12 +13,13 @@ import { convertToImageLicense } from "../api/imageApi";
 import { fetchCompetenceGoalSetCodes } from "../api/searchApi";
 import {
   GQLImageLicense,
+  GQLNode,
   GQLQuerySubjectArgs,
   GQLQuerySubjectCollectionArgs,
   GQLSubject,
   GQLSubjectLink,
 } from "../types/schema";
-import { getNumberId } from "../utils/apiHelpers";
+import { getNumberId, nodeToTaxonomyEntity } from "../utils/apiHelpers";
 
 export const Query = {
   async subject(_: any, { id }: GQLQuerySubjectArgs, context: ContextWithLoaders): Promise<Node> {
@@ -90,13 +91,11 @@ export const resolvers = {
       const res = await context.loaders.nodeLoader.loadMany(subjectpage.leadsTo.map((id) => ({ id })));
       return res.filter((node): node is Node => !!node);
     },
-    async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<Node[]> {
-      const nodeArrays = await Promise.all(
-        subjectpage.popularArticles
-          .slice(0, 9)
-          .map((art) => context.loaders.nodesLoader.load({ contextId: art.contextId })),
-      );
-      return nodeArrays.flat().filter((node): node is Node => !!node);
+    async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLNode[]> {
+      const nodes = await context.loaders.nodesLoader.load({
+        contextIds: subjectpage.popularArticles.slice(0, 9).map((art) => art.contextId),
+      });
+      return nodes.map((node) => nodeToTaxonomyEntity(node, context));
     },
   },
   SubjectPageVisualElement: {
