@@ -92,6 +92,7 @@ export const resolvers = {
       return res.filter((node): node is Node => !!node);
     },
     async popularArticles(subjectpage: SubjectPageDTO, _: any, context: ContextWithLoaders): Promise<GQLNode[]> {
+      if (subjectpage.popularArticles.length === 0) return [];
       const nodes = await context.loaders.nodesLoader.load({
         contextIds: subjectpage.popularArticles.slice(0, 9).map((art) => art.contextId),
       });
