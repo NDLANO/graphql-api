@@ -57,8 +57,8 @@ export const Query = {
 
 export const resolvers = {
   ResourceTypeDefinition: {
-    async subtypes(resourceType: GQLResourceTypeDefinition): Promise<GQLResourceTypeDefinition[] | undefined> {
-      return resourceType.subtypes;
+    async subtypes(resourceType: GQLResourceTypeDefinition): Promise<GQLResourceTypeDefinition[]> {
+      return resourceType.subtypes ?? [];
     },
   },
   Resource: {

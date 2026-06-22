@@ -15,11 +15,12 @@ const codegen: CodegenConfig = {
     "src/types/schema.d.ts": {
       plugins: ["typescript", "typescript-resolvers"],
       config: {
-        maybeValue: "T",
+        inputMaybeValue: "T",
         typesPrefix: "GQL",
         enumsAsTypes: true,
         scalars: {
           StringOrNull: "string | null",
+          StringRecord: "Record<string, string>",
         },
       },
     },
