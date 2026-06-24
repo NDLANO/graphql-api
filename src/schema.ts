@@ -963,6 +963,7 @@ export const typeDefs = gql`
     id: String!
     title: Title!
     isProgrammeSubject: Boolean!
+    defaultUrlName: String
     subjects: [Subject!]
   }
 
