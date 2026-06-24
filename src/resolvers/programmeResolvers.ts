@@ -143,6 +143,8 @@ export const resolvers = {
           },
           url: child.url,
           isProgrammeSubject,
+          // TODO: Remove this once we no longer need to filter out "andre ressurser"
+          defaultUrlName: child.defaultUrlName,
         };
       });
     },
