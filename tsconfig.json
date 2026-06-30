@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
+    "module": "preserve",
     "esModuleInterop": true,
     "target": "esnext",
     "noImplicitAny": true,
-    "moduleResolution": "nodenext",
-    "sourceMap": true,
-    "outDir": "build",
+    "moduleResolution": "bundler",
+    "noEmit": true,
     "strict": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,

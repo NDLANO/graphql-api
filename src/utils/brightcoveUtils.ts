@@ -65,11 +65,12 @@ const parseContributorsString = (contributorString: string): Author => {
   const contributorFields = contributorString.split(/: */);
   if (contributorFields.length !== 2) return { type: "", name: contributorFields[0] ?? "" };
   const [type, name] = contributorFields;
-  const contributorType = Object.keys(contributorTypes.nb ?? {}).find(
-    (key) => contributorTypes.nb![key] === mapContributorType(type!.trim()),
-  );
-  return { type: contributorType || "", name: name! };
+  const mappedContributorType = mapContributorType(type!.trim());
+  const contributorType = Object.entries(contributorTypes).find(([_, entry]) => entry.nb === mappedContributorType);
+  return { type: contributorType?.[0] || "", name: name! };
 };
+
+const groupKeys = ["creators", "processors", "rightsholders"] as const;
 
 export const getContributorGroups = (fields: Record<string, string>) => {
   const licenseInfoKeys = Object.keys(fields).filter((key) => key.startsWith("licenseinfo"));
@@ -78,14 +79,8 @@ export const getContributorGroups = (fields: Record<string, string>) => {
 
   return contributors.reduce<CopyrightType>(
     (groups, contributor) => {
-      const objectKeys = Object.keys(contributorGroups) as Array<keyof typeof contributorGroups>;
-      const group = objectKeys.find((key) => {
-        return contributorGroups[key].find((type) => type === contributor.type);
-      });
-      if (group) {
-        return { ...groups, [group]: [...groups[group], contributor] };
-      }
-      return { ...groups, creators: [...groups.creators, contributor] };
+      const group = groupKeys.find((key) => contributorGroups[key].some((t) => t === contributor.type)) ?? "creators";
+      return { ...groups, [group]: [...groups[group], contributor] };
     },
     {
       creators: [],

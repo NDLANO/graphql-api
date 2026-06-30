@@ -7,7 +7,7 @@ ENV APP_PATH=$HOME/graphql-api
 WORKDIR $APP_PATH
 
 # Copy necessary files for installing dependencies
-COPY yarn.lock package.json tsconfig.json .yarnrc.yml $APP_PATH/
+COPY yarn.lock package.json tsconfig.json vite.config.ts .yarnrc.yml $APP_PATH/
 
 # Enable yarn
 RUN corepack enable
@@ -18,7 +18,7 @@ RUN yarn install --immutable
 COPY src $APP_PATH/src
 
 # Compiles the server into a single file, together with all its dependencies.
-RUN yarn ncc
+RUN yarn build
 
 ### Run stage
 FROM node:22.21.1-alpine3.21
@@ -28,4 +28,4 @@ COPY --from=builder /home/app/graphql-api/build/ ./
 
 ENV NODE_ENV=production
 
-CMD ["node", "index.js"]
+CMD ["node", "--enable-source-maps", "server.mjs"]
