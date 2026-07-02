@@ -6,8 +6,9 @@
  *
  */
 
+import { GraphQLError } from "graphql";
 import { describe, expect, test } from "vitest";
-import { getNumberId, licenseFixer } from "../apiHelpers";
+import { getNumberId, getNumberIdOrThrow, licenseFixer } from "../apiHelpers";
 
 test("license C converts to COPYRIGHTED", async () => {
   expect(licenseFixer("C", "4.0")).toBe("COPYRIGHTED");
@@ -48,5 +49,27 @@ describe("getNumberId", () => {
   });
   test("returns undefined when given float string", () => {
     expect(getNumberId("42.5")).toBeUndefined();
+  });
+});
+
+describe("getNumberIdOrThrow", () => {
+  test("returns the number for a valid id", () => {
+    expect(getNumberIdOrThrow("42")).toBe(42);
+    expect(getNumberIdOrThrow(42)).toBe(42);
+  });
+  test("throws a 400 GraphQLError for a malformed id", () => {
+    expect(() => getNumberIdOrThrow("53751).")).toThrow(GraphQLError);
+    try {
+      getNumberIdOrThrow("53751).");
+      throw new Error("should have thrown");
+    } catch (e) {
+      expect(e).toBeInstanceOf(GraphQLError);
+      expect((e as GraphQLError).extensions).toEqual({ status: 400 });
+      expect((e as GraphQLError).message).toBe("Invalid id: 53751).");
+    }
+  });
+  test("throws for empty and non-numeric ids", () => {
+    expect(() => getNumberIdOrThrow(undefined)).toThrow(GraphQLError);
+    expect(() => getNumberIdOrThrow("abc")).toThrow(GraphQLError);
   });
 });
